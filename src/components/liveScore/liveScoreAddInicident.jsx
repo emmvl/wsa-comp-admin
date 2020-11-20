@@ -195,7 +195,7 @@ class LiveScoreAddIncident extends Component {
                     }}
                 >
                     <div className="row">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit === true ? AppConstants.editIncident : AppConstants.addIncident}</Breadcrumb.Item>
                             </Breadcrumb>
@@ -643,7 +643,7 @@ class LiveScoreAddIncident extends Component {
         const { umpireKey } = this.state
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (

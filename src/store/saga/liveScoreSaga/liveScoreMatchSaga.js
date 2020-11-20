@@ -96,7 +96,6 @@ function* liveScoreAddMatchSaga(action) {
 
 // Add Match
 function* liveScoreCreateMatchSaga(action) {
-    console.log(action, 'liveScoreCreateMatchSaga')
     try {
         const result = yield call(
             LiveScoreAxiosApi.liveScoreCreateMatch,

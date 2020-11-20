@@ -263,7 +263,7 @@ class LiveScoreSeasonFixture extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.seasonFixture}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -340,7 +340,6 @@ class LiveScoreSeasonFixture extends Component {
         return finalArray
     }
 
-    ////////form content view
     contentView = () => {
         let roundsArray = this.props.liveScoreMatchState.roundList
         let newArray = this.createRoundsArray(roundsArray)
@@ -384,7 +383,7 @@ class LiveScoreSeasonFixture extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <Loader visible={this.props.liveScoreFixtureCompState.onLoad || this.props.liveScoreMatchState.onLoad} />
                 <Layout>

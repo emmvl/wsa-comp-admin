@@ -34,7 +34,7 @@ const ValidationConstants = {
     dateOfBirth: 'DOB is required',
     membershipProductRequired: 'Please select the competition membership product',
     emergencyContactNumber: ['Emergency contact number is required'],
-    emergencyContactName: ['Emergency contact name is required'],
+    emergencyContactName: ['Emergency contact first name is required','Emergency contact last name is required'],
     existingMedicalCondition: ['Existing Medical Conditions is required'],
     regularMedication: ['Regular Medications is required'],
     heardBy: ['HeardBy is required'],

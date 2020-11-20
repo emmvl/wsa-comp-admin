@@ -11,6 +11,7 @@ import {
     Modal,
     Checkbox,
     Radio,
+    message,
 } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -30,7 +31,8 @@ import {
     clearMatchAction,
     getCompetitionVenuesList,
     liveScoreClubListAction,
-    searchFilterAction
+    searchFilterAction,
+    liveScoreGetMatchDetailInitiate
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -47,11 +49,9 @@ import { isArrayNotEmpty, captializedString } from '../../util/helpers';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import Tooltip from 'react-png-tooltip'
 import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction'
-import { message } from "antd";
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
-import { liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -91,7 +91,7 @@ class LiveScoreAddMatch extends Component {
         confirm({
             title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend making any changes in the Draws screen. Proceed anyway?',
             okText: 'OK',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'Cancel',
             onOk() {
                 this_.props.liveScoreCreateMatchAction(matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, null, umpireKey, umpireData, scorerData, recordUmpireType, screenName)
@@ -316,17 +316,17 @@ class LiveScoreAddMatch extends Component {
                 this.setState({ forfeitVisible: false })
                 let team1resultId = matchResult[4].id
                 let team2resultId = matchResult[3].id
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
             } else if (forfietedTeam === 'team2') {
                 this.setState({ forfeitVisible: false })
                 let team1resultId = matchResult[3].id
                 let team2resultId = matchResult[4].id
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
             } else if (forfietedTeam === 'both') {
                 this.setState({ forfeitVisible: false })
                 let team1resultId = matchResult[5].id
                 let team2resultId = matchResult[5].id
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
             }
         } else {
             message.config({
@@ -396,12 +396,12 @@ class LiveScoreAddMatch extends Component {
                 this.setState({ abandonVisible: false })
                 let team1resultId = matchResult[7].id
                 let team2resultId = matchResult[7].id
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
             } else if (abandoneReason === 'notPlayed') {
                 this.setState({ abandonVisible: false })
                 let team1resultId = matchResult[8].id
                 let team2resultId = matchResult[8].id
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
             }
         } else {
             message.config({
@@ -457,7 +457,7 @@ class LiveScoreAddMatch extends Component {
                     }}
                 >
                     <div className="row">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">
                                     {this.state.isEdit ? AppConstants.editMatch : AppConstants.addMatch}
@@ -484,9 +484,9 @@ class LiveScoreAddMatch extends Component {
         return (
             <div className="row">
                 <div className="col-sm">
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div className="d-flex flex-row align-items-center">
                         <InputWithHead required="required-field" heading={AppConstants.matchDuration} />
-                        <Tooltip background="#ff8237">
+                        <Tooltip>
                             <span>{AppConstants.matchDurationMsg}</span>
                         </Tooltip>
                     </div>
@@ -503,9 +503,9 @@ class LiveScoreAddMatch extends Component {
                     </Form.Item>
                 </div>
                 <div className="col-sm">
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div className="d-flex flex-row align-items-center">
                         <InputWithHead required="required-field" heading={AppConstants.mainBreak} />
-                        <Tooltip background="#ff8237">
+                        <Tooltip>
                             <span>{AppConstants.mainBreakMsg}</span>
                         </Tooltip>
                     </div>
@@ -522,9 +522,9 @@ class LiveScoreAddMatch extends Component {
                 </div>
                 {addEditMatch.type === "FOUR_QUARTERS" && (
                     <div className="col-sm">
-                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div className="d-flex flex-row align-items-center">
                             <InputWithHead required="required-field" heading={AppConstants.qtrBreak} />
-                            <Tooltip background="#ff8237">
+                            <Tooltip>
                                 <span>{AppConstants.qtrBreatMsg}</span>
                             </Tooltip>
                         </div>
@@ -709,7 +709,7 @@ class LiveScoreAddMatch extends Component {
                                     placeholder="Select Away Team"
                                     style={{ width: '100%', }}
                                     onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
-                                // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
+                                    // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
                                 >
                                     {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                         <Option key={'awayTeam_' + item.id} value={item.id}>{item.name}</Option>
@@ -1130,15 +1130,15 @@ class LiveScoreAddMatch extends Component {
         if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[0].id
             let team2resultId = matchResult[1].id
-            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
         } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[1].id
             let team2resultId = matchResult[0].id
-            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
         } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[2].id
             let team2resultId = matchResult[2].id
-            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
+            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName)
         }
     }
 
@@ -1531,16 +1531,16 @@ class LiveScoreAddMatch extends Component {
             if (staticMatchData.startTime !== matchData.startTime) {
                 showModal = true
             }
-            else if (staticMatchData?.team1?.id !== matchData.team1id) {
+            else if (staticMatchData ?.team1 ?.id !== matchData.team1id) {
                 showModal = true
             }
-            else if (staticMatchData?.team2?.id !== matchData.team2id) {
+            else if (staticMatchData ?.team2 ?.id !== matchData.team2id) {
                 showModal = true
             }
-            else if (staticMatchData?.team2?.id !== matchData.team2id) {
+            else if (staticMatchData ?.team2 ?.id !== matchData.team2id) {
                 showModal = true
             }
-            else if (staticMatchData?.division?.id !== matchData.divisionId) {
+            else if (staticMatchData ?.division ?.id !== matchData.divisionId) {
                 showModal = true
             }
             else if (staticMatchData.roundId !== matchData.roundId) {
@@ -1563,13 +1563,13 @@ class LiveScoreAddMatch extends Component {
             } else {
                 showModal = false
             }
-            
-            if(showModal){
+
+            if (showModal) {
                 this.openModel(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
-            } 
-            else{
+            }
+            else {
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
-            }                
+            }
 
         }
         else {
@@ -1643,7 +1643,7 @@ class LiveScoreAddMatch extends Component {
     render() {
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 {this.state.umpireKey ? (
                     <DashboardLayout
                         menuHeading={AppConstants.umpires}

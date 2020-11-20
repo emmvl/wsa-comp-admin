@@ -3,16 +3,54 @@
 @import "./customStyles/customStyles.css";
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.default-bg {
+    background-color: #f7fafc;
+}
+
+.mt-n10 {
+    margin-top: -10px;
+}
+
+.mt-n20 {
+    margin-top: -20px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.ml-5 {
+    margin-left: 5px;
+}
+
+.ml-n10 {
+    margin-left: -10px;
+}
+
+.ml-n20 {
+    margin-left: -20px;
+}
+
+.ml-n22 {
+    margin-left: -22px;
+}
+
+.width-50 {
+    width: 50px;
+}
+
+.Tooltip_Wrapper__3AlJ0 >  svg > path:first-child {
+    fill: #ff8237;
+}

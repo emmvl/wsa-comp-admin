@@ -141,7 +141,8 @@ class MultifieldDrawsNew extends Component {
             singleCompDivisionCheked: true,
             filterDates: false,
             regenerateDrawExceptionModalVisible: false,
-            regenerateExceptionRefId: 1
+            regenerateExceptionRefId: 1,
+            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null
         };
         this.props.clearMultiDraws();
     }
@@ -826,106 +827,124 @@ class MultifieldDrawsNew extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
-                <div className="multi-draw-list-top-head row">
-                    <div className="col-sm-2 mt-3">
-                        <span className="form-heading">{AppConstants.draws}</span>
-                    </div>
-                    <div className="col-sm-10 row pr-0">
-                        <div className="col-sm mt-2">
-                            <Select
-                                className="year-select reg-filter-select1"
-                                style={{ maxWidth: 100, minWidth: 100 }}
-                                onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                                value={JSON.parse(this.state.yearRefId)}
-                            >
-                                {this.props.appState.own_YearArr.map((item) => (
-                                    <Option key={'year_' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-
-                        <div className="col-sm-2.5 mt-2">
-                            <Select
-                                className="year-select reg-filter-select1 innerSelect-value-draws"
-                                style={{ minWidth: 210, maxWidth: 210 }}
-                                onChange={(competitionId, e) =>
-                                    this.onCompetitionChange(competitionId, e.key)
-                                }
-                                value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
-                            >
-                                {this.props.appState.own_CompetitionArr.length > 0 && (
-                                    <Option key="-1" value="-1">{AppConstants.all}</Option>
-                                )}
-                                {this.props.appState.own_CompetitionArr.map((item) => (
-                                    <Option
-                                        key={'competition_' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-
-                        <div className="col-sm mt-2">
-                            <Select
-                                className="year-select reg-filter-select1"
-                                style={{ maxWidth: 150, minWidth: 150 }}
-                                disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
-                                onChange={(roundId) => this.onRoundsChange(roundId)}
-                                value={this.state.roundId}
-                            >
-                                {this.props.drawsState.getDrawsRoundsData.map((item) => (
-                                    <Option key={'round_' + item.roundId} value={item.roundId}>
-                                        {item.name}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-                        <div className="col-sm mt-2">
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    minWidth: 250
-                                }}
-                            >
-                                <RangePicker
-                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
-                                    onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
-                                    format="DD-MM-YYYY"
-                                    style={{ width: '100%', minWidth: 180 }}
-                                    value={[moment(this.state.startDate), moment(this.state.endDate)]}
-                                />
+            <>
+                {this.state.screenKey &&
+                    <div className="row" style={{ marginTop: "15px" }}>
+                        <div className="col-sm d-flex justify-content-end">
+                            <div className="reg-add-save-button">
+                                <Button
+                                    onClick={() => history.push(this.state.screenKey)}
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                >
+                                    {AppConstants.back}
+                                </Button>
                             </div>
                         </div>
+                    </div>
+                }
+                <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
 
-                        <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
-                            <Checkbox
-                                className="single-checkbox-radio-style"
-                                style={{ paddingTop: 8 }}
-                                checked={this.state.filterDates}
-                                // onChange={(e) => this.setState({ filterDates: e.target.checked })}
-                                onChange={(e) => this.onDateRangeCheck(e.target.checked)}
-                                disabled={this.state.firstTimeCompId == "-1"}
-                            // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
-                            >
-                                {AppConstants.filterDates}
-                            </Checkbox>
+                    <div className="multi-draw-list-top-head row">
+                        <div className="col-sm-2 mt-3">
+                            <span className="form-heading">{AppConstants.draws}</span>
                         </div>
-                        <div className="col-sm d-flex justify-content-end align-items-center pr-1">
-                            <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
-                                {AppConstants.go}
-                            </Button>
+                        <div className="col-sm-10 row pr-0">
+                            <div className="col-sm mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ maxWidth: 100, minWidth: 100 }}
+                                    onChange={(yearRefId) => this.onYearChange(yearRefId)}
+                                    value={JSON.parse(this.state.yearRefId)}
+                                >
+                                    {this.props.appState.own_YearArr.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            <div className="col-sm-2.5 mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1 innerSelect-value-draws"
+                                    style={{ minWidth: 210, maxWidth: 210 }}
+                                    onChange={(competitionId, e) =>
+                                        this.onCompetitionChange(competitionId, e.key)
+                                    }
+                                    value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                                >
+                                    {this.props.appState.own_CompetitionArr.length > 0 && (
+                                        <Option key="-1" value="-1">{AppConstants.all}</Option>
+                                    )}
+                                    {this.props.appState.own_CompetitionArr.map((item) => (
+                                        <Option
+                                            key={'competition_' + item.competitionId}
+                                            value={item.competitionId}
+                                        >
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            <div className="col-sm mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ maxWidth: 150, minWidth: 150 }}
+                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
+                                    onChange={(roundId) => this.onRoundsChange(roundId)}
+                                    value={this.state.roundId}
+                                >
+                                    {this.props.drawsState.getDrawsRoundsData.map((item) => (
+                                        <Option key={'round_' + item.roundId} value={item.roundId}>
+                                            {item.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+                            <div className="col-sm mt-2">
+                                <div
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        minWidth: 250
+                                    }}
+                                >
+                                    <RangePicker
+                                        disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
+                                        onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                                        format="DD-MM-YYYY"
+                                        style={{ width: '100%', minWidth: 180 }}
+                                        value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
+                                <Checkbox
+                                    className="single-checkbox-radio-style"
+                                    style={{ paddingTop: 8 }}
+                                    checked={this.state.filterDates}
+                                    // onChange={(e) => this.setState({ filterDates: e.target.checked })}
+                                    onChange={(e) => this.onDateRangeCheck(e.target.checked)}
+                                    disabled={this.state.firstTimeCompId == "-1"}
+                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                >
+                                    {AppConstants.filterDates}
+                                </Checkbox>
+                            </div>
+                            <div className="col-sm d-flex justify-content-end align-items-center pr-1">
+                                <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
+                                    {AppConstants.go}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     };
 
@@ -1727,7 +1746,7 @@ class MultifieldDrawsNew extends Component {
         confirm({
             title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             maskClosable: true,
             mask: true,
@@ -1990,13 +2009,13 @@ class MultifieldDrawsNew extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
 
-                <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="18" />
 
                 <Layout className="comp-dash-table-view">
                     {this.headerView()}
@@ -2042,7 +2061,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MultifieldDrawsNew);
+export default connect(mapStateToProps, mapDispatchToProps)(MultifieldDrawsNew);

@@ -451,7 +451,6 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     };
 
-    ////////form content view
     contentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
@@ -977,7 +976,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.user}
                     menuName={AppConstants.user}

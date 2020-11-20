@@ -286,6 +286,12 @@ function LiveScoreTeamState(state = initialState, action) {
             state.livescoreTeamActionObject = null
             return { ...state, onLoad: false };
 
+        //////update team name for competition module also
+        case ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS:
+            return { ...state, onLoad: false };
         default:
             return state;
     }

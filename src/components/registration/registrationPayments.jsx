@@ -62,32 +62,32 @@ const columns = [
             <span>{currencyFormat(amount)}</span>
         ),
     },
-    {
-        title: 'Action',
-        dataIndex: 'refund',
-        key: 'refund',
-        render: () =>
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: '25px' }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                    }
-                >
-                    <Menu.Item key="1">
-                        <span>Full Refund</span>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <span>Partial Refund</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-    },
+    // {
+    //     title: 'Action',
+    //     dataIndex: 'refund',
+    //     key: 'refund',
+    //     render: () =>
+    //         <Menu
+    //             className="action-triple-dot-submenu"
+    //             theme="light"
+    //             mode="horizontal"
+    //             style={{ lineHeight: '25px' }}
+    //         >
+    //             <SubMenu
+    //                 key="sub1"
+    //                 title={
+    //                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+    //                 }
+    //             >
+    //                 <Menu.Item key="1">
+    //                     <span>Full Refund</span>
+    //                 </Menu.Item>
+    //                 <Menu.Item key="2">
+    //                     <span>Partial Refund</span>
+    //                 </Menu.Item>
+    //             </SubMenu>
+    //         </Menu>
+    // },
 ];
 
 class RegistrationPayments extends Component {
@@ -146,7 +146,7 @@ class RegistrationPayments extends Component {
         return (
             // <Header className="reg-payment-header-view mt-5">
             //     <div className="row">
-            //         <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+            //         <div className="col-sm d-flex align-content-center">
             //             <Breadcrumb separator=" > ">
             //                 {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.registration}</Breadcrumb.Item> */}
             //                 <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.registrationAccountSummary}</Breadcrumb.Item>
@@ -332,17 +332,17 @@ class RegistrationPayments extends Component {
                                 {/* </a> */}
                             </Button>
                         ) : (
-                            <Button
-                                className="open-reg-button"
-                                type="primary"
-                            >
-                                <a href={stripeConnectURL} className="stripe-connect">
-                                    <span>
-                                        {AppConstants.connectToStripe}
-                                    </span>
-                                </a>
-                            </Button>
-                        )}
+                                <Button
+                                    className="open-reg-button"
+                                    type="primary"
+                                >
+                                    <a href={stripeConnectURL} className="stripe-connect">
+                                        <span>
+                                            {AppConstants.connectToStripe}
+                                        </span>
+                                    </a>
+                                </Button>
+                            )}
                     </div>
                 </div>
             </div>
@@ -398,7 +398,7 @@ class RegistrationPayments extends Component {
                         columns={columns}
                         dataSource={stripeTransferList}
                         pagination={false}
-                        // loading={this.props.stripeState.onLoad && true}
+                    // loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">
@@ -427,7 +427,6 @@ class RegistrationPayments extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div>
@@ -552,7 +551,7 @@ class RegistrationPayments extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="2" />
                 <Layout className="reg-payment-layout-view">

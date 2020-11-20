@@ -88,7 +88,7 @@ class LiveScoreAddPlayer extends Component {
                     playerData.dateOfBirth = ""
 
                     if (teamsId) {
-                        this.props.form.setFieldsValue({
+                        this.formRef.current.setFieldsValue({
                             team: teamsId
                         })
                     }
@@ -127,7 +127,7 @@ class LiveScoreAddPlayer extends Component {
                     playerData.dateOfBirth = ""
 
                     if (teamsId) {
-                        this.props.form.setFieldsValue({
+                        this.formRef.current.setFieldsValue({
                             team: teamsId
                         })
                     }
@@ -195,7 +195,6 @@ class LiveScoreAddPlayer extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { playerData, teamResult } = this.props.liveScorePlayerState
@@ -249,7 +248,7 @@ class LiveScoreAddPlayer extends Component {
                             showTime={false}
                             name={'date'}
                             value={playerData.dateOfBirth && moment(playerData.dateOfBirth, "DD-MM-YYYY")}
-                            // value={playerData.dateOfBirth}
+                        // value={playerData.dateOfBirth}
                         />
                     </div>
                     <div className="col-sm">
@@ -422,11 +421,10 @@ class LiveScoreAddPlayer extends Component {
         );
     };
 
-    /////main render method
     render() {
         const { screenKey } = this.state
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 {
                     screenKey == 'umpire' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />

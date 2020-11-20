@@ -19,7 +19,7 @@ const { Content } = Layout;
 
 let this_Obj = null
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -192,7 +192,7 @@ class LiveScoreTeam extends Component {
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText)
         }
     }
@@ -398,7 +398,7 @@ class LiveScoreTeam extends Component {
         const { screenKey } = this.props.liveScoreTeamState
 
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

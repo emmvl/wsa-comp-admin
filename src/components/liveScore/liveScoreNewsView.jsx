@@ -1,25 +1,27 @@
-import React, { Component } from "react";
-import { Layout, Breadcrumb, Modal, Button } from 'antd';
-import './liveScore.css';
-import InputWithHead from "../../customComponents/InputWithHead";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import ReactPlayer from 'react-player'
-import { NavLink } from "react-router-dom";
-import history from '../../util/history'
+import React, { Component } from 'react';
 import {
-    newsNotificationAction,
-    liveScoreDeleteNewsAction
-} from "../../store/actions/LiveScoreAction/liveScoreNewsAction";
+    Layout, Breadcrumb, Modal, Button,
+} from 'antd';
+import './liveScore.css';
+import ReactPlayer from 'react-player';
+import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Loader from '../../customComponents/loader'
-import Tooltip from 'react-png-tooltip'
-import { getKeyForStateWideMessage } from '../../util/sessionStorage';
+import Tooltip from 'react-png-tooltip';
 import { EditorState, ContentState, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import htmlToDraft from 'html-to-draftjs';
+import InputWithHead from '../../customComponents/InputWithHead';
+import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
+import DashboardLayout from '../../pages/dashboardLayout';
+import AppConstants from '../../themes/appConstants';
+import history from '../../util/history';
+import {
+    newsNotificationAction,
+    liveScoreDeleteNewsAction,
+} from '../../store/actions/LiveScoreAction/liveScoreNewsAction';
+import Loader from '../../customComponents/loader';
+import { getKeyForStateWideMessage } from '../../util/sessionStorage';
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -37,35 +39,35 @@ class LiveScoreNewsView extends Component {
             deleteLoading: false,
             screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
             editorState: EditorState.createEmpty(),
-        }
+        };
     }
 
-    ////method to show modal view after click
+    /// /method to show modal view after click
     showModal = (data, isVideo) => {
         this.setState({
             visible: true,
             modaldata: data,
-            isVideo: isVideo
+            isVideo,
         });
     };
 
-    ////method to hide modal view after ok click
-    handleOk = e => {
+    /// /method to hide modal view after ok click
+    handleOk = (e) => {
         this.setState({
             visible: false,
         });
     };
 
-    ////method to hide modal view after click on cancle button
-    handleCancel = e => {
+    /// /method to hide modal view after click on cancle button
+    handleCancel = (e) => {
         this.setState({
             visible: false,
-            modaldata: ''
+            modaldata: '',
         });
     };
 
     componentDidMount() {
-        let newsData = this.state.newsItem;
+        const newsData = this.state.newsItem;
 
         // let finalBody = newsData ? newsData.body ? JSON.parse(newsData.body) : "" : ""
         // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
@@ -74,24 +76,24 @@ class LiveScoreNewsView extends Component {
         //     editorState
         // })
 
-        const html = (newsData && newsData.body) ? newsData.body : "";
+        const html = (newsData && newsData.body) ? newsData.body : '';
         const contentBlock = htmlToDraft(html);
         if (contentBlock) {
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
             const editorState = EditorState.createWithContent(contentState);
             this.setState({
-                editorState
+                editorState,
             });
         }
     }
 
     componentDidUpdate(nextProps) {
-        let newsState = this.props.liveScoreNewsState.notificationResult
-        let onLoad_2Data = this.props.liveScoreNewsState
+        const newsState = this.props.liveScoreNewsState.notificationResult;
+        const onLoad_2Data = this.props.liveScoreNewsState;
         if (nextProps.newsState !== newsState) {
             if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading) {
                 if (newsState !== []) {
-                    history.push(this.state.id === "dashboard" ? "/liveScoreDashboard" : './liveScoreNewsList')
+                    history.push(this.state.id === 'dashboard' ? '/liveScoreDashboard' : './liveScoreNewsList');
                     // history.push(this.state.id === "dashboard" && "/liveScoreDashboard")
                 }
             }
@@ -99,28 +101,28 @@ class LiveScoreNewsView extends Component {
                 if (this.props.liveScoreNewsState.deleteNews !== []) {
                     history.push({
                         pathname: '/liveScoreNewsList',
-                        state: { screenKey: this.state.screenKey }
-                    })
+                        state: { screenKey: this.state.screenKey },
+                    });
                 }
             }
         }
     }
 
     deleteTeam = (newsId) => {
-        this.props.liveScoreDeleteNewsAction(newsId)
-        this.setState({ deleteLoading: true })
+        this.props.liveScoreDeleteNewsAction(newsId);
+        this.setState({ deleteLoading: true });
     }
 
     // onclickDelete = () => {
     showDeleteConfirm = (newsId) => {
-        let this_ = this
+        const this_ = this;
         confirm({
             title: 'Are you sure you want to delete this news?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
-                this_.deleteTeam(newsId)
+                this_.deleteTeam(newsId);
             },
             onCancel() {
                 console.log('Cancel');
@@ -129,22 +131,23 @@ class LiveScoreNewsView extends Component {
     }
     // }
 
-    ///////view for breadcrumb
+    /// ////view for breadcrumb
     headerView = () => {
-        let newsData = this.state.newsItem
+        const newsData = this.state.newsItem;
         return (
             <Header className="comp-venue-courts-header-view live-form-view-button-header">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.newsDetail}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="col-sm live-form-view-button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <NavLink to={{
-                            pathname: "liveScoreAddNews",
-                            state: { isEdit: true, item: this.state.newsItem, screenKey: this.state.screenKey }
-                        }}>
+                            pathname: 'liveScoreAddNews',
+                            state: { isEdit: true, item: this.state.newsItem, screenKey: this.state.screenKey },
+                        }}
+                        >
                             <Button className="primary-add-comp-form mr-5" type="primary">
                                 {AppConstants.edit}
                             </Button>
@@ -155,12 +158,12 @@ class LiveScoreNewsView extends Component {
                     </div>
                 </div>
             </Header>
-        )
+        );
     }
 
-    ////////form content view
+    /// /////form content view
     contentView = () => {
-        let newsData = this.state.newsItem;
+        const newsData = this.state.newsItem;
         const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
@@ -199,23 +202,21 @@ class LiveScoreNewsView extends Component {
                     </div>
                 )}
             </div>
-        )
+        );
     }
 
-    //// this method called inside modal view function to show content of the modal
+    /// / this method called inside modal view function to show content of the modal
     innerViewOfModal() {
         return (
-            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }}>
-                {this.state.isVideo ?
-                    <ReactPlayer url={this.state.modaldata} playing={this.state.visible} controls />
-                :
-                    <img src={this.state.modaldata} height='250' width='250' />
-                }
+            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center' }}>
+                {this.state.isVideo
+                    ? <ReactPlayer url={this.state.modaldata} playing={this.state.visible} controls />
+                    : <img src={this.state.modaldata} height="250" width="250" />}
             </div>
-        )
+        );
     }
 
-    ////modal view
+    /// /modal view
     ModalView() {
         return (
             <Modal
@@ -230,12 +231,12 @@ class LiveScoreNewsView extends Component {
             >
                 {this.innerViewOfModal()}
             </Modal>
-        )
+        );
     }
 
-    //////footer view containing all the buttons like submit and cancel
+    /// ///footer view containing all the buttons like submit and cancel
     footerView() {
-        let newsDataArr = this.state.newsItem;
+        const newsDataArr = this.state.newsItem;
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -243,7 +244,7 @@ class LiveScoreNewsView extends Component {
                         <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <span
-                                    style={{ cursor: "pointer" }}
+                                    style={{ cursor: 'pointer' }}
                                     onClick={() => history.push('/liveScoreNewsList')}
                                     className="input-heading-add-another"
                                 >
@@ -256,32 +257,38 @@ class LiveScoreNewsView extends Component {
                                 className="comp-buttons-view"
                                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}
                             >
-                                {(newsDataArr && !newsDataArr.published_at) &&
-                                    // <div style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 50, }}>
+                                {(newsDataArr && !newsDataArr.published_at)
+                                // <div style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 50, }}>
+                                && (
                                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                                         <Button
-                                            className="open-reg-button mr-0" type="primary"
-                                            onClick={() => this.onSubmitNewsPublish(newsDataArr, true)}>{AppConstants.publish}</Button>
-                                        <div style={{ paddingRight: 20, alignItems: 'center', justifyContent: 'center' }}>
-                                            <Tooltip background="#ff8237">
+                                            className="open-reg-button mr-0"
+                                            type="primary"
+                                            onClick={() => this.onSubmitNewsPublish(newsDataArr, true)}
+                                        >
+                                            {AppConstants.publish}
+                                        </Button>
+                                        <div className="align-items-center justify-content-center" style={{ paddingRight: 20 }}>
+                                            <Tooltip>
                                                 <span>{AppConstants.newsPublishMsg}</span>
                                             </Tooltip>
                                         </div>
                                     </div>
+                                )
                                     // </div>
                                 }
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <Button
-                                        className="open-reg-button" type="primary"
+                                        className="open-reg-button"
+                                        type="primary"
                                         onClick={() => this.onSubmitNewsPublish(newsDataArr, false)}
                                     >
                                         {(newsDataArr && !newsDataArr.published_at) ? AppConstants.publish_notify
-                                            : (newsDataArr && newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
-                                                AppConstants.notifyAgain : AppConstants.notify
-                                        }
+                                            : (newsDataArr && newsDataArr.isActive == 1 && newsDataArr.isNotification == 1)
+                                                ? AppConstants.notifyAgain : AppConstants.notify}
                                     </Button>
                                     <div>
-                                        <Tooltip background="#ff8237">
+                                        <Tooltip>
                                             <span>{AppConstants.newsPublishNotifyMsg}</span>
                                         </Tooltip>
                                     </div>
@@ -292,28 +299,26 @@ class LiveScoreNewsView extends Component {
                 </div>
             </div>
         );
-    };
-
-    onSubmitNewsPublish = (data, value) => {
-        this.props.newsNotificationAction(data, value, this.state.screenKey)
-        this.setState({ getDataLoading: true })
     }
 
-    ////main render function
+    onSubmitNewsPublish = (data, value) => {
+        this.props.newsNotificationAction(data, value, this.state.screenKey);
+        this.setState({ getDataLoading: true });
+    }
+
+    /// /main render function
     render() {
-        let stateWideMsg = getKeyForStateWideMessage()
+        const stateWideMsg = getKeyForStateWideMessage();
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
                 />
-                {stateWideMsg ?
-                    <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
-                :
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"21"} />
-                }
+                {stateWideMsg
+                    ? <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />
+                    : <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="21" />}
                 <Loader visible={this.props.liveScoreNewsState.notifyLoad} />
                 <Layout>
                     {this.headerView()}
@@ -335,14 +340,14 @@ class LiveScoreNewsView extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         newsNotificationAction,
-        liveScoreDeleteNewsAction
-    }, dispatch)
+        liveScoreDeleteNewsAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         liveScoreNewsState: state.LiveScoreNewsState,
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreNewsView);

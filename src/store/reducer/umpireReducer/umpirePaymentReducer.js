@@ -23,6 +23,9 @@ function getFilterUmpirePayment(umpirePaymentArr) {
 
         if (umpirePaymentArr[i].umpireType === "USERS") {
             let obj = {
+                approvedByUser: umpirePaymentArr[i].approvedByUser,
+                approved_at: umpirePaymentArr[i].approved_at,
+                approvedByUserId: umpirePaymentArr[i].approvedByUserId,
                 id: umpirePaymentArr[i].id,
                 match: umpirePaymentArr[i].match,
                 matchId: umpirePaymentArr[i].matchId,
@@ -146,15 +149,16 @@ function umpirePaymentState(state = initialState, action) {
                 if (payData.length > 0) {
                     for (let i in payData) {
 
-                        let obj = {
-                            userId: payData[i].user.id,
-                            matchUmpireId: payData[i].id,
-                            stripeId: payData[i].user.stripeAccountId
+                        if (payData[i].user && payData[i].user.stripeAccountId) {
+                            let obj = {
+                                userId: payData[i].user.id,
+                                matchUmpireId: payData[i].id,
+                                stripeId: payData[i].user.stripeAccountId
+                            }
+                            state.paymentTransferPostData.push(obj)
                         }
-                        state.paymentTransferPostData.push(obj)
                     }
                 } else {
-                    console.log(state.paymentArr, 'state.paymentArr')
                     state.paymentTransferPostData = state.paymentArr
                 }
 
@@ -273,6 +277,18 @@ function umpirePaymentState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.umpirePaymentObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_LOAD:
+
+
+            return { ...state, onPaymentLoad: true };
+
+        case ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_SUCCESS:
+            return {
+                ...state,
+                onPaymentLoad: false,
+
+            };
 
         default:
             return state;

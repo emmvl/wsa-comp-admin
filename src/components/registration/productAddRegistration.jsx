@@ -205,7 +205,6 @@ class ProductAddRegistration extends Component {
         );
     };
 
-    ////////form content view
     contentView = (values, errors, setFieldValue, touched, handleChange, handleBlur) => {
         return (
             <div className="content-view pt-5">
@@ -593,7 +592,7 @@ class ProductAddRegistration extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}

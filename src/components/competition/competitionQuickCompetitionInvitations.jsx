@@ -99,7 +99,7 @@ class QuickCompetitionInvitations extends Component {
                 "venueOptionId": 1,
                 "compNameOptionId": this.state.compNameOptionId,
             }
-    
+
             this.props.mergeCompetitionProceed(payload)
             this.setState({
                 onProcessMergeCompetition: true,
@@ -124,7 +124,7 @@ class QuickCompetitionInvitations extends Component {
                 "venueOptionId": 1,
                 "compNameOptionId": this.state.compNameOptionId,
             }
-    
+
             this.props.mergeCompetitionProceed(payload)
             this.setState({
                 onProcessMergeCompetition: true,
@@ -155,7 +155,7 @@ class QuickCompetitionInvitations extends Component {
         return (
             <Header className="comp-venue-courts-header-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetition2}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -300,7 +300,6 @@ class QuickCompetitionInvitations extends Component {
         }
     }
 
-    ////////form content view
     contentView = () => {
         const { teamPlayerArray, selectedTeamPlayer, importModalVisible, importPlayer } = this.props.quickCompetitionState
         return (
@@ -395,7 +394,7 @@ class QuickCompetitionInvitations extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="2" />
                 <Layout>

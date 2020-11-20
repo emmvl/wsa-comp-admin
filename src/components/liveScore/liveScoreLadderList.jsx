@@ -274,7 +274,6 @@ class LiveScoreLadderList extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { liveScoreLadderState } = this.props;
 
@@ -319,7 +318,7 @@ class LiveScoreLadderList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

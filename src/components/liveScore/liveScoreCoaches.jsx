@@ -255,7 +255,7 @@ class LiveScoreCoaches extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.coachList}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -388,7 +388,7 @@ class LiveScoreCoaches extends Component {
         const code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let { sortBy, sortOrder, offset } = this.state
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
         }
     }
@@ -406,7 +406,7 @@ class LiveScoreCoaches extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

@@ -121,23 +121,28 @@ const columns = [
   },
   {
     title: "Paid By",
-    dataIndex: "paidBy",
-    key: "paidBy",
-    render: (paidBy, record, index) => {
+    dataIndex: "paidByUsers",
+    key: "paidByUsers",
+    render: (paidByUsers, record, index) => {
       return (
         <div>
-          {this_Obj.state.userId == record.paidByUserId ? 'Self' :
-            <NavLink
-              to={{
-                pathname: `/userPersonal`,
-                state: {
-                  userId: record.paidByUserId,
-                  tabKey: "registration"
-                },
-              }}
-            >
-              <span className="input-heading-add-another pt-0">{paidBy}</span>
-            </NavLink>}
+          { (record.paidByUsers || []).map((item, index) => (
+              this_Obj.state.userId == item.paidByUserId ? <div> {'Self'} </div>:
+              <div>
+                <NavLink
+                  to={{
+                    pathname: `/userPersonal`,
+                    state: {
+                      userId: item.paidByUserId,
+                      tabKey: "registration"
+                    },
+                  }}
+                >
+                  <span className="input-heading-add-another pt-0">{item.paidBy}</span>
+                </NavLink>
+            </div>
+          ))
+          }
         </div>
       )
     },
@@ -658,10 +663,14 @@ const columnsPersonalChildContacts = [
 
 const columnsPersonalEmergency = [
   {
-    title: "Name",
-    dataIndex: "emergencyContactName",
-    key: "emergencyContactName",
-    width: 300,
+    title: "First Name",
+    dataIndex: "emergencyFirstName",
+    key: "emergencyFirstName",
+  },
+  {
+    title: "Last Name",
+    dataIndex: "emergencyLastName",
+    key: "emergencyLastName",
   },
   {
     title: "Phone Number",
@@ -2662,7 +2671,7 @@ class UserModulePersonalDetail extends Component {
 
   purchaseActivityView = () => {
     let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
-    console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
+   // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
     return (
       <div
         className="comp-dash-table-view mt-2"
@@ -2714,7 +2723,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     return (
-      <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+      <div className="fluid-width default-bg">
         <DashboardLayout
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}

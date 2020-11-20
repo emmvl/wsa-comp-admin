@@ -36,6 +36,7 @@ class CommunicationBanner extends Component {
         this.state = {
             numCompBanner: -1,
             numStateBanner: -1,
+            bannerLoad: false
         };
 
         this.formRef = React.createRef();
@@ -74,15 +75,19 @@ class CommunicationBanner extends Component {
                 this.props.getLiveScoreBanners(null, organisationId);
             }
         }
+
+        this.setState({ bannerLoad: true })
     }
 
     componentDidUpdate() {
-        if (!this.props.userState.onLoad && this.props.userState.status) {
+
+        if (!this.props.userState.onLoad && this.props.userState.status && this.state.bannerLoad) {
             const { bannerCount } = this.props.userState;
             if (bannerCount && (this.state.numStateBanner < 0 || this.state.numCompBanner < 0)) {
                 this.setState({
                     numStateBanner: bannerCount.numStateBanner,
                     numCompBanner: bannerCount.numCompBanner,
+                    bannerLoad: false
                 });
             }
         }
@@ -238,10 +243,10 @@ class CommunicationBanner extends Component {
         const { numStateBanner, numCompBanner } = this.state;
 
         return (
-            <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
 
-                <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
+                <InnerHorizontalMenu menu="communication" userSelectedKey="2" />
 
                 <Layout>
                     <Form

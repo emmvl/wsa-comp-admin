@@ -56,7 +56,7 @@ class UserModuleMedical extends Component{
         return (
             <Header className="comp-player-grades-header-view container mb-n3">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.medical}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -102,7 +102,7 @@ class UserModuleMedical extends Component{
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 <InnerHorizontalMenu menu="userModule" userModuleSelectedKey="4" />
                 <Layout>

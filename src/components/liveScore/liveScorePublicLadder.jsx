@@ -120,7 +120,7 @@ class LiveScorePublicLadder extends Component {
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
             <div className="row">
-                <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.competitionLadders}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -255,7 +255,6 @@ class LiveScorePublicLadder extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { liveScoreLadderState: { liveScoreLadderListData, onLoad } } = this.props;
         return (
@@ -275,7 +274,7 @@ class LiveScorePublicLadder extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     isManuNotVisible = {true}

@@ -46,7 +46,7 @@ const headerView = () => {
     return (
         <Header className="login-header-view">
             <div className="row">
-                <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb style={{
                         display: 'flex', lignItems: 'center', alignSelf: 'center'
                     }} separator=" > ">
@@ -139,7 +139,7 @@ const Stripe = (props) => {
     screenProps = props
     const [loading, setLoading] = useState(false);
     return (
-        <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+        <div className="fluid-width default-bg">
             <DashboardLayout
                 menuHeading={""}
                 menuName={""}

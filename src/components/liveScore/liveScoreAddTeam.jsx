@@ -77,7 +77,7 @@ class LiveScoreAddTeam extends Component {
     }
 
     componentDidMount() {
-
+        let sourceIdAvailable = false
         if (this.state.screenKey == 'umpire') {
             if (getUmpireCompetitonData()) {
                 if (this.state.isEdit) {
@@ -89,6 +89,7 @@ class LiveScoreAddTeam extends Component {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
                 const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
+                sourceIdAvailable = sourceId ? true : false
                 this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
@@ -106,6 +107,7 @@ class LiveScoreAddTeam extends Component {
                 else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
+                sourceIdAvailable = sourceId ? true : false
                 this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
@@ -113,6 +115,10 @@ class LiveScoreAddTeam extends Component {
             } else {
                 history.push('/liveScoreCompetitions')
             }
+        }
+        let isEditCheck = this.props.location.state ? this.props.location.state.isEdit : false
+        if (sourceIdAvailable && isEditCheck === false) {
+            history.push("/liveScoreTeam")
         }
     }
 
@@ -195,7 +201,6 @@ class LiveScoreAddTeam extends Component {
         })
     }
 
-    ////////form content view
     contentView = () => {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
         // let name = teamManagerData.name
@@ -338,8 +343,8 @@ class LiveScoreAddTeam extends Component {
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">
                                     {AppConstants.new}
                                 </Radio>
-                                <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
-                                    <Tooltip background="#ff8237">
+                                <div className="mt-n10 ml-n10 width-50">
+                                    <Tooltip>
                                         <span>{AppConstants.teamNewMsg}</span>
                                     </Tooltip>
                                 </div>
@@ -349,8 +354,8 @@ class LiveScoreAddTeam extends Component {
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                     {AppConstants.existing}
                                 </Radio>
-                                <div style={{ marginLeft: -10, marginTop: -10 }}>
-                                    <Tooltip background="#ff8237">
+                                <div className="mt-n10 mt-n10">
+                                    <Tooltip>
                                         <span>{AppConstants.teamExistingMsg}</span>
                                     </Tooltip>
                                 </div>
@@ -597,6 +602,7 @@ class LiveScoreAddTeam extends Component {
                 lastName,
                 mobileNumber,
                 email,
+                teamUniqueKey,
             } = this.props.liveScoreTeamState.teamManagerData
             let isCheked = this.props.liveScoreTeamState
             let usersArray = JSON.stringify(userIds)
@@ -633,7 +639,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('mobileNumber', regexNumberExpression(mobileNumber))
                     formData.append('email', email)
                 }
-                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
 
             }
             else if (this.props.liveScoreTeamState.managerType === 'new') {
@@ -664,7 +670,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('userIds', usersArray)
                 }
 
-                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
 
             }
             else {
@@ -689,7 +695,7 @@ class LiveScoreAddTeam extends Component {
                 formData.append('competitionId', compId)
                 formData.append('organisationId', organisationId)
                 formData.append('divisionId', divisionId)
-                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
 
             }
         }

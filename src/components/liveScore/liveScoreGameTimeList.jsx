@@ -77,7 +77,7 @@ function checkPlayerId(player) {
     }
 }
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -295,7 +295,7 @@ class LiveScoreGameTimeList extends Component {
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder)
         }
     }
@@ -441,10 +441,9 @@ class LiveScoreGameTimeList extends Component {
         );
     };
 
-    ////main render method
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"15"} />
                 <Layout>

@@ -24,7 +24,7 @@ function sorting(a, b, key) {
     return stringA.localeCompare(stringB)
 }
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -580,7 +580,7 @@ class LiveScorePositionTrackReport extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.positionTrackReport}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -744,7 +744,7 @@ class LiveScorePositionTrackReport extends Component {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             const body = {
                 paging: {
                     limit: 10,
@@ -846,7 +846,7 @@ class LiveScorePositionTrackReport extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"24"} />

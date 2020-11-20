@@ -1,28 +1,28 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, DatePicker, Modal, Form } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import moment from "moment";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, DatePicker, Modal, Form } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
-import AppConstants from "themes/appConstants";
-import AppImages from "themes/appImages";
-import history from "util/history";
-import { getOrganisationData, getPrevUrl } from "util/sessionStorage";
-import { getOnlyYearListAction } from "store/actions/appAction";
-import { getGenderAction } from "store/actions/commonAction/commonAction";
+import AppConstants from 'themes/appConstants';
+import AppImages from 'themes/appImages';
+import history from 'util/history';
+import { getOrganisationData, getPrevUrl } from 'util/sessionStorage';
+import { getOnlyYearListAction } from 'store/actions/appAction';
+import { getGenderAction } from 'store/actions/commonAction/commonAction';
 import {
     getUserDashboardTextualAction,
     exportOrgRegQuestionAction,
     userDeleteAction,
-} from "store/actions/userAction/userAction";
-import InputWithHead from "customComponents/InputWithHead";
-import Loader from "customComponents/loader";
-import InnerHorizontalMenu from "pages/innerHorizontalMenu";
-import DashboardLayout from "pages/dashboardLayout";
+} from 'store/actions/userAction/userAction';
+import InputWithHead from 'customComponents/InputWithHead';
+import Loader from 'customComponents/loader';
+import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
+import DashboardLayout from 'pages/dashboardLayout';
 
-import "./user.css";
+import './user.css';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -31,18 +31,14 @@ const { confirm } = Modal;
 
 let this_Obj = null;
 
-const listeners = (key) => ({
-    onClick: () => tableSort(key),
-});
-
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
     if (this_Obj.state.sortBy !== key) {
-        sortOrder = "ASC";
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
-        sortOrder = "DESC";
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
 
@@ -50,23 +46,27 @@ function tableSort(key) {
     this_Obj.props.getUserDashboardTextualAction(this_Obj.state.filter, sortBy, sortOrder);
 }
 
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
 const columns = [
     {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (name, record) => (
-            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
+            <NavLink to={{ pathname: '/userPersonal', state: { userId: record.userId } }}>
                 <span className="input-heading-add-another pt-0">{name}</span>
             </NavLink>
         ),
     },
     {
-        title: "Role",
-        dataIndex: "role",
-        key: "role",
+        title: 'Role',
+        dataIndex: 'role',
+        key: 'role',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (role) => (
@@ -78,9 +78,9 @@ const columns = [
         ),
     },
     {
-        title: "Linked",
-        dataIndex: "linked",
-        key: "linked",
+        title: 'Linked',
+        dataIndex: 'linked',
+        key: 'linked',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (linked) => (
@@ -92,9 +92,9 @@ const columns = [
         ),
     },
     {
-        title: "Competition",
-        dataIndex: "competition",
-        key: "competition",
+        title: 'Competition',
+        dataIndex: 'competition',
+        key: 'competition',
         sorter: false,
         // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (competition) => (
@@ -106,9 +106,9 @@ const columns = [
         ),
     },
     {
-        title: "Team",
-        dataIndex: "team",
-        key: "team",
+        title: 'Team',
+        dataIndex: 'team',
+        key: 'team',
         sorter: false,
         // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (team) => (
@@ -120,28 +120,28 @@ const columns = [
         ),
     },
     {
-        title: "DOB",
-        dataIndex: "dateOfBirth",
-        key: "dateOfBirth",
+        title: 'DOB',
+        dataIndex: 'dateOfBirth',
+        key: 'dateOfBirth',
         sorter: true,
-        onHeaderCell: () => listeners("dob"),
+        onHeaderCell: () => listeners('dob'),
         render: (dateOfBirth) => (
             <div>
-                {dateOfBirth != null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
+                {dateOfBirth != null ? moment(dateOfBirth).format('DD/MM/YYYY') : ''}
             </div>
         ),
     },
     {
-        title: "Action",
-        dataIndex: "isUsed",
-        key: "isUsed",
+        title: 'Action',
+        dataIndex: 'isUsed',
+        key: 'isUsed',
         render: (isUsed, e) => (
             isUsed === false && (
                 <Menu
                     className="action-triple-dot-submenu"
                     theme="light"
                     mode="horizontal"
-                    style={{ lineHeight: "25px" }}
+                    style={{ lineHeight: '25px' }}
                 >
                     <SubMenu
                         key="sub1"
@@ -156,11 +156,11 @@ const columns = [
                         }
                     >
                         <Menu.Item key="1">
-                            <NavLink to={{ pathname: "/userPersonal", state: { userId: e.userId } }}>
+                            <NavLink to={{ pathname: '/userPersonal', state: { userId: e.userId } }}>
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
-                        {!e.role.find(x => x.role === "Admin") && (
+                        {!e.role.find(x => x.role === 'Admin') && (
                             <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e)}>
                                 <span>Delete</span>
                             </Menu.Item>
@@ -179,19 +179,19 @@ class UserTextualDashboard extends Component {
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
-            competitionUniqueKey: "-1",
+            competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
-            linkedEntityId: "-1",
-            postalCode: "",
-            searchText: "",
+            linkedEntityId: '-1',
+            postalCode: '',
+            searchText: '',
             deleteLoading: false,
-            dobFrom: "-1",
-            dobTo: "-1",
+            dobFrom: '-1',
+            dobTo: '-1',
             sortBy: null,
             sortOrder: null,
             offsetData: 0,
-            postCode: null
+            postCode: null,
         };
 
         this_Obj = this;
@@ -208,11 +208,11 @@ class UserTextualDashboard extends Component {
             let offsetData = userTextualDasboardListAction.payload.paging.offset
             sortBy = userTextualDasboardListAction.sortBy
             sortOrder = userTextualDasboardListAction.sortOrder
-            let dobFrom = userTextualDasboardListAction.payload.dobFrom !== "-1" ? moment(userTextualDasboardListAction.payload.dobFrom).format("YYYY-MM-DD") : this.state.dobFrom
-            let dobTo = userTextualDasboardListAction.payload.dobTo !== "-1" ? moment(userTextualDasboardListAction.payload.dobTo).format("YYYY-MM-DD") : this.state.dobTo
+            let dobFrom = userTextualDasboardListAction.payload.dobFrom !== '-1' ? moment(userTextualDasboardListAction.payload.dobFrom).format('YYYY-MM-DD') : this.state.dobFrom
+            let dobTo = userTextualDasboardListAction.payload.dobTo !== '-1' ? moment(userTextualDasboardListAction.payload.dobTo).format('YYYY-MM-DD') : this.state.dobTo
             let genderRefId = userTextualDasboardListAction.payload.genderRefId
             let linkedEntityId = userTextualDasboardListAction.payload.linkedEntityId
-            let postalCode = userTextualDasboardListAction.payload.postCode == "-1" ? "" : userTextualDasboardListAction.payload.postCode
+            let postalCode = userTextualDasboardListAction.payload.postCode == '-1' ? '' : userTextualDasboardListAction.payload.postCode
             let roleId = userTextualDasboardListAction.payload.roleId
             let searchText = userTextualDasboardListAction.payload.searchText
             let yearRefId = userTextualDasboardListAction.payload.yearRefId
@@ -224,7 +224,7 @@ class UserTextualDashboard extends Component {
             this.referenceCalls();
             this.handleTextualTableList(page);
         } else {
-            history.push("/");
+            history.push('/');
         }
     }
 
@@ -234,7 +234,7 @@ class UserTextualDashboard extends Component {
         if (userState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
                 deleteLoading: false,
-                searchText: "",
+                searchText: '',
             });
 
             this.handleTextualTableList(1);
@@ -257,15 +257,15 @@ class UserTextualDashboard extends Component {
         let name = user.name
         confirm({
             title: `Do you really want to delete the user "${name}"?`,
-            okText: "Yes",
-            okType: "danger",
-            cancelText: "No",
-            className: "user-delete-text",
+            okText: 'Yes',
+            okType: 'primary',
+            cancelText: 'No',
+            className: 'user-delete-text',
             onOk() {
                 this_.deleteUserId(user);
             },
             onCancel() {
-                console.log("Cancel");
+                console.log('Cancel');
             },
         });
     };
@@ -288,10 +288,10 @@ class UserTextualDashboard extends Component {
     };
 
     onChangeDropDownValue = async (value, key) => {
-        if (key === "postalCode") {
+        if (key === 'postalCode') {
             // const regex = /,/gi;
             let canCall = false;
-            let newVal = value.toString().split(",");
+            let newVal = value.toString().split(',');
             newVal.forEach((x) => {
                 canCall = Number(x.length) % 4 === 0 && x.length > 0;
             });
@@ -305,8 +305,8 @@ class UserTextualDashboard extends Component {
             }
         } else {
             let newValue;
-            if (key === "dobFrom" || key === "dobTo") {
-                newValue = value == null ? "-1" : moment(value, "YYYY-mm-dd");
+            if (key === 'dobFrom' || key === 'dobTo') {
+                newValue = value == null ? '-1' : moment(value, 'YYYY-mm-dd');
             } else {
                 newValue = value;
             }
@@ -361,11 +361,11 @@ class UserTextualDashboard extends Component {
             roleId,
             genderRefId,
             linkedEntityId,
-            // dobFrom: (dobFrom !== "-1" && !isNaN(dobFrom)) ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
-            dobFrom: (dobFrom !== "-1") ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
-            // dobTo: (dobTo !== "-1" && !isNaN(dobTo)) ? moment(dobTo).format("YYYY-MM-DD") : "-1",
-            dobTo: (dobTo !== "-1") ? moment(dobTo).format("YYYY-MM-DD") : "-1",
-            postCode: (postalCode !== "" && postalCode !== null) ? postalCode.toString() : "-1",
+            // dobFrom: (dobFrom !== '-1' && !isNaN(dobFrom)) ? moment(dobFrom).format('YYYY-MM-DD') : '-1',
+            dobFrom: (dobFrom !== '-1') ? moment(dobFrom).format('YYYY-MM-DD') : '-1',
+            // dobTo: (dobTo !== '-1' && !isNaN(dobTo)) ? moment(dobTo).format('YYYY-MM-DD') : '-1',
+            dobTo: (dobTo !== '-1') ? moment(dobTo).format('YYYY-MM-DD') : '-1',
+            postCode: (postalCode !== '' && postalCode !== null) ? postalCode.toString() : '-1',
             searchText,
             paging: {
                 limit: 10,
@@ -397,7 +397,7 @@ class UserTextualDashboard extends Component {
             roleId,
             genderRefId,
             linkedEntityId,
-            postCode: (postalCode !== "" && postalCode !== null) ? postalCode.toString() : "-1",
+            postCode: (postalCode !== '' && postalCode !== null) ? postalCode.toString() : '-1',
             searchText,
         };
 
@@ -405,9 +405,9 @@ class UserTextualDashboard extends Component {
     };
 
     headerView = () => (
-        <Header className="comp-player-grades-header-view" style={{ padding: "0px 50px 0 45px" }}>
+        <Header className="comp-player-grades-header-view" style={{ padding: '0 50px 0 45px' }}>
             <div className="row">
-                <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.userProfile}
@@ -427,7 +427,7 @@ class UserTextualDashboard extends Component {
                                     value={this.state.searchText}
                                     prefix={
                                         <SearchOutlined
-                                            style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                            style={{ color: 'rgba(0,0,0,.25)', height: 16, width: 16 }}
                                             onClick={this.onClickSearchIcon}
                                         />
                                     }
@@ -474,7 +474,7 @@ class UserTextualDashboard extends Component {
         }
 
         return (
-            <div style={{ paddingLeft: "3.0%" }}>
+            <div style={{ paddingLeft: '3.0%' }}>
                 <div className="fluid-width" style={{ marginRight: 35 }}>
                     <div className="row user-filter-row">
                         <div className="user-col col-lg-3 col-md-6">
@@ -483,12 +483,12 @@ class UserTextualDashboard extends Component {
                                 <Select
                                     name="yearRefId"
                                     className="year-select user-filter-select-drop"
-                                    onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                                    onChange={(yearRefId) => this.onChangeDropDownValue(yearRefId, 'yearRefId')}
                                     value={this.state.yearRefId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => (
-                                        <Option key={'year_' + item.id} value={item.id}>
+                                    {this.props.appState.yearList.map((item) => (
+                                        <Option key={`year_${item.id}`} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -503,13 +503,13 @@ class UserTextualDashboard extends Component {
                                     showSearch
                                     optionFilterProp="children"
                                     className="year-select user-filter-select-drop"
-                                    onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionUniqueKey")}
+                                    onChange={(competitionId) => this.onChangeDropDownValue(competitionId, 'competitionUniqueKey')}
                                     value={this.state.competitionUniqueKey}
                                 >
                                     <Option key="-1" value="-1">{AppConstants.all}</Option>
                                     {(competitionList || []).map((item) => (
                                         <Option
-                                            key={'competition_' + item.competitionUniqueKey}
+                                            key={`competition_${item.competitionUniqueKey}`}
                                             value={item.competitionUniqueKey}
                                         >
                                             {item.name}
@@ -524,12 +524,12 @@ class UserTextualDashboard extends Component {
                                 <div className="year-select-heading select-heading-wid">{AppConstants.roles}</div>
                                 <Select
                                     className="year-select user-filter-select-drop"
-                                    onChange={(e) => this.onChangeDropDownValue(e, "roleId")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'roleId')}
                                     value={this.state.roleId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(roles || []).map((role) => (
-                                        <Option key={'role_' + role.id} value={role.id}>{role.description}</Option>
+                                        <Option key={`role_${role.id}`} value={role.id}>{role.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -540,12 +540,12 @@ class UserTextualDashboard extends Component {
                                 <div className="year-select-heading select-heading-wid">{AppConstants.gender}</div>
                                 <Select
                                     className="year-select user-filter-select-drop"
-                                    onChange={(e) => this.onChangeDropDownValue(e, "genderRefId")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'genderRefId')}
                                     value={this.state.genderRefId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(genderData || []).map((g) => (
-                                        <Option key={'gender_' + g.id} value={g.id}>{g.description}</Option>
+                                        <Option key={`gender_${g.id}`} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -561,13 +561,13 @@ class UserTextualDashboard extends Component {
                                     optionFilterProp="children"
                                     className="year-select user-filter-select-drop"
                                     style={{ minWidth: 100 }}
-                                    onChange={(e) => this.onChangeDropDownValue(e, "linkedEntityId")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'linkedEntityId')}
                                     value={this.state.linkedEntityId}
                                 >
                                     <Option key="-1" value="-1">{AppConstants.all}</Option>
                                     {(organisations || []).map((g) => (
                                         <Option
-                                            key={'organisation_' + g.organisationUniqueKey}
+                                            key={`organisation_${g.organisationUniqueKey}`}
                                             value={g.organisationUniqueKey}
                                         >
                                             {g.name}
@@ -596,12 +596,12 @@ class UserTextualDashboard extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select user-filter-select-cal"
-                                    onChange={e => this.onChangeDropDownValue(e, "dobFrom")}
+                                    onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="dobFrom"
                                     placeholder="dd-mm-yyyy"
-                                    value={this.state.dobFrom !== "-1" && moment(this.state.dobFrom, "YYYY-MM-DD")}
+                                    value={this.state.dobFrom !== '-1' && moment(this.state.dobFrom, 'YYYY-MM-DD')}
                                 />
                             </div>
                         </div>
@@ -613,11 +613,11 @@ class UserTextualDashboard extends Component {
                                     placeholder="dd-mm-yyyy"
                                     size="large"
                                     className="year-select user-filter-select-cal"
-                                    onChange={e => this.onChangeDropDownValue(e, "dobTo")}
+                                    onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="dobTo"
-                                    value={this.state.dobTo !== "-1" && moment(this.state.dobTo, "YYYY-MM-DD")}
+                                    value={this.state.dobTo !== '-1' && moment(this.state.dobTo, 'YYYY-MM-DD')}
                                 />
                             </div>
                         </div>
@@ -683,7 +683,7 @@ class UserTextualDashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
 
                 <InnerHorizontalMenu menu="user" userSelectedKey="1" />

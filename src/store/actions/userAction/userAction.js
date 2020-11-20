@@ -57,10 +57,11 @@ function getAffiliateOurOrganisationIdAction(organisationId) {
 }
 
 /* Get AffiliateTo Organisation */
-function getAffiliateToOrganisationAction(organisationId) {
+function getAffiliateToOrganisationAction(organisationId, searchText) {
     return {
         type: ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD,
         payload: organisationId,
+        searchText
     };
 }
 
@@ -399,6 +400,13 @@ function updateBannerAction(payload) {
     };
 }
 
+function clearListAction(payload) {
+    return {
+        type: ApiConstants.API_CLEAR_LIST_DATA,
+        payload,
+    };
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -451,4 +459,5 @@ export {
     getUmpireActivityListAction,
     getBannerCnt,
     updateBannerAction,
+    clearListAction
 };

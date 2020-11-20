@@ -70,7 +70,7 @@ function saveDraws(yearId, competitionId, drawsMasterId) {
 }
 
 /////update draws court timing where N/A is there
-function updateCourtTimingsDrawsAction(data, source, target, actionType, drawData, apiData) {
+function updateCourtTimingsDrawsAction(data, source, target, actionType, drawData, apiData,dateRangeCheck) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_LOAD,
         data,
@@ -78,7 +78,8 @@ function updateCourtTimingsDrawsAction(data, source, target, actionType, drawDat
         targetArray: target,
         actionType: actionType,
         drawData: drawData,
-        apiData: apiData
+        apiData: apiData,
+        dateRangeCheck:dateRangeCheck
     }
     return action
 }

@@ -437,7 +437,7 @@ class CompetitionFinals extends Component {
         return (
             <Header className="comp-venue-courts-header-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.finals}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -519,7 +519,6 @@ class CompetitionFinals extends Component {
         this.props.searchVenueList(filteredData)
     };
 
-    ////////form content view
     contentView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
@@ -902,7 +901,7 @@ class CompetitionFinals extends Component {
                             {(applyToData || []).map((app) => (
                                 <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
                             ))}
-                            <Radio key={'applyTo_' + "-1"} value={"-1"}>{AppConstants.none}</Radio>
+                            <Radio key={'applyTo_' + "0"} value={0}>{AppConstants.none}</Radio>
                         </Radio.Group>
                     </Form.Item>
                     {data.applyToRefId !== '-1' && (
@@ -1025,7 +1024,7 @@ class CompetitionFinals extends Component {
                                         {(extraTimeDrawData || []).map((ex) => (
                                             <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
                                         ))}
-                                        <Radio key="extraTimeDraw_-1" value="-1">{AppConstants.none}</Radio>
+                                        <Radio key="extraTimeDraw_0" value={0} >{AppConstants.none}</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                             </div>
@@ -1116,7 +1115,7 @@ class CompetitionFinals extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}

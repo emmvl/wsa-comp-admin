@@ -490,66 +490,65 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     checkCurrentSwapObjects(source, target, drawData) {
-        let sourceIndexArray = source.split(':');
-        let targetIndexArray = target.split(':');
-        let sourceXIndex = sourceIndexArray[0];
-        let sourceYIndex = sourceIndexArray[1];
-        let targetXIndex = targetIndexArray[0];
-        let targetYIndex = targetIndexArray[1];
+        const sourceIndexArray = source.split(':');
+        const targetIndexArray = target.split(':');
+        const sourceXIndex = sourceIndexArray[0];
+        const sourceYIndex = sourceIndexArray[1];
+        const targetXIndex = targetIndexArray[0];
+        const targetYIndex = targetIndexArray[1];
 
-        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
-        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+        const sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
+        const targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+
+        const sourceDraws = drawData[sourceXIndex];
+        const targetDraws = drawData[targetXIndex];
 
         // for end time calculations
         const startTimeSource = moment(sourceObejct.matchDate);
-        const endTimeSource = moment(sourceObejct.matchDate.slice(0, -5) + sourceObejct.endTime);
+        const sourceObejctDate = sourceObejct.matchDate.slice(0, -5);
+        const endTimeSource = moment(sourceObejctDate + sourceObejct.endTime);
         const diffTimeSource = endTimeSource.diff(startTimeSource, 'minutes');
 
         const startTimeTarget = moment(targetObject.matchDate);
-        const endTimeTarget = moment(targetObject.matchDate.slice(0, -5) + targetObject.endTime);
+        const targetObjectDate = sourceObejct.matchDate.slice(0, -5);
+        const endTimeTarget = moment(targetObjectDate + targetObject.endTime);
         const diffTimeTarget = endTimeTarget.diff(startTimeTarget, 'minutes');
 
-        // define next slots with data
-        const nextSource = drawData[sourceXIndex].slotsArray.find((slot, index) => {
-            if(index > sourceYIndex && slot.drawsId) {
-                return slot;
+        // define next slots with data for the swappable objects days
+        const nextSource = drawData[sourceXIndex].slotsArray
+            .filter(slot => slot.matchDate.slice(0, -5) === sourceObejctDate)
+            .find((slot, index) => {
+                if (index > sourceYIndex && slot.drawsId) {
+                    return slot;
+                }
             }
-        })
+            )
 
-        const nextTarget = drawData[targetXIndex].slotsArray.find((slot, index) => {
-            if(index > targetYIndex && slot.drawsId) {
-                return slot;
+        const nextTarget = drawData[targetXIndex].slotsArray
+            .filter(slot => slot.matchDate.slice(0, -5) === targetObjectDate)
+            .find((slot, index) => {
+                if (index > targetYIndex && slot.drawsId) {
+                    return slot;
+                }
             }
-        })
-
-        // define if next events starts later
-
-        const schedule = this.getWeeklySchedule();
-
-        // define end time in day schedule
-        const targetDayOfWeek = moment(sourceObejct.matchDate).format('dddd').toLowerCase();
-        const targetSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === targetDayOfWeek);
-        const endWorkingDayTarget = targetObject.matchDate.slice(0, -5) + targetSchedule.timeslot.endTime;
-
-        const sourceDayOfWeek = moment(targetObject.matchDate).format('dddd').toLowerCase();
-        const sourceSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === sourceDayOfWeek);
-        const endWorkingDaySource = sourceObejct.matchDate.slice(0, -5) + sourceSchedule.timeslot.endTime;
+            )
 
         // define if the swappable event finishes before next event or end of the working day
+        const targetObjectRestrictionEnd = this.getDayTimeRestrictions(targetDraws, targetObjectDate).endTime;
+        const sourceObjectRestrictionEnd = this.getDayTimeRestrictions(sourceDraws, sourceObejctDate).endTime;
 
         const sourceEndNew = moment(targetObject.matchDate).add(diffTimeSource, 'minutes');
-        const startTimeNextTarget = nextTarget ? moment(nextTarget.matchDate) : moment(endWorkingDayTarget);
+        const startTimeNextTarget = nextTarget ? moment(nextTarget.matchDate) : targetObjectRestrictionEnd;
         const isStartNextSourceLater = startTimeNextTarget.isSameOrAfter(sourceEndNew);
 
         const targetEndNew = moment(sourceObejct.matchDate).add(diffTimeTarget, 'minutes');
-        const startTimeNextSource = nextSource ? moment(nextSource.matchDate) : moment(endWorkingDaySource);
+        const startTimeNextSource = nextSource ? moment(nextSource.matchDate) : sourceObjectRestrictionEnd;
         const isStartNextTargetLater = startTimeNextSource.isSameOrAfter(targetEndNew);
 
         // for case when next events starts before end of swappable ones
         if (!isStartNextTargetLater || !isStartNextSourceLater) {
             return false;
         }
-
         return true;
     }
 
@@ -619,14 +618,13 @@ class MultifieldDrawsNewTimeline extends Component {
             yearId,
             storedCompetitionId,
             venueId,
-            roundId,
+            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
             null,
             null,
             null,
             this.state.filterDates
         );
-
-        this.setState({ updateLoad: true, isOnSwapUpdate : true });
+        this.setState({ updateLoad: true, isOnSwapUpdate: true });
     };
 
     // on Competition change
@@ -802,14 +800,12 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     allFilterValue = data => {
-        const isAllSelected = isArrayNotEmpty(data) && data.map(item => item.checked).every(item=> item === true);
+        const isAllSelected = isArrayNotEmpty(data) && data.map(item => item.checked).every(item => item === true);
         return isAllSelected ? true : false;
     }
 
     getWeeklySchedule = () => {
         let venueData = this.props.drawsState.competitionVenues;
-
-        // console.log('venueData', venueData);
 
         const weekSlotsTimeSchedule = [];
 
@@ -832,11 +828,11 @@ class MultifieldDrawsNewTimeline extends Component {
                         const isStartBefore = venueSlotStart.isBefore(equalDaysOfWeekSlotStart);
                         const isEndAfter = venueSlotEnd.isAfter(equalDaysOfWeekSlotEnd);
 
-                        if(isStartBefore) {
+                        if (isStartBefore) {
                             equalDaysOfWeekSlot.timeslot.startTime = venueSlot.timeslot.startTime;
                         }
 
-                        if(isEndAfter) {
+                        if (isEndAfter) {
                             equalDaysOfWeekSlot.timeslot.endTime = venueSlot.timeslot.endTime;
                         }
                     }
@@ -851,9 +847,9 @@ class MultifieldDrawsNewTimeline extends Component {
         const tooltip = document.getElementById('draggableTooltip');
 
         tooltip.setAttribute(
-            "style", 
+            "style",
             "display: none"
-        ); 
+        );
     }
 
     drawsFieldDragMove = e => {
@@ -867,21 +863,20 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const tooltip = document.getElementById('draggableTooltip');
         const isTooltipAllowTime = this.dragTimeRef.current?.isSameOrAfter(dragDayTimeRestrictions?.startTime)
-                                && this.dragTimeEndRef.current?.isSameOrBefore(dragDayTimeRestrictions?.endTime)
-                                && !!this.state.dragDayTarget;
+            && this.dragTimeEndRef.current?.isSameOrBefore(dragDayTimeRestrictions?.endTime)
+            && !!this.state.dragDayTarget;
 
 
         if (isTooltipAllowTime || this.state.tooltipSwappableTime) {
             tooltip.setAttribute(
-                "style", 
-                    `
-                    min-width: fit-content;
+                "style",
+                `min-width: fit-content;
                     padding: 5px;
                     background: #fff;
                     border: 1px solid #bbbbc6;
                     border-radius: 5px;
-                    position: absolute; 
-                    left: ${tooltipX}px; 
+                    position: absolute;
+                    left: ${tooltipX}px;
                     top: ${tooltipY}px;
                     z-index: 100`
             );
@@ -889,13 +884,13 @@ class MultifieldDrawsNewTimeline extends Component {
 
         else {
             tooltip.setAttribute(
-                "style", 
+                "style",
                 "display: none"
             );
         }
     }
-    
-    dayLineDragMove = (e, startDayDate, courtDataSlotsTarget, timeRestrictionsSchedule) => {   
+
+    dayLineDragMove = (e, startDayDate, courtDataSlotsTarget, timeRestrictionsSchedule) => {
         const { draggableEventObject, tooltipSwappableTime, dragDayTarget } = this.state;
 
         if (dragDayTarget !== e.currentTarget) {
@@ -927,7 +922,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
             const startTimeOld = moment(draggableEventObject.matchDate);
             const endTimeOld = moment(draggableEventObject.matchDate.slice(0, -5) + draggableEventObject.endTime);
-            const diffTime= endTimeOld.diff(startTimeOld, 'minutes');
+            const diffTime = endTimeOld.diff(startTimeOld, 'minutes');
             const endTimeNew = moment(newTimeWithDateFormatted).add(diffTime, 'minutes');
 
             this.dragTimeEndRef.current = endTimeNew;
@@ -952,7 +947,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const tooltip = document.getElementById('draggableTooltip');
         tooltip.setAttribute(
-            "style", 
+            "style",
             "display: none"
         );
 
@@ -970,7 +965,7 @@ class MultifieldDrawsNewTimeline extends Component {
             const draggableEvent = this.state.draggableEventObject;
 
             const endTimeNew = this.dragTimeEndRef.current;
-            
+
             if (endTimeNew.isAfter(this.state.dragDayTimeRestrictions.endTime)) {
                 return;
             }
@@ -981,7 +976,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
             const endTimeFormatted = endTimeNew.format('HH:mm');
 
-            const notEmptyTargetDayCourtSlots = this.state.courtDataSlotsTarget.filter(slot => 
+            const notEmptyTargetDayCourtSlots = this.state.courtDataSlotsTarget.filter(slot =>
                 slot.matchDate.slice(0, -5) === newTimeWithDateFormatted.slice(0, -5)
                 && slot.drawsId
             );
@@ -993,7 +988,8 @@ class MultifieldDrawsNewTimeline extends Component {
 
                     const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
                     const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
-                    
+                    const isSlotEventInside = startTimeNew.isBefore(slotStart) && endTimeNew.isAfter(slotEnd);
+
                     const isEventOverItself = slot.drawsId === draggableEvent.drawsId
                         && (
                             isStartTimeCondition
@@ -1018,11 +1014,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         return false;
                     }
 
-                    if (isStartTimeCondition) {
-                        return true;
-                    }
-
-                    else if (isEndTimeCondition) {
+                    if (isStartTimeCondition || isEndTimeCondition || isSlotEventInside) {
                         return true;
                     }
                 });
@@ -1039,7 +1031,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 yearRefId: yearId,
                 competitionId: storedCompetitionId,
                 venueId: 0,
-                roundId: roundId,
+                roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
                 orgId: null,
                 startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
                 endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
@@ -1053,21 +1045,19 @@ class MultifieldDrawsNewTimeline extends Component {
                 endTime: endTimeFormatted,
             };
 
-            // console.log('draggableEvent.drawsId', draggableEvent.drawsId)
-
             this.props.updateCourtTimingsDrawsAction(
                 postData,
                 null,
                 null,
                 null,
-                roundId,
+                this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
                 apiData,
                 this.state.filterDates
             );
         }
     }
 
-    slotObjectMouseDown = (e, draggableEventObject)=> {
+    slotObjectMouseDown = (e, draggableEventObject) => {
         this.setState({ draggableEventObject });
 
         if (draggableEventObject) {
@@ -1075,13 +1065,13 @@ class MultifieldDrawsNewTimeline extends Component {
             const draggableElMouseX = e.pageX - bounds.left;
             const draggableElMouseY = e.pageY - bounds.top;
 
-            this.setState({ 
+            this.setState({
                 draggableElMouse: {
                     draggableElMouseX,
                     draggableElMouseY
                 }
             });
-        } 
+        }
     }
 
     checkUnavailableTime = (workingSchedule, startDayTime, endDayTime, date) => {
@@ -1118,6 +1108,73 @@ class MultifieldDrawsNewTimeline extends Component {
             : null;
 
         return [unavailableStartWidth, unavailableEndWidth];
+    }
+
+    getDayTimeRestrictions = (courtData, fieldItemDate) => {
+        const venueData = this.props.drawsState.competitionVenues;
+
+        // for check the schedule of the day
+        const schedule = this.getWeeklySchedule();
+        const itemDateDayOfWeek = moment(fieldItemDate).format('dddd').toLowerCase();
+
+        const findSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === itemDateDayOfWeek);
+
+        const startDayTime = findSchedule.timeslot.startTime;
+        const endDayTime = findSchedule.timeslot.endTime;
+
+        const timeAllDayScheduleHours = [startDayTime];
+
+        while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
+            const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
+            timeAllDayScheduleHours.push(newTime)
+        }
+
+        // check unavailable time during the day
+
+        const courtVenueId = courtData.slotsArray.find(slot => slot.venueId).venueId;
+        const courtId = courtData.venueCourtId;
+
+        let venueDaySchedule;
+        let workingDayInTimeline;
+        let courtDaySchedule;
+
+        // TODO this.props.drawsState.competitionVenues could be an object with different properties, necessary to fix !!
+
+        if (venueData[0]?.availableTimeslots) {
+            venueData.forEach(venue => {
+                const daySchedule = venue.availableTimeslots.find(venueDay =>
+                    venueDay?.venueId && venueDay.venueId === courtVenueId && venueDay.day === findSchedule.day);
+
+                if (daySchedule) {
+                    venueDaySchedule = daySchedule.timeslot;
+                }
+            });
+
+            const venueDataSlotForCheck = venueData.find(venue => venue.id === courtVenueId);
+
+            // check unavailable days of week for court based on venue schedule
+
+            const workingDaysOfVenue = venueDataSlotForCheck.availableTimeslots.filter(venueDay => courtVenueId === venueDay.venueId)
+            workingDayInTimeline = workingDaysOfVenue.find(workingDayVenue => workingDayVenue.day.toLowerCase() === itemDateDayOfWeek);
+
+            // check unavailable time during the working day for court based on court schedule
+
+            const courtWeekSchedule = venueDataSlotForCheck.courts.find(court => court.courtId === courtId)?.availableTimeslots;
+            if (courtWeekSchedule) {
+                courtDaySchedule = courtWeekSchedule.find(court => court.day === itemDateDayOfWeek)?.timeslot;
+            }
+        }
+
+        const venueSchedule = this.checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
+        const courtSchedule = this.checkUnavailableTime(courtDaySchedule, startDayTime, endDayTime, fieldItemDate);
+
+        // unavailable time during the whole day
+
+        return workingDayInTimeline ? {
+            startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
+            endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
+        }
+            : null;
     }
 
     headerView = () => {
@@ -1240,7 +1297,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         <a
                             className="view-more-btn"
                             data-toggle="collapse"
-                            href={`#venue-collapsable-div`}
+                            href="#venue-collapsable-div"
                             role="button"
                             aria-expanded="false"
                         // aria-controls={teamIndex}
@@ -1304,7 +1361,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         <a
                             className="view-more-btn"
                             data-toggle="collapse"
-                            href={`#comp-collapsable-div`}
+                            href="#comp-collapsable-div"
                             role="button"
                             aria-expanded="true"
                         // aria-controls={teamIndex}
@@ -1660,6 +1717,7 @@ class MultifieldDrawsNewTimeline extends Component {
             </div>
         );
     }
+
     checkDate(date, index, dateArray) {
         if (index == 0) {
             return moment(date).format('DD MMM, ddd')
@@ -1674,15 +1732,10 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     draggableView = (dateItem) => {
-        let disabledStatus = this.state.competitionStatus == 1
-        var dateMargin = 25;
+        let disabledStatus = this.state.competitionStatus == 1;
         var dayMargin = 25;
         let topMargin = 2;
-        let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray)
-            ? this.props.drawsState.legendsArray
-            : [];
         let date = [];
-        const venueData = this.props.drawsState.competitionVenues;
 
         dateItem.dateNewArray.map(item => {
             const dateNew = item.date.slice(0, -5);
@@ -1692,23 +1745,40 @@ class MultifieldDrawsNewTimeline extends Component {
             }
         })
 
+        // for days vertical dashed lines style
+
+        let backgroundSize = '';
+        let backgroundImage = '';
+        let backgroundPosition = '';
+
+        let backgroundPositionCounter = -30;
+
+        for (let i = 0; i <= 10; i++) {
+            backgroundSize += `${ONE_MIN_WIDTH * 30}px ${ONE_MIN_WIDTH * 30}px`;
+            backgroundImage += 'radial-gradient(1px 1px at left center, rgb(170, 170, 170) 1px, transparent 1px)';
+            backgroundPosition += `0px ${backgroundPositionCounter}px`;
+
+            backgroundPositionCounter += 5;
+
+            if (i < 10) {
+                backgroundSize += ', ';
+                backgroundImage += ', ';
+                backgroundPosition += ', ';
+            }
+        }
+
         return (
             <>
                 <div
                     className="scroll-bar pb-4"
-                    // style={{ 
-                    //     width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140,
-                    //     minWidth: 1080
-                    // }}
+                // style={{
+                //     width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140,
+                //     minWidth: 1080
+                // }}
                 >
                     <div className="table-head-wrap">
-
                         {/* Day name list */}
-                        <div className="tablehead-row"
-                            style={{
-                                marginLeft: 34,
-                            }}
-                        >
+                        <div className="tablehead-row" style={{ marginLeft: 34 }}>
                             <div className="sr-no empty-bx" />
                             {date.map((itemDate, index) => {
                                 // for drawing days position
@@ -1755,12 +1825,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         </div>
 
                         {/* Times list */}
-                        <div
-                            className="tablehead-row"
-                            style={{
-                                marginLeft: 34,
-                            }}
-                        >
+                        <div className="tablehead-row" style={{ marginLeft: 34 }}>
                             <div className="sr-no empty-bx" />
                             {date.map((itemDate, index) => {
                                 // for drawing time position
@@ -1815,7 +1880,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     onDragOver={e => this.drawsFieldDragMove(e)}
                     onDragLeave={() => this.addNoneDisplayTooltip()}
                 >
-                    <div 
+                    <div
                         id="draggableTooltip"
                         className="unavailable-draws"
                         style={{
@@ -1823,25 +1888,19 @@ class MultifieldDrawsNewTimeline extends Component {
                         }}
                     />
                     {dateItem.draws && dateItem.draws.map((courtData, index) => {
-
                         if (index !== 0) {
                             topMargin += 70;
                         }
 
                         let prevDaysWidth = 0;
                         let diffDayScheduleTime = 0;
-                        // console.log('courtData', courtData)
 
                         return (
-                            <div
-                                key={"court" + index}
-                            >
+                            <div key={"court" + index}>
                                 <div className="sr-no" style={{ height: 62, boxSizing: 'border-box' }}>
-                                    <div className="venueCourt-tex-div"
+                                    <div
+                                        className="venueCourt-tex-div"
                                         style={{
-                                            // position: 'fixed',
-                                            zIndex: 99,
-                                            background: 'white',
                                             width: 95,
                                             marginLeft: -20,
                                             textAlign: 'center',
@@ -1863,14 +1922,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     const startDayTime = findSchedule.timeslot.startTime;
                                     const endDayTime = findSchedule.timeslot.endTime;
 
-                                    const timeAllDayScheduleHours = [startDayTime];
-
-                                    while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
-                                        const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
-                                        timeAllDayScheduleHours.push(newTime)
-                                    }
-
-                                    if (fieldItemDateIndex !== 0 ) {
+                                    if (fieldItemDateIndex !== 0) {
                                         prevDaysWidth += diffDayScheduleTime;
                                     }
                                     if (fieldItemDateIndex === 0) {
@@ -1882,61 +1934,14 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                     diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH;
 
-                                    // check unabailable time during the day
+                                    const timeRestrictionsSchedule = this.getDayTimeRestrictions(courtData, fieldItemDate);
 
-                                    const courtVenueId = courtData.slotsArray.find(slot => slot.venueId).venueId;
-                                    const courtId = courtData.venueCourtId;
-
-                                    let venueDaySchedule;
-                                    let workingDayInTimeline;
-                                    let courtDaySchedule;
-
-                                    // TODO this.props.drawsState.competitionVenues could be an object with different properties, necessary to fix !!
-
-                                    if (venueData[0]?.availableTimeslots) {
-
-                                        venueData.forEach(venue => {
-                                            const daySchedule = venue.availableTimeslots.find(venueDay =>
-                                                venueDay?.venueId && venueDay.venueId === courtVenueId && venueDay.day === findSchedule.day);
-
-                                            if (daySchedule) {
-                                                venueDaySchedule = daySchedule.timeslot;
-                                            }
-                                        });
-
-                                        const venueDataSlotForCheck = venueData.find(venue => venue.id === courtVenueId);
-
-                                        // check unavailable days of week for court based on venue schedule
-
-                                        const workingDaysOfVenue = venueDataSlotForCheck.availableTimeslots.filter(venueDay => courtVenueId === venueDay.venueId)
-                                        workingDayInTimeline = workingDaysOfVenue.find(workingDayVenue => workingDayVenue.day.toLowerCase() === itemDateDayOfWeek);
-
-                                        // check unavailable time during the working day for court based on court schedule
-
-                                        const courtWeekSchedule = venueDataSlotForCheck.courts.find(court => court.courtId === courtId)?.availableTimeslots;
-                                        if (courtWeekSchedule) {
-                                            courtDaySchedule = courtWeekSchedule.find(court => court.day === itemDateDayOfWeek)?.timeslot;
-                                        }
-
-                                    }
-
-                                    const venueSchedule = this.checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
-                                    const courtSchedule = this.checkUnavailableTime(courtDaySchedule, startDayTime, endDayTime, fieldItemDate);
-
-                                    // unavailable time during the whole day
-                                    const timeRestrictionsSchedule = {
-                                        startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
-                                        endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
-                                    }
-
-                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate)
+                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate);
 
                                     // render for the whole unavailable day for court based on venue schedule
-                                    if (!workingDayInTimeline) {
+                                    if (!timeRestrictionsSchedule) {
                                         return (
-                                            <div
-                                                key={"slot" + fieldItemDateIndex}
-                                            >
+                                            <div key={"slot" + fieldItemDateIndex}>
                                                 <div
                                                     id={courtData.venueCourtId}
                                                     className={'box unavailable-draws'}
@@ -1950,7 +1955,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     }}
                                                     onDragOver={() => {
                                                         if (this.state.dragDayTarget) {
-                                                            this.setState({ dragDayTarget: null})
+                                                            this.setState({ dragDayTarget: null })
                                                         }
                                                     }}
                                                 >
@@ -1961,29 +1966,32 @@ class MultifieldDrawsNewTimeline extends Component {
                                     }
 
                                     return (
-                                            <div key={"slot" + fieldItemDateIndex}>
-                                                {/* <span
-                                                    style={{ left: leftMargin, top: topMargin }}
-                                                    className={'border'}
-                                                /> */}
-                                                <div
-                                                    id={courtData.venueCourtId + ':' + fieldItemDateIndex}
-                                                    className={'box purple-bg day-box'}
-                                                    style={{
-                                                        minWidth: 'unset',
-                                                        left: prevDaysWidth,
-                                                        top: topMargin,
-                                                        overflow: 'visible',
-                                                        whiteSpace: 'nowrap',
-                                                        cursor: disabledStatus && "no-drop",
-                                                        width: diffDayScheduleTime,
-                                                        background: `repeating-linear-gradient( to right, #f5f5f5, #f5f5f5 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN * ONE_MIN_WIDTH}px )`
-                                                    }}
-                                                    onDragOver={e => this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)}
-                                                    onDragEnd={e => this.dayLineDragEnd(e)}
-                                                >
-                                                    {unavailableWidth.map((width, widthIndex) => {
-                                                        if (width)
+                                        <div key={"slot" + fieldItemDateIndex}>
+                                            {/* <span
+                                                style={{ left: leftMargin, top: topMargin }}
+                                                className={'border'}
+                                            /> */}
+                                            <div
+                                                id={courtData.venueCourtId + ':' + fieldItemDateIndex}
+                                                className={'box white-bg-timeline day-box'}
+                                                style={{
+                                                    minWidth: 'unset',
+                                                    left: prevDaysWidth,
+                                                    top: topMargin,
+                                                    overflow: 'visible',
+                                                    whiteSpace: 'nowrap',
+                                                    cursor: disabledStatus && "no-drop",
+                                                    width: diffDayScheduleTime,
+                                                    borderRadius: '0px',
+                                                    backgroundSize,
+                                                    backgroundImage,
+                                                    backgroundPosition,
+                                                }}
+                                                onDragOver={e => this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)}
+                                                onDragEnd={e => this.dayLineDragEnd(e)}
+                                            >
+                                                {unavailableWidth.map((width, widthIndex) => {
+                                                    if (width) {
                                                         return (
                                                             <div
                                                                 className={'box unavailable-draws'}
@@ -2001,55 +2009,84 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                 {AppConstants.unavailable}
                                                             </div>
                                                         )
-                                                    })}
-                                                    {courtData.slotsArray.map((slotObject, slotIndex) => {
+                                                    }
+                                                })}
+                                                {courtData.slotsArray.map((slotObject, slotIndex) => {
+                                                    if (slotObject.matchDate.slice(0, -5) === fieldItemDate && slotObject.drawsId) {
+                                                        // for left margin the event start inside the day
+                                                        const startWorkingDayTime = moment(fieldItemDate + startDayTime);
+                                                        const startTimeEvent = moment(slotObject.matchDate);
 
-                                                        if (slotObject.matchDate.slice(0, -5) === fieldItemDate && slotObject.drawsId) {
+                                                        const diffTimeStartEvent = startTimeEvent.diff(startWorkingDayTime, 'minutes') * ONE_MIN_WIDTH;
 
-                                                            // for left margin the event start inside the day
-                                                            const startWorkingDayTime = moment(fieldItemDate + startDayTime);
-                                                            const startTimeEvent = moment(slotObject.matchDate);
-
-                                                            const diffTimeStartEvent = startTimeEvent.diff(startWorkingDayTime, 'minutes') * ONE_MIN_WIDTH;
-
-                                                            // for width of the event
-                                                            const endTimeEvent = moment(fieldItemDate + slotObject.endTime);
-                                                            const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes')* ONE_MIN_WIDTH;
-
-                                                                return (
+                                                        // for width of the event
+                                                        const endTimeEvent = moment(fieldItemDate + slotObject.endTime);
+                                                        const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes') * ONE_MIN_WIDTH;
+                                                        return (
+                                                            <div key={"slot" + slotIndex}>
+                                                                {/* <span
+                                                                    style={{ left: diffTimeStartEvent, top: topMargin }}
+                                                                    className={'border'}
+                                                                /> */}
                                                                 <div
-                                                                    key={"slot" + slotIndex}
-                                                                >
-                                                                    {/* <span
-                                                                        style={{ left: diffTimeStartEvent, top: topMargin }}
-                                                                        className={'border'}
-                                                                    /> */}
-                                                                    <div
-                                                                        id={slotObject.drawsId}
-                                                                        onMouseDown={e => this.slotObjectMouseDown(e, slotObject)}
-                                                                        onDragOver={() => {
-                                                                            if (
-                                                                                slotObject.matchDate !== this.state.tooltipSwappableTime
-                                                                                && slotObject !== this.state.draggableEventObject
-                                                                            )
+                                                                    id={slotObject.drawsId}
+                                                                    onMouseDown={e => this.slotObjectMouseDown(e, slotObject)}
+                                                                    onDragOver={() => {
+                                                                        if (
+                                                                            slotObject.matchDate !== this.state.tooltipSwappableTime
+                                                                            && slotObject !== this.state.draggableEventObject
+                                                                        )
                                                                             this.setState({ tooltipSwappableTime: slotObject.matchDate })
-                                                                        }}
-                                                                        onDragLeave={() => {
-                                                                            this.setState({ tooltipSwappableTime: null })
-                                                                        }}
-                                                                        className={'box purple-bg'}
-                                                                        style={{
-                                                                            backgroundColor: this.checkColor(slotObject),
-                                                                            left: diffTimeStartEvent,
-                                                                            overflow: 'hidden',
-                                                                            whiteSpace: 'nowrap',
-                                                                            cursor: disabledStatus && "no-drop",
-                                                                            width: diffTimeEventDuration,
-                                                                            minWidth: diffTimeEventDuration,
-                                                                            height: 48,
-                                                                        }}
-                                                                    >
-                                                                        {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
+                                                                    }}
+                                                                    onDragLeave={() => {
+                                                                        this.setState({ tooltipSwappableTime: null })
+                                                                    }}
+                                                                    className={'box purple-bg'}
+                                                                    style={{
+                                                                        backgroundColor: this.checkColor(slotObject),
+                                                                        left: diffTimeStartEvent,
+                                                                        overflow: 'hidden',
+                                                                        whiteSpace: 'nowrap',
+                                                                        cursor: disabledStatus && "no-drop",
+                                                                        width: diffTimeEventDuration,
+                                                                        minWidth: diffTimeEventDuration,
+                                                                        height: 48,
+                                                                    }}
+                                                                >
+                                                                    {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
+                                                                        <Swappable
+                                                                            id={
+                                                                                index.toString() +
+                                                                                ':' +
+                                                                                slotIndex.toString()
+                                                                                +
+                                                                                ':' +
+                                                                                "1"
+                                                                            }
+                                                                            content={1}
+                                                                            swappable={this.checkSwap(slotObject)}
+                                                                            onSwap={(source, target) =>
+                                                                                this.onSwap(
+                                                                                    source,
+                                                                                    target,
+                                                                                    dateItem.draws,
+                                                                                    dateItem.roundId,
+                                                                                )
+                                                                            }
+                                                                            isCurrentSwappable={(source, target) =>
+                                                                                this.checkCurrentSwapObjects(
+                                                                                    source,
+                                                                                    target,
+                                                                                    dateItem.draws,
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <span>
+                                                                                {slotObject.homeTeamName} <br />
+                                                                                {slotObject.awayTeamName}
+                                                                            </span>
+                                                                        </Swappable>
+                                                                    ) : (
                                                                             <Swappable
                                                                                 id={
                                                                                     index.toString() +
@@ -2057,7 +2094,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     slotIndex.toString()
                                                                                     +
                                                                                     ':' +
-                                                                                    "1"
+                                                                                    dateItem.roundId.toString()
                                                                                 }
                                                                                 content={1}
                                                                                 swappable={this.checkSwap(slotObject)}
@@ -2077,133 +2114,99 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     )
                                                                                 }
                                                                             >
-                                                                                 <span>
+                                                                                <span>
                                                                                     {slotObject.homeTeamName} <br />
                                                                                     {slotObject.awayTeamName}
                                                                                 </span>
                                                                             </Swappable>
-                                                                        ) : (
-                                                                                <Swappable
-                                                                                    id={
-                                                                                        index.toString() +
-                                                                                        ':' +
-                                                                                        slotIndex.toString()
-                                                                                        +
-                                                                                        ':' +
-                                                                                        dateItem.roundId.toString()
-                                                                                    }
-                                                                                    content={1}
-                                                                                    swappable={this.checkSwap(slotObject)}
-                                                                                    onSwap={(source, target) =>
-                                                                                        this.onSwap(
-                                                                                            source,
-                                                                                            target,
-                                                                                            dateItem.draws,
-                                                                                            dateItem.roundId,
-                                                                                        )
-                                                                                    }
-                                                                                    isCurrentSwappable={(source, target) =>
-                                                                                        this.checkCurrentSwapObjects(
-                                                                                            source,
-                                                                                            target,
-                                                                                            dateItem.draws,
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    <span>
-                                                                                        {slotObject.homeTeamName} <br />
-                                                                                        {slotObject.awayTeamName}
-                                                                                    </span>
-                                                                                </Swappable>
-                                                                            )}
-                                                                    </div>
-
-                                                                    {slotObject.drawsId !== null && (
-                                                                        <div
-                                                                            className="box-exception"
-                                                                            style={{
-                                                                                left: diffTimeStartEvent,
-                                                                                top: 50,
-                                                                                overflow: 'hidden',
-                                                                                whiteSpace: 'nowrap',
-                                                                                minWidth: diffTimeEventDuration,
-                                                                            }}
-                                                                        >
-                                                                            <Menu
-                                                                                className="action-triple-dot-draws"
-                                                                                theme="light"
-                                                                                mode="horizontal"
-                                                                                style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
-                                                                            >
-                                                                                <SubMenu
-                                                                                    disabled={disabledStatus}
-                                                                                    style={{
-                                                                                        margin: 0,
-                                                                                        display: 'flex',
-                                                                                        justifyContent: 'center'
-                                                                                     }}
-                                                                                    key="sub1"
-                                                                                    title={
-                                                                                        (
-                                                                                                <div>
-                                                                                                    <img
-                                                                                                        className="dot-image"
-                                                                                                        src={AppImages.moreTripleDot}
-                                                                                                        alt=""
-                                                                                                        width="16"
-                                                                                                        height="10"
-                                                                                                    />
-                                                                                                </div>
-                                                                                            )
-                                                                                    }
-                                                                                >
-                                                                                    {slotObject.isLocked == 1 && (
-                                                                                        <Menu.Item
-                                                                                            key="1"
-                                                                                            onClick={() => this.state.firstTimeCompId == "-1" || this.state.filterDates
-                                                                                                ? this.unlockDraws(
-                                                                                                    slotObject.drawsId,
-                                                                                                    "1",
-                                                                                                    courtData.venueCourtId
-                                                                                                )
-                                                                                                : this.unlockDraws(
-                                                                                                    slotObject.drawsId,
-                                                                                                    dateItem.roundId,
-                                                                                                    courtData.venueCourtId
-                                                                                                )
-                                                                                            }
-                                                                                        >
-                                                                                            <div style={{ display: 'flex' }}>
-                                                                                                <span>Unlock</span>
-                                                                                            </div>
-                                                                                        </Menu.Item>
-                                                                                    )}
-                                                                                    <Menu.Item key="2">
-                                                                                        <NavLink
-                                                                                            to={{
-                                                                                                pathname: `/competitionException`,
-                                                                                                state: {
-                                                                                                    drawsObj: slotObject,
-                                                                                                    yearRefId: this.state.yearRefId,
-                                                                                                    competitionId: this.state.firstTimeCompId,
-                                                                                                    organisationId: this.state.organisationId,
-                                                                                                },
-                                                                                            }}
-                                                                                        >
-                                                                                            <span>Exception</span>
-                                                                                        </NavLink>
-                                                                                    </Menu.Item>
-                                                                                </SubMenu>
-                                                                            </Menu>
-                                                                        </div>
-                                                                    )}
+                                                                        )}
                                                                 </div>
-                                                            )
-                                                        }
 
-                                                    })}
-                                                </div>
+                                                                {slotObject.drawsId !== null && (
+                                                                    <div
+                                                                        className="box-exception"
+                                                                        style={{
+                                                                            left: diffTimeStartEvent,
+                                                                            top: 50,
+                                                                            overflow: 'hidden',
+                                                                            whiteSpace: 'nowrap',
+                                                                            minWidth: diffTimeEventDuration,
+                                                                        }}
+                                                                    >
+                                                                        <Menu
+                                                                            className="action-triple-dot-draws"
+                                                                            theme="light"
+                                                                            mode="horizontal"
+                                                                            style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
+                                                                        >
+                                                                            <SubMenu
+                                                                                disabled={disabledStatus}
+                                                                                style={{
+                                                                                    margin: 0,
+                                                                                    display: 'flex',
+                                                                                    justifyContent: 'center'
+                                                                                }}
+                                                                                key="sub1"
+                                                                                title={
+                                                                                    (
+                                                                                        <div>
+                                                                                            <img
+                                                                                                className="dot-image"
+                                                                                                src={AppImages.moreTripleDot}
+                                                                                                alt=""
+                                                                                                width="16"
+                                                                                                height="10"
+                                                                                            />
+                                                                                        </div>
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                {slotObject.isLocked == 1 && (
+                                                                                    <Menu.Item
+                                                                                        key="1"
+                                                                                        onClick={() => this.state.firstTimeCompId == "-1" || this.state.filterDates
+                                                                                            ? this.unlockDraws(
+                                                                                                slotObject.drawsId,
+                                                                                                "1",
+                                                                                                courtData.venueCourtId
+                                                                                            )
+                                                                                            : this.unlockDraws(
+                                                                                                slotObject.drawsId,
+                                                                                                dateItem.roundId,
+                                                                                                courtData.venueCourtId
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        <div style={{ display: 'flex' }}>
+                                                                                            <span>Unlock</span>
+                                                                                        </div>
+                                                                                    </Menu.Item>
+                                                                                )}
+                                                                                <Menu.Item key="2">
+                                                                                    <NavLink
+                                                                                        to={{
+                                                                                            pathname: `/competitionException`,
+                                                                                            state: {
+                                                                                                drawsObj: slotObject,
+                                                                                                yearRefId: this.state.yearRefId,
+                                                                                                competitionId: this.state.firstTimeCompId,
+                                                                                                organisationId: this.state.organisationId,
+                                                                                            },
+                                                                                        }}
+                                                                                    >
+                                                                                        <span>Exception</span>
+                                                                                    </NavLink>
+                                                                                </Menu.Item>
+                                                                            </SubMenu>
+                                                                        </Menu>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )
+                                                    }
+                                                })}
                                             </div>
+                                        </div>
                                     );
                                 })}
                             </div>
@@ -2245,7 +2248,7 @@ class MultifieldDrawsNewTimeline extends Component {
         };
         if (regenerateExceptionRefId) {
             payload["exceptionTypeRefId"] = regenerateExceptionRefId;
-          }
+        }
         this.props.generateDrawAction(payload);
         this.setState({ venueLoad: true });
     }
@@ -2282,7 +2285,7 @@ class MultifieldDrawsNewTimeline extends Component {
         confirm({
             title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             maskClosable: true,
             mask: true,
@@ -2526,16 +2529,16 @@ class MultifieldDrawsNewTimeline extends Component {
         this.setState({ selectedRounds: e })
     }
 
-
     render() {
+        console.log(this.props.drawsState)
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
 
-                <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="18" />
 
                 <Layout className="comp-dash-table-view">
                     {this.headerView()}
@@ -2581,7 +2584,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MultifieldDrawsNewTimeline);
+export default connect(mapStateToProps, mapDispatchToProps)(MultifieldDrawsNewTimeline);

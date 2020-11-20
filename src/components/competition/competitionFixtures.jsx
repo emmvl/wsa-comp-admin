@@ -309,7 +309,6 @@ class CompetitionFixtures extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-draw-content-view mt-0">
@@ -318,12 +317,10 @@ class CompetitionFixtures extends Component {
                         <span className="form-heading">{AppConstants.fixtures}</span>
                         <div className="row">
                             <div className="col-sm">
-                                <div style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}>
+                                <div
+                                    className="d-flex align-items-center"
+                                    style={{ width: '100%' }}
+                                >
                                     <span className="year-select-heading">{AppConstants.grade}:</span>
                                     <Select
                                         className="year-select"
@@ -1036,7 +1033,7 @@ class CompetitionFixtures extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="11" />
                 <Layout className="comp-dash-table-view">

@@ -94,8 +94,8 @@ const columns = [
         key: "registrationLock",
         filterDropdown: true,
         filterIcon: () => (
-            <div style={{ marginTop: 5 }}>
-                <CustomTooltip placement="top" background="#ff8237">
+            <div className="mt-5">
+                <CustomTooltip placement="top">
                     <span>{AppConstants.regLockMsg}</span>
                 </CustomTooltip>
             </div>
@@ -193,7 +193,7 @@ class RegistrationForm extends Component {
                 this.setFieldDecoratorValues()
                 this.setState({
                     onRegistrationLoad: false,
-                   // isPublished: registrationState.registrationFormData[0].statusRefId == 2
+                    // isPublished: registrationState.registrationFormData[0].statusRefId == 2
                 })
             }
         }
@@ -564,7 +564,6 @@ class RegistrationForm extends Component {
         }
     }
 
-    ////////form content view
     contentView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let fillteredProduct = this.props.registrationState.selectedProductName !== 0 ? this.props.registrationState.selectedProductName : []
@@ -691,8 +690,8 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.training}
                     </Checkbox>
-                    <div style={{ marginTop: 8, marginLeft: -8 }}>
-                        <CustomTooltip background="#ff8237">
+                    <div className="mt-8" style={{ marginLeft: -8 }}>
+                        <CustomTooltip>
                             <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
                     </div>
@@ -863,7 +862,7 @@ class RegistrationForm extends Component {
                         {AppConstants.replyToContactDetails}
                     </Checkbox>
                     <div style={{ marginTop: -15, marginLeft: -8 }}>
-                        <CustomTooltip background="#ff8237">
+                        <CustomTooltip>
                             <span>{AppConstants.replyContactDetailMsg}</span>
                         </CustomTooltip>
                     </div>
@@ -1020,8 +1019,8 @@ class RegistrationForm extends Component {
             <div className="discount-view pt-5">
                 <div className="row ml-1">
                     <span className="form-heading">{AppConstants.how_users_Register}</span>
-                    <div style={{ marginTop: 0, marginLeft: -2 }}>
-                        <CustomTooltip background="#ff8237">
+                    <div className="mt-0 ml-n2">
+                        <CustomTooltip>
                             <span>{AppConstants.howUserRegisterMsg}</span>
                         </CustomTooltip>
                     </div>
@@ -1158,8 +1157,8 @@ class RegistrationForm extends Component {
             <div className="discount-view pt-5">
                 <div className="row ml-1">
                     <span className="form-heading">{AppConstants.additionalQuestions}</span>
-                    <div style={{ marginTop: 0, marginLeft: -2 }}>
-                        <CustomTooltip background="#ff8237">
+                    <div className="mt-0 ml-n2">
+                        <CustomTooltip>
                             <span>{AppConstants.additionQuesMsg}</span>
                         </CustomTooltip>
                     </div>
@@ -1617,7 +1616,7 @@ class RegistrationForm extends Component {
     render() {
         const { isHardshipEnabled } = this.props.registrationState.registrationFormData[0];
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
@@ -1652,7 +1651,7 @@ class RegistrationForm extends Component {
 
                             <Loader
                                 visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
-                                    this.props.registrationState.onRegistrationSaveLoad}
+                                this.props.registrationState.onRegistrationSaveLoad}
                             />
                         </Content>
                         <Footer>{this.footerView()}</Footer>

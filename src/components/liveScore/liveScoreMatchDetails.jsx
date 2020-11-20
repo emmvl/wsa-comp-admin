@@ -447,7 +447,7 @@ class LiveScoreMatchDetails extends Component {
         confirm({
             title: 'Are you sure you want to delete this match?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deleteMatch(matchId)
@@ -495,7 +495,7 @@ class LiveScoreMatchDetails extends Component {
             <div className="p-4">
                 <div className="row">
                     <div className="col-sm-12 col-md-4 col-lg-4">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <span className="form-heading pb-0">
                                 {length >= 1 ? match ? match[0].team1.name : '' : ''}
                             </span>
@@ -599,15 +599,7 @@ class LiveScoreMatchDetails extends Component {
                                 </div>
                             </div>
                             <div className="col-sm pt-2">
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="full-width d-flex flex-row align-items-center justify-content-end">
                                     <Tooltip
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
@@ -735,7 +727,7 @@ class LiveScoreMatchDetails extends Component {
                 scroll={{ x: '100%' }}
                 pagination={false}
                 loading={this.props.liveScoreGamePositionState.onLoad}
-            // rowKey={(record) => record.id}
+                // rowKey={(record) => record.id}
             />
         )
     }
@@ -2529,7 +2521,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                    // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
+                                        // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2592,7 +2584,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                    // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
+                                        // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2612,16 +2604,16 @@ class LiveScoreMatchDetails extends Component {
                                     {this.teamPlayersStatus(team2PlayersData, 'team2', match[0] ?.team2 ?.id)}
                                 </div>
                             ) : (
-                                    <div className="col-12">
-                                        <Table
-                                            className="home-dashboard-table pt-2"
-                                            columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                            dataSource={team2PlayersData}
-                                            pagination={false}
-                                            scroll={{ x: '100%' }}
-                                        />
-                                    </div>
-                                )}
+                                <div className="col-12">
+                                    <Table
+                                        className="home-dashboard-table pt-2"
+                                        columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                        dataSource={team2PlayersData}
+                                        pagination={false}
+                                        scroll={{ x: '100%' }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                     {this.footerView('team2', match[0] ?.team2 ?.id)}
@@ -2930,7 +2922,7 @@ class LiveScoreMatchDetails extends Component {
         const { umpireKey } = this.state;
         let screen = (this.props.location.state && this.props.location.state.screenName) ? this.props.location.state.screenName : null;
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <Loader
                     visible={
                         // this.props.liveScorePlayerMinuteTrackingState.onLoad ||
@@ -2941,21 +2933,21 @@ class LiveScoreMatchDetails extends Component {
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                        <DashboardLayout
-                            menuHeading={AppConstants.liveScores}
-                            menuName={AppConstants.liveScores}
-                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                        />
-                    )}
+                    <DashboardLayout
+                        menuHeading={AppConstants.liveScores}
+                        menuName={AppConstants.liveScores}
+                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    />
+                )}
 
                 {umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                 ) : (
-                        <InnerHorizontalMenu
-                            menu="liveScore"
-                            liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
-                        />
-                    )}
+                    <InnerHorizontalMenu
+                        menu="liveScore"
+                        liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
+                    />
+                )}
 
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
 

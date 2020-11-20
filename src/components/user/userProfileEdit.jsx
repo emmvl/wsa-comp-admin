@@ -58,7 +58,8 @@ class UserProfileEdit extends Component {
                 stateRefId: 1,
                 postalCode: "",
                 statusRefId: 0,
-                emergencyContactName: "",
+                emergencyFirstName: "",
+                emergencyLastName: "",
                 emergencyContactNumber: "",
                 existingMedicalCondition: "",
                 regularMedication: "",
@@ -201,7 +202,8 @@ class UserProfileEdit extends Component {
     setEmergencyFormField = () => {
         let userData  = this.state.userData;
         this.formRef.current.setFieldsValue({
-            emergencyContactName: userData.emergencyContactName,
+            emergencyFirstName: userData.emergencyFirstName,
+            emergencyLastName: userData.emergencyLastName,
             emergencyContactNumber: userData.emergencyContactNumber,
         })
     }
@@ -566,20 +568,33 @@ class UserProfileEdit extends Component {
             <div className="content-view pt-0">
                 {/* First and Last name row */}
                 <div className="row">
-                    <div className="col-sm">
-                        <Form.Item name='emergencyContactName' rules={[{ required: true, message: ValidationConstants.emergencyContactName[0] }]}>
+                    <div className="col-sm-12 col-md-6">
+                        <Form.Item name='emergencyFirstName' rules={[{ required: true, message: ValidationConstants.emergencyContactName[0] }]}>
                             <InputWithHead
-                                auto_complete="new-emergencyContactName"
+                                auto_complete="new-emergencyFirstName"
                                 required="required-field"
-                                heading={AppConstants.emergencyContactName}
-                                placeholder={AppConstants.emergencyContactName}
-                                name={'emergencyContactName'}
-                                value={userData.emergencyContactName}
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyContactName")}
+                                heading={AppConstants.firstName}
+                                placeholder={AppConstants.firstName}
+                                name={'emergencyFirstName'}
+                                value={userData.emergencyFirstName}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyFirstName")}
                             />
                         </Form.Item>
                     </div>
-                    <div className="col-sm">
+                    <div className="col-sm-12 col-md-6">
+                        <Form.Item name='emergencyLastName' rules={[{ required: true, message: ValidationConstants.emergencyContactName[1] }]}>
+                            <InputWithHead
+                                auto_complete="new-emergencyLastName"
+                                required="required-field"
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.lastName}
+                                name={'emergencyLastName'}
+                                value={userData.emergencyLastName}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyLastName")}
+                            />
+                        </Form.Item>
+                    </div>
+                    <div className="col-sm-12 col-md-6">
                         <Form.Item name='emergencyContactNumber' rules={[{ required: true, message: ValidationConstants.emergencyContactNumber[0] }]}>
                             <InputWithHead
                                 auto_complete="new-emergencyContactName"
@@ -820,7 +835,7 @@ class UserProfileEdit extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} onMenuHeadingClick={() => history.push("./userTextualDashboard")} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="5" />
                 <Layout>

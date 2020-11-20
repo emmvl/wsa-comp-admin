@@ -415,7 +415,7 @@ class QuickCompetitionMatchFormat extends Component {
         return (
             <Header className="comp-venue-courts-header-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetitionFormat}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -485,7 +485,6 @@ class QuickCompetitionMatchFormat extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         let data = this.props.competitionFormatState.competitionFormatList;
         let appState = this.props.appState;
@@ -876,7 +875,7 @@ class QuickCompetitionMatchFormat extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}

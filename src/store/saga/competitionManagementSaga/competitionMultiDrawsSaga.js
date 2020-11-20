@@ -192,7 +192,8 @@ function* updateCompetitionDrawsTimeline(action) {
                 sourceArray: action.sourceArray,
                 targetArray: action.targetArray,
                 actionType: action.actionType,
-                drawData: action.drawData
+                drawData: action.drawData,
+                dateRangeCheck:action.dateRangeCheck
             });
 
             yield put({
@@ -230,9 +231,6 @@ function* saveDrawsSaga(action) {
         yield call(errorSaga, error)
 
     }
-
-
-
 }
 
 //// Get Competition venues saga
@@ -250,7 +248,6 @@ function* getCompetitionVenues(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
@@ -271,7 +268,8 @@ function* updateCourtTimingsDrawsAction(action) {
                     sourceArray: action.sourceArray,
                     targetArray: action.targetArray,
                     actionType: action.actionType,
-                    drawData: action.drawData
+                    drawData: action.drawData,
+                    dateRangeCheck:action.dateRangeCheck
                 });
             }
             message.success(result.result.data.message)

@@ -214,7 +214,7 @@ class LiveScoreIncidentList extends Component {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { limit, sortBy, sortOrder } = this.state
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder);
         }
     }
@@ -260,7 +260,7 @@ class LiveScoreIncidentList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidents}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -407,7 +407,7 @@ class LiveScoreIncidentList extends Component {
         const { umpireKey } = this.props.liveScoreIncidentState
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
 
 
                 {

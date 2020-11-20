@@ -648,6 +648,12 @@ let CompetitionAxiosApi = {
     async replicateSave(replicateData){
         var url = `api/replicate/review`
         return Method.dataPost(url, token, replicateData)
+    },
+
+    //////update team name for competition module also
+    updateCompTeamName(payload){
+        var url = `api/teamName`
+        return Method.dataPut(url, token, payload)
     }
 };
 

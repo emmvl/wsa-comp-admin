@@ -1465,6 +1465,11 @@ const LiveScoreAxiosApi = {
 
         return Method.dataPost(url, token, pagingBody);
     },
+    /// / Export Files
+    umpirePaymentExport(url) {
+        return Method.dataGetDownload(url, localStorage.token);
+    },
+
 
 };
 
