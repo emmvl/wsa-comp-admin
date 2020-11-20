@@ -7376,6 +7376,7 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <Button
                                             className="publish-button margin-top-disabled-button"
+                                            style={{display:"unset", width: "92.5px"}}
                                             type="primary"
                                             htmlType="submit"
                                             disabled={
