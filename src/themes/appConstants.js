@@ -1374,7 +1374,7 @@ const AppConstants = {
   decline: 'DECLINE',
   stateWideMsg: 'State-wide messages',
   allOrganisation: 'All Organisations',
-  individualOrganisation: 'Individual Organisations',
+  individualOrganisation: 'Individual Organisation',
   firstLevelAffiliatesAssociationLeague: '1st Level Affiliates - Association/ League',
   secondLevelAffiliatesClubSchool: '2nd Level Affiliates - Club/ School',
   teamSeasonalFee: 'Team Seasonal Fee',

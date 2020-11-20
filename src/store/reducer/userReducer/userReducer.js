@@ -148,6 +148,7 @@ const initialState = {
   onSaveOrgPhotoLoad: false,
   onDeleteOrgPhotoLoad: false,
   bannerCount: null,
+  onLoadSearch: false
 };
 
 function userReducer(state = initialState, action) {
@@ -258,7 +259,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD:
-      return { ...state, onLoad: true, affiliateToOnLoad: true };
+      return { ...state, onLoad: true, affiliateToOnLoad: true, onLoadSearch: true };
 
     case ApiConstants.API_AFFILIATE_TO_ORGANISATION_SUCCESS:
       let affiliateToData = action.result;
@@ -267,7 +268,8 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateTo: affiliateToData,
         affiliateToOnLoad: false,
-        status: action.status
+        status: action.status,
+        onLoadSearch: false
       };
 
     case ApiConstants.UPDATE_AFFILIATE:
@@ -321,7 +323,7 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_BANNER_COUNT_LOAD:
       return { ...state, onLoad: true, error: null };
 
-      case ApiConstants.API_BANNER_COUNT_SUCCESS:
+    case ApiConstants.API_BANNER_COUNT_SUCCESS:
       return {
         ...state,
         bannerCount: action.result,
@@ -333,7 +335,7 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_UPDATE_BANNER_COUNT_LOAD:
       return { ...state, onLoad: true, error: null };
 
-      case ApiConstants.API_UPDATE_BANNER_COUNT_SUCCESS:
+    case ApiConstants.API_UPDATE_BANNER_COUNT_SUCCESS:
       return {
         ...state,
         bannerCount: action.result,
@@ -858,6 +860,12 @@ function userReducer(state = initialState, action) {
       state.userFriendListAction = null;
       state.userReferFriendListAction = null;
       return { ...state, onLoad: false };
+
+    ////Coach
+    case ApiConstants.API_CLEAR_LIST_DATA:
+      state.affiliateTo = []
+      return { ...state };
+
 
     default:
       return state;
