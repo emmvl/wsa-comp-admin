@@ -518,23 +518,22 @@ class MultifieldDrawsNewTimeline extends Component {
         const nextSource = drawData[sourceXIndex].slotsArray
             .filter(slot => slot.matchDate.slice(0, -5) === sourceObejctDate)
             .find((slot, index) => {
-                if(index > sourceYIndex && slot.drawsId) {
+                if (index > sourceYIndex && slot.drawsId) {
                     return slot;
                 }
             }
-        )
+            )
 
         const nextTarget = drawData[targetXIndex].slotsArray
             .filter(slot => slot.matchDate.slice(0, -5) === targetObjectDate)
             .find((slot, index) => {
-                if(index > targetYIndex && slot.drawsId) {
+                if (index > targetYIndex && slot.drawsId) {
                     return slot;
                 }
             }
-        )
+            )
 
         // define if the swappable event finishes before next event or end of the working day
-
         const targetObjectRestrictionEnd = this.getDayTimeRestrictions(targetDraws, targetObjectDate).endTime;
         const sourceObjectRestrictionEnd = this.getDayTimeRestrictions(sourceDraws, sourceObejctDate).endTime;
 
@@ -550,7 +549,6 @@ class MultifieldDrawsNewTimeline extends Component {
         if (!isStartNextTargetLater || !isStartNextSourceLater) {
             return false;
         }
-
         return true;
     }
 
@@ -620,14 +618,13 @@ class MultifieldDrawsNewTimeline extends Component {
             yearId,
             storedCompetitionId,
             venueId,
-            roundId,
+            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
             null,
             null,
             null,
             this.state.filterDates
         );
-
-        this.setState({ updateLoad: true, isOnSwapUpdate : true });
+        this.setState({ updateLoad: true, isOnSwapUpdate: true });
     };
 
     // on Competition change
@@ -803,7 +800,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     allFilterValue = data => {
-        const isAllSelected = isArrayNotEmpty(data) && data.map(item => item.checked).every(item=> item === true);
+        const isAllSelected = isArrayNotEmpty(data) && data.map(item => item.checked).every(item => item === true);
         return isAllSelected ? true : false;
     }
 
@@ -831,11 +828,11 @@ class MultifieldDrawsNewTimeline extends Component {
                         const isStartBefore = venueSlotStart.isBefore(equalDaysOfWeekSlotStart);
                         const isEndAfter = venueSlotEnd.isAfter(equalDaysOfWeekSlotEnd);
 
-                        if(isStartBefore) {
+                        if (isStartBefore) {
                             equalDaysOfWeekSlot.timeslot.startTime = venueSlot.timeslot.startTime;
                         }
 
-                        if(isEndAfter) {
+                        if (isEndAfter) {
                             equalDaysOfWeekSlot.timeslot.endTime = venueSlot.timeslot.endTime;
                         }
                     }
@@ -866,14 +863,14 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const tooltip = document.getElementById('draggableTooltip');
         const isTooltipAllowTime = this.dragTimeRef.current?.isSameOrAfter(dragDayTimeRestrictions?.startTime)
-                                && this.dragTimeEndRef.current?.isSameOrBefore(dragDayTimeRestrictions?.endTime)
-                                && !!this.state.dragDayTarget;
+            && this.dragTimeEndRef.current?.isSameOrBefore(dragDayTimeRestrictions?.endTime)
+            && !!this.state.dragDayTarget;
 
 
         if (isTooltipAllowTime || this.state.tooltipSwappableTime) {
             tooltip.setAttribute(
                 "style",
-                    `min-width: fit-content;
+                `min-width: fit-content;
                     padding: 5px;
                     background: #fff;
                     border: 1px solid #bbbbc6;
@@ -925,7 +922,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
             const startTimeOld = moment(draggableEventObject.matchDate);
             const endTimeOld = moment(draggableEventObject.matchDate.slice(0, -5) + draggableEventObject.endTime);
-            const diffTime= endTimeOld.diff(startTimeOld, 'minutes');
+            const diffTime = endTimeOld.diff(startTimeOld, 'minutes');
             const endTimeNew = moment(newTimeWithDateFormatted).add(diffTime, 'minutes');
 
             this.dragTimeEndRef.current = endTimeNew;
@@ -1034,7 +1031,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 yearRefId: yearId,
                 competitionId: storedCompetitionId,
                 venueId: 0,
-                roundId: roundId,
+                roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
                 orgId: null,
                 startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
                 endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
@@ -1053,14 +1050,14 @@ class MultifieldDrawsNewTimeline extends Component {
                 null,
                 null,
                 null,
-                roundId,
+                this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
                 apiData,
                 this.state.filterDates
             );
         }
     }
 
-    slotObjectMouseDown = (e, draggableEventObject)=> {
+    slotObjectMouseDown = (e, draggableEventObject) => {
         this.setState({ draggableEventObject });
 
         if (draggableEventObject) {
@@ -1174,9 +1171,9 @@ class MultifieldDrawsNewTimeline extends Component {
         // unavailable time during the whole day
 
         return workingDayInTimeline ? {
-                startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
-                endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
-            }
+            startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
+            endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
+        }
             : null;
     }
 
@@ -1303,7 +1300,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             href="#venue-collapsable-div"
                             role="button"
                             aria-expanded="false"
-                            // aria-controls={teamIndex}
+                        // aria-controls={teamIndex}
                         >
                             <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
                         </a>
@@ -1367,7 +1364,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             href="#comp-collapsable-div"
                             role="button"
                             aria-expanded="true"
-                            // aria-controls={teamIndex}
+                        // aria-controls={teamIndex}
                         >
                             <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
                         </a>
@@ -1486,40 +1483,40 @@ class MultifieldDrawsNewTimeline extends Component {
                         )}
                     </div>
                 ) : (
-                    <div id="division-collapsable-div" className="pt-0 collapse in">
-                        <Checkbox
-                            className="single-checkbox-radio-style"
-                            style={{ paddingTop: 8 }}
-                            checked={mainCheckboxValue}
-                            onChange={e => this.changeAllVenueStatus(e.target.checked, "singleCompDivisionCheked")}
-                        >
-                            {AppConstants.all}
-                        </Checkbox>
-                        {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
-                            return (
-                                index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div key={"divisionGrade_" + item.competitionDivisionGradeId} className="column pl-5">
-                                    <Checkbox
-                                        className={`single-checkbox-radio-style ${getColor(item.colorCode)}`}
-                                        style={{ paddingTop: 8 }}
-                                        checked={item.checked}
-                                        onChange={e => this.props.checkBoxOnChange(e.target.checked, "singleCompeDivision", index)}
-                                    >
-                                        {item.name}
-                                    </Checkbox>
-                                </div>
-                            )
-                        })}
-
-                        {(isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5) && (
-                            <span
-                                className="input-heading-add-another pt-4"
-                                onClick={() => this.changeShowAllStatus("division")}
+                        <div id="division-collapsable-div" className="pt-0 collapse in">
+                            <Checkbox
+                                className="single-checkbox-radio-style"
+                                style={{ paddingTop: 8 }}
+                                checked={mainCheckboxValue}
+                                onChange={e => this.changeAllVenueStatus(e.target.checked, "singleCompDivisionCheked")}
                             >
-                                {showAllDivision ? AppConstants.hide : AppConstants.showAll}
-                            </span>
-                        )}
-                    </div>
-                )}
+                                {AppConstants.all}
+                            </Checkbox>
+                            {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
+                                return (
+                                    index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div key={"divisionGrade_" + item.competitionDivisionGradeId} className="column pl-5">
+                                        <Checkbox
+                                            className={`single-checkbox-radio-style ${getColor(item.colorCode)}`}
+                                            style={{ paddingTop: 8 }}
+                                            checked={item.checked}
+                                            onChange={e => this.props.checkBoxOnChange(e.target.checked, "singleCompeDivision", index)}
+                                        >
+                                            {item.name}
+                                        </Checkbox>
+                                    </div>
+                                )
+                            })}
+
+                            {(isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5) && (
+                                <span
+                                    className="input-heading-add-another pt-4"
+                                    onClick={() => this.changeShowAllStatus("division")}
+                                >
+                                    {showAllDivision ? AppConstants.hide : AppConstants.showAll}
+                                </span>
+                            )}
+                        </div>
+                    )}
             </>
         )
     }
@@ -1610,14 +1607,14 @@ class MultifieldDrawsNewTimeline extends Component {
                         <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                     </div>
                 ) : (
-                    <div
-                        className="d-flex align-items-center mt-1"
-                        onClick={() => this.filterOnClick()}
-                        style={{ cursor: "pointer" }}
-                    >
-                        <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
-                    </div>
-                )}
+                        <div
+                            className="d-flex align-items-center mt-1"
+                            onClick={() => this.filterOnClick()}
+                            style={{ cursor: "pointer" }}
+                        >
+                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
+                        </div>
+                    )}
                 {filterEnable && this.venueLeftView()}
                 {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
                 {filterEnable && this.divisionLeftView()}
@@ -1699,13 +1696,13 @@ class MultifieldDrawsNewTimeline extends Component {
                             ))}
                         </div>
                     ) : (
-                        <div className="draggable-wrap draw-data-table">
-                            <Loader visible={this.props.drawsState.updateLoad} />
+                            <div className="draggable-wrap draw-data-table">
+                                <Loader visible={this.props.drawsState.updateLoad} />
 
-                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
-                                    {this.state.firstTimeCompId != "-1" && (
-                                        <div className="draws-round-view">
+                                {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                    <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
+                                        {this.state.firstTimeCompId != "-1" && (
+                                            <div className="draws-round-view">
                                                 <span className="draws-round">
                                                     {dateItem.roundName}
                                                 </span>
@@ -1753,16 +1750,16 @@ class MultifieldDrawsNewTimeline extends Component {
         let backgroundSize = '';
         let backgroundImage = '';
         let backgroundPosition = '';
-        
+
         let backgroundPositionCounter = -30;
-        
+
         for (let i = 0; i <= 10; i++) {
             backgroundSize += `${ONE_MIN_WIDTH * 30}px ${ONE_MIN_WIDTH * 30}px`;
             backgroundImage += 'radial-gradient(1px 1px at left center, rgb(170, 170, 170) 1px, transparent 1px)';
             backgroundPosition += `0px ${backgroundPositionCounter}px`;
-        
+
             backgroundPositionCounter += 5;
-        
+
             if (i < 10) {
                 backgroundSize += ', ';
                 backgroundImage += ', ';
@@ -1774,10 +1771,10 @@ class MultifieldDrawsNewTimeline extends Component {
             <>
                 <div
                     className="scroll-bar pb-4"
-                    // style={{
-                    //     width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140,
-                    //     minWidth: 1080
-                    // }}
+                // style={{
+                //     width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140,
+                //     minWidth: 1080
+                // }}
                 >
                     <div className="table-head-wrap">
                         {/* Day name list */}
@@ -1925,7 +1922,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     const startDayTime = findSchedule.timeslot.startTime;
                                     const endDayTime = findSchedule.timeslot.endTime;
 
-                                    if (fieldItemDateIndex !== 0 ) {
+                                    if (fieldItemDateIndex !== 0) {
                                         prevDaysWidth += diffDayScheduleTime;
                                     }
                                     if (fieldItemDateIndex === 0) {
@@ -1958,7 +1955,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     }}
                                                     onDragOver={() => {
                                                         if (this.state.dragDayTarget) {
-                                                            this.setState({ dragDayTarget: null})
+                                                            this.setState({ dragDayTarget: null })
                                                         }
                                                     }}
                                                 >
@@ -2012,7 +2009,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                 {AppConstants.unavailable}
                                                             </div>
                                                         )
-}
+                                                    }
                                                 })}
                                                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                                                     if (slotObject.matchDate.slice(0, -5) === fieldItemDate && slotObject.drawsId) {
@@ -2024,7 +2021,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                                         // for width of the event
                                                         const endTimeEvent = moment(fieldItemDate + slotObject.endTime);
-                                                        const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes')* ONE_MIN_WIDTH;
+                                                        const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes') * ONE_MIN_WIDTH;
                                                         return (
                                                             <div key={"slot" + slotIndex}>
                                                                 {/* <span
@@ -2039,7 +2036,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                             slotObject.matchDate !== this.state.tooltipSwappableTime
                                                                             && slotObject !== this.state.draggableEventObject
                                                                         )
-                                                                        this.setState({ tooltipSwappableTime: slotObject.matchDate })
+                                                                            this.setState({ tooltipSwappableTime: slotObject.matchDate })
                                                                     }}
                                                                     onDragLeave={() => {
                                                                         this.setState({ tooltipSwappableTime: null })
@@ -2090,39 +2087,39 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                             </span>
                                                                         </Swappable>
                                                                     ) : (
-                                                                        <Swappable
-                                                                            id={
-                                                                                index.toString() +
-                                                                                ':' +
-                                                                                slotIndex.toString()
-                                                                                +
-                                                                                ':' +
-                                                                                dateItem.roundId.toString()
-                                                                            }
-                                                                            content={1}
-                                                                            swappable={this.checkSwap(slotObject)}
-                                                                            onSwap={(source, target) =>
-                                                                                this.onSwap(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                    dateItem.roundId,
-                                                                                )
-                                                                            }
-                                                                            isCurrentSwappable={(source, target) =>
-                                                                                this.checkCurrentSwapObjects(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <span>
-                                                                                {slotObject.homeTeamName} <br />
-                                                                                {slotObject.awayTeamName}
-                                                                            </span>
-                                                                        </Swappable>
-                                                                    )}
+                                                                            <Swappable
+                                                                                id={
+                                                                                    index.toString() +
+                                                                                    ':' +
+                                                                                    slotIndex.toString()
+                                                                                    +
+                                                                                    ':' +
+                                                                                    dateItem.roundId.toString()
+                                                                                }
+                                                                                content={1}
+                                                                                swappable={this.checkSwap(slotObject)}
+                                                                                onSwap={(source, target) =>
+                                                                                    this.onSwap(
+                                                                                        source,
+                                                                                        target,
+                                                                                        dateItem.draws,
+                                                                                        dateItem.roundId,
+                                                                                    )
+                                                                                }
+                                                                                isCurrentSwappable={(source, target) =>
+                                                                                    this.checkCurrentSwapObjects(
+                                                                                        source,
+                                                                                        target,
+                                                                                        dateItem.draws,
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                <span>
+                                                                                    {slotObject.homeTeamName} <br />
+                                                                                    {slotObject.awayTeamName}
+                                                                                </span>
+                                                                            </Swappable>
+                                                                        )}
                                                                 </div>
 
                                                                 {slotObject.drawsId !== null && (
@@ -2533,6 +2530,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     render() {
+        console.log(this.props.drawsState)
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout

@@ -88,7 +88,7 @@ class LiveScoreAddPlayer extends Component {
                     playerData.dateOfBirth = ""
 
                     if (teamsId) {
-                        this.props.form.setFieldsValue({
+                        this.formRef.current.setFieldsValue({
                             team: teamsId
                         })
                     }
@@ -127,7 +127,7 @@ class LiveScoreAddPlayer extends Component {
                     playerData.dateOfBirth = ""
 
                     if (teamsId) {
-                        this.props.form.setFieldsValue({
+                        this.formRef.current.setFieldsValue({
                             team: teamsId
                         })
                     }
@@ -248,7 +248,7 @@ class LiveScoreAddPlayer extends Component {
                             showTime={false}
                             name={'date'}
                             value={playerData.dateOfBirth && moment(playerData.dateOfBirth, "DD-MM-YYYY")}
-                            // value={playerData.dateOfBirth}
+                        // value={playerData.dateOfBirth}
                         />
                     </div>
                     <div className="col-sm">
