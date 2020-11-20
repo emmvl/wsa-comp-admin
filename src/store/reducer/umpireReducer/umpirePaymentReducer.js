@@ -278,6 +278,18 @@ function umpirePaymentState(state = initialState, action) {
             state.umpirePaymentObject = null
             return { ...state, onLoad: false };
 
+        case ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_LOAD:
+
+
+            return { ...state, onPaymentLoad: true };
+
+        case ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_SUCCESS:
+            return {
+                ...state,
+                onPaymentLoad: false,
+
+            };
+
         default:
             return state;
     }

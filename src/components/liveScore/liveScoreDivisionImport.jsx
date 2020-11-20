@@ -51,6 +51,14 @@ class LiveScoreDivisionImport extends Component {
 
     componentDidMount() {
         this.props.liveScoreDivisionResetImportResultAction();
+        if (getLiveScoreCompetiton()) {
+            const { sourceId } = JSON.parse(getLiveScoreCompetiton());
+            if (sourceId) {
+                history.push("/liveScoreDivisionList")
+            }
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
     }
 
     headerView = () => (

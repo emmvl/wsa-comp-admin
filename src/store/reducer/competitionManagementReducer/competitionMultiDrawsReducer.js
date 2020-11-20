@@ -1144,7 +1144,7 @@ function CompetitionMultiDraws(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:
       let resultDataNew
-      if (action.competitionId == "-1") {
+      if (action.competitionId == "-1" || action.dateRangeCheck) {
         let allCompetiitonDraws = action.getResult;
         resultDataNew = allcompetitionDrawsData(allCompetiitonDraws)
       }
@@ -1158,7 +1158,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       let orgDataNew = JSON.parse(JSON.stringify(action.getResult.organisations))
       return {
         ...state,
-        getRoundsDrawsdata: action.competitionId == "-1" ? [resultDataNew.data] : resultDataNew.roundsdata,
+        getRoundsDrawsdata: action.competitionId == "-1"|| action.dateRangeCheck ?  [resultDataNew.data] : resultDataNew.roundsdata,
         drawOrganisations: orgDataNew,
         onLoad: false,
         error: null,
