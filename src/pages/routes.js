@@ -169,6 +169,10 @@ import HelpAndSupport from 'pages/Support';
 import { routeAdminRole, routeUmpireRole, routeFinanceRole } from './routeAccess';
 import NotFound from './404';
 
+import CommunicationList from 'components/communication/communicationList';
+import AddCommunication from 'components/communication/addCommunication';
+import CommunicationView from 'components/communication/communictionView';
+
 class Routes extends React.Component {
     constructor(props) {
         super(props);
@@ -942,6 +946,12 @@ class Routes extends React.Component {
                     path="/communicationEditBanners"
                     component={lazyLoad(CommunicationEditBanners)}
                 />
+
+                <PrivateRoute path="/communicationList" component={lazyLoad(CommunicationList)} />
+
+                <PrivateRoute path="/addCommunication" component={lazyLoad(AddCommunication)} />
+
+                <PrivateRoute path="/communicationView" component={lazyLoad(CommunicationView)} />
 
                 <Route path="/" component={lazyLoad(NotFound)} />
 

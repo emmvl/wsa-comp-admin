@@ -324,7 +324,7 @@ class LiveScoreMatchesList extends Component {
         }
         setOwnCompetitionYear(yearRefId);
         setOwn_competition(compKey);
-        history.push('/competitionDraws');
+        history.push({ pathname: '/competitionDraws', state: { screenKey: "/liveScoreMatches" } });
     }
 
 

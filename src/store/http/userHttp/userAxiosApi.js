@@ -80,9 +80,14 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  async affiliateToOrganisation(organisationId) {
+  async affiliateToOrganisation(organisationId, searchText) {
     let userId = await getUserId();
-    const url = `api/affiliatedtoorganisation/${organisationId}?userId=${userId}`;
+    let url = null
+    if (searchText) {
+      url = `api/affiliatedtoorganisation/${organisationId}?userId=${userId}&search=${searchText}`;
+    } else {
+      url = `api/affiliatedtoorganisation/${organisationId}?userId=${userId}`;
+    }
     return Method.dataGet(url, token);
   },
 

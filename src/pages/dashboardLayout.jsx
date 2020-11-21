@@ -56,7 +56,7 @@ class DashboardLayout extends React.Component {
                         .find((role) => role.roleId === 10);
                     const isImpersonation = !!impersonationRole;
 
-                    const entityId = impersonationRole?.entityId;
+                    const entityId = impersonationRole ?.entityId;
 
                     let presetOrganisation = organisationData
                         .find((org) => org.organisationId === entityId);
@@ -470,7 +470,8 @@ class DashboardLayout extends React.Component {
                                                         <li className={menuName === AppConstants.Communication ? "active" : ""}
                                                             style={{ display: showRoleLevelPermission(userRoleId, 'events') ? 'visible' : 'none' }}>
                                                             <div className="events-menu menu-wrap">
-                                                                <NavLink to="/communication">
+                                                                {/* <NavLink to="/communication"> */}
+                                                                <NavLink to="/communicationList">
                                                                     <span className="icon" />
                                                                     {AppConstants.Communication}
                                                                 </NavLink>
