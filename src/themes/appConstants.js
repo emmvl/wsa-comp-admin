@@ -1244,6 +1244,7 @@ const AppConstants = {
 
   shipping: 'Shipping',
   pickup: 'Pickup',
+  pickupInstructions: 'Pick Up Instructions',
   productDimensionsWeight: 'Product dimensions and weight',
   dimensions: 'Dimensions',
   size: 'Size',
