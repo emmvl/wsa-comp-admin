@@ -21,6 +21,7 @@ import Loader from 'customComponents/loader';
 import InputWithHead from 'customComponents/InputWithHead';
 import DashboardLayout from 'pages/dashboardLayout';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
+import TextArea from 'antd/lib/input/TextArea';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -228,6 +229,15 @@ class ShopSettings extends Component {
                         type="number"
                         min={0}
                     />
+                </Form.Item>
+                <Form.Item 
+                    name="pickupInstruction"
+                >
+                    <div>
+                    <span className="input-heading">{AppConstants.pickupInstructions}</span>
+                    <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>
+                    </div>
+
                 </Form.Item>
             </div>
         );
