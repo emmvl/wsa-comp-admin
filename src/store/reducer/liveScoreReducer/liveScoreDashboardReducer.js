@@ -1,4 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
+import {isArrayNotEmpty } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
@@ -19,12 +20,21 @@ function liveScoreDashboardsReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_DASHBOARD_SUCCESS:
+            let dashboardMatches = [];
+            if(isArrayNotEmpty(action.result.match)){
+                (action.result.match || []).map((item) => {
+                    if(item){
+                        dashboardMatches.push(item);
+                    }
+                })
+            }
+
             return {
                 ...state,
                 onLoad: false,
                 dashboardIncidentList: action.result.incident,
                 dashboardNewsList: action.result.news,
-                dashboardMatchList: action.result.match,
+                dashboardMatchList: dashboardMatches,
             };
 
         case ApiConstants.API_LIVE_SCORE_DASHBOARD_FAIL:
