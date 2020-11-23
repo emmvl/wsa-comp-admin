@@ -2973,13 +2973,15 @@ class RegistrationCompetitionFee extends Component {
             ],
             divisionState: false,
             affiliateOrgId: null,
-            heroImage: null
+            heroImage: null,
+            yearRefId: null
         };
 
         this_Obj = this;
         let competitionId = null;
         competitionId = this.props.location.state ? this.props.location.state.id : null;
         competitionId !== null && this.props.clearCompReducerDataAction('all');
+
 
         this.formRef = createRef();
         // this.tableReference = React.createRef();
@@ -3065,8 +3067,12 @@ class RegistrationCompetitionFee extends Component {
             if (this.props.appState.yearList.length > 0) {
                 let mainYearRefId = getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
+
+                this.getMembershipDetails(mainYearRefId)
+
                 this.setState({
-                    onYearLoad: false
+                    onYearLoad: false,
+                    yearRefId:mainYearRefId
                 })
                 this.setDetailsFieldValue()
             }
@@ -3190,13 +3196,41 @@ class RegistrationCompetitionFee extends Component {
         this.props.registrationRestrictionTypeAction();
         this.props.fixtureTemplateRoundsAction();
         this.props.paymentMethodsDefaultAction();
+
+        // if (competitionId !== null) {
+        //     let hasRegistration = 1;
+        //     this.props.getAllCompetitionFeesDeatilsAction(
+        //         competitionId,
+        //         hasRegistration,
+        //         "REG",
+        //         affiliateOrgId,
+        //         this.state.yearRefId
+        //     );
+        //     this.setState({ getDataLoading: true });
+        // } else {
+        //     let hasRegistration = 1;
+        //     this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration);
+        //     this.props.getDefaultCharity();
+        // }
+        
+    };
+
+    setYear = (e) => {
+        this.setState({yearRefId: e})
+        this.getMembershipDetails(e)
+    }
+
+    getMembershipDetails = (yearRefId) => {
+        let affiliateOrgId = this.props.location.state ? this.props.location.state.affiliateOrgId : null;
+        let competitionId = this.props.location.state ? this.props.location.state.id : null;
         if (competitionId !== null) {
             let hasRegistration = 1;
             this.props.getAllCompetitionFeesDeatilsAction(
                 competitionId,
                 hasRegistration,
                 "REG",
-                affiliateOrgId
+                affiliateOrgId,
+                yearRefId
             );
             this.setState({ getDataLoading: true });
         } else {
@@ -3204,7 +3238,7 @@ class RegistrationCompetitionFee extends Component {
             this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration);
             this.props.getDefaultCharity();
         }
-    };
+    }
 
     // for  save  payment
     paymentApiCall = (competitionId) => {
@@ -3417,7 +3451,8 @@ class RegistrationCompetitionFee extends Component {
         this.formRef.current.setFieldsValue({
             competition_name: compFeesState.competitionDetailData.competitionName,
             numberOfRounds: compFeesState.competitionDetailData.noOfRounds,
-            yearRefId: compFeesState.competitionDetailData.yearRefId,
+            // yearRefId: compFeesState.competitionDetailData.yearRefId,
+            yearRefId: this.state.yearRefId,
             competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
             registrationCloseDate: compFeesState.competitionDetailData.registrationCloseDate && moment(compFeesState.competitionDetailData.registrationCloseDate),
@@ -4406,6 +4441,8 @@ class RegistrationCompetitionFee extends Component {
                                     <Select
                                         className="year-select reg-filter-select1 ml-2"
                                         style={{ maxWidth: 80 }}
+                                        onChange = {(e) => this.setYear(e)}
+                                        setFieldsValue= {this.state.yearRefId}
                                     >
                                         {this.props.appState.yearList.map((item) => (
                                             <Option key={'year_' + item.id} value={item.id}>
