@@ -1467,8 +1467,8 @@ class MultifieldDrawsNew extends Component {
                             topMargin += 70;
                         }
                         return (
-                            <div key={"court" + index}>
-                                <div className="sr-no" style={{ height: 62 }}>
+                            <>
+                                <div key={"court" + index} className="sr-no" style={{ height: 62 }}>
                                     <div className="venueCourt-tex-div">
                                         <span className="venueCourt-text">
                                             {courtData.venueShortName + '-' + courtData.venueCourtNumber}
@@ -1670,7 +1670,7 @@ class MultifieldDrawsNew extends Component {
                                         </div>
                                     );
                                 })}
-                            </div>
+                            </>
                         );
                     })}
                 </div>

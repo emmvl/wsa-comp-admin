@@ -160,7 +160,7 @@ function structureDrawsData(data, key, venuesData) {
   let sortedDateArray = [];
   let legendArray = [];
   let sortMainCourtNumberArray = [];
-if(data.length >0){
+if(data.length >0 && venuesData){
   venuesData.forEach(venue => {
     venue.courts.forEach(court => {
       const isCourtNotEmpty = data.some(dataSlot => dataSlot.venueCourtId === court.courtId);
