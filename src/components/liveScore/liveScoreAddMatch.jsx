@@ -52,6 +52,8 @@ import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScore
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
+import { getRefBadgeData } from '../../store/actions/appAction'
+
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -103,6 +105,7 @@ class LiveScoreAddMatch extends Component {
     };
 
     componentDidMount() {
+        this.props.getRefBadgeData(this.props.appstate.accreditation)
         if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey === 'umpire') {
                 const { id, scoringType, sourceId } = JSON.parse(getUmpireCompetitonData())
@@ -709,7 +712,7 @@ class LiveScoreAddMatch extends Component {
                                     placeholder="Select Away Team"
                                     style={{ width: '100%', }}
                                     onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
-                                    // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
+                                // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
                                 >
                                     {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                         <Option key={'awayTeam_' + item.id} value={item.id}>{item.name}</Option>
@@ -828,7 +831,7 @@ class LiveScoreAddMatch extends Component {
                                         value={umpireReserve ? umpireReserve : undefined}
                                     >
                                         {umpireListResult.map((item) => (
-                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                            <option key={item.id} value={item.id}>{item.reserveName}</option>
                                         ))}
 
                                     </Select>
@@ -1531,16 +1534,16 @@ class LiveScoreAddMatch extends Component {
             if (staticMatchData.startTime !== matchData.startTime) {
                 showModal = true
             }
-            else if (staticMatchData ?.team1 ?.id !== matchData.team1id) {
+            else if (staticMatchData?.team1?.id !== matchData.team1id) {
                 showModal = true
             }
-            else if (staticMatchData ?.team2 ?.id !== matchData.team2id) {
+            else if (staticMatchData?.team2?.id !== matchData.team2id) {
                 showModal = true
             }
-            else if (staticMatchData ?.team2 ?.id !== matchData.team2id) {
+            else if (staticMatchData?.team2?.id !== matchData.team2id) {
                 showModal = true
             }
-            else if (staticMatchData ?.division ?.id !== matchData.divisionId) {
+            else if (staticMatchData?.division?.id !== matchData.divisionId) {
                 showModal = true
             }
             else if (staticMatchData.roundId !== matchData.roundId) {
@@ -1712,7 +1715,8 @@ function mapDispatchToProps(dispatch) {
         searchFilterAction,
         ladderSettingGetMatchResultAction,
         umpireListAction,
-        liveScoreGetMatchDetailInitiate
+        liveScoreGetMatchDetailInitiate,
+        getRefBadgeData
     }, dispatch)
 }
 
@@ -1723,6 +1727,7 @@ function mapStateToProps(state) {
         liveScoreScorerState: state.LiveScoreScorerState,
         liveScoreTeamState: state.LiveScoreTeamState,
         umpireState: state.UmpireState,
+        appstate: state.AppState
     }
 }
 

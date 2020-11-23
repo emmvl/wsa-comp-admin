@@ -228,7 +228,8 @@ const initialState = {
     orgId2UmpirName: null,
     staticMatchData: JSON.parse(JSON.stringify(object)),
     umpireReserveId: null,
-    umpireCoachId: null
+    umpireCoachId: null,
+    accreditation:[]
 };
 
 function setMatchData(data) {
@@ -323,7 +324,18 @@ function createCoachArray(result) {
     return coachArray
 }
 
-function createUmpireArray(result) {
+function getAccreditationValue(accreditationArray,accreditationValue){
+    if (accreditationArray) {
+        for (let i in accreditationArray) {
+            if (accreditationArray[i].id == accreditationValue) {
+                return accreditationArray[i].description
+            }
+        }
+    }
+    return "N/A"
+}
+
+function createUmpireArray(result,accreditationArr) {
     let umpireArray = []
     for (let i in result) {
         let userRoleCheck = result[i].userRoleEntities
@@ -332,8 +344,10 @@ function createUmpireArray(result) {
             if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
 
                 for (let k in linkedEntity) {
+                 let accreditationBadge =    getAccreditationValue(accreditationArr,result[i].accreditationLevelUmpireRefId)
                     let obj = {
-                        name: (result[i].firstName + " " + result[i].lastName) + " - " + linkedEntity[k].name,
+                        name: (result[i].firstName + " " + result[i].lastName) +  " - " +accreditationBadge+ " - " + linkedEntity[k].name,
+                        reserveName:(result[i].firstName + " " + result[i].lastName) +" - " + linkedEntity[k].name,
                         id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
                         umpireId: result[i].id,
                         entityId: linkedEntity[k].entityId
@@ -481,7 +495,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
                 state.coachList = coachData
             }
-            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)))
+            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)),state.accreditation)
             return {
                 ...state,
                 onLoad: false,
@@ -1009,6 +1023,13 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.matchListActionObject = null
             return { ...state, onLoad: false };
+
+            case ApiConstants.API_GET_REF_BADGE_SUCCESS:
+                state.accreditation=action.result
+                return{
+                    ...state,
+                    onLoad:false
+                }
 
         default:
             return state;

@@ -615,7 +615,10 @@ function* userExportFilesSaga(action) {
 
 function* getRefBadgeSaga(action) {
   try {
-    const result = yield call(AxiosApi.getRegBadgeData, action.URL);
+    const result = isArrayNotEmpty(action.data) ? {
+      status: 1,
+      result: { data: action.data }
+    } : yield call(AxiosApi.getRegBadgeData);
 
     if (result.status === 1) {
       yield put({

@@ -3059,7 +3059,7 @@ class RegistrationCompetitionFee extends Component {
 
         if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
             setTimeout(() => {
-                this.setDetailsFieldValue();
+                this.formRef.current && this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
         }
@@ -4095,7 +4095,7 @@ class RegistrationCompetitionFee extends Component {
         if (tabKey == '1') {
             if (
                 compFeesState.competitionDetailData.competitionLogoUrl !== null &&
-                compFeesState.competitionDetailData.heroImageUrl !== null &&
+                // compFeesState.competitionDetailData.heroImageUrl !== null &&
                 invitees.length > 0
             ) {
                 let formData = new FormData();
@@ -4170,9 +4170,9 @@ class RegistrationCompetitionFee extends Component {
                 if (compFeesState.competitionDetailData.competitionLogoUrl == null) {
                     message.error(ValidationConstants.competitionLogoIsRequired);
                 }
-                if (compFeesState.competitionDetailData.heroImageUrl == null) {
-                    message.error(ValidationConstants.heroImageIsRequired);
-                }
+                // if (compFeesState.competitionDetailData.heroImageUrl == null) {
+                //     message.error(ValidationConstants.heroImageIsRequired);
+                // }
             }
         } else if (tabKey == '2') {
             let finalmembershipProductTypes = JSON.parse(
