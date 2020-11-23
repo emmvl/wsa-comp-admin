@@ -35,7 +35,8 @@ class InnerHorizontalMenu extends React.Component {
             yearLoading: false,
             defaultYear: null,
             userAccessPermission: "",
-            userRoleId: getUserRoleId()
+            userRoleId: getUserRoleId(),
+            count: 0
         };
     }
 
@@ -110,12 +111,17 @@ class InnerHorizontalMenu extends React.Component {
                         duration: 1.5,
                         maxCount: 1
                     })
-                    message.info(AppConstants.noCompetitionYear, 1.5);
+                    if (this.state.count < 1) {
+                        message.info(AppConstants.noCompetitionYear, 1.5);
+                    }
+
                     let defaultYear = localStorage.getItem("defaultYearId")
                     this.setState({ yearId: defaultYear, loading: true })
                     localStorage.setItem("yearId", defaultYear)
-                    if (!this.props.innerHorizontalState.error) {
+                    if (!this.props.innerHorizontalState.error && this.state.count < 1) {
+                        console.log(this.props.innerHorizontalState.error, 'Glitch', this.state.count)
                         this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
+                        this.setState({ count: this.state.count + 1 })
                     }
                     return
                 }

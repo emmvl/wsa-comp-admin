@@ -347,6 +347,7 @@ function createUmpireArray(result,accreditationArr) {
                  let accreditationBadge =    getAccreditationValue(accreditationArr,result[i].accreditationLevelUmpireRefId)
                     let obj = {
                         name: (result[i].firstName + " " + result[i].lastName) +  " - " +accreditationBadge+ " - " + linkedEntity[k].name,
+                        reserveName:(result[i].firstName + " " + result[i].lastName) +" - " + linkedEntity[k].name,
                         id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
                         umpireId: result[i].id,
                         entityId: linkedEntity[k].entityId

@@ -831,7 +831,7 @@ class LiveScoreAddMatch extends Component {
                                         value={umpireReserve ? umpireReserve : undefined}
                                     >
                                         {umpireListResult.map((item) => (
-                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                            <option key={item.id} value={item.id}>{item.reserveName}</option>
                                         ))}
 
                                     </Select>
