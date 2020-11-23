@@ -166,10 +166,10 @@ function userExportFilesAction(URL) {
   };
 }
 
-function getRefBadgeData() {
+function getRefBadgeData(data) {
   return {
     type: ApiConstants.API_GET_REF_BADGE_LOAD,
-    URL
+    data
   };
 }
 
