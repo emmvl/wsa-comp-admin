@@ -720,7 +720,7 @@ class LiveScoreMatchesList extends Component {
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
                         <DashboardLayout
-                            menuHeading={AppConstants.liveScores}
+                            menuHeading={AppConstants.matchDay}
                             menuName={AppConstants.liveScores}
                             onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                         />

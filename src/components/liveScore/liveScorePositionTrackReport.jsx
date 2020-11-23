@@ -847,7 +847,7 @@ class LiveScorePositionTrackReport extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"24"} />
                 <Layout>

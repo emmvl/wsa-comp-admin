@@ -710,7 +710,7 @@ class LiveScoreAddTeam extends Component {
                     screenName == 'userPersonal' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 }
                 {
                     screenName == 'userPersonal' ?

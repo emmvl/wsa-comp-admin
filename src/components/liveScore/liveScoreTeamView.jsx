@@ -450,17 +450,17 @@ class LiveScoreTeamView extends Component {
                 {screenName === 'userPersonal' ? (
                     <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 ) : (
-                    <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                )}
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                    )}
 
                 {screenName === 'userPersonal' ? (
                     <InnerHorizontalMenu menu="user" userSelectedKey="1" />
                 ) : (
-                    <InnerHorizontalMenu
-                        menu="liveScore"
-                        liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'}
-                    />
-                )}
+                        <InnerHorizontalMenu
+                            menu="liveScore"
+                            liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'}
+                        />
+                    )}
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

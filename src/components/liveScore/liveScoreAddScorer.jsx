@@ -474,7 +474,7 @@ class LiveScoreAddScorer extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

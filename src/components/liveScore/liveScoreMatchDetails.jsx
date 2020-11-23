@@ -2933,21 +2933,21 @@ class LiveScoreMatchDetails extends Component {
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.matchDay}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                 ) : (
-                    <InnerHorizontalMenu
-                        menu="liveScore"
-                        liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
-                    />
-                )}
+                        <InnerHorizontalMenu
+                            menu="liveScore"
+                            liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
+                        />
+                    )}
 
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
 

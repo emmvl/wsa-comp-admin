@@ -276,9 +276,9 @@ class LiveScorePublicLadder extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
-                    isManuNotVisible = {true}
-                    // menuName={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
+                    isManuNotVisible={true}
+                // menuName={AppConstants.liveScores}
                 />
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" /> */}
                 <Layout>

@@ -510,8 +510,8 @@ class LiveScoreAddManager extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}
-                                 onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>
