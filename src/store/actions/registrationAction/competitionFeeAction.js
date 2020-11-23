@@ -21,13 +21,14 @@ function regCompetitionListDeleteAction(competitionId) {
 }
 
 /////get the competition fees all the data in one API
-function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId) {
+function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId, yearRefId) {
     return {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId,
         hasRegistration,
         sourceModule,
-        affiliateOrgId
+        affiliateOrgId,
+        yearRefId
     };
 }
 

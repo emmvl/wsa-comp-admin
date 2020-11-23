@@ -292,10 +292,10 @@ let AxiosApi = {
     },
 
     ////get default competition membershipproduct tab details
-    async getDefaultCompFeesMembershipProduct(hasRegistration) {
+    async getDefaultCompFeesMembershipProduct(hasRegistration,yearRefId) {
         let orgItem = await getOrganisationData();
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/membershipdetails?organisationUniqueKey=${organisationUniqueKey}&hasRegistration=${hasRegistration}`;
+        var url = `/api/competitionfee/membershipdetails?organisationUniqueKey=${organisationUniqueKey}&hasRegistration=${hasRegistration}&yearRefId=${yearRefId}`;
         return Method.dataGet(url, token);
     },
 
