@@ -463,7 +463,7 @@ class DashboardLayout extends React.Component {
                                                                 onClick={() => this.props.clearDataOnCompChangeAction()}>
                                                                 <NavLink to="/liveScoreCompetitions">
                                                                     <span className="icon" />
-                                                                    {AppConstants.liveScores}
+                                                                    {AppConstants.matchDay}
                                                                 </NavLink>
                                                             </div>
                                                         </li>

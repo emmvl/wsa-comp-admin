@@ -1610,7 +1610,8 @@ const AppConstants = {
   notification: "Notification",
   news: "News",
   sms: "SMS",
-  backToCommunication: "Back to all communication"
+  backToCommunication: "Back to all communication",
+  matchDay:"Match Day"
 };
 
 export default AppConstants;
