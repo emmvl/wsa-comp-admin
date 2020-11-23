@@ -261,7 +261,7 @@ class LiveScoreAddDivision extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.addDivision}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

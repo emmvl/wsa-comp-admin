@@ -916,7 +916,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
                     <Content>

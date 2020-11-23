@@ -270,7 +270,7 @@ class LiveScoreNewsList extends Component {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
 
                 {
                     stateWideMsg ?

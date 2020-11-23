@@ -376,7 +376,7 @@ class LiveScoreLadderAdjustment extends Component {
     render = () => {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" />
                 <Loader visible={this.props.liveScoreLadderState.onLoading || this.props.liveScoreLadderState.onResetLoad} />
                 <Layout>

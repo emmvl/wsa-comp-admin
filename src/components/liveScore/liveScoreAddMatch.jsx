@@ -1651,7 +1651,7 @@ class LiveScoreAddMatch extends Component {
                     />
                 ) : (
                         <DashboardLayout
-                            menuHeading={AppConstants.liveScores}
+                            menuHeading={AppConstants.matchDay}
                             menuName={AppConstants.liveScores}
                             onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                         />

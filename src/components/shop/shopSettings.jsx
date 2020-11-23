@@ -73,6 +73,7 @@ class ShopSettings extends Component {
             suburb: settingDetailsData.suburb,
             state: isNotNullOrEmptyString(settingDetailsData.state) ? settingDetailsData.state : [],
             postcode: settingDetailsData.postcode,
+            pickupInstruction: settingDetailsData.pickupInstruction,
         });
     }
 
