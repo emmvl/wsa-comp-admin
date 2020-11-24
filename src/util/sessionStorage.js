@@ -212,6 +212,14 @@ const clearCompetitionStorage = () => {
   }
 }
 
+const setImpersonation=(Impersonation)=>{
+  localStorage.setItem('Impersonation',Impersonation)
+}
+
+const getImpersonation=()=>{
+  return localStorage.Impersonation
+}
+
 export {
   getOwn_CompetitionFinalRefId,
   setOwn_CompetitionFinalRefId,
@@ -259,5 +267,7 @@ export {
   setParticipating_competitionStatus,
   setPrevUrl,
   getPrevUrl,
-  clearCompetitionStorage
+  clearCompetitionStorage,
+  setImpersonation,
+  getImpersonation
 }

@@ -789,6 +789,7 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
+        impersonationAccess:action.payload.access
       });
       if (action.payload.access == false) {
         history.push('/')

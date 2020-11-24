@@ -1,5 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty } from "../../../util/helpers";
+import {setImpersonation} from 'util/sessionStorage'
 
 let affiliate = {
   affiliateId: 0,
@@ -148,7 +149,8 @@ const initialState = {
   onSaveOrgPhotoLoad: false,
   onDeleteOrgPhotoLoad: false,
   bannerCount: null,
-  onLoadSearch: false
+  onLoadSearch: false,
+  impersonationAccess:false
 };
 
 function userReducer(state = initialState, action) {
@@ -760,11 +762,13 @@ function userReducer(state = initialState, action) {
       return { ...state, impersonationLoad: true };
 
     case ApiConstants.API_IMPERSONATION_SUCCESS:
+      setImpersonation(action.impersonationAccess)
       return {
         ...state,
         impersonationLoad: false,
         impersonation: action.result.success,
         status: action.status,
+        impersonationAccess:action.impersonationAccess
       };
     case ApiConstants.API_USER_DELETE_LOAD:
       return {

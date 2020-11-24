@@ -854,6 +854,7 @@ class Registration extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
+                        rowKey={(record, index) => record.orgRegistrationId + index}
                         dataSource={userRegDashboardList}
                         pagination={false}
                         loading={userRegistrationState.onUserRegDashboardLoad === true}

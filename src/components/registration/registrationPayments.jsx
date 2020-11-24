@@ -12,7 +12,7 @@ import {
     accountBalanceAction, saveStripeAccountAction,
     getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from './../../themes/dateformate';
@@ -99,6 +99,7 @@ class RegistrationPayments extends Component {
             paymentFor: "all",
             loadingSave: false,
             stripeDashBoardLoad: false,
+            isImpersonation: false
         }
     }
 
@@ -117,6 +118,7 @@ class RegistrationPayments extends Component {
     }
 
     componentDidMount() {
+
         let urlSplit = this.props.location.search.split("?code=")
         if (this.stripeConnected()) {
             this.props.getStripeTransferListAction(1, null, null)
@@ -128,6 +130,8 @@ class RegistrationPayments extends Component {
             this.props.saveStripeAccountAction(code)
             this.setState({ loadingSave: true })
         }
+
+
     }
 
     onChange = e => {
@@ -314,38 +318,45 @@ class RegistrationPayments extends Component {
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
         // let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
+        let isImpersonation = getImpersonation()
+        console.log(isImpersonation)
         return (
             <div className="pb-5 pt-5">
                 <div className="row">
                     <div className="col-sm">
                         <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
                     </div>
-                    <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
-                        {stripeConnected ? (
-                            <Button
-                                className="open-reg-button"
-                                type="primary"
-                                onClick={() => this.stripeDashboardLoginUrl()}
-                            >
-                                {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
-                                {AppConstants.goToStripeDashboard}
-                                {/* </a> */}
-                            </Button>
-                        ) : (
+                    {isImpersonation !== "true" &&
+                        < div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
+
+                            {stripeConnected ? (
                                 <Button
                                     className="open-reg-button"
                                     type="primary"
+                                    onClick={() => this.stripeDashboardLoginUrl()}
                                 >
-                                    <a href={stripeConnectURL} className="stripe-connect">
-                                        <span>
-                                            {AppConstants.connectToStripe}
-                                        </span>
-                                    </a>
+                                    {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                    {AppConstants.goToStripeDashboard}
+                                    {/* </a> */}
                                 </Button>
-                            )}
-                    </div>
+                            ) : (
+                                    <Button
+                                        className="open-reg-button"
+                                        type="primary"
+                                    >
+                                        <a href={stripeConnectURL} className="stripe-connect">
+                                            <span>
+                                                {AppConstants.connectToStripe}
+                                            </span>
+                                        </a>
+                                    </Button>
+                                )
+                            }
+
+                        </div>
+                    }
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -581,6 +592,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         stripeState: state.StripeState,
+        userState: state.UserState,
     }
 }
 
