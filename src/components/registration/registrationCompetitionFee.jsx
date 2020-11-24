@@ -102,6 +102,7 @@ const playerSeasonalTable = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -114,6 +115,7 @@ const playerSeasonalTable = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -130,6 +132,7 @@ const playerSeasonalTable = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -143,6 +146,7 @@ const playerSeasonalTable = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -156,6 +160,7 @@ const playerSeasonalTable = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -183,6 +188,7 @@ const playerSeasonalTable = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -210,6 +216,7 @@ const playerSeasonalTable = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             <Input
                 prefix="$"
@@ -233,6 +240,7 @@ const playerSeasonalTable = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 prefix="$"
@@ -256,6 +264,7 @@ const playerSeasonalTable = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: (total) => (
             <Input
                 style={{ width: 95 }}
@@ -273,6 +282,7 @@ const playerCasualTable = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -285,6 +295,7 @@ const playerCasualTable = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -301,6 +312,7 @@ const playerCasualTable = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
+        width: 84,
         render: (membershipCasual) => (
             <Input
                 prefix="$"
@@ -314,6 +326,7 @@ const playerCasualTable = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -327,6 +340,7 @@ const playerCasualTable = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -335,6 +349,7 @@ const playerCasualTable = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -343,6 +358,7 @@ const playerCasualTable = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             <Input
                 prefix="$"
@@ -366,6 +382,7 @@ const playerCasualTable = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 prefix="$"
@@ -389,6 +406,7 @@ const playerCasualTable = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: (total) => (
             <Input
                 style={{ width: 95 }}
@@ -406,6 +424,7 @@ const playerSeasonalTableAssociation = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -418,6 +437,7 @@ const playerSeasonalTableAssociation = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -434,6 +454,7 @@ const playerSeasonalTableAssociation = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -447,6 +468,7 @@ const playerSeasonalTableAssociation = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -460,6 +482,7 @@ const playerSeasonalTableAssociation = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -487,6 +510,7 @@ const playerSeasonalTableAssociation = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -514,6 +538,7 @@ const playerSeasonalTableAssociation = [
         title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             (fee != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
@@ -541,6 +566,7 @@ const playerSeasonalTableAssociation = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             (gst != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
@@ -568,6 +594,7 @@ const playerSeasonalTableAssociation = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             <Input
                 prefix="$"
@@ -591,6 +618,7 @@ const playerSeasonalTableAssociation = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 prefix="$"
@@ -614,6 +642,7 @@ const playerSeasonalTableAssociation = [
         title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) => (
             <Input
                 prefix="$"
@@ -637,6 +666,7 @@ const playerSeasonalTableAssociation = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) => (
             <Input
                 prefix="$"
@@ -660,6 +690,7 @@ const playerSeasonalTableAssociation = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: (total) => (
             <Input
                 style={{ width: 95 }}
@@ -677,6 +708,7 @@ const playerCasualTableAssociation = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -689,6 +721,7 @@ const playerCasualTableAssociation = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -705,6 +738,7 @@ const playerCasualTableAssociation = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
+        width: 84,
         render: (membershipCasual) => (
             <Input
                 prefix="$"
@@ -718,6 +752,7 @@ const playerCasualTableAssociation = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -731,6 +766,7 @@ const playerCasualTableAssociation = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -739,6 +775,7 @@ const playerCasualTableAssociation = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -747,6 +784,7 @@ const playerCasualTableAssociation = [
         title: 'Association Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -755,6 +793,7 @@ const playerCasualTableAssociation = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -763,6 +802,7 @@ const playerCasualTableAssociation = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             <Input
                 type="number"
@@ -785,6 +825,7 @@ const playerCasualTableAssociation = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 prefix="$"
@@ -808,6 +849,7 @@ const playerCasualTableAssociation = [
         title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) => (
             <Input
                 prefix="$"
@@ -831,6 +873,7 @@ const playerCasualTableAssociation = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) => (
             <Input
                 prefix="$"
@@ -854,6 +897,7 @@ const playerCasualTableAssociation = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: (total) => (
             <Input
                 style={{ width: 95 }}
@@ -871,6 +915,7 @@ const playerSeasonalTableClub = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -883,6 +928,7 @@ const playerSeasonalTableClub = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -899,6 +945,7 @@ const playerSeasonalTableClub = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -912,6 +959,7 @@ const playerSeasonalTableClub = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -925,6 +973,7 @@ const playerSeasonalTableClub = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -952,6 +1001,7 @@ const playerSeasonalTableClub = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -979,6 +1029,7 @@ const playerSeasonalTableClub = [
         title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -1006,6 +1057,7 @@ const playerSeasonalTableClub = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -1033,6 +1085,7 @@ const playerSeasonalTableClub = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             <Input
                 prefix="$"
@@ -1056,6 +1109,7 @@ const playerSeasonalTableClub = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 prefix="$"
@@ -1079,6 +1133,7 @@ const playerSeasonalTableClub = [
         title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) => (
             <Input
                 prefix="$"
@@ -1102,6 +1157,7 @@ const playerSeasonalTableClub = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) => (
             <Input
                 prefix="$"
@@ -1125,6 +1181,7 @@ const playerSeasonalTableClub = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: (total) => (
             <Input
                 style={{ width: 95 }}
@@ -1142,6 +1199,7 @@ const playerCasualTableClub = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -1154,6 +1212,7 @@ const playerCasualTableClub = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -1170,6 +1229,7 @@ const playerCasualTableClub = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
+        width: 84,
         render: (membershipCasual) => (
             <Input
                 prefix="$"
@@ -1183,6 +1243,7 @@ const playerCasualTableClub = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -1196,6 +1257,7 @@ const playerCasualTableClub = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -1204,6 +1266,7 @@ const playerCasualTableClub = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -1212,6 +1275,7 @@ const playerCasualTableClub = [
         title: 'Club Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -1220,6 +1284,7 @@ const playerCasualTableClub = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -1228,6 +1293,7 @@ const playerCasualTableClub = [
         title: 'Competition fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             <Input
                 prefix="$"
@@ -1251,6 +1317,7 @@ const playerCasualTableClub = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 prefix="$"
@@ -1274,6 +1341,7 @@ const playerCasualTableClub = [
         title: 'Affiliate fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) => (
             <Input
                 prefix="$"
@@ -1297,6 +1365,7 @@ const playerCasualTableClub = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) => (
             <Input
                 prefix="$"
@@ -1320,6 +1389,7 @@ const playerCasualTableClub = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: (total) => (
             <Input
                 style={{ width: 95 }}
@@ -1337,6 +1407,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -1349,6 +1420,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -1365,6 +1437,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -1378,6 +1451,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -1391,6 +1465,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1418,6 +1493,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1445,6 +1521,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1472,6 +1549,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1499,6 +1577,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) =>
             fee != null ? (
                 <Input
@@ -1525,6 +1604,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) =>
             gst != null ? (
                 <Input
@@ -1555,6 +1635,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) =>
             affiliateFee != null ? (
                 <Input
@@ -1585,6 +1666,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) =>
             affiliateGst != null ? (
                 <Input
@@ -1615,6 +1697,7 @@ const playerSeasonalTableTeamAssociation = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: () => (
             <Input
                 disabled
@@ -1630,6 +1713,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -1642,6 +1726,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -1658,6 +1743,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -1671,6 +1757,7 @@ const playerSeasonalTableTeamClub = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -1684,6 +1771,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1711,6 +1799,7 @@ const playerSeasonalTableTeamClub = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1738,6 +1827,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1765,6 +1855,7 @@ const playerSeasonalTableTeamClub = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -1792,6 +1883,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) =>
             fee != null ? (
                 <Input
@@ -1818,6 +1910,7 @@ const playerSeasonalTableTeamClub = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) =>
             gst != null ? (
                 <Input
@@ -1848,6 +1941,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) =>
             affiliateFee != null ? (
                 <Input
@@ -1878,6 +1972,7 @@ const playerSeasonalTableTeamClub = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) =>
             affiliateGst != null ? (
                 <Input
@@ -1908,6 +2003,7 @@ const playerSeasonalTableTeamClub = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: () => (
             <Input
                 disabled
@@ -1923,6 +2019,7 @@ const playerSeasonalTeamTable = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -1935,6 +2032,7 @@ const playerSeasonalTeamTable = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -1951,6 +2049,7 @@ const playerSeasonalTeamTable = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -1964,6 +2063,7 @@ const playerSeasonalTeamTable = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -1977,6 +2077,7 @@ const playerSeasonalTeamTable = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => {
             return(
                 ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ?
@@ -2007,6 +2108,7 @@ const playerSeasonalTeamTable = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -2034,6 +2136,7 @@ const playerSeasonalTeamTable = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) =>
             ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -2064,6 +2167,7 @@ const playerSeasonalTeamTable = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) =>
         ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
@@ -2094,6 +2198,7 @@ const playerSeasonalTeamTable = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: () => (
             <Input
                 disabled
@@ -2109,6 +2214,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -2121,6 +2227,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -2137,6 +2244,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -2150,6 +2258,7 @@ const playerCasualTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -2163,6 +2272,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2171,6 +2281,7 @@ const playerCasualTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2179,6 +2290,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Association Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2187,6 +2299,7 @@ const playerCasualTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2195,6 +2308,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -2221,6 +2335,7 @@ const playerCasualTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -2248,6 +2363,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) => (
             affiliateFee != null ? (
                 <Input
@@ -2275,6 +2391,7 @@ const playerCasualTableTeamAssociation = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) => (
             affiliateGst != null ? (
                 <Input
@@ -2302,6 +2419,7 @@ const playerCasualTableTeamAssociation = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: () => (
             <Input
                 disabled
@@ -2317,6 +2435,7 @@ const playerCasualTableTeamClub = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -2329,6 +2448,7 @@ const playerCasualTableTeamClub = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -2345,6 +2465,7 @@ const playerCasualTableTeamClub = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -2358,6 +2479,7 @@ const playerCasualTableTeamClub = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -2371,6 +2493,7 @@ const playerCasualTableTeamClub = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: () => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2379,6 +2502,7 @@ const playerCasualTableTeamClub = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2387,6 +2511,7 @@ const playerCasualTableTeamClub = [
         title: 'Club Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2395,6 +2520,7 @@ const playerCasualTableTeamClub = [
         title: 'GST',
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2403,6 +2529,7 @@ const playerCasualTableTeamClub = [
         title: 'Competition fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -2430,6 +2557,7 @@ const playerCasualTableTeamClub = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -2457,6 +2585,7 @@ const playerCasualTableTeamClub = [
         title: 'Affiliate fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
+        width: 84,
         render: (affiliateFee, record, index) => (
             affiliateFee != null ? (
                 <Input
@@ -2484,6 +2613,7 @@ const playerCasualTableTeamClub = [
         title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
+        width: 84,
         render: (affiliateGst, record, index) => (
             affiliateGst != null ? (
                 <Input
@@ -2511,6 +2641,7 @@ const playerCasualTableTeamClub = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: () => (
             <Input
                 disabled
@@ -2526,6 +2657,7 @@ const playerCasualTeamTable = [
         title: 'Membership Type',
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
+        width: 84,
         render: (membershipProductTypeName) => (
             <Input
                 className="input-inside-table-fees"
@@ -2538,6 +2670,7 @@ const playerCasualTeamTable = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
+        width: 84,
         render: (division, record) => (
             <Input
                 className="input-inside-table-fees"
@@ -2554,6 +2687,7 @@ const playerCasualTeamTable = [
         title: 'Membership Fees (excl. GST)',
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
+        width: 84,
         render: (membershipSeasonal) => (
             <Input
                 prefix="$"
@@ -2567,6 +2701,7 @@ const playerCasualTeamTable = [
         title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
+        width: 84,
         render: (membershipGst) => (
             <Input
                 prefix="$"
@@ -2580,6 +2715,7 @@ const playerCasualTeamTable = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
+        width: 84,
         render: (fee, record, index) => (
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
@@ -2588,6 +2724,7 @@ const playerCasualTeamTable = [
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
+        width: 84,
         render: (gst, record, index) => (
             <Input
                 disabled
@@ -2600,6 +2737,7 @@ const playerCasualTeamTable = [
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
         key: 'fee',
+        width: 84,
         render: (fee, record, index) => (
             fee != null ? (
                 <Input
@@ -2627,6 +2765,7 @@ const playerCasualTeamTable = [
         title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
+        width: 84,
         render: (gst, record, index) => (
             gst != null ? (
                 <Input
@@ -2654,6 +2793,7 @@ const playerCasualTeamTable = [
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
+        width: 96,
         render: () => (
             <Input
                 disabled
