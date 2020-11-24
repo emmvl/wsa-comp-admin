@@ -600,7 +600,7 @@ class HomeDashboard extends Component {
                                     )}
                                 </div>
                                 <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <span className="reg-payment-paid-reg-text">{AppConstants.livescoreCompetitions}</span>
+                                    <span className="reg-payment-paid-reg-text">{AppConstants.matchDayComp}</span>
                                 </div>
                                 <div
                                     className="col-sm-2"

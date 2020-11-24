@@ -178,7 +178,9 @@ class LiveScoreMatchSheet extends Component {
         this.setState({
             division,
             teamLoad: true,
-            selectedTeam: null
+            selectedTeam: null,
+            selectedRound: null,
+            rounds: []
         });
         this.fetchMatchList(
             division === 'All' ? null : division,

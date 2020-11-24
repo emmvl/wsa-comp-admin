@@ -269,7 +269,7 @@ class CompetitionDraws extends Component {
             if (this.props.drawsState.changeStatus == false && this.state.changeStatus) {
                 let statusRefId = this.props.drawsState.publishStatus
                 setOwn_competitionStatus(statusRefId)
-                message.success("Draws published to live scores successfully");
+                message.success("Draws published to Match Day successfully");
                 this.setState({ changeStatus: false, competitionStatus: statusRefId })
 
                 if (this.props.drawsState.teamNames != null && this.props.drawsState.teamNames != "") {

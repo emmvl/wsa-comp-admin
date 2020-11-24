@@ -119,7 +119,6 @@ class InnerHorizontalMenu extends React.Component {
                     this.setState({ yearId: defaultYear, loading: true })
                     localStorage.setItem("yearId", defaultYear)
                     if (!this.props.innerHorizontalState.error && this.state.count < 1) {
-                        console.log(this.props.innerHorizontalState.error, 'Glitch', this.state.count)
                         this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
                         this.setState({ count: this.state.count + 1 })
                     }
