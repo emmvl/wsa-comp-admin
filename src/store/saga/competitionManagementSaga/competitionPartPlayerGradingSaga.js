@@ -299,4 +299,25 @@ export function* playerCommentList(action) {
     }
 }
 
+export function* playerGradingExport(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.exportPlayerGrading, action.competitionId, action.divisionId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_PLAYER_GRADES_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
+
+
+
 

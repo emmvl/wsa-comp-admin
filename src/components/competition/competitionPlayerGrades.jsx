@@ -12,7 +12,7 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction,
+    changeDivisionPlayerAction, commentListingAction, exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwnCompetitionYear,
@@ -106,7 +106,7 @@ class CompetitionPlayerGrades extends Component {
                 let divisionId = allDivisionsData[0].competitionMembershipProductDivisionId
                 // let divisionId = 15
                 this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId)
-                this.setState({ divisionId, getDataLoading: true })
+                this.setState({ competitionDivisionId: divisionId, getDataLoading: true, divisionId })
             }
         }
 
@@ -159,6 +159,9 @@ class CompetitionPlayerGrades extends Component {
 
     }
 
+    exportPlayerData = () => {
+        this.props.exportPlayerGrades(this.state.competitionDivisionId, this.state.firstTimeCompId)
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -242,7 +245,7 @@ class CompetitionPlayerGrades extends Component {
                             {this.state.divisionId != null &&
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile">
-                                        <Button disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.exportPlayerData()} disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -1114,6 +1117,7 @@ function mapDispatchToProps(dispatch) {
         addOrRemovePlayerForChangeDivisionAction,
         changeDivisionPlayerAction,
         commentListingAction,
+        exportPlayerGrades
     }, dispatch)
 }
 

@@ -12,7 +12,8 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction
+    changeDivisionPlayerAction, commentListingAction,
+    exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -148,6 +149,10 @@ class CompetitionPartPlayerGrades extends Component {
 
     }
 
+    exportPlayerData = () => {
+        this.props.exportPlayerGrades(this.state.divisionId, this.state.firstTimeCompId)
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -230,7 +235,7 @@ class CompetitionPartPlayerGrades extends Component {
                             {this.state.divisionId != null &&
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile">
-                                        <Button disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.exportPlayerData()} disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -1070,7 +1075,8 @@ function mapDispatchToProps(dispatch) {
         deleteTeamAction,
         addOrRemovePlayerForChangeDivisionAction,
         changeDivisionPlayerAction,
-        commentListingAction
+        commentListingAction,
+        exportPlayerGrades
     }, dispatch)
 }
 

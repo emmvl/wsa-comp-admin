@@ -110,6 +110,7 @@ import {
     deleteTeamSaga,
     playerChangeDivisionSaga,
     playerCommentList,
+    playerGradingExport
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 
 import * as regChangeSaga from './registrationSaga/registrationChangeSaga';
@@ -447,6 +448,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD, updateDrawsLock);
     // invite send in registration Form
     yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList);
+
     /// / Umpire Module
     yield takeEvery(ApiConstants.API_UMPIRE_LIST_LOAD, umpireSaga.umpireListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga);
@@ -551,4 +553,5 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD, competitionQuickSaga.UpdateGrid_TimeSlotSaga);
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD, competitionQuickSaga.updateGrid_DivisionSaga);
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_VENUE_LOAD, competitionQuickSaga.updateGrid_VenueSaga);
+    yield takeEvery(ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD, playerGradingExport)
 }

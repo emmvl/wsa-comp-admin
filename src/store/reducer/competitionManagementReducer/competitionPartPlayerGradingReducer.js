@@ -434,6 +434,18 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 commentLoad: false
             }
 
+            case ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD:
+                return {
+                    ...state,
+                    onLoad:true
+                }
+
+                case ApiConstants.API_EXPORT_PLAYER_GRADES_SUCCESS:
+                    return{
+                        ...state,
+                        onLoad:false
+                    }
+
         default:
             return state;
     }
