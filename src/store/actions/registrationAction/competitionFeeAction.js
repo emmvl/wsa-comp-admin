@@ -54,10 +54,11 @@ function saveCompetitionFeesMembershipTabAction(payload, competitionId, affiliat
 }
 
 ////get default competition membershipproduct tab details
-function getDefaultCompFeesMembershipProductTabAction(hasRegistration) {
+function getDefaultCompFeesMembershipProductTabAction(hasRegistration, yearRefId) {
     return {
         type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_LOAD,
-        hasRegistration
+        hasRegistration,
+        yearRefId
     };
 }
 

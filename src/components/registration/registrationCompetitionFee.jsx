@@ -3074,7 +3074,10 @@ class RegistrationCompetitionFee extends Component {
                     onYearLoad: false,
                     yearRefId:mainYearRefId
                 })
-                this.setDetailsFieldValue()
+                this.formRef.current.setFieldsValue({
+                    yearRefId:mainYearRefId
+                });
+                this.setDetailsFieldValue(mainYearRefId)
             }
         }
     }
@@ -3235,7 +3238,7 @@ class RegistrationCompetitionFee extends Component {
             this.setState({ getDataLoading: true });
         } else {
             let hasRegistration = 1;
-            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration);
+            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration, yearRefId);
             this.props.getDefaultCharity();
         }
     }
@@ -3446,13 +3449,13 @@ class RegistrationCompetitionFee extends Component {
         }
     };
 
-    setDetailsFieldValue() {
+    setDetailsFieldValue(yearRefId) {
         let compFeesState = this.props.competitionFeesState;
         this.formRef.current.setFieldsValue({
             competition_name: compFeesState.competitionDetailData.competitionName,
             numberOfRounds: compFeesState.competitionDetailData.noOfRounds,
             // yearRefId: compFeesState.competitionDetailData.yearRefId,
-            yearRefId: this.state.yearRefId,
+            yearRefId: this.state.yearRefId ? this.state.yearRefId : yearRefId,
             competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
             registrationCloseDate: compFeesState.competitionDetailData.registrationCloseDate && moment(compFeesState.competitionDetailData.registrationCloseDate),
@@ -4442,7 +4445,7 @@ class RegistrationCompetitionFee extends Component {
                                         className="year-select reg-filter-select1 ml-2"
                                         style={{ maxWidth: 80 }}
                                         onChange = {(e) => this.setYear(e)}
-                                        setFieldsValue= {this.state.yearRefId}
+                                        // value= {this.state.yearRefId}
                                     >
                                         {this.props.appState.yearList.map((item) => (
                                             <Option key={'year_' + item.id} value={item.id}>
