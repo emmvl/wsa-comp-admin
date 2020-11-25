@@ -537,6 +537,7 @@ function setupDateObjectArray(dateArray, drawObject) {
   var tempDateArray = JSON.parse(JSON.stringify(dateArray))
   let defaultDateObject = {
     date: drawObject.matchDate,
+    endTime: drawObject.endTime,
     notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
   }
   for (let i in dateArray) {
