@@ -1613,7 +1613,9 @@ const AppConstants = {
     backToCommunication: "Back to all communication",
     matchDay: "Match Day",
     matchDayComp: 'Match Day Competitions',
-    backToMatchDay: 'Back To Match Day'
+    backToMatchDay: 'Back To Match Day',
+    umpireAccreditation:"Umpire Accreditation",
+    expiry:"Expiry"
 };
 
 export default AppConstants;

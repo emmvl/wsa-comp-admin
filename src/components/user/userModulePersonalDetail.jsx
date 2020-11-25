@@ -127,7 +127,7 @@ const columns = [
       return (
         <div>
           { (record.paidByUsers || []).map((item, index) => (
-              this_Obj.state.userId == item.paidByUserId ? <div> {'Self'} </div>:
+            this_Obj.state.userId == item.paidByUserId ? <div> {'Self'} </div> :
               <div>
                 <NavLink
                   to={{
@@ -140,7 +140,7 @@ const columns = [
                 >
                   <span className="input-heading-add-another pt-0">{item.paidBy}</span>
                 </NavLink>
-            </div>
+              </div>
           ))
           }
         </div>
@@ -1758,6 +1758,32 @@ class UserModulePersonalDetail extends Component {
             )}
             {/* <span className="desc-text-style side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
           </div>
+          <div className="live-score-side-desc-view">
+            <div className="live-score-title-icon-view">
+              <div className="live-score-icon-view">
+                <img src={AppImages.whistleIcon} alt="" height="16" width="16" />
+              </div>
+              <span className="year-select-heading ml-3">
+                {AppConstants.umpireAccreditation}
+              </span>
+              <div className='col-sm d-flex justify-content-end'>
+                <span className="year-select-heading  ml-3">
+                  {AppConstants.expiry}
+                </span>
+              </div>
+            </div>
+            <div className='live-score-title-icon-view ml-5'>
+              <span className="desc-text-style  side-bar-profile-data">
+                {personal.accrediationLevel}
+              </span>
+
+              <div className='col-sm d-flex justify-content-end'>
+                <span className="desc-text-style  side-bar-profile-data">
+                  {personal.accreditationUmpireExpiryDate && moment(personal.accreditationUmpireExpiryDate).format("DD-MM-YYYY")}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -2671,7 +2697,7 @@ class UserModulePersonalDetail extends Component {
 
   purchaseActivityView = () => {
     let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
-   // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
+    // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
     return (
       <div
         className="comp-dash-table-view mt-2"

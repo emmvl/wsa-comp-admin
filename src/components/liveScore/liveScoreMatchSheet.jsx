@@ -385,6 +385,8 @@ class LiveScoreMatchSheet extends Component {
             ? commonReducerState.matchPrintTemplateType
             : [];
 
+        let filteredMatches = this.props.liveScoreMatchState ? this.props.liveScoreMatchState.liveScoreMatchList : [];
+        let roundList = isArrayNotEmpty(filteredMatches) ? this.state.rounds : []
         return (
             <div className="p-5">
                 <div className="fluid-width">
@@ -459,7 +461,7 @@ class LiveScoreMatchSheet extends Component {
                                 value={this.state.selectedRound ?? AppConstants.selectRound}
                                 placeholder={AppConstants.selectTemplateType}
                             >
-                                {this.state.rounds.map((item) => (
+                                {roundList.map((item) => (
                                     <Option value={item.id} key={'round_' + item.id}>{item.name}</Option>
                                 ))}
                             </Select>
