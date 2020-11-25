@@ -1783,7 +1783,7 @@ class UserModulePersonalDetail extends Component {
                 </span>
               </div>
             </div>
-          </div>
+          </div> 
         </div>
       </div>
     );
