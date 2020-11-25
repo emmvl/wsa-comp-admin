@@ -563,7 +563,7 @@ function* getEnhancedRoundRobinTypesSaga(action) {
 
 function* exportFilesSaga(action) {
   try {
-    const result = yield call(LiveScoreApi.exportFiles, action.URL);
+    const result = yield call(LiveScoreApi.exportFiles, action.URL,action.key);
 
     if (result.status === 1) {
       yield put({
