@@ -513,7 +513,7 @@ class CompetitionOpenRegForm extends Component {
 
         if (fromReplicate != 1) {
             if (storedCompetitionId && yearId && propsData && compData) {
-                this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
+                this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule, null, JSON.parse(yearId))
                 this.setState({
                     yearRefId: JSON.parse(yearId),
                     firstTimeCompId: storedCompetitionId,
