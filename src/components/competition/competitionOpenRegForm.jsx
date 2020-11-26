@@ -279,7 +279,8 @@ class CompetitionOpenRegForm extends Component {
             deleteLoading: false,
             competitionStatus: 0,
             divisionState: false,
-            nextButtonClicked: false
+            nextButtonClicked: false,
+            onYearLoad: false
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
@@ -359,13 +360,16 @@ class CompetitionOpenRegForm extends Component {
                         competitionStatus = competitionTypeList[0].competitionStatus
                         finalTypeRefId = competitionTypeList[0].finalTypeRefId
                     }
-                    this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
+
+                    let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
+                    
+                    this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, yearRefId)
                     if (competitionStatus == 2) {
                         setOwn_competitionStatus(statusRefId)
                         setOwn_competition(competitionId)
                         setOwn_CompetitionFinalRefId(finalTypeRefId)
                     }
-                    let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
+                    
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
@@ -401,6 +405,24 @@ class CompetitionOpenRegForm extends Component {
                     nextButtonClicked: false,
                     loading: false
                 })
+            }
+        }
+
+        if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
+
+                this.getMembershipDetails(mainYearRefId)
+
+                this.setState({
+                    onYearLoad: false,
+                    yearRefId:mainYearRefId
+                })
+                this.formRef.current.setFieldsValue({
+                    yearRefId:mainYearRefId
+                });
+                this.setDetailsFieldValue(mainYearRefId)
             }
         }
     }
@@ -527,14 +549,26 @@ class CompetitionOpenRegForm extends Component {
         this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
+
+    }
+
+    getMembershipDetails = (yearRefId) => {
+        let affiliateOrgId = this.props.location.state ? this.props.location.state.affiliateOrgId : null;
+        let competitionId = this.props.location.state ? this.props.location.state.id : null;
         if (competitionId !== null) {
-            let hasRegistration = 0
-            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, this.state.sourceModule)
-            this.setState({ getDataLoading: true })
+            let hasRegistration = 1;
+            this.props.getAllCompetitionFeesDeatilsAction(
+                competitionId,
+                hasRegistration,
+                "REG",
+                affiliateOrgId,
+                yearRefId
+            );
+            this.setState({ getDataLoading: true });
         } else {
-            let hasRegistration = 0
-            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration)
-            this.props.getDefaultCharity()
+            let hasRegistration = 1;
+            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration, yearRefId);
+            this.props.getDefaultCharity();
         }
     }
 
@@ -730,6 +764,7 @@ class CompetitionOpenRegForm extends Component {
         // this.props.getCompetitionTypeListAction(yearRefId);
         this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
         this.setDetailsFieldValue()
+        this.getMembershipDetails(yearId)
     }
 
     onCompetitionChange(competitionId, competitionArray) {
