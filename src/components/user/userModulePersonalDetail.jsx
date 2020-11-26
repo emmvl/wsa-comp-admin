@@ -1761,7 +1761,7 @@ class UserModulePersonalDetail extends Component {
           <div className="live-score-side-desc-view">
             <div className="live-score-title-icon-view">
               <div className="live-score-icon-view">
-                <img src={AppImages.whistleIcon} alt="" height="19" width="19" />
+                <img src={AppImages.whistleIcon} alt="" height="16" width="16" />
               </div>
               <span className="year-select-heading ml-3">
                 {AppConstants.umpireAccreditation}
@@ -1783,7 +1783,7 @@ class UserModulePersonalDetail extends Component {
                 </span>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     );

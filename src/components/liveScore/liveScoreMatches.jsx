@@ -408,7 +408,7 @@ class LiveScoreMatchesList extends Component {
                                     }}
                                 >
                                     {/* <NavLink to={{
-                                        pathname: '/liveScoreAddMatch',
+                                        pathname: '/matchDayAddMatch',
                                     }}> */}
                                     <Button
                                         type="primary"
@@ -433,7 +433,7 @@ class LiveScoreMatchesList extends Component {
                                         justifyContent: "flex-end",
                                     }}
                                 >
-                                    <NavLink to={{ pathname: '/liveScoreAddMatch' }}>
+                                    <NavLink to={{ pathname: '/matchDayAddMatch' }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addMatches}
                                         </Button>

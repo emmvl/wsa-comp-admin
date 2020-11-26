@@ -144,7 +144,7 @@ const columns = [
                     <Menu.Item key="1">
                         <NavLink
                             to={{
-                                pathname: "/liveScoreAddEditCoach",
+                                pathname: "/matchDayAddEditCoach",
                                 state: { isEdit: true, tableRecord: record }
                             }}
                         >
@@ -283,7 +283,7 @@ class LiveScoreCoaches extends Component {
                                         justifyContent: "flex-end",
                                     }}
                                 >
-                                    <NavLink to="/liveScoreAddEditCoach">
+                                    <NavLink to="/matchDayAddEditCoach">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addCoach}
                                         </Button>
