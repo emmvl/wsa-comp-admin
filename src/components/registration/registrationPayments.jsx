@@ -319,7 +319,6 @@ class RegistrationPayments extends Component {
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
         // let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
         let isImpersonation = getImpersonation()
-        console.log(isImpersonation)
         return (
             <div className="pb-5 pt-5">
                 <div className="row">

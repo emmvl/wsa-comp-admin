@@ -133,7 +133,6 @@ function* getDrawsRoundsSaga(action) {
 function* updateCompetitionDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateDraws, action.data);
-        console.log(action)
         if (result.status === 1) {
             if(action.sourceDuplicate || action.targetDuplicate){
                 const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, 0, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);

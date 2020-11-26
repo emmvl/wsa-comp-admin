@@ -215,13 +215,6 @@ class CompetitionLadder extends Component {
         this.props.updateLadderFormatAction(ladderFormat, "ladderFormat", index);
     }
 
-    onSelect = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
-    };
-
-    onCheck = (checkedKeys, info) => {
-        console.log('onCheck', checkedKeys, info);
-    };
 
     onChangeSchemeName = (e, actionKey, index, ladderFormat, schemeData) => {
         let schemaDefault = schemeData.find(x => x.schemeName === e);

@@ -233,8 +233,6 @@ function liveScoreNewsState(state = initialState, action) {
 
 
         case ApiConstants.API_DEFAULT_NEWS_IMAGE_VIDEO:
-            console.log(action.payload)
-
             return {
                 ...state,
                 addEditNews: {

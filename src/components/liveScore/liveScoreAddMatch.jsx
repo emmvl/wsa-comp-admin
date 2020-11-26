@@ -581,7 +581,6 @@ class LiveScoreAddMatch extends Component {
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
         let coachListResult = isArrayNotEmpty(coachList) ? coachList : []
         let { allDisabled } = this.state
-        // console.log(umpire1NameMainId, 'umpire1NameMainId', umpire2NameMainId)
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -1529,7 +1528,6 @@ class LiveScoreAddMatch extends Component {
 
         // this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
         if (this.state.sourceIdAvailable) {
-            // console.log("addEditMatch", staticMatchData, "matchData", matchData)
             let showModal = false
             if (staticMatchData.startTime !== matchData.startTime) {
                 showModal = true

@@ -108,7 +108,6 @@ function updateManagersData(result) {
 function liveScoreMangerState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD:
-            console.log(action, 'API_LIVE_SCORE_MANAGER_LIST_LOAD')
             if (action.key === "managerList") {
                 state.managerListActionObject = action
             }

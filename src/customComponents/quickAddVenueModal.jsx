@@ -81,7 +81,6 @@ class CompetitionVenueModal extends React.Component {
                                         onChange={(venueSelection) => onSelectValues(venueSelection)}
                                         placeholder={AppConstants.selectVenue}
                                         filterOption={false}
-                                        // onBlur={() => console.log("called")}
                                         onSearch={(value) => handleSearch(value)}
                                     >
                                         {appState.venueList.map((item) => (

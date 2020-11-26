@@ -186,9 +186,6 @@ class AddUmpire extends Component {
         const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad, umpireListData } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
-
-        console.log(umpireListResult, 'umpireListResult')
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -486,7 +483,6 @@ class AddUmpire extends Component {
 
     onSaveClick = () => {
         const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId, umpireListResult, umpireListData } = this.props.umpireState
-        console.log(umpireListResult)
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
 
         if (umpireRadioBtn === 'new') {
@@ -536,7 +532,6 @@ class AddUmpire extends Component {
                     } else {
                         let getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
                         let getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
-                        console.log(getUmpireObject, 'umpireListData', umpireListData, 'index', getUmpireObjectIndex)
                         if (getUmpireObject !== null) {
                             body = {
                                 id: getUmpireObject.id,
@@ -601,7 +596,6 @@ class AddUmpire extends Component {
                 } else {
                     let getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
                     let getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
-                    console.log(getUmpireObject, 'umpireListData', umpireListData, 'index', getUmpireObjectIndex)
                     if (getUmpireObject !== null) {
                         body = {
                             id: getUmpireObject.id,

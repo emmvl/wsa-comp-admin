@@ -509,7 +509,6 @@ class ShopOrderStatus extends Component {
     }
 
     render() {
-        console.log(this.props.shopOrderStatusState)
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />

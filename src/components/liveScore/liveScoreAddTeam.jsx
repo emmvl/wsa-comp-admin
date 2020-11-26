@@ -329,7 +329,7 @@ class LiveScoreAddTeam extends Component {
                             placeholder="Select Affiliate"
                         >
                             {affilateList.map((item) => (
-                                <Option key={'affiliate_' + item.id} value={item.organisationId}>
+                                <Option key={'affiliate_' + item.id} value={item.id}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -682,7 +682,6 @@ class LiveScoreAddTeam extends Component {
                 if (userIds.length > 0) {
                     formData.append('userIds', usersArray)
                 }
-                console.log([...formData])
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
 
             }
@@ -708,7 +707,6 @@ class LiveScoreAddTeam extends Component {
                 formData.append('competitionId', compId)
                 formData.append('organisationId', organisationId)
                 formData.append('divisionId', divisionId)
-                console.log([...formData])
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
 
             }

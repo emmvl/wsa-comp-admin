@@ -357,15 +357,6 @@ class PaymentDashboard extends Component {
             </div>
         );
     };
-    ///setting the available from date
-    dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
-    }
-
-    ////setting the available to date
-    dateOnChangeTo = date => {
-        console.log(date)
-    }
 
     handlePaymentTableList = (page, userId, regId, searchValue) => {
         let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchText } = this.state

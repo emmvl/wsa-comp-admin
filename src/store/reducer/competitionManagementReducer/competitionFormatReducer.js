@@ -39,7 +39,6 @@ function competitionFormatReducer(state = initialState, action) {
             let data = action.result;
             let isAllDivisionChecked = false
             getCompetitionFormatDivisions(data);
-           //console.log("&&&&&&" + JSON.stringify(data));
            if(data.competionFormatDivisions.length == 1 || !isArrayNotEmpty(data.competionFormatDivisions))
            {
                if(isArrayNotEmpty(data.competionFormatDivisions)){
@@ -80,7 +79,6 @@ function competitionFormatReducer(state = initialState, action) {
             }
             else if(getKey =="allDivision")
             {
-                console.log("AllDivision::" + updatedValue);
                 state.isAllDivisionChecked = updatedValue;
             }
 			else if(getKey == "nonPlayingDates"){
