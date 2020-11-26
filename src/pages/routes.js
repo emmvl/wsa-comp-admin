@@ -338,11 +338,11 @@ class Routes extends React.Component {
                         : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
-                    path="/competitionDraws"
+                    path="/competitionDrawsOld"
                     component={this.haveAccess(userRoleId, '/competitionDraws') ? lazyLoad(MultiFieldDrawsNew) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
-                    path="/competitionDrawsTimeline"
+                    path="/competitionDraws"
                     component={this.haveAccess(userRoleId, '/competitionDraws') ? lazyLoad(MultiFieldDrawsNewTimeline) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute

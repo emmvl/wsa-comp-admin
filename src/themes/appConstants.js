@@ -1548,6 +1548,7 @@ const AppConstants = {
   reasonForTransfer: 'Reason for Transfer',
   registrationCloseDate: 'Registration close date',
   filterDates: 'Filter Dates',
+  showOnlyScheduledMatches: 'Show only scheduled matches',
   uploadBankAccount: 'Upload Bank Account',
   editBankAccount: 'Edit Bank Account',
   theyAlreadyTakenCourt: 'They have already taken the court for training, grading or a competition game',
