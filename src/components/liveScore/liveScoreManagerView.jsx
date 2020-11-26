@@ -153,7 +153,7 @@ class LiveScoreManagerView extends Component {
                                     }}
                                 >
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddManagers",
+                                        pathname: "/matchDayAddManagers",
                                         state: { isEdit: true, tableRecord: this.state.data }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">

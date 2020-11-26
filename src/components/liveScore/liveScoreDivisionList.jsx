@@ -115,7 +115,7 @@ const columns = [
                     <Menu.Item key="1">
                         <NavLink
                             to={{
-                                pathname: "/liveScoreAddDivision",
+                                pathname: "/matchDayAddDivision",
                                 state: { isEdit: true, tableRecord: record }
                             }}
                         >
@@ -347,7 +347,7 @@ class LiveScoreDivisionList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        {liveScoreCompIsParent && <NavLink to={`/liveScoreAddDivision`} className="text-decoration-none">
+                                        {liveScoreCompIsParent && <NavLink to={`/matchDayAddDivision`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addDivision}
                                             </Button>

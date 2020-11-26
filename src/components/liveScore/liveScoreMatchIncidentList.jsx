@@ -161,7 +161,7 @@ class LiveScoreIncidentList extends Component {
                                         justifyContent: "flex-end",
                                     }}
                                 >
-                                    {/* <NavLink to="/liveScoreAddIncident">
+                                    {/* <NavLink to="/matchDayAddIncident">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
                                         </Button>

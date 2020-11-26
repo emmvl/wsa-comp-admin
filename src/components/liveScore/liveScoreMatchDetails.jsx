@@ -532,7 +532,7 @@ class LiveScoreMatchDetails extends Component {
                                     }}
                                 >
                                     <NavLink to={{
-                                        pathname: '/liveScoreAddIncident',
+                                        pathname: '/matchDayAddIncident',
                                         state: {
                                             matchId: this.state.matchId,
                                             matchDetails: matchDetails,
@@ -581,7 +581,7 @@ class LiveScoreMatchDetails extends Component {
                                     }}
                                 >
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddMatch",
+                                        pathname: "/matchDayAddMatch",
                                         state: {
                                             isEdit: true,
                                             matchId: this.state.matchId,

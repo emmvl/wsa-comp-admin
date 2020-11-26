@@ -67,7 +67,7 @@ class LiveScoreIncidentView extends Component {
                     </div>
                     <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
                         <NavLink to={{
-                            pathname: '/liveScoreAddIncident',
+                            pathname: '/matchDayAddIncident',
                             state: { isEdit: true, tableRecord: this.state.incidentItem, umpireKey: this.state.umpireKey }
                         }}>
                             <Button className="primary-add-comp-form" type="primary">

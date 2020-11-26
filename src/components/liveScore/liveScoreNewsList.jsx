@@ -206,7 +206,7 @@ class LiveScoreNewsList extends Component {
                                 >
                                     <NavLink
                                         to={{
-                                            pathname: '/liveScoreAddNews',
+                                            pathname: '/matchDayAddNews',
                                             state: { key: 'List', item: null, screenKey: this.state.screenKey }
                                         }}
                                     >

@@ -670,7 +670,7 @@ class LiveScoreDashboard extends Component {
 
     //             <div className="col-sm text-right">
     //                 <NavLink to={{
-    //                     pathname: '/liveScoreAddMatch',
+    //                     pathname: '/matchDayAddMatch',
     //                     state: { key: 'dashboard' }
     //                 }}>
     //                     <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
@@ -747,7 +747,7 @@ class LiveScoreDashboard extends Component {
                                 }}
                             >
                                 <NavLink to={{
-                                    pathname: '/liveScoreAddMatch',
+                                    pathname: '/matchDayAddMatch',
                                     state: { key: 'dashboard' }
                                 }}>
                                     <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
@@ -796,7 +796,7 @@ class LiveScoreDashboard extends Component {
 
                 {/* <div className="col-sm text-right">
                     <NavLink to={{
-                        pathname: './liveScoreAddIncident',
+                        pathname: './matchDayAddIncident',
                         state: { key: 'dashboard' }
                     }}>
                         <Button className='primary-add-comp-form' type='primary'>
@@ -821,7 +821,7 @@ class LiveScoreDashboard extends Component {
                 </div>
                 <div className="col-sm text-right">
                     <NavLink to={{
-                        pathname: '/liveScoreAddNews',
+                        pathname: '/matchDayAddNews',
                         state: { key: 'dashboard', item: null }
                     }} className="text-decoration-none">
                         <Button className="primary-add-comp-form" type="primary">
