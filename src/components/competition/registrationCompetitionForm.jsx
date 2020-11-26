@@ -106,6 +106,7 @@ class RegistrationCompetitionForm extends Component {
             deleteDivModalVisible: false,
             competitionDivisionId: null,
             deleteLoading: false,
+            onYearLoad: false,
             divisionTable: [
                 {
                     title: "Division Name",
@@ -283,6 +284,8 @@ class RegistrationCompetitionForm extends Component {
                 history.push('/competitionDashboard');
             }
         }
+
+
         if (nextProps.competitionFeesState !== competitionFeesState) {
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading) {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
@@ -323,7 +326,26 @@ class RegistrationCompetitionForm extends Component {
             if (this.props.appState.yearList.length > 0) {
                 let yearRefId = getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
+                this.getMembershipDetails(yearRefId)
                 this.setDetailsFieldValue()
+            }
+        }
+
+        if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
+
+                this.getMembershipDetails(mainYearRefId)
+
+                this.setState({
+                    onYearLoad: false,
+                    yearRefId:mainYearRefId
+                })
+                this.formRef.current.setFieldsValue({
+                    yearRefId:mainYearRefId
+                });
+                this.setDetailsFieldValue(mainYearRefId)
             }
         }
     }
@@ -415,14 +437,30 @@ class RegistrationCompetitionForm extends Component {
         this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
+    }
+
+    setYear = (e) => {
+        this.setState({yearRefId: e})
+        this.getMembershipDetails(e)
+    }
+
+    getMembershipDetails = (yearRefId) => {
+        let affiliateOrgId = this.props.location.state ? this.props.location.state.affiliateOrgId : null;
+        let competitionId = this.props.location.state ? this.props.location.state.id : null;
         if (competitionId !== null) {
-            let hasRegistration = 0
-            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, this.state.sourceModule)
-            this.setState({ getDataLoading: true })
+            let hasRegistration = 1;
+            this.props.getAllCompetitionFeesDeatilsAction(
+                competitionId,
+                hasRegistration,
+                "REG",
+                affiliateOrgId,
+                yearRefId
+            );
+            this.setState({ getDataLoading: true });
         } else {
-            let hasRegistration = 0
-            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration)
-            this.props.getDefaultCharity()
+            let hasRegistration = 1;
+            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration, yearRefId);
+            this.props.getDefaultCharity();
         }
     }
 
@@ -623,7 +661,8 @@ class RegistrationCompetitionForm extends Component {
                                     name="yearRefId"
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}
                                 >
-                                    <Select className="year-select reg-filter-select-year ml-2">
+                                    <Select className="year-select reg-filter-select-year ml-2"
+                                    onChange = {(e) => this.setYear(e)}>
                                         {this.props.appState.yearList.map(item => (
                                             <Option key={'year_' + item.id} value={item.id}>
                                                 {item.description}
