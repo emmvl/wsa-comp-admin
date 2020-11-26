@@ -50,7 +50,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const Mailto = ({ email, subject, body, children }) => {
     return (
-        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{children}</a>
+        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank">{children}</a>
     );
 };
 
