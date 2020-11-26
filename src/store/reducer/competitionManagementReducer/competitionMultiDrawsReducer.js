@@ -365,7 +365,6 @@ function getDrawsDuplicate(drawsArray,drawsObject){
 }
 
 function pushColorDivision(division, drawsResultData) {
-  console.log(division.length,'called',drawsResultData.length)
   let newDivisionArray = []
   for (let i in division) {
     let divisionGradeId = division[i].competitionDivisionGradeId
@@ -392,7 +391,6 @@ function pushColorDivision(division, drawsResultData) {
       }
     }
   }
-  console.log('called',newDivisionArray)
   return newDivisionArray
 }
 

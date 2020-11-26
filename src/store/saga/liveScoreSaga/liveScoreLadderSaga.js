@@ -44,7 +44,6 @@ export function* liveScoreLaddersDivisionsaga(action) {
             });
 
             let divisionId = result.result.data[0]
-            // yield console.log('wo', divisionId)
             const listResult = yield call(LiveScoreAxiosApi.liveScoreLadderList, divisionId);
             if (listResult.status === 1) {
                 yield put({

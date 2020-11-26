@@ -576,7 +576,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                 }
 
                 if (action.data === state.umpire1NameMainId) {
-                    // console.log(action.data, 'umpire1NameMainId@@@@@@@@@@@@@@', state.umpire1NameMainId)
                     state.umpire1NameMainId = null
                     state.umpire1Name = null
                     state.umpireRosterId_1 = null
@@ -800,7 +799,6 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
             if (umpires_2) {
                 let umpir2UserId = getUmpureUserId(state.umpireList, umpires_2)
-                // console.log(umpires_2, 'umpires_2', state.umpireList, umpir2UserId)
                 state.umpire2Orag = isArrayNotEmpty(umpires_2.competitionOrganisations) ? umpires_2.competitionOrganisations[0].id : [];
                 state.umpire2Name = umpires_2.userId;
                 state.umpire2NameMainId = umpir2UserId.userId;

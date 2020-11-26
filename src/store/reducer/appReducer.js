@@ -379,7 +379,6 @@ function appState(state = initialState, action) {
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
       let yearResult = action.yearList ? reverseArray(action.yearList) : []
-      // console.log("yearResult" + JSON.stringify(yearResult));
       let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
       let yearobject = {
         description: "All",
@@ -455,7 +454,6 @@ function appState(state = initialState, action) {
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
       let own_yearListSorted = action.yearList ? reverseArray(action.yearList) : []
-      console.log(own_yearListSorted)
       return {
         ...state,
         onLoad: false,

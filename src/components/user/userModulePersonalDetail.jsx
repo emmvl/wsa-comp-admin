@@ -2697,7 +2697,6 @@ class UserModulePersonalDetail extends Component {
 
   purchaseActivityView = () => {
     let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
-    // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
     return (
       <div
         className="comp-dash-table-view mt-2"

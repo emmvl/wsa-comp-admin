@@ -20,7 +20,6 @@ class RegistrationWizardModel extends React.Component {
         const { competitionStatus, registrationStatus, competitionClick, registrationClick, publishStatus, stripeConnectURL, stripeConnected, competitionId, competitionChange, wizardCompetition, heading, placeholder, name, handleBlur, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
         let isImpersonation = getImpersonation()
         let showStripe = (isImpersonation !== "true" && !stripeConnected) ? true : false
-        // console.log("isImpersonation", isImpersonation,"showStripe",showStripe)
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal

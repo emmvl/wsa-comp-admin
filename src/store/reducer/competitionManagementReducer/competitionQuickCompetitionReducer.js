@@ -248,7 +248,6 @@ function sortDateArray(dateArray) {
 
 //sort court array
 function sortCourtArray(mainCourtNumberArray) {
-    console.log(mainCourtNumberArray)
     let isSortedArray = []
     const sortAlphaNum = (a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName, 'en', { numeric: true })
     // let collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
@@ -298,7 +297,6 @@ function drawsDataStructure(drawsData) {
             );
         }
     }
-    console.log(mainCourtNumberArray, sortedDateArray)
     return { mainCourtNumberArray, sortedDateArray };
 }
 
@@ -391,7 +389,6 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, venueI
 
 ///sort competition data
 function sortCompArray(compListData) {
-    console.log(compListData)
     let isSortedArray = []
     const sortAlphaNum = (a, b) => a.competitionName.localeCompare(b.competitionName, 'en', { numeric: true })
     isSortedArray = compListData.sort(sortAlphaNum)
@@ -799,7 +796,6 @@ function QuickCompetitionState(state = initialState, action) {
                 sourceYIndex,
                 targetYIndex
             );
-            console.log(swapedDrawsArray)
             state.quickComptitionDetails.draws = swapedDrawsArray;
 
             return {
@@ -844,7 +840,6 @@ function QuickCompetitionState(state = initialState, action) {
                 error: null,
             }
         case ApiConstants.QUICKCOMP_IMPORT_DATA_SUCCESS:
-            console.log(action)
             let resTeams = action.result;
             return {
                 ...state,
@@ -893,7 +888,6 @@ function QuickCompetitionState(state = initialState, action) {
                 mergeValidate: false
             }
         case ApiConstants.API_VALIDATE_MERGE_COMPETITION_SUCCESS:
-            console.log(action)
             return {
                 ...state,
                 onInvitationLoad: false,
@@ -936,7 +930,6 @@ function QuickCompetitionState(state = initialState, action) {
             return { ...state, onQuickCompLoad: true, error: null }
 
         case ApiConstants.API_UPDATE_STATUS_TIMESLOT_SUCCESS:
-            console.log(action)
             return {
                 ...state,
                 onQuickCompLoad: false,

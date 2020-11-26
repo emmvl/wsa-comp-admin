@@ -518,7 +518,6 @@ class RegistrationCompetitionForm extends Component {
     }
 
     saveAPIsActionCall = (values) => {
-        console.log(values)
         let tabKey = this.state.competitionTabKey
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
@@ -1243,10 +1242,10 @@ class RegistrationCompetitionForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
+                                    <span className="applicable-to-heading pt-0 pl-2">
                                         {AppConstants.nonPlayerDivisionMessage}
                                     </span>
-                            )}
+                                )}
                         </div>
                     </div>
                 ))}
@@ -1353,9 +1352,9 @@ class RegistrationCompetitionForm extends Component {
                                         className="publish-button" type="primary"
                                         disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
                                         htmlType="submit" onClick={() => this.setState({
-                                        statusRefId: tabKey == "2" ? 2 : 1,
-                                        buttonPressed: tabKey == "2" ? "publish" : "next"
-                                    })}
+                                            statusRefId: tabKey == "2" ? 2 : 1,
+                                            buttonPressed: tabKey == "2" ? "publish" : "next"
+                                        })}
                                     >
                                         {tabKey === "2" ? AppConstants.publish : AppConstants.next}
                                     </Button>

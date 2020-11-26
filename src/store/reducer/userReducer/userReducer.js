@@ -568,7 +568,6 @@ function userReducer(state = initialState, action) {
       return { ...state, onSaveOrgPhotoLoad: true };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS:
-      console.log("$$$$$$$$$$$$$$");
       return {
         ...state,
         onSaveOrgPhotoLoad: false,
@@ -580,7 +579,6 @@ function userReducer(state = initialState, action) {
       return { ...state, onDeleteOrgPhotoLoad: true };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS:
-      console.log("&&&&&&&&&&&&&");
       return {
         ...state,
         onDeleteOrgPhotoLoad: false,
@@ -847,7 +845,6 @@ function userReducer(state = initialState, action) {
       return { ...state, umpireActivityOnLoad: true };
 
     case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_SUCCESS:
-      console.log("action***", action.result);
       let umpireActivityData = action.result;
       return {
         ...state,

@@ -424,7 +424,6 @@ function* getCompetitionFormatTypesSaga(action) {
 
 function* getOnlyYearAndCompetitionListSaga(action) {
   try {
-    //console.log(")))))))))))))))" , action.yearData)
     const result = isArrayNotEmpty(action.yearData) ? {
       status: 1,
       result: { data: action.yearData, key: "old" }

@@ -152,14 +152,12 @@ class RegistrationFormList extends Component {
 
     async componentDidUpdate(nextProps) {
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
-            console.log("********************^^^^^" + this.state.allyearload + "***" + this.props.appState.onLoad)
             if (this.props.appState.yearList.length > 0) {
                 let mainYearRefId = getCurrentYear(this.props.appState.yearList)
                 const { regFormListAction } = this.props.dashboardState
                 let page = 1
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder;
-                console.log("regFormListAction", regFormListAction);
                 if (regFormListAction) {
                     let offset = regFormListAction.offset
                     sortBy = regFormListAction.sortBy
@@ -168,11 +166,9 @@ class RegistrationFormList extends Component {
                     let allyearload = false;
                     await this.setState({ offset, sortBy, sortOrder, yearRefId, allyearload })
                     page = Math.floor(offset / 10) + 1;
-                    console.log("********************$$$$" + this.state.allyearload)
                     this.handleMembershipTableList(page, yearRefId)
 
                 } else {
-                    console.log("********************%%%%%")
                     this.handleMembershipTableList(1, mainYearRefId)
                     await this.setState({
                         yearRefId: mainYearRefId, allyearload: false

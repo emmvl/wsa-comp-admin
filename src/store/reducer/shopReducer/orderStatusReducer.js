@@ -109,7 +109,6 @@ function shopOrderStatusState(state = initialState, action) {
         case ApiConstants.API_GET_ORDER_DETAILS_SUCCESS:
             let orderDetails = makeOrderDetailObject(action.result, state.orderDetails)
             state.orderDetails = orderDetails
-            console.log("action.result", action.result, "orderDetails", orderDetails)
             return {
                 ...state,
                 onLoad: false,

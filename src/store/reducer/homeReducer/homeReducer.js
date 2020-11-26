@@ -25,7 +25,6 @@ function homeReducer(state = initialState, action) {
         case ApiConstants.API_USER_COUNT_LOAD:
             return { ...state, onLoad: true, error: null }
         case ApiConstants.API_USER_COUNT_SUCCESS:
-            console.log(action)
             return {
                 ...state,
                 onLoad: false,

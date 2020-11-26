@@ -167,14 +167,12 @@ function* addTeamLiveScoreSaga(action) {
 
             history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/liveScoreTeam');
 
-            console.log("*******", action.sourceIdAvailable, action.teamUniqueKey)
             let updateCompData = {
                 teamUniqueKey: action.teamUniqueKey ? action.teamUniqueKey : "",
                 name: result.result.data.name
             }
             if (action.sourceIdAvailable === true && action.teamUniqueKey) {
                 const result1 = yield call(CompetitionAxiosApi.updateCompTeamName, updateCompData);
-                console.log("result1",result1)
                 if (result1.status === 1) {
                 yield put({
                     type: ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS,

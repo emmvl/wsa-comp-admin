@@ -1405,7 +1405,6 @@ class MultifieldDrawsNew extends Component {
     }
 
     draggableView = (dateItem) => {
-        console.log(dateItem)
         let disabledStatus = this.state.competitionStatus == 1
         var dateMargin = 25;
         var dayMargin = 25;

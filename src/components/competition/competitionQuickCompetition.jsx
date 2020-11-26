@@ -94,7 +94,7 @@ class CompetitionQuickCompetition extends Component {
                     this.props.updateCompetition("", "allData")
                     let competitionId = selectedCompetition;
                     this.props.getQuickCompetitionAction(competitionId)
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true,yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId  });
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId });
                 }
             }
         }
@@ -312,7 +312,7 @@ class CompetitionQuickCompetition extends Component {
 
     //close competition modal and call create competition
     closeCompModal = () => {
-        const { competitionName, competitionDate,yearId } = this.props.quickCompetitionState
+        const { competitionName, competitionDate, yearId } = this.props.quickCompetitionState
         this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
@@ -323,7 +323,7 @@ class CompetitionQuickCompetition extends Component {
 
     //nextCompModal
     nextCompModal = () => {
-        const { competitionName, competitionDate,yearId  } = this.props.quickCompetitionState
+        const { competitionName, competitionDate, yearId } = this.props.quickCompetitionState
         this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
@@ -608,7 +608,6 @@ class CompetitionQuickCompetition extends Component {
         let appState = this.props.appState
         let quickCompetitionState = this.props.quickCompetitionState
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
-        console.log(quickCompetitionData)
         return (
             <div className="comp-draw-content-view mt-0">
                 <div className="row comp-draw-list-top-head">

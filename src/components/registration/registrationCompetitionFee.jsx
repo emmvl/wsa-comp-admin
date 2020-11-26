@@ -180,8 +180,8 @@ const playerSeasonalTable = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -208,8 +208,8 @@ const playerSeasonalTable = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -502,8 +502,8 @@ const playerSeasonalTableAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -530,8 +530,8 @@ const playerSeasonalTableAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -558,8 +558,8 @@ const playerSeasonalTableAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -586,8 +586,8 @@ const playerSeasonalTableAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -993,8 +993,8 @@ const playerSeasonalTableClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1021,8 +1021,8 @@ const playerSeasonalTableClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1049,8 +1049,8 @@ const playerSeasonalTableClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1077,8 +1077,8 @@ const playerSeasonalTableClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1485,8 +1485,8 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1513,8 +1513,8 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1541,8 +1541,8 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1569,8 +1569,8 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1597,8 +1597,8 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            ),
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                ),
     },
     {
         title: 'GST',
@@ -1624,12 +1624,12 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'Affiliate Fees (excl. GST)',
@@ -1655,12 +1655,12 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'GST',
@@ -1686,12 +1686,12 @@ const playerSeasonalTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'Total',
@@ -1791,8 +1791,8 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1819,8 +1819,8 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1847,8 +1847,8 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1875,8 +1875,8 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -1903,8 +1903,8 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            ),
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                ),
     },
     {
         title: 'GST',
@@ -1930,12 +1930,12 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'Affiliate Fees (excl. GST)',
@@ -1961,12 +1961,12 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'GST',
@@ -1992,12 +1992,12 @@ const playerSeasonalTableTeamClub = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'Total',
@@ -2079,7 +2079,7 @@ const playerSeasonalTeamTable = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => {
-            return(
+            return (
                 ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ?
                     (
                         <Input
@@ -2128,8 +2128,8 @@ const playerSeasonalTeamTable = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2156,12 +2156,12 @@ const playerSeasonalTeamTable = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'GST',
@@ -2169,7 +2169,7 @@ const playerSeasonalTeamTable = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) =>
-        ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2187,12 +2187,12 @@ const playerSeasonalTeamTable = [
                     }
                 />
             ) : (
-                <Input
-                    disabled
-                    className="input-inside-table-fees"
-                    value="N/A"
-                />
-            ),
+                    <Input
+                        disabled
+                        className="input-inside-table-fees"
+                        value="N/A"
+                    />
+                ),
     },
     {
         title: 'Total',
@@ -2327,8 +2327,8 @@ const playerCasualTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2355,8 +2355,8 @@ const playerCasualTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2383,8 +2383,8 @@ const playerCasualTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2411,8 +2411,8 @@ const playerCasualTableTeamAssociation = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2549,8 +2549,8 @@ const playerCasualTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2577,8 +2577,8 @@ const playerCasualTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2605,8 +2605,8 @@ const playerCasualTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2633,8 +2633,8 @@ const playerCasualTableTeamClub = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2757,8 +2757,8 @@ const playerCasualTeamTable = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -2785,8 +2785,8 @@ const playerCasualTeamTable = [
                     }
                 />
             ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -3212,10 +3212,10 @@ class RegistrationCompetitionFee extends Component {
 
                 this.setState({
                     onYearLoad: false,
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 })
                 this.formRef.current.setFieldsValue({
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
             }
@@ -3355,11 +3355,11 @@ class RegistrationCompetitionFee extends Component {
         //     this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration);
         //     this.props.getDefaultCharity();
         // }
-        
+
     };
 
     setYear = (e) => {
-        this.setState({yearRefId: e})
+        this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
 
@@ -3703,7 +3703,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
                                     feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
                                     feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
-                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
@@ -3764,8 +3764,6 @@ class RegistrationCompetitionFee extends Component {
                     }
                     if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
-                        // console.log("feeSeasonalTeamData", feeSeasonalTeamData);
-                        // console.log("feeSeasonalData", feeSeasonalData);
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
                                 if (
@@ -3776,7 +3774,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j]?.gst;
                                     feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j]?.affiliateFee;
                                     feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affiliateGst;
-                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
@@ -3833,7 +3831,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
                                     feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
                                     feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
-                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
@@ -3903,7 +3901,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
                                     feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
                                     feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
-                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -3970,8 +3968,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
                                     feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
                                     feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
-                                    if(fee_data[i].teamRegChargeTypeRefId != 3)
-                                    {
+                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                         feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
                                         feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
                                         feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
@@ -4031,7 +4028,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                     feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                     feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                         feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                         feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                         feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -4090,7 +4087,7 @@ class RegistrationCompetitionFee extends Component {
                     item['teamSeasonalGST'] = item.gst;
                     item['affiliateTeamSeasonalFees'] = item.affiliateFee;
                     item['affiliateTeamSeasonalGST'] = item.affiliateGst;
-                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
                         item['nominationTeamSeasonalFee'] = item.nominationFees;
                         item['nominationTeamSeasonalGST'] = item.nominationGST;
                         item['affNominationTeamSeasonalFee'] = item.affNominationFees;
@@ -4137,7 +4134,7 @@ class RegistrationCompetitionFee extends Component {
                                 feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                     feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -4164,7 +4161,7 @@ class RegistrationCompetitionFee extends Component {
                                 feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                if (fee_data[i].teamRegChargeTypeRefId != 3) {
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                     feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -4201,7 +4198,6 @@ class RegistrationCompetitionFee extends Component {
         }
 
         if (finalpostarray.length > 0) {
-            console.log("finalpostarray", finalpostarray);
             this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
             this.setState({ loading: true });
         } else {
@@ -4584,8 +4580,8 @@ class RegistrationCompetitionFee extends Component {
                                     <Select
                                         className="year-select reg-filter-select1 ml-2"
                                         style={{ maxWidth: 80 }}
-                                        onChange = {(e) => this.setYear(e)}
-                                        // value= {this.state.yearRefId}
+                                        onChange={(e) => this.setYear(e)}
+                                    // value= {this.state.yearRefId}
                                     >
                                         {this.props.appState.yearList.map((item) => (
                                             <Option key={'year_' + item.id} value={item.id}>
@@ -5458,10 +5454,10 @@ class RegistrationCompetitionFee extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
+                                    <span className="applicable-to-heading pt-0 pl-2">
                                         {AppConstants.nonPlayerDivisionMessage}
                                     </span>
-                            )}
+                                )}
                         </div>
                     </div>
                 ))}
@@ -5614,7 +5610,7 @@ class RegistrationCompetitionFee extends Component {
                 ))}
 
                 {feeDetails && feeDetails.map((item, index) => {
-                    return(
+                    return (
                         <div className="inside-container-view">
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
@@ -5681,82 +5677,82 @@ class RegistrationCompetitionFee extends Component {
                                         {AppConstants.individualRegistrations}
                                     </Checkbox>
                                 </div>
-                            {item.isIndividualReg && (
-                                <div> 
-                                <div style={{ marginTop: 15 }}>
-                                    <Checkbox
-                                        style={{ marginLeft: '45px' }}
-                                        checked={item.isSeasonal}
-                                        className="single-checkbox"
-                                        disabled={feesTableDisable}
-                                        onChange={(e) => {
-                                            this.props.checkUncheckcompetitionFeeSction(
-                                                e.target.checked,
-                                                index,
-                                                'isSeasonal'
-                                            );
-                                        }}
-                                    >
-                                        {AppConstants.seasonalFee}
-                                    </Checkbox>
-                                </div>
-                                {item.isSeasonal && (
-                                    <div className="table-responsive mt-2">
-                                        <Table
-                                            className="fees-table"
-                                            columns={this.seasonalFeesOnOrgLevel()}
-                                            dataSource={
-                                                item.isAllType != 'allDivisions'
-                                                    ? item.seasonal.perType
-                                                    : item.seasonal.allType
-                                            }
-                                            pagination={false}
-                                            Divider="false"
-                                        />
-                                    </div>
-                                )}
+                                {item.isIndividualReg && (
+                                    <div>
+                                        <div style={{ marginTop: 15 }}>
+                                            <Checkbox
+                                                style={{ marginLeft: '45px' }}
+                                                checked={item.isSeasonal}
+                                                className="single-checkbox"
+                                                disabled={feesTableDisable}
+                                                onChange={(e) => {
+                                                    this.props.checkUncheckcompetitionFeeSction(
+                                                        e.target.checked,
+                                                        index,
+                                                        'isSeasonal'
+                                                    );
+                                                }}
+                                            >
+                                                {AppConstants.seasonalFee}
+                                            </Checkbox>
+                                        </div>
+                                        {item.isSeasonal && (
+                                            <div className="table-responsive mt-2">
+                                                <Table
+                                                    className="fees-table"
+                                                    columns={this.seasonalFeesOnOrgLevel()}
+                                                    dataSource={
+                                                        item.isAllType != 'allDivisions'
+                                                            ? item.seasonal.perType
+                                                            : item.seasonal.allType
+                                                    }
+                                                    pagination={false}
+                                                    Divider="false"
+                                                />
+                                            </div>
+                                        )}
 
-                                <div style={{ marginTop: 10 }}>
-                                    <Checkbox
-                                        style={{ marginLeft: '45px' }}
-                                        checked={item.isCasual}
-                                        className="single-checkbox"
-                                        disabled={feesTableDisable}
-                                        onChange={(e) =>
-                                            this.props.checkUncheckcompetitionFeeSction(
-                                                e.target.checked,
-                                                index,
-                                                'isCasual'
-                                            )
-                                        }
-                                    >
-                                        {AppConstants.singleGameFee}
-                                    </Checkbox>
-                                </div>
+                                        <div style={{ marginTop: 10 }}>
+                                            <Checkbox
+                                                style={{ marginLeft: '45px' }}
+                                                checked={item.isCasual}
+                                                className="single-checkbox"
+                                                disabled={feesTableDisable}
+                                                onChange={(e) =>
+                                                    this.props.checkUncheckcompetitionFeeSction(
+                                                        e.target.checked,
+                                                        index,
+                                                        'isCasual'
+                                                    )
+                                                }
+                                            >
+                                                {AppConstants.singleGameFee}
+                                            </Checkbox>
+                                        </div>
 
-                                {item.isCasual && (
-                                    <div className="table-responsive mt-2">
-                                        <Table
-                                            className="fees-table"
-                                            columns={this.casualFeesOnOrgLevel()}
-                                            dataSource={
-                                                item.isAllType != 'allDivisions'
-                                                    ? item.casual.perType
-                                                    : item.casual.allType
-                                            }
-                                            pagination={false}
-                                            Divider="false"
-                                        />
+                                        {item.isCasual && (
+                                            <div className="table-responsive mt-2">
+                                                <Table
+                                                    className="fees-table"
+                                                    columns={this.casualFeesOnOrgLevel()}
+                                                    dataSource={
+                                                        item.isAllType != 'allDivisions'
+                                                            ? item.casual.perType
+                                                            : item.casual.allType
+                                                    }
+                                                    pagination={false}
+                                                    Divider="false"
+                                                />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-								  </div>
                                 )}
                                 {(item.isAllType != 'allDivisions'
-                                        ? item.seasonalTeam.perType
-                                        : item.seasonalTeam.allType
+                                    ? item.seasonalTeam.perType
+                                    : item.seasonalTeam.allType
                                 ).length > 0 && (
-                                    <div style={{ marginTop: 25 }}>
-                                        {/* <div style={{ marginTop: 15 }}>
+                                        <div style={{ marginTop: 25 }}>
+                                            {/* <div style={{ marginTop: 15 }}>
                                                 <Checkbox
                                                     checked={item.isTeamReg}
                                                     className="single-checkbox"
@@ -5773,53 +5769,53 @@ class RegistrationCompetitionFee extends Component {
                                                     {AppConstants.teamRegistration}
                                                 </Checkbox>
                                             </div> */}
-                                        <div>
-                                            <Checkbox
-                                                checked={item.isTeamSeasonal}
-                                                className="single-checkbox"
-                                                style={{ fontSize: '16px' }}
-                                                disabled={feesTableDisable}
-                                                onChange={(e) => {
-                                                    this.props.checkUncheckcompetitionFeeSction(
-                                                        e.target.checked,
-                                                        index,
-                                                        'isTeamSeasonal'
-                                                    );
-                                                }}
-                                            >
-                                                {AppConstants.teamRegistration}
-                                            </Checkbox>
-                                        </div>
-                                        {item.isTeamSeasonal == 1 && (
-                                            <div style={{ marginTop: 5 }}>
-                                                <Radio.Group
-                                                    className="reg-competition-radio"
-                                                    onChange={(e) =>
-                                                        this.props.checkUncheckcompetitionFeeSction(
-                                                            e.target.value,
-                                                            index,
-                                                            'teamRegChargeTypeRefId'
-                                                        )
-                                                    }
-                                                    value={item.teamRegChargeTypeRefId}
+                                            <div>
+                                                <Checkbox
+                                                    checked={item.isTeamSeasonal}
+                                                    className="single-checkbox"
+                                                    style={{ fontSize: '16px' }}
                                                     disabled={feesTableDisable}
+                                                    onChange={(e) => {
+                                                        this.props.checkUncheckcompetitionFeeSction(
+                                                            e.target.checked,
+                                                            index,
+                                                            'isTeamSeasonal'
+                                                        );
+                                                    }}
                                                 >
-                                                    <div style={{ display: "flex" }}>
-                                                        <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio>
-                                                        <div >
-                                                            <Radio className="team-reg-radio-custom-style" value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
-                                                                {AppConstants.chargedPerMatch}
-                                                            </Radio>
-                                                            {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
-                                                                <div style={{display: "flex"}}>
-                                                                    <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
-                                                                    <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
-                                                                </div>
-                                                            )}
+                                                    {AppConstants.teamRegistration}
+                                                </Checkbox>
+                                            </div>
+                                            {item.isTeamSeasonal == 1 && (
+                                                <div style={{ marginTop: 5 }}>
+                                                    <Radio.Group
+                                                        className="reg-competition-radio"
+                                                        onChange={(e) =>
+                                                            this.props.checkUncheckcompetitionFeeSction(
+                                                                e.target.value,
+                                                                index,
+                                                                'teamRegChargeTypeRefId'
+                                                            )
+                                                        }
+                                                        value={item.teamRegChargeTypeRefId}
+                                                        disabled={feesTableDisable}
+                                                    >
+                                                        <div style={{ display: "flex" }}>
+                                                            <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio>
+                                                            <div >
+                                                                <Radio className="team-reg-radio-custom-style" value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2}>
+                                                                    {AppConstants.chargedPerMatch}
+                                                                </Radio>
+                                                                {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
+                                                                    <div style={{ display: "flex" }}>
+                                                                        <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
+                                                                        <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    {/* <div className="fluid-width">
+                                                        {/* <div className="fluid-width">
                                                             <div className="row">
                                                                 <div className="col-sm-4">
                                                                     <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
@@ -5872,27 +5868,27 @@ class RegistrationCompetitionFee extends Component {
                                                                 </div>
                                                             </div>
                                                         </div> */}
-                                                </Radio.Group>
-                                            </div>
-                                        )}
-                                        {item.isTeamSeasonal && (
-                                            <div className="table-responsive mt-2">
-                                                <Table
-                                                    // ref= {(tableReference) => this.tableReference = tableReference}
-                                                    className="fees-table"
-                                                    columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()}
-                                                    dataSource={
-                                                        item.isAllType != 'allDivisions'
-                                                            ? item.seasonalTeam.perType
-                                                            : item.seasonalTeam.allType
-                                                    }
-                                                    pagination={false}
-                                                    Divider="false"
-                                                />
-                                            </div>
-                                        )}
+                                                    </Radio.Group>
+                                                </div>
+                                            )}
+                                            {item.isTeamSeasonal && (
+                                                <div className="table-responsive mt-2">
+                                                    <Table
+                                                        // ref= {(tableReference) => this.tableReference = tableReference}
+                                                        className="fees-table"
+                                                        columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()}
+                                                        dataSource={
+                                                            item.isAllType != 'allDivisions'
+                                                                ? item.seasonalTeam.perType
+                                                                : item.seasonalTeam.allType
+                                                        }
+                                                        pagination={false}
+                                                        Divider="false"
+                                                    />
+                                                </div>
+                                            )}
 
-                                        {/* <div style={{ marginTop: 10 }}>
+                                            {/* <div style={{ marginTop: 10 }}>
                                                 <Checkbox
                                                     checked={item.isTeamCasual}
                                                     className="single-checkbox"
@@ -5923,8 +5919,8 @@ class RegistrationCompetitionFee extends Component {
                                                     />
                                                 </div>
                                             )} */}
-                                    </div>
-                                )}
+                                        </div>
+                                    )}
                             </div>
                         </div>
                     )
@@ -6203,30 +6199,21 @@ class RegistrationCompetitionFee extends Component {
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
                                     ) : (
-                                        <div>
-                                            {(orgLevelId == '4' && item.id == 1) == false && (
-                                                <div className="contextualHelp-RowDirection">
-                                                    <div className="applicable-to-heading invitees-main">
-                                                        {item.description}
+                                            <div>
+                                                {(orgLevelId == '4' && item.id == 1) == false && (
+                                                    <div className="contextualHelp-RowDirection">
+                                                        <div className="applicable-to-heading invitees-main">
+                                                            {item.description}
+                                                        </div>
+                                                        <div className="mt-2">
+                                                            <CustomToolTip>
+                                                                <span>{item.helpMsg}</span>
+                                                            </CustomToolTip>
+                                                        </div>
                                                     </div>
-                                                    <div className="mt-2">
-                                                        <CustomToolTip>
-                                                            <span>{item.helpMsg}</span>
-                                                        </CustomToolTip>
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {item.subReferences.map((subItem) =>
-                                                subItem.id == 2 ? (
-                                                    <div style={{ marginLeft: '20px' }}>
-                                                        {this.disableInvitee(subItem) && (
-                                                            <Radio key={subItem.id} value={subItem.id}>
-                                                                {subItem.description}
-                                                            </Radio>
-                                                        )}
-                                                    </div>
-                                                ) : (
-                                                    <>
+                                                )}
+                                                {item.subReferences.map((subItem) =>
+                                                    subItem.id == 2 ? (
                                                         <div style={{ marginLeft: '20px' }}>
                                                             {this.disableInvitee(subItem) && (
                                                                 <Radio key={subItem.id} value={subItem.id}>
@@ -6234,29 +6221,38 @@ class RegistrationCompetitionFee extends Component {
                                                                 </Radio>
                                                             )}
                                                         </div>
-                                                        <div style={{ marginLeft: 20 }}>
-                                                            {this.disableInvitee(subItem) && (
-                                                                <Radio.Group
-                                                                    onChange={(e) =>
-                                                                        this.props.add_editcompetitionFeeDeatils(
-                                                                            e.target.value,
-                                                                            'affiliateNonSelected'
-                                                                        )
-                                                                    }
-                                                                    disabled={regInviteesDisable}
-                                                                    value={affiliateNonSelected}
-                                                                >
-                                                                    <Radio key="none1" value="none1">
-                                                                        None
+                                                    ) : (
+                                                            <>
+                                                                <div style={{ marginLeft: '20px' }}>
+                                                                    {this.disableInvitee(subItem) && (
+                                                                        <Radio key={subItem.id} value={subItem.id}>
+                                                                            {subItem.description}
+                                                                        </Radio>
+                                                                    )}
+                                                                </div>
+                                                                <div style={{ marginLeft: 20 }}>
+                                                                    {this.disableInvitee(subItem) && (
+                                                                        <Radio.Group
+                                                                            onChange={(e) =>
+                                                                                this.props.add_editcompetitionFeeDeatils(
+                                                                                    e.target.value,
+                                                                                    'affiliateNonSelected'
+                                                                                )
+                                                                            }
+                                                                            disabled={regInviteesDisable}
+                                                                            value={affiliateNonSelected}
+                                                                        >
+                                                                            <Radio key="none1" value="none1">
+                                                                                None
                                                                     </Radio>
-                                                                </Radio.Group>
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                )
-                                            )}
-                                        </div>
-                                    )}
+                                                                        </Radio.Group>
+                                                                    )}
+                                                                </div>
+                                                            </>
+                                                        )
+                                                )}
+                                            </div>
+                                        )}
                                 </div>
                             )
                         )}
@@ -6277,18 +6273,18 @@ class RegistrationCompetitionFee extends Component {
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
                                     ) : (
-                                        <div>
-                                            <div className="contextualHelp-RowDirection">
-                                                <div className="applicable-to-heading invitees-main">
-                                                    {item.description}
+                                            <div>
+                                                <div className="contextualHelp-RowDirection">
+                                                    <div className="applicable-to-heading invitees-main">
+                                                        {item.description}
+                                                    </div>
+                                                    <div className="mt-2">
+                                                        <CustomToolTip>
+                                                            <span>{item.helpMsg}</span>
+                                                        </CustomToolTip>
+                                                    </div>
                                                 </div>
-                                                <div className="mt-2">
-                                                    <CustomToolTip>
-                                                        <span>{item.helpMsg}</span>
-                                                    </CustomToolTip>
-                                                </div>
-                                            </div>
-                                            {/* {item.subReferences.map((subItem) => (
+                                                {/* {item.subReferences.map((subItem) => (
                                                 <div style={{ marginLeft: '20px' }}>
                                                     <Radio key={subItem.id} value={subItem.id}>
                                                         {subItem.description}
@@ -6296,54 +6292,54 @@ class RegistrationCompetitionFee extends Component {
                                                     {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
                                                 </div>
                                             ))} */}
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    paddingLeft: 20
-                                                }}
-                                            >
-                                                <Checkbox
-                                                    className="single-checkbox-radio-style"
-                                                    style={{ paddingTop: 8 }}
-                                                    checked={associationChecked}
-                                                    onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        paddingLeft: 20
+                                                    }}
                                                 >
-                                                    {item.subReferences[0].description}
-                                                </Checkbox>
+                                                    <Checkbox
+                                                        className="single-checkbox-radio-style"
+                                                        style={{ paddingTop: 8 }}
+                                                        checked={associationChecked}
+                                                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                                    >
+                                                        {item.subReferences[0].description}
+                                                    </Checkbox>
 
-                                                {this.affiliatesSearchInvitee(item.subReferences[0], anyOrgSelected)}
+                                                    {this.affiliatesSearchInvitee(item.subReferences[0], anyOrgSelected)}
 
-                                                <Checkbox
-                                                    className="single-checkbox-radio-style"
-                                                    style={{ paddingTop: 13, marginLeft: 0 }}
-                                                    checked={clubChecked}
-                                                    onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "clubChecked")}
-                                                >
-                                                    {item.subReferences[1].description}
-                                                </Checkbox>
+                                                    <Checkbox
+                                                        className="single-checkbox-radio-style"
+                                                        style={{ paddingTop: 13, marginLeft: 0 }}
+                                                        checked={clubChecked}
+                                                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "clubChecked")}
+                                                    >
+                                                        {item.subReferences[1].description}
+                                                    </Checkbox>
 
-                                                {this.affiliatesSearchInvitee(item.subReferences[1], anyOrgSelected)}
-                                            </div>
+                                                    {this.affiliatesSearchInvitee(item.subReferences[1], anyOrgSelected)}
+                                                </div>
 
-                                            <div style={{ marginLeft: 20 }}>
-                                                <Radio.Group
-                                                    onChange={(e) =>
-                                                        this.props.add_editcompetitionFeeDeatils(
-                                                            e.target.value,
-                                                            'anyOrgNonSelected'
-                                                        )
-                                                    }
-                                                    value={anyOrgNonSelected}
-                                                    disabled={regInviteesDisable}
-                                                >
-                                                    <Radio key="none2" value="none2">
-                                                        None
+                                                <div style={{ marginLeft: 20 }}>
+                                                    <Radio.Group
+                                                        onChange={(e) =>
+                                                            this.props.add_editcompetitionFeeDeatils(
+                                                                e.target.value,
+                                                                'anyOrgNonSelected'
+                                                            )
+                                                        }
+                                                        value={anyOrgNonSelected}
+                                                        disabled={regInviteesDisable}
+                                                    >
+                                                        <Radio key="none2" value="none2">
+                                                            None
                                                     </Radio>
-                                                </Radio.Group>
+                                                    </Radio.Group>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
                                 </div>
                             )
                         )}
@@ -6370,29 +6366,29 @@ class RegistrationCompetitionFee extends Component {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div>
-                                            <div className="applicable-to-heading invitees-main">
-                                                {item.description}
-                                            </div>
-                                            {item.subReferences.map((subItem) => (
-                                                <div key={subItem.id} style={{ marginLeft: '20px' }}>
-                                                    <Radio
-                                                        disabled={regInviteesDisable}
-                                                        onChange={(e) =>
-                                                            this.props.add_editcompetitionFeeDeatils(
-                                                                e.target.value,
-                                                                'none'
-                                                            )
-                                                        }
-                                                        key={subItem.id}
-                                                        value={subItem.id}
-                                                    >
-                                                        {subItem.description}
-                                                    </Radio>
+                                            <div>
+                                                <div className="applicable-to-heading invitees-main">
+                                                    {item.description}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                                {item.subReferences.map((subItem) => (
+                                                    <div key={subItem.id} style={{ marginLeft: '20px' }}>
+                                                        <Radio
+                                                            disabled={regInviteesDisable}
+                                                            onChange={(e) =>
+                                                                this.props.add_editcompetitionFeeDeatils(
+                                                                    e.target.value,
+                                                                    'none'
+                                                                )
+                                                            }
+                                                            key={subItem.id}
+                                                            value={subItem.id}
+                                                        >
+                                                            {subItem.description}
+                                                        </Radio>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                 </div>
                             )
                         )}
@@ -6974,7 +6970,7 @@ class RegistrationCompetitionFee extends Component {
                                         rules={[{
                                             required: true,
                                             message:
-                                            ValidationConstants.pleaseEnterChildDiscountPercentage,
+                                                ValidationConstants.pleaseEnterChildDiscountPercentage,
                                         }]}
                                     >
                                         <InputWithHead
@@ -7300,7 +7296,7 @@ class RegistrationCompetitionFee extends Component {
                                     rules={[{
                                         required: true,
                                         message:
-                                        ValidationConstants.pleaseSelectDiscountType,
+                                            ValidationConstants.pleaseSelectDiscountType,
                                     }]}
                                 >
                                     <Select
@@ -7338,7 +7334,7 @@ class RegistrationCompetitionFee extends Component {
                                     rules={[{
                                         required: true,
                                         message:
-                                        ValidationConstants.pleaseSelectMembershipProduct,
+                                            ValidationConstants.pleaseSelectMembershipProduct,
                                     }]}
                                 >
                                     <Select
@@ -7372,7 +7368,7 @@ class RegistrationCompetitionFee extends Component {
                                 rules={[{
                                     required: true,
                                     message:
-                                    ValidationConstants.pleaseSelectMembershipTypes,
+                                        ValidationConstants.pleaseSelectMembershipTypes,
                                 }]}
                             >
                                 <Select
@@ -7479,7 +7475,6 @@ class RegistrationCompetitionFee extends Component {
         let allDisable = this.state.permissionState.allDisable;
         let invitees = this.props.competitionFeesState.competitionDetailData.invitees
         let directComp = isArrayNotEmpty(invitees) ? (invitees[0].registrationInviteesRefId == 5) : false
-        console.log("")
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -7556,7 +7551,7 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <Button
                                             className="publish-button margin-top-disabled-button"
-                                            style={{display:"unset", width: "92.5px"}}
+                                            style={{ display: "unset", width: "92.5px" }}
                                             type="primary"
                                             htmlType="submit"
                                             disabled={
@@ -7585,31 +7580,31 @@ class RegistrationCompetitionFee extends Component {
                             </div>
                         </div>
                     ) : (
-                        (tabKey == '4' || tabKey == '6') && (
-                            <div className="row">
-                                <div className="col-sm">
-                                    <div className="comp-buttons-view">
-                                        <Button
-                                            className="publish-button margin-top-disabled-button"
-                                            type="primary"
-                                            // disabled={allDisable}
-                                            htmlType="submit"
-                                            onClick={() =>
-                                                this.setState({
-                                                    statusRefId: tabKey == '6' && isPublished ? 3 : 2,
-                                                    // buttonPressed: "publish"
-                                                    buttonPressed: tabKey == '6' ? 'publish' : 'next',
-                                                })
-                                            }
-                                        >
-                                            {AppConstants.save}
-                                        </Button>
-                                        {this.nextButtonView()}
+                            (tabKey == '4' || tabKey == '6') && (
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <div className="comp-buttons-view">
+                                            <Button
+                                                className="publish-button margin-top-disabled-button"
+                                                type="primary"
+                                                // disabled={allDisable}
+                                                htmlType="submit"
+                                                onClick={() =>
+                                                    this.setState({
+                                                        statusRefId: tabKey == '6' && isPublished ? 3 : 2,
+                                                        // buttonPressed: "publish"
+                                                        buttonPressed: tabKey == '6' ? 'publish' : 'next',
+                                                    })
+                                                }
+                                            >
+                                                {AppConstants.save}
+                                            </Button>
+                                            {this.nextButtonView()}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    )}
+                            )
+                        )}
                 </div>
             </div>
         );
@@ -7647,7 +7642,7 @@ class RegistrationCompetitionFee extends Component {
                         {this.dropdownView()}
 
                         <Content>
-                            <div className="tab-view" style={{width: '75%'}}>
+                            <div className="tab-view" style={{ width: '75%' }}>
                                 <Tabs
                                     activeKey={this.state.competitionTabKey}
                                     onChange={this.tabCallBack}

@@ -329,10 +329,8 @@ class Umpire extends Component {
     }
 
     checkAccreditationLevel = (accreditation) => {
-        console.log(this.props.appstate)
         if (this.props.appstate.accreditation) {
             let accreditationArr = this.props.appstate.accreditation
-            console.log(accreditationArr)
             for (let i in accreditationArr) {
                 if (accreditationArr[i].id == accreditation) {
                     return accreditationArr[i].description

@@ -125,6 +125,7 @@ class MultifieldDrawsNewTimeline extends Component {
             dragDayStart: null,
             courtDataTarget: null,
             tooltipSwappableTime: null,
+            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null
         };
         this.props.clearMultiDraws();
         this.dragTimeRef = React.createRef();
@@ -499,11 +500,11 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const nextEvent = data
             .find((slot, index) => {
-                if(index > eventIndex && slot.drawsId && dataFiltered.includes(slot)) {
+                if (index > eventIndex && slot.drawsId && dataFiltered.includes(slot)) {
                     return slot;
                 }
             }
-        );
+            );
 
         return nextEvent;
     }
@@ -1096,7 +1097,7 @@ class MultifieldDrawsNewTimeline extends Component {
             slotObject.matchDate !== tooltipSwappableTime
             && slotObject !== draggableEventObject
         )
-        this.setState({ tooltipSwappableTime: slotObject.matchDate })
+            this.setState({ tooltipSwappableTime: slotObject.matchDate })
     }
 
     checkUnavailableTime = (workingSchedule, startDayTime, endDayTime, date) => {
@@ -1184,7 +1185,7 @@ class MultifieldDrawsNewTimeline extends Component {
             const courtWeekSchedule = venueDataSlotForCheck.courts.find(court => court.courtId === courtId)?.availableTimeslots;
             if (courtWeekSchedule) {
                 courtDaySchedule = courtWeekSchedule.find(court => court.day === itemDateDayOfWeek)?.timeslot;
-                
+
             }
         }
 
@@ -1202,104 +1203,121 @@ class MultifieldDrawsNewTimeline extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
-                <div className="multi-draw-list-top-head row">
-                    <div className="col-sm-2 mt-3">
-                        <span className="form-heading">{AppConstants.draws}</span>
-                    </div>
-                    <div className="col-sm-10 row pr-0">
-                        <div className="col-sm mt-2">
-                            <Select
-                                className="year-select reg-filter-select1"
-                                style={{ maxWidth: 100, minWidth: 100 }}
-                                onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                                value={JSON.parse(this.state.yearRefId)}
-                            >
-                                {this.props.appState.own_YearArr.map((item) => (
-                                    <Option key={'year_' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-
-                        <div className="col-sm-2.5 mt-2">
-                            <Select
-                                className="year-select reg-filter-select1 innerSelect-value-draws"
-                                style={{ minWidth: 210, maxWidth: 210 }}
-                                onChange={(competitionId, e) =>
-                                    this.onCompetitionChange(competitionId, e.key)
-                                }
-                                value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
-                            >
-                                {this.props.appState.own_CompetitionArr.length > 0 && (
-                                    <Option key="-1" value="-1">{AppConstants.all}</Option>
-                                )}
-                                {this.props.appState.own_CompetitionArr.map((item) => (
-                                    <Option
-                                        key={'competition_' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-
-                        <div className="col-sm mt-2">
-                            <Select
-                                className="year-select reg-filter-select1"
-                                style={{ maxWidth: 150, minWidth: 150 }}
-                                disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
-                                onChange={(roundId) => this.onRoundsChange(roundId)}
-                                value={this.state.roundId}
-                            >
-                                {this.props.drawsState.getDrawsRoundsData.map((item) => (
-                                    <Option key={'round_' + item.roundId} value={item.roundId}>
-                                        {item.name}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-                        <div className="col-sm mt-2">
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    minWidth: 250
-                                }}
-                            >
-                                <RangePicker
-                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
-                                    onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
-                                    format="DD-MM-YYYY"
-                                    style={{ width: '100%', minWidth: 180 }}
-                                    value={[moment(this.state.startDate), moment(this.state.endDate)]}
-                                />
+            <>
+                {this.state.screenKey &&
+                    <div className="row" style={{ marginTop: "15px" }}>
+                        <div className="col-sm d-flex justify-content-end">
+                            <div className="reg-add-save-button">
+                                <Button
+                                    onClick={() => history.push(this.state.screenKey)}
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                >
+                                    {AppConstants.backToMatchDay}
+                                </Button>
                             </div>
                         </div>
-
-                        <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
-                            <Checkbox
-                                className="single-checkbox-radio-style"
-                                style={{ paddingTop: 8 }}
-                                checked={this.state.filterDates}
-                                onChange={(e) => this.onDateRangeCheck(e.target.checked)}
-                                disabled={this.state.firstTimeCompId == "-1"}
-                            >
-                                {AppConstants.filterDates}
-                            </Checkbox>
+                    </div>
+                }
+                <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
+                    <div className="multi-draw-list-top-head row">
+                        <div className="col-sm-2 mt-3">
+                            <span className="form-heading">{AppConstants.draws}</span>
                         </div>
-                        <div className="col-sm d-flex justify-content-end align-items-center pr-1">
-                            <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
-                                {AppConstants.go}
-                            </Button>
+                        <div className="col-sm-10 row pr-0">
+                            <div className="col-sm mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ maxWidth: 100, minWidth: 100 }}
+                                    onChange={(yearRefId) => this.onYearChange(yearRefId)}
+                                    value={JSON.parse(this.state.yearRefId)}
+                                >
+                                    {this.props.appState.own_YearArr.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            <div className="col-sm-2.5 mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1 innerSelect-value-draws"
+                                    style={{ minWidth: 210, maxWidth: 210 }}
+                                    onChange={(competitionId, e) =>
+                                        this.onCompetitionChange(competitionId, e.key)
+                                    }
+                                    value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                                >
+                                    {this.props.appState.own_CompetitionArr.length > 0 && (
+                                        <Option key="-1" value="-1">{AppConstants.all}</Option>
+                                    )}
+                                    {this.props.appState.own_CompetitionArr.map((item) => (
+                                        <Option
+                                            key={'competition_' + item.competitionId}
+                                            value={item.competitionId}
+                                        >
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            <div className="col-sm mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ maxWidth: 150, minWidth: 150 }}
+                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
+                                    onChange={(roundId) => this.onRoundsChange(roundId)}
+                                    value={this.state.roundId}
+                                >
+                                    {this.props.drawsState.getDrawsRoundsData.map((item) => (
+                                        <Option key={'round_' + item.roundId} value={item.roundId}>
+                                            {item.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+                            <div className="col-sm mt-2">
+                                <div
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        minWidth: 250
+                                    }}
+                                >
+                                    <RangePicker
+                                        disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
+                                        onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                                        format="DD-MM-YYYY"
+                                        style={{ width: '100%', minWidth: 180 }}
+                                        value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
+                                <Checkbox
+                                    className="single-checkbox-radio-style"
+                                    style={{ paddingTop: 8 }}
+                                    checked={this.state.filterDates}
+                                    onChange={(e) => this.onDateRangeCheck(e.target.checked)}
+                                    disabled={this.state.firstTimeCompId == "-1"}
+                                >
+                                    {AppConstants.filterDates}
+                                </Checkbox>
+                            </div>
+                            <div className="col-sm d-flex justify-content-end align-items-center pr-1">
+                                <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
+                                    {AppConstants.go}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     };
 
@@ -1668,7 +1686,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     className="single-checkbox-radio-style"
                                     checked={this.state.isFilterSchedule}
                                     onChange={e => this.onScheduledMatchesRangeCheck(e.target.checked)}
-                                    // disabled={this.state.firstTimeCompId == "-1"}
+                                // disabled={this.state.firstTimeCompId == "-1"}
                                 >
                                     {AppConstants.showOnlyScheduledMatches}
                                 </Checkbox>
@@ -1776,13 +1794,13 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const filteredDateArray = dateNewArray
             .filter(item => this.getDate(item.date) === itemDate);
-        
+
         const dayDate = this.getDate(filteredDateArray[0].date);
 
         // for Show only scheduled matches filter
         const sortedByStartTimeDateArray = filteredDateArray.sort((a, b) => moment(a.date) - moment(b.date));
         const firstEventInDayStart = sortedByStartTimeDateArray[0]?.date;
-        
+
         const sortedByEndTimeDateArray = filteredDateArray
             .sort((a, b) => moment(this.getDate(a.date) + a.endTime) - moment(this.getDate(b.date) + b.endTime));
         const lastEventInDayEnd = dayDate + sortedByEndTimeDateArray[sortedByEndTimeDateArray.length - 1].endTime;
@@ -1790,7 +1808,7 @@ class MultifieldDrawsNewTimeline extends Component {
         const firstEventHourStart = moment(firstEventInDayStart).startOf('hour').format('HH:mm');
 
         const isLastEventEndsAtDayEnd = moment(lastEventInDayEnd).format('HH:mm') === moment(lastEventInDayEnd).startOf('hour').format('HH:mm');
-        
+
         const lastEventHourEnd = isLastEventEndsAtDayEnd
             ? moment(lastEventInDayEnd).format('HH:mm')
             : moment(lastEventInDayEnd).endOf('hour').add(1, 'minutes').format('HH:mm');
@@ -1825,7 +1843,7 @@ class MultifieldDrawsNewTimeline extends Component {
         let topMargin = 2;
         const date = [];
 
-        const { isFilterSchedule} = this.state;
+        const { isFilterSchedule } = this.state;
 
         const { dateNewArray } = dateItem;
 
@@ -1878,7 +1896,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                 if (index < date.length - 1) {
                                     newTimeAllDayScheduleHours.pop();
                                 }
-                                
+
                                 return newTimeAllDayScheduleHours.map((itemTime, indexTime) => {
                                     if (index !== 0 || indexTime !== 0) {
                                         dayMargin += ONE_HOUR_IN_MIN * ONE_MIN_WIDTH;
@@ -1984,7 +2002,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                 </div>
                                 {date.map((fieldItemDate, fieldItemDateIndex) => {
                                     // for check the schedule of the day
-                                    const { startDayTime, endDayTime} = this.getStartAndEndDayTime(fieldItemDate, dateNewArray);
+                                    const { startDayTime, endDayTime } = this.getStartAndEndDayTime(fieldItemDate, dateNewArray);
 
                                     const startDayDate = moment(fieldItemDate + startDayTime);
                                     const endDayDate = moment(fieldItemDate + endDayTime);
@@ -1998,7 +2016,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                     if (fieldItemDateIndex === date.length - 1) {
                                         // for the last day in schedule width and right dashed line in the end of the day
-                                        diffDayScheduleTime =  endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH + 2;
+                                        diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH + 2;
                                     } else if (fieldItemDateIndex === date.length - 1 && isFilterSchedule) {
                                         diffDayScheduleTime = (endDayDate.diff(startDayDate, 'minutes') - ONE_HOUR_IN_MIN) * ONE_MIN_WIDTH;
                                     } else {
@@ -2083,7 +2101,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                 </span>
                                                             </div>
                                                         )
-                                                }})}
+                                                    }
+                                                })}
                                                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                                                     if (this.getDate(slotObject.matchDate) === fieldItemDate && slotObject.drawsId) {
                                                         // for left margin the event start inside the day
@@ -2152,7 +2171,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 style={{
                                                                                     whiteSpace: 'nowrap',
                                                                                     overflow: 'hidden',
-                                                                                    textOverflow:'ellipsis'
+                                                                                    textOverflow: 'ellipsis'
                                                                                 }}
                                                                             >
                                                                                 {slotObject.homeTeamName} <br />
@@ -2191,7 +2210,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     style={{
                                                                                         whiteSpace: 'nowrap',
                                                                                         overflow: 'hidden',
-                                                                                        textOverflow:'ellipsis'
+                                                                                        textOverflow: 'ellipsis'
                                                                                     }}
                                                                                 >
                                                                                     {slotObject.homeTeamName} <br />
@@ -2237,16 +2256,16 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                                     width="16"
                                                                                                     height="10"
                                                                                                 />
-                                                                                                
+
                                                                                             ) : (
-                                                                                                <img
-                                                                                                    className="dot-image"
-                                                                                                    src={AppImages.moreTripleDot}
-                                                                                                    alt=""
-                                                                                                    width="16"
-                                                                                                    height="10"
-                                                                                                />
-                                                                                            )}
+                                                                                                    <img
+                                                                                                        className="dot-image"
+                                                                                                        src={AppImages.moreTripleDot}
+                                                                                                        alt=""
+                                                                                                        width="16"
+                                                                                                        height="10"
+                                                                                                    />
+                                                                                                )}
                                                                                         </div>
                                                                                     )
                                                                                 }

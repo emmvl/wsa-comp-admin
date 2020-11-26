@@ -70,10 +70,10 @@ function totalSeasonalFees(seasonalFees1, record) {
                 {record.feeOrgId == null ? 'N/A' : (record.seasonalFees == null && record.seasonalGST == null) ? 'N/A' : 'Affiliate fee not set!'}
             </span>
         ) : (
-            <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
-            </span>
-        )
+                <span>
+                    {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
+                </span>
+            )
     );
 }
 
@@ -101,10 +101,10 @@ function totalCasualFees(casualFees1, record) {
                 {record.feeOrgId == null ? 'N/A' : (record.casualFees == null && record.casualGST == null) ? 'N/A' : 'Affiliate fee not set!'}
             </span>
         ) : (
-            <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
-            </span>
-        )
+                <span>
+                    {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
+                </span>
+            )
     );
 }
 
@@ -437,7 +437,6 @@ class RegistrationCompetitionList extends Component {
     );
 
     handleCompetitionTableList = (page, yearRefId, searchText) => {
-        console.log('called');
         const { sortBy, sortOrder } = this.state;
         const offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset });

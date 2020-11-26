@@ -910,7 +910,6 @@ function CompetitionTimeSlots(state = initialState, action) {
             }
 
         case ApiConstants.Search_Division_Timeslot_update:
-            console.log(action)
             if (action.key == "divisions") {
                 state.getcompetitionTimeSlotData.divisions = action.value
             }
