@@ -126,7 +126,6 @@ class LiveScoreIncidentList extends Component {
     }
 
     componentDidMount() {
-
         const { incidentListActionObject, umpireKey } = this.props.liveScoreIncidentState
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
@@ -148,7 +147,6 @@ class LiveScoreIncidentList extends Component {
             } else {
                 history.push('/umpireDashboard')
             }
-
         } else {
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -189,7 +187,6 @@ class LiveScoreIncidentList extends Component {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             compId = id
         }
-
 
         let { limit, sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
@@ -255,7 +252,6 @@ class LiveScoreIncidentList extends Component {
         this.props.liveScoreIncidentList(compId, searchText, limit, offset, sortBy, sortOrder);
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -266,19 +262,10 @@ class LiveScoreIncidentList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             {/* <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to="/liveScoreAddIncident">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
@@ -287,16 +274,7 @@ class LiveScoreIncidentList extends Component {
                                 </div>
                             </div> */}
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -312,16 +290,7 @@ class LiveScoreIncidentList extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to="/liveScoreIncidentImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
@@ -342,7 +311,7 @@ class LiveScoreIncidentList extends Component {
                     </div>
                 </div>
                 {/* search box */}
-                <div className="col-sm pt-4 ml-3 " style={{ display: "flex", justifyContent: 'flex-end' }}>
+                <div className="col-sm pt-4 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -381,14 +350,7 @@ class LiveScoreIncidentList extends Component {
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
+                        className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end"
                     />
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -408,8 +370,6 @@ class LiveScoreIncidentList extends Component {
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width default-bg">
-
-
                 {
                     umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -423,7 +383,6 @@ class LiveScoreIncidentList extends Component {
                         :
                         <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
                 }
-
 
                 <Layout>
                     {this.headerView()}

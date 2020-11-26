@@ -921,7 +921,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         innerHorizontalState: state.InnerHorizontalState,
         userState: state.UserState,
@@ -929,4 +929,4 @@ function mapStatetoProps(state) {
     }
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)((InnerHorizontalMenu));
+export default connect(mapStateToProps, mapDispatchToProps)(InnerHorizontalMenu);

@@ -4,17 +4,16 @@ import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { NavLink } from "react-router-dom"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+
 const columns = [
     {
         title: 'Summary',
         dataIndex: 'summary',
         key: 'summary',
         sorter: (a, b) => a.summary.length - b.summary.length,
-
     },
     {
         title: 'Team Numbers',
@@ -22,7 +21,6 @@ const columns = [
         key: 'teamNumbers',
         render: teamNumbers => <Input className="input-inside-player-grades-table-for-grade" value={teamNumbers} />,
         sorter: (a, b) => a.teamNumbers.length - b.teamNumbers.length,
-
     },
     {
         title: 'Min. Teams/Grade or Division',
@@ -31,7 +29,6 @@ const columns = [
         render: minTeamsPerGarde => <Input className="input-inside-player-grades-table-for-grade" value={minTeamsPerGarde} />,
         width: '30%',
         sorter: (a, b) => a.minTeamsPerGarde.length - b.minTeamsPerGarde.length,
-
     },
     {
         title: 'Divisions/Grades',
@@ -39,9 +36,7 @@ const columns = [
         key: 'divisionGrades',
         render: divisionGrades => <Input className="input-inside-player-grades-table-for-grade" value={divisionGrades} />,
         sorter: (a, b) => a.divisionGrades.length - b.divisionGrades.length,
-
     },
-
 ];
 
 const data = [
@@ -58,8 +53,6 @@ const data = [
         teamNumbers: '23',
         minTeamsPerGarde: '7',
         divisionGrades: '3',
-
-
     },
     {
         key: '3',
@@ -67,7 +60,6 @@ const data = [
         teamNumbers: '40',
         minTeamsPerGarde: '7',
         divisionGrades: '3',
-
     },
     {
         key: '4',
@@ -75,7 +67,6 @@ const data = [
         teamNumbers: '34',
         minTeamsPerGarde: '7',
         divisionGrades: '5',
-
     },
     {
         key: '5',
@@ -83,7 +74,6 @@ const data = [
         teamNumbers: '30',
         minTeamsPerGarde: '7',
         divisionGrades: '5',
-
     },
     {
         key: '6',
@@ -92,7 +82,6 @@ const data = [
         minTeamsPerGarde: '7',
         divisionGrades: '6',
     },
-
 ];
 
 class CompetitionReGradingStep2 extends Component {
@@ -112,7 +101,6 @@ class CompetitionReGradingStep2 extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -128,7 +116,6 @@ class CompetitionReGradingStep2 extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -148,13 +135,7 @@ class CompetitionReGradingStep2 extends Component {
                             </div>
                         </div>
                         <div className="col-sm-8">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition_name}:</span>
                                 <Select
                                     className="year-select"
@@ -189,7 +170,7 @@ class CompetitionReGradingStep2 extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
                                 <Button className="open-reg-button" type="primary">{AppConstants.confirm}</Button>
                             </div>
@@ -200,7 +181,6 @@ class CompetitionReGradingStep2 extends Component {
         )
     }
 
-
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -208,7 +188,6 @@ class CompetitionReGradingStep2 extends Component {
                 <InnerHorizontalMenu menu="competition" compSelectedKey={"13"} />
                 <Layout>
                     {this.headerView()}
-
 
                     <Content>
                         {this.dropdownView()}
@@ -222,8 +201,8 @@ class CompetitionReGradingStep2 extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 export default CompetitionReGradingStep2;

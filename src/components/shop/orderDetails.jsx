@@ -51,7 +51,6 @@ class OrderDetails extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">

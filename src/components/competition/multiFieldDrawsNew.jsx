@@ -439,7 +439,6 @@ class MultifieldDrawsNew extends Component {
         }
     }
 
-    //////year change onchange
     onYearChange = (yearId) => {
         this.props.clearMultiDraws('rounds');
         setOwnCompetitionYear(yearId);
@@ -465,9 +464,8 @@ class MultifieldDrawsNew extends Component {
 
     onChangeStartDate = (startDate, endDate) => {
         this.setState({
-            startDate: startDate,
-            endDate: endDate
-
+            startDate,
+            endDate
         })
     }
 
@@ -580,7 +578,6 @@ class MultifieldDrawsNew extends Component {
             orgId: null,
             startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
             endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
-
         }
 
         this.props.updateCompetitionDraws(
@@ -744,18 +741,11 @@ class MultifieldDrawsNew extends Component {
                 if (!checkVenueFalse.includes(slot.venueId)) {
                     if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
                         return slot.colorCode
-                    } else {
-                        return "#999999"
                     }
-                } else {
-                    return "#999999"
                 }
-            } else {
-                return "#999999"
             }
-        } else {
-            return "#999999"
         }
+        return "#999999"
     }
 
     checkAllDivisionData = () => {
@@ -782,7 +772,6 @@ class MultifieldDrawsNew extends Component {
                     uncheckedArr.push(checkedArray[i][key])
                 }
             }
-            return uncheckedArr
         }
         return uncheckedArr
     }
@@ -887,13 +876,8 @@ class MultifieldDrawsNew extends Component {
                         </div>
                         <div className="col-sm mt-2">
                             <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    minWidth: 250
-                                }}
+                                className="w-100 d-flex flex-row align-items-center"
+                                style={{ minWidth: 250 }}
                             >
                                 <RangePicker
                                     disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
@@ -948,7 +932,7 @@ class MultifieldDrawsNew extends Component {
                             aria-expanded="false"
                             // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
 
@@ -1009,7 +993,7 @@ class MultifieldDrawsNew extends Component {
                             aria-expanded="true"
                             // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -1047,7 +1031,6 @@ class MultifieldDrawsNew extends Component {
                         </span>
                     )}
                 </div>
-
             </>
         )
     }
@@ -1080,7 +1063,7 @@ class MultifieldDrawsNew extends Component {
                             role="button"
                             aria-expanded="true"
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -1152,8 +1135,8 @@ class MultifieldDrawsNew extends Component {
                                 className="input-heading-add-another pt-4"
                                 onClick={() => this.changeShowAllStatus("division")}
                             >
-                                    {showAllDivision ? AppConstants.hide : AppConstants.showAll}
-                                </span>
+                                {showAllDivision ? AppConstants.hide : AppConstants.showAll}
+                            </span>
                         )}
                     </div>
                 )}
@@ -1179,7 +1162,7 @@ class MultifieldDrawsNew extends Component {
                             role="button"
                             aria-expanded="true"
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -1236,18 +1219,16 @@ class MultifieldDrawsNew extends Component {
             >
                 {filterEnable ? (
                     <div
-                        className="d-flex align-items-center mt-4"
+                        className="d-flex align-items-center mt-4 pointer"
                         onClick={() => this.filterOnClick()}
-                        style={{ cursor: "pointer" }}
                     >
                         <img className="dot-image" src={AppImages.filterIcon} alt="" width="20" height="20" style={{ marginBottom: 7 }} />
                         <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                     </div>
                 ) : (
                     <div
-                        className="d-flex align-items-center mt-1"
+                        className="d-flex align-items-center mt-1 pointer"
                         onClick={() => this.filterOnClick()}
-                        style={{ cursor: "pointer" }}
                     >
                         <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
                     </div>
@@ -1263,18 +1244,15 @@ class MultifieldDrawsNew extends Component {
     containerView() {
         return (
             <div className="multiDrawContentView">
-                <div className="multi-draw-list-top-head row" style={{ alignContent: "center" }}>
+                <div className="multi-draw-list-top-head row align-content-center">
                     <div className="col-sm-3 mt-3">
                         <span className="form-heading">{AppConstants.matchCalender}</span>
                     </div>
                     <div className="col-sm-3 mt-3">
                         <div
+                            className="w-ft d-flex flex-row align-items-center"
                             style={{
-                                width: "fit-content",
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginLeft: "10px",
+                                marginLeft: 10,
                                 marginTop: 5
                             }}
                         >
@@ -1298,26 +1276,12 @@ class MultifieldDrawsNew extends Component {
                 </div>
                 <div>
                     {this.props.drawsState.spinLoad && (
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                height: 100,
-                                alignItems: 'center',
-                            }}
-                        >
+                        <div className="d-flex justify-content-center align-items-center" style={{ height: 100 }}>
                             <Spin size='default' spinning={this.props.drawsState.spinLoad} />
                         </div>
                     )}
                     {this.props.drawsState.getRoundsDrawsdata.length <= 0 && (
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                height: 100,
-                                alignItems: 'center',
-                            }}
-                        />
+                        <div className="d-flex justify-content-center align-items-center" style={{ height: 100 }} />
                     )}
                     {this.props.drawsState.updateLoad ? (
                         <div className="draggable-wrap draw-data-table">
@@ -1346,9 +1310,9 @@ class MultifieldDrawsNew extends Component {
                                 <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
                                     {this.state.firstTimeCompId != "-1" && (
                                         <div className="draws-round-view">
-                                                <span className="draws-round">
-                                                    {dateItem.roundName}
-                                                </span>
+                                            <span className="draws-round">
+                                                {dateItem.roundName}
+                                            </span>
                                         </div>
                                     )}
                                     {this.draggableView(dateItem)}
@@ -1372,21 +1336,20 @@ class MultifieldDrawsNew extends Component {
             </div>
         );
     }
+
     checkDate(date, index, dateArray) {
         if (index == 0) {
             return moment(date).format('DD MMM, ddd')
         } else {
             if (moment(dateArray[index].date).format('DD-MM-YYYY') == moment(dateArray[(index - 1)].date).format('DD-MM-YYYY')) {
                 return moment(date).format('ddd')
-            }
-            else {
+            } else {
                 return moment(date).format('DD MMM, ddd')
             }
         }
     }
 
     draggableView = (dateItem) => {
-        console.log(dateItem)
         let disabledStatus = this.state.competitionStatus == 1
         var dateMargin = 25;
         var dayMargin = 25;
@@ -1478,7 +1441,6 @@ class MultifieldDrawsNew extends Component {
                                                     overflow: 'hidden',
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
-
                                                 }}
                                             >
                                                 {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
@@ -1539,9 +1501,9 @@ class MultifieldDrawsNew extends Component {
                                                     >
                                                         {slotObject.drawsId != null ? (
                                                             <span>
-                                                                    {slotObject.homeTeamName} <br />
+                                                                {slotObject.homeTeamName} <br />
                                                                 {slotObject.awayTeamName}
-                                                                </span>
+                                                            </span>
                                                         ) : (
                                                             <span>Free</span>
                                                         )}
@@ -1564,7 +1526,13 @@ class MultifieldDrawsNew extends Component {
                                                         className="action-triple-dot-draws"
                                                         theme="light"
                                                         mode="horizontal"
-                                                        style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop", display: slotObject.isLocked !== 1 && "flex", justifyContent: slotObject.isLocked !== 1 && "center" }}
+                                                        style={{
+                                                            lineHeight: '16px',
+                                                            borderBottom: 0,
+                                                            cursor: disabledStatus && "no-drop",
+                                                            display: slotObject.isLocked !== 1 && "flex",
+                                                            justifyContent: slotObject.isLocked !== 1 && "center"
+                                                        }}
                                                     >
                                                         <SubMenu
                                                             disabled={disabledStatus}
@@ -1572,14 +1540,7 @@ class MultifieldDrawsNew extends Component {
                                                             key="sub1"
                                                             title={
                                                                 slotObject.isLocked == 1 ? (
-                                                                    <div
-                                                                        style={{
-                                                                            display: 'flex',
-                                                                            justifyContent: 'space-between',
-                                                                            width: 80,
-                                                                            maxWidth: 80,
-                                                                        }}
-                                                                    >
+                                                                    <div className="d-flex justify-content-between" style={{ width: 80, maxWidth: 80 }}>
                                                                         <img
                                                                             className="dot-image"
                                                                             src={AppImages.drawsLock}
@@ -1624,7 +1585,7 @@ class MultifieldDrawsNew extends Component {
                                                                         )
                                                                     }
                                                                 >
-                                                                    <div style={{ display: 'flex' }}>
+                                                                    <div className="d-flex">
                                                                         <span>Unlock</span>
                                                                     </div>
                                                                 </Menu.Item>
@@ -1772,19 +1733,17 @@ class MultifieldDrawsNew extends Component {
             if (this.state.generateRoundId != null) {
                 this.callGenerateDraw();
                 this.setState({ drawGenerateModalVisible: false });
-            }
-            else {
+            } else {
                 message.error("Please select round");
             }
-        }
-        else {
+        } else {
             this.setState({ drawGenerateModalVisible: false });
         }
     }
 
     handlePublishModal = (key) => {
         try {
-            if (key == "ok") {
+            if (key === "ok") {
                 let competitiondata = this.props.drawsState.liveScoreCompetiton
                 localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
                 localStorage.removeItem('stateWideMessage')
@@ -1834,7 +1793,7 @@ class MultifieldDrawsNew extends Component {
                     <div>
                         <div className="comp-buttons-view">
                             <Tooltip
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() =>
                                     this.setState({
                                         tooltipVisibleDelete: isPublish,
@@ -1920,8 +1879,7 @@ class MultifieldDrawsNew extends Component {
     checkDivision = e => {
         if (e.target.checked) {
             this.state.publishPartModel.publishPart.isShowDivision = true;
-        }
-        else {
+        } else {
             this.state.publishPartModel.publishPart.isShowDivision = false;
             this.onSelectDivisionsValues(null)
         }

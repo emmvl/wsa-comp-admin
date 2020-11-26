@@ -162,8 +162,7 @@ const columns = [
         key: 'division',
         sorter: true,
         onHeaderCell: () => listeners('div'),
-        render: (division) =>
-            <span>{division ? division.name : ""}</span>
+        render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
         title: 'Play Time',
@@ -171,8 +170,7 @@ const columns = [
         key: 'playTime',
         sorter: false,
         // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (playTime, record) =>
-            <span>{checkPlayTime(record)}</span>
+        render: (playTime, record) => <span>{checkPlayTime(record)}</span>
     },
     {
         title: 'Play %',
@@ -180,8 +178,7 @@ const columns = [
         key: 'playPercent',
         sorter: true,
         onHeaderCell: () => listeners('playPercent'),
-        render: (playTime, record) =>
-            <span>{checkPlay(record)}</span>
+        render: (playTime, record) => <span>{checkPlay(record)}</span>
     },
     // {
     //     title: 'Playing Up %',
@@ -230,20 +227,6 @@ class LiveScoreGameTimeList extends Component {
             }
         } else {
             history.push('/liveScoreCompetitions')
-        }
-    }
-
-    checkUserId(record) {
-        let userId = record.player ? record.player.userId : null
-        if (userId == null) {
-            message.config({ duration: 1.5, maxCount: 1 })
-            message.warn(ValidationConstants.playerMessage)
-        } else {
-            history.push("/userPersonal", {
-                userId: userId,
-                screenKey: "livescore",
-                screen: "/liveScorePlayerList"
-            })
         }
     }
 
@@ -311,27 +294,21 @@ class LiveScoreGameTimeList extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ alignSelf: 'center' }}>
+                    <div className="col-sm align-self-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.gameTimeStatistics}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm" style={{
-                        display: "flex",
-                        flexDirection: 'row',
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                    }}>
+                    <div className="col-sm d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             <div className="col-sm">
                                 <Select
-                                    className="year-select reg-filter-select1"
-                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
+                                    className="year-select reg-filter-select1 d-flex justify-content-end"
+                                    style={{ minWidth: 140 }}
                                     // onChange={(selectStatus) => this.setState({ selectStatus })}
                                     onChange={(filter) => this.setFilterValue({ filter })}
                                     value={this.state.filter}
@@ -342,18 +319,8 @@ class LiveScoreGameTimeList extends Component {
                                     <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>
                                 </Select>
                             </div>
-                            <div className="col-sm" style={{ display: "flex" }}>
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignSelf: 'center',
-                                        alignItems: "flex-end",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                            <div className="col-sm d-flex">
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-end align-self-center justify-content-end">
                                     <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -374,7 +341,7 @@ class LiveScoreGameTimeList extends Component {
                     </div>
                 </div>
                 {/* search box */}
-                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end' }}>
+                <div className="col-sm pt-3 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -418,14 +385,7 @@ class LiveScoreGameTimeList extends Component {
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
+                        className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end"
                     />
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -456,7 +416,6 @@ class LiveScoreGameTimeList extends Component {
         );
     }
 }
-// export default LiveScoreGameTimeList;
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ gameTimeStatisticsListAction, exportFilesAction }, dispatch)

@@ -1,7 +1,11 @@
 import React, { Component, createRef } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message } from 'antd';
+import {
+    Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message,
+} from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
+import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -11,8 +15,6 @@ import {
     saveCompetitionFormatAction,
     updateCompetitionFormatAction,
 } from "../../store/actions/competitionModuleAction/competitionFormatAction";
-import { bindActionCreators } from "redux";
-import { connect } from 'react-redux';
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import {
@@ -21,9 +23,9 @@ import {
     getCompetitionTypesAction,
     getYearAndCompetitionOwnAction,
     clearYearCompetitionAction,
-    getEnhancedRoundRobinAction
+    getEnhancedRoundRobinAction,
 } from "../../store/actions/appAction";
-import { getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
+import { getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction";
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
 import { getOrganisationData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
@@ -46,24 +48,24 @@ class QuickCompetitionMatchFormat extends Component {
             buttonPressed: "",
             loading: false,
             isFinalAvailable: false,
-            matchTypeRefStateId: 0
-        }
+            matchTypeRefStateId: 0,
+        };
 
-        this.formRef = createRef()
+        this.formRef = createRef();
         this.referenceApiCalls();
     }
 
     componentDidMount() {
-        let competitionId = this.props.location.state ? this.props.location.state.competitionUniqueKey : null
-        let year = this.props.location.state && this.props.location.state.year
-        let propsData = this.props.quickCompetitionState.quick_CompetitionYearArr.length > 0 && this.props.quickCompetitionState.quick_CompetitionYearArr
-        let compData = this.props.quickCompetitionState.quick_CompetitionArr.length > 0 && this.props.quickCompetitionState.quick_CompetitionArr
+        const competitionId = this.props.location.state ? this.props.location.state.competitionUniqueKey : null;
+        const year = this.props.location.state && this.props.location.state.year;
+        const propsData = this.props.quickCompetitionState.quick_CompetitionYearArr.length > 0 && this.props.quickCompetitionState.quick_CompetitionYearArr;
+        const compData = this.props.quickCompetitionState.quick_CompetitionArr.length > 0 && this.props.quickCompetitionState.quick_CompetitionArr;
         if (year && competitionId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(year),
                 firstTimeCompId: competitionId,
-                getDataLoading: true
-            })
+                getDataLoading: true,
+            });
             this.apiCalls(competitionId, year);
         } else {
             this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionYearArr, null);
@@ -72,23 +74,23 @@ class QuickCompetitionMatchFormat extends Component {
 
     componentDidUpdate(nextProps) {
         try {
-            let competitionFormatState = this.props.competitionFormatState;
-            let competitionModuleState = this.props.competitionModuleState;
+            const { competitionFormatState } = this.props;
+            const { competitionModuleState } = this.props;
             if (nextProps.competitionFormatState != competitionFormatState) {
                 if (competitionFormatState.onLoad == false && this.state.getDataLoading) {
                     this.setState({
                         getDataLoading: false,
-                    })
+                    });
                     this.setFormFieldValue();
                 }
-                this.setFormFieldValue()
+                this.setFormFieldValue();
             }
             if (nextProps.quickCompetitionState !== this.props.quickCompetitionState) {
-                let competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
+                const competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
                 if (nextProps.quickCompetitionState.quick_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
-                        let competitionId = competitionList[0].competitionId;
-                        let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
+                        const { competitionId } = competitionList[0];
+                        const yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId;
                         this.setState({ firstTimeCompId: competitionId, getDataLoading: true, yearRefId: yearId });
                         this.apiCalls(competitionId, yearId);
                     }
@@ -102,11 +104,11 @@ class QuickCompetitionMatchFormat extends Component {
                             if (this.state.isFinalAvailable) {
                                 history.push('/competitionFinals');
                             } else {
-                                let payload = {
+                                const payload = {
                                     yearRefId: this.state.yearRefId,
                                     competitionUniqueKey: this.state.firstTimeCompId,
-                                    organisationId: this.state.organisationId
-                                }
+                                    organisationId: this.state.organisationId,
+                                };
                                 if (competitionModuleState.drawGenerateLoad == false && !this.state.isFinalAvailable) {
                                     this.props.generateDrawAction(payload);
                                     this.setState({ loading: true });
@@ -140,51 +142,51 @@ class QuickCompetitionMatchFormat extends Component {
                 }
             }
         } catch (error) {
-            console.log("ERROr" + error);
+            console.log(`ERROr${error}`);
         }
     }
 
     apiCalls = (competitionId, yearRefId) => {
-        let payload = {
+        const payload = {
             yearRefId,
             competitionUniqueKey: competitionId,
-            organisationId: this.state.organisationId
-        }
+            organisationId: this.state.organisationId,
+        };
         this.props.getCompetitionFormatAction(payload);
     }
 
     referenceApiCalls = () => {
-        this.props.clearYearCompetitionAction()
+        this.props.clearYearCompetitionAction();
         this.props.getMatchTypesAction();
         this.props.getCompetitionFormatTypesAction();
         this.props.getCompetitionTypesAction();
         this.props.getEnhancedRoundRobinAction();
-        this.setState({ getDataLoading: true })
+        this.setState({ getDataLoading: true });
     }
 
     onYearChange(yearId) {
-        this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionYearArr, yearId)
-        this.setState({ firstTimeCompId: null, yearRefId: yearId })
+        this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionYearArr, yearId);
+        this.setState({ firstTimeCompId: null, yearRefId: yearId });
     }
 
     // on Competition change
     onCompetitionChange(competitionId) {
-        let payload = {
+        const payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: competitionId,
-            organisationId: this.state.organisationId
-        }
+            organisationId: this.state.organisationId,
+        };
         this.props.getCompetitionFormatAction(payload);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId });
     }
 
     setFormFieldValue = () => {
-        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
-        let competitionFormatDivision = formatList.competionFormatDivisions;
+        const formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
+        const competitionFormatDivision = formatList.competionFormatDivisions;
 
         this.formRef.current.setFieldsValue({
             [`competitionFormatRefId`]: formatList.competitionFormatRefId,
-            [`matchTypeRefId`]: formatList.matchTypeRefId
+            [`matchTypeRefId`]: formatList.matchTypeRefId,
         });
 
         (competitionFormatDivision || []).map((item, index) => {
@@ -194,39 +196,39 @@ class QuickCompetitionMatchFormat extends Component {
                 [`qtrBreak${index}`]: item.qtrBreak,
                 [`timeBetweenGames${index}`]: item.timeBetweenGames,
             });
-        })
+        });
     }
 
     onChange(e, competitionFormatDivisions, index) {
-        let removedDivisions = [];
-        let selectDivs = competitionFormatDivisions[index].selectedDivisions;
-        for (let k in selectDivs) {
+        const removedDivisions = [];
+        const selectDivs = competitionFormatDivisions[index].selectedDivisions;
+        for (const k in selectDivs) {
             if (e.indexOf(selectDivs[k]) == -1) {
                 removedDivisions.push(selectDivs[k]);
                 break;
             }
         }
 
-        let a = competitionFormatDivisions[index].selectedDivisions.filter(x => false);
+        const a = competitionFormatDivisions[index].selectedDivisions.filter((x) => false);
         competitionFormatDivisions[index].selectedDivisions = a;
         competitionFormatDivisions[index].selectedDivisions = e;
 
-        let competitionFormatTemplateId = competitionFormatDivisions[index].competitionFormatTemplateId;
-        let remainingFormatDiv = competitionFormatDivisions.filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
+        const { competitionFormatTemplateId } = competitionFormatDivisions[index];
+        const remainingFormatDiv = competitionFormatDivisions.filter((x) => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
-        for (let remDiv in remainingFormatDiv) {
-            let itemDivisions = remainingFormatDiv[remDiv].divisions;
+        for (const remDiv in remainingFormatDiv) {
+            const itemDivisions = remainingFormatDiv[remDiv].divisions;
             // disable true
-            for (let i in e) {
-                for (let j in itemDivisions) {
+            for (const i in e) {
+                for (const j in itemDivisions) {
                     if (itemDivisions[j].competitionMembershipProductDivisionId === e[i]) {
                         itemDivisions[j].isDisabled = true;
                     }
                 }
             }
 
-            for (let i in removedDivisions) {
-                for (let j in itemDivisions) {
+            for (const i in removedDivisions) {
+                for (const j in itemDivisions) {
                     if (itemDivisions[j].competitionMembershipProductDivisionId === removedDivisions[i]) {
                         itemDivisions[j].isDisabled = false;
                     }
@@ -247,7 +249,7 @@ class QuickCompetitionMatchFormat extends Component {
 
     handleDeleteModal(flag, key, index, competionFormatDivisions) {
         this.setState({
-            deleteModalVisible: flag
+            deleteModalVisible: flag,
         });
         if (key === "ok") {
             this.deleteCompetitionFormatDivision(competionFormatDivisions, index);
@@ -255,12 +257,12 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     deleteCompetitionFormatDivision = (competionFormatDivisions, index) => {
-        let removedFormat = competionFormatDivisions[index];
-        let remainingFormatDiv = competionFormatDivisions.filter(x => x.competitionFormatTemplateId != removedFormat.competitionFormatTemplateId);
-        for (let remDiv in remainingFormatDiv) {
-            let itemDivisions = remainingFormatDiv[remDiv].divisions;
-            for (let i in removedFormat.selectedDivisions) {
-                for (let j in itemDivisions) {
+        const removedFormat = competionFormatDivisions[index];
+        const remainingFormatDiv = competionFormatDivisions.filter((x) => x.competitionFormatTemplateId != removedFormat.competitionFormatTemplateId);
+        for (const remDiv in remainingFormatDiv) {
+            const itemDivisions = remainingFormatDiv[remDiv].divisions;
+            for (const i in removedFormat.selectedDivisions) {
+                for (const j in itemDivisions) {
                     if (itemDivisions[j].competitionMembershipProductDivisionId === removedFormat.selectedDivisions[i]) {
                         itemDivisions[j].isDisabled = false;
                     }
@@ -272,8 +274,8 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     onChangeSetValue = (id, fieldName) => {
-        let data = this.props.competitionFormatState.competitionFormatList;
-        let fixtureTemplateId = null;
+        const data = this.props.competitionFormatState.competitionFormatList;
+        const fixtureTemplateId = null;
         if (fieldName === "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
             //     if (item.noOfRounds == id) {
@@ -309,7 +311,7 @@ class QuickCompetitionMatchFormat extends Component {
 
     handleAllDivisionModal = (flag, key, index, competionFormatDivisions) => {
         this.setState({
-            allDivisionVisible: flag
+            allDivisionVisible: flag,
         });
         if (key === "ok") {
             this.performAllDivisionOperation(true, competionFormatDivisions, index);
@@ -319,19 +321,19 @@ class QuickCompetitionMatchFormat extends Component {
     deleteModal = (index) => {
         this.setState({
             currentIndex: index,
-            deleteModalVisible: true
+            deleteModalVisible: true,
         });
     }
 
     onChangeAllDivision = (e, competionFormatDivisions, index) => {
         this.setState({
-            currentIndex: index
+            currentIndex: index,
         });
 
         if (competionFormatDivisions.length > 1) {
             if (e.target.checked) {
                 this.setState({
-                    allDivisionVisible: true
+                    allDivisionVisible: true,
                 });
             } else {
                 this.performAllDivisionOperation(e.target.checked, competionFormatDivisions, index);
@@ -342,52 +344,51 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     performAllDivisionOperation = (checkedVal, competionFormatDivisions, index) => {
-        let allDivObj = Object.assign(competionFormatDivisions[index]);
+        const allDivObj = Object.assign(competionFormatDivisions[index]);
         allDivObj.selectedDivisions = [];
-        for (let i in allDivObj.divisions) {
+        for (const i in allDivObj.divisions) {
             allDivObj.divisions[i].isDisabled = false;
         }
 
-        let arr = [];
+        const arr = [];
         arr.push(allDivObj);
 
         this.props.updateCompetitionFormatAction(checkedVal, "allDivision");
         this.props.updateCompetitionFormatAction(arr, 'competionFormatDivisions');
     }
 
-
     saveCompetitionFormats = (values) => {
         this.setState({ buttonPressed: "save" });
-        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
-        let competitionFormatDivision = formatList.competionFormatDivisions;
+        const formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
+        const competitionFormatDivision = formatList.competionFormatDivisions;
         formatList.organisationId = this.state.organisationId;
 
         if (formatList.isDefault == null) {
             formatList.isDefault = 0;
         }
 
-        for (let item in competitionFormatDivision) {
-            let isFinal = competitionFormatDivision[item]["isFinal"];
+        for (const item in competitionFormatDivision) {
+            const { isFinal } = competitionFormatDivision[item];
             if (isFinal && formatList.competitionFormatRefId != 1) {
                 this.setState({ isFinalAvailable: true });
             }
 
-            let competitionFormatTemplateId = competitionFormatDivision[item].competitionFormatTemplateId;
+            const { competitionFormatTemplateId } = competitionFormatDivision[item];
             if (competitionFormatTemplateId < 0) {
                 competitionFormatDivision[item].competitionFormatTemplateId = 0;
             }
 
-            const selectedDivisions = competitionFormatDivision[item].selectedDivisions;
-            let divisions = competitionFormatDivision[item].divisions;
-            let divArr = [];
+            const { selectedDivisions } = competitionFormatDivision[item];
+            const { divisions } = competitionFormatDivision[item];
+            const divArr = [];
 
-            for (let j in selectedDivisions) {
-                let matchDivisions = divisions.find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+            for (const j in selectedDivisions) {
+                const matchDivisions = divisions.find((x) => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
                 if (matchDivisions != "") {
-                    let obj = {
+                    const obj = {
                         competitionFormatDivisionId: 0,
-                        competitionMembershipProductDivisionId: 0
-                    }
+                        competitionMembershipProductDivisionId: 0,
+                    };
                     obj.competitionFormatDivisionId = matchDivisions.competitionFormatDivisionId;
                     obj.competitionMembershipProductDivisionId = matchDivisions.competitionMembershipProductDivisionId;
                     divArr.push(obj);
@@ -410,36 +411,32 @@ class QuickCompetitionMatchFormat extends Component {
         setOwn_competition(this.state.firstTimeCompId);
     }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div className="col-sm d-flex align-content-center">
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetitionFormat}</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    /// ////view for breadcrumb
+    headerView = () => (
+        <Header className="comp-venue-courts-header-view">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetitionFormat}</Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
+            </div>
+        </Header>
+    )
 
-    ///dropdown view containing all the dropdown of header
+    /// dropdown view containing all the dropdown of header
     dropdownView = () => {
-        let quickCompetitionState = this.props.quickCompetitionState
+        const { quickCompetitionState } = this.props;
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
-                                <span className="year-select-heading">{AppConstants.year}:</span>
+                            <div className="d-flex flex-row align-items-center w-ft">
+                                <span className="year-select-heading">
+                                    {AppConstants.year}
+                                    :
+                                </span>
                                 <Select
                                     name="yearRefId"
                                     className="year-select reg-filter-select-year ml-2"
@@ -447,8 +444,8 @@ class QuickCompetitionMatchFormat extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {quickCompetitionState.quick_CompetitionYearArr.map(item => (
-                                        <Option key={'year_' + item.id} value={item.id}>
+                                    {quickCompetitionState.quick_CompetitionYearArr.map((item) => (
+                                        <Option key={`year_${item.id}`} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -456,23 +453,19 @@ class QuickCompetitionMatchFormat extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50,
-                            }}>
-                                <span className="year-select-heading">{AppConstants.competition}:</span>
+                            <div className="d-flex flex-row align-items-center w-ft" style={{ marginRight: 50 }}>
+                                <span className="year-select-heading">
+                                    {AppConstants.competition}:
+                                </span>
                                 <Select
                                     name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
-                                    // style={{ minWidth: 200, }}
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)}
+                                    // style={{ minWidth: 200 }}
+                                    onChange={(competitionId) => this.onCompetitionChange(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {quickCompetitionState.quick_CompetitionArr.map(item => (
-                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                    {quickCompetitionState.quick_CompetitionArr.map((item) => (
+                                        <Option key={`competition_${item.competitionId}`} value={item.competitionId}>
                                             {item.competitionName}
                                         </Option>
                                     ))}
@@ -482,13 +475,13 @@ class QuickCompetitionMatchFormat extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     contentView = () => {
-        let data = this.props.competitionFormatState.competitionFormatList;
-        let appState = this.props.appState;
-        let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
+        const data = this.props.competitionFormatState.competitionFormatList;
+        const { appState } = this.props;
+        const { isAllDivisionChecked } = this.props.competitionFormatState;
         return (
             <div className="content-view pt-4">
                 <InputWithHead
@@ -512,9 +505,9 @@ class QuickCompetitionMatchFormat extends Component {
                         >
                             <div className="fluid-width">
                                 <div className="row">
-                                    {(appState.competitionFormatTypes || []).map(item => (
+                                    {(appState.competitionFormatTypes || []).map((item) => (
                                         <div className="col-sm">
-                                            <Radio key={'competitionFormatType_' + item.id} value={item.id}>
+                                            <Radio key={`competitionFormatType_${item.id}`} value={item.id}>
                                                 {item.description}
                                             </Radio>
                                         </div>
@@ -533,7 +526,8 @@ class QuickCompetitionMatchFormat extends Component {
                 </Checkbox> */}
                 {/* <InputWithHead heading={AppConstants.fixture_template} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}
                 >
@@ -549,14 +543,15 @@ class QuickCompetitionMatchFormat extends Component {
                     rules={[{ required: true, message: ValidationConstants.matchTypeRequired }]}
                 >
                     <Select
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                        className="w-100"
+                        style={{ paddingRight: 1, minWidth: 182 }}
                         onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                         value={data.matchTypeRefId}
                     >
                         {(appState.matchTypes || []).map((item) => {
                             if (item.name !== "SINGLE") {
                                 return (
-                                    <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
+                                    <Option key={`matchType_${item.id}`} value={item.id}>{item.description}</Option>
                                 );
                             }
                             return <></>;
@@ -567,25 +562,27 @@ class QuickCompetitionMatchFormat extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}
                         >
                             <Option style={{ height: '30px' }} value={null} key={null}>{}</Option>
                             {(data.fixtureTemplates || []).map((fixture) => (
-                                <Option value={'fixtureTemplate_' + fixture.noOfRounds} key={fixture.noOfRounds}>
+                                <Option value={`fixtureTemplate_${fixture.noOfRounds}`} key={fixture.noOfRounds}>
                                     {fixture.noOfRounds}
                                 </Option>
                             ))}
                         </Select>
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}
                         >
                             {(appState.enhancedRoundRobinTypes || []).map((round) => (
-                                <Option key={'enhancedRoundRobinType_' + round.id} value={round.id}>
+                                <Option key={`enhancedRoundRobinType_${round.id}`} value={round.id}>
                                     {round.description}
                                 </Option>
                             ))}
@@ -603,7 +600,7 @@ class QuickCompetitionMatchFormat extends Component {
                         <div className="row">
                             {(appState.typesOfCompetition || []).map((item) => (
                                 <div className="col-sm">
-                                    <Radio key={'competitionType_' + item.id} value={item.id}>{item.description}</Radio>
+                                    <Radio key={`competitionType_${item.id}`} value={item.id}>{item.description}</Radio>
                                 </div>
                             ))}
                         </div>
@@ -640,15 +637,14 @@ class QuickCompetitionMatchFormat extends Component {
                     </div>
                 </div>
                 {(data.competionFormatDivisions || []).map((item, index) => (
-                    <div className="inside-container-view" key={"compFormat" + index}>
+                    <div className="inside-container-view" key={`compFormat${index}`}>
                         <div className="fluid-width">
-                            <div style={{ display: 'flex' }}>
-                                <div className="applicable-to-heading" style={{ paddingTop: '0px' }}>
+                            <div className="d-flex">
+                                <div className="applicable-to-heading pt-0">
                                     {AppConstants.applyMatchFormat}
                                 </div>
                                 <div
-                                    className="transfer-image-view pt-0 pointer"
-                                    style={{ marginLeft: 'auto' }}
+                                    className="transfer-image-view pt-0 pointer ml-auto"
                                     onClick={() => this.deleteModal(index)}
                                 >
                                     <span className="user-remove-btn">
@@ -667,30 +663,32 @@ class QuickCompetitionMatchFormat extends Component {
                             >
                                 {AppConstants.allDivisions}
                             </Checkbox>
-                            {!isAllDivisionChecked ? <div className="fluid-width">
-                                <div className="row">
-                                    <div className="col-sm">
-                                        <Select
-                                            mode="multiple"
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                                            onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
-                                            value={item.selectedDivisions}
-                                        >
-                                            {(item.divisions || []).map((division) => (
-                                                <Option
-                                                    key={'compMemProdDiv_' + division.competitionMembershipProductDivisionId}
-                                                    disabled={division.isDisabled}
-                                                    value={division.competitionMembershipProductDivisionId}
-                                                >
-                                                    {division.divisionsName}
-                                                </Option>
-                                            ))}
-
-                                        </Select>
+                            {!isAllDivisionChecked && (
+                                <div className="fluid-width">
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <Select
+                                                mode="multiple"
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
+                                                onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
+                                                value={item.selectedDivisions}
+                                            >
+                                                {(item.divisions || []).map((division) => (
+                                                    <Option
+                                                        key={`compMemProdDiv_${division.competitionMembershipProductDivisionId}`}
+                                                        disabled={division.isDisabled}
+                                                        value={division.competitionMembershipProductDivisionId}
+                                                    >
+                                                        {division.divisionsName}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </div>
                                     </div>
+                                    {this.allDivisionModalView(data.competionFormatDivisions)}
                                 </div>
-                                {this.allDivisionModalView(data.competionFormatDivisions)}
-                            </div> : null}
+                            )}
                         </div>
 
                         <div className="fluid-width">
@@ -699,8 +697,9 @@ class QuickCompetitionMatchFormat extends Component {
                                     <Form.Item
                                         name={`matchDuration${index}`}
                                         rules={[{
-                                            required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                            message: ValidationConstants.matchDuration
+                                            required: true,
+                                            pattern: new RegExp("^[1-9][0-9]*$"),
+                                            message: ValidationConstants.matchDuration,
                                         }]}
                                     >
                                         <InputWithHead
@@ -719,7 +718,7 @@ class QuickCompetitionMatchFormat extends Component {
                                             name={`mainBreak${index}`}
                                             rules={[{
                                                 required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3)),
-                                                message: ValidationConstants.mainBreak
+                                                message: ValidationConstants.mainBreak,
                                             }]}
                                         >
                                             <InputWithHead
@@ -739,7 +738,7 @@ class QuickCompetitionMatchFormat extends Component {
                                             name={`qtrBreak${index}`}
                                             rules={[{
                                                 required: (data.matchTypeRefId == 3),
-                                                message: ValidationConstants.qtrBreak
+                                                message: ValidationConstants.qtrBreak,
                                             }]}
                                         >
                                             <InputWithHead
@@ -806,72 +805,66 @@ class QuickCompetitionMatchFormat extends Component {
                     {AppConstants.setAsDefault}
                 </Checkbox> */}
             </div>
-        )
-    }
-
-    allDivisionModalView = (competionFormatDivisions) => {
-        return (
-            <div>
-                <Modal
-                    title="Competition Format"
-                    visible={this.state.allDivisionVisible}
-                    onOk={() => this.handleAllDivisionModal(false, "ok", this.state.currentIndex, competionFormatDivisions)}
-                    onCancel={() => this.handleAllDivisionModal(false, "cancel", this.state.currentIndex, competionFormatDivisions)}
-                >
-                    <p>This will remove the other competition formats.</p>
-                </Modal>
-            </div>
         );
     }
 
-    deleteConfirmModalView = (competionFormatDivisions) => {
-        return (
-            <div>
-                <Modal
-                    title="Competition Format"
-                    visible={this.state.deleteModalVisible}
-                    onOk={() => this.handleDeleteModal(false, "ok", this.state.currentIndex, competionFormatDivisions)}
-                    onCancel={() => this.handleDeleteModal(false, "cancel", this.state.currentIndex, competionFormatDivisions)}
-                >
-                    <p>Are you sure you want to remove?.</p>
-                </Modal>
-            </div>
-        );
-    }
+    allDivisionModalView = (competitionFormatDivisions) => (
+        <div>
+            <Modal
+                title="Competition Format"
+                visible={this.state.allDivisionVisible}
+                onOk={() => this.handleAllDivisionModal(false, "ok", this.state.currentIndex, competitionFormatDivisions)}
+                onCancel={() => this.handleAllDivisionModal(false, "cancel", this.state.currentIndex, competitionFormatDivisions)}
+            >
+                <p>This will remove the other competition formats.</p>
+            </Modal>
+        </div>
+    )
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = (isSubmitting) => {
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
-                            {/* <Button type="cancel-button">Cancel</Button> */}
-                        </div>
-                        <div className="col-sm">
-                            <div className="comp-finals-button-view">
-                                {/* <Button
-                                    className="save-draft-text"
-                                    type="save-draft-text"
-                                    onClick={()=> this.saveCompetitionFormats()}
-                                >
-                                    {AppConstants.saveDraft}
-                                </Button> */}
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                    htmlType="submit"
-                                    disabled={isSubmitting}
-                                >
-                                    {AppConstants.createDraftDraw}
-                                </Button>
-                            </div>
+    deleteConfirmModalView = (competitionFormatDivisions) => (
+        <div>
+            <Modal
+                title="Competition Format"
+                visible={this.state.deleteModalVisible}
+                onOk={() => this.handleDeleteModal(false, "ok", this.state.currentIndex, competitionFormatDivisions)}
+                onCancel={() => this.handleDeleteModal(false, "cancel", this.state.currentIndex, competitionFormatDivisions)}
+            >
+                <p>Are you sure you want to remove?.</p>
+            </Modal>
+        </div>
+    )
+
+    /// ///footer view containing all the buttons like submit and cancel
+    footerView = (isSubmitting) => (
+        <div className="fluid-width">
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm d-flex align-items-start">
+                        {/* <Button type="cancel-button">Cancel</Button> */}
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-finals-button-view">
+                            {/* <Button
+                                className="save-draft-text"
+                                type="save-draft-text"
+                                onClick={()=> this.saveCompetitionFormats()}
+                            >
+                                {AppConstants.saveDraft}
+                            </Button> */}
+                            <Button
+                                className="open-reg-button"
+                                type="primary"
+                                htmlType="submit"
+                                disabled={isSubmitting}
+                            >
+                                {AppConstants.createDraftDraw}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
 
     render() {
         return (
@@ -924,7 +917,7 @@ function mapDispatchToProps(dispatch) {
         clearYearCompetitionAction,
         generateDrawAction,
         getEnhancedRoundRobinAction,
-        getYearAndQuickCompetitionAction
+        getYearAndQuickCompetitionAction,
     }, dispatch);
 }
 
@@ -934,7 +927,7 @@ function mapStateToProps(state) {
         appState: state.AppState,
         competitionModuleState: state.CompetitionModuleState,
         quickCompetitionState: state.QuickCompetitionState,
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuickCompetitionMatchFormat);

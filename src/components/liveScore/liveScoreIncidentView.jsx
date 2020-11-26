@@ -55,7 +55,6 @@ class LiveScoreIncidentView extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-venue-courts-header-view live-form-view-button-header">
@@ -65,7 +64,7 @@ class LiveScoreIncidentView extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidentDetails}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="col-sm live-form-view-button-container d-flex justify-content-end">
                         <NavLink to={{
                             pathname: '/liveScoreAddIncident',
                             state: { isEdit: true, tableRecord: this.state.incidentItem, umpireKey: this.state.umpireKey }
@@ -80,18 +79,16 @@ class LiveScoreIncidentView extends Component {
         )
     }
 
-
     //// this method called insside modal view function to show content of the modal
     innerViewOfModal() {
         return (
-            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} onClick={this.showModal}>
+            <div className="comp-dashboard-botton-view-mobile d-flex justify-content-center" onClick={this.showModal}>
                 {
                     this.state.isVideo ?
                         <ReactPlayer playing={this.state.visible} url={this.state.modaldata} controls />
                         :
                         <img src={this.state.modaldata} height='250' width='250' />
                 }
-
             </div>
         )
     }
@@ -127,18 +124,15 @@ class LiveScoreIncidentView extends Component {
 
                 <div className="col-sm">
                     <div><span className="year-select-heading">Time</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{getTime(DATA.incidentTime)}</span>
-                    </div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{getTime(DATA.incidentTime)}</span></div>
                 </div>
                 <div className="col-sm">
                     <div><span className="year-select-heading">Match Id</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.matchId}</span>
-                    </div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.matchId}</span></div>
                 </div>
                 <div className="col-sm">
                     <div><span className="year-select-heading">Incident Type</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.incidentType.name}</span>
-                    </div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.incidentType.name}</span></div>
                 </div>
             </div>
         )
@@ -195,9 +189,9 @@ class LiveScoreIncidentView extends Component {
                                 return <div className="side-bar-profile-data">
                                     {
                                         res === "video" ?
-                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
+                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
                                             :
-                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
+                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
                                     }
                                 </div>
                             })}

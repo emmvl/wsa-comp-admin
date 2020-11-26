@@ -65,15 +65,7 @@ class UmpireDivisions extends Component {
     headerView = () => {
         return (
             <div className="header-view divisions">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpirePoolsDivision}
@@ -99,18 +91,10 @@ class UmpireDivisions extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginBottom: "12px"
-                                }}
-                            >
-                                <span className="year-select-heading ">
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ marginBottom: 12 }}>
+                                <span className="year-select-heading">
                                     {AppConstants.competition}:
-                                   </span>
+                                </span>
 
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -144,7 +128,7 @@ class UmpireDivisions extends Component {
                     <Select
                         placeholder="Select"
                         mode="multiple"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                     >
                         <Option value="a">A Grade</Option>
                         <Option value="b">B Grade</Option>
@@ -187,7 +171,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >
@@ -228,7 +212,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         >
                             <Option value="a">A Grade</Option>
                             <Option value="b">B Grade</Option>
@@ -244,7 +228,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
                             // value={this.state.umpPool}
                         >
@@ -263,7 +247,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >
@@ -282,7 +266,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >
@@ -301,7 +285,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >
@@ -367,7 +351,6 @@ class UmpireDivisions extends Component {
     footerView = () => {
         return (
             <div className="fluid-width">
-
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">

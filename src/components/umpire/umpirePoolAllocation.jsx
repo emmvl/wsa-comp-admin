@@ -76,31 +76,21 @@ class UmpirePoolAllocation extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm pt-1 d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.umpirePools}
                             </span>
                         </div>
 
-                        {/* <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                        {/* <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                             <div className="row">
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -116,16 +106,7 @@ class UmpirePoolAllocation extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -143,14 +124,8 @@ class UmpirePoolAllocation extends Component {
                             </div>
                         </div> */}
                     </div>
-                    {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }}>
-                        <div style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginRight: 50,
-                        }}>
+                    {/* <div className="mt-5 d-flex w-ft">
+                        <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.competition}:</span>
                             <Select
                                 className="year-select"
@@ -176,7 +151,6 @@ class UmpirePoolAllocation extends Component {
         this.setState({ selectedComp, competitionUniqueKey: compKey })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
@@ -184,12 +158,7 @@ class UmpirePoolAllocation extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -301,16 +270,15 @@ class UmpirePoolAllocation extends Component {
                                         </div>
                                         <div className="col-sm d-flex justify-content-end">
                                             <img
-                                                className="comp-player-table-img team-delete-link"
+                                                className="comp-player-table-img team-delete-link pointer"
                                                 src={AppImages.deleteImage}
                                                 alt=""
                                                 height="20"
                                                 width="20"
-                                                style={{ cursor: "pointer" }}
                                                 onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
                                             />
                                             <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
-                                                <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" />
+                                                <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
                                             </a>
                                         </div>
                                     </div>
@@ -337,22 +305,22 @@ class UmpirePoolAllocation extends Component {
                                                         >
                                                         </Checkbox>
                                                         <div className="col-sm d-flex justify-content-flex-start align-items-center">
-                                                            <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                            <span className="player-grading-haeding-player-name-text pointer">
                                                                 {playerItem.rank}{" "}{playerItem.playerName}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
-                                                            <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                            <span className="player-grading-haeding-player-name-text pointer">
                                                                 {playerItem.Badge}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
-                                                            <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                            <span className="player-grading-haeding-player-name-text pointer">
                                                                 {playerItem.years}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
-                                                            <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                            <span className="player-grading-haeding-player-name-text pointer">
                                                                 {playerItem.matches}
                                                             </span>
                                                         </div>
@@ -444,22 +412,22 @@ class UmpirePoolAllocation extends Component {
                                                 >
                                                 </Checkbox>
                                                 <div className="col-sm d-flex justify-content-flex-start align-items-center">
-                                                    <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                    <span className="player-grading-haeding-player-name-text pointer">
                                                         {playerItem.rank}{" "}{playerItem.playerName}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
-                                                    <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                    <span className="player-grading-haeding-player-name-text pointer">
                                                         {playerItem.Badge}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
-                                                    <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                    <span className="player-grading-haeding-player-name-text pointer">
                                                         {playerItem.years}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
-                                                    <span style={{ cursor: "pointer" }} className="player-grading-haeding-player-name-text">
+                                                    <span className="player-grading-haeding-player-name-text pointer">
                                                         {playerItem.matches}
                                                     </span>
                                                 </div>
@@ -517,7 +485,7 @@ class UmpirePoolAllocation extends Component {
                         </div>
                     </div>
                     <div className="col-sm mt-3 pr-1">
-                        <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                        <div className="d-flex justify-content-end">
                             <Button className="publish-button save-draft-text" type="primary" htmlType="submit">
                                 {AppConstants.save}
                             </Button>
@@ -549,7 +517,6 @@ class UmpirePoolAllocation extends Component {
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
             </div>
-
         );
     }
 }

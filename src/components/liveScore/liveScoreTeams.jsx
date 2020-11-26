@@ -225,31 +225,21 @@ class LiveScoreTeam extends Component {
         history.push('/competitionPartTeamGradeCalculate');
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let { sourceIdAvailable } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm pt-1 d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamList}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
                         <div className="row">
                             {sourceIdAvailable && (
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             type="primary"
                                             className="primary-add-comp-form"
@@ -263,16 +253,7 @@ class LiveScoreTeam extends Component {
 
                             {!sourceIdAvailable && (
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/liveScoreAddTeam">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addTeam}
@@ -283,16 +264,7 @@ class LiveScoreTeam extends Component {
                             )}
 
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -310,16 +282,7 @@ class LiveScoreTeam extends Component {
 
                             {!sourceIdAvailable && (
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/liveScoreTeamImport">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
@@ -342,7 +305,7 @@ class LiveScoreTeam extends Component {
                 </div>
                 {/* search box */}
 
-                <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                <div className="col-sm pt-5 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"

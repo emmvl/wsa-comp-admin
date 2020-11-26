@@ -48,9 +48,9 @@ const columns = [
                 //     pathname: '/liveScorePlayerView',
                 //     state: { tableRecord: record }
                 // }}>
-                <span style={{ color: '#ff8237', cursor: "pointer" }}
-                      onClick={() => _this.checkUserId(record)}
-                >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
+                <span className="pointer" style={{ color: '#ff8237' }} onClick={() => _this.checkUserId(record)}>
+                    {(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}
+                </span>
                 // </NavLink>)
             )
         }
@@ -121,9 +121,9 @@ const columns_2 = [
                 //     pathname: '/liveScorePlayerView',
                 //     state: { tableRecord: record }
                 // }}>
-                <span style={{ color: '#ff8237', cursor: "pointer" }}
-                      onClick={() => _this.checkUserId(record)}
-                >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
+                <span className="pointer" style={{ color: '#ff8237' }} onClick={() => _this.checkUserId(record)}>
+                    {(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}
+                </span>
                 // </NavLink>)
             )
         }
@@ -347,8 +347,6 @@ class LiveScoreTeamView extends Component {
                             </Button>
                         </NavLink>
                     </div>
-
-
                 </div>
             </div>
         )
@@ -374,19 +372,15 @@ class LiveScoreTeamView extends Component {
         });
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         const { userRoleId } = this.state
         let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
             <div className="row mt-5">
-                <div className="col-sm d-flex align-items-center justify-content-end" style={{ width: '100%' }}>
+                <div className="col-sm d-flex align-items-center justify-content-end w-100">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                style={{ width: '100%' }}
-                            >
+                            <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                 <NavLink to={{
                                     pathname: "/liveScoreAddTeam",
                                     state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key, screenName: this.state.screenName, screenKey: this.state.screenKey }
@@ -399,10 +393,7 @@ class LiveScoreTeamView extends Component {
                         </div>
                         {!this.state.sourceIdAvailable && (
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                    style={{ width: '100%' }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                     <Button
                                         disabled={roleId}
                                         onClick={() => this.showDeleteConfirm(this.state.teamId)}
@@ -469,7 +460,7 @@ class LiveScoreTeamView extends Component {
                                 <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc" }}>
+                                <div className="col-sm-9 default-bg">
                                     {this.headerView()}
                                     {this.tableView()}
                                 </div>

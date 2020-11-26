@@ -1,13 +1,16 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
+import {
+    Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination,
+} from 'antd';
 import './product.scss';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
     getTransactionPayoutListAction,
 } from "../../store/actions/stripeAction/stripeAction";
@@ -15,16 +18,16 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from '../../themes/dateformate';
-import moment from 'moment'
 
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
-/////function to sort table column
+
+/// //function to sort table column
 function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+    const stringA = JSON.stringify(a[key]);
+    const stringB = JSON.stringify(b[key]);
+    return stringA.localeCompare(stringB);
 }
 
 const columns = [
@@ -39,28 +42,28 @@ const columns = [
         dataIndex: 'source_transfer',
         key: 'source_transfer',
         sorter: false,
-        render: source_transfer => (
-            <span >{source_transfer ? source_transfer.description : "N/A"}</span>
-        )
+        render: (sourceTransfer) => (
+            <span>{sourceTransfer ? sourceTransfer.description : "N/A"}</span>
+        ),
     },
     {
         title: "Date",
         dataIndex: 'created',
         key: 'created',
         sorter: false,
-        render: created => {
-            var date = new Date(created * 1000);
-            let finalDate = liveScore_formateDate(date)
+        render: (created) => {
+            const date = new Date(created * 1000);
+            const finalDate = liveScore_formateDate(date);
             return (
                 <span>{finalDate}</span>
-            )
+            );
         },
     },
     {
         title: 'Amount',
         dataIndex: 'amount',
         key: 'amount',
-        render: amount => (
+        render: (amount) => (
             <span>{currencyFormat(amount)}</span>
         ),
         sorter: false,
@@ -71,23 +74,20 @@ const columns = [
         key: 'status',
         sorter: false,
     },
-
 ];
-
 
 class RegistrationPayoutTransaction extends Component {
     constructor(props) {
         super(props);
         this.state = {
 
-        }
+        };
     }
 
     componentDidMount() {
         if (this.stripeConnected()) {
             this.props.getTransactionPayoutListAction(1, null, null, this.props.location.state ? this.props.location.state.id : null)
         }
-
     }
 
     stripeConnected = () => {
@@ -96,20 +96,18 @@ class RegistrationPayoutTransaction extends Component {
         return stripeAccountID
     }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <div className="comp-player-grades-header-view-design">
-                <div className="row">
-                    <div className="col-sm d-flex align-content-center">
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.transactions}</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    /// ////view for breadcrumb
+    headerView = () => (
+        <div className="comp-player-grades-header-view-design">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.transactions}</Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
 
     handleStripeTransactionPayoutList = (key) => {
         let page = this.props.stripeState.stripeTransactionPayoutListPage
@@ -164,37 +162,43 @@ class RegistrationPayoutTransaction extends Component {
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">
-                    <span className="reg-payment-paid-reg-text">{AppConstants.currentPage + " - " + currentPage}</span>
-                    <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
+                    <span className="reg-payment-paid-reg-text">{`${AppConstants.currentPage} - ${currentPage}`}</span>
+                    <span className="reg-payment-paid-reg-text pt-2">{`${AppConstants.totalPages} - ${totalPageCount}`}</span>
                 </div>
                 <div className="d-flex justify-content-end paddingBottom56px">
                     <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripeTransactionPayoutList("Previous")}>
-                        <span style={!previousEnabled ? { color: "#9b9bad" } : null}
-                            className="pagination-button-text">{AppConstants.previous}</span>
+                        <span
+                            style={!previousEnabled ? { color: "#9b9bad" } : null}
+                            className="pagination-button-text"
+                        >
+                            {AppConstants.previous}
+                        </span>
                     </div>
                     <div className="pagination-button-div" onClick={() => nextEnabled && this.handleStripeTransactionPayoutList("next")}>
-                        <span style={!nextEnabled ? { color: "#9b9bad" } : null}
-                            className="pagination-button-text">{AppConstants.next}</span>
+                        <span
+                            style={!nextEnabled ? { color: "#9b9bad" } : null}
+                            className="pagination-button-text"
+                        >
+                            {AppConstants.next}
+                        </span>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
-    contentView = () => {
-        return (
-            <div className="comp-dash-table-view mt-2">
-                {this.transactionPayoutListView()}
-            </div>
-        )
-    }
+    contentView = () => (
+        <div className="comp-dash-table-view mt-2">
+            {this.transactionPayoutListView()}
+        </div>
+    )
 
     render() {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="3" />
-                <Layout >
+                <Layout>
                     {this.headerView()}
                     <Content>
                         {this.contentView()}
@@ -205,16 +209,17 @@ class RegistrationPayoutTransaction extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getTransactionPayoutListAction,
-    }, dispatch)
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         stripeState: state.StripeState,
-    }
+    };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)((RegistrationPayoutTransaction));
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationPayoutTransaction);

@@ -22,6 +22,7 @@ import history from "../../util/history";
 
 const { Header, Content } = Layout;
 var screenProps = null
+
 // Custom styling can be passed to options when creating an Element.
 const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -41,15 +42,12 @@ const CARD_ELEMENT_OPTIONS = {
     }
 };
 
-///////view for breadcrumb
 const headerView = () => {
     return (
         <Header className="login-header-view">
             <div className="row">
                 <div className="col-sm d-flex align-content-center">
-                    <Breadcrumb style={{
-                        display: 'flex', lignItems: 'center', alignSelf: 'center'
-                    }} separator=" > ">
+                    <Breadcrumb className="d-flex align-items-center align-self-center" separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.payment}</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
@@ -70,7 +68,7 @@ const footerView = () => {
                                 className="open-reg-button"
                                 htmlType="submit"
                                 type="primary"
-                                form='my-form'
+                                form="my-form"
                             >
                                 {AppConstants.submitPayment}
                             </Button>
@@ -114,16 +112,16 @@ const CheckoutForm = (props) => {
 
     return (
         <div className="content-view">
-            <form id='my-form' className="form" onSubmit={handleSubmit}>
-                <label className="home-dash-left-text" for="card-element">
+            <form id="my-form" className="form" onSubmit={handleSubmit}>
+                <label className="home-dash-left-text" htmlFor="card-element">
                     Credit or debit card
-                 </label>
+                </label>
                 <div className="pt-5">
                     <CardElement
                         id="card-element"
                         options={CARD_ELEMENT_OPTIONS}
                         onChange={handleChange}
-                        className='StripeElement'
+                        className="StripeElement"
                     />
                     <div className="card-errors" role="alert">{error}</div>
                 </div>
@@ -141,10 +139,10 @@ const Stripe = (props) => {
     return (
         <div className="fluid-width default-bg">
             <DashboardLayout
-                menuHeading={""}
-                menuName={""}
+                menuHeading=""
+                menuName=""
             />
-            <Layout >
+            <Layout>
                 <Content className="container">
                     {headerView()}
                     <div className="auth-form">
@@ -168,7 +166,7 @@ async function stripeTokenHandler(token, props) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            "Authorization": localStorage.token,
+            Authorization: localStorage.token,
         },
         body: JSON.stringify({ token: { id: token.id } })
     });
@@ -177,11 +175,9 @@ async function stripeTokenHandler(token, props) {
         if (response.status === 200) {
             message.success(res.message);
             history.push('/appRegistrationSuccess');
-        }
-        else if (response.status === 400) {
+        } else if (response.status === 400) {
             message.error(res.message);
-        }
-        else {
+        } else {
             message.error("Something went wrong.")
         }
     })
@@ -189,4 +185,5 @@ async function stripeTokenHandler(token, props) {
             message.error("Something went wrong.")
         })
 }
+
 export default Stripe

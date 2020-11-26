@@ -7,22 +7,20 @@ import AppConstants from "../../themes/appConstants";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+
 const columns = [
     {
         title: 'Rank',
         dataIndex: 'rank',
         key: 'rank',
         sorter: (a, b) => a.rank.length - b.rank.length,
-
     },
     {
         title: 'Team Name',
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: (a, b) => a.teamName.length - b.teamName.length,
-
     },
-
     {
         title: 'Season Results',
         dataIndex: 'seasonResults',
@@ -37,14 +35,12 @@ const columns = [
             </span>
         ),
         sorter: (a, b) => a.seasonResults.length - b.seasonResults.length,
-
     },
     {
         title: 'Current Grade',
         dataIndex: 'currentGrade',
         key: 'currentGrade',
         sorter: (a, b) => a.currentGrade.length - b.currentGrade.length,
-
     },
     {
         title: 'New Grade',
@@ -52,11 +48,7 @@ const columns = [
         key: 'newGrade',
         render: newGrade => <Input className="input-inside-player-grades-table-for-grade" value={newGrade} />,
         sorter: (a, b) => a.newGrade.length - b.newGrade.length,
-
     },
-
-
-
 ];
 
 const data = [
@@ -75,9 +67,7 @@ const data = [
         seasonResults: ["Rnd15-25", "Rnd24-45", "Rnd12-50", "Rnd15-25", "Rnd24-45", "Rnd12-50", "Rnd35-25", "Rnd15-55"],
         currentGrade: "12A",
         newGrade: "12B",
-
     },
-
 ];
 
 class CompetitionReGrading extends Component {
@@ -98,7 +88,6 @@ class CompetitionReGrading extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -110,15 +99,11 @@ class CompetitionReGrading extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.step1}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-
                 </div>
-
             </div>
-
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -138,13 +123,7 @@ class CompetitionReGrading extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
@@ -157,12 +136,7 @@ class CompetitionReGrading extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.division}:</span>
                                 <Select
                                     className="year-select"
@@ -175,12 +149,7 @@ class CompetitionReGrading extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.grade}:</span>
                                 <Select
                                     className="year-select"
@@ -192,7 +161,7 @@ class CompetitionReGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <div className="col-sm d-flex justify-content-end">
                             <span className="year-select-heading">{AppConstants.gradetoggle}</span>
                         </div>
                     </div>
@@ -208,7 +177,7 @@ class CompetitionReGrading extends Component {
                     <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false} />
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: "flex-end", marginTop: 15, paddingRight: 5 }}>
+                <div className="d-flex justify-content-end" style={{ marginTop: 15, paddingRight: 5 }}>
                     <Button className="open-reg-button" type="primary">{AppConstants.save}</Button>
                 </div>
             </div>
@@ -221,7 +190,7 @@ class CompetitionReGrading extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
                                 <NavLink to="/competitionReGradingStep2">
                                     <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
@@ -233,7 +202,6 @@ class CompetitionReGrading extends Component {
             </div>
         )
     }
-
 
     render() {
         return (
@@ -258,4 +226,5 @@ class CompetitionReGrading extends Component {
         );
     }
 }
+
 export default CompetitionReGrading;

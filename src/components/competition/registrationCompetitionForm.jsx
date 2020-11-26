@@ -153,8 +153,8 @@ class RegistrationCompetitionForm extends Component {
                                 rules={[{ required: true, message: ValidationConstants.genderRestriction }]}
                             >
                                 <Select
-                                    className='division-age-select'
-                                    style={{ width: '100%', minWidth: 120, }}
+                                    className="division-age-select w-100"
+                                    style={{ minWidth: 120 }}
                                     onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
                                     value={genderRefId}
                                     placeholder="Select"
@@ -198,8 +198,8 @@ class RegistrationCompetitionForm extends Component {
                             >
                                 <DatePicker
                                     size="default"
-                                    className="comp-venue-time-datepicker"
-                                    style={{ width: '100%', minWidth: 135 }}
+                                    className="comp-venue-time-datepicker w-100"
+                                    style={{ minWidth: 135 }}
                                     onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -225,8 +225,8 @@ class RegistrationCompetitionForm extends Component {
                             >
                                 <DatePicker
                                     size="default"
-                                    className="comp-venue-time-datepicker"
-                                    style={{ width: '100%', minWidth: 135 }}
+                                    className="comp-venue-time-datepicker w-100"
+                                    style={{ minWidth: 135 }}
                                     onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -244,7 +244,7 @@ class RegistrationCompetitionForm extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: "pointer" }}>
+                        <span className="d-flex justify-content-center w-100 pointer">
                             <img
                                 className="dot-image"
                                 src={AppImages.redCross}
@@ -480,7 +480,6 @@ class RegistrationCompetitionForm extends Component {
     }
 
     saveAPIsActionCall = (values) => {
-        console.log(values)
         let tabKey = this.state.competitionTabKey
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
@@ -578,20 +577,12 @@ class RegistrationCompetitionForm extends Component {
         }
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {competitionId == null ? AppConstants.addCompetition : AppConstants.competitionDetails}
@@ -608,14 +599,7 @@ class RegistrationCompetitionForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span id={AppUniqueId.comp_year_refid} className="year-select-heading required-field">
                                     {AppConstants.year}:
                                 </span>
@@ -698,9 +682,8 @@ class RegistrationCompetitionForm extends Component {
                     </div>
                     <div className="col-sm">
                         <DatePicker
-                            className="comp-dashboard-botton-view-mobile"
-                            size="large"
-                            style={{ width: '100%' }}
+                            className="comp-dashboard-botton-view-mobile w-100"
+                            // size="large"
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
@@ -760,6 +743,7 @@ class RegistrationCompetitionForm extends Component {
     setGradesAndPools = (value) => {
         this.props.add_editcompetitionFeeDeatils(value, "finalTypeRefId")
     }
+
     regCompetitionFeeNavigationView = () => {
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
@@ -775,9 +759,9 @@ class RegistrationCompetitionForm extends Component {
                                     {AppConstants.toEditRegistrationDeatils}
                                 </span>
                                 <span
-                                    className="registation-screen-nav-text-appColor"
+                                    className="registation-screen-nav-text-appColor pointer ml-5"
                                     onClick={() => history.push("/registrationCompetitionFee", { id: competitionId })}
-                                    style={{ marginLeft: 5, textDecoration: "underline", cursor: "pointer" }}
+                                    style={{ textDecoration: "underline" }}
                                 >
                                     {AppConstants.registrationArea}
                                 </span>
@@ -859,16 +843,13 @@ class RegistrationCompetitionForm extends Component {
                             </div>
                             <input
                                 disabled={compDetailDisable}
+                                className="d-none"
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
                                 onChange={(evt) => this.setImage(evt.target)}
                             />
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", justifyContent: 'center', alignItems: 'flex-start', flexDirection: "column", }}
-                        >
+                        <div className="col-sm d-flex justify-content-center align-items-start flex-column">
                             {defaultCompFeesOrgLogo !== null && (
                                 <Checkbox
                                     className="single-checkbox"
@@ -918,7 +899,8 @@ class RegistrationCompetitionForm extends Component {
                         <Select
                             id={AppUniqueId.select_Venues}
                             mode="multiple"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={venueSelection => {
                                 this.onSelectValues(venueSelection, detailsData)
                             }}
@@ -1018,8 +1000,8 @@ class RegistrationCompetitionForm extends Component {
 
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date, "startDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1032,8 +1014,8 @@ class RegistrationCompetitionForm extends Component {
                             <InputWithHead headingId={AppUniqueId.comp_end_date} heading={AppConstants.compCloseDate} required="required-field" />
                             <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.endDateIsRequired }]}>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date, "endDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1050,7 +1032,8 @@ class RegistrationCompetitionForm extends Component {
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field" />
                         <Form.Item name='numberOfRounds' rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectRound}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
                                 // value={detailsData.competitionDetailData.noOfRounds}
@@ -1205,8 +1188,8 @@ class RegistrationCompetitionForm extends Component {
                                 </div>
                             ) : (
                                 <span className="applicable-to-heading pt-0 pl-2">
-                                        {AppConstants.nonPlayerDivisionMessage}
-                                    </span>
+                                    {AppConstants.nonPlayerDivisionMessage}
+                                </span>
                             )}
                         </div>
                     </div>
@@ -1265,7 +1248,7 @@ class RegistrationCompetitionForm extends Component {
                             <div className="reg-add-save-button">
                                 {competitionId && (
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() => this.setState({ tooltipVisibleDelete: isPublished })}
                                         onMouseLeave={() => this.setState({ tooltipVisibleDelete: false })}
                                         visible={this.state.tooltipVisibleDelete}
@@ -1285,7 +1268,7 @@ class RegistrationCompetitionForm extends Component {
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Tooltip
-                                    style={{ height: '100%' }}
+                                    className="h-100"
                                     onMouseEnter={() => this.setState({ tooltipVisibleDraft: isPublished })}
                                     onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
                                     visible={this.state.tooltipVisibleDraft}
@@ -1303,7 +1286,7 @@ class RegistrationCompetitionForm extends Component {
                                     </Button>
                                 </Tooltip>
                                 <Tooltip
-                                    style={{ height: '100%' }}
+                                    className="h-100"
                                     onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
@@ -1311,12 +1294,14 @@ class RegistrationCompetitionForm extends Component {
                                 >
                                     <Button
                                         id={tabKey === "2" ? AppUniqueId.comp_Division_Publish_button : AppUniqueId.comp_page1_Next_button}
-                                        className="publish-button" type="primary"
+                                        className="publish-button"
+                                        type="primary"
                                         disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
-                                        htmlType="submit" onClick={() => this.setState({
-                                        statusRefId: tabKey == "2" ? 2 : 1,
-                                        buttonPressed: tabKey == "2" ? "publish" : "next"
-                                    })}
+                                        htmlType="submit"
+                                        onClick={() => this.setState({
+                                            statusRefId: tabKey == "2" ? 2 : 1,
+                                            buttonPressed: tabKey == "2" ? "publish" : "next"
+                                        })}
                                     >
                                         {tabKey === "2" ? AppConstants.publish : AppConstants.next}
                                     </Button>

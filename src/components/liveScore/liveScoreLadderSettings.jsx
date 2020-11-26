@@ -112,12 +112,11 @@ class LiveScoreLadderSettings extends Component {
         return (
             <div className="content-view pt-4">
                 {(ladderData || []).map((ladder, index) => (
-                    <div className="inside-container-view" style={{ paddingTop: "25px" }}>
+                    <div className="inside-container-view" style={{ paddingTop: 25 }}>
                         {ladderData.length > 1 && (
-                            <div style={{ display: "flex", float: "right" }}>
+                            <div className="d-flex float-right">
                                 <div
-                                    className="transfer-image-view pt-0 pointer"
-                                    style={{ marginLeft: 'auto' }}
+                                    className="transfer-image-view pt-0 pointer ml-auto"
                                     onClick={() => this.deleteModal(index)}
                                 >
                                     <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
@@ -126,19 +125,19 @@ class LiveScoreLadderSettings extends Component {
                             </div>
                         )}
                         <Checkbox
-                            className="single-checkbox pt-2"
-                            style={{ marginTop: 0 }}
+                            className="single-checkbox pt-2 mt-0"
                             checked={ladder.isAllDivision}
                             onChange={(e) => this.onChangeLadderSetting(e.target.checked, index, "isAllDivision")}
                         >
                             {AppConstants.allDivisions}
                         </Checkbox>
                         <div className="fluid-width">
-                            <div className="row" style={{ display: 'block', marginLeft: 0 }}>
-                                <div className="col-sm" style={{ paddingLeft: 0, paddingTop: 5 }}>
+                            <div className="row d-block ml-0">
+                                <div className="col-sm pl-0" style={{ paddingTop: 5 }}>
                                     <Select
                                         mode="multiple"
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(e) => this.onChangeLadderSetting(e, index, "selectedDivisions")}
                                         value={ladder.selectedDivisions}
                                     >
@@ -157,14 +156,14 @@ class LiveScoreLadderSettings extends Component {
                         </div>
                         <div className="inside-container-view">
                             <div className="table-responsive">
-                                <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                                <div className="d-flex" style={{ paddingLeft: 10 }}>
                                     <div style={{ width: '89%' }} className="ladder-points-heading">
                                         <InputWithHead heading="Result type/Byes" />
                                     </div>
-                                    <div className="ladder-points-heading"><InputWithHead heading={"Points"} /></div>
+                                    <div className="ladder-points-heading"><InputWithHead heading="Points" /></div>
                                 </div>
                                 {(ladder.settings || []).map((res, resIndex) => (
-                                    <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                                    <div className="d-flex" style={{ paddingLeft: 10 }}>
                                         <div style={{ width: '89%' }}><InputWithHead heading={res.name} /></div>
                                         <div style={{ marginTop: 5 }}>
                                             <InputWithHead
@@ -225,18 +224,10 @@ class LiveScoreLadderSettings extends Component {
         );
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.ladderSettings}
@@ -329,7 +320,7 @@ class LiveScoreLadderSettings extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"19"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="19" />
                 <Loader visible={this.props.ladderSettingState.loader || this.props.ladderSettingState.onLoad} />
                 <Layout>
                     {this.headerView()}

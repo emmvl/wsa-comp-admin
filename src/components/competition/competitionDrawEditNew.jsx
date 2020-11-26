@@ -16,19 +16,20 @@ import {
     getOwn_competitionStatus,
     setOwn_competitionStatus,
 } from "../../util/sessionStorage"
+import { getYearAndCompetitionOwnAction } from '../../store/actions/appAction';
+import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import {
-    getYearAndCompetitionOwnAction,
-} from '../../store/actions/appAction';
-import { generateDrawAction }
-    from "../../store/actions/competitionModuleAction/competitionModuleAction";
-import {
-    getDivisionAction, getCompetitionFixtureAction,
-    clearFixtureData, updateCompetitionFixtures, getActiveRoundsAction
+    getDivisionAction,
+    getCompetitionFixtureAction,
+    clearFixtureData,
+    updateCompetitionFixtures,
+    getActiveRoundsAction
 } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
 import moment from 'moment'
 import Loader from '../../customComponents/loader'
 import history from "../../util/history"
 import { getCurrentYear } from 'util/permissions'
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -188,35 +189,24 @@ class CompetitionDrawEdit extends Component {
         });
     };
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-draws-header-view mt-4">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: 'flex', alignContent: 'center' }}
+    headerView = () => (
+        <Header className="comp-draws-header-view mt-4">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb
+                        className="d-flex align-items-center align-self-center"
+                        separator=" > "
                     >
-                        <Breadcrumb
-                            style={{
-                                display: 'flex',
-                                lignItems: 'center',
-                                alignSelf: 'center'
-                            }}
-                            separator=" > "
-                        >
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {' '}
-                                {AppConstants.fixtures}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {' '}
+                            {AppConstants.fixtures}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
+            </div>
+        </Header>
+    )
 
-    //////year change onchange
     onYearChange = yearId => {
         this.props.clearFixtureData("grades")
         setOwnCompetitionYear(yearId)
@@ -334,7 +324,6 @@ class CompetitionDrawEdit extends Component {
         }
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="row">
@@ -357,15 +346,7 @@ class CompetitionDrawEdit extends Component {
                     </div>
                 </div>
                 <div className="col-sm-4">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginRight: 50
-                        }}
-                    >
+                    <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                         <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
                             name="competition"
@@ -397,14 +378,7 @@ class CompetitionDrawEdit extends Component {
                         <span className="form-heading">{AppConstants.fixtures}</span>
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                    }}
-                                >
+                                <div className="w-100 d-flex flex-row align-items-center">
                                     <span className="year-select-heading">{AppConstants.grade}:</span>
                                     <Select
                                         disabled={disabledStatus}
@@ -433,8 +407,8 @@ class CompetitionDrawEdit extends Component {
                         {this.dragableView()}
                     </div>
                 ) : (
-                        this.dragableView()
-                    )}
+                    this.dragableView()
+                )}
             </div>
         )
     }
@@ -488,49 +462,49 @@ class CompetitionDrawEdit extends Component {
                                                 <span>Free</span>
                                             </div>
                                         ) : (
-                                                <div>
-                                                    <div
-                                                        className="box purple-box purple-bg"
-                                                        style={{
-                                                            top: topMarginHomeTeam,
-                                                            backgroundColor: slotObject.team1Color,
-                                                            left: leftMargin,
-                                                            cursor: disabledStatus && "no-drop"
-                                                        }}
+                                            <div>
+                                                <div
+                                                    className="box purple-box purple-bg"
+                                                    style={{
+                                                        top: topMarginHomeTeam,
+                                                        backgroundColor: slotObject.team1Color,
+                                                        left: leftMargin,
+                                                        cursor: disabledStatus && "no-drop"
+                                                    }}
+                                                >
+                                                    <FixtureSwappable
+                                                        id={index.toString() + ':' + slotIndex.toString() + ':0:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
+                                                        content={1}
+                                                        swappable={disabledStatus == false}
+                                                        onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
                                                     >
-                                                        <FixtureSwappable
-                                                            id={index.toString() + ':' + slotIndex.toString() + ':0:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
-                                                            content={1}
-                                                            swappable={disabledStatus == false}
-                                                            onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
-                                                        >
-                                                            <span>{slotObject.team1Name}</span>
-                                                        </FixtureSwappable>
-                                                    </div>
-                                                    <span
-                                                        className="border"
-                                                        style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                    />
-                                                    <div
-                                                        className="box purple-box purple-bg"
-                                                        style={{
-                                                            top: topMarginAwayTeam,
-                                                            backgroundColor: slotObject.team2Color,
-                                                            left: leftMargin,
-                                                            cursor: disabledStatus && "no-drop"
-                                                        }}
-                                                    >
-                                                        <FixtureSwappable
-                                                            id={index.toString() + ':' + slotIndex.toString() + ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
-                                                            content={1}
-                                                            swappable={disabledStatus == false}
-                                                            onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
-                                                        >
-                                                            <span>{slotObject.team2Name}</span>
-                                                        </FixtureSwappable>
-                                                    </div>
+                                                        <span>{slotObject.team1Name}</span>
+                                                    </FixtureSwappable>
                                                 </div>
-                                            );
+                                                <span
+                                                    className="border"
+                                                    style={{ top: topMarginAwayTeam, left: leftMargin }}
+                                                />
+                                                <div
+                                                    className="box purple-box purple-bg"
+                                                    style={{
+                                                        top: topMarginAwayTeam,
+                                                        backgroundColor: slotObject.team2Color,
+                                                        left: leftMargin,
+                                                        cursor: disabledStatus && "no-drop"
+                                                    }}
+                                                >
+                                                    <FixtureSwappable
+                                                        id={index.toString() + ':' + slotIndex.toString() + ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
+                                                        content={1}
+                                                        swappable={disabledStatus == false}
+                                                        onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
+                                                    >
+                                                        <span>{slotObject.team2Name}</span>
+                                                    </FixtureSwappable>
+                                                </div>
+                                            </div>
+                                        );
                                     })}
                                 </div>
                             );
@@ -554,7 +528,7 @@ class CompetitionDrawEdit extends Component {
                             <Tooltip
                                 title={AppConstants.statusPublishHover}
                                 visible={this.state.tooltipVisibleDelete}
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() => this.setState({ tooltipVisibleDelete: isPublish })}
                                 onMouseLeave={() => this.setState({ tooltipVisibleDelete: false })}
                             >

@@ -72,7 +72,7 @@
     flex-wrap: wrap;
 }
 
-.header-transaparent{
+.header-transparent{
     background-color: transparent;
     display: flex;
     align-items: center;

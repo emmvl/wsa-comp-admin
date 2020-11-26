@@ -126,7 +126,6 @@ class ShopSettings extends Component {
         this.props.onChangeSettingsData(types, 'types');
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
@@ -200,7 +199,7 @@ class ShopSettings extends Component {
                     ]}
                 >
                     <Select
-                        style={{ width: '100%' }}
+                        className="w-100"
                         placeholder={AppConstants.select}
                         onChange={(value) => this.props.onChangeSettingsData(value, 'state')}
                     >

@@ -58,18 +58,10 @@ class UmpireSetting extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpireAllocationSettings}
@@ -94,14 +86,7 @@ class UmpireSetting extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">
                                     {AppConstants.competition}:
                                 </span>
@@ -283,7 +268,6 @@ class UmpireSetting extends Component {
                                 >
                                     {AppConstants.next}
                                 </Button>
-
                             </div>
                         </div>
                     </div>

@@ -17,7 +17,6 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import StripeKeys from "../stripe/stripeKeys";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 
-
 const { Content } = Layout;
 const { Option } = Select;
 let this_Obj = null
@@ -48,7 +47,6 @@ const columns = [
         key: "competitionName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("pcompetitionName"),
-
     },
     {
         title: "Registration Divisions",
@@ -151,9 +149,7 @@ const columnsOwned = [
         key: "statusName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("ostatus"),
-
     },
-
 ];
 
 class RegistrationMainDashboard extends Component {
@@ -176,13 +172,11 @@ class RegistrationMainDashboard extends Component {
             regStatus: false,
             sortBy: null,
             sortOrder: null
-
         };
         this_Obj = this
     }
 
     async componentDidMount() {
-
         const { regDashboardListAction } = this.props.registrationDashboardState
 
         this.props.getOnlyYearListAction(this.props.appState.yearList)
@@ -248,6 +242,7 @@ class RegistrationMainDashboard extends Component {
             value: e.target.value
         });
     };
+
     onYearClick(yearId) {
         let { sortBy, sortOrder } = this.state
         localStorage.setItem("yearId", yearId)
@@ -277,12 +272,10 @@ class RegistrationMainDashboard extends Component {
                 visible: true, compFeeStatus, compName, regStatus
             })
         } else {
-            this.setState
-            ({
+            this.setState({
                 visible: true
             })
         }
-
     }
 
     userEmail = () => {
@@ -290,13 +283,13 @@ class RegistrationMainDashboard extends Component {
         let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
         return email
     }
+
     stripeConnected = () => {
         let orgData = getOrganisationData()
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
         return stripeAccountID
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { yearList, selectedYear } = this.props.appState
         let stripeConnected = this.stripeConnected()
@@ -327,7 +320,7 @@ class RegistrationMainDashboard extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }}>
+                    <div className="col-sm pb-3 d-flex align-content-center justify-content-end">
                         <Button
                             className="open-reg-button"
                             type="primary"
@@ -336,11 +329,10 @@ class RegistrationMainDashboard extends Component {
                             {AppConstants.registrationWizard}
                         </Button>
                     </div>
-
                 </div>
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div className="col-sm-6 d-flex flex-row align-items-center">
                             <span className="form-heading">
                                 {AppConstants.ownedCompetitionsReg}
                             </span>
@@ -349,22 +341,14 @@ class RegistrationMainDashboard extends Component {
                             <div className="row">
                                 <div className="col-sm">
                                     <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
+                                        className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end"
                                         onClick={() => this.props.clearCompReducerDataAction("all")}
                                     >
                                         <NavLink
                                             to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
                                             className="text-decoration-none"
                                         >
-                                            <Button className="primary-add-comp-form" type="primary"
-                                            >
+                                            <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.newCompetitionReg}
                                             </Button>
                                         </NavLink>
@@ -372,8 +356,6 @@ class RegistrationMainDashboard extends Component {
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <WizardModel
@@ -398,11 +380,11 @@ class RegistrationMainDashboard extends Component {
     regStatus() {
         if (this.state.regStatus == 2) {
             return true
-        }
-        else {
+        } else {
             return false
         }
     }
+
     //wizard  registration click
     onClickRegistration() {
         if (this.state.isDirect && this.state.competitionCreatorOrganisation == 1) {
@@ -426,25 +408,22 @@ class RegistrationMainDashboard extends Component {
         let feeStatus = false
         if (this.state.compFeeStatus == 1) {
             return true
-
-        }
-        else if (this.state.inviteeStatus == 1) {
+        } else if (this.state.inviteeStatus == 1) {
             return true
-        }
-        else {
+        } else {
             return false
         }
     }
+
     ///wizard competition click
     clickCompetition() {
         if (this.state.competitionId !== 0) {
             history.push("/registrationCompetitionFee", { id: this.state.competitionId })
-        }
-        else {
+        } else {
             history.push("/registrationCompetitionFee", { id: null })
         }
-
     }
+
     changeCompetition(competitionId) {
         let competitionData = this.props.registrationDashboardState.competitionTypeList
         let competitionIndex = competitionData.findIndex((x) => x.competitionId === competitionId)
@@ -465,7 +444,6 @@ class RegistrationMainDashboard extends Component {
         })
     }
 
-
     ///dropdown view containing dropdown and next screen navigation button/text
     dropdownButtonView = () => {
         const { yearList, selectedYear } = this.props.appState
@@ -473,7 +451,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-4" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div className="col-sm-4 d-flex flex-row align-items-center">
                             <span className="form-heading">
                                 {AppConstants.participateInCompReg}
 

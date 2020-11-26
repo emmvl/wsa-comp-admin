@@ -14,7 +14,7 @@ import {
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
-import { liveScore_formateDate } from './../../themes/dateformate';
+import { liveScore_formateDate } from "../../themes/dateformate";
 import moment from 'moment'
 import { NavLink } from 'react-router-dom';
 
@@ -70,7 +70,6 @@ const columns = [
         render: amount => (
             <span>{currencyFormat(amount)}</span>
         ),
-
     },
     {
         title: "Status",
@@ -134,7 +133,6 @@ class RegistrationSettlements extends Component {
         this.props.exportPaymentApi("payout")
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             // <div className="comp-player-grades-header-view-design">
@@ -149,24 +147,15 @@ class RegistrationSettlements extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className='col-sm' style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.payouts}
                             </span>
                         </div>
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                        <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                             <div className="row">
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             onClick={() => this.onExport()}
                                             className="primary-add-comp-form" type="primary">
@@ -267,8 +256,8 @@ class RegistrationSettlements extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.year} />
                     <Select
-                        className="reg-payment-select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                        className="reg-payment-select w-100"
+                        style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
@@ -283,8 +272,8 @@ class RegistrationSettlements extends Component {
                     <InputWithHead required="pt-0" heading={AppConstants.competition} />
 
                     <Select
-                        className="reg-payment-select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                        className="reg-payment-select w-100"
+                        style={{ paddingRight: 1, minWidth: 160 }}
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
@@ -299,8 +288,8 @@ class RegistrationSettlements extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
-                        className="reg-payment-select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                        className="reg-payment-select w-100"
+                        style={{ paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
@@ -315,9 +304,9 @@ class RegistrationSettlements extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
-                        className="reg-payment-datepicker"
-                        size="large"
-                        style={{ width: '100%', minWidth: 160 }}
+                        className="reg-payment-datepicker w-100"
+                        // size="large"
+                        style={{ minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
@@ -327,9 +316,9 @@ class RegistrationSettlements extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                     <DatePicker
-                        className="reg-payment-datepicker"
-                        size="large"
-                        style={{ width: '100%', minWidth: 160 }}
+                        className="reg-payment-datepicker w-100"
+                        // size="large"
+                        style={{ minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
@@ -354,7 +343,7 @@ class RegistrationSettlements extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="3" />
-                <Layout >
+                <Layout>
                     {this.headerView()}
                     <Content>
                         {this.contentView()}
@@ -373,10 +362,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         stripeState: state.StripeState,
     }
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationSettlements));
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationSettlements);

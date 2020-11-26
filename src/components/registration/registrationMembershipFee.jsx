@@ -426,14 +426,7 @@ class RegistrationMembershipFee extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading required-field">
                                     {AppConstants.year}:
                                 </span>
@@ -566,8 +559,7 @@ class RegistrationMembershipFee extends Component {
                                             )}
                                         </div>
                                         <Checkbox
-                                            className="single-checkbox"
-                                            style={{ width: '100%' }}
+                                            className="single-checkbox w-100"
                                             checked={item.isMandate}
                                             onChange={e =>
                                                 this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
@@ -590,8 +582,8 @@ class RegistrationMembershipFee extends Component {
                                                             }]}
                                                         >
                                                             <DatePicker
-                                                                size="large"
-                                                                style={{ width: '100%' }}
+                                                                // size="large"
+                                                                className="w-100"
                                                                 onChange={date => this.dateOnChangeFrom(date, index)}
                                                                 format="DD-MM-YYYY"
                                                                 placeholder="dd-mm-yyyy"
@@ -612,8 +604,8 @@ class RegistrationMembershipFee extends Component {
                                                             }]}
                                                         >
                                                             <DatePicker
-                                                                size="large"
-                                                                style={{ width: '100%' }}
+                                                                // size="large"
+                                                                className="w-100"
                                                                 onChange={date => this.dateOnChangeTo(date, index)}
                                                                 format="DD-MM-YYYY"
                                                                 placeholder="dd-mm-yyyy"
@@ -630,8 +622,7 @@ class RegistrationMembershipFee extends Component {
                                         )}
                                         <div className="fluid-width">
                                             <Checkbox
-                                                className="single-checkbox"
-                                                style={{ marginLeft: "0px" }}
+                                                className="single-checkbox ml-0"
                                                 checked={item.isAllow}
                                                 onChange={e =>
                                                     this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
@@ -643,8 +634,7 @@ class RegistrationMembershipFee extends Component {
                                         </div>
                                         {item.isPlaying != 1 && (
                                             <Checkbox
-                                                className="single-checkbox"
-                                                style={{ marginLeft: "0px" }}
+                                                className="single-checkbox ml-0"
                                                 checked={item.isChildrenCheckNumber}
                                                 onChange={e =>
                                                     this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
@@ -655,7 +645,7 @@ class RegistrationMembershipFee extends Component {
                                             </Checkbox>
                                         )}
                                         {item.isAllow && item.isPlaying == 1 && (
-                                            <div className="fluid-width" style={{ marginTop: "10px" }}>
+                                            <div className="fluid-width mt-10">
                                                 <div className="row">
                                                     <div className="col-sm" style={{ marginLeft: 25 }}>
                                                         <Form.Item
@@ -708,8 +698,8 @@ class RegistrationMembershipFee extends Component {
                     </Modal>
                 </div>
             )
-        }catch(ex){
-            console.log("Error in membershipTypesView::"+ex)
+        } catch (ex) {
+            console.log("Error in membershipTypesView::" + ex)
         }
     }
 
@@ -854,7 +844,8 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -895,8 +886,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -908,8 +899,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
                                         onChange={date => this.onChangeDiscountAvailableTo(date, index)}
@@ -930,7 +921,8 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -979,8 +971,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -992,8 +984,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
                                         onChange={date => this.onChangeDiscountAvailableTo(date, index)}
@@ -1052,7 +1044,8 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -1093,8 +1086,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -1106,8 +1099,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         placeholder="dd-mm-yyyy"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
@@ -1311,7 +1304,8 @@ class RegistrationMembershipFee extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectDiscountType }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={discountType => this.onChangeMembershipProductDisType(discountType, index)}
                                         placeholder="Select"
                                         // value={item.membershipPrdTypeDiscountTypeRefId !== 0 && item.membershipPrdTypeDiscountTypeRefId}
@@ -1335,7 +1329,8 @@ class RegistrationMembershipFee extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={discountMembershipType =>
                                             this.onChangeMembershipTypeDiscount(discountMembershipType, index)
                                         }

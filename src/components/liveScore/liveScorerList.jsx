@@ -250,7 +250,6 @@ class LiveScorerList extends Component {
         this.props.exportFilesAction(url)
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -261,27 +260,10 @@ class LiveScorerList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div
-                        className="col-sm"
-                        style={{
-                            display: "flex",
-                            flexDirection: 'row',
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                        }}
-                    >
+                    <div className="col-sm d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to="/liveScoreAddScorer">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addScorer}
@@ -290,16 +272,7 @@ class LiveScorerList extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "flex-end",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-end justify-content-end">
                                     <Button
                                         onClick={() => this.onExport()}
                                         className="primary-add-comp-form"
@@ -322,7 +295,7 @@ class LiveScorerList extends Component {
                     </div>
                 </div>
                 {/* search box */}
-                <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }}>
+                <div className="col-sm pt-5 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -433,7 +406,6 @@ class LiveScorerList extends Component {
         )
     }
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">

@@ -234,8 +234,7 @@ class Umpire extends Component {
         this_obj = this;
     }
 
-    async  componentDidMount() {
-
+    async componentDidMount() {
         const { umpireListActionObject } = this.props.umpireState
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
@@ -253,9 +252,6 @@ class Umpire extends Component {
     }
 
     componentDidUpdate(nextProps) {
-
-
-
         const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
@@ -355,16 +351,7 @@ class Umpire extends Component {
                 </div>
 
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                        }}
-                    />
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -476,34 +463,16 @@ class Umpire extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm pt-1 d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.umpireList}
                             </span>
                         </div>
 
-                        <div
-                            className="col-sm-8"
-                            style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                width: '100%',
-                            }}
-                        >
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/addUmpire" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addUmpire}
@@ -513,16 +482,7 @@ class Umpire extends Component {
                                 </div>
 
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             className="primary-add-comp-form"
                                             type="primary"
@@ -543,16 +503,7 @@ class Umpire extends Component {
                                 </div>
 
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink
                                             className="text-decoration-none"
                                             to={{
@@ -579,16 +530,8 @@ class Umpire extends Component {
                         </div>
                     </div>
 
-                    <div className="mt-5" style={{ display: "flex", justifyContent: "space-between" }}>
-                        <div
-                            style={{
-                                width: "fit-content",
-                                marginRight: 50,
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}
-                        >
+                    <div className="mt-5 d-flex justify-content-between">
+                        <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.competition}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"

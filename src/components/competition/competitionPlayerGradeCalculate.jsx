@@ -28,7 +28,6 @@ import {
 // import moment from "moment"
 import { getCurrentYear } from 'util/permissions'
 
-
 const { Footer, Content } = Layout;
 const { Option } = Select;
 let this_Obj = null;
@@ -62,7 +61,8 @@ const columns = [
             className="input-inside-player-grades-table-for-grade"
             value={minimumPlayers}
             disabled={this_Obj.state.competitionStatus == 1}
-            onChange={(e) => this_Obj.props.onchangeCompPartPlayerGradingSummaryData(e.target.value, index, "minimumPlayers")} />,
+            onChange={(e) => this_Obj.props.onchangeCompPartPlayerGradingSummaryData(e.target.value, index, "minimumPlayers")}
+        />,
         width: '20%',
         sorter: (a, b) => tableSort(a, b, "minimumPlayers")
     },
@@ -86,14 +86,11 @@ const columns = [
     //     key: 'comments',
     //     width: 110,
     //     render: (comments, record) =>
-    //         <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
+    //         <div className="d-flex justify-content-center" role="button" onClick={() => this_Obj.onClickComment(record)}>
     //             <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
     //         </div>
     // },
-
 ];
-
-
 
 class CompetitionPlayerGradeCalculate extends Component {
     constructor(props) {
@@ -115,8 +112,6 @@ class CompetitionPlayerGradeCalculate extends Component {
             comments: null,
             competitionStatus: 0,
             tooltipVisibleDelete: false
-
-
         }
         this_Obj = this;
     }
@@ -153,7 +148,6 @@ class CompetitionPlayerGradeCalculate extends Component {
 
     componentDidMount() {
         this.apiCalls()
-
     }
 
     apiCalls = () => {
@@ -171,20 +165,17 @@ class CompetitionPlayerGradeCalculate extends Component {
                 getDataLoading: true
             })
             this.props.getCompPartPlayerGradingSummaryAction(yearId, storedCompetitionId)
-        }
-        else {
+        } else {
             if (yearId) {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
-            }
-            else {
+            } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 setOwnCompetitionYear(1)
             }
         }
-
     }
 
     ////save the final team grading data
@@ -200,8 +191,6 @@ class CompetitionPlayerGradeCalculate extends Component {
         this.setState({ saveLoad: true })
     }
 
-
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -216,7 +205,6 @@ class CompetitionPlayerGradeCalculate extends Component {
         )
     }
 
-    //////year change onchange
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
@@ -241,7 +229,6 @@ class CompetitionPlayerGradeCalculate extends Component {
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -266,13 +253,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                             </div>
                         </div>
                         <div className="col-sm-6 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     // style={{ minWidth: 200 }}
@@ -289,7 +270,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }}>
+                        <div className="col-sm pb-3 d-flex justify-content-end align-items-center">
                             <NavLink to="/competitionPlayerGrades">
                                 <span className="input-heading-add-another pt-0">{AppConstants.playerGradingToggle}</span>
                             </NavLink>
@@ -366,8 +347,6 @@ class CompetitionPlayerGradeCalculate extends Component {
         )
     }
 
-
-
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1
@@ -380,7 +359,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
 
                                 <Tooltip
-                                    style={{ height: '100%' }}
+                                    className="h-100"
                                     onMouseEnter={() =>
                                         this.setState({
                                             tooltipVisibleDelete: isPublished,

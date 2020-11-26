@@ -248,16 +248,7 @@ class LiveScoreManagerList extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
@@ -278,7 +269,6 @@ class LiveScoreManagerList extends Component {
         this.props.userExportFilesAction(url)
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -289,28 +279,10 @@ class LiveScoreManagerList extends Component {
                                 {AppConstants.managersList}
                             </span>
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "flex-end"
-                            }}
-                        >
+                        <div className="col-sm w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to={`/liveScoreAddManagers`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addManager}
@@ -319,16 +291,7 @@ class LiveScoreManagerList extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             onClick={() => this.onExport()}
                                             className="primary-add-comp-form"
@@ -348,16 +311,7 @@ class LiveScoreManagerList extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to={`/liveScoreManagerImport`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
@@ -378,7 +332,7 @@ class LiveScoreManagerList extends Component {
                         </div>
                     </div>
                     {/* search box */}
-                    <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }}>
+                    <div className="col-sm pt-5 ml-3 d-flex justify-content-end">
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"

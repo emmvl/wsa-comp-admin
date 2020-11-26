@@ -215,7 +215,7 @@ class LiveScoreMatchSheet extends Component {
     headerView = () => (
         <Header className="comp-venue-courts-header-view">
             <div className="row">
-                <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.matchSheets}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -236,8 +236,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'startTime',
             key: 'startTime',
             sorter: (a, b) => tableSort(a, b, "startTime"),
-            render: (startTime) =>
-                <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
+            render: (startTime) => <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
         },
         {
             title: AppConstants.round,
@@ -285,7 +284,7 @@ class LiveScoreMatchSheet extends Component {
         }
 
         return (
-            <div className="formView mt-4" style={{ marginBottom: 20 }}>
+            <div className="formView mt-4 mb-20">
                 {this.sheetTableHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
@@ -318,8 +317,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: (a, b) => tableSort(a, b, "createdAt"),
-            render: (createdAt) =>
-                <span>{createdAt ? liveScore_MatchFormate(createdAt) : ""}</span>
+            render: (createdAt) => <span>{createdAt ? liveScore_MatchFormate(createdAt) : ""}</span>
         },
         {
             title: AppConstants.download,
@@ -330,7 +328,6 @@ class LiveScoreMatchSheet extends Component {
             </a>
         },
     ];
-
 
     downloadTableHeading = () => {
         return (
@@ -389,11 +386,11 @@ class LiveScoreMatchSheet extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.division} />
-
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(division) => this.changeDivision({ division })}
                                 value={this.state.division}
                                 placeholder={AppConstants.selectDivision}
@@ -412,7 +409,8 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(selectedTeam) => this.onChangeTeam(selectedTeam)}
                                 value={this.state.selectedTeam}
                                 placeholder={AppConstants.selectTeam}
@@ -432,7 +430,8 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
                                 value={this.state.selectedTemplateId ?? AppConstants.selectTemplateType}
                                 placeholder={AppConstants.selectTemplateType}
@@ -452,7 +451,8 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(selectedRoundId) => this.onChangeRound(selectedRoundId)}
                                 value={this.state.selectedRound ?? AppConstants.selectRound}
                                 placeholder={AppConstants.selectTemplateType}
@@ -481,7 +481,7 @@ class LiveScoreMatchSheet extends Component {
     footerView = () => (
         <div className="fluid-width">
             <div className="match-sheet-footer-view">
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: 15 }}>
+                <div className="d-flex justify-content-end" style={{ marginRight: 15 }}>
                     <Button
                         className="open-reg-button mr-3"
                         type="primary"
@@ -546,13 +546,12 @@ function mapDispatchtoprops(dispatch) {
     }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
-        liveScoreFixturCompState: state.LiveScoreFixtureCompState,
         liveScoreMatchSheetState: state.LiveScoreMatchSheetState,
         commonReducerState: state.CommonReducerState,
         liveScoreMatchState: state.LiveScoreMatchState,
     };
 }
 
-export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreMatchSheet));
+export default connect(mapStateToProps, mapDispatchtoprops)(LiveScoreMatchSheet);

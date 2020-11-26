@@ -349,7 +349,7 @@ class AddProduct extends Component {
             <input
                 type="file"
                 id="getImage"
-                style={{ display: 'none' }}
+                className="d-none"
                 onChange={(e) => this.onChange(e)}
                 accept="image/*"
             />
@@ -467,13 +467,10 @@ class AddProduct extends Component {
         this.setDetailsFieldValue();
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view header-transaparent"
-                >
+                <Header className="form-header-view header-transparent">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.productDetails}
@@ -640,7 +637,7 @@ class AddProduct extends Component {
                             ) : (
                                 <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
                                     <InputWithHead heading={AppConstants.dragImageToUpload} />
-                                    <div className="d-flex justify-content-center" style={{ width: '100%' }}>
+                                    <div className="d-flex justify-content-center w-100">
                                         {this.getImage()}
                                     </div>
                                 </div>
@@ -648,14 +645,13 @@ class AddProduct extends Component {
                         </>
                     </div>
                     {urls.length > 0 && (
-                        <div className="d-flex justify-content-end" style={{ width: '100%' }}>
+                        <div className="d-flex justify-content-end w-100">
                             {this.getImage()}
                         </div>
                     )}
                 </div>
             </div>
         );
-
     };
 
     ////////Image content view for non edit
@@ -675,7 +671,6 @@ class AddProduct extends Component {
                 </div>
             </div>
         );
-
     };
 
     ////////pricing content view

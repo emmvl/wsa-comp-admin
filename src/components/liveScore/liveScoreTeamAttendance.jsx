@@ -453,7 +453,6 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -463,17 +462,12 @@ class LiveScoreTeamAttendance extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamAttendance}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm" style={{
-                        display: "flex",
-                        flexDirection: 'row',
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                    }}>
+                    <div className="col-sm d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             <div className="col-sm">
                                 <Select
-                                    className="year-select reg-filter-select1"
-                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
+                                    className="year-select reg-filter-select1 d-flex justify-content-end"
+                                    style={{ minWidth: 140 }}
                                     onChange={this.onChangeStatus}
                                     value={this.state.selectStatus}
                                 >
@@ -483,18 +477,8 @@ class LiveScoreTeamAttendance extends Component {
                                     <Option value="Played">Played</Option>
                                 </Select>
                             </div>
-                            <div className="col-sm" style={{ display: "flex" }}>
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignSelf: 'center',
-                                        alignItems: "flex-end",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                            <div className="col-sm d-flex">
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-end align-self-center justify-content-end">
                                     <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -515,7 +499,7 @@ class LiveScoreTeamAttendance extends Component {
                     </div>
                 </div>
                 {/* search box */}
-                {/* <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }}>
+                {/* <div className="col-sm pt-3 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -546,7 +530,6 @@ class LiveScoreTeamAttendance extends Component {
         this.setState({ selectedRound: roundName })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let { divisionList, roundList } = this.props.liveScoreTeamAttendanceState
         let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
@@ -587,7 +570,7 @@ class LiveScoreTeamAttendance extends Component {
                         </div>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }}>
+                    <div className="col-sm d-flex justify-content-end align-items-center">
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
@@ -644,7 +627,6 @@ class LiveScoreTeamAttendance extends Component {
         )
     }
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -684,6 +666,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreTeamAttendance);
-
-
-

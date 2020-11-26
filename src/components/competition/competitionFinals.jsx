@@ -34,8 +34,7 @@ import {
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import { NavLink } from 'react-router-dom';
-import { isArrayNotEmpty } from "util/helpers";
-import { getCurrentYear } from 'util/permissions'
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -420,7 +419,7 @@ class CompetitionFinals extends Component {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
             organisationId: this.state.organisationId,
-            "finals": finalsList,
+            finals: finalsList,
             venues: venueList
         }
 
@@ -432,22 +431,18 @@ class CompetitionFinals extends Component {
         this.props.getTemplateDownloadAction(null);
     }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div className="col-sm d-flex align-content-center">
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.finals}</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-venue-courts-header-view">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.finals}</Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
+            </div>
+        </Header>
+    )
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
         return (
@@ -455,12 +450,7 @@ class CompetitionFinals extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
@@ -478,13 +468,7 @@ class CompetitionFinals extends Component {
                             </div>
                         </div>
                         <div className="col-sm-4 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                marginRight: 50,
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     // style={{ minWidth: 200 }}
@@ -528,20 +512,21 @@ class CompetitionFinals extends Component {
         let disabledStatus = this.state.competitionStatus == 1
         return (
             <div>
-                {(finalsList != null && finalsList.length > 0) &&
+                {(finalsList != null && finalsList.length > 0) && (
                     <div className="compitition-finals-venue">
                         <InputWithHead required="required-field pb-0" heading={AppConstants.venue} />
-                        <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
+                        <Form.Item name="selectedVenues" rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                             <Select
                                 mode="multiple"
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
                                     this.onChangeSetValue(venueSelection, venueList, "venueList")
                                 }}
                                 placeholder={AppConstants.selectVenue}
                                 filterOption={false}
                                 onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
-                            // disabled={compDetailDisable}
+                                // disabled={compDetailDisable}
                             >
                                 {appState.venueList.map((item) => (
                                     <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
@@ -549,7 +534,7 @@ class CompetitionFinals extends Component {
                             </Select>
                         </Form.Item>
                     </div>
-                }
+                )}
                 <div className="compitition-finals-division">
                     {(finalsList || []).map((data, index) => (
                         <div key={data.competitionFormatTemplateId}>
@@ -566,8 +551,8 @@ class CompetitionFinals extends Component {
                                             ))}
                                         </div>
                                     ) : (
-                                            <span>{AppConstants.allDivisions}</span>
-                                        )}
+                                        <span>{AppConstants.allDivisions}</span>
+                                    )}
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <InputWithHead heading={AppConstants.finalsStartDate} required="required-field" />
@@ -575,9 +560,9 @@ class CompetitionFinals extends Component {
                                                 <DatePicker
                                                     id={AppUniqueId.final_StartDate}
                                                     disabled={disabledStatus}
-                                                    size="large"
+                                                    // size="large"
                                                     placeholder="dd-mm-yyyy"
-                                                    style={{ width: '100%' }}
+                                                    className="w-100"
                                                     onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
                                                     name="finalsStartDate"
                                                     format="DD-MM-YYYY"
@@ -609,23 +594,23 @@ class CompetitionFinals extends Component {
                                             </Select>
                                         </Form.Item>
                                     ) : (
-                                            <Form.Item
-                                                name={`poolTopRefId${index}`}
-                                                rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}
+                                        <Form.Item
+                                            name={`poolTopRefId${index}`}
+                                            rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}
+                                        >
+                                            <Select
+                                                disabled={disabledStatus}
+                                                value={data.poolTopRefId}
+                                                onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
                                             >
-                                                <Select
-                                                    disabled={disabledStatus}
-                                                    value={data.poolTopRefId}
-                                                    onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
-                                                >
-                                                    {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
-                                                        <Option key={'poolTop_' + fix.id} value={fix.id}>
-                                                            {fix.description}
-                                                        </Option>
-                                                    ))}
-                                                </Select>
-                                            </Form.Item>
-                                        )}
+                                                {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
+                                                    <Option key={'poolTop_' + fix.id} value={fix.id}>
+                                                        {fix.description}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                    )}
 
                                     {this.isShowPlayOff3rdPosition(data) && (
                                         <Checkbox
@@ -646,7 +631,8 @@ class CompetitionFinals extends Component {
                                         <Select
                                             disabled={disabledStatus}
                                             id={AppUniqueId.final_Match_Type_dpdn}
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                            className="w-100"
+                                            style={{ paddingRight: 1, minWidth: 182 }}
                                             onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
                                             value={data.finalsMatchTypeRefId}
                                         >
@@ -914,7 +900,8 @@ class CompetitionFinals extends Component {
                                 <Select
                                     disabled={disabledStatus}
                                     id={AppUniqueId.finals_extratimetype_dpdn}
-                                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                    className="w-100"
+                                    style={{ paddingRight: 1, minWidth: 182 }}
                                     onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
                                     value={data.extraTimeMatchTypeRefId}
                                 >
@@ -1063,7 +1050,7 @@ class CompetitionFinals extends Component {
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() =>
                                             this.setState({
                                                 tooltipVisibleDelete: isPublished,

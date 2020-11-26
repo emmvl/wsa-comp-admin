@@ -533,17 +533,9 @@ class UserOurOrganization extends Component {
         this.props.updateCharityAction(payload);
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
+            <Header className="form-header-view d-flex align-items-center bg-transparent">
                 {this.state.sourcePage == "AFF" ? (
                     <Breadcrumb separator=" > ">
                         <NavLink to="/userAffiliatesList">
@@ -655,14 +647,11 @@ class UserOurOrganization extends Component {
                             <input
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
                             />
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", justifyContent: 'center', alignItems: 'flex-start', flexDirection: "column", }}
-                        >
+                        <div className="col-sm d-flex justify-content-center align-items-start flex-column">
                             <Checkbox
                                 className="single-checkbox"
                                 // defaultChecked={false}
@@ -691,7 +680,7 @@ class UserOurOrganization extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.organisationType} />
                     </div>
-                    <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
+                    <div className="col-sm d-flex align-items-center">
                         <InputWithHead heading={affiliate.organisationTypeRefName} />
                     </div>
                 </div>
@@ -699,7 +688,7 @@ class UserOurOrganization extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.affiliatedTo} />
                     </div>
-                    <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
+                    <div className="col-sm d-flex align-items-center">
                         <InputWithHead heading={affiliate.affiliatedToOrgName} />
                     </div>
                 </div>
@@ -882,8 +871,7 @@ class UserOurOrganization extends Component {
                         <div className="pl-5 pb-5 pt-4">
                             <label className="pt-2">
                                 <input
-                                    style={{ cursor: "pointer" }}
-                                    className="pt-2 pb-2"
+                                    className="pt-2 pb-2 pointer"
                                     type="file"
                                     id="teamImport"
                                     ref={(input) => { this.filesInput = input }}
@@ -992,10 +980,7 @@ class UserOurOrganization extends Component {
         return (
             <div className="mb-3">
                 {/* <div className="col-sm"> */}
-                <div
-                    className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                    style={{ width: '100%' }}
-                >
+                <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                     <Button onClick={() => this.editPhotos(record)} className="primary-add-comp-form ml-5" type="primary">
                         {AppConstants.edit}
                     </Button>
@@ -1096,10 +1081,7 @@ class UserOurOrganization extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="col-sm">
-                    <div
-                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                        style={{ width: '100%' }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                         <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
                             {AppConstants.remove}
                         </Button>
@@ -1206,7 +1188,7 @@ class UserOurOrganization extends Component {
                 <div className="inside-container-view">
                     <span className="form-heading">{AppConstants.roundUp}</span>
                     {charityRoundUp.map((item, index) => (
-                        <div className="row" key={index} style={{ marginLeft: '0px' }}>
+                        <div className="row ml-0" key={index}>
                             <Checkbox
                                 className="single-checkbox mt-3"
                                 checked={item.isSelected}

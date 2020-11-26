@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Button, Form, Select, Radio, Spin, AutoComplete, Checkbox, message } from 'antd';
 import './umpire.css';
@@ -24,7 +23,6 @@ import {
 } from '../../store/actions/umpireAction/umpireAction'
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -71,7 +69,6 @@ class AddUmpire extends Component {
     }
 
     componentDidUpdate(nextProps) {
-
         if (this.props.umpireState.affilateList == nextProps.umpireState.affilateList) {
             if (this.state.isUmpireAffiliate === true && this.props.umpireState.onAffiliateLoad === false) {
                 let compId = JSON.parse(getUmpireCompetiton())
@@ -84,8 +81,6 @@ class AddUmpire extends Component {
                 this.setState({ load: true, competition_id: compId, isUmpireAffiliate: false })
             }
         }
-
-
 
         if (this.props.umpireState.umpireList !== nextProps.umpireState.umpireList) {
             if (this.state.loader === true && this.props.umpireState.onLoad === false) {
@@ -127,7 +122,6 @@ class AddUmpire extends Component {
             'Contact no': umpireData.mobileNumber,
             'umpireNewAffiliateName': affiliateId
         })
-
     }
 
     filterUmpireList = () => {
@@ -145,9 +139,7 @@ class AddUmpire extends Component {
                 hasError: false
             })
             this.props.updateAddUmpireData(regexNumberExpression(number), 'mobileNumber')
-        }
-
-        else if (number.length < 10) {
+        } else if (number.length < 10) {
             this.props.updateAddUmpireData(regexNumberExpression(number), 'mobileNumber')
             this.setState({
                 hasError: true
@@ -156,20 +148,13 @@ class AddUmpire extends Component {
         setTimeout(() => {
             this.setInitialFieldValue()
         }, 300);
-
     }
 
-
-    ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}>
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -186,8 +171,6 @@ class AddUmpire extends Component {
         const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad, umpireListData } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
-
-        console.log(umpireListResult, 'umpireListResult')
 
         return (
             <div className="content-view pt-4">
@@ -219,18 +202,15 @@ class AddUmpire extends Component {
                                     value && value.length > 2
                                         ? this.props.umpireSearchAction({ refRoleId: JSON.stringify(refRoleTypes('member')), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value })
                                         : this.props.umpireClear()
-
                                 }}
                             >
-                                {
-                                    this.state.exsitingValue &&
+                                {this.state.exsitingValue && (
                                     umpireList.map((item) => (
                                         <Option key={'umpire_' + item.id} value={item.firstName + " " + item.lastName}>
                                             {item.firstName + " " + item.lastName}
                                         </Option>
                                     ))
-                                }
-
+                                )}
                             </AutoComplete>
                         </Form.Item>
                         <span style={{ color: 'red' }}>
@@ -253,7 +233,7 @@ class AddUmpire extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
-                                style={{ width: '100%', }}
+                                style={{ width: '100%' }}
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
                                 optionFilterProp="children"
@@ -378,17 +358,16 @@ class AddUmpire extends Component {
                             name="umpireNewAffiliateName"
                             rules={[{ required: true, message: ValidationConstants.organisationField }]}
                         >
-
                             <Select
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
-                                style={{ width: '100%', }}
+                                style={{ width: '100%' }}
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 // value={affiliateId}
                                 optionFilterProp="children"
-                            // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
-                            // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
+                                // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
+                                // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
                             >
                                 {affiliateListResult.map((item) => (
                                     <Option key={'organisation_' + item.id} value={item.id}>{item.name}</Option>
@@ -421,7 +400,7 @@ class AddUmpire extends Component {
         this.setState({ loader: true })
         this.props.updateAddUmpireData(e.target.value, 'umpireRadioBtn')
         this.formRef.current.setFieldsValue({
-            'umpireAffiliateName': []
+            umpireAffiliateName: []
         })
     }
 
@@ -486,7 +465,6 @@ class AddUmpire extends Component {
 
     onSaveClick = () => {
         const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId, umpireListResult, umpireListData } = this.props.umpireState
-        console.log(umpireListResult)
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
 
         if (umpireRadioBtn === 'new') {
@@ -504,7 +482,7 @@ class AddUmpire extends Component {
                             lastName: umpireData.lastName,
                             mobileNumber: regexNumberExpression(umpireData.mobileNumber),
                             email: umpireData.email,
-                            "affiliates": umpireData.affiliates,
+                            affiliates: umpireData.affiliates,
                         }
                     } else {
                         body = {
@@ -512,8 +490,7 @@ class AddUmpire extends Component {
                             lastName: umpireData.lastName,
                             mobileNumber: regexNumberExpression(umpireData.mobileNumber),
                             email: umpireData.email,
-                            "affiliates": umpireData.affiliates,
-
+                            affiliates: umpireData.affiliates,
                         }
                     }
                     if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
@@ -525,7 +502,7 @@ class AddUmpire extends Component {
                 } else if (umpireRadioBtn === 'existing') {
                     body = {
                         id: exsitingUmpireId,
-                        "affiliates": umpireData.affiliates,
+                        affiliates: umpireData.affiliates,
                     }
 
                     if (umpireListData.length === 0) {
@@ -536,7 +513,6 @@ class AddUmpire extends Component {
                     } else {
                         let getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
                         let getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
-                        console.log(getUmpireObject, 'umpireListData', umpireListData, 'index', getUmpireObjectIndex)
                         if (getUmpireObject !== null) {
                             body = {
                                 id: getUmpireObject.id,
@@ -546,8 +522,6 @@ class AddUmpire extends Component {
                                 email: getUmpireObject.email ? getUmpireObject.email : "",
                                 affiliates: umpireData.affiliates,
                             }
-
-
                             // body = {
                             //     id: exsitingUmpireId,
                             //
@@ -571,7 +545,7 @@ class AddUmpire extends Component {
                         lastName: umpireData.lastName,
                         mobileNumber: regexNumberExpression(umpireData.mobileNumber),
                         email: umpireData.email,
-                        "affiliates": umpireData.affiliates,
+                        affiliates: umpireData.affiliates,
                     }
                 } else {
                     body = {
@@ -579,7 +553,7 @@ class AddUmpire extends Component {
                         lastName: umpireData.lastName,
                         mobileNumber: regexNumberExpression(umpireData.mobileNumber),
                         email: umpireData.email,
-                        "affiliates": umpireData.affiliates,
+                        affiliates: umpireData.affiliates,
                     }
                 }
                 if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
@@ -589,10 +563,6 @@ class AddUmpire extends Component {
                     this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
                 }
             } else if (umpireRadioBtn === 'existing') {
-
-                console.log(exsitingUmpireId)
-
-
                 if (umpireListData.length === 0) {
                     this.setState({ isUserNotFound: true })
                 } else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
@@ -611,8 +581,6 @@ class AddUmpire extends Component {
                             email: getUmpireObject.email ? getUmpireObject.email : "",
                             affiliates: umpireData.affiliates,
                         }
-
-
                         // body = {
                         //     id: exsitingUmpireId,
                         //
@@ -628,7 +596,6 @@ class AddUmpire extends Component {
         }
     };
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">

@@ -266,7 +266,6 @@ class UserAffiliatesList extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
@@ -279,7 +278,7 @@ class UserAffiliatesList extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-lg-3 col-md-6">
-                            <div className="d-flex align-items-center" style={{ width: '100%' }}>
+                            <div className="d-flex align-items-center w-100">
                                 <span className="year-select-heading" style={{ width: 120 }}>{AppConstants.affiliatedTo}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"

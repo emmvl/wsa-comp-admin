@@ -67,9 +67,7 @@ class LiveScoreAddIncident extends Component {
     }
 
     componentDidMount() {
-
         if (this.state.umpireKey === 'umpire') {
-
             if (getUmpireCompetitonData()) {
                 const { id } = JSON.parse(getUmpireCompetitonData())
                 const { incidentData } = this.props.liveScoreIncidentState
@@ -91,7 +89,6 @@ class LiveScoreAddIncident extends Component {
             } else {
                 history.push('/umpireDashboard')
             }
-
         } else {
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -182,18 +179,10 @@ class LiveScoreAddIncident extends Component {
         }
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -229,9 +218,7 @@ class LiveScoreAddIncident extends Component {
     }
 
     setTeamId(teamId) {
-
         if (this.state.umpireKey) {
-
             if (getUmpireCompetitonData()) {
                 const { id } = JSON.parse(getUmpireCompetitonData())
                 this.props.liveScorePlayerListAction(id, teamId);
@@ -239,9 +226,7 @@ class LiveScoreAddIncident extends Component {
                 this.setInitialFieldValue()
                 this.props.liveScoreUpdateIncidentData(teamId, "teamId")
             }
-
         } else {
-
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 this.props.liveScorePlayerListAction(id, teamId);
@@ -250,8 +235,6 @@ class LiveScoreAddIncident extends Component {
                 this.props.liveScoreUpdateIncidentData(teamId, "teamId")
             }
         }
-
-
     }
 
     //// Form View
@@ -273,8 +256,8 @@ class LiveScoreAddIncident extends Component {
                         <InputWithHead heading={AppConstants.date} />
 
                         <DatePicker
-                            size="large"
-                            style={{ width: '100%' }}
+                            // size="large"
+                            className="w-100"
                             onChange={(date) => {
                                 this.props.liveScoreUpdateIncidentData(moment(date).format('MM/DD/YYYY'), "date")
                             }}
@@ -289,8 +272,7 @@ class LiveScoreAddIncident extends Component {
                         <InputWithHead heading={AppConstants.time} />
 
                         <TimePicker
-                            className="comp-venue-time-timepicker"
-                            style={{ width: '100%' }}
+                            className="comp-venue-time-timepicker w-100"
                             onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time')}
                             onBlur={(e) => this.props.liveScoreUpdateIncidentData(e.target.value && moment(e.target.value, "HH:mm"), 'time')}
                             format="HH:mm"
@@ -324,9 +306,8 @@ class LiveScoreAddIncident extends Component {
                             <InputWithHead required="required-field" heading={AppConstants.team} />
                             {this.state.isEdit ? (
                                 <Select
-                                    className="reg-form-multiple-select"
-                                    placeholder='Select Home Team'
-                                    style={{ width: '100%' }}
+                                    className="reg-form-multiple-select w-100"
+                                    placeholder="Select Home Team"
                                     onChange={(teamId) => this.setTeamId(teamId)}
                                     // value={incidentData.teamId ? incidentData.teamId : ''}
                                     optionFilterProp="children"
@@ -339,9 +320,8 @@ class LiveScoreAddIncident extends Component {
                                 </Select>
                             ) : (
                                 <Select
-                                    className="reg-form-multiple-select"
+                                    className="reg-form-multiple-select w-100"
                                     placeholder="Select Home Team"
-                                    style={{ width: '100%' }}
                                     onChange={(teamId) => this.setTeamId(teamId)}
                                     // value={incidentData.teamId ? incidentData.teamId : ''}
                                     optionFilterProp="children"
@@ -368,7 +348,7 @@ class LiveScoreAddIncident extends Component {
                             mode="multiple"
                             showSearch
                             placeholder={AppConstants.selectPlayer}
-                            style={{ width: '100%', }}
+                            className="w-100"
                             onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
                             value={playerIds}
                         >
@@ -393,7 +373,7 @@ class LiveScoreAddIncident extends Component {
                             <Select
                                 showSearch
                                 placeholder={AppConstants.selectIncident}
-                                style={{ width: '100%', }}
+                                className="w-100"
                                 onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
                                 // value={incidentData.injury ? incidentData.injury : undefined}
                             >
@@ -447,7 +427,7 @@ class LiveScoreAddIncident extends Component {
                         <input
                             type="file"
                             id="user-pic"
-                            style={{ display: 'none' }}
+                            className="d-none"
                             onChange={(event) => {
                                 this.setImage(event.target, 'evt.target')
                                 this.setState({ imageTimeout: 2000, crossImageIcon: false })
@@ -460,7 +440,7 @@ class LiveScoreAddIncident extends Component {
                             }}
                         />
 
-                        <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
+                        <div className="position-absolute" style={{ bottom: 71, left: 150 }}>
                             {(this.state.crossImageIcon || incidentData.addImages) && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
@@ -488,7 +468,7 @@ class LiveScoreAddIncident extends Component {
                         <input
                             type="file"
                             id="user-vdo"
-                            style={{ display: 'none' }}
+                            className="d-none"
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
                                 // this.setState({ videoTimeout: 2000, crossVideoIcon: false })
@@ -501,7 +481,7 @@ class LiveScoreAddIncident extends Component {
                             }}
                         />
 
-                        <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
+                        <div className="position-absolute" style={{ bottom: 71, left: 150 }}>
                             {(this.state.crossVideoIcon || incidentData.addVideo) && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img

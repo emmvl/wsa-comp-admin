@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Select, Checkbox, Button, Table, Form, Modal } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Table, Modal } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction } from
-    "../../store/actions/competitionModuleAction/ladderFormatAction";
+import { getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction } from "../../store/actions/competitionModuleAction/ladderFormatAction";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from "../../util/history";
@@ -56,14 +55,12 @@ class CompetitionLadder extends Component {
                 getDataLoading: true
             })
             this.apiCalls(storedCompetitionId, yearId);
-        }
-        else if (yearId) {
+        } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
-        }
-        else {
+        } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             // setOwnCompetitionYear(1)
         }
@@ -147,7 +144,6 @@ class CompetitionLadder extends Component {
                 schemeModalVisible: true
             })
         }
-
     }
 
     handleSchemeModal = (flag, key, index, ladderFormat) => {
@@ -186,12 +182,11 @@ class CompetitionLadder extends Component {
 
         let a = ladderFormat[index].selectedDivisions.filter(x => false);
         ladderFormat[index].selectedDivisions = a;
-
         ladderFormat[index].selectedDivisions = e;
 
         let schemeName = ladder.schemeName;
         let remainingFormatDiv = ladderFormat.
-            filter(x => x.schemeName != schemeName);
+        filter(x => x.schemeName != schemeName);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -326,7 +321,7 @@ class CompetitionLadder extends Component {
 
             for (let j in selectedDivisions) {
                 let matchDivisions = divisions.
-                    find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
                 if (matchDivisions != "") {
                     let obj = {
                         competitionFormatDivisionId: 0,
@@ -350,7 +345,6 @@ class CompetitionLadder extends Component {
         this.setState({ loading: true });
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-venue-courts-header-view">
@@ -365,7 +359,6 @@ class CompetitionLadder extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
         return (
@@ -390,20 +383,13 @@ class CompetitionLadder extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50,
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     name="competition"
                                     className="year-select"
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)
-                                    }
+                                    onChange={competitionId => this.onCompetitionChange(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {own_CompetitionArr.map(item => (
@@ -422,19 +408,19 @@ class CompetitionLadder extends Component {
     }
 
     contentView = () => {
-
         let schemeData = this.props.ladderFormatState.ladderSchemeDefaults;
         let ladderFormat = this.props.ladderFormatState.ladderFormats;
         let isAllDivisionChecked = this.props.ladderFormatState.isAllDivisionChecked;
         return (
-            <div className="content-view pt-4" style={{ paddingBottom: '0px' }}>
-
+            <div className="content-view pt-4 pb-0">
                 {(ladderFormat || []).map((ladder, index) => (
-                    <div className="inside-container-view" style={{ paddingTop: "14px" }}>
-                        <div style={{ display: "flex" }}>
+                    <div className="inside-container-view" style={{ paddingTop: 14 }}>
+                        <div className="d-flex">
                             <InputWithHead heading={AppConstants.ladderFormatScheme} />
-                            <div className="transfer-image-view pt-0 pointer" style={{ marginLeft: 'auto' }} onClick={() => this.deleteModal(index)}>
-                                <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                            <div className="transfer-image-view pt-0 pointer ml-auto" onClick={() => this.deleteModal(index)}>
+                                <span className="user-remove-btn">
+                                    <i className="fa fa-trash-o" aria-hidden="true" />
+                                </span>
                                 <span className="user-remove-text">
                                     {AppConstants.remove}
                                 </span>
@@ -444,7 +430,8 @@ class CompetitionLadder extends Component {
                         {!ladder.isEditted ? (
                             <div>
                                 <Select
-                                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                    className="w-100"
+                                    style={{ paddingRight: 1, minWidth: 182 }}
                                     onChange={(e) => this.onChangeSchemeName(e, "ladderFormat", index, ladderFormat, schemeData)}
                                     value={ladder.schemeName}
                                 >
@@ -456,21 +443,29 @@ class CompetitionLadder extends Component {
                                 </Select>
                             </div>
                         ) : (
-                                <InputWithHead
-                                    placeholder={AppConstants.ladderFormatScheme}
-                                    value={ladder.schemeName}
-                                    onChange={(e) => this.onUpdateSchemeName(e, ladderFormat, index)}
-                                />
-                            )}
+                            <InputWithHead
+                                placeholder={AppConstants.ladderFormatScheme}
+                                value={ladder.schemeName}
+                                onChange={(e) => this.onUpdateSchemeName(e, ladderFormat, index)}
+                            />
+                        )}
 
-                        <Checkbox className="single-checkbox pt-2" defaultChecked={isAllDivisionChecked} onChange={(e) => this.onChangeAllDivision(e, ladderFormat, index)}>{AppConstants.allDivisions}</Checkbox>
+                        <Checkbox
+                            className="single-checkbox pt-2"
+                            defaultChecked={isAllDivisionChecked}
+                            onChange={(e) => this.onChangeAllDivision(e, ladderFormat, index)}
+                        >
+                            {AppConstants.allDivisions}
+                        </Checkbox>
+
                         {!isAllDivisionChecked && (
                             <div className="fluid-width">
                                 <div className="row">
                                     <div className="col-sm">
                                         <Select
                                             mode="multiple"
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                            className="w-100"
+                                            style={{ paddingRight: 1, minWidth: 182 }}
                                             onChange={(e) => this.onChange(e, ladderFormat, ladder, index)}
                                             value={ladder.selectedDivisions}
                                         >
@@ -491,42 +486,50 @@ class CompetitionLadder extends Component {
                         )}
                         <div className="inside-container-view">
                             <div className="table-responsive">
-                                <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                                <div className="d-flex" style={{ paddingLeft: 10 }}>
                                     <div style={{ width: '89%' }}><InputWithHead heading="Result type/Byes" /></div>
-                                    <div><InputWithHead heading={"Points"} /></div>
+                                    <div><InputWithHead heading="Points" /></div>
                                 </div>
                                 {(ladder.resultTypes || []).map((res, resIndex) => (
-                                    <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                                    <div className="d-flex" style={{ paddingLeft: 10 }}>
                                         <div style={{ width: '89%' }}><InputWithHead heading={res.description} /></div>
                                         <div>
-                                            <InputWithHead className="input-inside-table-fees" value={res.points}
-                                                placeholder={"Points"} disabled={!ladder.isEditted}
-                                                onChange={(e) => this.onChangeResultType(e, index, ladderFormat, resIndex)}>
-                                            </InputWithHead>
+                                            <InputWithHead
+                                                className="input-inside-table-fees"
+                                                value={res.points}
+                                                placeholder="Points"
+                                                disabled={!ladder.isEditted}
+                                                onChange={(e) => this.onChangeResultType(e, index, ladderFormat, resIndex)}
+                                            />
                                         </div>
                                     </div>
                                 ))}
-                                {!ladder.isEditted ?
-                                    <div style={{ display: 'flex', justifyContent: "flex-end", paddingTop: '10px', paddingRight: '6px' }}>
-                                        <Button className="open-reg-button" type="primary" style={{ height: '34px' }}
-                                            onClick={() => this.handleEditModal(true, "show", index, ladderFormat)}>{AppConstants.edit}</Button>
+                                {!ladder.isEditted && (
+                                    <div className="d-flex justify-content-end pt-5 pr-5">
+                                        <Button
+                                            className="open-reg-button"
+                                            type="primary"
+                                            style={{ height: 34 }}
+                                            onClick={() => this.handleEditModal(true, "show", index, ladderFormat)}
+                                        >
+                                            {AppConstants.edit}
+                                        </Button>
                                         {this.editModalView(ladderFormat)}
                                     </div>
-                                    : null}
+                                )}
                                 {/* <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" /> */}
                             </div>
                         </div>
                     </div>
                 ))}
-                { !isAllDivisionChecked ?
+                {!isAllDivisionChecked && (
                     <div className="row">
                         <div className="col-sm" onClick={(e) => this.onClickAddLadder(e, ladderFormat)}>
                             <span className="input-heading-add-another pointer">+ {AppConstants.addNewLadderScheme}</span>
                         </div>
-                    </div> : null
-                }
+                    </div>
+                )}
             </div>
-
         )
     }
 
@@ -598,14 +601,13 @@ class CompetitionLadder extends Component {
     /////ladderAdjustmentView
     ladderAdjustmentView = () => {
         return (
-            <div className="fees-view pt-5" style={{ marginTop: '0px' }}>
+            <div className="fees-view pt-5 mt-0">
                 <span className="form-heading">{AppConstants.ladderAdjustment}</span>
                 <span className="input-heading-add-another">+ {AppConstants.addNewAdjustment}</span>
 
                 <div className="transfer-image-view">
                     <img src={AppImages.transfer} alt="" height="45" width="45" />
                     <span className='comp-ladder-recalculate'>{AppConstants.recalculateLadder}</span>
-
                 </div>
             </div>
         )
@@ -617,15 +619,17 @@ class CompetitionLadder extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
+                        <div className="col-sm d-flex align-items-start">
                             {/* <Button type="cancel-button">Cancel</Button> */}
                         </div>
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                <Button className="save-draft-text" type="save-draft-text"
-                                    onClick={() => this.saveLadderFormats()}>{AppConstants.saveDraft}</Button>
-                                <Button className="open-reg-button" type="primary"
-                                    onClick={() => this.saveLadderFormats()}>{AppConstants.finalise}</Button>
+                            <div className="d-flex justify-content-end">
+                                <Button className="save-draft-text" type="save-draft-text" onClick={() => this.saveLadderFormats()}>
+                                    {AppConstants.saveDraft}
+                                </Button>
+                                <Button className="open-reg-button" type="primary" onClick={() => this.saveLadderFormats()}>
+                                    {AppConstants.finalise}
+                                </Button>
                             </div>
                         </div>
                     </div>

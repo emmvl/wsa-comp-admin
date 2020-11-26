@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Spin } from "antd";
 
-
-
 class Loader extends Component {
-    /////// render function
     render() {
         return (
             <Modal
@@ -19,10 +16,8 @@ class Loader extends Component {
                 height={0}
                 closable={false}
                 footer={null}
-
             >
                 <Spin tip="Loading..."  delay={this.props.delay} />
-
             </Modal>
         );
     }

@@ -430,18 +430,10 @@ class LiveScoreSettingsView extends Component {
         }
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.settings}
@@ -599,7 +591,7 @@ class LiveScoreSettingsView extends Component {
                             <input
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 name="imageFile"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
@@ -610,10 +602,7 @@ class LiveScoreSettingsView extends Component {
                                 }}
                             />
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", alignItems: "center" }}
-                        >
+                        <div className="col-sm d-flex align-items-center">
                             <Checkbox
                                 className="single-checkbox"
                                 defaultChecked
@@ -636,7 +625,7 @@ class LiveScoreSettingsView extends Component {
                             <Select
                                 mode="multiple"
                                 placeholder={AppConstants.selectVenue}
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 onChange={value => {
                                     this.onSelectValues(value)
                                 }}
@@ -677,11 +666,7 @@ class LiveScoreSettingsView extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <Checkbox.Group
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "center"
-                                }}
+                                className="d-flex flex-column justify-content-center"
                                 // options={applyTo1}
                                 value={this.props.liveScoreSetting.form.record1}
                                 onChange={e => this.onChangeCheckBox(e)}
@@ -698,12 +683,7 @@ class LiveScoreSettingsView extends Component {
                         </div>
                         <div className="col-sm" style={{ paddingTop: 1 }}>
                             <Checkbox.Group
-                                className="checkBoxGroup-checkbox-radio-style"
-                                style={{
-                                    display: "-ms-flexbox",
-                                    flexDirection: "column",
-                                    justifyContent: "center"
-                                }}
+                                className="checkBoxGroup-checkbox-radio-style d-flex flex-column justify-content-center"
                                 options={applyTo2}
                                 value={this.props.liveScoreSetting.form.record2}
                                 onChange={e => this.onChangeCheckBox2(e)}
@@ -731,7 +711,8 @@ class LiveScoreSettingsView extends Component {
                         <Form.Item name='recordumpire' rules={[{ required: true, message: ValidationConstants.recordUmpireField }]}>
                             <Select
                                 placeholder={'Select Record Umpire'}
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={recordUmpire => this.props.onChangeSettingForm({
                                     key: "recordUmpire",
                                     data: recordUmpire
@@ -761,7 +742,8 @@ class LiveScoreSettingsView extends Component {
                         <Form.Item name="attendanceRecord" rules={[{ required: true, message: ValidationConstants.attendanceRecordField }]}>
                             <Select
                                 placeholder="Select Record"
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={recordSelection => this.props.onChangeSettingForm({
                                     key: "attendanceRecordingType",
                                     data: recordSelection
@@ -786,7 +768,8 @@ class LiveScoreSettingsView extends Component {
                         <Form.Item name='attendanceReport' rules={[{ required: true, message: ValidationConstants.attendanceReportField }]}>
                             <Select
                                 placeholder={'Select Report'}
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={reportSelection => this.props.onChangeSettingForm({
                                     key: "attendanceRecordingPeriod",
                                     data: reportSelection
@@ -850,12 +833,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Line up selection */}
                 <Checkbox
-                    style={{
-                        display: "-ms-flexbox",
-                        flexDirection: "column",
-                        justifyContent: "center"
-                    }}
-                    className="single-checkbox pt-5"
+                    className="single-checkbox pt-5 d-flex flex-column justify-content-center"
                     onChange={(e) => this.onChnageLineUpSelection(e.target.checked, record1)}
                     // onChange={(e) => this.props.onChangeSettingForm({ key: "lineupSelection", data: e.target.checked })}
                     checked={lineupSelection}
@@ -918,12 +896,7 @@ class LiveScoreSettingsView extends Component {
                         value={borrowedPlayer}
                     >
                         <div className="row mt-0 ml-1">
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                justifyContent: 'center'
-                            }}>
+                            <div className="d-flex align-items-center flex-row justify-content-center">
                                 <div>
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="GAMES">
                                         {AppConstants.gamesBorrowed}
@@ -959,12 +932,7 @@ class LiveScoreSettingsView extends Component {
 
                 <div style={{ marginTop: 20 }}>
                     <Checkbox
-                        style={{
-                            display: "-ms-flexbox",
-                            flexDirection: "column",
-                            justifyContent: "center"
-                        }}
-                        className="single-checkbox"
+                        className="single-checkbox d-flex flex-column justify-content-center"
                         onChange={(e) => this.props.onChangeSettingForm({
                             key: "premierCompLink",
                             data: e.target.checked
@@ -1003,8 +971,8 @@ class LiveScoreSettingsView extends Component {
                             onChange={e => this.competition_format(e)}
                             // value={this.props.liveScoreSetting.form.scoring}
                         >
-                            <div className="row ml-2" style={{ marginTop: 0 }}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div className="row ml-2 mt-0">
+                                <div className="d-flex align-items-center">
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="SINGLE">{AppConstants.single}</Radio>
                                     <div className="mt-n10 ml-n10">
                                         <Tooltip>
@@ -1013,7 +981,7 @@ class LiveScoreSettingsView extends Component {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
+                                <div className="d-flex align-items-center" style={{ marginLeft: 10 }}>
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="50_50">50/50</Radio>
                                     <div className="mt-n10 mt-n10">
                                         <Tooltip>
@@ -1046,7 +1014,8 @@ class LiveScoreSettingsView extends Component {
                     <Form.Item name='time' rules={[{ required: true, message: ValidationConstants.timerField }]}>
                         <Select
                             placeholder={'Select Time'}
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={timer => this.props.onChangeSettingForm({ key: "timerType", data: timer })}
                             // value="CENTRAL"
                             // value={this.props.liveScoreSetting.form.timerType}
@@ -1063,12 +1032,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={0} heading={AppConstants.buzzer} />
                 <div className="row mt-0 ml-1">
                     <Checkbox
-                        style={{
-                            display: "-ms-flexbox",
-                            flexDirection: "column",
-                            justifyContent: "center"
-                        }}
-                        className="single-checkbox"
+                        className="single-checkbox d-flex flex-column justify-content-center"
                         onChange={(e) => this.props.onChangeSettingForm({
                             key: "buzzerEnabled",
                             data: e.target.checked
@@ -1118,7 +1082,8 @@ class LiveScoreSettingsView extends Component {
             <div className="col-sm ml-3">
                 <Select
                     mode="multiple"
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={associationAffiliate => {
                         this.props.onChangeSettingForm({ key: "associationAffilite", data: associationAffiliate })
                     }}
@@ -1150,7 +1115,8 @@ class LiveScoreSettingsView extends Component {
             <div className="col-sm ml-3">
                 <Select
                     mode="multiple"
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={clubAffiliate => {
                         this.props.onChangeSettingForm({ key: "clubAffilite", data: clubAffiliate })
                     }}
@@ -1227,7 +1193,7 @@ class LiveScoreSettingsView extends Component {
                                                 orgLevelId == '2' && subItem.id == 2
                                                     ?
                                                     <>
-                                                        <div style={{ marginLeft: '20px' }}>
+                                                        <div style={{ marginLeft: 20 }}>
                                                             <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                         </div>
 
@@ -1244,7 +1210,7 @@ class LiveScoreSettingsView extends Component {
                                                     <>
                                                         {((orgLevelId == '2' || orgLevelId == '3') && subItem.id == 3) && (
                                                             <>
-                                                                <div style={{ marginLeft: '20px' }}>
+                                                                <div style={{ marginLeft: 20 }}>
                                                                     <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                                 </div>
 
@@ -1289,11 +1255,7 @@ class LiveScoreSettingsView extends Component {
                                         <div>
                                             <div className="applicable-to-heading invitees-main">{item.description}</div>
 
-                                            <div style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                paddingLeft: 13
-                                            }}>
+                                            <div className="d-flex flex-column" style={{ paddingLeft: 13 }}>
                                                 <Checkbox
                                                     disabled={disabledComponent}
                                                     className="single-checkbox-radio-style"
@@ -1361,7 +1323,7 @@ class LiveScoreSettingsView extends Component {
                                         <div>
                                             <div className="applicable-to-heading invitees-main">{item.description}</div>
                                             {(item.subReferences).map((subItem) => (
-                                                <div key={'subReference_' + subItem.id} style={{ marginLeft: '20px' }}>
+                                                <div key={'subReference_' + subItem.id} style={{ marginLeft: 20 }}>
                                                     <Radio
                                                         onChange={(e) => this.props.onChangeSettingForm({
                                                             key: "none",
@@ -1427,14 +1389,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
                                 </span>
