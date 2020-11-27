@@ -150,7 +150,7 @@ const columnsOwned = [
         dataIndex: 'more',
         key: 'more',
         render: () => (
-            <span className="d-flex justify-content-end w-50">
+            <span className="d-flex justify-content-center w-50">
                 <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
             </span>
         ),
@@ -220,7 +220,7 @@ const columnsParticipate = [
         dataIndex: 'more',
         key: 'more',
         render: () => (
-            <span className="d-flex justify-content-end w-50">
+            <span className="d-flex justify-content-center w-50">
                 <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
             </span>
         ),
@@ -583,7 +583,7 @@ class HomeDashboard extends Component {
                                     )}
                                 </div>
                                 <div className="col-sm-4 d-flex align-items-center justify-content-center">
-                                    <span className="reg-payment-paid-reg-text">{AppConstants.livescoreCompetitions}</span>
+                                    <span className="reg-payment-paid-reg-text">{AppConstants.matchDayComp}</span>
                                 </div>
                                 <div
                                     className="col-sm-2 d-flex align-items-center justify-content-end"

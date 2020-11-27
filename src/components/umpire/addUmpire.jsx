@@ -233,7 +233,7 @@ class AddUmpire extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
                                 optionFilterProp="children"
@@ -362,7 +362,7 @@ class AddUmpire extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 // value={affiliateId}
                                 optionFilterProp="children"
@@ -571,7 +571,6 @@ class AddUmpire extends Component {
                 } else {
                     let getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
                     let getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
-                    console.log(getUmpireObject, 'umpireListData', umpireListData, 'index', getUmpireObjectIndex)
                     if (getUmpireObject !== null) {
                         body = {
                             id: getUmpireObject.id,

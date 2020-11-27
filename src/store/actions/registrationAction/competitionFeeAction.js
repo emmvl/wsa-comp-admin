@@ -21,13 +21,14 @@ function regCompetitionListDeleteAction(competitionId) {
 }
 
 /////get the competition fees all the data in one API
-function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId) {
+function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId, yearRefId) {
     return {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId,
         hasRegistration,
         sourceModule,
-        affiliateOrgId
+        affiliateOrgId,
+        yearRefId
     };
 }
 
@@ -53,10 +54,11 @@ function saveCompetitionFeesMembershipTabAction(payload, competitionId, affiliat
 }
 
 ////get default competition membershipproduct tab details
-function getDefaultCompFeesMembershipProductTabAction(hasRegistration) {
+function getDefaultCompFeesMembershipProductTabAction(hasRegistration, yearRefId) {
     return {
         type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_LOAD,
-        hasRegistration
+        hasRegistration,
+        yearRefId
     };
 }
 

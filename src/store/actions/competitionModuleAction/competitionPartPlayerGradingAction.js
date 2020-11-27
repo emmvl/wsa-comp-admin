@@ -166,6 +166,15 @@ function commentListingAction(competitionId, entityId, commentType) {
     return action
 }
 
+function exportPlayerGrades(divisionId,competitionId){
+    const action = {
+        type: ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD,
+        divisionId,
+        competitionId,
+    }
+    return action
+}
+
 
 export {
     getCompPartPlayerGradingSummaryAction,
@@ -184,5 +193,6 @@ export {
     competitionImportDataCleanUpAction,
     changeDivisionPlayerAction,
     addOrRemovePlayerForChangeDivisionAction,
-    commentListingAction
+    commentListingAction,
+    exportPlayerGrades
 }

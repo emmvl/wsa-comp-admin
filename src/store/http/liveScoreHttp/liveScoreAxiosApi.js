@@ -1049,12 +1049,13 @@ const LiveScoreAxiosApi = {
     },
 
     // Get Teams with pagination
-    getTeamWithPaging(competitionID, offset, limit, search, sortBy, sortOrder) {
+ async getTeamWithPaging(competitionID, offset, limit, search, sortBy, sortOrder) {
+    const { organisationId } = await getOrganisationData();
         let url = null;
         if (search && search.length > 0) {
-            url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+            url = `/teams/list?competitionId=${competitionID}&organisationId=${organisationId}&offset=${offset}&limit=${limit}&search=${search}`;
         } else {
-            url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+            url = `/teams/list?competitionId=${competitionID}&organisationId=${organisationId}&offset=${offset}&limit=${limit}&search=${search}`;
         }
 
         if (sortBy && sortOrder) {
@@ -1081,8 +1082,15 @@ const LiveScoreAxiosApi = {
     },
 
     /// / Export Files
-    exportFiles(url) {
+    async  exportFiles(url,key) {
+        if(key){
+            const { organisationId } = await getOrganisationData();
+            url +=`&organisationId=${organisationId}`
+            return Method.dataGetDownload(url, localStorage.token);
+        }
+        else{
         return Method.dataGetDownload(url, localStorage.token);
+        }
     },
 
     /// / venue Change
@@ -1465,6 +1473,11 @@ const LiveScoreAxiosApi = {
 
         return Method.dataPost(url, token, pagingBody);
     },
+    /// / Export Files
+    umpirePaymentExport(url) {
+        return Method.dataGetDownload(url, localStorage.token);
+    },
+
 
 };
 

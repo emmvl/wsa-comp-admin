@@ -65,11 +65,18 @@
   .single-checkbox-width {
     width: 44%;
   }
+
+  .button-margin-top-ump-payment {
+    margin-top: 20px;
+  }
 }
 
 @media (max-width: 1024px) {
   .single-checkbox-width {
     min-width: 0;
+  }
+  .button-margin-top-ump-payment {
+    margin-top: 20px;
   }
 }
 

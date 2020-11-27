@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { getRefBadgeData } from '../../store/actions/appAction'
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
@@ -136,6 +137,15 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
+        title: 'Accreditation',
+        dataIndex: 'accreditationLevelUmpireRefId',
+        key: 'accreditationLevelUmpireRefId',
+        sorter: false,
+        render: (accreditationLevelUmpireRefId, record) => (
+            <span>{this_obj.checkAccreditationLevel(accreditationLevelUmpireRefId)}</span>
+        )
+    },
+    {
         title: "Organisation",
         dataIndex: "linkedEntity",
         key: "linkedEntity",
@@ -249,6 +259,7 @@ class Umpire extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
+        this.props.getRefBadgeData(this.props.appstate.accreditation)
     }
 
     componentDidUpdate(nextProps) {
@@ -314,6 +325,19 @@ class Umpire extends Component {
                 screen: "/umpire",
             });
         }
+    }
+
+    checkAccreditationLevel = (accreditation) => {
+        if (this.props.appstate.accreditation) {
+            let accreditationArr = this.props.appstate.accreditation
+            for (let i in accreditationArr) {
+                if (accreditationArr[i].id == accreditation) {
+                    return accreditationArr[i].description
+                }
+            }
+
+        }
+        return ""
     }
 
     handlePageChange = (page) => {
@@ -592,6 +616,7 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         umpireMainListAction,
         userExportFilesAction,
+        getRefBadgeData
     }, dispatch);
 }
 
@@ -599,6 +624,7 @@ function mapStateToProps(state) {
     return {
         umpireState: state.UmpireState,
         umpireCompetitionState: state.UmpireCompetitionState,
+        appstate: state.AppState
     };
 }
 

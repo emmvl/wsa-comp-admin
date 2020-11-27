@@ -14,6 +14,7 @@ import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } fro
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
 
@@ -145,11 +146,13 @@ class LiveScoreTeam extends Component {
             sortBy: null,
             sortOrder: null,
             sourceIdAvailable: false,
+            liveScoreCompIsParent: false
         };
         this_Obj = this
     }
 
     componentDidMount() {
+        this.setLivScoreCompIsParent()
         let { livescoreTeamActionObject } = this.props.liveScoreTeamState
         if (getLiveScoreCompetiton()) {
             const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
@@ -171,6 +174,12 @@ class LiveScoreTeam extends Component {
         } else {
             history.push("/liveScoreCompetitions")
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     /// Handle Page change
@@ -209,7 +218,7 @@ class LiveScoreTeam extends Component {
     // on Export
     onExport = () => {
         let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}`
-        this.props.exportFilesAction(url)
+        this.props.exportFilesAction(url, "team")
     }
 
     ///navigation to team grading summary if sourceId is not null
@@ -226,7 +235,7 @@ class LiveScoreTeam extends Component {
     }
 
     headerView = () => {
-        let { sourceIdAvailable } = this.state
+        let { sourceIdAvailable, liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -251,7 +260,7 @@ class LiveScoreTeam extends Component {
                                 </div>
                             )}
 
-                            {!sourceIdAvailable && (
+                            {liveScoreCompIsParent == true && !sourceIdAvailable && (
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/liveScoreAddTeam">
@@ -280,7 +289,7 @@ class LiveScoreTeam extends Component {
                                 </div>
                             </div>
 
-                            {!sourceIdAvailable && (
+                            {liveScoreCompIsParent == true && !sourceIdAvailable && (
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/liveScoreTeamImport">
@@ -363,7 +372,7 @@ class LiveScoreTeam extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

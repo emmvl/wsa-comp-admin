@@ -198,7 +198,7 @@ class LiveScorerView extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

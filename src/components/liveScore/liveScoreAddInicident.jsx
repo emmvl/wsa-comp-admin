@@ -627,14 +627,14 @@ class LiveScoreAddIncident extends Component {
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                )}
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                    )}
 
                 {umpireKey ? (
                     <InnerHorizontalMenu menu="umpire" umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="17" />
-                )}
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="17" />
+                    )}
 
                 <Loader visible={this.props.liveScoreIncidentState.loading} />
 

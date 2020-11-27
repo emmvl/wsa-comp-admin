@@ -418,7 +418,8 @@ class UmpireRoaster extends Component {
         }
 
         if (this.state.selectedComp) {
-            let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
+            // let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
+            let roleIds = Array.isArray(umpireRole) ? JSON.stringify(umpireRole) : JSON.stringify([umpireRole])
             this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
         }
         this.setState({ umpireRole })

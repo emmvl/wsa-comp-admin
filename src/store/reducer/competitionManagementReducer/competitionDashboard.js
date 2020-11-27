@@ -152,7 +152,6 @@ function setMembershipProducts(state,payload){
             membershipProductTemp.oldProducts.membershipProductTypes = oldMembershipProuductTypes;
 
             replicateSaveTemp.membershipProducts[payload.oldProductIndex] = membershipProductTemp;
-            console.log("replicate",replicateSaveTemp);
         }
     }catch(ex){
         console.log("Error in setMembershipProducts::"+ex);

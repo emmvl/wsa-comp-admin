@@ -94,9 +94,9 @@ const columns = [
         title: "Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
-        render: (expiryDate, record, index) => (
+        render: (expiryDate) => (
             <span>
-                {expiryDate != null ? (expiryDate != 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
+                {expiryDate != null ? (expiryDate !== 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
             </span>
         )
     },
@@ -114,30 +114,35 @@ const columns = [
         title: "Division",
         dataIndex: "divisionName",
         key: "divisionName",
-        render: (divisionName, record, index) => {
-            return <div>{divisionName != null ? divisionName : ""}</div>;
-        },
+        render: (divisionName) => (
+            <div>{divisionName != null ? divisionName : ""}</div>
+        ),
     },
     {
         title: "Paid By",
         dataIndex: "paidByUsers",
         key: "paidByUsers",
-        render: (paidByUsers, record, index) => {
+        render: (paidByUsers, record) => {
             return (
                 <div>
-                    {(record.paidByUsers || []).map((item, index) => (
-                        this_Obj.state.userId == item.paidByUserId ? 'Self' :
-                            <NavLink
-                                to={{
-                                    pathname: `/userPersonal`,
-                                    state: {
-                                        userId: item.paidByUserId,
-                                        tabKey: "registration"
-                                    },
-                                }}
-                            >
-                                <span className="input-heading-add-another pt-0">{item.paidBy}</span>
-                            </NavLink>
+                    {(record.paidByUsers || []).map((item) => (
+                        this_Obj.state.userId == item.paidByUserId ? (
+                            <div>Self</div>
+                        ) : (
+                            <div>
+                                <NavLink
+                                    to={{
+                                        pathname: `/userPersonal`,
+                                        state: {
+                                            userId: item.paidByUserId,
+                                            tabKey: "registration"
+                                        },
+                                    }}
+                                >
+                                    <span className="input-heading-add-another pt-0">{item.paidBy}</span>
+                                </NavLink>
+                            </div>
+                        )
                     ))}
                 </div>
             )
@@ -152,11 +157,9 @@ const columns = [
         title: "Status",
         dataIndex: "paymentStatus",
         key: "paymentStatus",
-        render: (paymentStatus, record, index) => {
-            return (
-                <span style={{ textTransform: "capitalize" }}>{paymentStatus}</span>
-            );
-        },
+        render: (paymentStatus) => (
+            <span style={{ textTransform: "capitalize" }}>{paymentStatus}</span>
+        ),
     },
     {
         title: "Action",
@@ -1637,7 +1640,7 @@ class UserModulePersonalDetail extends Component {
                             </span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">
-                            {liveScore_formateDate(personal.dateOfBirth) == "Invalid date"
+                            {liveScore_formateDate(personal.dateOfBirth) === "Invalid date"
                                 ? ""
                                 : liveScore_formateDate(personal.dateOfBirth)}
                         </span>
@@ -1671,8 +1674,8 @@ class UserModulePersonalDetail extends Component {
                         </div>
                         <Select
                             name="yearRefId"
-                            className="user-prof-filter-select"
-                            style={{ width: '100%', paddingRight: 1, paddingTop: "15px" }}
+                            className="user-prof-filter-select w-100"
+                            style={{ paddingRight: 1, paddingTop: 15 }}
                             onChange={(yearRefId) => this.onChangeYear(yearRefId)}
                             value={this.state.yearRefId}
                         >
@@ -1684,8 +1687,8 @@ class UserModulePersonalDetail extends Component {
                             ))}
                         </Select>
                         <Select
-                            className="user-prof-filter-select"
-                            style={{ width: '100%', paddingRight: 1, paddingTop: "15px" }}
+                            className="user-prof-filter-select w-100"
+                            style={{ paddingRight: 1, paddingTop: 15 }}
                             onChange={(e) => this.onChangeSetValue(e)}
                             value={compititionId}
                         >
@@ -1710,7 +1713,7 @@ class UserModulePersonalDetail extends Component {
                             </span>
                         </div>
                         {((this.state.teams != null && this.state.teams) || []).map(
-                            (item, index) => (
+                            (item) => (
                                 <div
                                     key={item.teamId}
                                     className="desc-text-style side-bar-profile-data"
@@ -1735,7 +1738,7 @@ class UserModulePersonalDetail extends Component {
                             </span>
                         </div>
                         {((this.state.divisions != null && this.state.divisions) || []).map(
-                            (item, index) => (
+                            (item) => (
                                 <div
                                     key={item.divisionId}
                                     className="desc-text-style side-bar-profile-data"
@@ -1745,6 +1748,32 @@ class UserModulePersonalDetail extends Component {
                             )
                         )}
                         {/* <span className="desc-text-style side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
+                    </div>
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.whistleIcon} alt="" height="16" width="16" />
+                            </div>
+                            <span className="year-select-heading ml-3">
+                                {AppConstants.umpireAccreditation}
+                            </span>
+                            <div className='col-sm d-flex justify-content-end'>
+                                <span className="year-select-heading  ml-3">
+                                    {AppConstants.expiry}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='live-score-title-icon-view ml-5'>
+                            <span className="desc-text-style  side-bar-profile-data">
+                                {personal.accrediationLevel}
+                            </span>
+
+                            <div className='col-sm d-flex justify-content-end'>
+                                <span className="desc-text-style  side-bar-profile-data">
+                                    {personal.accreditationUmpireExpiryDate && moment(personal.accreditationUmpireExpiryDate).format("DD-MM-YYYY")}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2607,7 +2636,6 @@ class UserModulePersonalDetail extends Component {
 
     purchaseActivityView = () => {
         let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
-        // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
         return (
             <div className="comp-dash-table-view mt-2 default-bg">
                 <div className="table-responsive home-dash-table-view">
@@ -2619,7 +2647,7 @@ class UserModulePersonalDetail extends Component {
                         loading={onLoad}
                     />
                 </div>
-                <div className="d-flex justify-content-end ">
+                <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination pb-3"
                         current={purchasesCurrentPage}

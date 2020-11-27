@@ -377,7 +377,7 @@ class LiveScoreVenueChange extends Component {
         return (
             <div className="fluid-width">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

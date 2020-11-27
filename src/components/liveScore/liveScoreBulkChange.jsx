@@ -1154,7 +1154,7 @@ class LiveScoreBulkChange extends Component {
             <div className="fluid-width">
                 <Loader visible={this.props.liveScoreBulkMatchState.onLoad} />
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

@@ -808,7 +808,7 @@ class LiveScoreAddNews extends Component {
             <div className="fluid-width default-bg">
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

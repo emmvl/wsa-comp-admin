@@ -144,10 +144,11 @@ function getEnhancedRoundRobinAction() {
   };
 }
 
-function exportFilesAction(URL) {
+function exportFilesAction(URL,key) {
   return {
     type: ApiConstants.API_EXPORT_FILES_LOAD,
-    URL
+    URL,
+    key
   };
 }
 
@@ -166,10 +167,10 @@ function userExportFilesAction(URL) {
   };
 }
 
-function getRefBadgeData() {
+function getRefBadgeData(data) {
   return {
     type: ApiConstants.API_GET_REF_BADGE_LOAD,
-    URL
+    data
   };
 }
 

@@ -57,7 +57,7 @@ class UserOurOrganization extends Component {
             loggedInuserOrgTypeRefId: 0,
             loading: false,
             photoLoading: false,
-            photoDeleteLoading:false,
+            photoDeleteLoading: false,
             buttonPressed: "",
             getDataLoading: false,
             deleteModalVisible: false,
@@ -121,10 +121,12 @@ class UserOurOrganization extends Component {
             }
         }
 
-        if(nextProps.userState!= userState){
+        if (nextProps.userState != userState) {
             if (userState.onSaveOrgPhotoLoad == false && this.state.photoLoading == true) {
-                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
-                    photoLoading: false });
+                this.setState({
+                    isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
+                    photoLoading: false
+                });
 
                 this.props.getOrganisationPhotoAction(obj);
             }
@@ -374,15 +376,15 @@ class UserOurOrganization extends Component {
     }
 
     addPhoto = () => {
-        try{
+        try {
             let obj = {
                 id: 0,
                 photoTypeRefId: null,
                 photoUrl: null
             }
             this.setState({ isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null });
-        }catch(ex){
-            console.log("Error in addPhoto::"+ex);
+        } catch (ex) {
+            console.log("Error in addPhoto::" + ex);
         }
     }
 
@@ -477,11 +479,6 @@ class UserOurOrganization extends Component {
                     formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
                     formData.append("logoIsDefault", affiliate.logoIsDefault ? 1 : 0);
                     formData.append("contacts", contacts);
-                    // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-                    // formData.append("termsAndConditions", termsAndConditionsValue);
-                    // formData.append("organisationLogo", this.state.termsAndCondititionFile);
-                    // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
-                    console.log("formData", formData);
                     this.setState({ loading: true });
                     this.props.saveAffiliateAction(formData);
                 }
@@ -513,7 +510,7 @@ class UserOurOrganization extends Component {
         formData.append("organisationId", getOrganisationData().organisationUniqueKey);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
         formData.append("termsAndConditions", termsAndConditionsValue ? termsAndConditionsValue : "");
-        formData.append("termsAndCondition", this.state.termsAndCondititionFile? this.state.termsAndCondititionFile : "");
+        formData.append("termsAndCondition", this.state.termsAndCondititionFile ? this.state.termsAndCondititionFile : "");
 
         this.setState({ loading: true });
         this.props.updateTermsAndConditionAction(formData);
@@ -545,10 +542,10 @@ class UserOurOrganization extends Component {
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
                     </Breadcrumb>
                 ) : (
-                    <NavLink to="/affiliatedirectory">
-                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
-                    </NavLink>
-                )}
+                        <NavLink to="/affiliatedirectory">
+                            <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                        </NavLink>
+                    )}
             </Header>
         </div>
     );
@@ -606,9 +603,9 @@ class UserOurOrganization extends Component {
             : null;
 
         let defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
-        } ${affiliate.suburb ? `${affiliate.suburb},` : ''
-        } ${state ? `${state},` : ''
-        } Australia`;
+            } ${affiliate.suburb ? `${affiliate.suburb},` : ''
+            } ${state ? `${state},` : ''
+            } Australia`;
 
         return (
             <div className="content-view pt-4">
@@ -1305,12 +1302,12 @@ class UserOurOrganization extends Component {
                                                     {this.photosListView()}
                                                 </div>
                                             ) : (
-                                                <div>
-                                                    {this.photosEditHeaderView()}
-                                                    {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
-                                                    {this.photosAddEditView()}
-                                                </div>
-                                            )}
+                                                    <div>
+                                                        {this.photosEditHeaderView()}
+                                                        {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
+                                                        {this.photosAddEditView()}
+                                                    </div>
+                                                )}
                                         </div>
                                         {this.state.isEditView && (
                                             <div>{this.photosEditViewFooterView()}</div>
@@ -1324,12 +1321,12 @@ class UserOurOrganization extends Component {
                                     </TabPane>
                                     {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
                                         (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
-                                        <TabPane tab={AppConstants.charity} key="4">
-                                            <div className="tab-formView mt-5">
-                                                {this.charityVoucherView()}
-                                            </div>
-                                        </TabPane>
-                                    )}
+                                            <TabPane tab={AppConstants.charity} key="4">
+                                                <div className="tab-formView mt-5">
+                                                    {this.charityVoucherView()}
+                                                </div>
+                                            </TabPane>
+                                        )}
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />

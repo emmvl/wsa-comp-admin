@@ -27,6 +27,7 @@ import './umpire.css';
 import Loader from '../../customComponents/loader';
 import AppImages from "themes/appImages";
 import moment from "moment";
+import { exportFilesAction } from "store/actions/umpireAction/umpirePaymentAction";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
@@ -246,69 +247,90 @@ class UmpirePayments extends Component {
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
 
-                if (getUmpireCompetiton()) {
-                    if (this.state.liveScoreUmpire === "liveScoreUmpire") {
-                        firstComp = JSON.parse(getLiveScoreUmpireCompition());
-                        compData = JSON.parse(getLiveScoreUmpireCompitionData());
-                        setUmpireCompition(firstComp);
-                        setUmpireCompitionData(JSON.stringify(compData));
-                    } else {
-                        firstComp = JSON.parse(getUmpireCompetiton());
-                        compData = JSON.parse(getUmpireCompetitonData());
-                    }
-                } else {
-                    setUmpireCompition(firstComp);
-                    setUmpireCompitionData(JSON.stringify(compData));
+                // if (getUmpireCompetiton()) {
+                //     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
+                //         firstComp = JSON.parse(getLiveScoreUmpireCompition());
+                //         compData = JSON.parse(getLiveScoreUmpireCompitionData());
+                //         setUmpireCompition(firstComp);
+                //         setUmpireCompitionData(JSON.stringify(compData));
+                //     } else {
+                //         firstComp = JSON.parse(getUmpireCompetiton());
+                //         compData = JSON.parse(getUmpireCompetitonData());
+                //     }
+                // } else {
+                //     setUmpireCompition(firstComp);
+                //     setUmpireCompitionData(JSON.stringify(compData));
+                // }
+
+                // if (firstComp !== false) {
+                //     if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+                //         let compId = JSON.parse(getLiveScoreUmpireCompition());
+
+                //         const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData());
+                //         let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
+
+                //         let { sortBy, sortOrder, searchText } = this.state
+                //         const body = {
+                //             paging: {
+                //                 offset: 0,
+                //                 limit: 10,
+                //             },
+                //         }
+
+                //         this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+                //         this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
+
+                //         this.setState({
+                //             selectedComp: compId,
+                //             loading: false,
+                //             competitionUniqueKey: uniqueKey,
+                //             compArray: compList,
+                //         });
+                //     } else {
+                //         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+
+                //         let { sortBy, sortOrder, searchText } = this.state
+                //         const body = {
+                //             paging: {
+                //                 offset: 0,
+                //                 limit: 10,
+                //             },
+                //         }
+
+                //         this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+                //         this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
+
+                //         this.setState({
+                //             selectedComp: firstComp,
+                //             loading: false,
+                //             competitionUniqueKey: compKey,
+                //             compArray: compList,
+                //             venueLoad: true,
+                //         });
+                //     }
+
+                // }
+
+                let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+
+                let { sortBy, sortOrder, searchText } = this.state
+                const body = {
+                    paging: {
+                        offset: 0,
+                        limit: 10,
+                    },
                 }
 
-                if (firstComp !== false) {
-                    if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
-                        let compId = JSON.parse(getLiveScoreUmpireCompition());
+                this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+                this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
 
-                        const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData());
-                        let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
-
-                        let { sortBy, sortOrder, searchText } = this.state
-                        const body = {
-                            paging: {
-                                offset: 0,
-                                limit: 10,
-                            },
-                        }
-
-                        this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
-                        this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
-
-                        this.setState({
-                            selectedComp: compId,
-                            loading: false,
-                            competitionUniqueKey: uniqueKey,
-                            compArray: compList,
-                        });
-                    } else {
-                        let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-
-                        let { sortBy, sortOrder, searchText } = this.state
-                        const body = {
-                            paging: {
-                                offset: 0,
-                                limit: 10,
-                            },
-                        }
-
-                        this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
-                        this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
-
-                        this.setState({
-                            selectedComp: firstComp,
-                            loading: false,
-                            competitionUniqueKey: compKey,
-                            compArray: compList,
-                            venueLoad: true,
-                        });
-                    }
-
-                }
+                this.setState({
+                    selectedComp: firstComp,
+                    loading: false,
+                    competitionUniqueKey: compKey,
+                    compArray: compList,
+                    venueLoad: true,
+                });
             }
         }
 
@@ -506,7 +528,12 @@ class UmpirePayments extends Component {
         </div>
     );
 
-    dropdownView = () => {
+    onExport = () => {
+        let url = AppConstants.umpirePaymentExport + `competitionId=${this.state.selectedComp}`;
+        this.props.exportFilesAction(url);
+    };
+
+    dropdownView_1 = () => {
         const { paymentStatus } = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
@@ -535,7 +562,7 @@ class UmpirePayments extends Component {
                                 <Button
                                     type="primary"
                                     className="primary-add-comp-form"
-                                    // onClick={this.onExport}
+                                    onClick={this.onExport}
                                 >
                                     <div className="row">
                                         <div className="col-sm">
@@ -565,6 +592,95 @@ class UmpirePayments extends Component {
                                 </Checkbox>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        const { paymentStatus } = this.props.umpirePaymentState
+        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        return (
+            <div className="comp-player-grades-header-drop-down-view comp">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div style={{
+                                width: '100%',
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                            }}>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
+                                <Select
+                                    className="year-select reg-filter-select1 ml-3"
+                                    style={{ minWidth: 200, maxWidth: 250 }}
+                                    onChange={(comp) => this.onChangeComp({ comp })}
+                                    value={this.state.selectedComp}
+                                >
+                                    {competition.map((item) => (
+                                        <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="col-sm mr-5" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <Button
+                                type="primary"
+                                className="primary-add-comp-form button-margin-top-ump-payment mr-5"
+                                onClick={this.onExport}
+                            >
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <img
+                                            className="export-image"
+                                            src={AppImages.export}
+                                            alt=""
+                                        />
+                                        {AppConstants.export}
+                                    </div>
+                                </div>
+                            </Button>
+
+                            <div
+                                className="comp-dashboard-botton-view-mobile pb-3"
+                            >
+                                <Checkbox
+                                    className="single-checkbox"
+                                    checked={paymentStatus}
+                                    onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
+                                >
+                                    All
+                                </Checkbox>
+                            </div>
+                        </div>
+
+                        {/* <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "fit-content",
+                                    // marginRight: 30
+                                    // display: 'contents',
+                                    // display: "flex",
+                                    // flexDirection: "column",
+                                    // alignItems: "flex-end",
+                                    // justifyContent: "flex-end",
+                                    // alignContent: "center",
+                                    // paddingRight: "35px"
+                                }}
+                            >
+                                <Checkbox
+                                    className="single-checkbox"
+                                    checked={paymentStatus}
+                                    onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
+                                >
+                                    All
+                                </Checkbox>
+                            </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -655,6 +771,7 @@ function mapDispatchToProps(dispatch) {
         getUmpirePaymentData,
         updateUmpirePaymentData,
         umpirePaymentTransferData,
+        exportFilesAction
     }, dispatch);
 }
 

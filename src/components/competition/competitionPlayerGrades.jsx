@@ -16,7 +16,7 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction,
+    changeDivisionPlayerAction, commentListingAction, exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwnCompetitionYear,
@@ -101,8 +101,8 @@ class CompetitionPlayerGrades extends Component {
             if (allDivisionsData.length > 0) {
                 const divisionId = allDivisionsData[0].competitionMembershipProductDivisionId;
                 // let divisionId = 15
-                this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId);
-                this.setState({ divisionId, getDataLoading: true });
+                this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId)
+                this.setState({ competitionDivisionId: divisionId, getDataLoading: true, divisionId })
             }
         }
 
@@ -147,10 +147,14 @@ class CompetitionPlayerGrades extends Component {
         }
     }
 
+    exportPlayerData = () => {
+        this.props.exportPlayerGrades(this.state.competitionDivisionId, this.state.firstTimeCompId)
+    }
+
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
             <div className="row">
-                <div className="col-sm d-flex justify-content-center">
+                <div className="col-sm d-flex justify-content-start">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -222,6 +226,26 @@ class CompetitionPlayerGrades extends Component {
                                             </div>
                                         </Button>
                                     </NavLink>
+                                </div>
+                            </div>
+                        )}
+
+                        {this.state.divisionId != null && (
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <Button onClick={() => this.exportPlayerData()} disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.import}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.export}
+                                            </div>
+                                        </div>
+                                    </Button>
+
                                 </div>
                             </div>
                         )}
@@ -554,7 +578,7 @@ class CompetitionPlayerGrades extends Component {
         }
     };
 
-    /// ///for the assigned teams on the left side of the view port
+    //////for the assigned teams on the left side of the view port
     assignedView = () => {
         const assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
         const commentList = this.props.partPlayerGradingState.playerCommentList;
@@ -841,7 +865,7 @@ class CompetitionPlayerGrades extends Component {
                                                     onChange={(e) => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")}
                                                 />
                                                 <div className="col-sm d-flex align-items-center">
-                                                    {disableStatus == false ?
+                                                    {disableStatus == false ? (
                                                         <NavLink
                                                             to={{
                                                                 pathname: `/userPersonal`,
@@ -852,11 +876,11 @@ class CompetitionPlayerGrades extends Component {
                                                                 {playerItem.playerName}
                                                             </span>
                                                         </NavLink>
-                                                        :
+                                                    ) : (
                                                         <span className="player-grading-player-name-text pointer">
                                                             {playerItem.playerName}
                                                         </span>
-                                                    }
+                                                    )}
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-end flex-wrap">
                                                     {/* <div className="col-sm">
@@ -1045,6 +1069,7 @@ function mapDispatchToProps(dispatch) {
         addOrRemovePlayerForChangeDivisionAction,
         changeDivisionPlayerAction,
         commentListingAction,
+        exportPlayerGrades,
     }, dispatch);
 }
 

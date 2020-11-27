@@ -48,14 +48,17 @@ class LiveScoreTeamImport extends Component {
             csvData: null,
             offset: 0,
             competitionId: null,
+            sourceIdAvailable: false,
         };
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton());
-            this.setState({ competitionId: id });
-
+            const { id, sourceId } = JSON.parse(getLiveScoreCompetiton());
+            this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false });
+            if (sourceId) {
+                history.push("/liveScoreTeam")
+            }
             this.props.liveScoreTeamResetImportResultAction();
         } else {
             history.push("/liveScoreCompetitions")
@@ -153,7 +156,7 @@ class LiveScoreTeamImport extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

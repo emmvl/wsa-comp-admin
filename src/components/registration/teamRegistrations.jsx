@@ -386,7 +386,8 @@ class TeamRegistrations extends Component {
         let paymentStatus = [
             { id: 1, description: "Pending Membership" },
             { id: 2, description: "Pending Registration Fee" },
-            { id: 3, description: "Registered" },
+            { id: 3, description: "Pending Competition Fee" },
+            { id: 4, description: "Registered" },
         ];
 
         if (affiliateToData.affiliatedTo !== undefined) {

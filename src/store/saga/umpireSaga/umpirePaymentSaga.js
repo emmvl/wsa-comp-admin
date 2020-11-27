@@ -78,8 +78,27 @@ function* umpirePaymentTransferSaga(action) {
     }
 }
 
+function* umpirePaymenExportSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.umpirePaymentExport, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 
 export default function* rootUmpirePaymentSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_PAYMENT_DATA_LOAD, umpirePaymentListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_LOAD, umpirePaymentTransferSaga);
+    yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_LOAD, umpirePaymenExportSaga);
 }

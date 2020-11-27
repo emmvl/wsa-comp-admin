@@ -424,7 +424,6 @@ function* getCompetitionFormatTypesSaga(action) {
 
 function* getOnlyYearAndCompetitionListSaga(action) {
   try {
-    //console.log(")))))))))))))))" , action.yearData)
     const result = isArrayNotEmpty(action.yearData) ? {
       status: 1,
       result: { data: action.yearData, key: "old" }
@@ -563,7 +562,7 @@ function* getEnhancedRoundRobinTypesSaga(action) {
 
 function* exportFilesSaga(action) {
   try {
-    const result = yield call(LiveScoreApi.exportFiles, action.URL);
+    const result = yield call(LiveScoreApi.exportFiles, action.URL,action.key);
 
     if (result.status === 1) {
       yield put({
@@ -615,7 +614,10 @@ function* userExportFilesSaga(action) {
 
 function* getRefBadgeSaga(action) {
   try {
-    const result = yield call(AxiosApi.getRegBadgeData, action.URL);
+    const result = isArrayNotEmpty(action.data) ? {
+      status: 1,
+      result: { data: action.data }
+    } : yield call(AxiosApi.getRegBadgeData);
 
     if (result.status === 1) {
       yield put({

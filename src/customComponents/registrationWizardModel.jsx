@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Select } from 'antd';
 import AppImages from "../themes/appImages";
 import AppConstants from '../themes/appConstants';
+import { getImpersonation } from "../util/sessionStorage";
 import "./wizard.css";
 
 const { Option } = Select;
@@ -18,6 +19,8 @@ class RegistrationWizardModel extends React.Component {
 
     render() {
         const { competitionStatus, registrationStatus, competitionClick, registrationClick, publishStatus, stripeConnectURL, stripeConnected, competitionId, competitionChange, wizardCompetition, heading, placeholder, name, handleBlur, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
+        let isImpersonation = getImpersonation()
+        let showStripe = (isImpersonation !== "true" && !stripeConnected) ? true : false
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -52,7 +55,7 @@ class RegistrationWizardModel extends React.Component {
                         </div>
                     </div>
 
-                    <div className="wizard_div" style={{ minHeight: stripeConnected ? 100 : 140, marginTop: 20 }}>
+                    <div className="wizard_div" style={{ minHeight: !showStripe ? 100 : 140, marginTop: 20 }}>
                         <div className="row">
                             <div className="col-sm pl-0 pb-2">
                                 <div className="col-sm-6 d-flex justify-content-start">
@@ -71,9 +74,9 @@ class RegistrationWizardModel extends React.Component {
                         {!stripeConnected && (
                             <div className="row w-100">
                                 <div className="col-sm-1 serialView pb-2">
-                                        <span className="comment-heading">
-                                            {"1"}{" "}
-                                        </span>
+                                    <span className="comment-heading">
+                                        {"1"}{" "}
+                                    </span>
                                 </div>
                                 <div className="col-sm setupView pb-2">
                                     <span className="comment-heading">
@@ -91,7 +94,7 @@ class RegistrationWizardModel extends React.Component {
                         <div className="row w-100">
                             <div className="col-sm-1 serialView pb-2">
                                 <span className="comment-heading">
-                                    {!stripeConnected ? "2" : "1"}{" "}
+                                    {showStripe ? "2" : "1"}{" "}
                                 </span>
                             </div>
                             <div className="col-sm-10 setupView pb-2 ">
@@ -116,7 +119,7 @@ class RegistrationWizardModel extends React.Component {
                         <div className="row w-100">
                             <div className="col-sm-1 serialView pb-2">
                                 <span className="comment-heading">
-                                    {!stripeConnected ? "3" : "2"} {" "}
+                                    {showStripe ? "3" : "2"} {" "}
                                 </span>
                             </div>
                             <div className="col-sm-10 setupView pb-2 ">

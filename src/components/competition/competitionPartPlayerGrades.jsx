@@ -16,7 +16,7 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction,
+    changeDivisionPlayerAction, commentListingAction, exportPlayerGrades,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -140,7 +140,11 @@ class CompetitionPartPlayerGrades extends Component {
         }
     }
 
-    /// ////view for breadcrumb
+    exportPlayerData = () => {
+        this.props.exportPlayerGrades(this.state.divisionId, this.state.firstTimeCompId)
+    }
+
+    ///////view for breadcrumb
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
             <div className="row">
@@ -218,13 +222,31 @@ class CompetitionPartPlayerGrades extends Component {
                                 </div>
                             </div>
                         )}
+
+                        {this.state.divisionId != null && (
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <Button onClick={() => this.exportPlayerData()} disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.import}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.export}
+                                            </div>
+                                        </div>
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
     )
 
-    /// ///year change onchange
     onYearChange = (yearId) => {
         setParticipatingYear(yearId);
         setParticipating_competition(undefined);
@@ -247,7 +269,7 @@ class CompetitionPartPlayerGrades extends Component {
         this.props.getDivisionsListAction(this.state.yearRefId, competitionId);
     }
 
-    /// //on division change
+    //on division change
     onDivisionChange = (divisionId) => {
         this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId);
         this.setState({ divisionId });
@@ -559,7 +581,7 @@ class CompetitionPartPlayerGrades extends Component {
                                             disabled={disableStatus}
                                             className="single-checkbox mt-1 check-box-player"
                                             checked={teamItem.isChecked}
-                                            onChange={(e) => this.onChangeParentDivCheckbox(e.target.checked, teamIndex, "assigned")}
+                                            onChange={e => this.onChangeParentDivCheckbox(e.target.checked, teamIndex, "assigned")}
                                         />
                                         <div className="col-sm d-flex align-items-center">
                                             <span className="player-grading-haeding-team-name-text">{teamItem.teamName}</span>
@@ -577,7 +599,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                 onClick={() => disableStatus == false && this.onClickDeleteTeam(teamItem, teamIndex)}
                                             />
                                             <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
-                                                <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
+                                                <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" />
                                             </a>
                                         </div>
                                     </div>
@@ -602,8 +624,8 @@ class CompetitionPartPlayerGrades extends Component {
                                                             disabled={disableStatus}
                                                             checked={playerItem.isChecked}
                                                             className="single-checkbox mt-1 check-box-player"
-                                                            onChange={(e) => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}
-                                                        />
+                                                            onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}>
+                                                        </Checkbox>
                                                         <div className="col-sm d-flex align-items-center">
                                                             {disableStatus == false ? (
                                                                 <NavLink
@@ -622,7 +644,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div className="col-sm d-flex justify-content-end column-width-style">
+                                                        <div className="col-sm d-flex justify-content-end flex-wrap">
                                                             {/* <div className="col-sm">
                                                                 {playerItem.playerHistory.map((item, index) => (
                                                                     <Tag className="comp-player-table-tag" key={item.teamId}>
@@ -1013,6 +1035,7 @@ function mapDispatchToProps(dispatch) {
         addOrRemovePlayerForChangeDivisionAction,
         changeDivisionPlayerAction,
         commentListingAction,
+        exportPlayerGrades,
     }, dispatch);
 }
 

@@ -36,6 +36,7 @@ class ShopSingleProductComponent extends React.Component {
 
     render() {
         const { productItem, editOnclick, deleteOnclick, viewOnclick } = this.props
+        let imagesArr = isArrayNotEmpty(productItem.images) ? productItem.images : [{ id: 0, url: AppImages.squareImage }]
         return (
             <div className="shop-single-prd-main-view mt-3">
                 <div className="product-menu-option-view">
@@ -84,7 +85,7 @@ class ShopSingleProductComponent extends React.Component {
                             infiniteLoop
                             showArrows
                         >
-                            {isArrayNotEmpty(productItem.images) && productItem.images.map(
+                            {isArrayNotEmpty(imagesArr) && imagesArr.map(
                                 (item, index) => {
                                     return (
                                         <div className="carousel-div" key={item + index}>
@@ -96,14 +97,6 @@ class ShopSingleProductComponent extends React.Component {
 
                         </Carousel>
                     </div>
-                    {/* <img
-                        src={isArrayNotEmpty(productItem.images) ? productItem.images[0].url : AppImages.squareImage}
-                        name="image"
-                        className="product-img"
-                        onError={ev => {
-                            ev.target.src = AppImages.squareImage;
-                        }}
-                    /> */}
                 </div>
                 <div className="product-text-view">
                     <span className="product-name">{productItem.productName}</span>

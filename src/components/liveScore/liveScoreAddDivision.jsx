@@ -48,6 +48,14 @@ class LiveScoreAddDivision extends Component {
         } else {
             this.props.liveScoreUpdateDivisionAction("", 'isAddDivision')
             this.setInitalValue()
+            if (getLiveScoreCompetiton()) {
+                const { sourceId } = JSON.parse(getLiveScoreCompetiton());
+                if (sourceId) {
+                    history.push("/liveScoreDivisionList")
+                }
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         }
     }
 
@@ -251,7 +259,7 @@ class LiveScoreAddDivision extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.addDivision}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

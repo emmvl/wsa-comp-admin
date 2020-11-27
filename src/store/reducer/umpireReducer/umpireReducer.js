@@ -36,7 +36,8 @@ const initialState = {
     currentPage_Data: null,
     totalCount_Data: null,
     umpireListActionObject: null,
-    umpireListData: []
+    umpireListData: [],
+    umpireCheckbox:false
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -48,9 +49,7 @@ function isUmpireCoachCheck(data, key) {
             }
         }
     }
-    else {
-        return false
-    }
+    return false
 }
 
 

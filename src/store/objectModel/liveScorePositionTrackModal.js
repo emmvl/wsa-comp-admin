@@ -10,7 +10,6 @@ function getPositionTrackListData(data, reporting) {
 
 //// For All Games Column
 function getPositionTrackListObject(data, reporting) {
-    console.log(reporting, "reportingreporting")
     return {
         teamName: data.team.name,
         teamId: data.team.id,

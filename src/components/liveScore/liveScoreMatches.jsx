@@ -324,7 +324,7 @@ class LiveScoreMatchesList extends Component {
         }
         setOwnCompetitionYear(yearRefId);
         setOwn_competition(compKey);
-        history.push('/competitionDraws');
+        history.push({ pathname: '/competitionDraws', state: { screenKey: "/liveScoreMatches" } });
     }
 
     scoreView(score, records, index) {
@@ -388,7 +388,7 @@ class LiveScoreMatchesList extends Component {
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     {/* <NavLink to={{
-                                        pathname: '/liveScoreAddMatch',
+                                        pathname: '/matchDayAddMatch',
                                     }}> */}
                                     <Button
                                         type="primary"
@@ -404,7 +404,7 @@ class LiveScoreMatchesList extends Component {
 
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to={{ pathname: '/liveScoreAddMatch' }}>
+                                    <NavLink to={{ pathname: '/matchDayAddMatch' }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addMatches}
                                         </Button>
@@ -673,7 +673,7 @@ class LiveScoreMatchesList extends Component {
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
                     <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
+                        menuHeading={AppConstants.matchDay}
                         menuName={AppConstants.liveScores}
                         onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                     />

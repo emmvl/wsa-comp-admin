@@ -22,6 +22,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
+import { getRefBadgeData } from '../../store/actions/appAction';
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions';
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
 import {
@@ -50,6 +51,7 @@ import { isArrayNotEmpty, captializedString } from '../../util/helpers';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction';
 import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction';
 import { entityTypes } from '../../util/entityTypes';
+import { refRoleTypes } from '../../util/refRoles';
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction";
 
 const { Footer, Content, Header } = Layout;
@@ -101,6 +103,7 @@ class LiveScoreAddMatch extends Component {
     };
 
     componentDidMount() {
+        this.props.getRefBadgeData(this.props.appstate.accreditation)
         if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey === 'umpire') {
                 const { id, scoringType, sourceId } = JSON.parse(getUmpireCompetitonData());
@@ -316,17 +319,17 @@ class LiveScoreAddMatch extends Component {
                 this.setState({ forfeitVisible: false });
                 const team1resultId = matchResult[4].id;
                 const team2resultId = matchResult[3].id;
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
             } else if (forfietedTeam === 'team2') {
                 this.setState({ forfeitVisible: false });
                 const team1resultId = matchResult[3].id;
                 const team2resultId = matchResult[4].id;
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
             } else if (forfietedTeam === 'both') {
                 this.setState({ forfeitVisible: false });
                 const team1resultId = matchResult[5].id;
                 const team2resultId = matchResult[5].id;
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
             }
         } else {
             message.config({
@@ -399,12 +402,12 @@ class LiveScoreAddMatch extends Component {
                 this.setState({ abandonVisible: false });
                 const team1resultId = matchResult[7].id;
                 const team2resultId = matchResult[7].id;
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
             } else if (abandoneReason === 'notPlayed') {
                 this.setState({ abandonVisible: false });
                 const team1resultId = matchResult[8].id;
                 const team2resultId = matchResult[8].id;
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
             }
         } else {
             message.config({
@@ -576,7 +579,7 @@ class LiveScoreAddMatch extends Component {
         const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
-        // console.log(umpire1NameMainId, 'umpire1NameMainId', umpire2NameMainId)
+
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -706,7 +709,7 @@ class LiveScoreAddMatch extends Component {
                                     className="reg-form-multiple-select w-100"
                                     placeholder="Select Away Team"
                                     onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
-                                    // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
+                                // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
                                 >
                                     {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                         <Option key={`awayTeam_${item.id}`} value={item.id}>{item.name}</Option>
@@ -828,7 +831,7 @@ class LiveScoreAddMatch extends Component {
                                         value={umpireReserve || undefined}
                                     >
                                         {umpireListResult.map((item) => (
-                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                            <option key={item.id} value={item.id}>{item.reserveName}</option>
                                         ))}
                                     </Select>
                                 </div>
@@ -1132,15 +1135,15 @@ class LiveScoreAddMatch extends Component {
         if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
             const team1resultId = matchResult[0].id;
             const team2resultId = matchResult[1].id;
-            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
         } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
             const team1resultId = matchResult[1].id;
             const team2resultId = matchResult[0].id;
-            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
         } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
             const team1resultId = matchResult[2].id;
             const team2resultId = matchResult[2].id;
-            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey);
+            this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey, null, null, null, this.state.screenName);
         }
     }
 
@@ -1519,7 +1522,6 @@ class LiveScoreAddMatch extends Component {
 
         // this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
         if (this.state.sourceIdAvailable) {
-            // console.log("addEditMatch", staticMatchData, "matchData", matchData)
             let showModal = false;
             if (staticMatchData.startTime !== matchData.startTime) {
                 showModal = true;
@@ -1628,18 +1630,18 @@ class LiveScoreAddMatch extends Component {
                         menuName={AppConstants.umpires}
                     />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.matchDay}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu="umpire" umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : '2'} />
-                )}
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : '2'} />
+                    )}
 
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
 
@@ -1691,6 +1693,7 @@ function mapDispatchToProps(dispatch) {
         ladderSettingGetMatchResultAction,
         umpireListAction,
         liveScoreGetMatchDetailInitiate,
+        getRefBadgeData,
     }, dispatch);
 }
 
@@ -1701,6 +1704,7 @@ function mapStateToProps(state) {
         liveScoreScorerState: state.LiveScoreScorerState,
         liveScoreTeamState: state.LiveScoreTeamState,
         umpireState: state.UmpireState,
+        appstate: state.AppState,
     };
 }
 

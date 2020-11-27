@@ -1227,7 +1227,6 @@ function createProductFeeArr(data) {
             let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[j], null, 1)
             let statusteamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 3)
             let statusTeamCasual = checkStatus(getDivisionsArray, memberShipProductType[j], null, 4)
-            console.log("statusSeasonal", statusSeasonal);
             let type_Object_casual = null
             let type_Object_seasonal = null
             let type_object_team_seasonal = null;
@@ -1616,7 +1615,6 @@ function createProductFeeArr(data) {
                         }
                     }
 
-                    console.log("*****", statusTeamCasual);
                     if (statusTeamCasual.status) {
                         let mFeesCasualPer = Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst)
                         type_object_team_casual = {
@@ -1736,9 +1734,6 @@ function createProductFeeArr(data) {
             //"isTeamReg": (isSeasonalTeamFeeTypeAvailable == true || isCasualTeamFeeTypeAvailable == true) ? true : false,
             "teamRegChargeTypeRefId": teamRegChargeTypeRefId
         }
-
-        console.log("object",object);
-
         productArray.push(object)
     }
     return productArray

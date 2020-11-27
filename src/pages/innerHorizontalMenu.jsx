@@ -35,7 +35,8 @@ class InnerHorizontalMenu extends React.Component {
             yearLoading: false,
             defaultYear: null,
             userAccessPermission: "",
-            userRoleId: getUserRoleId()
+            userRoleId: getUserRoleId(),
+            count: 0
         };
     }
 
@@ -110,12 +111,16 @@ class InnerHorizontalMenu extends React.Component {
                         duration: 1.5,
                         maxCount: 1
                     })
-                    message.info(AppConstants.noCompetitionYear, 1.5);
+                    if (this.state.count < 1) {
+                        message.info(AppConstants.noCompetitionYear, 1.5);
+                    }
+
                     let defaultYear = localStorage.getItem("defaultYearId")
                     this.setState({ yearId: defaultYear, loading: true })
                     localStorage.setItem("yearId", defaultYear)
-                    if (!this.props.innerHorizontalState.error) {
+                    if (!this.props.innerHorizontalState.error && this.state.count < 1) {
                         this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
+                        this.setState({ count: this.state.count + 1 })
                     }
                     return
                 }
@@ -891,20 +896,26 @@ class InnerHorizontalMenu extends React.Component {
                 )}
 
                 {menu === "communication" && (
-                  <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['1']}
-                    style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.userSelectedKey]}
-                    onClick={() => this.props.clearDataOnCompChangeAction()}
-                  >
-                      <Menu.Item key="1">
-                          <NavLink to="/communication">
-                              <span>{AppConstants.dashboard}</span>
-                          </NavLink>
-                      </Menu.Item>
-                  </Menu>)
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.userSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                    >
+                        <Menu.Item key="1">
+                            <NavLink to="/CommunicationList">
+                                <span>{AppConstants.dashboard}</span>
+                            </NavLink>
+                        </Menu.Item>
+
+                        <Menu.Item key="2">
+                            <NavLink to="/communication">
+                                <span>{AppConstants.banners}</span>
+                            </NavLink>
+                        </Menu.Item>
+                    </Menu>)
                 }
             </div>
         );

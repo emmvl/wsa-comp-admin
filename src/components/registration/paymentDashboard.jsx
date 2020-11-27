@@ -42,7 +42,7 @@ function tableSort(key) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo);
+    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo, this_Obj.state.searchText);
 }
 
 const columns = [
@@ -169,9 +169,6 @@ const columns = [
                     <Menu.Item key="2">
                         <span>Cash Payment received</span>
                     </Menu.Item>
-                    {/* <Menu.Item key="3">
-                        <span>Refund</span>
-                    </Menu.Item> */}
                 </SubMenu>
             </Menu>
         )
@@ -198,6 +195,7 @@ class PaymentDashboard extends Component {
             dateTo: null,
             type: -1,
             status: -1,
+            searchText: ''
         };
         this_Obj = this;
     }
@@ -223,7 +221,7 @@ class PaymentDashboard extends Component {
             await this.setState({ offset, sortBy, sortOrder, registrationId, userId, yearRefId, competitionUniqueKey, dateFrom, dateTo, filterOrganisation })
             page = Math.floor(offset / 10) + 1;
 
-            this.handlePaymentTableList(page, userId, registrationId)
+            this.handlePaymentTableList(page, userId, registrationId, this.state.searchText)
         } else {
             let userInfo = this.props.location.state ? this.props.location.state.personal : null;
             let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
@@ -231,7 +229,7 @@ class PaymentDashboard extends Component {
             let userId = userInfo != null ? userInfo.userId : -1;
             let regId = registrationId != null ? registrationId : '-1';
 
-            this.handlePaymentTableList(1, userId, regId)
+            this.handlePaymentTableList(1, userId, regId, this.state.searchText)
         }
     }
 
@@ -246,8 +244,30 @@ class PaymentDashboard extends Component {
 
     clearFilterByUserId = () => {
         this.setState({ userInfo: null });
-        this.handlePaymentTableList(this.state.offset, -1, "-1")
+        this.handlePaymentTableList(this.state.offset, -1, "-1", this.state.searchText)
     }
+
+    // on change search text
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value, offset: 0 })
+        if (e.target.value === null || e.target.value === "") {
+            this.handlePaymentTableList(1, this.state.userId !== null ? this.state.userId : -1, this.state.registrationId !== null ? this.state.registrationId : "-1", e.target.value)
+        }
+    }
+
+    onKeyEnterSearchText = (e) => {
+        const code = e.keyCode || e.which;
+        if (code === 13) { // 13 is the enter keycode
+            this.handlePaymentTableList(1, this.state.userId !== null ? this.state.userId : -1, this.state.registrationId !== null ? this.state.registrationId : "-1", this.state.searchText)
+        }
+    };
+
+    onClickSearchIcon = () => {
+        if (this.state.searchText) {
+            this.handlePaymentTableList(1, this.state.userId !== null ? this.state.userId : -1, this.state.registrationId !== null ? this.state.registrationId : "-1", this.state.searchText)
+
+        }
+    };
 
     headerView = () => {
         let tagName = this.state.userInfo != null ? this.state.userInfo.firstName + " " + this.state.userInfo.lastName : null;
@@ -279,13 +299,14 @@ class PaymentDashboard extends Component {
                                     <div className="comp-product-search-inp-width">
                                         <Input
                                             className="product-reg-search-input"
-                                            // onChange={this.onChangeSearchText}
+                                            onChange={this.onChangeSearchText}
                                             placeholder="Search..."
-                                            // onKeyPress={this.onKeyEnterSearchText}
+                                            onKeyPress={this.onKeyEnterSearchText}
+                                            value={this.state.searchText}
                                             prefix={
                                                 <SearchOutlined
                                                     style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                    // onClick={this.onClickSearchIcon}
+                                                    onClick={this.onClickSearchIcon}
                                                 />
                                             }
                                             allowClear
@@ -320,43 +341,35 @@ class PaymentDashboard extends Component {
             </div>
         );
     };
-    ///setting the available from date
-    dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
-    }
 
-    ////setting the available to date
-    dateOnChangeTo = date => {
-        console.log(date)
-    }
-
-    handlePaymentTableList = (page, userId, regId) => {
-        let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo } = this.state
+    handlePaymentTableList = (page, userId, regId, searchValue) => {
+        let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchText } = this.state
         let offset = page ? 10 * (page - 1) : 0;
+
         this.setState({
             offset,
             userId: userId,
             registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder, -1, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
     };
 
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
-            this.handlePaymentTableList(1);
+            this.handlePaymentTableList(1, null, null, this.state.searchText);
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });
-            this.handlePaymentTableList(1);
+            this.handlePaymentTableList(1, null, null, this.state.searchText);
         } else if (key === "filterOrganisation") {
             await this.setState({ filterOrganisation: value });
-            this.handlePaymentTableList(1, -1, "-1");
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "dateFrom") {
             await this.setState({ dateFrom: value });
-            this.handlePaymentTableList(1, -1, "-1");
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "dateTo") {
             await this.setState({ dateTo: value });
-            this.handlePaymentTableList(1, -1, "-1");
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         }
     };
 
@@ -681,7 +694,7 @@ class PaymentDashboard extends Component {
                         className="antd-pagination"
                         current={paymentState.paymentListPage}
                         total={total}
-                        onChange={(page) => this.handlePaymentTableList(page, userId, regId)}
+                        onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
                     />
                 </div>
             </div>

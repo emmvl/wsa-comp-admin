@@ -50,7 +50,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const Mailto = ({ email, subject, body, children }) => {
     return (
-        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{children}</a>
+        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank">{children}</a>
     );
 };
 
@@ -198,7 +198,7 @@ class RegistrationForm extends Component {
             }
         }
         if (this.state.onRegistrationSaveLoad === true && registrationState.onRegistrationSaveLoad === false) {
-            this.setState({onRegistrationSaveLoad: false});
+            this.setState({ onRegistrationSaveLoad: false });
             history.push("/registrationFormList")
         }
         if (nextProps.appState !== this.props.appState) {
@@ -330,7 +330,7 @@ class RegistrationForm extends Component {
         }
     };
 
-    registrationSend = (isResend) =>{
+    registrationSend = (isResend) => {
         let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
         const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
         let registration_settings = []
@@ -358,7 +358,7 @@ class RegistrationForm extends Component {
             SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
 
             this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
-            this.setState({onRegistrationSaveLoad: true});
+            this.setState({ onRegistrationSaveLoad: true });
         } else {
             message.error(ValidationConstants.pleaseSelectMembershipProduct)
         }
@@ -389,7 +389,7 @@ class RegistrationForm extends Component {
             this.registrationSend(0);
         }
 
-        this.setState({visible: false});
+        this.setState({ visible: false });
     }
 
     confirmationModalView() {
@@ -400,7 +400,7 @@ class RegistrationForm extends Component {
                 onCancel={() => this.handleModal("close")}
                 centered
                 footer={[
-                    <Button key="Cancel" className="save-draft-text" type="save-draft-text" style={{width: '100px'}} onClick={() => this.handleModal("cancel")}>
+                    <Button key="Cancel" className="save-draft-text" type="save-draft-text" style={{ width: '100px' }} onClick={() => this.handleModal("cancel")}>
                         {AppConstants.cancel}
                     </Button>,
                     <Button key="Proceed" onClick={() => this.handleModal("ok")} type="primary" className="open-reg-button">
@@ -584,7 +584,7 @@ class RegistrationForm extends Component {
                                 disabledDate={d => !d || d.isAfter(closeDate)
                                     // || d.isSameOrBefore(dateOpen)
                                 }
-                                // value={dateOpen ? moment(dateOpen, "YYYY-MM-DD") : ''}
+                            // value={dateOpen ? moment(dateOpen, "YYYY-MM-DD") : ''}
                             />
                         </Form.Item>
                     </div>
@@ -615,7 +615,7 @@ class RegistrationForm extends Component {
                                 disabledDate={d => !d || d.isAfter(closeDate)
                                     // || d.isSameOrBefore(dateOpen)
                                 }
-                                // value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
+                            // value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
                             />
                         </Form.Item>
                     </div>
@@ -1276,7 +1276,7 @@ class RegistrationForm extends Component {
                                 placeholder={AppConstants.disclaimers}
                                 onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerText")}
                                 disabled={isPublished}
-                                // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
+                            // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
                             />
                         </Form.Item>
                         <Form.Item name={`disclaimerLink${index}`} rules={[{
@@ -1289,7 +1289,7 @@ class RegistrationForm extends Component {
                                 placeholder={AppConstants.disclaimerLink}
                                 onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerLink")}
                                 disabled={isPublished}
-                                // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
+                            // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
                             />
                         </Form.Item>
                     </div>
@@ -1339,7 +1339,7 @@ class RegistrationForm extends Component {
                                             disabled={isPublished}
                                             onChange={yearRefId => this.onYearChange(yearRefId)}
                                             value={registrationFormData.inviteYearRefId}
-                                            // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+                                        // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
                                         >
                                             {this.props.appState.allYearList.map(item => (
                                                 <Option key={'year_' + item.id} value={item.id}>
@@ -1530,8 +1530,8 @@ class RegistrationForm extends Component {
                                     htmlType="submit"
                                     type="primary"
                                     onClick={() => this.setState({ statusRefId: 2 })}
-                                    // disabled={statusRefId == 2}
-                                    // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                // disabled={statusRefId == 2}
+                                // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                 >
                                     {statusRefId == 2 ? AppConstants.update : AppConstants.openRegistrations}
                                 </Button>
@@ -1614,7 +1614,7 @@ class RegistrationForm extends Component {
 
                             <Loader
                                 visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
-                                this.props.registrationState.onRegistrationSaveLoad}
+                                    this.props.registrationState.onRegistrationSaveLoad}
                             />
                         </Content>
                         <Footer>{this.footerView()}</Footer>

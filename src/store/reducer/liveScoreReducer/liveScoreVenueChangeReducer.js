@@ -87,7 +87,6 @@ function LiveScoreVenueChange(state = initialState, action) {
             }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_LOAD:
-            console.log(action)
             return {
                 ...state,
                 onLoad: true

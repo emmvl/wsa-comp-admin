@@ -143,7 +143,7 @@ class LiveScoreManagerView extends Component {
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddManagers",
+                                        pathname: "/matchDayAddManagers",
                                         state: { isEdit: true, tableRecord: this.state.data }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
@@ -188,7 +188,7 @@ class LiveScoreManagerView extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

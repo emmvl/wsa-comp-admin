@@ -133,7 +133,6 @@ function* getDrawsRoundsSaga(action) {
 function* updateCompetitionDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateDraws, action.data);
-        console.log(action)
         if (result.status === 1) {
             if(action.sourceDuplicate || action.targetDuplicate){
                 const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, 0, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
@@ -192,7 +191,8 @@ function* updateCompetitionDrawsTimeline(action) {
                 sourceArray: action.sourceArray,
                 targetArray: action.targetArray,
                 actionType: action.actionType,
-                drawData: action.drawData
+                drawData: action.drawData,
+                dateRangeCheck:action.dateRangeCheck
             });
 
             yield put({
@@ -230,9 +230,6 @@ function* saveDrawsSaga(action) {
         yield call(errorSaga, error)
 
     }
-
-
-
 }
 
 //// Get Competition venues saga
@@ -250,7 +247,6 @@ function* getCompetitionVenues(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
@@ -271,7 +267,8 @@ function* updateCourtTimingsDrawsAction(action) {
                     sourceArray: action.sourceArray,
                     targetArray: action.targetArray,
                     actionType: action.actionType,
-                    drawData: action.drawData
+                    drawData: action.drawData,
+                    dateRangeCheck:action.dateRangeCheck
                 });
             }
             message.success(result.result.data.message)

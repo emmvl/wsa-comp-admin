@@ -141,7 +141,8 @@ class MultifieldDrawsNew extends Component {
             singleCompDivisionCheked: true,
             filterDates: false,
             regenerateDrawExceptionModalVisible: false,
-            regenerateExceptionRefId: 1
+            regenerateExceptionRefId: 1,
+            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null
         };
         this.props.clearMultiDraws();
     }
@@ -312,7 +313,7 @@ class MultifieldDrawsNew extends Component {
             if (this.props.drawsState.changeStatus == false && this.state.changeStatus) {
                 let statusRefId = this.props.drawsState.publishStatus
                 setOwn_competitionStatus(statusRefId)
-                message.success("Draws published to live scores successfully");
+                message.success("Draws published to Match Day successfully");
                 this.setState({ changeStatus: false, competitionStatus: statusRefId })
                 if (this.props.drawsState.teamNames != null && this.props.drawsState.teamNames != "") {
                     this.setState({ publishModalVisible: true });
@@ -815,101 +816,119 @@ class MultifieldDrawsNew extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
-                <div className="multi-draw-list-top-head row">
-                    <div className="col-sm-2 mt-3">
-                        <span className="form-heading">{AppConstants.draws}</span>
-                    </div>
-                    <div className="col-sm-10 row pr-0">
-                        <div className="col-sm mt-2">
-                            <Select
-                                className="year-select reg-filter-select1"
-                                style={{ maxWidth: 100, minWidth: 100 }}
-                                onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                                value={JSON.parse(this.state.yearRefId)}
-                            >
-                                {this.props.appState.own_YearArr.map((item) => (
-                                    <Option key={'year_' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-
-                        <div className="col-sm-2.5 mt-2">
-                            <Select
-                                className="year-select reg-filter-select1 innerSelect-value-draws"
-                                style={{ minWidth: 210, maxWidth: 210 }}
-                                onChange={(competitionId, e) =>
-                                    this.onCompetitionChange(competitionId, e.key)
-                                }
-                                value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
-                            >
-                                {this.props.appState.own_CompetitionArr.length > 0 && (
-                                    <Option key="-1" value="-1">{AppConstants.all}</Option>
-                                )}
-                                {this.props.appState.own_CompetitionArr.map((item) => (
-                                    <Option
-                                        key={'competition_' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-
-                        <div className="col-sm mt-2">
-                            <Select
-                                className="year-select reg-filter-select1"
-                                style={{ maxWidth: 150, minWidth: 150 }}
-                                disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
-                                onChange={(roundId) => this.onRoundsChange(roundId)}
-                                value={this.state.roundId}
-                            >
-                                {this.props.drawsState.getDrawsRoundsData.map((item) => (
-                                    <Option key={'round_' + item.roundId} value={item.roundId}>
-                                        {item.name}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-                        <div className="col-sm mt-2">
-                            <div
-                                className="w-100 d-flex flex-row align-items-center"
-                                style={{ minWidth: 250 }}
-                            >
-                                <RangePicker
-                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
-                                    onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
-                                    format="DD-MM-YYYY"
-                                    style={{ width: '100%', minWidth: 180 }}
-                                    value={[moment(this.state.startDate), moment(this.state.endDate)]}
-                                />
+            <>
+                {this.state.screenKey &&
+                    <div className="row" style={{ marginTop: "15px" }}>
+                        <div className="col-sm d-flex justify-content-end">
+                            <div className="reg-add-save-button">
+                                <Button
+                                    onClick={() => history.push(this.state.screenKey)}
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                >
+                                    {AppConstants.backToMatchDay}
+                                </Button>
                             </div>
                         </div>
+                    </div>
+                }
+                <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
 
-                        <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
-                            <Checkbox
-                                className="single-checkbox-radio-style"
-                                style={{ paddingTop: 8 }}
-                                checked={this.state.filterDates}
-                                // onChange={(e) => this.setState({ filterDates: e.target.checked })}
-                                onChange={(e) => this.onDateRangeCheck(e.target.checked)}
-                                disabled={this.state.firstTimeCompId == "-1"}
-                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
-                            >
-                                {AppConstants.filterDates}
-                            </Checkbox>
+                    <div className="multi-draw-list-top-head row">
+                        <div className="col-sm-2 mt-3">
+                            <span className="form-heading">{AppConstants.draws}</span>
                         </div>
-                        <div className="col-sm d-flex justify-content-end align-items-center pr-1">
-                            <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
-                                {AppConstants.go}
-                            </Button>
+                        <div className="col-sm-10 row pr-0">
+                            <div className="col-sm mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ maxWidth: 100, minWidth: 100 }}
+                                    onChange={(yearRefId) => this.onYearChange(yearRefId)}
+                                    value={JSON.parse(this.state.yearRefId)}
+                                >
+                                    {this.props.appState.own_YearArr.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            <div className="col-sm-2.5 mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1 innerSelect-value-draws"
+                                    style={{ minWidth: 210, maxWidth: 210 }}
+                                    onChange={(competitionId, e) =>
+                                        this.onCompetitionChange(competitionId, e.key)
+                                    }
+                                    value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                                >
+                                    {this.props.appState.own_CompetitionArr.length > 0 && (
+                                        <Option key="-1" value="-1">{AppConstants.all}</Option>
+                                    )}
+                                    {this.props.appState.own_CompetitionArr.map((item) => (
+                                        <Option
+                                            key={'competition_' + item.competitionId}
+                                            value={item.competitionId}
+                                        >
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            <div className="col-sm mt-2">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ maxWidth: 150, minWidth: 150 }}
+                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
+                                    onChange={(roundId) => this.onRoundsChange(roundId)}
+                                    value={this.state.roundId}
+                                >
+                                    {this.props.drawsState.getDrawsRoundsData.map((item) => (
+                                        <Option key={'round_' + item.roundId} value={item.roundId}>
+                                            {item.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+                            <div className="col-sm mt-2">
+                                <div
+                                    className="w-100 d-flex flex-row align-items-center"
+                                    style={{ minWidth: 250 }}
+                                >
+                                    <RangePicker
+                                        disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
+                                        onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                                        format="DD-MM-YYYY"
+                                        style={{ width: '100%', minWidth: 180 }}
+                                        value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
+                                <Checkbox
+                                    className="single-checkbox-radio-style"
+                                    style={{ paddingTop: 8 }}
+                                    checked={this.state.filterDates}
+                                    // onChange={(e) => this.setState({ filterDates: e.target.checked })}
+                                    onChange={(e) => this.onDateRangeCheck(e.target.checked)}
+                                    disabled={this.state.firstTimeCompId == "-1"}
+                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                >
+                                    {AppConstants.filterDates}
+                                </Checkbox>
+                            </div>
+                            <div className="col-sm d-flex justify-content-end align-items-center pr-1">
+                                <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
+                                    {AppConstants.go}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     };
 
@@ -930,7 +949,7 @@ class MultifieldDrawsNew extends Component {
                             href={`#venue-collapsable-div`}
                             role="button"
                             aria-expanded="false"
-                            // aria-controls={teamIndex}
+                        // aria-controls={teamIndex}
                         >
                             <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
@@ -991,7 +1010,7 @@ class MultifieldDrawsNew extends Component {
                             href={`#comp-collapsable-div`}
                             role="button"
                             aria-expanded="true"
-                            // aria-controls={teamIndex}
+                        // aria-controls={teamIndex}
                         >
                             <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
@@ -1411,8 +1430,8 @@ class MultifieldDrawsNew extends Component {
                             topMargin += 70;
                         }
                         return (
-                            <div key={"court" + index}>
-                                <div className="sr-no" style={{ height: 62 }}>
+                            <>
+                                <div key={"court" + index} className="sr-no" style={{ height: 62 }}>
                                     <div className="venueCourt-tex-div">
                                         <span className="venueCourt-text">
                                             {courtData.venueShortName + '-' + courtData.venueCourtNumber}
@@ -1473,8 +1492,8 @@ class MultifieldDrawsNew extends Component {
                                                                 {slotObject.awayTeamName}
                                                             </span>
                                                         ) : (
-                                                            <span>Free</span>
-                                                        )}
+                                                                <span>Free</span>
+                                                            )}
                                                     </Swappable>
                                                 ) : (
                                                     <Swappable
@@ -1557,16 +1576,16 @@ class MultifieldDrawsNew extends Component {
                                                                         />
                                                                     </div>
                                                                 ) : (
-                                                                    <div>
-                                                                        <img
-                                                                            className="dot-image"
-                                                                            src={AppImages.moreTripleDot}
-                                                                            alt=""
-                                                                            width="16"
-                                                                            height="10"
-                                                                        />
-                                                                    </div>
-                                                                )
+                                                                        <div>
+                                                                            <img
+                                                                                className="dot-image"
+                                                                                src={AppImages.moreTripleDot}
+                                                                                alt=""
+                                                                                width="16"
+                                                                                height="10"
+                                                                            />
+                                                                        </div>
+                                                                    )
                                                             }
                                                         >
                                                             {slotObject.isLocked == 1 && (
@@ -1612,7 +1631,7 @@ class MultifieldDrawsNew extends Component {
                                         </div>
                                     );
                                 })}
-                            </div>
+                            </>
                         );
                     })}
                 </div>

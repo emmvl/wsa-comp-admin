@@ -51,6 +51,14 @@ class LiveScoreDivisionImport extends Component {
 
     componentDidMount() {
         this.props.liveScoreDivisionResetImportResultAction();
+        if (getLiveScoreCompetiton()) {
+            const { sourceId } = JSON.parse(getLiveScoreCompetiton());
+            if (sourceId) {
+                history.push("/liveScoreDivisionList")
+            }
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
     }
 
     headerView = () => (
@@ -138,7 +146,7 @@ class LiveScoreDivisionImport extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

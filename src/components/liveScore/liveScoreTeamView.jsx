@@ -17,7 +17,7 @@ import { isArrayNotEmpty } from '../../util/helpers'
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { getOrganisationData, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { getUserRoleId } from '../../util/permissions'
+import { getUserRoleId, checkLivScoreCompIsParent } from '../../util/permissions'
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -157,6 +157,7 @@ class LiveScoreTeamView extends Component {
             userRoleId: getUserRoleId(),
             screenKey: this.props.location.state ? this.props.location.state.screenKey : null,
             sourceIdAvailable: false,
+            liveScoreCompIsParent: false
         }
         _this = this
     }
@@ -171,6 +172,7 @@ class LiveScoreTeamView extends Component {
     }
 
     async componentDidMount() {
+        this.setLivScoreCompIsParent()
         if (getLiveScoreCompetiton()) {
             const { sourceId } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ sourceIdAvailable: sourceId ? true : false })
@@ -185,10 +187,10 @@ class LiveScoreTeamView extends Component {
         }
     }
 
-    componentDidUpdate(nextProps) {
-        if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {
-
-        }
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     // Delete Player
@@ -373,39 +375,41 @@ class LiveScoreTeamView extends Component {
     }
 
     headerView = () => {
-        const { userRoleId } = this.state
+        const { userRoleId, liveScoreCompIsParent } = this.state
         let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
             <div className="row mt-5">
                 <div className="col-sm d-flex align-items-center justify-content-end w-100">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
-                                <NavLink to={{
-                                    pathname: "/liveScoreAddTeam",
-                                    state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key, screenName: this.state.screenName, screenKey: this.state.screenKey }
-                                }}>
-                                    <Button disabled={roleId} className="primary-add-comp-form" type="primary">
-                                        + {AppConstants.edit}
-                                    </Button>
-                                </NavLink>
-                            </div>
-                        </div>
-                        {!this.state.sourceIdAvailable && (
+                    {liveScoreCompIsParent == true && (
+                        <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
-                                    <Button
-                                        disabled={roleId}
-                                        onClick={() => this.showDeleteConfirm(this.state.teamId)}
-                                        className="primary-add-comp-form"
-                                        type="primary"
-                                    >
-                                        {AppConstants.delete}
-                                    </Button>
+                                    <NavLink to={{
+                                        pathname: "/liveScoreAddTeam",
+                                        state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key, screenName: this.state.screenName, screenKey: this.state.screenKey }
+                                    }}>
+                                        <Button disabled={roleId} className="primary-add-comp-form" type="primary">
+                                            + {AppConstants.edit}
+                                        </Button>
+                                    </NavLink>
                                 </div>
                             </div>
-                        )}
-                    </div>
+                            {!this.state.sourceIdAvailable && (
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
+                                        <Button
+                                            disabled={roleId}
+                                            onClick={() => this.showDeleteConfirm(this.state.teamId)}
+                                            className="primary-add-comp-form"
+                                            type="primary"
+                                        >
+                                            {AppConstants.delete}
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
             // </div>
@@ -441,17 +445,17 @@ class LiveScoreTeamView extends Component {
                 {screenName === 'userPersonal' ? (
                     <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 ) : (
-                    <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                )}
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                    )}
 
                 {screenName === 'userPersonal' ? (
                     <InnerHorizontalMenu menu="user" userSelectedKey="1" />
                 ) : (
-                    <InnerHorizontalMenu
-                        menu="liveScore"
-                        liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'}
-                    />
-                )}
+                        <InnerHorizontalMenu
+                            menu="liveScore"
+                            liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'}
+                        />
+                    )}
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

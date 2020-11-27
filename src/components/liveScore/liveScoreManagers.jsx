@@ -164,7 +164,7 @@ const columns = [
                     <Menu.Item key="1">
                         <NavLink
                             to={{
-                                pathname: '/liveScoreAddManagers',
+                                pathname: '/matchDayAddManagers',
                                 state: { isEdit: true, tableRecord: record }
                             }}
                         >
@@ -283,7 +283,7 @@ class LiveScoreManagerList extends Component {
                             <div className="row">
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <NavLink to={`/liveScoreAddManagers`} className="text-decoration-none">
+                                        <NavLink to="/matchDayAddManagers" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addManager}
                                             </Button>
@@ -392,7 +392,7 @@ class LiveScoreManagerList extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

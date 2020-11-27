@@ -234,7 +234,7 @@ class CommunicationBanner extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
 
-                <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
+                <InnerHorizontalMenu menu="communication" userSelectedKey="2" />
 
                 <Layout>
                     <Form

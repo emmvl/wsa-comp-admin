@@ -623,7 +623,7 @@ class LiveScoreDashboard extends Component {
     //             </div>
     //             <div className="col-sm text-right">
     //                 <NavLink to={{
-    //                     pathname: '/liveScoreAddMatch',
+    //                     pathname: '/matchDayAddMatch',
     //                     state: { key: 'dashboard' }
     //                 }}>
     //                     <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
@@ -671,7 +671,7 @@ class LiveScoreDashboard extends Component {
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <NavLink to={{
-                                    pathname: '/liveScoreAddMatch',
+                                    pathname: '/matchDayAddMatch',
                                     state: { key: 'dashboard' }
                                 }}>
                                     <Button className="primary-add-comp-form" type="primary">+ {AppConstants.addNew}</Button>
@@ -721,7 +721,7 @@ class LiveScoreDashboard extends Component {
 
                 {/* <div className="col-sm text-right">
                     <NavLink to={{
-                        pathname: './liveScoreAddIncident',
+                        pathname: './matchDayAddIncident',
                         state: { key: 'dashboard' }
                     }}>
                         <Button className='primary-add-comp-form' type='primary'>
@@ -747,7 +747,7 @@ class LiveScoreDashboard extends Component {
                 <div className="col-sm text-right">
                     <NavLink
                         to={{
-                            pathname: '/liveScoreAddNews',
+                            pathname: '/matchDayAddNews',
                             state: { key: 'dashboard', item: null }
                         }}
                         className="text-decoration-none"
@@ -840,7 +840,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
                     <Content>

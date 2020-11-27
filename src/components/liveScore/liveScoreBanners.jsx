@@ -264,7 +264,7 @@ class LiveScoreBanners extends Component {
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
                 />

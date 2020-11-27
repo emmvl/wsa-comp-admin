@@ -346,7 +346,7 @@ const columnsInvite = [
                         <Menu.Item key="1">
                             <NavLink
                                 to={{
-                                    pathname: "/liveScoreAddMatch",
+                                    pathname: "/matchDayAddMatch",
                                     state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
                                 }}
                             >
@@ -357,7 +357,7 @@ const columnsInvite = [
                         <Menu.Item key="2">
                             <NavLink
                                 to={{
-                                    pathname: "/liveScoreAddMatch",
+                                    pathname: "/matchDayAddMatch",
                                     state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
                                 }}
                             >
@@ -578,7 +578,7 @@ const columns = [
                     {umpires ? umpires[0] && umpires[0].verifiedBy === null && (
                         <Menu.Item key="1">
                             <NavLink to={{
-                                pathname: "/liveScoreAddMatch",
+                                pathname: "/matchDayAddMatch",
                                 state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
                             }}>
                                 <span>Edit</span>
@@ -588,7 +588,7 @@ const columns = [
                         <Menu.Item key="2">
                             <NavLink
                                 to={{
-                                    pathname: "/liveScoreAddMatch",
+                                    pathname: "/matchDayAddMatch",
                                     state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
                                 }}
                             >

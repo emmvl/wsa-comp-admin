@@ -253,7 +253,6 @@ function LiveScoreTeamState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS:
-            console.log(action, 'API_LIVE_SCORE_ADD_TEAM_SUCCESS')
             return { ...state, onLoad: false, screenKey: action.screenKey };
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD:

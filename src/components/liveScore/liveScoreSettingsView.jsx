@@ -1417,7 +1417,7 @@ class LiveScoreSettingsView extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.liveScores}
+                    menuHeading={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.matchDay}
                     menuName={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />

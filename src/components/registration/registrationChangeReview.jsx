@@ -196,7 +196,7 @@ class RegistrationChangeReview extends Component {
             if (reviewSaveData.declineReasonRefId != 0 && reviewSaveData.declineReasonRefId != null) {
                 this.setState({ declineVisible: false });
                 let invoicesTemp = null;
-                if(regChangeReviewData.invoices){
+                if (regChangeReviewData.invoices) {
                     invoicesTemp = regChangeReviewData.invoices.map(e => ({ ...e }));
                     for (let invoice of invoicesTemp) {
                         invoice.refundAmount = 0;
@@ -479,48 +479,48 @@ class RegistrationChangeReview extends Component {
                         )}
                     </div>
                 ) : (
-                    <div>
-                        <InputWithHead
-                            heading={AppConstants.organisationName}
-                            placeholder={AppConstants.organisationName}
-                            value={regChangeReviewData.transferOrgName}
-                            disabled
-                        />
+                        <div>
+                            <InputWithHead
+                                heading={AppConstants.organisationName}
+                                placeholder={AppConstants.organisationName}
+                                value={regChangeReviewData.transferOrgName}
+                                disabled
+                            />
 
-                        <InputWithHead
-                            heading={AppConstants.competition_name}
-                            placeholder={AppConstants.competition_name}
-                            value={regChangeReviewData.transferCompName}
-                            disabled
-                        />
+                            <InputWithHead
+                                heading={AppConstants.competition_name}
+                                placeholder={AppConstants.competition_name}
+                                value={regChangeReviewData.transferCompName}
+                                disabled
+                            />
 
-                        {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId != 0 && (
-                            <div>
-                                <InputWithHead heading={AppConstants.reasonForTransfer} />
-                                <Radio.Group
-                                    disabled
-                                    className="reg-competition-radio"
-                                    value={regChangeReviewData ? regChangeReviewData.reasonTypeRefId : null}
-                                >
-                                    {isArrayNotEmpty(transferOption) && transferOption.map((item) => (
-                                        <Radio key={'transferOption_' + item.id} value={item.id}>{item.value}</Radio>
-                                    ))}
-                                    {(regChangeReviewData.reasonTypeRefId == 3) && (
-                                        <div>
-                                            <InputWithHead
-                                                disabled
-                                                className="ml-5"
-                                                placeholder="Other"
-                                                value={regChangeReviewData ? regChangeReviewData.otherInfo : null}
-                                                style={{ maxWidth: '50%', minHeight: 60 }}
-                                            />
-                                        </div>
-                                    )}
-                                </Radio.Group>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            {regChangeReviewData.reasonTypeRefId != null && regChangeReviewData.reasonTypeRefId != 0 && (
+                                <div>
+                                    <InputWithHead heading={AppConstants.reasonForTransfer} />
+                                    <Radio.Group
+                                        disabled
+                                        className="reg-competition-radio"
+                                        value={regChangeReviewData ? regChangeReviewData.reasonTypeRefId : null}
+                                    >
+                                        {isArrayNotEmpty(transferOption) && transferOption.map((item) => (
+                                            <Radio key={'transferOption_' + item.id} value={item.id}>{item.value}</Radio>
+                                        ))}
+                                        {(regChangeReviewData.reasonTypeRefId == 3) && (
+                                            <div>
+                                                <InputWithHead
+                                                    disabled
+                                                    className="ml-5"
+                                                    placeholder="Other"
+                                                    value={regChangeReviewData ? regChangeReviewData.otherInfo : null}
+                                                    style={{ maxWidth: '50%', minHeight: 60 }}
+                                                />
+                                            </div>
+                                        )}
+                                    </Radio.Group>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 <div>
                     <InputWithHead heading={AppConstants.approvals} />
                     {(regChangeReviewData.approvals || []).map((item, index) => (
@@ -532,8 +532,8 @@ class RegistrationChangeReview extends Component {
                                         {item.refundTypeRefId != 3 ? (
                                             <div style={{ color: this.getApprovalsIconColor(item), paddingLeft: "10px" }}>&#x2714;</div>
                                         ) : (
-                                            <div style={{ color: "red", paddingLeft: "10px" }}>&#x2718;</div>
-                                        )}
+                                                <div style={{ color: "red", paddingLeft: "10px" }}>&#x2718;</div>
+                                            )}
                                     </div>
                                 )}
                             </div>
@@ -584,7 +584,7 @@ class RegistrationChangeReview extends Component {
         </div>
     );
 
-    deRegisterDecline = (reviewSaveData) =>{
+    deRegisterDecline = (reviewSaveData) => {
         return (
             <div>
                 <InputWithHead heading={AppConstants.reasonWhyYourAreDecline} />
@@ -612,7 +612,7 @@ class RegistrationChangeReview extends Component {
         )
     }
 
-    transferFromDecline = (reviewSaveData) =>{
+    transferFromDecline = (reviewSaveData) => {
         return (
             <div>
                 <InputWithHead heading={AppConstants.reasonWhyYourAreDeclineFromTransfer} />
@@ -641,7 +641,7 @@ class RegistrationChangeReview extends Component {
         )
     }
 
-    transferToDecline = (reviewSaveData) =>{
+    transferToDecline = (reviewSaveData) => {
         return (
             <div>
                 <InputWithHead heading={AppConstants.reasonWhyYourAreDeclineToTransfer} />

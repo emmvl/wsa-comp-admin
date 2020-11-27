@@ -524,7 +524,7 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm pt-2">
                                 <div className="w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to={{
-                                        pathname: '/liveScoreAddIncident',
+                                        pathname: '/matchDayAddIncident',
                                         state: {
                                             matchId: this.state.matchId,
                                             matchDetails: matchDetails,
@@ -559,7 +559,7 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm pt-2">
                                 <div className="w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddMatch",
+                                        pathname: "/matchDayAddMatch",
                                         state: {
                                             isEdit: true,
                                             matchId: this.state.matchId,
@@ -2866,21 +2866,21 @@ class LiveScoreMatchDetails extends Component {
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.matchDay}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                 ) : (
-                    <InnerHorizontalMenu
-                        menu="liveScore"
-                        liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
-                    />
-                )}
+                        <InnerHorizontalMenu
+                            menu="liveScore"
+                            liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
+                        />
+                    )}
 
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
 

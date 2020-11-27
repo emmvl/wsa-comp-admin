@@ -186,7 +186,7 @@ class LiveScoreNewsList extends Component {
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
                                         to={{
-                                            pathname: '/liveScoreAddNews',
+                                            pathname: '/matchDayAddNews',
                                             state: { key: 'List', item: null, screenKey: this.state.screenKey }
                                         }}
                                     >
@@ -248,7 +248,7 @@ class LiveScoreNewsList extends Component {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
 
                 {stateWideMsg ? (
                     <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey="21" />

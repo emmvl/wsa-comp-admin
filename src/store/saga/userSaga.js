@@ -176,7 +176,7 @@ function* getAffiliateOurOrganisationIdSaga(action) {
 // Get affiliated to organisation
 function* getAffiliatedToOrganisationSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.affiliateToOrganisation, action.payload);
+    const result = yield call(UserAxiosApi.affiliateToOrganisation, action.payload, action.searchText);
 
     if (result.status === 1) {
       yield put({
@@ -789,6 +789,7 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
+        impersonationAccess:action.payload.access
       });
       if (action.payload.access == false) {
         history.push('/')

@@ -98,10 +98,10 @@ function makeDetailDataObject(data) {
 function getImageUrls(images) {
     let displayImagesUrls = []
     if (isArrayNotEmpty(images)) {
-        for (let i in images) {
+        for (let i of images) {
             let object = {
-                "image": images[i].url,
-                id: images[i].id
+                "image": i !==null ? i.url : "",
+                id: i!==null ? i.id : 0
             }
             displayImagesUrls.push(object)
         }

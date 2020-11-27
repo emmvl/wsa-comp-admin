@@ -130,7 +130,6 @@ function deleteSelectedMedia(mediaArray, mediaType) {
 function liveScoreIncidentState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_LOAD:
-            console.log(action, 'liveScoreIncidentState')
             return { ...state, onLoad: true, incidentListActionObject: action }
 
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_SUCCESS:
@@ -270,7 +269,6 @@ function liveScoreIncidentState(state = initialState, action) {
             return { ...state, loading: true }
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS:
-            console.log(action, 'API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS')
             return {
                 ...state,
                 loading: false,

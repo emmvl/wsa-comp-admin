@@ -101,7 +101,7 @@ function* getAllCompetitionFeesDetailsSaga(action) {
                 status: resultCharity.status,
             });
 
-            const resultData = yield call(RegistrationAxiosApi.getDefaultCompFeesMembershipProduct, action.hasRegistration);
+            const resultData = yield call(RegistrationAxiosApi.getDefaultCompFeesMembershipProduct, action.hasRegistration, action.yearRefId);
             if (resultData.status === 1) {
                 yield put({
                     type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_SUCCESS,
@@ -138,7 +138,7 @@ function* getAllCompetitionFeesDetailsSaga(action) {
 // get default competition membership product tab details
 function* getDefaultCompFeesMembershipProductSaga(action) {
     try {
-        const result = yield call(RegistrationAxiosApi.getDefaultCompFeesMembershipProduct, action.hasRegistration);
+        const result = yield call(RegistrationAxiosApi.getDefaultCompFeesMembershipProduct, action.hasRegistration, action.yearRefId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_SUCCESS,

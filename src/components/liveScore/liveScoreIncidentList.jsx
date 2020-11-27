@@ -266,7 +266,7 @@ class LiveScoreIncidentList extends Component {
                         <div className="row">
                             {/* <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/liveScoreAddIncident">
+                                    <NavLink to="/matchDayAddIncident">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
                                         </Button>
@@ -374,7 +374,7 @@ class LiveScoreIncidentList extends Component {
                     umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 }
 
                 {

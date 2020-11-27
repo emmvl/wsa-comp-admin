@@ -66,7 +66,7 @@ class LiveScoreIncidentView extends Component {
                     </div>
                     <div className="col-sm live-form-view-button-container d-flex justify-content-end">
                         <NavLink to={{
-                            pathname: '/liveScoreAddIncident',
+                            pathname: '/matchDayAddIncident',
                             state: { isEdit: true, tableRecord: this.state.incidentItem, umpireKey: this.state.umpireKey }
                         }}>
                             <Button className="primary-add-comp-form" type="primary">
@@ -210,7 +210,7 @@ class LiveScoreIncidentView extends Component {
                     this.state.umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 }
 
                 {
