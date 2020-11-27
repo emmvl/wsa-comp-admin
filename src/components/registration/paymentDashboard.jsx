@@ -367,7 +367,7 @@ class PaymentDashboard extends Component {
             userId: userId,
             registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder, -1, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
     };
 
     onChangeDropDownValue = async (value, key) => {
