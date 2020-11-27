@@ -51,7 +51,7 @@ class LiveScoreLadderAdjustment extends Component {
                 this.setState({ loadding: true, })
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 

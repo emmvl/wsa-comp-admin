@@ -43,7 +43,7 @@ class LiveScoreLadderSettings extends Component {
             //this.props.ladderSettingGetMatchResultAction()
             this.props.ladderSettingGetDATA(uniqueKey)
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -318,7 +318,7 @@ class LiveScoreLadderSettings extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="19" />
                 <Loader visible={this.props.ladderSettingState.loader || this.props.ladderSettingState.onLoad} />

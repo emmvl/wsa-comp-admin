@@ -58,7 +58,7 @@ const columns = [
         render: (firstName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
-                state: { userId: record.id, screenKey: "livescore", screen: "/LiveScoreCoaches" }
+                state: { userId: record.id, screenKey: "livescore", screen: "/matchDayCoaches" }
             }}>
                 <span className="input-heading-add-another pt-0">{firstName}</span>
             </NavLink>
@@ -72,7 +72,7 @@ const columns = [
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
-                state: { userId: record.id, screenKey: "livescore", screen: "/LiveScoreCoaches" }
+                state: { userId: record.id, screenKey: "livescore", screen: "/matchDayCoaches" }
             }}>
                 <span className="input-heading-add-another pt-0">{lastName}</span>
             </NavLink>
@@ -191,10 +191,10 @@ class LiveScoreCoaches extends Component {
             if (id !== null) {
                 this.props.getliveScoreTeams(id)
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -363,7 +363,7 @@ class LiveScoreCoaches extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"23"} />
                 <Layout>

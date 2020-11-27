@@ -82,7 +82,7 @@ function* liveScoreAddCoachSaga(action) {
 
       message.success("Add Coach - Successfully Added");
 
-      history.push("/liveScoreCoaches");
+      history.push("/matchDayCoaches");
     } else {
       yield call(failSaga, result);
     }
@@ -102,7 +102,7 @@ function* liveScoreCoachImportSaga(action) {
       });
 
       if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/liveScoreCoaches");
+        history.push("/matchDayCoaches");
         message.success("Coach Imported Successfully.");
       } else {
         receiptImportResult(result.result);

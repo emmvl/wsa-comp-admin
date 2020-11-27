@@ -174,7 +174,7 @@ const columns = [
                     {/* <Menu.Item key="2">
                         <NavLink
                             to={{
-                                pathname: "./liveScoreAssignMatch",
+                                pathname: "./matchDayAssignMatch",
                                 state: { record }
                             }}
                         >
@@ -220,7 +220,7 @@ class LiveScoreManagerList extends Component {
                 this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset, 'managerList')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -394,7 +394,7 @@ class LiveScoreManagerList extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>

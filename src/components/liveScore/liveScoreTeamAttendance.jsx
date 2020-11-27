@@ -283,10 +283,10 @@ class LiveScoreTeamAttendance extends Component {
             if (id !== null) {
                 this.props.getLiveScoreDivisionList(id)
             } else {
-                history.pushState('/liveScoreCompetitions')
+                history.pushState('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -633,7 +633,7 @@ class LiveScoreTeamAttendance extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="14" />

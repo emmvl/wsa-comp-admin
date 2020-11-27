@@ -100,6 +100,7 @@ class LiveScoreAddNews extends Component {
                 this.props.liveScoreManagerListAction(3, 1, 1)
             }
         } else {
+            history.push('/matchDayCompetitions')
             this.props.getliveScoreScorerList(1, 4)
             this.props.liveScoreManagerListAction(3, 1, 1)
         }
@@ -810,7 +811,7 @@ class LiveScoreAddNews extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 {stateWideMsg ? (

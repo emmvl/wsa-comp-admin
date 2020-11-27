@@ -223,10 +223,10 @@ class LiveScoreGameTimeList extends Component {
                     this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
                 }
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -404,7 +404,7 @@ class LiveScoreGameTimeList extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"15"} />
                 <Layout>
                     {this.headerView()}

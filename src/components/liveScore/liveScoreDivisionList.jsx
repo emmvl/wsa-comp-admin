@@ -211,7 +211,7 @@ class LiveScoreDivisionList extends Component {
                 this.props.getMainDivisionListAction(id, offset)
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -318,7 +318,7 @@ class LiveScoreDivisionList extends Component {
                                 {!sourceIdAvailable && (
                                     <div className="col-sm">
                                         <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                            <NavLink to={`/liveScoreDivisionImport`} className="text-decoration-none">
+                                            <NavLink to="/matchDayDivisionImport" className="text-decoration-none">
                                                 <Button className="primary-add-comp-form" type="primary">
                                                     <div className="row">
                                                         <div className="col-sm">
@@ -369,7 +369,7 @@ class LiveScoreDivisionList extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="9" />
                 <Layout>

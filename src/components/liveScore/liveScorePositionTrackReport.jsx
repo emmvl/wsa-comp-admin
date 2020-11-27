@@ -571,7 +571,7 @@ class LiveScorePositionTrackReport extends Component {
 
             this.setState({ competitionId: id })
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 

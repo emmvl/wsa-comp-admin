@@ -73,7 +73,7 @@ class LiveScoreAddScorer extends Component {
 
             this.formRef = React.createRef();
         } else {
-            history.push('/liveScoreCompetitions');
+            history.push('/matchDayCompetitions');
         }
     }
 
@@ -467,7 +467,7 @@ class LiveScoreAddScorer extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Loader visible={this.props.liveScoreScorerState.onLoad} />

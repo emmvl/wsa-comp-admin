@@ -169,10 +169,10 @@ class LiveScoreTeam extends Component {
                     this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
                 }
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         } else {
-            history.push("/liveScoreCompetitions")
+            history.push("/matchDayCompetitions")
         }
     }
 
@@ -263,7 +263,7 @@ class LiveScoreTeam extends Component {
                             {liveScoreCompIsParent == true && !sourceIdAvailable && (
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <NavLink to="/liveScoreAddTeam">
+                                        <NavLink to="/matchDayAddTeam">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addTeam}
                                             </Button>
@@ -374,7 +374,7 @@ class LiveScoreTeam extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="3" />

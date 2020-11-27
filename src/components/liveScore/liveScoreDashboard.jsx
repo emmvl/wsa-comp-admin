@@ -566,7 +566,7 @@ class LiveScoreDashboard extends Component {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -576,13 +576,13 @@ class LiveScoreDashboard extends Component {
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
+            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/matchDayDashboard" })
         }
     }
 
     umpireName(item) {
         if (item.userId) {
-            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
+            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/matchDayDashboard" })
         } else {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
@@ -649,7 +649,7 @@ class LiveScoreDashboard extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                <NavLink to="/liveScoreBulkChange">
+                                <NavLink to="/matchDayBulkChange">
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.bulkMatchChange}
                                     </Button>

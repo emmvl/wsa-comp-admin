@@ -210,7 +210,7 @@ class LiveScoreIncidentView extends Component {
                     this.state.umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
 
                 {

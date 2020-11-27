@@ -72,7 +72,7 @@ export function* liveScoreAddEditScorerSaga(action) {
             if (action.isEdit) {
                 history.push('/liveScorerList')
             } else {
-                history.push('/liveScoreAssignMatch', { record: result.result.data })
+                history.push('/matchDayAssignMatch', { record: result.result.data })
             }
         } else {
             yield call(failSaga, result)

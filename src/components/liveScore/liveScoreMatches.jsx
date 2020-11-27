@@ -242,7 +242,7 @@ class LiveScoreMatchesList extends Component {
                 this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
                 this.handleMatchTableList(page, id)
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         } else {
             if (getLiveScoreCompetiton()) {
@@ -252,7 +252,7 @@ class LiveScoreMatchesList extends Component {
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, selectedDivision === 'All' ? '' : selectedDivision)
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         }
     }
@@ -675,7 +675,7 @@ class LiveScoreMatchesList extends Component {
                     <DashboardLayout
                         menuHeading={AppConstants.matchDay}
                         menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                     />
                 )}
 

@@ -66,7 +66,7 @@ class LiveScoreMatchSheet extends Component {
                 this.refreshDownloads();
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
