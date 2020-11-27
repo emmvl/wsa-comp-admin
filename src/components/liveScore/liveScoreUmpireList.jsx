@@ -216,7 +216,7 @@ class LiveScoreUmpireList extends Component {
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
                                         to={{
-                                            pathname: `/liveScoreUmpireImport`,
+                                            pathname: `/matchDayUmpireImport`,
                                             state: { screenName: 'liveScoreUmpireList' }
                                         }}
                                         className="text-decoration-none"

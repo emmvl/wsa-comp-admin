@@ -583,8 +583,8 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreUmpireList"
-                    component={this.haveAccess(userRoleId, '/liveScoreUmpireList') ? lazyLoad(LiveScoreUmpireList) : lazyLoad(NotFound)}
+                    path="/matchDayUmpireList"
+                    component={this.haveAccess(userRoleId, '/matchDayUmpireList') ? lazyLoad(LiveScoreUmpireList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -638,8 +638,8 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreSettingsView"
-                    component={this.haveAccess(userRoleId, '/liveScoreSettingsView') ? lazyLoad(LiveScoreSettingsView) : lazyLoad(NotFound)}
+                    path="/matchDaySettingsView"
+                    component={this.haveAccess(userRoleId, '/matchDaySettingsView') ? lazyLoad(LiveScoreSettingsView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -708,8 +708,8 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreVenueChange"
-                    component={this.haveAccess(userRoleId, '/liveScoreVenueChange') ? lazyLoad(LiveScoreVenueChange) : lazyLoad(NotFound)}
+                    path="/matchDayVenueChange"
+                    component={this.haveAccess(userRoleId, '/matchDayVenueChange') ? lazyLoad(LiveScoreVenueChange) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -870,8 +870,8 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreUmpireImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreUmpireImport') ? lazyLoad(LiveScoreUmpireImport) : lazyLoad(NotFound)}
+                    path="/matchDayUmpireImport"
+                    component={this.haveAccess(userRoleId, '/matchDayUmpireImport') ? lazyLoad(LiveScoreUmpireImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

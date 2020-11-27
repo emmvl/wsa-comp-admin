@@ -659,7 +659,7 @@ class LiveScoreDashboard extends Component {
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <NavLink to={{
-                                    pathname: '/liveScoreVenueChange',
+                                    pathname: '/matchDayVenueChange',
                                     state: { key: 'dashboard' }
                                 }}>
                                     <Button className="primary-add-comp-form" type="primary">

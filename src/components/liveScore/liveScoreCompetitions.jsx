@@ -197,7 +197,7 @@ const columnsOwned = [
                             this_Obj.setCompetitionID(record);
                         }}
                     >
-                        <NavLink to={{ pathname: '/liveScoreSettingsView', state: 'edit' }}>
+                        <NavLink to={{ pathname: '/matchDaySettingsView', state: 'edit' }}>
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -524,7 +524,7 @@ class LiveScoreCompetitions extends Component {
                                 type="primary"
                                 onClick={() => {
                                     localStorage.removeItem('LiveScoreCompetition');
-                                    this.props.history.push('/liveScoreSettingsView', 'add');
+                                    this.props.history.push('/matchDaySettingsView', 'add');
                                 }}
                             >
                                 +

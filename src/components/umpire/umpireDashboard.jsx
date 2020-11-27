@@ -1110,7 +1110,7 @@ class UmpireDashboard extends Component {
                     {umpireType && umpireType !== "USERS" && (
                         <div>
                             <NavLink to={{
-                                pathname: "/liveScoreSettingsView",
+                                pathname: "/matchDaySettingsView",
                                 state: {
                                     selectedComp: this.state.selectedComp,
                                     screenName: "umpireDashboard",

@@ -533,7 +533,7 @@ class InnerHorizontalMenu extends React.Component {
                                         <Menu.Item key="18">
                                             <NavLink
                                                 to={{
-                                                    pathname: '/liveScoreSettingsView',
+                                                    pathname: '/matchDaySettingsView',
                                                     state: 'edit'
                                                 }}
                                             >

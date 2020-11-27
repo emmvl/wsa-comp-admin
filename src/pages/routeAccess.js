@@ -74,7 +74,7 @@ const routeAdminRole = [
     "/matchDayScorerView",
     "/matchDayMatchImport",
     "/matchDayTeamImport",
-    "/liveScoreUmpireList",
+    "/matchDayUmpireList",
     "/matchDayLadderList",
     "/matchDayPlayerList",
     "/matchDayPlayerImport",
@@ -85,7 +85,7 @@ const routeAdminRole = [
     "/matchDayNewsList",
     "/matchDayAddNews",
     "/matchDayNewsView",
-    "/liveScoreSettingsView",
+    "/matchDaySettingsView",
     "/matchDayBanners",
     "/matchDayTeamAttendance",
     "/matchDayGameTimeList",
@@ -100,7 +100,7 @@ const routeAdminRole = [
     "/matchDayDivisionImport",
     "/userMedical",
     "/matchDayAssignMatch",
-    "/liveScoreVenueChange",
+    "/matchDayVenueChange",
     "/matchDayIncidentImport",
     "/matchDayPublicLadder",
     "/matchDaySeasonFixture",
@@ -151,7 +151,7 @@ const routeAdminRole = [
     "/matchDayPositionTrackReport",
     "/matchDayLadderAdjustment",
     "/registrationDashboard",
-    "/liveScoreUmpireImport",
+    "/matchDayUmpireImport",
     "/umpirePoolAllocation",
     "/matchDayCoachImport",
     "/userOurOrganisation",
@@ -190,7 +190,7 @@ const routeUmpireRole = [
     "/addUmpire",
     "/umpireImport",
     "/matchDayTeamView",
-    "/liveScoreSettingsView"
+    "/matchDaySettingsView"
 ]
 
 const routeFinanceRole = [
