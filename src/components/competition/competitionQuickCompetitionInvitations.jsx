@@ -88,7 +88,7 @@ class QuickCompetitionInvitations extends Component {
     ValidateProceed = () => {
         const { mergeCompetitionTypeSelection } = this.props.quickCompetitionState
         const typeSelection = mergeCompetitionTypeSelection == null ? " " : mergeCompetitionTypeSelection;
-        if(mergeCompetitionTypeSelection.venueMismatch != 1){
+        if (mergeCompetitionTypeSelection.venueMismatch != 1) {
             let payload = {
                 "registrationCompetitionId": this.state.selectedMergeComptition,
                 "quickCompetitionId": this.state.competitionId,
@@ -105,13 +105,13 @@ class QuickCompetitionInvitations extends Component {
                 onProcessMergeCompetition: true,
                 modalVisible: false
             })
-        }else{
-            this.setState({competitionMismatchModalVisible: true})
+        } else {
+            this.setState({ competitionMismatchModalVisible: true })
         }
     }
 
     mismatchModalOk = (key) => {
-        if(key == "ok"){
+        if (key === "ok") {
             const { mergeCompetitionTypeSelection } = this.props.quickCompetitionState
             const typeSelection = mergeCompetitionTypeSelection == null ? " " : mergeCompetitionTypeSelection;
             let payload = {
@@ -131,8 +131,8 @@ class QuickCompetitionInvitations extends Component {
                 modalVisible: false
             })
             this.setState({competitionMismatchModalVisible: false})
-        }else if(key == "cancel"){
-            this.setState({competitionMismatchModalVisible: false})
+        } else if (key === "cancel") {
+            this.setState({ competitionMismatchModalVisible: false })
         }
     }
 
@@ -150,7 +150,6 @@ class QuickCompetitionInvitations extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-venue-courts-header-view">
@@ -175,7 +174,8 @@ class QuickCompetitionInvitations extends Component {
                 <div>
                     <div className="pt-4 pl-4">
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182, maxWidth: 300 }}
                             onChange={selectedMergeComptition => this.setState({ selectedMergeComptition })}
                             value={this.state.selectedMergeComptition}
                             placeholder={AppConstants.selectCompetition}

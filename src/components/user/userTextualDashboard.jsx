@@ -580,7 +580,7 @@ class UserTextualDashboard extends Component {
                         <div className="user-col col-lg-3 col-md-6">
                             <div className="user-filter-col-postal">
                                 <div className="year-select-heading select-heading-wid">{AppConstants.postCode}</div>
-                                <div style={{ width: '100%' }}>
+                                <div className="w-100">
                                     <InputWithHead
                                         placeholder={AppConstants.postCode}
                                         onChange={(e) => this.onChangeDropDownValue(e.target.value, "postalCode")}
@@ -611,7 +611,7 @@ class UserTextualDashboard extends Component {
                                 <div className="year-select-heading select-heading-wid">{AppConstants.dobTo}</div>
                                 <DatePicker
                                     placeholder="dd-mm-yyyy"
-                                    size="large"
+                                    // size="large"
                                     className="year-select user-filter-select-cal"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
                                     format="DD-MM-YYYY"

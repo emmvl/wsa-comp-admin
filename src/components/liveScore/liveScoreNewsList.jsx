@@ -21,6 +21,7 @@ function checkSorting(a, b, key) {
         return a[key].length - b[key].length
     }
 }
+
 /////function to sort table column
 function tableSort(a, b, key) {
     //if (a[key] && b[key]) {
@@ -28,7 +29,6 @@ function tableSort(a, b, key) {
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
     //}
-
 }
 
 // compare dates
@@ -56,7 +56,9 @@ function checkDate(expiryDate, publishedDate) {
         let expiryFormate = new Date(expiryDate)
         if (expiryFormate > currentDate || expiryFormate === currentDate) {
             return 'green'
-        } else return 'grey'
+        } else {
+            return 'grey'
+        }
     } else if (publishedDate) {
         if (expiryDate) {
             let expiryFormate = new Date(expiryDate)
@@ -68,11 +70,9 @@ function checkDate(expiryDate, publishedDate) {
         } else {
             return 'green'
         }
-
     } else {
         return 'red'
     }
-
 }
 
 const columns = [
@@ -99,15 +99,13 @@ const columns = [
         dataIndex: 'news_expire_date',
         key: 'news_expire_date',
         sorter: (a, b) => checkSorting(a, b, 'news_expire_date'),
-        render: (news_expire_date) =>
-            <span >{news_expire_date ? liveScore_MatchFormate(news_expire_date) : ""}</span>
+        render: (news_expire_date) => <span>{news_expire_date ? liveScore_MatchFormate(news_expire_date) : ""}</span>
     },
     {
         title: 'Recipients',
         dataIndex: 'recipients',
         key: 'recipients',
         sorter: (a, b) => checkSorting(a, b, 'recipients'),
-
     },
     // {
     //     title: 'Published',
@@ -115,38 +113,30 @@ const columns = [
     //     key: 'published_at',
     //     sorter: (a, b) => checkSorting(a, b, 'published_at'),
     //     render: published_at =>
-    //         <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+    //         <span className="d-flex justify-content-center w-50">
     //             {published_at && liveScore_formateDate(published_at)}
     //         </span>,
-
     // },
     {
         title: "Published",
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
-
-        render: isActive =>
-            <span>{isActive === 1 ? "Yes" : "NO"}</span>
-
+        render: isActive => <span>{isActive === 1 ? "Yes" : "NO"}</span>
     },
     {
         title: "Published Date",
         dataIndex: 'published_at',
         key: 'published_at',
-        render: (published_at) =>
-            <span>{published_at && liveScore_formateDate(published_at)}</span>
-
+        render: (published_at) => <span>{published_at && liveScore_formateDate(published_at)}</span>
         // sorter: (a, b) => tableSort(a, b, 'Published_date'),
-
     },
     {
         title: 'Notification',
         dataIndex: 'isNotification',
         key: 'isNotification',
         sorter: (a, b) => checkSorting(a, b, 'isNotification'),
-        render: isNotification =>
-            <span>{isNotification === 1 ? "Yes" : "NO"}</span>
+        render: isNotification => <span>{isNotification === 1 ? "Yes" : "NO"}</span>
     },
     {
         title: 'Active',
@@ -154,7 +144,7 @@ const columns = [
         key: 'news_expire_date_Active',
         // sorter: (a, b) => a.news_expire_date.length - b.news_expire_date.length,
         render: (news_expire_date, record) =>
-            <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+            <span className="d-flex justify-content-center w-50">
                 <img className="dot-image"
                     src={checkDate(news_expire_date, record.published_at) === 'green' ? AppImages.greenDot : checkDate(news_expire_date, record.published_at) === 'grey' ? AppImages.greyDot : AppImages.redDot}
                     alt="" width="12" height="12" />
@@ -179,31 +169,21 @@ class LiveScoreNewsList extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}  >
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.newsList}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
 
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
                                         to={{
                                             pathname: '/matchDayAddNews',
@@ -219,11 +199,9 @@ class LiveScoreNewsList extends Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
-
 
     ////////tableView view for Umpire list
     tableView = () => {
@@ -272,12 +250,11 @@ class LiveScoreNewsList extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
 
-                {
-                    stateWideMsg ?
-                        <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
-                        :
-                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"21"} />
-                }
+                {stateWideMsg ? (
+                    <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey="21" />
+                ) : (
+                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="21" />
+                )}
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -288,6 +265,7 @@ class LiveScoreNewsList extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ liveScoreNewsListAction }, dispatch)
 }
@@ -297,4 +275,5 @@ function mapStateToProps(state) {
         liveScoreNewsState: state.LiveScoreNewsState
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreNewsList));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreNewsList);

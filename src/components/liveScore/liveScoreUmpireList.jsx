@@ -29,16 +29,14 @@ const columns = [
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
-        render: (match) =>
-            <span>{match ? liveScore_formateDate(match.startTime) : ""}</span>
+        render: (match) => <span>{match ? liveScore_formateDate(match.startTime) : ""}</span>
     },
     {
         title: 'Time',
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
-        render: (match) =>
-            <span>{match ? getTime(match.startTime) : ""}</span>
+        render: (match) => <span>{match ? getTime(match.startTime) : ""}</span>
     },
     {
         title: 'Match',
@@ -70,8 +68,7 @@ const columns = [
         dataIndex: 'umpire1Club',
         key: 'umpire1Club',
         sorter: (a, b) => tableSort(a, b, "umpire1Club"),
-        render: (umpire1Club) =>
-            <span>{umpire1Club ? umpire1Club.name : ""}</span>
+        render: (umpire1Club) => <span>{umpire1Club ? umpire1Club.name : ""}</span>
     },
     {
         title: 'Second Umpire Name',
@@ -90,8 +87,7 @@ const columns = [
         dataIndex: 'umpire2Club',
         key: 'umpire2Club',
         sorter: (a, b) => tableSort(a, b, "umpire2Club"),
-        render: (umpire2Club) =>
-            <span>{umpire2Club ? umpire2Club.name : ""}</span>
+        render: (umpire2Club) => <span>{umpire2Club ? umpire2Club.name : ""}</span>
     },
 ];
 
@@ -188,7 +184,6 @@ class LiveScoreUmpireList extends Component {
         this.props.exportFilesAction(url)
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -199,19 +194,10 @@ class LiveScoreUmpireList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -227,16 +213,7 @@ class LiveScoreUmpireList extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
                                         to={{
                                             pathname: `/liveScoreUmpireImport`,
@@ -263,7 +240,7 @@ class LiveScoreUmpireList extends Component {
                     </div>
                 </div>
                 {/* search box */}
-                <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                <div className="mt-5 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -304,14 +281,7 @@ class LiveScoreUmpireList extends Component {
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
+                        className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end"
                     />
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -359,4 +329,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreUmpireList);
-

@@ -88,7 +88,7 @@ const columns = [
                 sorter: (a, b) => tableSort(a, b, "transferCompOrgName"),
                 render: (transferCompOrgName, record) => (
                     <div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="d-flex justify-content-between">
                             {record.tCompOrgApproved!= "-1" && <div>{transferCompOrgName}</div> }
                             {transferCompOrgName && (
                                 <div className="transfer-status">
@@ -115,9 +115,9 @@ const columns = [
                 sorter: (a, b) => tableSort(a, b, "transferAffOrgName"),
                 render: (transferAffOrgName, record) => (
                     <div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="d-flex justify-content-between">
                             {transferAffOrgName!= "-1" &&
-                                <div> {transferAffOrgName} </div>
+                            <div> {transferAffOrgName} </div>
                             }
                             {transferAffOrgName && (
                                 <div className="transfer-status">
@@ -173,7 +173,7 @@ const columns = [
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (compOrganiserApproved, record) => (
                     <div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="d-flex justify-content-between">
                             <div>
                                 {compOrganiserApproved !== 'N/A' && compOrganiserApproved !== 'P' ? currencyFormat(compOrganiserApproved) : compOrganiserApproved}
                             </div>
@@ -198,7 +198,7 @@ const columns = [
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (affiliateApproved, record) => (
                     <div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="d-flex justify-content-between">
                             <div>
                                 {affiliateApproved !== 'N/A' && affiliateApproved !== 'P' ? currencyFormat(affiliateApproved) : affiliateApproved}
                             </div>
@@ -223,7 +223,7 @@ const columns = [
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (stateApproved, record) => (
                     <div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="d-flex justify-content-between">
                             <div>
                                 {stateApproved !== 'N/A' && stateApproved !== 'P' ? currencyFormat(stateApproved) : stateApproved}
                             </div>
@@ -269,7 +269,7 @@ const columns = [
                                     key="1"
                                     onClick={() => history.push("/registrationChangeReview", {deRegisterId: record.id,deRegData: record})}
                                 >
-                                   <span>Review</span>
+                                    <span>Review</span>
                                 </Menu.Item>
                             </Menu.SubMenu>
                         )}
@@ -328,14 +328,10 @@ class RegistrationChange extends Component {
         this.setState({ filter });
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
             <div className="row">
-                <div
-                    className="col-sm"
-                    style={{ display: "flex", alignContent: "center" }}
-                >
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.registrationChange}
@@ -354,7 +350,6 @@ class RegistrationChange extends Component {
         this.handleRegChangeList(1);
     };
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const {regChangeCompetitions} = this.props.regChangeState;
         const {regChangeTypes} = this.props.commonReducerState;
@@ -397,7 +392,7 @@ class RegistrationChange extends Component {
                                     value={this.state.competitionId}
                                     onChange={(e) => this.onChangeDropDownValue(e, "competitionId")}
                                 >
-                                   <Option key={-1} value="-1">{AppConstants.all}</Option>
+                                    <Option key={-1} value="-1">{AppConstants.all}</Option>
                                     {(competitionList || []).map((item) => (
                                         <Option
                                             key={'competition_' + item.competitionId}
@@ -427,10 +422,10 @@ class RegistrationChange extends Component {
                             </div>
                         </div>
 
-                        <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
+                        <div className="d-flex align-items-center" style={{ marginRight: '1%' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3"
-                            // <div className="col-sm d-flex justify-content-end"
-                            // onClick={() => this.props.clearCompReducerDataAction("all")}
+                                // <div className="col-sm d-flex justify-content-end"
+                                // onClick={() => this.props.clearCompReducerDataAction("all")}
                             >
                                 {/* <NavLink
                                     to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
@@ -443,7 +438,7 @@ class RegistrationChange extends Component {
                             </div>
                         </div>
 
-                        <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
+                        <div className="d-flex align-items-center" style={{ marginRight: '1%' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3">
                                 <Button className="primary-add-comp-form" type="primary">
                                     <div className="row">

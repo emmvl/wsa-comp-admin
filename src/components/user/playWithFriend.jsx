@@ -179,8 +179,6 @@ class PlayWithFriend extends Component {
         this.handleFriendTableList(1);
     }
 
-
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -195,7 +193,6 @@ class PlayWithFriend extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
@@ -277,10 +274,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         userState: state.UserState,
         appState: state.AppState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((PlayWithFriend));
+export default connect(mapStateToProps, mapDispatchToProps)((PlayWithFriend));

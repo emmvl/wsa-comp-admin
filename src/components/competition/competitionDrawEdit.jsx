@@ -6,7 +6,7 @@ import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
 import DashboardLayout from '../../pages/dashboardLayout';
-import { getDayName, getTime } from './../../themes/dateformate';
+import { getDayName, getTime } from "../../themes/dateformate";
 import SwappableComponentEdit from '../../customComponents/SwappableComponentEdit.jsx';
 import AppConstants from '../../themes/appConstants';
 import history from "../../util/history";
@@ -108,8 +108,7 @@ class CompetitionDrawEditOld extends Component {
                                 roundId
                             );
                             this.setState({ roundId, venueId, roundTime, venueLoad: false });
-                        }
-                        else {
+                        } else {
                             this.setState({
                                 venueId,
                                 venueLoad: false
@@ -168,19 +167,16 @@ class CompetitionDrawEditOld extends Component {
                     competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
                     venueLoad: false
                 })
-            }
-            else {
+            } else {
 
                 this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
             }
-        }
-        else if (yearId) {
+        } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
-        }
-        else {
+        } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             // setOwnCompetitionYear(1)
         }
@@ -337,49 +333,32 @@ class CompetitionDrawEditOld extends Component {
         if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.pleaseSelectCompetition)
-        }
-        else if (this.state.venueId == null && this.state.venueId == "") {
+        } else if (this.state.venueId == null && this.state.venueId == "") {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.pleaseSelectVenue)
-        }
-        else if (this.state.roundId == null || this.state.roundId == "") {
+        } else if (this.state.roundId == null || this.state.roundId == "") {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.pleaseSelectRound)
-        }
-        else {
+        } else {
             this.props.publishDraws(this.state.firstTimeCompId, 'edit')
         }
     }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-draws-header-view mt-4">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: 'flex', alignContent: 'center' }}
-                    >
-                        <Breadcrumb
-                            style={{
-                                display: 'flex',
-                                lignItems: 'center',
-                                alignSelf: 'center'
-                            }}
-                            separator=" > "
-                        >
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {' '}
-                                {AppConstants.draws}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-draws-header-view mt-4">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb className="d-flex align-items-center align-self-center" separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {' '}
+                            {AppConstants.draws}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        );
-    };
+            </div>
+        </Header>
+    );
 
-    //////year change onchange
     onYearChange = yearId => {
         this.props.clearDraws("rounds")
         setOwnCompetitionYear(yearId)
@@ -407,7 +386,6 @@ class CompetitionDrawEditOld extends Component {
         this.setState({ competitionDivisionGradeId });
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="row">
@@ -432,15 +410,7 @@ class CompetitionDrawEditOld extends Component {
                     </div>
                 </div>
                 <div className="col-sm-4">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginRight: 50
-                        }}
-                    >
+                    <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                         <div className="reg-filter-col-cont">
                             <span className="year-select-heading">
                                 {AppConstants.competition}:
@@ -464,15 +434,7 @@ class CompetitionDrawEditOld extends Component {
                     </div>
                 </div>
                 <div className="col-sm-5">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginRight: 50
-                        }}
-                    >
+                    <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                         <span className="year-select-heading">
                             {AppConstants.division}:
                         </span>
@@ -539,14 +501,7 @@ class CompetitionDrawEditOld extends Component {
                         <span className="form-heading">{AppConstants.draws}</span>
                         <div className="row">
                             <div className="col-sm mr-0">
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}
-                                >
+                                <div className="w-100 d-flex flex-row align-items-center">
                                     <span className="year-select-heading">
                                         {AppConstants.venue}:
                                     </span>
@@ -566,14 +521,7 @@ class CompetitionDrawEditOld extends Component {
                                 </div>
                             </div>
                             <div className="col-sm pl-0">
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}
-                                >
+                                <div className="w-100 d-flex flex-row align-items-center">
                                     <span className="year-select-heading">
                                         {AppConstants.round}:
                                     </span>
@@ -599,12 +547,12 @@ class CompetitionDrawEditOld extends Component {
                         </div>
                     </div>
                     {/* <div className="col-sm-2 comp-draw-edit-btn-view">
-            <NavLink to="/competitionDrawEdit">
-              <Button className="live-score-edit" type="primary">
-                {AppConstants.edit}
-              </Button>
-            </NavLink>
-          </div> */}
+                        <NavLink to="/competitionDrawEdit">
+                            <Button className="live-score-edit" type="primary">
+                                {AppConstants.edit}
+                            </Button>
+                        </NavLink>
+                    </div> */}
                 </div>
                 {/* {this.draggableView()} */}
                 {
@@ -657,7 +605,9 @@ class CompetitionDrawEditOld extends Component {
                                     dayMargin = 70;
                                 }
                                 return (
-                                    <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
+                                    <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>
+                                        {item.notInDraw == false ? getTime(item.date) : "Not in draw"}
+                                    </span>
                                 );
                             })}
                         </div>
@@ -697,91 +647,91 @@ class CompetitionDrawEditOld extends Component {
                                                 <span>Free</span>
                                             </div>
                                         ) : (
-                                                <div>
-                                                    <span
-                                                        className={'border huge-border'}
-                                                        style={{ top: topMargin, left: leftMargin }}
-                                                    />
-                                                    <div
-                                                        className={
-                                                            'small-undraggable-box'
-                                                            +
-                                                            ' purple-dark'
-                                                        }
-                                                        style={{
-                                                            top: topMargin,
-                                                            backgroundColor: slotObject.colorCode,
-                                                            left: leftMargin
-                                                        }}
-                                                    >
-                                                        <span>{slotObject.divisionName + " - " + slotObject.gradeName}</span>
-                                                    </div>
-                                                    <span
-                                                        className={'border'}
-                                                        style={{
-                                                            top: topMarginHomeTeam,
-                                                            left: leftMargin
-                                                        }}
-                                                    />
-                                                    <div
-                                                        className={
-                                                            'box purple-box' + ' purple-bg'
-                                                        }
-                                                        style={{
-                                                            top: topMarginHomeTeam,
-                                                            backgroundColor: slotObject.colorCode,
-                                                            left: leftMargin
-                                                        }}
-                                                    >
-                                                        <SwappableComponentEdit
-                                                            id={
-                                                                index.toString() +
-                                                                ':' +
-                                                                slotIndex.toString() +
-                                                                ':0:' + slotObject.competitionDivisionGradeId
-                                                            }
-                                                            content={1}
-                                                            swappable
-                                                            onSwap={(source, target) =>
-                                                                this.onSwap(source, target)
-                                                            }
-                                                        >
-                                                            <span>{slotObject.homeTeamName}</span>
-                                                        </SwappableComponentEdit>
-                                                    </div>
-                                                    <span
-                                                        className={'border'}
-                                                        style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                    />
-                                                    <div
-                                                        className={
-                                                            'box purple-box ' +
-                                                            ' purple-bg'
-                                                        }
-                                                        style={{
-                                                            top: topMarginAwayTeam,
-                                                            backgroundColor: slotObject.colorCode,
-                                                            left: leftMargin
-                                                        }}
-                                                    >
-                                                        <SwappableComponentEdit
-                                                            id={
-                                                                index.toString() +
-                                                                ':' +
-                                                                slotIndex.toString() +
-                                                                ':1:' + slotObject.competitionDivisionGradeId
-                                                            }
-                                                            content={1}
-                                                            swappable
-                                                            onSwap={(source, target) =>
-                                                                this.onSwap(source, target)
-                                                            }
-                                                        >
-                                                            <span>{slotObject.awayTeamName}</span>
-                                                        </SwappableComponentEdit>
-                                                    </div>
+                                            <div>
+                                                <span
+                                                    className={'border huge-border'}
+                                                    style={{ top: topMargin, left: leftMargin }}
+                                                />
+                                                <div
+                                                    className={
+                                                        'small-undraggable-box'
+                                                        +
+                                                        ' purple-dark'
+                                                    }
+                                                    style={{
+                                                        top: topMargin,
+                                                        backgroundColor: slotObject.colorCode,
+                                                        left: leftMargin
+                                                    }}
+                                                >
+                                                    <span>{slotObject.divisionName + " - " + slotObject.gradeName}</span>
                                                 </div>
-                                            );
+                                                <span
+                                                    className={'border'}
+                                                    style={{
+                                                        top: topMarginHomeTeam,
+                                                        left: leftMargin
+                                                    }}
+                                                />
+                                                <div
+                                                    className={
+                                                        'box purple-box' + ' purple-bg'
+                                                    }
+                                                    style={{
+                                                        top: topMarginHomeTeam,
+                                                        backgroundColor: slotObject.colorCode,
+                                                        left: leftMargin
+                                                    }}
+                                                >
+                                                    <SwappableComponentEdit
+                                                        id={
+                                                            index.toString() +
+                                                            ':' +
+                                                            slotIndex.toString() +
+                                                            ':0:' + slotObject.competitionDivisionGradeId
+                                                        }
+                                                        content={1}
+                                                        swappable
+                                                        onSwap={(source, target) =>
+                                                            this.onSwap(source, target)
+                                                        }
+                                                    >
+                                                        <span>{slotObject.homeTeamName}</span>
+                                                    </SwappableComponentEdit>
+                                                </div>
+                                                <span
+                                                    className={'border'}
+                                                    style={{ top: topMarginAwayTeam, left: leftMargin }}
+                                                />
+                                                <div
+                                                    className={
+                                                        'box purple-box ' +
+                                                        ' purple-bg'
+                                                    }
+                                                    style={{
+                                                        top: topMarginAwayTeam,
+                                                        backgroundColor: slotObject.colorCode,
+                                                        left: leftMargin
+                                                    }}
+                                                >
+                                                    <SwappableComponentEdit
+                                                        id={
+                                                            index.toString() +
+                                                            ':' +
+                                                            slotIndex.toString() +
+                                                            ':1:' + slotObject.competitionDivisionGradeId
+                                                        }
+                                                        content={1}
+                                                        swappable
+                                                        onSwap={(source, target) =>
+                                                            this.onSwap(source, target)
+                                                        }
+                                                    >
+                                                        <span>{slotObject.awayTeamName}</span>
+                                                    </SwappableComponentEdit>
+                                                </div>
+                                            </div>
+                                        );
                                     })}
                                 </div>
                             );
@@ -806,7 +756,8 @@ class CompetitionDrawEditOld extends Component {
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
                             <Button type="cancel-button" onClick={() => history.push('/competitionDraws')}>
-                                {AppConstants.back}</Button>
+                                {AppConstants.back}
+                            </Button>
                         </div>
                     </div>
                     {/* <div className="col-sm-9">
@@ -885,7 +836,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(CompetitionDrawEditOld);
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionDrawEditOld);

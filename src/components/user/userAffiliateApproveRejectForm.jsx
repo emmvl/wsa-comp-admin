@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Select, Button, Breadcrumb } from 'antd';
+import { Layout, Select, Button, Breadcrumb } from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import HeadDescription from "../../customComponents/headDescription";
@@ -9,18 +9,15 @@ import AppConstants from "../../themes/appConstants";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
-
 class UserAffiliateApproveRejectForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             organisationType: "club",
             affiliatedTo: "peninsulaNetballAssociation",
-
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="user-affiliate-header-view">
@@ -52,7 +49,6 @@ class UserAffiliateApproveRejectForm extends Component {
                     </div>
                 </div>
             </div>
-
         )
     }
 
@@ -60,13 +56,7 @@ class UserAffiliateApproveRejectForm extends Component {
     dropDownView = () => {
         return (
             <div className="user-affiliate-dropdown-view">
-                <div style={{
-                    width: '100%',
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginLeft: 7
-                }}>
+                <div className="w-100 d-flex flex-row align-items-center" style={{ marginLeft: 7 }}>
                     <span className="year-select-heading">{AppConstants.organisationType}</span>
                     <Select
                         className="year-select"
@@ -78,13 +68,7 @@ class UserAffiliateApproveRejectForm extends Component {
                     </Select>
                 </div>
 
-                <div style={{
-                    width: '100%',
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginLeft: 7
-                }}>
+                <div className="w-100 d-flex flex-row align-items-center" style={{ marginLeft: 7 }}>
                     <span className="year-select-heading">{AppConstants.affiliatedTo}</span>
                     <Select
                         className="year-select"
@@ -99,8 +83,6 @@ class UserAffiliateApproveRejectForm extends Component {
         )
     }
 
-
-
     //////currentView for first column in the screen
     currentView = () => {
         return (
@@ -112,13 +94,11 @@ class UserAffiliateApproveRejectForm extends Component {
                     <HeadDescription heading={AppConstants.phoneNumber} desc={"02 9876 5432"} />
                 </div>
                 <div className="user-affiliate-contacts-text-view">
-                    <span className='user-affiliate-contacts-text'>{AppConstants.contacts}</span>
+                    <span className="user-affiliate-contacts-text">{AppConstants.contacts}</span>
                 </div>
             </div>
         )
     }
-
-
 
     /////pendingView for second column in the screen
     pendingView = () => {
@@ -131,11 +111,12 @@ class UserAffiliateApproveRejectForm extends Component {
                     <HeadDescription heading={AppConstants.phoneNumber} desc={"02 9876 5432"} />
                 </div>
                 <div className="user-affiliate-contacts-text-view">
-                    <span className='user-affiliate-contacts-text'>{AppConstants.contacts}</span>
+                    <span className="user-affiliate-contacts-text">{AppConstants.contacts}</span>
                 </div>
             </div>
         )
     }
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
@@ -161,7 +142,7 @@ class UserAffiliateApproveRejectForm extends Component {
 
     render() {
         return (
-            <div className="container-fluid" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="container-fluid default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="3" />
                 <Layout>
@@ -174,8 +155,8 @@ class UserAffiliateApproveRejectForm extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 export default UserAffiliateApproveRejectForm;

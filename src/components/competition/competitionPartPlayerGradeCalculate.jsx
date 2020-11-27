@@ -25,7 +25,6 @@ import {
 } from "../../util/sessionStorage"
 import PlayerCommentModal from "../../customComponents/playerCommentModal"
 import moment from "moment"
-import { getCurrentYear } from "util/permissions"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -85,14 +84,12 @@ const columns = [
     //     key: 'comments',
     //     width: 110,
     //     render: (comments, record) =>
-    //         <div className="d-flex justify-content-center" style={{ cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
+    //         <div className="d-flex justify-content-center" role="button" onClick={() => this_Obj.onClickComment(record)}>
     //             <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
     //         </div>
     // },
 
 ];
-
-
 
 class CompetitionPartPlayerGradeCalculate extends Component {
     constructor(props) {
@@ -157,20 +154,17 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                 getDataLoading: true
             })
             this.props.getCompPartPlayerGradingSummaryAction(yearId, storedCompetitionId)
-        }
-        else {
+        } else {
             if (yearId) {
                 this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
-            }
-            else {
+            } else {
                 this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
                 setParticipatingYear(1)
             }
         }
-
     }
 
     ////save the final team grading data
@@ -186,7 +180,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         this.setState({ saveLoad: true })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -200,7 +193,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             </div>
         )
     }
-    //////year change onchange
+
     onYearChange = (yearId) => {
         setParticipatingYear(yearId)
         setParticipating_competition(undefined)
@@ -242,6 +235,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     //         comments: null
     //     });
     // };
+
     // // model cancel for disappear a model
     // handleCancel = e => {
     //     this.setState({
@@ -255,8 +249,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     //     });
     // };
 
-
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -282,11 +274,8 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                         </div>
                         <div className="col-sm pb-3">
                             <div
-                                className="d-flex align-items-center"
-                                style={{
-                                    width: "fit-content",
-                                    marginRight: 50,
-                                }}
+                                className="d-flex align-items-center w-ft"
+                                style={{ marginRight: 50 }}
                             >
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
@@ -344,8 +333,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         )
     }
 
-
-
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1
@@ -356,7 +343,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                         <div className="col-sm">
                             <div className="d-flex justify-content-end">
                                 <Tooltip
-                                    style={{ height: '100%' }}
+                                    className="h-100"
                                     onMouseEnter={() =>
                                         this.setState({
                                             tooltipVisibleDelete: isPublished,
@@ -384,7 +371,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             </div>
         )
     }
-
 
     render() {
         return (

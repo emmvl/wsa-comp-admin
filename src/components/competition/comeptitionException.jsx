@@ -133,23 +133,11 @@ class CompetitionException extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
-                    <Breadcrumb style={{
-                        display: 'flex',
-                        lignItems: 'center',
-                        alignSelf: 'center'
-                    }} separator=" > ">
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
+                    <Breadcrumb className="d-flex align-items-center align-self-center" separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.exception}
                         </Breadcrumb.Item>
@@ -185,14 +173,15 @@ class CompetitionException extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <span className="form-heading" style={{ textAlign: 'start' }}>{AppConstants.exceptionHeading}</span>
+                <span className="form-heading text-left">{AppConstants.exceptionHeading}</span>
                 <div className="fluid-width">
                     {/* venue drop down view */}
                     <InputWithHead required="required-field" heading={AppConstants.venue} />
                     <div>
                         <Select
                             showSearch
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectVenue}
                             onChange={(venueId) => this.onChangeVenue(venueId)}
                             value={this.state.venueId}
@@ -208,7 +197,8 @@ class CompetitionException extends Component {
                     {/* court drop down view */}
                     <InputWithHead required="required-field pb-0" heading={AppConstants.court} />
                     <Select
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
+                        className="w-100 mt-0 pt-0"
+                        style={{ paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectCourt}
                         value={this.state.venueCourtId}
                         onChange={(venueCourtId) => this.changeVenueCourtId(venueCourtId)}
@@ -225,8 +215,8 @@ class CompetitionException extends Component {
                             <InputWithHead required="required-field" heading={AppConstants.date} />
 
                             <DatePicker
-                                size="large"
-                                style={{ width: '100%' }}
+                                // size="large"
+                                className="w-100"
                                 format="DD-MM-YYYY"
                                 placeholder="dd-mm-yyyy"
                                 onChange={(startDate) => this.onChangeDate(moment(startDate).format("YYYY-MM-DD"))}
@@ -244,8 +234,7 @@ class CompetitionException extends Component {
                             <InputWithHead required="required-field" heading={AppConstants.time} />
 
                             <TimePicker
-                                className="comp-venue-time-timepicker"
-                                style={{ width: '100%' }}
+                                className="comp-venue-time-timepicker w-100"
                                 format="HH:mm"
                                 onChange={(endTime) => this.onChangeTime(endTime)}
                                 onBlur={(e) => this.onChangeTime(e.target.value && moment(e.target.value, "HH:mm"))}
@@ -266,7 +255,8 @@ class CompetitionException extends Component {
     onChangeDate(value) {
         this.setState({ matchDate: value })
     }
-    /// for post api of court timming
+
+    /// for post api of court timing
     courttiming() {
         if (this.state.venueCourtId == null) {
             message.config({ duration: 0.9, maxCount: 1 })
@@ -305,7 +295,7 @@ class CompetitionException extends Component {
         }
     }
 
-    handleGenerateDrawModal =  (key) =>{
+    handleGenerateDrawModal = (key) => {
         if (key === "ok") {
             if (this.state.generateRoundId != null) {
                 this.callGenerateDraw();
@@ -318,7 +308,7 @@ class CompetitionException extends Component {
         }
     }
 
-    callGenerateDraw = () =>{
+    callGenerateDraw = () => {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionId,
@@ -338,7 +328,7 @@ class CompetitionException extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to='/competitionDraws'>
+                                <NavLink to="/competitionDraws">
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
@@ -355,7 +345,7 @@ class CompetitionException extends Component {
 
                 <Modal
                     className="add-membership-type-modal"
-                    title= {AppConstants.regenerateDrawTitle}
+                    title={AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}
@@ -381,7 +371,7 @@ class CompetitionException extends Component {
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
-                <InnerHorizontalMenu menu="competition" compSelectedKey={'24'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="24" />
                 <Layout>
                     {this.headerView()}
                     <Form

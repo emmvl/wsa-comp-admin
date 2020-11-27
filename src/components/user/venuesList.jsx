@@ -259,7 +259,7 @@ class VenuesList extends Component {
     };
 
     headerView = () => (
-        <div className="comp-player-grades-header-view-design" style={{ marginBottom: '12px' }}>
+        <div className="comp-player-grades-header-view-design" style={{ marginBottom: 12 }}>
             <div className="row">
                 <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
@@ -335,7 +335,7 @@ class VenuesList extends Component {
             <div className="fluid-width">
                 <div className="row">
                     <div>
-                        <div className="d-flex align-items-center" style={{ width: '100%' }}>
+                        <div className="d-flex align-items-center w-100">
                             <button className="dashboard-lay-search-button" onClick={this.onClickSearchIcon}>
                                 <img src={AppImages.searchIcon} height="15" width="15" alt="" />
                             </button>

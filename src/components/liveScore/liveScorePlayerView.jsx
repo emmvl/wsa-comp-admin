@@ -13,7 +13,6 @@ const { TabPane } = Tabs;
 
 ////activity columns data
 const activity_Columns = [
-
     {
         title: 'Match id',
         dataIndex: 'matchId',
@@ -60,7 +59,6 @@ const activity_Columns = [
 
 ////activity columns data
 const shhoting_Columns = [
-
     {
         title: 'Match id',
         dataIndex: 'matchId',
@@ -213,7 +211,7 @@ class LiveScorePlayerView extends Component {
 
     btnView = () => {
         return (
-            <div className="col-sm mt-5" style={{ display: "flex", justifyContent: "flex-end", }}>
+            <div className="col-sm mt-5 d-flex justify-content-end">
                 <div className="comp-dashboard-botton-view-mobile">
                     <NavLink to={{
                         pathname: '/matchDayAddPlayer',
@@ -232,7 +230,6 @@ class LiveScorePlayerView extends Component {
             </div>
         )
     }
-
 
     //////// tableView
     activityView = () => {
@@ -283,10 +280,10 @@ class LiveScorePlayerView extends Component {
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width">
                             <div className="row">
-                                <div className="col-sm-3 " style={{ marginBottom: "7%" }}>
+                                <div className="col-sm-3" style={{ marginBottom: "7%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
+                                <div className="col-sm-9 default-bg">
                                     {this.btnView()}
                                     <div className="inside-table-view mt-4">
                                         <Tabs defaultActiveKey="1" onChange={this.tabCallBack}>
@@ -307,5 +304,5 @@ class LiveScorePlayerView extends Component {
         );
     }
 }
-export default LiveScorePlayerView;
 
+export default LiveScorePlayerView;

@@ -63,14 +63,7 @@ class LiveScoreDivisionImport extends Component {
 
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
+            <Header className="form-header-view d-flex align-items-center bg-transparent">
                 <div className="row">
                     <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
@@ -111,8 +104,7 @@ class LiveScoreDivisionImport extends Component {
                 <div className="row">
                     {/* <CSVReader cssClass="react-csv-input" onFileLoaded={this.handleForce} /> */}
                     <input
-                        style={{ cursor: "pointer" }}
-                        className="pt-2 pb-2"
+                        className="pt-2 pb-2 pointer"
                         type="file"
                         ref={(input) => {
                             this.filesInput = input

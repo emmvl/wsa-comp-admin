@@ -7,10 +7,11 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+
 const { Content } = Layout;
+
 ////columns data
 const columns = [
-
     {
         title: 'Start',
         dataIndex: 'startTime',
@@ -29,7 +30,6 @@ const columns = [
             }}>
                 <span className="input-heading-add-another pt-0">{text}</span>
             </NavLink>
-
     },
     {
         title: 'Team',
@@ -37,15 +37,12 @@ const columns = [
         key: 'team',
         sorter: (a, b) => a.team.length - b.team.length,
         render: text =>
-
             <div className="d-flex justify-content-center">
                 <span className="mt-1">{text} {" "}</span><Tag
                     className="comp-dashboard-table-tag ml-2 mt-1"
                     color={"#5CD88D"}
                 >1</Tag>
             </div>
-
-
     },
     {
         title: 'Status',
@@ -72,7 +69,6 @@ const data = [
         status: 'Accepted',
     },
 ];
-
 
 class LiveScorerView extends Component {
     constructor(props) {
@@ -147,35 +143,17 @@ class LiveScorerView extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.assignToMatch}
                                     </Button>
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to={{
                                         pathname: "/matchDayAddScorer",
                                         state: { isEdit: true, tableRecord: this.state.data }
@@ -187,27 +165,15 @@ class LiveScorerView extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
-
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.delete}
                                     </Button>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
@@ -241,7 +207,7 @@ class LiveScorerView extends Component {
                                 <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
+                                <div className="col-sm-9 default-bg">
                                     {this.headerView()}
                                     {this.tableView()}
                                 </div>
@@ -253,5 +219,5 @@ class LiveScorerView extends Component {
         );
     }
 }
-export default LiveScorerView;
 
+export default LiveScorerView;

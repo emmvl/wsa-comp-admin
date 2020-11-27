@@ -575,7 +575,6 @@ class LiveScorePositionTrackReport extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -586,25 +585,10 @@ class LiveScorePositionTrackReport extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm-8" style={{
-                        display: "flex",
-                        flexDirection: 'row',
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                        width: '100%'
-                    }}>
+                    <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -657,7 +641,7 @@ class LiveScorePositionTrackReport extends Component {
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScorePositionTrackState.onLoad}
-                        className={"home-dashboard-table"}
+                        className="home-dashboard-table"
                         columns={(this.state.aggregate == 'MATCH' && this.state.reporting === 'PERCENT') ? percentColumn : this.state.aggregate == 'MATCH' ? columns_1 : (this.state.aggregate == 'ALL' && this.state.reporting === 'PERCENT') ? percentColumn_1 : columns_2}
                         dataSource={positionTrackData}
                         pagination={false}
@@ -787,7 +771,6 @@ class LiveScorePositionTrackReport extends Component {
         }
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -822,7 +805,7 @@ class LiveScorePositionTrackReport extends Component {
                         </div>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }}>
+                    <div className="col-sm d-flex justify-content-end align-items-center">
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"

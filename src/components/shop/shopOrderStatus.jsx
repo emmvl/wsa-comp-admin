@@ -323,14 +323,14 @@ class ShopOrderStatus extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-4 pt-2 orderSpace">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm pt-1 d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.orderStatus}
                             </span>
                         </div>
                         <div className="row">
                             <div className="col-sm pt-1">
-                                <div style={{ display: "flex", justifyContent: 'flex-end' }}>
+                                <div className="d-flex justify-content-end">
                                     <div className="comp-product-search-inp-width">
                                         <Input
                                             className="product-reg-search-input"
@@ -350,16 +350,7 @@ class ShopOrderStatus extends Component {
                                 </div>
                             </div>
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.addOrder}
                                     </Button>
@@ -461,7 +452,7 @@ class ShopOrderStatus extends Component {
                             <div className="reg-filter-col-cont">
                                 <div style={{ width: 180 }} className="year-select-heading">{AppConstants.fulfilmentStatus} :</div>
                                 <Select
-                                    //  mode="multiple"
+                                    // mode="multiple"
                                     className="year-select reg-filter-select mr-3"
                                     style={{ minWidth: 160 }}
                                     onChange={(fulfilmentStatus) => this.onChangeDropDownValue(fulfilmentStatus, "fulfilmentStatus")}

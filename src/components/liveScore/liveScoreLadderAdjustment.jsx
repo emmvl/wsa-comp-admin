@@ -98,18 +98,10 @@ class LiveScoreLadderAdjustment extends Component {
         })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.ladderAdjustment}
@@ -135,14 +127,7 @@ class LiveScoreLadderAdjustment extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">
                                     {AppConstants.division}:
                                </span>
@@ -215,8 +200,7 @@ class LiveScoreLadderAdjustment extends Component {
                 {addNewLadder.map((ladder, index) => (
                     <div className="inside-container-view">
                         <div
-                            className="transfer-image-view pt-0 pointer"
-                            style={{ marginLeft: 'auto' }}
+                            className="transfer-image-view pt-0 pointer ml-auto"
                             onClick={() => this.deleteItem(index)}
                         >
                             <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
@@ -226,7 +210,7 @@ class LiveScoreLadderAdjustment extends Component {
                         </div>
 
                         <div className="row pt-3">
-                            <div className='col-sm-3 division-table-field-view'>
+                            <div className="col-sm-3 division-table-field-view">
                                 <InputWithHead
                                     required="required-field pb-0"
                                     heading={AppConstants.teamName}
@@ -236,7 +220,7 @@ class LiveScoreLadderAdjustment extends Component {
                                 <Form.Item name={`teamId${index}`} rules={[{ required: true, message: ValidationConstants.teamName }]}>
                                     <Select
                                         placeholder={AppConstants.selectTeam}
-                                        style={{ width: '100%' }}
+                                        className="w-100"
                                         onChange={(teamId) => this.props.updateLadderSetting({
                                             data: teamId,
                                             index,
@@ -255,7 +239,7 @@ class LiveScoreLadderAdjustment extends Component {
                         </div>
 
                         <div className="row pt-3">
-                            <div className='col-sm-3 division-table-field-view'>
+                            <div className="col-sm-3 division-table-field-view">
                                 <InputWithHead required="required-field pb-0" heading={AppConstants.points} />
                             </div>
                             <div className="col-sm">
@@ -275,7 +259,7 @@ class LiveScoreLadderAdjustment extends Component {
                         </div>
 
                         <div className="row pt-3">
-                            <div className='col-sm-3 division-table-field-view'>
+                            <div className="col-sm-3 division-table-field-view">
                                 <InputWithHead required="required-field pb-0" heading={AppConstants.reasonForChange} />
                             </div>
                             <div className="col-sm">
@@ -336,7 +320,6 @@ class LiveScoreLadderAdjustment extends Component {
         )
     };
 
-    //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">

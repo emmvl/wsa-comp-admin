@@ -63,7 +63,7 @@ class DivisionGradeModal extends React.Component {
     render() {
         const { checkvalue, changeDivision, changeTeam, division, modalTitle, onDivisionBack, onCancel, addDivision, addGrade, removegrade, changegrade, removeDivision } = this.props
         return (
-            <div style={{ backgroundColor: "red" }}>
+            <div className="bg-danger">
                 <Modal
                     {...this.props}
                     className="add-membership-type-modal modalFooter"
@@ -73,7 +73,7 @@ class DivisionGradeModal extends React.Component {
                     okText={AppConstants.save}
                     cancelButtonProps={{ style: { position: "absolute", left: 15 } }}
                     footer={
-                        <div style={{ display: "none" }} />
+                        <div className="d-none" />
                     }
                 >
                     <Form
@@ -100,20 +100,21 @@ class DivisionGradeModal extends React.Component {
                                         <div className="col-sm-7">
                                             {item.grades.map((gradeItem, gradeIndex) => (
                                                 <div className="row" key={"gradeValue" + gradeIndex}>
-                                                    <div className="col-sm pl-4 pb-2 division" style={{ display: "flex" }}>
+                                                    <div className="col-sm pl-4 pb-2 division d-flex">
                                                         <Form.Item name={`grade${index}${gradeIndex}`} rules={[{ required: gradeIndex >= 1, message: ValidationConstants.gradeField }]}>
                                                             <InputWithHead
                                                                 heading={index == 0 && gradeIndex == 0 ? AppConstants.grade : " "}
-                                                                placeholder={"Enter grade"}
+                                                                placeholder="Enter grade"
                                                                 // value={gradeItem.grade}
                                                                 onChange={(e) => changegrade(index, gradeIndex, e)}
                                                             />
                                                         </Form.Item>
                                                         {item.grades.length > 1 && (
                                                             <span
-                                                                className="user-remove-btn pl-2"
+                                                                className="user-remove-btn pl-2 d-flex position-relative justify-content-center align-items-center"
+                                                                role="button"
                                                                 onClick={() => { removegrade(index, gradeIndex); this.valueupdate() }}
-                                                                style={{ cursor: 'pointer', display: 'flex', position: 'relative', justifyContent: "center", alignItems: 'center', paddingTop: 30 }}
+                                                                style={{ paddingTop: 30, cursor: 'pointer' }}
                                                             >
                                                                 <img
                                                                     className="dot-image"
@@ -162,13 +163,13 @@ class DivisionGradeModal extends React.Component {
                             </div>
 
                             <div className="row">
-                                <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
-                                    <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
-                                        <Button className="cancelBtnWidth" type="cancel-button" onClick={onDivisionBack} style={{ marginRight: '20px' }}>
+                                <div className="col-sm d-flex w-100" style={{ paddingTop: 10 }}>
+                                    <div className="col-sm-6 d-flex w-50 justify-content-start">
+                                        <Button className="cancelBtnWidth" type="cancel-button" onClick={onDivisionBack} style={{ marginRight: 20 }}>
                                             {AppConstants.back}
                                         </Button>
                                     </div>
-                                    <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
+                                    <div className="col-sm-6 d-flex justify-content-end w-50">
                                         <Button className="publish-button" type="primary" htmlType="submit">
                                             {AppConstants.save}
                                         </Button>

@@ -75,12 +75,10 @@ class CompetitionPlayerImport extends Component {
                         if (assignedPlayerData.length === 0) {
                             if (this.state.screenNavigationKey == "ProposedPlayerGrading") {
                                 history.push('/competitionPartPlayerGrades');
-                            }
-                            else if (this.state.screenNavigationKey == "PlayerGrading") {
+                            } else if (this.state.screenNavigationKey == "PlayerGrading") {
                                 history.push('/competitionPlayerGrades');
                             }
-                        }
-                        else {
+                        } else {
                             this.setState({ isProceed: 1 });
                         }
                     }
@@ -89,15 +87,10 @@ class CompetitionPlayerImport extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}>
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -141,8 +134,7 @@ class CompetitionPlayerImport extends Component {
                 <div className="col-sm">
                     <div className="row">
                         <input
-                            style={{ cursor: "pointer" }}
-                            className="pt-2 pb-2"
+                            className="pt-2 pb-2 pointer"
                             type="file"
                             ref={(input) => { this.filesInput = input }}
                             name="file"
@@ -158,14 +150,14 @@ class CompetitionPlayerImport extends Component {
                     </div>
                 </div>
 
-                <div className="col-sm" style={{ marginTop: 10 }}>
+                <div className="col-sm mt-10">
                     <div className="row">
                         <div className="reg-add-save-button">
                             <Button id={AppUniqueId.importPlayerBtn} onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
                                 {AppConstants.upload}
                             </Button>
                         </div>
-                        <div className="reg-add-save-button" style={{ marginLeft: '20px' }}>
+                        <div className="reg-add-save-button" style={{ marginLeft: 20 }}>
                             <NavLink to="/templates/wsa-import-player.csv" target="_blank" download>
                                 <Button id={AppUniqueId.downLoadTempletebtn} className="primary-add-comp-form" type="primary">
                                     {AppConstants.downloadTemplate}
@@ -191,7 +183,7 @@ class CompetitionPlayerImport extends Component {
                         pagination={false}
                     />
                 </div>
-                <div className="d-flex justify-content-end" style={{ marginTop: '20px' }}>
+                <div className="d-flex justify-content-end" style={{ marginTop: 20 }}>
                     <div className="reg-add-save-button">
                         <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
                             {AppConstants.proceed}
@@ -238,4 +230,5 @@ function mapStateToProps(state) {
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
     }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPlayerImport);

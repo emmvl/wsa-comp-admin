@@ -20,7 +20,6 @@ class UmpireAllocation extends Component {
         }
     }
 
-
     componentDidMount() {
         loadjs('assets/js/custom.js');
     }
@@ -31,7 +30,6 @@ class UmpireAllocation extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-draws-header-view mt-5">
@@ -46,17 +44,11 @@ class UmpireAllocation extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="row">
                 <div className="col-sm-3">
-                    <div style={{
-                        width: '100%',
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}>
+                    <div className="w-100 d-flex flex-row align-items-center">
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
                             className="year-select"
@@ -72,13 +64,7 @@ class UmpireAllocation extends Component {
                     </div>
                 </div>
                 <div className="col-sm-3">
-                    <div style={{
-                        width: '100%',
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginRight: 50,
-                    }}>
+                    <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
                             className="year-select"
@@ -104,12 +90,7 @@ class UmpireAllocation extends Component {
                         <span className="form-heading">{AppConstants.winter_2019}</span>
                         <div className="row">
                             <div className="col-sm">
-                                <div style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}>
+                                <div className="w-100 d-flex flex-row align-items-center">
                                     <span className="year-select-heading">{AppConstants.venue}:</span>
                                     <Select
                                         className="year-select"
@@ -122,13 +103,7 @@ class UmpireAllocation extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginRight: 50,
-                                }}>
+                                <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                     <span className="year-select-heading">{AppConstants.round}:</span>
                                     <Select
                                         className="year-select"
@@ -304,152 +279,152 @@ class UmpireAllocation extends Component {
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-192 border-36" />
                         <div className="only-box purple-box left-135 top-192 box-36 purple-dark">
                             <span>
                                 Sara Cole
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-228 border-36" />
                         <div className="only-box purple-box left-135 top-228 box-36 purple-dark">
                             <span>
                                 Evelyn Keller
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-144" />
                         <div className="undragable-box left-245 top-144 green-bg">
                             <span>
                                 Queenscliff 10 <br />
                                 Mona Vale 9
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-192 border-36" />
                         <div className="only-box green-box left-245 top-192 box-36 green-dark">
                             <span>
                                 Julia Carr
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-228 border-36" />
                         <div className="only-box green-box left-245 top-228 box-36 green-dark">
                             <span>
                                 Debra Peters
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-144" />
                         <div className="undragable-box left-355 top-144 yellow-bg black-text">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-192 border-36" />
                         <div className="only-box yellow-box left-355 top-192 box-36 yellow-dark black-text">
                             <span>
                                 Jessica Sim...
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-228 border-36" />
                         <div className="only-box yellow-box left-355 top-228 box-36 yellow-dark black-text">
                             <span>
                                 Linda Martinez
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-144" />
                         <div className="undragable-box left-465 top-144 blue-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-192 border-36" />
                         <div className="only-box blue-box left-465 top-192 box-36 blue-dark">
                             <span>
                                 Carol McDo...
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-228 border-36" />
                         <div className="only-box blue-box left-465 top-228 box-36 blue-dark">
                             <span>
                                 Helen Rivera
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-144" />
                         <div className="undragable-box left-575 top-144 red-bg">
                             <span>
                                 Mona Vale 8 <br />
                                 Collaroy 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-192 border-36" />
                         <div className="only-box red-box left-575 top-192 box-36 red-dark">
                             <span>
                                 Shirley Martin
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-228 border-36" />
                         <div className="only-box red-box left-575 top-228 box-36 red-dark">
                             <span>
                                 Betty Medina
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-144" />
                         <div className="undragable-box left-685 top-144 red-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-192 border-36" />
                         <div className="only-box red-box left-685 top-192 box-36 red-dark">
                             <span>
                                 Sharon Collins
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-228 border-36" />
                         <div className="only-box red-box left-685 top-228 box-36 red-dark">
                             <span>
                                 Tammy Torres
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-144" />
                         <div className="undragable-box left-795 top-144 blue-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-192 border-36" />
                         <div className="only-box blue-box left-795 top-192 box-36 blue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-228 border-36" />
                         <div className="only-box blue-box left-795 top-228 box-36 blue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-144" />
                         <div className="undragable-box left-905 top-144 blue-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-192 border-36" />
                         <div className="only-box blue-box left-905 top-192 box-36 blue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-228 border-36" />
                         <div className="only-box blue-box left-905 top-228 box-36 blue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
 
                         <div className="sr-no big-sr">3</div>
@@ -458,171 +433,171 @@ class UmpireAllocation extends Component {
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-25 top-336 border-36" />
                         <div className="only-box green-box left-25 top-336 box-36 green-dark">
                             <span>
                                 Marilyn Miller
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-25 top-372 border-36" />
                         <div className="only-box green-box left-25 top-372 box-36 green-dark">
                             <span>
                                 Heather Jen...
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-288" />
                         <div className="undragable-box left-135 top-288 yellow-bg black-text">
                             <span>
                                 Queenscliff 10 <br />
                                 Mona Vale 9
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-336 border-36" />
                         <div className="only-box yellow-box left-135 top-336 box-36 yellow-dark black-text">
                             <span>
                                 Jean Roberts
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-372 border-36" />
                         <div className="only-box yellow-box left-135 top-372 box-36 yellow-dark black-text">
                             <span>
                                 Joyce Hayes
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-288" />
                         <div className="undragable-box left-245 top-288 red-bg">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-336 border-36" />
                         <div className="only-box red-box left-245 top-336 box-36 red-dark">
                             <span>
                                 Maria Ford
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-372 border-36" />
                         <div className="box left-245 top-372 box-36 red-dark">
                             <span>
                                 Beverly Curtis
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-288" />
                         <div className="undragable-box left-355 top-288 yellow-bg black-text">
                             <span>
                                 Mona Vale 8 <br />
                                 Collaroy 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-336 border-36" />
                         <div className="only-box yellow-box left-355 top-336 box-36 yellow-dark black-text">
                             <span>
                                 Ann Graham
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-372 border-36" />
                         <div className="only-box yellow-box left-355 top-372 box-36 yellow-dark black-text">
                             <span>
                                 Gloria Hill
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-288" />
                         <div className="undragable-box left-465 top-288 red-bg">
                             <span>
                                 Mona Vale 8 <br />
                                 Collaroy 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-336 border-36" />
                         <div className="only-box red-box left-465 top-336 box-36 red-dark">
                             <span>
                                 Brenda Ortega
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-372 border-36" />
                         <div className="only-box red-box left-465 top-372 box-36 red-dark">
                             <span>
                                 Brenda Ortega
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-288" />
                         <div className="undragable-box left-575 top-288 orange-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-336 border-36" />
                         <div className="only-box orange-box left-575 top-336 box-36 orange-dark">
                             <span>
                                 Megan Baker
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-372 border-36" />
                         <div className="only-box orange-box left-575 top-372 box-36 orange-dark">
                             <span>
                                 Donna Jones
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-288" />
                         <div className="undragable-box left-685 top-288 skyblue-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-336 border-36" />
                         <div className="only-box skyblue-box left-685 top-336 box-36 skyblue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-372 border-36" />
                         <div className="only-box skyblue-box left-685 top-372 box-36 skyblue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-288" />
                         <div className="undragable-box left-795 top-288 blue-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-336 border-36" />
                         <div className="only-box blue-box left-795 top-336 box-36 blue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-372 border-36" />
                         <div className="only-box blue-box left-795 top-372 box-36 blue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-288" />
                         <div className="undragable-box left-905 top-288 blue-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-336 border-36" />
                         <div className="only-box blue-box left-905 top-336 box-36 blue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-372 border-36" />
                         <div className="only-box blue-box left-905 top-372 box-36 blue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
 
                         <div className="sr-no big-sr">4</div>
@@ -631,178 +606,177 @@ class UmpireAllocation extends Component {
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-25 top-480 border-36" />
                         <div className="only-box green-box left-25 top-480 box-36 green-dark">
                             <span>
                                 Emily Wade
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-25 top-516 border-36" />
                         <div className="only-box green-box left-25 top-516 box-36 green-dark">
                             <span>
                                 Megan Reyn...
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-432" />
                         <div className="undragable-box left-135 top-432 yellow-bg black-text">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-480 border-36" />
                         <div className="only-box yellow-box left-135 top-480 box-36 yellow-dark black-text">
                             <span>
                                 Lori Carter
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-135 top-516 border-36" />
                         <div className="only-box yellow-box left-135 top-516 box-36 yellow-dark black-text">
                             <span>
                                 Rachel Romero
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-432" />
                         <div className="undragable-box left-245 top-432 red-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-480 border-36" />
                         <div className="only-box red-box left-245 top-480 box-36 red-dark">
                             <span>
                                 Mary Knight
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-245 top-516 border-36" />
                         <div className="only-box red-box left-245 top-516 box-36 red-dark">
                             <span>
                                 Carolyn Peters
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-432" />
                         <div className="undragable-box left-355 top-432 yellow-bg black-text">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-480 border-36" />
                         <div className="only-box yellow-box left-355 top-480 box-36 yellow-dark black-text">
                             <span>
                                 Betty Wells
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-355 top-516 border-36" />
                         <div className="only-box yellow-box left-355 top-516 box-36 yellow-dark black-text">
                             <span>
                                 Deborah Ro...
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-432" />
                         <div className="undragable-box left-465 top-432 red-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-480 border-36" />
                         <div className="only-box red-box left-465 top-480 box-36 red-dark">
                             <span>
                                 Joan Warren
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-465 top-516 border-36" />
                         <div className="only-box red-box left-465 top-516 box-36 red-dark">
                             <span>
                                 Mary Wilson
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-432" />
                         <div className="undragable-box left-575 top-432 orange-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-480 border-36" />
                         <div className="only-box orange-box left-575 top-480 box-36 orange-dark">
                             <span>
                                 Theresa Pena
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-575 top-516 border-36" />
                         <div className="only-box orange-box left-575 top-516 box-36 orange-dark">
                             <span>
                                 Dorothy Diaz
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-432" />
                         <div className="undragable-box left-685 top-432 skyblue-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-480 border-36" />
                         <div className="only-box skyblue-box left-685 top-480 box-36 skyblue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-685 top-516 border-36" />
                         <div className="only-box skyblue-box left-685 top-516 box-36 skyblue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-432" />
                         <div className="undragable-box left-795 top-432 blue-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-480 border-36" />
                         <div className="only-box blue-box left-795 top-480 box-36 blue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-795 top-516 border-36" />
                         <div className="only-box blue-box left-795 top-516 box-36 blue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-432" />
                         <div className="undragable-box left-905 top-432 blue-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-480 border-36" />
                         <div className="only-box blue-box left-905 top-480 box-36 blue-dark">
                             <span>
                                 Cynthia Reed
-                     </span>
+                            </span>
                         </div>
                         <span className="border left-905 top-516 border-36" />
                         <div className="only-box blue-box left-905 top-516 box-36 blue-dark">
                             <span>
                                 Marilyn Henry
-                     </span>
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
         )
     }
-
 
     //////footer view containing all the buttons like back and save
     footerView = () => {
@@ -847,4 +821,5 @@ class UmpireAllocation extends Component {
         );
     }
 }
+
 export default UmpireAllocation;

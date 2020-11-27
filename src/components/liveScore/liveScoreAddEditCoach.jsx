@@ -110,19 +110,11 @@ class LiveScoreAddEditCoach extends Component {
         }, 300);
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location ? this.props.location.state ? this.props.location.state.isEdit : null : null
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -284,7 +276,7 @@ class LiveScoreAddEditCoach extends Component {
                                 // loading={this.props.liveScoreState.onLoad && true}
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
                                 // value={[741, 738]}
                                 showSearch
@@ -316,7 +308,6 @@ class LiveScoreAddEditCoach extends Component {
                             heading={AppConstants.coachSearch}
                         />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchCoach }]}>
-
                             <AutoComplete
                                 loading
                                 style={{ width: '100%', height: '44px' }}
@@ -374,7 +365,7 @@ class LiveScoreAddEditCoach extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: '100%', }}
+                                style={{ width: '100%' }}
                                 onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
                                 // value={teamId}
                                 optionFilterProp="children"
@@ -390,7 +381,6 @@ class LiveScoreAddEditCoach extends Component {
         )
     }
 
-    //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
@@ -492,7 +482,6 @@ class LiveScoreAddEditCoach extends Component {
         }
     };
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">

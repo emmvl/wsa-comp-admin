@@ -214,7 +214,6 @@ class RegistrationFormList extends Component {
         this.props.regDashboardListAction(offset, yearRefId, sortBy, sortOrder)
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -237,7 +236,6 @@ class RegistrationFormList extends Component {
         this.handleMembershipTableList(1, yearRefId);
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">

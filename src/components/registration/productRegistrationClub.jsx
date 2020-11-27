@@ -16,64 +16,51 @@ const columns = [
         sorter: (a, b) => a.name.length - b.name.length,
         // sortOrder: columnKey === 'name' && sortedInfo.order,
         // ellipsis: true,
-
     },
     {
         title: 'Registration Type',
         dataIndex: 'regType',
         key: 'regType',
         sorter: (a, b) => a.regType.length - b.regType.length,
-
     },
     {
         title: 'Club Fee',
         dataIndex: 'clubFee',
         key: 'clubFee',
         sorter: (a, b) => a.clubFee.length - b.clubFee.length,
-
-
     },
     {
         title: 'Association Fee',
         dataIndex: 'associatFee',
         key: 'associatFee',
         sorter: (a, b) => a.associatFee.length - b.associatFee.length,
-
     },
     {
         title: 'State Fee',
         dataIndex: 'stateFee',
         key: 'stateFee',
         sorter: (a, b) => a.stateFee.length - b.stateFee.length,
-
-
     },
     {
         title: 'Total Fee',
         dataIndex: 'totalFee',
         key: 'totalFee',
         sorter: (a, b) => a.totalFee.length - b.totalFee.length,
-
     },
-
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        render: status => <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-            <img className="dot-image" src={status === "true" ? AppImages.greenDot : AppImages.greyDot}
-                alt="" width="12" height="12" />
+        render: status => <span className='d-flex justify-content-center w-50'>
+            <img className="dot-image" src={status === "true" ? AppImages.greenDot : AppImages.greyDot} alt="" width="12" height="12" />
         </span>,
-
     },
     {
         title: 'Product Type',
         dataIndex: 'productType',
         key: 'productType',
         sorter: (a, b) => a.productType.length - b.productType.length,
-
     },
-
 ];
 
 const playingMemberData = [
@@ -87,7 +74,6 @@ const playingMemberData = [
         totalFee: "$ 90.00",
         status: "true",
         productType: "Recurring"
-
     },
     {
         key: '2',
@@ -110,7 +96,6 @@ const playingMemberData = [
         totalFee: "$ 90.00",
         status: "true",
         productType: "Recurring"
-
     },
     {
         key: '4',
@@ -136,9 +121,7 @@ const nonPlayingMemberData = [
         totalFee: "$ 90.00",
         status: "true",
         productType: "One-off"
-
     },
-
 ];
 
 class ProductRegistrationClub extends Component {
@@ -150,15 +133,12 @@ class ProductRegistrationClub extends Component {
         }
     }
 
-
-
     onChange = e => {
         this.setState({
             value: e.target.value,
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="product-reg-club-header-view">
@@ -188,8 +168,7 @@ class ProductRegistrationClub extends Component {
                     </Radio.Group>
                 </div>
                 <div className="table-responsive home-dash-table-view mt-5">
-                    <Table className="home-dashboard-table" columns={columns} dataSource={tableData} pagination={false}
-                    />
+                    <Table className="home-dashboard-table" columns={columns} dataSource={tableData} pagination={false} />
                 </div>
             </div>
         )
@@ -201,11 +180,11 @@ class ProductRegistrationClub extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     {/* <div className="row">
-                        <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
+                        <div className="col-sm d-flex align-items-start">
                             <Button type="cancel-button">Cancel</Button>
                         </div>
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 <Button className="save-draft-text" type="save-draft-text">Save as Draft</Button>
                                 <Button className="publish-button" type="primary">Publish</Button>
                             </div>
@@ -230,14 +209,13 @@ class ProductRegistrationClub extends Component {
                         {/* </div> */}
                     </Content>
 
-
                     <Footer>
                         {this.footerView()}
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 export default ProductRegistrationClub;

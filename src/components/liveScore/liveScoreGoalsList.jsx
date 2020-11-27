@@ -295,28 +295,21 @@ class LiveScoreGoalList extends Component {
         this.setState({ filter })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ alignSelf: 'center' }}>
+                    <div className="col-sm align-self-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.goalState}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm" style={{
-                        display: "flex",
-                        flexDirection: 'row',
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                    }}>
+                    <div className="col-sm d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
-
                             <div className="col-sm">
                                 <Select
-                                    className="year-select reg-filter-select1"
-                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 100 }}
+                                    className="year-select reg-filter-select1 d-flex justify-content-end"
+                                    style={{ minWidth: 100 }}
                                     onChange={(filter) => this.onChangeFilter(filter)}
                                     value={this.state.filter}
                                 >
@@ -324,18 +317,8 @@ class LiveScoreGoalList extends Component {
                                     <Option value={AppConstants.total}>{AppConstants.total}</Option>
                                 </Select>
                             </div>
-                            <div className="col-sm" style={{ display: "flex" }}>
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignSelf: 'center',
-                                        alignItems: "flex-end",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                            <div className="col-sm d-flex">
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-end align-self-center justify-content-end">
                                     <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -356,7 +339,7 @@ class LiveScoreGoalList extends Component {
                     </div>
                 </div>
                 {/* search box */}
-                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }}>
+                <div className="col-sm pt-3 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -402,27 +385,19 @@ class LiveScoreGoalList extends Component {
                 </div>
 
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}>
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             defaultCurrent={currentPage}
                             total={totalCount}
-                            onChange={(page) => this.onPageChange(page)} />
+                            onChange={(page) => this.onPageChange(page)}
+                        />
                     </div>
                 </div>
             </div>
         )
     }
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -438,6 +413,7 @@ class LiveScoreGoalList extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ liveScoreGoalListAction, exportFilesAction }, dispatch)
 }
@@ -449,5 +425,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreGoalList);
-
-

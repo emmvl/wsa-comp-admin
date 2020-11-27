@@ -21,10 +21,9 @@ import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { liveScoreCoachListAction } from "../../store/actions/LiveScoreAction/liveScoreCoachAction";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
-import { isArrayNotEmpty } from "../../util/helpers";
 import { getliveScoreTeams } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { userExportFilesAction } from "../../store/actions/appAction";
-import { teamListData } from "../../util/helpers";
+import { isArrayNotEmpty, teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -227,16 +226,7 @@ class LiveScoreCoaches extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
@@ -250,7 +240,6 @@ class LiveScoreCoaches extends Component {
         );
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -261,28 +250,10 @@ class LiveScoreCoaches extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div
-                        className="col-sm-8"
-                        style={{
-                            display: "flex",
-                            flexDirection: 'row',
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                            width: '100%'
-                        }}
-                    >
+                    <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to="/matchDayAddEditCoach">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addCoach}
@@ -291,16 +262,7 @@ class LiveScoreCoaches extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -316,16 +278,7 @@ class LiveScoreCoaches extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to="/liveScoreCoachImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
@@ -345,7 +298,7 @@ class LiveScoreCoaches extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                <div className="mt-5 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"

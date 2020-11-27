@@ -150,7 +150,7 @@ const columnsOwned = [
         dataIndex: 'more',
         key: 'more',
         render: () => (
-            <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+            <span className="d-flex justify-content-center w-50">
                 <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
             </span>
         ),
@@ -220,7 +220,7 @@ const columnsParticipate = [
         dataIndex: 'more',
         key: 'more',
         render: () => (
-            <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+            <span className="d-flex justify-content-center w-50">
                 <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
             </span>
         ),
@@ -285,7 +285,7 @@ class HomeDashboard extends Component {
     }
 
     async componentDidUpdate(nextProps) {
-        try{
+        try {
             const { yearList } = this.props.appState;
             const userOrganisation = this.props.userState.getUserOrganisation;
             if (this.state.userCountLoading && !this.props.appState.onLoad) {
@@ -302,39 +302,37 @@ class HomeDashboard extends Component {
             }
 
             if (this.state.loading && !this.props.userState.onOrgLoad) {
-                //if (nextProps.userState.getUserOrganisation !== userOrganisation) {
-                    if (userOrganisation.length > 0) {
-                        if (this.props.appState.yearList.length == 0) {
-                            this.props.getOnlyYearListAction(this.props.appState.yearList);
-                            this.setState({ userCountLoading: true, loading: false });
-                        } else {
-                            const yearRefId = getCurrentYear(yearList);
-                            if (this.props.homeDashboardState.userCount == null) {
-                                this.props.getUserCount(yearRefId);
-                                this.setState({ loading: false });
-                            }
-                        }
-
-                        if (this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null) {
-                            const organisationUniqueKey = getOrganisationData() == null
-                                ? userOrganisation[0].organisationUniqueKey
-                                : getOrganisationData().organisationUniqueKey;
-                            await this.setState({ organisationId: organisationUniqueKey });
-                            this.handleActionBoxList(1);
+                // if (nextProps.userState.getUserOrganisation !== userOrganisation) {
+                if (userOrganisation.length > 0) {
+                    if (this.props.appState.yearList.length == 0) {
+                        this.props.getOnlyYearListAction(this.props.appState.yearList);
+                        this.setState({ userCountLoading: true, loading: false });
+                    } else {
+                        const yearRefId = getCurrentYear(yearList);
+                        if (this.props.homeDashboardState.userCount == null) {
+                            this.props.getUserCount(yearRefId);
+                            this.setState({ loading: false });
                         }
                     }
-                //}
+
+                    if (this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null) {
+                        const organisationUniqueKey = getOrganisationData() == null
+                            ? userOrganisation[0].organisationUniqueKey
+                            : getOrganisationData().organisationUniqueKey;
+                        await this.setState({ organisationId: organisationUniqueKey });
+                        this.handleActionBoxList(1);
+                    }
+                }
+                // }
             }
 
             if (this.state.updateActionBoxLoad && !this.props.homeDashboardState.onActionBoxLoad) {
                 this.setState({ updateActionBoxLoad: false });
                 this.handleActionBoxList(1);
             }
-        }
-        catch(error){
+        } catch (error) {
             console.log("error", error);
         }
-
     }
 
     onYearChange = (yearRefId) => {
@@ -436,20 +434,11 @@ class HomeDashboard extends Component {
         const { yearRefId } = this.props.homeDashboardState;
         return (
             <div className="row text-view" style={{ paddingTop: '3%' }}>
-                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="col-sm d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.competitionsOverview}</span>
                 </div>
                 <div className="col-sm text-right">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginLeft: 7,
-                            justifyContent: 'flex-end',
-                        }}
-                    >
+                    <div className="w-100 d-flex flex-row align-items-center justify-content-end" style={{ marginLeft: 7 }}>
                         <span className="year-select-heading" style={{ marginRight: 10 }}>
                             {`${AppConstants.year}: `}
                         </span>
@@ -490,23 +479,22 @@ class HomeDashboard extends Component {
                     <div className="col-sm pt-5">
                         <div className="home-dash-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeUserIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <Spin size="small" spinning={this.props.homeDashboardState.onLoad} />
                                     {!this.props.homeDashboardState.onLoad && (
                                         <span className="reg-payment-price-text">{(userCount !== null && userCount !== '') ? userCount : '-'}</span>
                                     )}
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
                                 </div>
                                 <div
-                                    className="col-sm-2"
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                                    className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => history.push('/userTextualDashboard')}
                                 >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
@@ -518,12 +506,12 @@ class HomeDashboard extends Component {
                     <div className="col-sm pt-5">
                         <div className="home-dash-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <Spin size="small" spinning={this.props.homeDashboardState.onLoad} />
                                     {!this.props.homeDashboardState.onLoad && (
                                         <span className="reg-payment-price-text">
@@ -531,12 +519,11 @@ class HomeDashboard extends Component {
                                         </span>
                                     )}
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
                                 </div>
                                 <div
-                                    className="col-sm-2"
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                                    className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => (userRoleId == 2) && history.push('/registration')}
                                 >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
@@ -549,12 +536,12 @@ class HomeDashboard extends Component {
                     <div className="col-sm pt-5">
                         <div className="home-dash-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeCompIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <Spin size="small" spinning={this.props.homeDashboardState.onLoad} />
                                     {!this.props.homeDashboardState.onLoad && (
                                         <span className="reg-payment-price-text">
@@ -564,12 +551,11 @@ class HomeDashboard extends Component {
                                         </span>
                                     )}
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalCompetitions}</span>
                                 </div>
                                 <div
-                                    className="col-sm-2"
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                                    className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => userRoleId == 2 && history.push('/competitionDashboard')}
                                 >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
@@ -581,15 +567,12 @@ class HomeDashboard extends Component {
                     <div className="col-sm pt-5">
                         <div className="home-dash-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeLiveScoreIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div
-                                    className="col-sm-4"
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                >
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <Spin size="small" spinning={this.props.homeDashboardState.onLoad} />
                                     {!this.props.homeDashboardState.onLoad && (
                                         <span className="reg-payment-price-text">
@@ -599,12 +582,11 @@ class HomeDashboard extends Component {
                                         </span>
                                     )}
                                 </div>
-                                <div className="col-sm-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="col-sm-4 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-paid-reg-text">{AppConstants.matchDayComp}</span>
                                 </div>
                                 <div
-                                    className="col-sm-2"
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                                    className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => userRoleId == 2 && history.push('/matchDayCompetitions')}
                                 >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>

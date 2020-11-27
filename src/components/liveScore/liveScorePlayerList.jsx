@@ -269,16 +269,7 @@ class LiveScorePlayerList extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -340,41 +331,22 @@ class LiveScorePlayerList extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm pt-1 d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.playerList}
                             </span>
                         </div>
 
-                        <div
-                            className="col-sm-8"
-                            style={{
-                                display: "flex",
-                                flexDirection: 'row',
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                width: '100%'
-                            }}
-                        >
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/matchDayAddPlayer" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addPlayer}
@@ -383,16 +355,7 @@ class LiveScorePlayerList extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             onClick={this.onExport}
                                             className="primary-add-comp-form"
@@ -412,16 +375,7 @@ class LiveScorePlayerList extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/liveScorerPlayerImport" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
@@ -441,7 +395,7 @@ class LiveScorePlayerList extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                    <div className="mt-5 d-flex justify-content-end">
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
@@ -466,7 +420,7 @@ class LiveScorePlayerList extends Component {
 
     loaderView = () => {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="d-flex align-items-center justify-content-center">
                 <Spin size="small" tip="Loading..." />
             </div>
         )

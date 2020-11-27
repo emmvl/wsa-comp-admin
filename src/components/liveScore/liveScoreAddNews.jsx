@@ -133,7 +133,7 @@ class LiveScoreAddNews extends Component {
         const { liveScoreNewsState } = this.props;
         const { editorState } = this.state;
         return (
-            <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)", }}>
+            <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
                 <div className="livescore-editor-news col-sm">
                     <Editor
                         editorState={editorState}
@@ -354,19 +354,11 @@ class LiveScoreAddNews extends Component {
         )
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {isEdit ? AppConstants.editNews : AppConstants.addNews}
@@ -389,7 +381,7 @@ class LiveScoreAddNews extends Component {
                     <Select
                         mode="tags"
                         placeholder={AppConstants.searchScorer}
-                        style={{ width: '100%' }}
+                        className="w-100"
                         // onChange={(scorerId) => this.props.liveScoreUpdateNewsAction(scorerId, "title")}
                         // value={editData.title}
                     >
@@ -416,7 +408,7 @@ class LiveScoreAddNews extends Component {
                     <Select
                         mode="tags"
                         placeholder="Select Manager"
-                        style={{ width: '100%' }}
+                        className="w-100"
                         // onChange={e => this.venueChange(e)}
                         // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
@@ -498,8 +490,9 @@ class LiveScoreAddNews extends Component {
                 <InputWithHead required="pb-1" heading={AppConstants.recipients} />
                 <div>
                     <Select
+                        className="w-100"
                         placeholder={AppConstants.recipientSelection}
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                        style={{ paddingRight: 1, minWidth: 182 }}
                         onChange={recipientSelection => this.setRecipientData(recipientSelection, 'recipients')}
                         value={editData.recipients}
                     >
@@ -526,7 +519,7 @@ class LiveScoreAddNews extends Component {
                             <input
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 onChange={(event) => {
                                     this.setImage(event.target, 'evt.target')
                                     this.setState({ imageTimeout: 2000, crossImageIcon: false })
@@ -539,7 +532,7 @@ class LiveScoreAddNews extends Component {
                                 }}
                             />
 
-                            <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
+                            <div className="position-absolute" style={{ bottom: 65, left: 150 }}>
                                 {(this.state.crossImageIcon || newsImage) && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                         <img
@@ -568,7 +561,7 @@ class LiveScoreAddNews extends Component {
                         <input
                             type="file"
                             id="user-vdo"
-                            style={{ display: 'none' }}
+                            className="d-none"
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
                                 // this.setState({ videoTimeout: 2000, crossVideoIcon: false })
@@ -580,8 +573,8 @@ class LiveScoreAddNews extends Component {
                                 event.target.value = null
                             }}
                         />
-                        <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
-                            {(this.state.crossVideoIcon || newsVideo) &&
+                        <div className="position-absolute" style={{ bottom: 65, left: 150 }}>
+                            {(this.state.crossVideoIcon || newsVideo) && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
                                         className="dot-image"
@@ -592,7 +585,7 @@ class LiveScoreAddNews extends Component {
                                         onClick={() => this.deleteVideo()}
                                     />
                                 </span>
-                            }
+                            )}
                         </div>
                         <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
@@ -604,7 +597,7 @@ class LiveScoreAddNews extends Component {
                         <InputWithHead required="pb-1" heading={AppConstants.newsExpiryDate} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%' }}
+                            className="w-100"
                             onChange={(date) => this.props.liveScoreUpdateNewsAction(date, "expire_date")}
                             format="DD-MM-YYYY"
                             value={expiryDate ? moment(expiryDate) : ''}
@@ -616,8 +609,7 @@ class LiveScoreAddNews extends Component {
                     <div className="col-sm">
                         <InputWithHead required="pb-1" heading={AppConstants.newsExpiryTime} />
                         <TimePicker
-                            className="comp-venue-time-timepicker"
-                            style={{ width: '100%' }}
+                            className="comp-venue-time-timepicker w-100"
                             format="HH:mm"
                             value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
                             onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
@@ -634,13 +626,13 @@ class LiveScoreAddNews extends Component {
 
     stateWideMsgView() {
         const { allOrg, indivisualOrg } = this.props.liveScoreNewsState;
-        const recipientArr_1 = [
+        const recipientArr1 = [
             { label: 'All User', value: "allUser", },
             { label: 'All Coaches', value: "allCoach", },
             { label: 'All Managers', value: "allManager", },
         ];
 
-        const recipientArr_2 = [
+        const recipientArr2 = [
             { label: 'All Players', value: "allPlayer", },
             { label: 'All Umpires', value: "allUmpire", },
             { label: 'All Parents', value: "allParent", },
@@ -648,10 +640,7 @@ class LiveScoreAddNews extends Component {
 
         return (
             <div>
-                <div
-                    className="mt-3"
-                    style={{ display: "flex", alignItems: "center" }}
-                >
+                <div className="mt-3 d-flex align-items-center">
                     <Checkbox
                         className="single-checkbox"
                         onChange={(e) => this.props.liveScoreUpdateNewsAction(e.target.checked, "allOrg")}
@@ -661,10 +650,7 @@ class LiveScoreAddNews extends Component {
                     </Checkbox>
                 </div>
 
-                <div
-                    className="mt-3"
-                    style={{ display: "flex", alignItems: "center" }}
-                >
+                <div className="mt-3 d-flex align-items-center">
                     <Checkbox
                         className="single-checkbox"
                         onChange={(e) => this.props.liveScoreUpdateNewsAction(e.target.checked, "indivisualOrg")}
@@ -679,9 +665,9 @@ class LiveScoreAddNews extends Component {
                         <Select
                             mode="multiple"
                             placeholder={AppConstants.selectOrganisation}
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                        >
-                        </Select>
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
+                        />
                     </div>
                 )}
 
@@ -689,23 +675,15 @@ class LiveScoreAddNews extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <Checkbox.Group
-                            style={{
-                                display: "-ms-flexbox",
-                                flexDirection: "column",
-                                justifyContent: "center"
-                            }}
-                            options={recipientArr_1}
+                            className="d-flex flex-column justify-content-center"
+                            options={recipientArr1}
                         />
                     </div>
 
                     <div className="col-sm">
                         <Checkbox.Group
-                            style={{
-                                display: "-ms-flexbox",
-                                flexDirection: "column",
-                                justifyContent: "center"
-                            }}
-                            options={recipientArr_2}
+                            className="d-flex flex-column justify-content-center"
+                            options={recipientArr2}
                         />
                     </div>
                 </div>

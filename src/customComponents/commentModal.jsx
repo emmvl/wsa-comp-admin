@@ -1,28 +1,67 @@
 import React from 'react';
-import { Input, Modal, } from 'antd';
-import Loader from "./loader"
-import moment from 'moment'
+import { Input, Modal } from 'antd';
+import moment from 'moment';
+
+import Loader from './loader';
+
 const { TextArea } = Input;
+
 class CommentModal extends React.Component {
     render() {
-        const { commentList, commentLoad, heading, placeholder, name, handleBlur, finalGradeId, owner, proposedGradeID, OwnCreatedComment, affilateCreatedComment, affilate, onChange, type, value, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
+        const {
+            commentList,
+            commentLoad,
+            placeholder,
+            name,
+            handleBlur,
+            // finalGradeId,
+            // owner,
+            // proposedGradeID,
+            // OwnCreatedComment,
+            // affilateCreatedComment,
+            // affilate,
+            onChange,
+            type,
+            value,
+            modalTitle,
+            // ownnerComment,
+            // affilateComment,
+        } = this.props;
         return (
-            <div style={{ backgroundColor: "red" }}>
+            <div className="bg-danger">
                 <Modal
                     {...this.props}
                     className="add-membership-type-modal"
                     title={modalTitle}
-                    visible={this.props.visible}
-                    onOk={onOK}
-                    onCancel={onCancel}
                 >
-
-                    <div style={{ overflow: "auto", minHeight: 50, maxHeight: 200, padding: 10, }}>
+                    <div
+                        className="over"
+                        style={{
+                            minHeight: 50,
+                            maxHeight: 200,
+                            padding: 10,
+                            overflow: "auto",
+                        }}
+                    >
                         <Loader visible={commentLoad} />
                         {commentList.map((commentItem) => (
                             <div className="col-sm pl-0 pb-2">
-                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}</span>
-                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}</span>
+                                <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">
+                                    {commentItem.createdByName}
+                                    {" "}
+                                    {"("}
+                                    {commentItem.organisationName}
+                                    {")"}
+                                    {" "}
+                                </span>
+                                <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">
+                                    {"("}
+                                    {moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}
+                                    {")"}
+                                    {" "}
+                                    {":"}
+                                    {"   "}
+                                </span>
                                 <span className="comment-heading">{commentItem.comment}</span>
                             </div>
                         ))}
@@ -31,10 +70,10 @@ class CommentModal extends React.Component {
                         <div>
                             <div className="col-sm pl-0 pb-2">
                                 {owner !== null && (
-                                    <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{owner}{" "}</span>
+                                    <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">{owner}{" "}</span>
                                 )}
                                 {OwnCreatedComment !== null && (
-                                    <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{OwnCreatedComment}{")"}{" "}{":"}{"   "}</span>
+                                    <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">{"("}{OwnCreatedComment}{")"}{" "}{":"}{"   "}</span>
                                 )}
                                 {ownnerComment !== null && (
                                     <span className="comment-heading">{ownnerComment}</span>
@@ -47,10 +86,10 @@ class CommentModal extends React.Component {
                     {proposedGradeID !== null && affilate && (
                         <div className="col-sm pl-0 pb-2">
                             {affilate !== null && (
-                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{affilate}{" "}</span>
+                                <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">{affilate}{" "}</span>
                             )}
                             {affilateCreatedComment !== null && (
-                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{affilateCreatedComment}{')'}{" "}{":"}{"   "}</span>
+                                <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">{"("}{affilateCreatedComment}{')'}{" "}{":"}{"   "}</span>
                             )}
                             {affilateComment !== null && (
                                 <span className="comment-heading">{affilateComment}</span>
@@ -74,7 +113,7 @@ class CommentModal extends React.Component {
                     </div>
                 </Modal>
             </div>
-        )
+        );
     }
 }
 

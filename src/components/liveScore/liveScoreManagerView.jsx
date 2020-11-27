@@ -7,10 +7,11 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+
 const { Content } = Layout;
+
 ////columns data
 const columns = [
-
     {
         title: 'Start',
         dataIndex: 'start',
@@ -62,7 +63,6 @@ const data = [
         results: 'H : - : A'
     },
 ];
-
 
 class LiveScoreManagerView extends Component {
     constructor(props) {
@@ -128,7 +128,6 @@ class LiveScoreManagerView extends Component {
         )
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -139,19 +138,10 @@ class LiveScoreManagerView extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to={{
                                         pathname: "/matchDayAddManagers",
                                         state: { isEdit: true, tableRecord: this.state.data }
@@ -163,16 +153,7 @@ class LiveScoreManagerView extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
 
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.delete}
@@ -216,7 +197,7 @@ class LiveScoreManagerView extends Component {
                                 <div className="col-sm-3" style={{ marginBottom: "7%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
+                                <div className="col-sm-9 default-bg" style={{ paddingBottom: 10 }}>
                                     {this.headerView()}
                                     {this.tableView()}
                                 </div>
@@ -228,5 +209,5 @@ class LiveScoreManagerView extends Component {
         );
     }
 }
-export default LiveScoreManagerView;
 
+export default LiveScoreManagerView;

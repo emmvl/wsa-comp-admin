@@ -33,15 +33,7 @@ function ImageLoader(props) {
             )}
 
             {timeout ? (
-                <label
-                    style={{
-                        width: 100,
-                        height: 100,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
+                <label className="d-flex align-items-center justify-content-center" style={{ width: 100, height: 100 }}>
                     <Spin />
                 </label>
             ) : (
@@ -57,12 +49,12 @@ function ImageLoader(props) {
                 ) : (
                     <label>
                         <img
-                            className={className}
+                            className={`${className} ml-0`}
                             src={src}
                             alt=""
                             height={height ? null : '120'}
                             width={width ? null : '120'}
-                            style={{ borderRadius: borderRadius ? null : 60, marginLeft: 0 }}
+                            style={{ borderRadius: borderRadius ? null : 60 }}
                             name="image"
                             onError={(ev) => {
                                 ev.target.src = AppImages.circleImage;

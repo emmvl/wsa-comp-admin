@@ -336,7 +336,7 @@ class TeamRegistrations extends Component {
                         </div>
                     </div>
                     <div className="col-sm" />
-                    <div style={{ marginRight: "25px", display: "flex", alignItems: "center" }}>
+                    <div className="d-flex align-items-center" style={{ marginRight: 25 }}>
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
@@ -354,7 +354,7 @@ class TeamRegistrations extends Component {
                             />
                         </div>
                     </div>
-                    <div style={{ marginRight: "1%", display: "flex", alignItems: "center" }}>
+                    <div className="d-flex align-items-center" style={{ marginRight: "1%" }}>
                         <div className="d-flex flex-row-reverse button-with-search pb-3">
                             <Button
                                 type="primary"

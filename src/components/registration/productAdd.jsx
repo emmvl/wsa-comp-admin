@@ -49,7 +49,6 @@ const columns = [
         dataIndex: 'total',
         key: 'total',
     },
-
 ];
 
 const data = [
@@ -73,7 +72,6 @@ const data = [
         national: "$50.00",
         total: "$170"
     },
-
 ];
 
 class ProductAdd extends Component {
@@ -98,26 +96,18 @@ class ProductAdd extends Component {
         console.log('onCheck', checkedKeys, info);
     };
 
-
-
-
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: 'transparent', display: 'flex',
-                    alignItems: 'center'
-                }}>
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-product">Products</Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-add">Add</Breadcrumb.Item>
                     </Breadcrumb>
-
                 </Header>
                 <div className="registration-product-view">
                     {/* <NavLink className="text-decoration-none" to={`/productRegistration`}> */}
-                    <Button >
+                    <Button>
                         Registration Products
                     </Button>
                     {/* </NavLink> */}
@@ -133,7 +123,8 @@ class ProductAdd extends Component {
                 title: 'Registration Details Required',
                 children: [
                     {
-                        title: 'Parent Details', children: [
+                        title: 'Parent Details',
+                        children: [
                             { title: 'First Name', children: [] },
                             { title: 'Last Name', children: [] },
                             { title: 'Email', children: [] },
@@ -147,8 +138,8 @@ class ProductAdd extends Component {
                 ]
             }
         ]
-        return (
 
+        return (
             <div className="content-view pt-5">
                 <span className="form-heading">Product Details</span>
                 {/* <span className="required-field">*</span> */}
@@ -157,7 +148,8 @@ class ProductAdd extends Component {
 
                 <span className="input-heading">Type</span>
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={(productType) => this.setState({ productType })}
                     value={this.state.productType}
                 >
@@ -168,7 +160,7 @@ class ProductAdd extends Component {
                 <Input className="input" placeholder="Description" />
 
                 <span className='applicable-to-heading'>Allow Registration Via</span>
-                <Checkbox.Group style={{ display: "-ms-flexbox", flexDirection: 'column', justifyContent: 'center' }} options={registrationVia} defaultValue={['Application', 'Website']} onChange={(e) => this.onChange(e)} />
+                <Checkbox.Group className="d-flex flex-column justify-content-center" options={registrationVia} defaultValue={['Application', 'Website']} onChange={(e) => this.onChange(e)} />
 
                 <span className="input-heading">Contact Name</span>
                 <Input className="input" placeholder="Contact Name" />
@@ -177,24 +169,18 @@ class ProductAdd extends Component {
                 <Input className="input" placeholder="Contact Email" />
 
                 <div className="inside-container-view">
-
-                    <Tree className="tree-government-rebate" checkable
-                        defaultExpandedKeys={['0',]}
-                        defaultCheckedKeys={['0-0', '0-1', '0-2', '0-3']}>
+                    <Tree
+                        className="tree-government-rebate"
+                        checkable
+                        defaultExpandedKeys={['0']}
+                        defaultCheckedKeys={['0-0', '0-1', '0-2', '0-3']}
+                    >
                         {this.ShowRegistrationDetailTree(registrationDetail1)}
                     </Tree>
-
                 </div>
-
-
-
-
             </div>
-
-
         )
     }
-
 
     ShowRegistrationDetailTree = tree => {
         const { TreeNode } = Tree;
@@ -209,7 +195,7 @@ class ProductAdd extends Component {
 
     registrationDetailNode = item => {
         return (
-            <span >
+            <span>
                 {item.title}
             </span>
         );
@@ -232,7 +218,7 @@ class ProductAdd extends Component {
     }
     makeSubRegistrationDetailNode(item) {
         return (
-            <span >
+            <span>
                 {item.title}
             </span>
         );
@@ -246,8 +232,7 @@ class ProductAdd extends Component {
                     <TreeNode
                         title={this.makeParentDetailRequiredNode(parentItem)}
                         key={`${catIndex}-${scatIndex}-${parentIndex}`}
-                    >
-                    </TreeNode>
+                    />
                 );
             })
         );
@@ -255,12 +240,11 @@ class ProductAdd extends Component {
 
     makeParentDetailRequiredNode(parentItem) {
         return (
-            <span >
+            <span>
                 {parentItem.title}
             </span>
         );
     }
-
 
     ///////payment view inside the content
     paymentView = () => {
@@ -268,8 +252,12 @@ class ProductAdd extends Component {
         return (
             <div className="payment-view pt-5">
                 <span className="form-heading">Payment Settings</span>
-                <Checkbox.Group style={{ display: "-ms-flexbox", flexDirection: 'column', justifyContent: 'center' }} options={paymentTypes}
-                    defaultValue={['Credit/Debit Card', 'Direct Debit', 'Cash']} onChange={(e) => this.onChange(e)} />
+                <Checkbox.Group
+                    className="d-flex flex-column justify-content-center"
+                    options={paymentTypes}
+                    defaultValue={['Credit/Debit Card', 'Direct Debit', 'Cash']}
+                    onChange={(e) => this.onChange(e)}
+                />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -293,7 +281,8 @@ class ProductAdd extends Component {
                 <span className="form-heading">Fees</span>
                 <span className="input-heading">Type</span>
                 <Select
-                    style={{ minWidth: 182, width: '100%', paddingRight: 1 }}
+                    className="w-100"
+                    style={{ minWidth: 182, paddingRight: 1 }}
                     onChange={(feesType) => this.setState({ feesType })}
                     value={this.state.feesType}
                 >
@@ -327,13 +316,13 @@ class ProductAdd extends Component {
                 <span className="form-heading">Discounts</span>
                 <span className="input-heading">Type</span>
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={(discountType) => this.setState({ discountType })}
                     value={this.state.discountType}
                 >
                     <Option value="applyToClubFeesOnly">Apply to Club fees only</Option>
                 </Select>
-
 
                 <div className="inside-container-view">
                     <Checkbox className="single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>General Discount</Checkbox>
@@ -353,8 +342,8 @@ class ProductAdd extends Component {
                             <div className="col-sm">
                                 <span className="input-heading">Available From</span>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -364,8 +353,8 @@ class ProductAdd extends Component {
                             <div className="col-sm">
                                 <span className="input-heading">Available To</span>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     placeholder="dd-mm-yyyy"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
@@ -396,8 +385,8 @@ class ProductAdd extends Component {
                             <div className="col-sm">
                                 <span className="input-heading">Available From</span>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -407,9 +396,9 @@ class ProductAdd extends Component {
                             <div className="col-sm">
                                 <span className="input-heading">Available To</span>
                                 <DatePicker
-                                    size="large"
+                                    // size="large"
                                     placeholder="dd-mm-yyyy"
-                                    style={{ width: '100%' }}
+                                    className="w-100"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
@@ -424,9 +413,7 @@ class ProductAdd extends Component {
                 <div className="inside-container-view">
                     <Checkbox className="single-checkbox mt-1" onChange={(e) => this.onChange(e)}>{AppConstants.familyDiscount}</Checkbox>
                 </div>
-
             </div>
-
         )
     }
 
@@ -441,18 +428,17 @@ class ProductAdd extends Component {
         console.log(date)
     }
 
-
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
+                        <div className="col-sm d-flex align-items-start">
                             <Button type="cancel-button">Cancel</Button>
                         </div>
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 <Button className="save-draft-text" type="save-draft-text">Save as Draft</Button>
                                 <Button className="publish-button" type="primary">Publish</Button>
                             </div>
@@ -482,15 +468,23 @@ class ProductAdd extends Component {
                 <span className="form-heading">Advanced Settings</span>
 
                 <div className="inside-container-view">
-                    <Tree className="tree-government-rebate pt-0" checkable
-                        defaultExpandedKeys={['0',]}
-                        defaultCheckedKeys={['0-0', '0-1']}>
+                    <Tree
+                        className="tree-government-rebate pt-0"
+                        checkable
+                        defaultExpandedKeys={['0']}
+                        defaultCheckedKeys={['0-0', '0-1']}
+                    >
                         {this.ShowGovernemntRebateSettingTree(governemntRebateSetting1)}
                     </Tree>
                 </div>
 
-                <Checkbox.Group style={{ display: "-ms-flexbox", flexDirection: 'column', justifyContent: 'center', paddingTop: 10 }} options={advancedSetting}
-                    defaultValue={['Allow Team Preference', 'Manually approve all new registrations', 'Allow people to invite friends']} onChange={(e) => this.onChange(e)} />
+                <Checkbox.Group
+                    className="d-flex flex-column justify-content-center"
+                    style={{ paddingTop: 10 }}
+                    options={advancedSetting}
+                    defaultValue={['Allow Team Preference', 'Manually approve all new registrations', 'Allow people to invite friends']}
+                    onChange={(e) => this.onChange(e)}
+                />
 
                 <div className="inside-container-view">
                     <Checkbox className="single-checkbox mt-1" defaultChecked onChange={(e) => this.onChange(e)}>Disclaimers</Checkbox>
@@ -529,23 +523,19 @@ class ProductAdd extends Component {
                     <TreeNode
                         title={this.makeSubGovernamentRebateNode(inItem)}
                         key={`${catIndex}-${scatIndex}`}
-                    >
-                    </TreeNode>
+                    />
                 );
             })
         );
     }
+
     makeSubGovernamentRebateNode(item) {
         return (
-            <span >
+            <span>
                 {item.title}
             </span>
         );
     }
-
-
-
-
 
     render() {
         return (
@@ -576,14 +566,13 @@ class ProductAdd extends Component {
                         </div>
                     </Content>
 
-
                     <Footer>
                         {this.footerView()}
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 export default ProductAdd;
