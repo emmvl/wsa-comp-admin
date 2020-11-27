@@ -241,6 +241,7 @@ function* liveScoreTeamPagingSaga(action) {
             action.search,
             action.sortBy,
             action.sortOrder,
+            action.competitionOrganisationId
         );
 
         if (result.status === 1) {

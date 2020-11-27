@@ -859,6 +859,27 @@ class RegistrationCompetitionForm extends Component {
         let compDetailDisable = this.state.permissionState.compDetailDisable
         return (
             <div className="content-view pt-4">
+
+                <InputWithHead
+                    required="required-field pb-0"
+                    heading={AppConstants.year}
+                />
+
+                <Form.Item
+                    name="yearRefId"
+                    rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}
+                >
+                    <Select className="year-select reg-filter-select-year"
+                        style={{ maxWidth: 80 }}
+                        onChange={(e) => this.setYear(e)}>
+                        {this.props.appState.yearList.map(item => (
+                            <Option key={'year_' + item.id} value={item.id}>
+                                {item.description}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+
                 <Form.Item
                     name='competition_name'
                     rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
@@ -1396,7 +1417,7 @@ class RegistrationCompetitionForm extends Component {
                         noValidate="noValidate"
                     >
                         {this.headerView()}
-                        {this.dropdownView()}
+                        {/* {this.dropdownView()} */}
                         <Content>
                             {this.regCompetitionFeeNavigationView()}
                             <div className="tab-view">

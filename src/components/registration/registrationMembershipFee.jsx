@@ -719,6 +719,25 @@ class RegistrationMembershipFee extends Component {
         return (
             <div className="content-view pt-5">
                 <span className="form-heading">{AppConstants.membershipProduct}</span>
+
+                <InputWithHead
+                    required="required-field pb-2"
+                    heading={AppConstants.year}
+                />
+
+                <Form.Item name="yearRefId" rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}>
+                    <Select
+                        className="year-select reg-filter-select1"
+                        style={{ maxWidth: 80 }}
+                    >
+                        {this.props.appState.yearList.map(item => (
+                            <Option key={'year_' + item.id} value={item.id}>
+                                {item.description}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+
                 <Form.Item
                     name="membershipProductName"
                     rules={[{ required: true, message: ValidationConstants.membershipProductIsRequired }]}
@@ -1473,7 +1492,7 @@ class RegistrationMembershipFee extends Component {
                         noValidate="noValidate"
                         initialValues={{ yearRefId: 1, validityRefId: 1 }}
                     >
-                        {this.dropdownView()}
+                        {/* {this.dropdownView()} */}
                         <Content>
                             <div className="tab-view">
                                 <Tabs

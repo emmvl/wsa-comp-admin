@@ -155,7 +155,7 @@ class LiveScoreTeam extends Component {
         this.setLivScoreCompIsParent()
         let { livescoreTeamActionObject } = this.props.liveScoreTeamState
         if (getLiveScoreCompetiton()) {
-            const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
+            const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
             if (id !== null) {
                 if (livescoreTeamActionObject) {
@@ -164,9 +164,9 @@ class LiveScoreTeam extends Component {
                     let sortBy = livescoreTeamActionObject.sortBy
                     let sortOrder = livescoreTeamActionObject.sortOrder
                     this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder)
+                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, competitionOrganisation.id)
                 } else {
-                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
+                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, competitionOrganisation.id)
                 }
             } else {
                 history.push("/matchDayCompetitions")
@@ -217,8 +217,9 @@ class LiveScoreTeam extends Component {
 
     // on Export
     onExport = () => {
-        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}`
-        this.props.exportFilesAction(url, "team")
+        const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}&organisationId=${competitionOrganisation.id} `
+        this.props.exportFilesAction(url)
     }
 
     ///navigation to team grading summary if sourceId is not null

@@ -1193,7 +1193,7 @@ class LiveScoreSettingsView extends Component {
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
         let disabledComponent = ((this.state.isEdit === 'edit' || this.state.edit === 'edit') && this.state.onOkClick)
-        let isEdit = this.state.isEdit || this.state.edit
+        let isEdit = (this.state.isEdit || this.state.edit) ? this.state.isEdit || this.state.edit : 'add'
         return (
             <div className={((isEdit.edit === 'edit' || isEdit === 'edit') && this.state.onOkClick) && "inside-container-view"}>
                 {((isEdit.edit === 'edit' || isEdit === 'edit') && this.state.onOkClick) && (
@@ -1286,63 +1286,63 @@ class LiveScoreSettingsView extends Component {
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
                                     ) : (
-                                        <div>
-                                            <div className="applicable-to-heading invitees-main">{item.description}</div>
+                                            <div>
+                                                <div className="applicable-to-heading invitees-main">{item.description}</div>
 
-                                            <div style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                paddingLeft: 13
-                                            }}>
-                                                <Checkbox
-                                                    disabled={disabledComponent}
-                                                    className="single-checkbox-radio-style"
-                                                    style={{ paddingLeft: 7, paddingTop: 8 }}
-                                                    checked={associationChecked}
-                                                    onChange={e => this.props.onChangeSettingForm({
-                                                        key: 'associationChecked',
-                                                        data: e.target.checked,
-                                                        checkBoxId: item.subReferences[0].id
-                                                    })}
-                                                >
-                                                    {item.subReferences[0].description}
-                                                </Checkbox>
+                                                <div style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    paddingLeft: 13
+                                                }}>
+                                                    <Checkbox
+                                                        disabled={disabledComponent}
+                                                        className="single-checkbox-radio-style"
+                                                        style={{ paddingLeft: 7, paddingTop: 8 }}
+                                                        checked={associationChecked}
+                                                        onChange={e => this.props.onChangeSettingForm({
+                                                            key: 'associationChecked',
+                                                            data: e.target.checked,
+                                                            checkBoxId: item.subReferences[0].id
+                                                        })}
+                                                    >
+                                                        {item.subReferences[0].description}
+                                                    </Checkbox>
 
-                                                {associationChecked && this.associationSearchInvitee()}
+                                                    {associationChecked && this.associationSearchInvitee()}
 
-                                                <Checkbox
-                                                    disabled={disabledComponent}
-                                                    className="single-checkbox-radio-style"
-                                                    style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }}
-                                                    checked={clubChecked}
-                                                    onChange={e => this.props.onChangeSettingForm({
-                                                        key: 'clubChecked',
-                                                        data: e.target.checked,
-                                                        checkBoxId: item.subReferences[1].id
-                                                    })}
-                                                >
-                                                    {item.subReferences[1].description}
-                                                </Checkbox>
+                                                    <Checkbox
+                                                        disabled={disabledComponent}
+                                                        className="single-checkbox-radio-style"
+                                                        style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }}
+                                                        checked={clubChecked}
+                                                        onChange={e => this.props.onChangeSettingForm({
+                                                            key: 'clubChecked',
+                                                            data: e.target.checked,
+                                                            checkBoxId: item.subReferences[1].id
+                                                        })}
+                                                    >
+                                                        {item.subReferences[1].description}
+                                                    </Checkbox>
 
-                                                {clubChecked && this.clubSearchInvitee()}
-                                            </div>
+                                                    {clubChecked && this.clubSearchInvitee()}
+                                                </div>
 
-                                            <div style={{ marginLeft: 20 }}>
-                                                <Radio.Group
-                                                    onChange={(e) => this.props.onChangeSettingForm({
-                                                        key: "anyOrgNonSelected",
-                                                        data: e.target.value
-                                                    })}
-                                                    value={anyOrgNonSelected}
-                                                    disabled={disabledComponent}
-                                                >
-                                                    <Radio disabled={disabledComponent} key="none2" value="none2">
-                                                        None
+                                                <div style={{ marginLeft: 20 }}>
+                                                    <Radio.Group
+                                                        onChange={(e) => this.props.onChangeSettingForm({
+                                                            key: "anyOrgNonSelected",
+                                                            data: e.target.value
+                                                        })}
+                                                        value={anyOrgNonSelected}
+                                                        disabled={disabledComponent}
+                                                    >
+                                                        <Radio disabled={disabledComponent} key="none2" value="none2">
+                                                            None
                                                     </Radio>
-                                                </Radio.Group>
+                                                    </Radio.Group>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
                                 </div>
                             )))
                         }
