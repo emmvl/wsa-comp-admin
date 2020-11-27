@@ -424,8 +424,8 @@ class Routes extends React.Component {
                     component={this.haveAccess(userRoleId, '/userMedical') ? lazyLoad(userModuleMedical) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
-                    path="/liveScoreMatchSheet"
-                    component={this.haveAccess(userRoleId, '/liveScoreMatchSheet')
+                    path="/matchDayMatchSheet"
+                    component={this.haveAccess(userRoleId, '/matchDayMatchSheet')
                         ? lazyLoad(LiveScoreMatchSheet)
                         : lazyLoad(NotFound)}
                 />
@@ -434,8 +434,8 @@ class Routes extends React.Component {
                     component={this.haveAccess(userRoleId, '/registrationList') ? lazyLoad(RegistrationList) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
-                    path="/liveScorePlayerProfile"
-                    component={this.haveAccess(userRoleId, '/liveScorePlayerProfile') ? lazyLoad(LiveScorePlayerProfile) : lazyLoad(NotFound)}
+                    path="/matchDayPlayerProfile"
+                    component={this.haveAccess(userRoleId, '/matchDayPlayerProfile') ? lazyLoad(LiveScorePlayerProfile) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/registrationPayments"
@@ -503,18 +503,18 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreDashboard"
-                    component={this.haveAccess(userRoleId, '/liveScoreDashboard') ? lazyLoad(LiveScoreDashboard) : lazyLoad(NotFound)}
+                    path="/matchDayDashboard"
+                    component={this.haveAccess(userRoleId, '/matchDayDashboard') ? lazyLoad(LiveScoreDashboard) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreMatches"
-                    component={this.haveAccess(userRoleId, '/liveScoreMatches') ? lazyLoad(LiveScoreMatches) : lazyLoad(NotFound)}
+                    path="/matchDayMatches"
+                    component={this.haveAccess(userRoleId, '/matchDayMatches') ? lazyLoad(LiveScoreMatches) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreMatchDetails"
-                    component={this.haveAccess(userRoleId, '/liveScoreMatchDetails') ? lazyLoad(LiveScoreMatchDetails) : lazyLoad(NotFound)}
+                    path="/matchDayMatchDetails"
+                    component={this.haveAccess(userRoleId, '/matchDayMatchDetails') ? lazyLoad(LiveScoreMatchDetails) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -523,28 +523,28 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScorerList"
-                    component={this.haveAccess(userRoleId, '/liveScorerList') ? lazyLoad(LiveScorerList) : lazyLoad(NotFound)}
+                    path="/matchDayScorerList"
+                    component={this.haveAccess(userRoleId, '/matchDayScorerList') ? lazyLoad(LiveScorerList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreAddScorer"
-                    component={this.haveAccess(userRoleId, '/liveScoreAddScorer') ? lazyLoad(LiveScoreAddScorer) : lazyLoad(NotFound)}
+                    path="/matchDayAddScorer"
+                    component={this.haveAccess(userRoleId, '/matchDayAddScorer') ? lazyLoad(LiveScoreAddScorer) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreTeam"
-                    component={this.haveAccess(userRoleId, '/liveScoreTeam') ? lazyLoad(LiveScoreTeam) : lazyLoad(NotFound)}
+                    path="/matchDayTeam"
+                    component={this.haveAccess(userRoleId, '/matchDayTeam') ? lazyLoad(LiveScoreTeam) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreAddTeam"
-                    component={this.haveAccess(userRoleId, '/liveScoreAddTeam') ? lazyLoad(LiveScoreAddTeam) : lazyLoad(NotFound)}
+                    path="/matchDayAddTeam"
+                    component={this.haveAccess(userRoleId, '/matchDayAddTeam') ? lazyLoad(LiveScoreAddTeam) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreManagerList"
-                    component={this.haveAccess(userRoleId, '/liveScoreManagerList') ? lazyLoad(LiveScoreManagerList) : lazyLoad(NotFound)}
+                    path="/matchDayManagerList"
+                    component={this.haveAccess(userRoleId, '/matchDayManagerList') ? lazyLoad(LiveScoreManagerList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -553,78 +553,78 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreManagerImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreManagerImport') ? lazyLoad(LiveScoreManagerImport) : lazyLoad(NotFound)}
+                    path="/matchDayManagerImport"
+                    component={this.haveAccess(userRoleId, '/matchDayManagerImport') ? lazyLoad(LiveScoreManagerImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreManagerView"
-                    component={this.haveAccess(userRoleId, '/liveScoreManagerView') ? lazyLoad(LiveScoreManagerView) : lazyLoad(NotFound)}
+                    path="/matchDayManagerView"
+                    component={this.haveAccess(userRoleId, '/matchDayManagerView') ? lazyLoad(LiveScoreManagerView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreTeamView"
-                    component={this.haveAccess(userRoleId, '/liveScoreTeamView') ? lazyLoad(LiveScoreTeamView) : lazyLoad(NotFound)}
+                    path="/matchDayTeamView"
+                    component={this.haveAccess(userRoleId, '/matchDayTeamView') ? lazyLoad(LiveScoreTeamView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScorerView"
-                    component={this.haveAccess(userRoleId, '/liveScorerView') ? lazyLoad(LiveScorerView) : lazyLoad(NotFound)}
+                    path="/matchDayScorerView"
+                    component={this.haveAccess(userRoleId, '/matchDayScorerView') ? lazyLoad(LiveScorerView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreMatchImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreMatchImport') ? lazyLoad(LiveScoreMatchImport) : lazyLoad(NotFound)}
+                    path="/matchDayMatchImport"
+                    component={this.haveAccess(userRoleId, '/matchDayMatchImport') ? lazyLoad(LiveScoreMatchImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreTeamImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreTeamImport') ? lazyLoad(LiveScoreTeamImport) : lazyLoad(NotFound)}
+                    path="/matchDayTeamImport"
+                    component={this.haveAccess(userRoleId, '/matchDayTeamImport') ? lazyLoad(LiveScoreTeamImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreUmpireList"
-                    component={this.haveAccess(userRoleId, '/liveScoreUmpireList') ? lazyLoad(LiveScoreUmpireList) : lazyLoad(NotFound)}
+                    path="/matchDayUmpireList"
+                    component={this.haveAccess(userRoleId, '/matchDayUmpireList') ? lazyLoad(LiveScoreUmpireList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreLadderList"
-                    component={this.haveAccess(userRoleId, '/liveScoreLadderList') ? lazyLoad(LiveScoreLadderList) : lazyLoad(NotFound)}
+                    path="/matchDayLadderList"
+                    component={this.haveAccess(userRoleId, '/matchDayLadderList') ? lazyLoad(LiveScoreLadderList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScorePlayerList"
-                    component={this.haveAccess(userRoleId, '/liveScorePlayerList') ? lazyLoad(LiveScorePlayerList) : lazyLoad(NotFound)}
+                    path="/matchDayPlayerList"
+                    component={this.haveAccess(userRoleId, '/matchDayPlayerList') ? lazyLoad(LiveScorePlayerList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScorerPlayerImport"
-                    component={this.haveAccess(userRoleId, '/liveScorerPlayerImport') ? lazyLoad(LiveScorerPlayerImport) : lazyLoad(NotFound)}
+                    path="/matchDayPlayerImport"
+                    component={this.haveAccess(userRoleId, '/matchDayPlayerImport') ? lazyLoad(LiveScorerPlayerImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreAddPlayer"
-                    component={this.haveAccess(userRoleId, '/liveScoreAddPlayer') ? lazyLoad(LiveScoreAddPlayer) : lazyLoad(NotFound)}
+                    path="/matchDayAddPlayer"
+                    component={this.haveAccess(userRoleId, '/matchDayAddPlayer') ? lazyLoad(LiveScoreAddPlayer) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScorePlayerView"
-                    component={this.haveAccess(userRoleId, '/liveScorePlayerView') ? lazyLoad(LiveScorePlayerView) : lazyLoad(NotFound)}
+                    path="/matchDayPlayerView"
+                    component={this.haveAccess(userRoleId, '/matchDayPlayerView') ? lazyLoad(LiveScorePlayerView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreIncidentView"
-                    component={this.haveAccess(userRoleId, '/liveScoreIncidentView') ? lazyLoad(LiveScoreIncidentView) : lazyLoad(NotFound)}
+                    path="/matchDayIncidentView"
+                    component={this.haveAccess(userRoleId, '/matchDayIncidentView') ? lazyLoad(LiveScoreIncidentView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreIncidentList"
-                    component={this.haveAccess(userRoleId, '/liveScoreIncidentList') ? lazyLoad(LiveScoreIncidentList) : lazyLoad(NotFound)}
+                    path="/matchDayIncidentList"
+                    component={this.haveAccess(userRoleId, '/matchDayIncidentList') ? lazyLoad(LiveScoreIncidentList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreNewsList"
-                    component={this.haveAccess(userRoleId, '/liveScoreNewsList') ? lazyLoad(LiveScoreNewsList) : lazyLoad(NotFound)}
+                    path="/matchDayNewsList"
+                    component={this.haveAccess(userRoleId, '/matchDayNewsList') ? lazyLoad(LiveScoreNewsList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -633,53 +633,53 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreNewsView"
-                    component={this.haveAccess(userRoleId, '/liveScoreNewsView') ? lazyLoad(LiveScoreNewsView) : lazyLoad(NotFound)}
+                    path="/matchDayNewsView"
+                    component={this.haveAccess(userRoleId, '/matchDayNewsView') ? lazyLoad(LiveScoreNewsView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreSettingsView"
-                    component={this.haveAccess(userRoleId, '/liveScoreSettingsView') ? lazyLoad(LiveScoreSettingsView) : lazyLoad(NotFound)}
+                    path="/matchDaySettingsView"
+                    component={this.haveAccess(userRoleId, '/matchDaySettingsView') ? lazyLoad(LiveScoreSettingsView) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreBanners"
-                    component={this.haveAccess(userRoleId, '/liveScoreBanners') ? lazyLoad(LiveScoreBanners) : lazyLoad(NotFound)}
+                    path="/matchDayBanners"
+                    component={this.haveAccess(userRoleId, '/matchDayBanners') ? lazyLoad(LiveScoreBanners) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreTeamAttendance"
-                    component={this.haveAccess(userRoleId, '/liveScoreTeamAttendance') ? lazyLoad(LiveScoreTeamAttendance) : lazyLoad(NotFound)}
+                    path="/matchDayTeamAttendance"
+                    component={this.haveAccess(userRoleId, '/matchDayTeamAttendance') ? lazyLoad(LiveScoreTeamAttendance) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreGameTimeList"
-                    component={this.haveAccess(userRoleId, '/liveScoreGameTimeList') ? lazyLoad(LiveScoreGameTimeList) : lazyLoad(NotFound)}
+                    path="/matchDayGameTimeList"
+                    component={this.haveAccess(userRoleId, '/matchDayGameTimeList') ? lazyLoad(LiveScoreGameTimeList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreGoalsList"
-                    component={this.haveAccess(userRoleId, '/liveScoreGoalsList') ? lazyLoad(LiveScoreGoalsList) : lazyLoad(NotFound)}
+                    path="/matchDayGoalsList"
+                    component={this.haveAccess(userRoleId, '/matchDayGoalsList') ? lazyLoad(LiveScoreGoalsList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreCompetitions"
-                    component={this.haveAccess(userRoleId, '/liveScoreCompetitions') ? lazyLoad(LiveScoreCompetitions) : lazyLoad(NotFound)}
+                    path="/matchDayCompetitions"
+                    component={this.haveAccess(userRoleId, '/matchDayCompetitions') ? lazyLoad(LiveScoreCompetitions) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreBulkChange"
-                    component={this.haveAccess(userRoleId, '/liveScoreBulkChange') ? lazyLoad(LiveScoreBulkChange) : lazyLoad(NotFound)}
+                    path="/matchDayBulkChange"
+                    component={this.haveAccess(userRoleId, '/matchDayBulkChange') ? lazyLoad(LiveScoreBulkChange) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreEditBanners"
-                    component={this.haveAccess(userRoleId, '/liveScoreEditBanners') ? lazyLoad(LiveScoreEditBanners) : lazyLoad(NotFound)}
+                    path="/matchDayEditBanners"
+                    component={this.haveAccess(userRoleId, '/matchDayEditBanners') ? lazyLoad(LiveScoreEditBanners) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreDivisionList"
-                    component={this.haveAccess(userRoleId, '/liveScoreDivisionList') ? lazyLoad(LiveScoreDivisionList) : lazyLoad(NotFound)}
+                    path="/matchDayDivisionList"
+                    component={this.haveAccess(userRoleId, '/matchDayDivisionList') ? lazyLoad(LiveScoreDivisionList) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -693,23 +693,23 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreLadderSettings"
-                    component={this.haveAccess(userRoleId, '/liveScoreLadderSettings') ? lazyLoad(LiveScoreLadderSettings) : lazyLoad(NotFound)}
+                    path="/matchDayLadderSettings"
+                    component={this.haveAccess(userRoleId, '/matchDayLadderSettings') ? lazyLoad(LiveScoreLadderSettings) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreDivisionImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreDivisionImport') ? lazyLoad(LiveScoreDivisionImport) : lazyLoad(NotFound)}
+                    path="/matchDayDivisionImport"
+                    component={this.haveAccess(userRoleId, '/matchDayDivisionImport') ? lazyLoad(LiveScoreDivisionImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreAssignMatch"
-                    component={this.haveAccess(userRoleId, '/liveScoreAssignMatch') ? lazyLoad(LiveScoreAssignMatch) : lazyLoad(NotFound)}
+                    path="/matchDayAssignMatch"
+                    component={this.haveAccess(userRoleId, '/matchDayAssignMatch') ? lazyLoad(LiveScoreAssignMatch) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreVenueChange"
-                    component={this.haveAccess(userRoleId, '/liveScoreVenueChange') ? lazyLoad(LiveScoreVenueChange) : lazyLoad(NotFound)}
+                    path="/matchDayVenueChange"
+                    component={this.haveAccess(userRoleId, '/matchDayVenueChange') ? lazyLoad(LiveScoreVenueChange) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -718,18 +718,18 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreIncidentImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreIncidentImport') ? lazyLoad(LiveScoreIncidentImport) : lazyLoad(NotFound)}
+                    path="/matchDayIncidentImport"
+                    component={this.haveAccess(userRoleId, '/matchDayIncidentImport') ? lazyLoad(LiveScoreIncidentImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScorePublicLadder"
-                    component={this.haveAccess(userRoleId, '/liveScorePublicLadder') ? lazyLoad(LiveScorePublicLadder) : lazyLoad(NotFound)}
+                    path="/matchDayPublicLadder"
+                    component={this.haveAccess(userRoleId, '/matchDayPublicLadder') ? lazyLoad(LiveScorePublicLadder) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreSeasonFixture"
-                    component={this.haveAccess(userRoleId, '/liveScoreSeasonFixture') ? lazyLoad(LiveScoreSeasonFixture) : lazyLoad(NotFound)}
+                    path="/matchDaySeasonFixture"
+                    component={this.haveAccess(userRoleId, '/matchDaySeasonFixture') ? lazyLoad(LiveScoreSeasonFixture) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -765,8 +765,8 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreCoaches"
-                    component={this.haveAccess(userRoleId, '/liveScoreCoaches') ? lazyLoad(LiveScoreCoaches) : lazyLoad(NotFound)}
+                    path="/matchDayCoaches"
+                    component={this.haveAccess(userRoleId, '/matchDayCoaches') ? lazyLoad(LiveScoreCoaches) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -775,13 +775,13 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreCoachImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreCoachImport') ? lazyLoad(LiveScorerCoachImport) : lazyLoad(NotFound)}
+                    path="/matchDayCoachImport"
+                    component={this.haveAccess(userRoleId, '/matchDayCoachImport') ? lazyLoad(LiveScorerCoachImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScoreSocialSheet"
-                    component={this.haveAccess(userRoleId, '/liveScoreSocialSheet') ? lazyLoad(LiveScoreSocialSheet) : lazyLoad(NotFound)}
+                    path="/matchDaySocialSheet"
+                    component={this.haveAccess(userRoleId, '/matchDaySocialSheet') ? lazyLoad(LiveScoreSocialSheet) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -870,8 +870,8 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreUmpireImport"
-                    component={this.haveAccess(userRoleId, '/liveScoreUmpireImport') ? lazyLoad(LiveScoreUmpireImport) : lazyLoad(NotFound)}
+                    path="/matchDayUmpireImport"
+                    component={this.haveAccess(userRoleId, '/matchDayUmpireImport') ? lazyLoad(LiveScoreUmpireImport) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -880,13 +880,13 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/liveScoreLadderAdjustment"
-                    component={this.haveAccess(userRoleId, '/liveScoreLadderAdjustment') ? lazyLoad(LiveScoreLadderAdjustment) : lazyLoad(NotFound)}
+                    path="/matchDayLadderAdjustment"
+                    component={this.haveAccess(userRoleId, '/matchDayLadderAdjustment') ? lazyLoad(LiveScoreLadderAdjustment) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
-                    path="/liveScorePositionTrackReport"
-                    component={this.haveAccess(userRoleId, '/liveScorePositionTrackReport')
+                    path="/matchDayPositionTrackReport"
+                    component={this.haveAccess(userRoleId, '/matchDayPositionTrackReport')
                         ? lazyLoad(LiveScorePositionTrackReport)
                         : lazyLoad(NotFound)}
                 />

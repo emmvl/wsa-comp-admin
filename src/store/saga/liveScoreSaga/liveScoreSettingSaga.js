@@ -58,7 +58,7 @@ export function* liveScorePostSaga({ payload }) {
             if (payload.screenName == 'umpireDashboard') {
                 history.push('/umpireDashboard')
             } else {
-                history.push(payload.settingView && '/liveScoreDashboard')
+                history.push(payload.settingView && '/matchDayDashboard')
             }
 
         } else {

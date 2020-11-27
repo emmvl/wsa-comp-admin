@@ -49,29 +49,15 @@ class MultiFieldDraws extends Component {
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view mt-4">
             <div className="row">
-                <div className="col-sm pt-1" style={{ display: 'flex', alignContent: 'center' }}>
+                <div className="col-sm pt-1 d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.draws}</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
-                <div
-                    className="col-sm-8"
-                    style={{
-                        display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', width: '100%',
-                    }}
-                >
+                <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
                     <div className="row">
                         <div className="col-sm pt-1">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <Button className="primary-add-comp-form" type="primary">
                                     {AppConstants.edit}
                                 </Button>
@@ -79,16 +65,7 @@ class MultiFieldDraws extends Component {
                         </div>
 
                         <div className="col-sm pt-1">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <Button className="primary-add-comp-form" type="primary">
                                     {AppConstants.exception}
                                 </Button>
@@ -117,26 +94,19 @@ class MultiFieldDraws extends Component {
         return _.map(layout, (l) => (
             <div
                 style={{
-                    display: 'flex',
                     backgroundColor: l.color,
                     borderRadius: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center',
                 }}
-                className="div-styles"
+                className="div-styles d-flex justify-content-center align-items-center"
                 key={l.i}
                 data-grid={l}
             >
                 {l.whiteArea.map(() => (
                     <Popover content={content} trigger="click">
                         <div
+                            className="bg-white"
                             key={1}
-                            style={{
-                                height: 5,
-                                width: 15,
-                                backgroundColor: '#fff',
-                                margin: 2.5,
-                            }}
+                            style={{ height: 5, width: 15, margin: 2.5 }}
                         />
                     </Popover>
                 ))}
@@ -179,38 +149,18 @@ class MultiFieldDraws extends Component {
 
     containerView = () => (
         <div>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    height: 70,
-                    alignItems: 'flex-end',
-                    paddingBottom: 10,
-                }}
-            >
+            <div className="d-flex flex-row align-items-end" style={{ height: 70, paddingBottom: 10 }}>
                 <div style={{ paddingLeft: 100 }} />
                 <div
-                    style={{
-                        display: 'flex',
-                        width: screenWidth - perColumn,
-                        flexDirection: 'row',
-                    }}
+                    className="d-flex flex-row"
+                    style={{ width: screenWidth - perColumn }}
                 >
                     {timeSlots.map((item, index) => (
                         <div
-                            style={{
-                                display: 'flex',
-                                width: perColumn,
-                                alignItems: 'center',
-                            }}
+                            className="d-flex align-items-center"
+                            style={{ width: perColumn }}
                         >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    paddingLeft: 10,
-                                }}
-                            >
+                            <div className="d-flex flex-column" style={{ paddingLeft: 10 }}>
                                 {index === 0 ? (
                                     <span>{item.day}</span>
                                 ) : (
@@ -222,22 +172,12 @@ class MultiFieldDraws extends Component {
                     ))}
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div
-                    style={{
-                        display: 'flex',
-                        paddingLeft: 50,
-                        paddingRight: 10,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
+            <div className="d-flex flex-row">
+                <div className="d-flex flex-column align-items-center" style={{ paddingLeft: 50, paddingRight: 10 }}>
                     {locationArr.map((item, index) => (
                         <div
+                            className="d-flex justify-content-center align-items-center"
                             style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
                                 height: 30,
                                 marginTop: index === 0 ? 0 : 10,
                                 backgroundColor: item.color,
@@ -264,7 +204,7 @@ class MultiFieldDraws extends Component {
                     </ReactGridLayout>
                 </div>
             </div>
-            <div className="mt-5" style={{ display: 'flex', flexDirection: 'row', paddingLeft: 50 }}>
+            <div className="mt-5 d-flex flex-row" style={{ paddingLeft: 50 }}>
                 {lagendsArray.map((subItem) => (
                     <div className="legend-color-text-div">
                         <div>
@@ -309,7 +249,7 @@ class MultiFieldDraws extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.draws}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
                 />
 
                 <InnerHorizontalMenu menu="competition" compSelectedKey="18" />

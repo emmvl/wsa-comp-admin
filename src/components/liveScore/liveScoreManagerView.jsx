@@ -7,10 +7,11 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+
 const { Content } = Layout;
+
 ////columns data
 const columns = [
-
     {
         title: 'Start',
         dataIndex: 'start',
@@ -63,7 +64,6 @@ const data = [
     },
 ];
 
-
 class LiveScoreManagerView extends Component {
     constructor(props) {
         super(props);
@@ -85,7 +85,7 @@ class LiveScoreManagerView extends Component {
                 <div className='profile-image-view mr-5'>
                     <span className="user-contact-heading">{AppConstants.managerProfile}</span>
                     <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
-                    <span className="user-contact-heading">{data.firstName + " " + data.lastName}</span>
+                    <span className="user-contact-heading">{data && (data.firstName + " " + data.lastName)}</span>
                 </div>
 
                 <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutManager}</span>
@@ -98,7 +98,7 @@ class LiveScoreManagerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.emailAddress}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.email}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && data.email}</span>
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -108,7 +108,7 @@ class LiveScoreManagerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && data.mobileNumber}</span>
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -119,7 +119,7 @@ class LiveScoreManagerView extends Component {
                             <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
 
-                        {data.linkedEntity.map((item) => (
+                        {data && data.linkedEntity.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.name}</span>
                         ))}
                     </div>
@@ -128,7 +128,6 @@ class LiveScoreManagerView extends Component {
         )
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -139,40 +138,22 @@ class LiveScoreManagerView extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
-                                    <NavLink to={{
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                    {/* <NavLink to={{
                                         pathname: "/matchDayAddManagers",
                                         state: { isEdit: true, tableRecord: this.state.data }
-                                    }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.edit}
-                                        </Button>
-                                    </NavLink>
+                                    }}> */}
+                                    <Button className="primary-add-comp-form" type="primary">
+                                        + {AppConstants.edit}
+                                    </Button>
+                                    {/* </NavLink> */}
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
 
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.delete}
@@ -207,7 +188,7 @@ class LiveScoreManagerView extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
@@ -216,7 +197,7 @@ class LiveScoreManagerView extends Component {
                                 <div className="col-sm-3" style={{ marginBottom: "7%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
+                                <div className="col-sm-9 default-bg" style={{ paddingBottom: 10 }}>
                                     {this.headerView()}
                                     {this.tableView()}
                                 </div>
@@ -228,5 +209,5 @@ class LiveScoreManagerView extends Component {
         );
     }
 }
-export default LiveScoreManagerView;
 
+export default LiveScoreManagerView;

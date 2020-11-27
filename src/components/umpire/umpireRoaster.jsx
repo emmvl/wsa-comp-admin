@@ -45,6 +45,7 @@ function tableSort(key) {
     let rolIds = Array.isArray(this_obj.state.umpireRole) ? JSON.stringify(this_obj.state.umpireRole) : JSON.stringify([this_obj.state.umpireRole])
     this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder)
 }
+
 /////function to sort table column
 // function tableSort(a, b, key) {
 //     let stringA = JSON.stringify(a[key])
@@ -58,7 +59,6 @@ const listeners = (key) => ({
 });
 
 const columns = [
-
     {
         title: 'First Name',
         dataIndex: 'firstName',
@@ -75,7 +75,6 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) =>
-
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.lastName}</span>
     },
     {
@@ -106,7 +105,7 @@ const columns = [
         render: (matchId) => {
             return (
                 <NavLink to={{
-                    pathname: '/liveScoreMatchDetails',
+                    pathname: '/matchDayMatchDetails',
                     state: { matchId: matchId, umpireKey: 'umpire', screenName: "umpireRoster" }
                 }}>
                     <span className="input-heading-add-another pt-0">{matchId}</span>
@@ -121,7 +120,7 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (startTime, record) =>
-            <span >{moment(record.match.startTime).format("DD/MM/YYYY HH:mm")}</span>
+            <span>{moment(record.match.startTime).format("DD/MM/YYYY HH:mm")}</span>
     },
     {
         title: 'Role',
@@ -129,7 +128,7 @@ const columns = [
         key: 'roleId',
         sorter: false,
         render: (roleId, record) =>
-            <span >{this_obj.getUmpireRole(roleId)}</span>
+            <span>{this_obj.getUmpireRole(roleId)}</span>
     },
     {
         title: 'Status',
@@ -156,21 +155,17 @@ const columns = [
                 }
             >
                 <Menu.Item key="1" onClick={() => this_obj.onActionPerform(record, 'YES')}>
-                    <span  >Accept</span>
+                    <span>Accept</span>
                 </Menu.Item>
                 <Menu.Item key="2" onClick={() => this_obj.onActionPerform(record, 'NO')}>
-
-                    <span >Decline</span>
-
+                    <span>Decline</span>
                 </Menu.Item>
                 <Menu.Item key="3" onClick={() => this_obj.onActionPerform(record, 'DELETE')}>
-                    <span >Unassign</span>
+                    <span>Unassign</span>
                 </Menu.Item>
             </Menu.SubMenu>
         </Menu>
     }
-
-
 ];
 
 class UmpireRoaster extends Component {
@@ -189,7 +184,6 @@ class UmpireRoaster extends Component {
             umpireRole: 15,
             sortBy: null,
             sortOrder: null
-
         }
         this_obj = this
     }
@@ -234,7 +228,6 @@ class UmpireRoaster extends Component {
                     // setUmpireCompId(firstComp)
                     setUmpireCompition(firstComp)
                     setUmpireCompitionData(JSON.stringify(compData))
-
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
@@ -242,8 +235,7 @@ class UmpireRoaster extends Component {
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
-                    const body =
-                    {
+                    const body = {
                         paging: {
                             limit: 10,
                             offset: this.state.offsetData
@@ -262,9 +254,7 @@ class UmpireRoaster extends Component {
 
         if (nextProps.umpireRoasterdState !== this.props.umpireRoasterdState) {
             if (this.props.umpireRoasterdState.roasterLoading !== this.state.roasterLoad) {
-
-                const body =
-                {
+                const body = {
                     paging: {
                         limit: 10,
                         offset: this.state.offsetData
@@ -275,7 +265,6 @@ class UmpireRoaster extends Component {
                 this.setState({ roasterLoad: false })
             }
         }
-
     }
 
     onActionPerform(record, status) {
@@ -288,8 +277,7 @@ class UmpireRoaster extends Component {
         if (record.userId === null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.umpireMessage)
-        }
-        else {
+        } else {
             history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoster" })
         }
     }
@@ -305,18 +293,15 @@ class UmpireRoaster extends Component {
             }
         }
         return orgArray
-
     }
 
     //getUmpireCategory
     getUmpireCategory(roleId) {
         if (roleId == 15) {
             return "Umpiring"
-        }
-        else if (roleId == 19) {
+        } else if (roleId == 19) {
             return "UmpireReserve"
-        }
-        else if (roleId == 20) {
+        } else if (roleId == 20) {
             return "UmpireCoach"
         }
     }
@@ -325,11 +310,9 @@ class UmpireRoaster extends Component {
     getUmpireRole(roleId) {
         if (roleId == 15) {
             return "Umpire"
-        }
-        else if (roleId == 19) {
+        } else if (roleId == 19) {
             return "Umpire Reserve"
-        }
-        else if (roleId == 20) {
+        } else if (roleId == 20) {
             return "Umpire Coach"
         }
     }
@@ -367,15 +350,7 @@ class UmpireRoaster extends Component {
                         rowKey={(record, index) => "umpireListResult" + record.id + index} />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}>
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -389,8 +364,6 @@ class UmpireRoaster extends Component {
         )
     }
 
-
-
     onChangeComp(compID) {
         let { sortBy, sortOrder } = this.state
         let selectedComp = compID.comp
@@ -403,8 +376,6 @@ class UmpireRoaster extends Component {
         }
         setUmpireCompition(selectedComp)
         setUmpireCompitionData(JSON.stringify(compObj))
-
-
 
         let compKey = compID.competitionUniqueKey
 
@@ -454,41 +425,28 @@ class UmpireRoaster extends Component {
         this.setState({ umpireRole })
     }
 
-
     // on Export
     onExport() {
         let url = AppConstants.rosterExport + `competitionId=${this.state.selectedComp}&roleId=${15}`
         this.props.exportFilesAction(url)
     }
 
-
-    ///////view for breadcrumb
     headerView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm pt-1 d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.umpireRoster}
                             </span>
                         </div>
 
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
-
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -504,16 +462,7 @@ class UmpireRoaster extends Component {
                                     </div>
                                 </div>
                                 {/* <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex justify-content-end flex-row align-items-center">
                                         <NavLink to={{
                                             pathname: `/umpireImport`,
                                             state: { screenName: 'umpireRoaster' }
@@ -536,14 +485,8 @@ class UmpireRoaster extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }}>
-                        <div style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginRight: 50,
-                        }}>
+                    {/* <div className="w-ft mt-5 d-flex">
+                        <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.competition}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -557,13 +500,7 @@ class UmpireRoaster extends Component {
                             </Select>
                         </div>
 
-                        <div style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginRight: 50,
-                        }}>
+                        <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.status}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -577,14 +514,12 @@ class UmpireRoaster extends Component {
                                 <Option value="NONE">No Response</Option>
                             </Select>
                         </div>
-
                     </div> */}
                 </div>
             </div>
         );
     };
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
 
@@ -648,8 +583,6 @@ class UmpireRoaster extends Component {
         )
     }
 
-
-
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -666,6 +599,7 @@ class UmpireRoaster extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
@@ -675,11 +609,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         umpireRoasterdState: state.UmpireRoasterState,
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((UmpireRoaster));
 
+export default connect(mapStateToProps, mapDispatchToProps)(UmpireRoaster);

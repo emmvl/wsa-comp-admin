@@ -63,14 +63,10 @@ class UmpirePaymentSetting extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view d-flex align-items-center"
-                    style={{ backgroundColor: "transparent" }}
-                >
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpirePaymentSetting}
@@ -120,7 +116,6 @@ class UmpirePaymentSetting extends Component {
         );
     };
 
-    //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         const { paidByCompOrgDivision } = this.props.umpirePaymentSettingState
         return (
@@ -188,12 +183,12 @@ class UmpirePaymentSetting extends Component {
                         {'Paid by Affiliate'}
                     </Checkbox>
 
-                    {paidByAffiliate &&
+                    {paidByAffiliate && (
                         <div className="inside-container-view">
                             {this.paidByAffiliateView()}
                             {this.paidByAffiliateFeesView()}
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         )
@@ -409,7 +404,7 @@ class UmpirePaymentSetting extends Component {
                         })}
                         checked={byBadgeBtnAffiliate}
                     >
-                        {'By Badge'}
+                        By Badge
                     </Checkbox>
 
                     {byBadgeBtnAffiliate && (
@@ -425,7 +420,7 @@ class UmpirePaymentSetting extends Component {
                         })}
                         checked={byPoolBtnAffiliate}
                     >
-                        {'By Pool'}
+                        By Pool
                     </Checkbox>
                     {byPoolBtnAffiliate && (
                         // <div>
@@ -532,7 +527,7 @@ class UmpirePaymentSetting extends Component {
         let badge = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : []
         return (
             <div>
-                <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20 }}>
+                <div className="d-flex flex-column" style={{ marginTop: 20 }}>
                     <Checkbox checked={allDivisionBadge} onChange={(e) => this.props.umpirePaymentSettingUpdate({
                         value: e.target.checked,
                         key: 'allDivisionBadge'
@@ -579,7 +574,7 @@ class UmpirePaymentSetting extends Component {
         let badge = isArrayNotEmpty(badgeDataByAffiliate) ? badgeDataByAffiliate : []
         return (
             <div>
-                <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20 }}>
+                <div className="d-flex flex-column" style={{ marginTop: 20 }}>
                     <Checkbox
                         checked={allDivisionBadgeAffiliate}
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({
@@ -654,7 +649,7 @@ class UmpirePaymentSetting extends Component {
                 ))}
                 <div>
                     <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addPoolFee' })}
-                        className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherPool}</span>
+                          className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherPool}</span>
                 </div>
             </div>
         )

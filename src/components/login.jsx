@@ -44,7 +44,7 @@ class Login extends Component {
 
     contentView = (values, errors, setFieldValue, touched, handleChange, handleBlur) => (
         <div className="content-view">
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="d-flex justify-content-center">
                 <img src={AppImages.netballLogo1} alt="" />
             </div>
 

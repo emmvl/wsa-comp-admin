@@ -123,7 +123,7 @@ function* liveScoreCreateMatchSaga(action) {
                 // history.push({ pathname: action.screenName == 'umpireList' ? "umpire" : "/umpireDashboard" });
                 history.push({ pathname: "/" + action.screenName });
             } else {
-                history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/liveScoreMatches");
+                history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/matchDayMatches");
             }
 
             message.success(action.data.id === 0 ? "Match has been created successfully." : "Match has been updated successfully.");
@@ -147,7 +147,7 @@ function* liveScoreDeleteMatchSaga(action) {
                 status: result.status,
             });
 
-            history.push('/liveScoreMatches');
+            history.push('/matchDayMatches');
 
             message.success('Match Deleted Successfully.');
         } else {
@@ -190,7 +190,7 @@ function* liveScoreMatchImportSaga(action) {
             });
 
             if (Object.keys(result.result.data.error).length === 0) {
-                history.push('/liveScoreMatches');
+                history.push('/matchDayMatches');
                 message.success('Match Imported Successfully.');
             } else {
                 receiptImportResult(result.result);

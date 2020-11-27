@@ -116,7 +116,6 @@ class LiveScorePublicLadder extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
             <div className="row">
@@ -168,10 +167,10 @@ class LiveScorePublicLadder extends Component {
     // }
 
     componentDidUpdate(nextProps) {
-        if (nextProps.liveScoreFixturCompState !== this.props.liveScoreFixturCompState) {
-            if (this.state.onCompLoad && this.props.liveScoreFixturCompState.onLoad == false) {
-                let firstComp = this.props.liveScoreFixturCompState.comptitionList && this.props.liveScoreFixturCompState.comptitionList[0].id
-                let compKey = this.props.liveScoreFixturCompState.comptitionList && this.props.liveScoreFixturCompState.comptitionList[0].competitionUniqueKey
+        if (nextProps.liveScoreFixtureCompState !== this.props.liveScoreFixtureCompState) {
+            if (this.state.onCompLoad && this.props.liveScoreFixtureCompState.onLoad == false) {
+                let firstComp = this.props.liveScoreFixtureCompState.comptitionList && this.props.liveScoreFixtureCompState.comptitionList[0].id
+                let compKey = this.props.liveScoreFixtureCompState.comptitionList && this.props.liveScoreFixtureCompState.comptitionList[0].competitionUniqueKey
                 this.props.getLiveScoreDivisionList(firstComp)
                 this.setState({
                     selectedComp: firstComp,
@@ -206,10 +205,9 @@ class LiveScorePublicLadder extends Component {
         this.setState({ division })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
-        let competition = this.props.liveScoreFixturCompState.comptitionList ? this.props.liveScoreFixturCompState.comptitionList : []
+        let competition = this.props.liveScoreFixtureCompState.comptitionList ? this.props.liveScoreFixtureCompState.comptitionList : []
         let division = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -230,13 +228,7 @@ class LiveScorePublicLadder extends Component {
                         </div>
                     </div>
                     <div className="col-sm-2">
-                        <div style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginRight: 50
-                        }}>
+                        <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.division}:</span>
                             <Select
                                 className="year-select"
@@ -277,8 +269,8 @@ class LiveScorePublicLadder extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
-                    isManuNotVisible={true}
-                // menuName={AppConstants.liveScores}
+                    isManuNotVisible
+                    // menuName={AppConstants.liveScores}
                 />
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" /> */}
                 <Layout>
@@ -305,7 +297,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         liveScoreLadderState: state.LiveScoreLadderState,
-        liveScoreFixturCompState: state.LiveScoreFixtureCompState,
+        liveScoreFixtureCompState: state.LiveScoreFixtureCompState,
     }
 }
 

@@ -81,11 +81,11 @@ function* liveScoreAddEditPlayerSaga(action) {
             });
             message.success(action.playerId ? 'Player Edited Successfully.' : 'Player Added Successfully.');
 
-            // history.push(action.temaViewPlayer ? "/liveScoreTeamView" : "/liveScorePlayerList", { tableRecord: action.data.teamId });
+            // history.push(action.temaViewPlayer ? "/matchDayTeamView" : "/matchDayPlayerList", { tableRecord: action.data.teamId });
             history.push(
                 action.propsData.screenName === 'fromMatchList' || action.propsData.screenName === 'fromTeamList'
-                    ? '/liveScoreTeamView'
-                    : '/liveScorePlayerList',
+                    ? '/matchDayTeamView'
+                    : '/matchDayPlayerList',
                 { ...action.propsData },
             );
         } else {
@@ -108,7 +108,7 @@ function* liveScorePlayerImportSaga(action) {
             });
 
             if (Object.keys(result.result.data.error).length === 0) {
-                history.push('/liveScorePlayerList');
+                history.push('/matchDayPlayerList');
                 message.success('Player Imported Successfully.');
             } else {
                 receiptImportResult(result.result);
@@ -132,7 +132,7 @@ function* liveScoreDeletePlayerSaga(action) {
                     status: deleteResult.status,
                 });
                 message.success('Player Deleted Successfully.');
-                history.push('/liveScorePlayerList');
+                history.push('/matchDayPlayerList');
             } else {
                 const result = yield call(
                     LiveScoreAxiosApi.getPlayerWithPagination,

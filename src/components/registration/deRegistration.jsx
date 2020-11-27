@@ -100,11 +100,10 @@ class DeRegistration extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <Header className="comp-venue-courts-header-view">
             <div className="row">
-                <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.registrationChange}
@@ -230,9 +229,9 @@ class DeRegistration extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            style={{ width: '100%', paddingRight: 1 }}
+                            style={{ paddingRight: 1 }}
                             required="required-field pt-0 pb-0"
-                            className="input-inside-table-venue-court team-mem_prod_type"
+                            className="input-inside-table-venue-court team-mem_prod_type w-100"
                             onChange={(e) => this.updateDeregistrationData(e, "organisationId", "transfer")}
                             value={saveData.transfer.organisationId}
                             placeholder="Organisation Name"
@@ -253,9 +252,9 @@ class DeRegistration extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            style={{ width: '100%', paddingRight: 1 }}
+                            style={{ paddingRight: 1 }}
                             required="required-field pt-0 pb-0"
-                            className="input-inside-table-venue-court team-mem_prod_type"
+                            className="input-inside-table-venue-court team-mem_prod_type w-100"
                             onChange={(e) => this.updateDeregistrationData(e, "competitionId", "transfer")}
                             value={saveData.transfer.competitionId}
                             placeholder="Competition Name"
@@ -302,18 +301,18 @@ class DeRegistration extends Component {
                     disabled
                     heading={AppConstants.username}
                     required="pb-1"
-                    style={{ width: '100%', paddingRight: 1 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
+                    style={{ paddingRight: 1 }}
+                    className="input-inside-table-venue-court team-mem_prod_type w-100"
                     value={personal ? (personal.firstName + ' ' + personal.lastName) : ""}
                     placeholder="User Name"
                 />
 
                 <InputWithHead
                     disabled
-                    style={{ width: '100%', paddingRight: 1 }}
+                    style={{ paddingRight: 1 }}
                     heading={AppConstants.organisationName}
                     required="pb-1"
-                    className="input-inside-table-venue-court team-mem_prod_type"
+                    className="input-inside-table-venue-court team-mem_prod_type w-100"
                     value={regData ? regData.affiliate : ''}
                     placeholder="Organisation Name"
                 />
@@ -322,8 +321,8 @@ class DeRegistration extends Component {
                     disabled
                     heading={AppConstants.competition_name}
                     required="pb-1"
-                    style={{ width: '100%', paddingRight: 1 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
+                    style={{ paddingRight: 1 }}
+                    className="input-inside-table-venue-court team-mem_prod_type w-100"
                     value={regData ? regData.competitionName : ''}
                     placeholder="Competition Name"
                 />
@@ -332,8 +331,8 @@ class DeRegistration extends Component {
                     disabled
                     heading={AppConstants.membershipProduct}
                     required="pb-1"
-                    style={{ width: '100%', paddingRight: 1 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
+                    style={{ paddingRight: 1 }}
+                    className="input-inside-table-venue-court team-mem_prod_type w-100"
                     value={(regData ? regData.membershipProduct : '') + ' - ' + (regData ? regData.membershipType : '')}
                     placeholder={AppConstants.membershipProduct}
                 />
@@ -342,8 +341,8 @@ class DeRegistration extends Component {
                     disabled
                     heading={AppConstants.division}
                     required="pb-1"
-                    style={{ width: '100%', paddingRight: 1 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
+                    style={{ paddingRight: 1 }}
+                    className="input-inside-table-venue-court team-mem_prod_type w-100"
                     value={regData ? regData.divisionName : ''}
                     placeholder={AppConstants.division}
                 />
@@ -352,8 +351,8 @@ class DeRegistration extends Component {
                     disabled
                     heading={AppConstants.teamName}
                     required="pb-1"
-                    style={{ width: '100%', paddingRight: 1 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
+                    style={{ paddingRight: 1 }}
+                    className="input-inside-table-venue-court team-mem_prod_type w-100"
                     value={regData ? regData.teamName : ''}
                     placeholder={AppConstants.teamName}
                 />

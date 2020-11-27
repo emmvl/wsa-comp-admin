@@ -61,10 +61,10 @@ class LiveScoreBanners extends Component {
             if (id !== null) {
                 this.props.getLiveScoreBanners(id);
             } else {
-                history.push('/liveScoreCompetitions');
+                history.push('/matchDayCompetitions');
             }
         } else {
-            history.push('/liveScoreCompetitions');
+            history.push('/matchDayCompetitions');
         }
     }
 
@@ -94,7 +94,7 @@ class LiveScoreBanners extends Component {
     };
 
     loaderView = () => (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="d-flex align-items-center justify-content-center">
             {/* <Spin size="small" /> */}
             <Spin />
             {/* <Spin size="large" /> */}
@@ -218,13 +218,13 @@ class LiveScoreBanners extends Component {
     headerView = () => (
         <Header className="comp-venue-courts-header-view live-form-view-button-header">
             <div className="row">
-                <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                <div className="col-sm d-flex align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.banners}</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
-                <div className="col-sm live-form-view-button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <NavLink to="/liveScoreEditBanners">
+                <div className="col-sm live-form-view-button-container d-flex justify-content-end">
+                    <NavLink to="/matchDayEditBanners">
                         <Button className="primary-add-comp-form" type="primary">{`+${AppConstants.addBanners}`}</Button>
                     </NavLink>
                 </div>
@@ -240,19 +240,10 @@ class LiveScoreBanners extends Component {
     removeBtn = (record) => (
         <div className="mb-3">
             {/* <div className="col-sm"> */}
-            <div
-                className="comp-dashboard-botton-view-mobile"
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                }}
-            >
+            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                 <NavLink
                     to={{
-                        pathname: '/liveScoreEditBanners',
+                        pathname: '/matchDayEditBanners',
                         state: { isEdit: true, tableRecord: record },
                     }}
                 >
@@ -271,11 +262,11 @@ class LiveScoreBanners extends Component {
     render() {
         const { bannerResult } = this.props.liveScoreBannerState;
         return (
-            <div className="fluid-width" style={{ backgroundColor: '#f7fafc', paddingBottom: 10 }}>
+            <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="20" />

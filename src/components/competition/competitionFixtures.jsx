@@ -19,7 +19,6 @@ import {
     getYearAndCompetitionOwnAction,
 } from '../../store/actions/appAction';
 import { getDivisionAction, getCompetitionFixtureAction, clearFixtureData, updateCompetitionFixtures } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
-// import moment from 'moment';
 import Loader from '../../customComponents/loader'
 import { getCurrentYear } from 'util/permissions'
 
@@ -42,6 +41,7 @@ class CompetitionFixtures extends Component {
 
     componentDidMount() {
         loadjs('assets/js/custom.js');
+        this.apiCalls();
     }
 
     componentDidUpdate(nextProps) {
@@ -82,11 +82,6 @@ class CompetitionFixtures extends Component {
         }
     }
 
-    componentDidMount() {
-        loadjs('assets/js/custom.js');
-        this.apiCalls();
-    }
-
     apiCalls() {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
@@ -108,19 +103,16 @@ class CompetitionFixtures extends Component {
                     competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
                     venueLoad: false
                 })
-            }
-            else {
+            } else {
 
                 this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
             }
-        }
-        else if (yearId) {
+        } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
-        }
-        else {
+        } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             // setOwnCompetitionYear(1)
         }
@@ -132,34 +124,21 @@ class CompetitionFixtures extends Component {
         });
     };
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-draws-header-view mt-4">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: 'flex', alignContent: 'center' }}
-                    >
-                        <Breadcrumb
-                            style={{
-                                display: 'flex',
-                                lignItems: 'center',
-                                alignSelf: 'center'
-                            }}
-                            separator=" > "
-                        >
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {' '}
-                                {AppConstants.fixtures}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-draws-header-view mt-4">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb className="d-flex align-items-center align-self-center" separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {' '}
+                            {AppConstants.fixtures}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
-    //////year change onchange
+            </div>
+        </Header>
+    )
+
     onYearChange = yearId => {
         this.props.clearFixtureData("grades")
         setOwnCompetitionYear(yearId)
@@ -188,7 +167,6 @@ class CompetitionFixtures extends Component {
         this.props.getCompetitionFixtureAction(this.state.yearRefId, this.state.firstTimeCompId, competitionDivisionGradeId)
     }
 
-
     onSwap(source, target, round_Id, draws) {
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
@@ -196,8 +174,6 @@ class CompetitionFixtures extends Component {
         let sourceYIndex = sourceIndexArray[1];
         let sourceZIndex = sourceIndexArray[2];
         let sourceID = sourceIndexArray[3];
-
-
         let targetXIndex = targetIndexArray[0];
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
@@ -223,7 +199,6 @@ class CompetitionFixtures extends Component {
 
                         };
                     }
-
                 } else {
                     if (targetZIndex == 0) {
                         customSourceObject = {
@@ -253,10 +228,8 @@ class CompetitionFixtures extends Component {
                 round_Id
             )
         }
-
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="row">
@@ -278,15 +251,7 @@ class CompetitionFixtures extends Component {
                     </div>
                 </div>
                 <div className="col-sm-4">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginRight: 50
-                        }}
-                    >
+                    <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                         <span className="year-select-heading">
                             {AppConstants.competition}:
                         </span>
@@ -317,17 +282,12 @@ class CompetitionFixtures extends Component {
                         <span className="form-heading">{AppConstants.fixtures}</span>
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="d-flex align-items-center"
-                                    style={{ width: '100%' }}
-                                >
+                                <div className="d-flex align-items-center w-100">
                                     <span className="year-select-heading">{AppConstants.grade}:</span>
                                     <Select
                                         className="year-select"
                                         style={{ minWidth: 100, maxWidth: 130 }}
-                                        onChange={competitionDivisionGradeId =>
-                                            this.onDivisionGradeNameChange(competitionDivisionGradeId)
-                                        }
+                                        onChange={competitionDivisionGradeId => this.onDivisionGradeNameChange(competitionDivisionGradeId)}
                                         value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
                                     >
                                         {this.props.drawsState.fixtureDivisionGradeNameList.map(item => (
@@ -346,7 +306,8 @@ class CompetitionFixtures extends Component {
                 </div>
                 {
                     this.props.drawsState.updateFixtureLoad ?
-                        <div><Loader visible={this.props.drawsState.updateFixtureLoad} />
+                        <div>
+                            <Loader visible={this.props.drawsState.updateFixtureLoad} />
                             {this.dragableView()}
                         </div> :
                         this.dragableView()
@@ -360,7 +321,10 @@ class CompetitionFixtures extends Component {
         var dayMargin = 25;
         let topMargin = 0;
         let getStaticDrawsData = [{
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+            venueCourtNumber: 1,
+            venueCourtName: "1",
+            venueShortName: "Lots",
+            slotsArray: [{
                 drawsId: 12,
                 venueCourtNumber: 1,
                 venueCourtName: null,
@@ -470,7 +434,10 @@ class CompetitionFixtures extends Component {
                 ],
             }]
         }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+            venueCourtNumber: 1,
+            venueCourtName: "1",
+            venueShortName: "Lots",
+            slotsArray: [{
                 drawsId: 12,
                 venueCourtNumber: 1,
                 venueCourtName: null,
@@ -580,7 +547,10 @@ class CompetitionFixtures extends Component {
                 ],
             }]
         }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+            venueCourtNumber: 1,
+            venueCourtName: "1",
+            venueShortName: "Lots",
+            slotsArray: [{
                 drawsId: 17,
                 venueCourtNumber: 1,
                 venueCourtName: null,
@@ -690,7 +660,10 @@ class CompetitionFixtures extends Component {
                 ],
             }]
         }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+            venueCourtNumber: 1,
+            venueCourtName: "1",
+            venueShortName: "Lots",
+            slotsArray: [{
                 drawsId: 20,
                 venueCourtNumber: 1,
                 venueCourtName: null,
@@ -799,15 +772,14 @@ class CompetitionFixtures extends Component {
                     },
                 ],
             }]
-        },
-        ]
+        }]
         let dateArray = [{ time: "09:00" }, { time: "10:00" }, { time: "11:00" }, { time: "12:00" }]
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar pb-4">
                     <div className="table-head-wrap">
                         {/* Times list */}
-                        <div className="tablehead-row-fixture ">
+                        <div className="tablehead-row-fixture">
                             <div className="sr-no empty-bx" />
                             {dateArray.map((date, index) => {
                                 if (index !== 0) {
@@ -832,7 +804,7 @@ class CompetitionFixtures extends Component {
                         }
                         return (
                             <div>
-                                <div className="fixture-sr-no"> {index + 1}</div>
+                                <div className="fixture-sr-no">{index + 1}</div>
                                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                                     if (slotIndex !== 0) {
                                         leftMargin += 75;
@@ -844,17 +816,14 @@ class CompetitionFixtures extends Component {
                                         <div>
                                             <span
                                                 style={{ left: leftMargin, top: topMargin }}
-                                                className={
-                                                    'fixtureBorder'
-                                                }
+                                                className="fixtureBorder"
                                             />
                                             <div
-                                                className={
-                                                    'fixtureBox'
-                                                }
+                                                className="fixtureBox overflow-hidden"
                                                 style={{
                                                     backgroundColor: slotObject.colorCode,
-                                                    left: leftMargin, top: topMargin, overflow: "hidden",
+                                                    left: leftMargin,
+                                                    top: topMargin,
                                                     whiteSpace: "nowrap",
                                                 }}
                                             >
@@ -871,8 +840,8 @@ class CompetitionFixtures extends Component {
                                                             {slotObject.homeTeamName}
                                                         </span>
                                                     ) : (
-                                                            <span>N/A</span>
-                                                        )}
+                                                        <span>N/A</span>
+                                                    )}
                                                 </CompetitionSwappable>
                                             </div>
                                         </div>
@@ -882,13 +851,12 @@ class CompetitionFixtures extends Component {
                         );
                     })}
                 </div>
-
             </div>
         );
     };
+
     //////the gragable content view inside the container
     // dragableView = () => {
-
     //     let topMargin = 50;
     //     let topMarginHomeTeam = 50;
     //     let topMarginAwayTeam = 103;
@@ -898,114 +866,105 @@ class CompetitionFixtures extends Component {
     //             <div className="scroll-bar">
     //                 {/* Slots View */}
     //                 <div className="fixture-main-canvas Draws">
-    //                     {
-    //                         getStaticDrawsData.map((courtData, index) => {
-    //                             let leftMargin = 25;
-    //                             if (index !== 0) {
-    //                                 topMargin += 180;
-    //                                 topMarginHomeTeam += 180;
-    //                                 topMarginAwayTeam += 180;
-    //                             }
-    //                             return (
-    //                                 <div>
-    //                                     <div className="fixture-round-view">
-    //                                         <div>
-    //                                             <span className="fixture-round">{courtData.roundName}</span>
-    //                                         </div>
-    //                                         <div>
-    //                                             <span style={{ fontSize: 11 }}>{moment(courtData.roundStartDate).format("ddd DD/MM")}</span>
-    //                                         </div>
+    //                     {getStaticDrawsData.map((courtData, index) => {
+    //                         let leftMargin = 25;
+    //                         if (index !== 0) {
+    //                             topMargin += 180;
+    //                             topMarginHomeTeam += 180;
+    //                             topMarginAwayTeam += 180;
+    //                         }
+    //                         return (
+    //                             <div>
+    //                                 <div className="fixture-round-view">
+    //                                     <div>
+    //                                         <span className="fixture-round">{courtData.roundName}</span>
     //                                     </div>
-    //                                     <div className="sr-no fixture-huge-sr">
+    //                                     <div>
+    //                                         <span style={{ fontSize: 11 }}>
+    //                                             {moment(courtData.roundStartDate).format("ddd DD/MM")}
+    //                                         </span>
     //                                     </div>
-
-    //                                     {courtData.draws.map((slotObject, slotIndex) => {
-    //                                         if (slotIndex !== 0) {
-    //                                             leftMargin += 110;
-    //                                         }
-    //                                         if (slotIndex == 0) {
-    //                                             leftMargin = 70;
-    //                                         }
-    //                                         return slotObject.drawsId === null ? (
-    //                                             <div
-    //                                                 className={
-    //                                                     'fixture-huge-undraggble-box grey--bg'
-    //                                                 }
-    //                                                 style={{ top: topMargin, left: leftMargin }}
-    //                                             >
-    //                                                 <span>Free</span>
-    //                                             </div>
-    //                                         ) : (
-    //                                                 <div>
-
-    //                                                     <div
-    //                                                         className={
-    //                                                             'box purple-box' + ' purple-bg'
-    //                                                         }
-    //                                                         style={{
-    //                                                             top: topMarginHomeTeam,
-    //                                                             backgroundColor: slotObject.team1Color,
-    //                                                             left: leftMargin
-    //                                                         }}
-    //                                                     >
-    //                                                         <FixtureSwappable
-    //                                                             id={
-    //                                                                 index.toString() +
-    //                                                                 ':' +
-    //                                                                 slotIndex.toString() +
-    //                                                                 ':0:' + courtData.roundId
-    //                                                             }
-    //                                                             content={1}
-    //                                                             swappable
-    //                                                             onSwap={(source, target) =>
-    //                                                                 this.onSwap(source, target, courtData.roundId, courtData.draws)
-    //                                                             }
-    //                                                         >
-    //                                                             <span>{slotObject.team1Name}</span>
-    //                                                         </FixtureSwappable>
-    //                                                     </div>
-    //                                                     <span
-    //                                                         className={'border'}
-    //                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
-    //                                                     />
-    //                                                     <div
-    //                                                         className={
-    //                                                             'box purple-box ' +
-    //                                                             ' purple-bg'
-    //                                                         }
-    //                                                         style={{
-    //                                                             top: topMarginAwayTeam,
-    //                                                             backgroundColor: slotObject.team2Color,
-    //                                                             left: leftMargin
-    //                                                         }}
-    //                                                     >
-    //                                                         <FixtureSwappable
-    //                                                             id={
-    //                                                                 index.toString() +
-    //                                                                 ':' +
-    //                                                                 slotIndex.toString() +
-    //                                                                 ':1:' + courtData.roundId
-    //                                                             }
-    //                                                             content={1}
-    //                                                             swappable
-    //                                                             onSwap={(source, target) =>
-    //                                                                 this.onSwap(source, target, courtData.roundId, courtData.draws)
-    //                                                             }
-    //                                                         >
-    //                                                             <span>{slotObject.team2Name}</span>
-    //                                                         </FixtureSwappable>
-    //                                                     </div>
-    //                                                 </div>
-    //                                             );
-    //                                     })}
     //                                 </div>
-    //                             );
-    //                         })
-    //                     }
+    //                                 <div className="sr-no fixture-huge-sr">
+    //                                 </div>
+    //
+    //                                 {courtData.draws.map((slotObject, slotIndex) => {
+    //                                     if (slotIndex !== 0) {
+    //                                         leftMargin += 110;
+    //                                     }
+    //                                     if (slotIndex == 0) {
+    //                                         leftMargin = 70;
+    //                                     }
+    //                                     return slotObject.drawsId === null ? (
+    //                                         <div
+    //                                             className="fixture-huge-undraggble-box grey--bg"
+    //                                             style={{ top: topMargin, left: leftMargin }}
+    //                                         >
+    //                                             <span>Free</span>
+    //                                         </div>
+    //                                     ) : (
+    //                                         <div>
+    //                                             <div
+    //                                                 className="box purple-box purple-bg"
+    //                                                 style={{
+    //                                                     top: topMarginHomeTeam,
+    //                                                     backgroundColor: slotObject.team1Color,
+    //                                                     left: leftMargin
+    //                                                 }}
+    //                                             >
+    //                                                 <FixtureSwappable
+    //                                                     id={
+    //                                                         index.toString() +
+    //                                                         ':' +
+    //                                                         slotIndex.toString() +
+    //                                                         ':0:' + courtData.roundId
+    //                                                     }
+    //                                                     content={1}
+    //                                                     swappable
+    //                                                     onSwap={(source, target) =>
+    //                                                         this.onSwap(source, target, courtData.roundId, courtData.draws)
+    //                                                     }
+    //                                                 >
+    //                                                     <span>{slotObject.team1Name}</span>
+    //                                                 </FixtureSwappable>
+    //                                             </div>
+    //                                             <span
+    //                                                 className="border"
+    //                                                 style={{ top: topMarginAwayTeam, left: leftMargin }}
+    //                                             />
+    //                                             <div
+    //                                                 className="box purple-box purple-bg"
+    //                                                 style={{
+    //                                                     top: topMarginAwayTeam,
+    //                                                     backgroundColor: slotObject.team2Color,
+    //                                                     left: leftMargin
+    //                                                 }}
+    //                                             >
+    //                                                 <FixtureSwappable
+    //                                                     id={
+    //                                                         index.toString() +
+    //                                                         ':' +
+    //                                                         slotIndex.toString() +
+    //                                                         ':1:' + courtData.roundId
+    //                                                     }
+    //                                                     content={1}
+    //                                                     swappable
+    //                                                     onSwap={(source, target) =>
+    //                                                         this.onSwap(source, target, courtData.roundId, courtData.draws)
+    //                                                     }
+    //                                                 >
+    //                                                     <span>{slotObject.team2Name}</span>
+    //                                                 </FixtureSwappable>
+    //                                             </div>
+    //                                         </div>
+    //                                     );
+    //                                 })}
+    //                             </div>
+    //                         );
+    //                     })}
     //                 </div>
     //             </div>
     //         </div>
-
     //     );
     // };
 
@@ -1066,13 +1025,11 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         drawsState: state.CompetitionDrawsState,
     };
 }
-export default connect(
-    mapStatetoProps,
-    mapDispatchToProps
-)(CompetitionFixtures);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionFixtures);

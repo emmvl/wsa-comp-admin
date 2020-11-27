@@ -125,7 +125,6 @@ class LiveScoreLadderList extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let { liveScoreCompIsParent } = this.state
         return (
@@ -138,29 +137,12 @@ class LiveScoreLadderList extends Component {
                     </div>
 
                     {liveScoreCompIsParent && (
-                        <div
-                            className="col-sm"
-                            style={{
-                                display: "flex",
-                                flexDirection: 'row',
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                            }}
-                        >
+                        <div className="col-sm d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to={{
-                                            pathname: '/liveScoreLadderAdjustment',
+                                            pathname: '/matchDayLadderAdjustment',
                                             state: { divisionId: this.state.divisionId }
                                         }}>
                                             <Button className="primary-add-comp-form" type="primary">
@@ -188,10 +170,10 @@ class LiveScoreLadderList extends Component {
                 this.props.getLiveScoreDivisionList(id)
 
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -242,14 +224,7 @@ class LiveScoreLadderList extends Component {
                         </Select>
                     )} */}
 
-                    <div
-                        style={{
-                            width: "fit-content",
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                        }}
-                    >
+                    <div className="w-ft d-flex flex-row align-items-center">
                         <span className="year-select-heading">
                             {AppConstants.filterByDivision}:
                         </span>
@@ -295,7 +270,7 @@ class LiveScoreLadderList extends Component {
                         className="antd-pagination"
                         defaultCurrent={1}
                         total={8}
-                    // onChange={this.handleTableChange}
+                        // onChange={this.handleTableChange}
                     />
                 </div> */}
                 <div className="comp-dash-table-view mt-4 ml-1">
@@ -305,7 +280,7 @@ class LiveScoreLadderList extends Component {
                             let value = x.points >= 0 ? x.points : JSON.stringify(x.points)
                             let newValue = value >= 0 ? value : value.replace("-", '')
                             return (
-                                <div key={index} style={{ marginBottom: '10px' }}>
+                                <div key={index} style={{ marginBottom: 10 }}>
                                     <li className="required-field">{x.teamName + key + newValue + ' points for ' + x.adjustmentReason}</li>
                                 </div>
                             )
@@ -322,7 +297,7 @@ class LiveScoreLadderList extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" />
                 <Layout>

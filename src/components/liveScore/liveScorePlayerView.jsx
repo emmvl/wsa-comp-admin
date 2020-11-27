@@ -8,12 +8,13 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+
 const { Content } = Layout;
 const { TabPane } = Tabs;
 
 ////activity columns data
 const activity_Columns = [
-
     {
         title: 'Match id',
         dataIndex: 'matchId',
@@ -60,7 +61,6 @@ const activity_Columns = [
 
 ////activity columns data
 const shhoting_Columns = [
-
     {
         title: 'Match id',
         dataIndex: 'matchId',
@@ -137,6 +137,18 @@ class LiveScorePlayerView extends Component {
         }
     }
 
+    componentDidMount() {
+        let playerData = this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null
+
+        if (getLiveScoreCompetiton()) {
+            if (!playerData) {
+                history.push('/matchDayGoalsList')
+            }
+        } else {
+            history.push('/matchDayCompetitions')
+        }
+    }
+
     ////view for profile image
     profileImageView = () => {
         let data = this.state.data
@@ -147,13 +159,13 @@ class LiveScorePlayerView extends Component {
                     <span className="user-contact-heading">{AppConstants.playerProfile}</span>
                     {/* <img className="user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" /> */}
 
-                    {data.profilePicture ?
+                    {data && data.profilePicture ?
                         <img className="user-image" src={data.profilePicture} alt="" height="80" width="80" />
                         :
                         <span className="user-contact-heading">{AppConstants.noImage}</span>
                     }
-                    <span className="user-contact-heading">{data.firstName + " " + data.lastName}</span>
-                    <span className="year-select-heading pt-0">{'#' + data.playerId}</span>
+                    <span className="user-contact-heading">{data && (data.firstName + " " + data.lastName)}</span>
+                    <span className="year-select-heading pt-0">{data && ('#' + data.playerId)}</span>
                 </div>
 
                 <div className="profile-img-view-style">
@@ -164,7 +176,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.dateOfBirth}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{liveScore_formateDate(data.dob) == "Invalid date" ? "" : liveScore_formateDate(data.dob)}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && (liveScore_formateDate(data.dob) == "Invalid date" ? "" : liveScore_formateDate(data.dob))}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -173,7 +185,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.phoneNumber}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && data.phoneNumber}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -182,7 +194,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.team ? data.team.name : data.teamName}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && (data.team ? data.team.name : data.teamName)}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -191,7 +203,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.division}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.division ? data.division.name : ""}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && (data.division ? data.division.name : "")}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -213,10 +225,10 @@ class LiveScorePlayerView extends Component {
 
     btnView = () => {
         return (
-            <div className="col-sm mt-5" style={{ display: "flex", justifyContent: "flex-end", }}>
+            <div className="col-sm mt-5 d-flex justify-content-end">
                 <div className="comp-dashboard-botton-view-mobile">
                     <NavLink to={{
-                        pathname: '/liveScoreAddPlayer',
+                        pathname: '/matchDayAddPlayer',
                         state: { isEdit: true, playerData: this.state.data }
                     }}>
                         <Button className="primary-add-comp-form mr-5" type="primary">
@@ -232,7 +244,6 @@ class LiveScorePlayerView extends Component {
             </div>
         )
     }
-
 
     //////// tableView
     activityView = () => {
@@ -277,16 +288,16 @@ class LiveScorePlayerView extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.screenName === 'dashboard' ? "1" : this.state.screenName === 'incident' ? '17' : "7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width">
                             <div className="row">
-                                <div className="col-sm-3 " style={{ marginBottom: "7%" }}>
+                                <div className="col-sm-3" style={{ marginBottom: "7%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
+                                <div className="col-sm-9 default-bg">
                                     {this.btnView()}
                                     <div className="inside-table-view mt-4">
                                         <Tabs defaultActiveKey="1" onChange={this.tabCallBack}>
@@ -307,5 +318,5 @@ class LiveScorePlayerView extends Component {
         );
     }
 }
-export default LiveScorePlayerView;
 
+export default LiveScorePlayerView;

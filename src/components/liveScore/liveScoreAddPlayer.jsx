@@ -133,11 +133,9 @@ class LiveScoreAddPlayer extends Component {
                     }
                 }
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
-
-
     }
 
     setInitalFiledValue() {
@@ -173,18 +171,10 @@ class LiveScoreAddPlayer extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {this.state.isEdit ? AppConstants.editPlayer : AppConstants.addPlayer}
@@ -240,8 +230,8 @@ class LiveScoreAddPlayer extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.dOB} />
                         <DatePicker
-                            size="large"
-                            style={{ width: '100%' }}
+                            // size="large"
+                            className="w-100"
                             onChange={(dateOfBirth) => dateOfBirth && this.props.liveScoreUpdatePlayerDataAction(moment(dateOfBirth).format('DD-MM-YYYY'), 'dateOfBirth')}
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
@@ -279,7 +269,8 @@ class LiveScoreAddPlayer extends Component {
                         <Form.Item name='team' rules={[{ required: true, message: ValidationConstants.teamName }]}>
                             <Select
                                 loading={this.props.liveScoreState.onLoad && true}
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(teamId) => this.props.liveScoreUpdatePlayerDataAction(teamId, 'teamId')}
                                 value={playerData.teamId}
                                 placeholder={AppConstants.selectTeam}
@@ -307,7 +298,7 @@ class LiveScoreAddPlayer extends Component {
                             <input
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
                                     this.setState({ timeout: 2000 })
@@ -318,10 +309,7 @@ class LiveScoreAddPlayer extends Component {
                             />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
-                        {/* <div
-                            className="col-sm"
-                            style={{ display: "flex", alignItems: "center" }}
-                        >
+                        {/* <div className="col-sm d-flex align-items-center">
                             <Checkbox
                                 className="single-checkbox"
                                 defaultChecked
@@ -394,7 +382,7 @@ class LiveScoreAddPlayer extends Component {
                             <div className="reg-add-save-button">
                                 <Button
                                     className="cancelBtnWidth"
-                                    onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })}
+                                    onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/matchDayPlayerList', { ...this.props.location.state })}
                                     type="cancel-button"
                                 >
                                     {AppConstants.cancel}
@@ -429,7 +417,7 @@ class LiveScoreAddPlayer extends Component {
                     screenKey == 'umpire' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
 
                 {

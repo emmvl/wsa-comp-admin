@@ -83,11 +83,9 @@ class LiveScoreAddTeam extends Component {
         if (this.state.screenKey == 'umpire') {
             if (getUmpireCompetitonData()) {
                 if (this.state.isEdit) {
-
                     this.props.liveScoreGetTeamDataAction(this.state.teamId)
                     this.setState({ load: true })
-                }
-                else {
+                } else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
                 const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
@@ -97,18 +95,16 @@ class LiveScoreAddTeam extends Component {
                 this.props.liveScoreGetAffiliate({ id, name: '' })
                 this.props.liveScoreManagerListAction(5, 1, id)
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
-        }
-        else {
+        } else {
             this.setLivScoreCompIsParent()
             if (getLiveScoreCompetiton()) {
                 const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
                 if (this.state.isEdit) {
                     this.props.liveScoreGetTeamDataAction(this.state.teamId)
                     this.setState({ load: true, localCompetitionID: id })
-                }
-                else {
+                } else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
                 sourceIdAvailable = sourceId ? true : false
@@ -117,12 +113,12 @@ class LiveScoreAddTeam extends Component {
                 this.props.liveScoreGetAffiliate({ id, name: '' })
                 this.props.liveScoreManagerListAction(5, 1, id)
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
         let isEditCheck = this.props.location.state ? this.props.location.state.isEdit : false
         if (sourceIdAvailable && isEditCheck === false) {
-            history.push("/liveScoreTeam")
+            history.push("/matchDayTeam")
         }
     }
 
@@ -180,19 +176,11 @@ class LiveScoreAddTeam extends Component {
         this.setState({ load: true })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {isEdit ? AppConstants.editTeam : AppConstants.addTeam}
@@ -262,7 +250,7 @@ class LiveScoreAddTeam extends Component {
                             <input
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
                                     this.setState({ timeout: 2000 })
@@ -273,10 +261,7 @@ class LiveScoreAddTeam extends Component {
                             />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", alignItems: "center" }}
-                        >
+                        <div className="col-sm d-flex align-items-center">
                             <Checkbox
                                 className="single-checkbox"
                                 // defaultChecked={false}
@@ -300,7 +285,8 @@ class LiveScoreAddTeam extends Component {
                                 disabled={!this.state.liveScoreCompIsParent || this.state.sourceIdAvailable}
                                 showSearch
                                 optionFilterProp="children"
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={divisionSelection => {
                                     this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
                                 }}
@@ -319,9 +305,9 @@ class LiveScoreAddTeam extends Component {
                 <div>
                     <Form.Item name='affiliate' rules={[{ required: true, message: ValidationConstants.affiliateField }]}>
                         <Select
-
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             disabled={!this.state.liveScoreCompIsParent}
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={affiliateId => {
                                 this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                             }}
@@ -351,7 +337,7 @@ class LiveScoreAddTeam extends Component {
                         value={managerType}
                     >
                         <div className="row ml-2" style={{ marginTop: 18 }}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div className="d-flex align-items-center">
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">
                                     {AppConstants.new}
                                 </Radio>
@@ -362,7 +348,7 @@ class LiveScoreAddTeam extends Component {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: -15 }}>
+                            <div className="d-flex align-items-center" style={{ marginLeft: -15 }}>
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                     {AppConstants.existing}
                                 </Radio>
@@ -394,7 +380,7 @@ class LiveScoreAddTeam extends Component {
                             showSearch
                             mode="multiple"
                             placeholder={AppConstants.searchManager}
-                            style={{ width: '100%', }}
+                            className="w-100"
                             onChange={(e) => {
                                 this.props.liveScoreAddTeamform({ key: 'userIds', data: e })
                                 this.props.liveScoreClear()
@@ -407,14 +393,14 @@ class LiveScoreAddTeam extends Component {
                             }}
                             onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)}
                             optionFilterProp="children"
-                        // onSearch={(value) => {
-                        //     this.setState({ showOption: true })
-                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                        //         return data.firstName.indexOf(value) > -1
-                        //     })
-                        //     this.props.liveScoreManagerFilter(filteredData)
-                        // }}
-                        // value={selectedManager}
+                            // onSearch={(value) => {
+                            //     this.setState({ showOption: true })
+                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                            //         return data.firstName.indexOf(value) > -1
+                            //     })
+                            //     this.props.liveScoreManagerFilter(filteredData)
+                            // }}
+                            // value={selectedManager}
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
@@ -525,7 +511,7 @@ class LiveScoreAddTeam extends Component {
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
                                 }}
-                            // value={teamManagerData.email}
+                                // value={teamManagerData.email}
                             />
                         </Form.Item>
 
@@ -545,7 +531,7 @@ class LiveScoreAddTeam extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                            // value={teamManagerData.mobileNumber}
+                                // value={teamManagerData.mobileNumber}
                             />
                         </Form.Item>
 
@@ -564,15 +550,14 @@ class LiveScoreAddTeam extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScoreTeam')} className="cancelBtnWidth" type="cancel-button">
+                                <Button onClick={() => history.push('/matchDayTeam')} className="cancelBtnWidth" type="cancel-button">
                                     {AppConstants.cancel}
                                 </Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text"
-                                    type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -653,9 +638,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('email', email)
                 }
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
-
-            }
-            else if (this.props.liveScoreTeamState.managerType === 'new') {
+            } else if (this.props.liveScoreTeamState.managerType === 'new') {
                 const formData = new FormData();
                 if (this.state.teamId) {
                     formData.append('id', this.state.teamId)
@@ -683,9 +666,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('userIds', usersArray)
                 }
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
-
-            }
-            else {
+            } else {
                 // message.config({ duration: 0.9, maxCount: 1 })
                 // message.error('Please select manager section.')
                 const formData = new FormData();
@@ -708,7 +689,6 @@ class LiveScoreAddTeam extends Component {
                 formData.append('organisationId', organisationId)
                 formData.append('divisionId', divisionId)
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
-
             }
         }
     }
@@ -717,12 +697,12 @@ class LiveScoreAddTeam extends Component {
     render() {
         const { screenName } = this.state
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width default-bg">
                 {
                     screenName == 'userPersonal' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
                 {
                     screenName == 'userPersonal' ?

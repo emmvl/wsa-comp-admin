@@ -399,7 +399,6 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
-    //////year change onchange
     onYearChange = (yearId) => {
         this.props.clearMultiDraws('rounds');
         setOwnCompetitionYear(yearId);
@@ -427,7 +426,6 @@ class MultifieldDrawsNewTimeline extends Component {
         this.setState({
             startDate: startDate,
             endDate: endDate
-
         })
     }
 
@@ -531,7 +529,6 @@ class MultifieldDrawsNewTimeline extends Component {
         const diffTimeTarget = this.getDiffBetweenStartAndEnd(targetObject);
 
         // define next slots with data for the swappable objects days
-
         const nextSource = this.getNextEventForSwap(drawData[sourceXIndex].slotsArray, sourceObejctDate, sourceYIndex);
         const nextTarget = this.getNextEventForSwap(drawData[targetXIndex].slotsArray, targetObjectDate, targetYIndex);
 
@@ -721,18 +718,11 @@ class MultifieldDrawsNewTimeline extends Component {
                 if (!checkVenueFalse.includes(slot.venueId)) {
                     if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
                         return slot.colorCode
-                    } else {
-                        return "#999999"
                     }
-                } else {
-                    return "#999999"
                 }
-            } else {
-                return "#999999"
             }
-        } else {
-            return "#999999"
         }
+        return "#999999"
     }
 
     checkAllDivisionData = () => {
@@ -759,7 +749,6 @@ class MultifieldDrawsNewTimeline extends Component {
                     uncheckedArr.push(checkedArray[i][key])
                 }
             }
-            return uncheckedArr
         }
         return uncheckedArr
     }
@@ -776,21 +765,12 @@ class MultifieldDrawsNewTimeline extends Component {
                     if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
                         if (!disabledStatus) {
                             return true
-                        } else {
-                            return false
                         }
-                    } else {
-                        return false
                     }
-                } else {
-                    return false
                 }
-            } else {
-                return false
             }
-        } else {
-            return false
         }
+        return false
     }
 
     onDateRangeCheck = (val) => {
@@ -882,7 +862,6 @@ class MultifieldDrawsNewTimeline extends Component {
             && this.dragTimeEndRef.current?.isSameOrBefore(dragDayTimeRestrictions?.endTime)
             && !!this.state.dragDayTarget;
 
-
         if (isTooltipAllowTime || this.state.tooltipSwappableTime) {
             tooltip.setAttribute(
                 "style",
@@ -896,9 +875,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     top: ${tooltipY}px;
                     z-index: 100`
             );
-        }
-
-        else {
+        } else {
             tooltip.setAttribute(
                 "style",
                 "display: none"
@@ -1279,15 +1256,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                 </Select>
                             </div>
                             <div className="col-sm mt-2">
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        minWidth: 250
-                                    }}
-                                >
+                                <div className="w-100 d-flex flex-row align-items-center" style={{ minWidth: 250 }}>
                                     <RangePicker
                                         disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
                                         onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
@@ -1343,7 +1312,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             aria-expanded="false"
                         // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
 
@@ -1395,7 +1364,7 @@ class MultifieldDrawsNewTimeline extends Component {
         return (
             <>
                 <div className="row">
-                    <div className="col-sm d-flex justify-content-start ">
+                    <div className="col-sm d-flex justify-content-start">
                         <span className="user-contact-heading">{AppConstants.competitions}</span>
                     </div>
                     <div className="col-sm d-flex justify-content-end" style={{ marginTop: 5 }}>
@@ -1407,7 +1376,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             aria-expanded="true"
                         // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -1481,7 +1450,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             role="button"
                             aria-expanded="true"
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -1583,7 +1552,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             role="button"
                             aria-expanded="true"
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -1640,22 +1609,20 @@ class MultifieldDrawsNewTimeline extends Component {
             >
                 {filterEnable ? (
                     <div
-                        className="d-flex align-items-center mt-4"
+                        className="d-flex align-items-center mt-4 pointer"
                         onClick={() => this.filterOnClick()}
-                        style={{ cursor: "pointer" }}
                     >
                         <img className="dot-image" src={AppImages.filterIcon} alt="" width="20" height="20" style={{ marginBottom: 7 }} />
                         <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                     </div>
                 ) : (
-                        <div
-                            className="d-flex align-items-center mt-1"
-                            onClick={() => this.filterOnClick()}
-                            style={{ cursor: "pointer" }}
-                        >
-                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
-                        </div>
-                    )}
+                    <div
+                        className="d-flex align-items-center mt-1 pointer"
+                        onClick={() => this.filterOnClick()}
+                    >
+                        <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
+                    </div>
+                )}
                 {filterEnable && this.venueLeftView()}
                 {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
                 {filterEnable && this.divisionLeftView()}
@@ -1667,26 +1634,21 @@ class MultifieldDrawsNewTimeline extends Component {
     containerView() {
         return (
             <div className="multiDrawContentView">
-                <div className="multi-draw-list-top-head row" style={{ alignContent: "center" }}>
+                <div className="multi-draw-list-top-head row align-content-center">
                     <div className="col-sm-3 mt-3" style={{ minWidth: 215 }}>
                         <span className="form-heading">{AppConstants.matchCalender}</span>
                     </div>
                     <div className="col-sm-3 mt-3" style={{ minWidth: 310 }}>
                         <div
-                            style={{
-                                width: "fit-content",
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginTop: 5
-                            }}
+                            className="w-ft d-flex flex-row align-items-center"
+                            style={{ marginTop: 5 }}
                         >
-                            <div className='col-sm-2' style={{ minWidth: '100%', paddingLeft: 0 }}>
+                            <div className="col-sm-2 pl-0" style={{ minWidth: '100%' }}>
                                 <Checkbox
                                     className="single-checkbox-radio-style"
                                     checked={this.state.isFilterSchedule}
                                     onChange={e => this.onScheduledMatchesRangeCheck(e.target.checked)}
-                                // disabled={this.state.firstTimeCompId == "-1"}
+                                    // disabled={this.state.firstTimeCompId == "-1"}
                                 >
                                     {AppConstants.showOnlyScheduledMatches}
                                 </Checkbox>
@@ -1713,24 +1675,16 @@ class MultifieldDrawsNewTimeline extends Component {
                 <div>
                     {this.props.drawsState.spinLoad && (
                         <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                height: 100,
-                                alignItems: 'center',
-                            }}
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ height: 100 }}
                         >
                             <Spin size='default' spinning={this.props.drawsState.spinLoad} />
                         </div>
                     )}
                     {this.props.drawsState.getRoundsDrawsdata.length <= 0 && (
                         <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                height: 100,
-                                alignItems: 'center',
-                            }}
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ height: 100 }}
                         />
                     )}
                     {this.props.drawsState.updateLoad ? (
@@ -1753,23 +1707,23 @@ class MultifieldDrawsNewTimeline extends Component {
                             ))}
                         </div>
                     ) : (
-                            <div className="draggable-wrap draw-data-table">
-                                <Loader visible={this.props.drawsState.updateLoad} />
+                        <div className="draggable-wrap draw-data-table">
+                            <Loader visible={this.props.drawsState.updateLoad} />
 
-                                {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                    <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
-                                        {this.state.firstTimeCompId != "-1" && (
-                                            <div className="draws-round-view">
-                                                <span className="draws-round">
-                                                    {dateItem.roundName}
-                                                </span>
-                                            </div>
-                                        )}
-                                        {this.draggableView(dateItem)}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
+                                    {this.state.firstTimeCompId != "-1" && (
+                                        <div className="draws-round-view">
+                                            <span className="draws-round">
+                                                {dateItem.roundName}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {this.draggableView(dateItem)}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -1860,14 +1814,12 @@ class MultifieldDrawsNewTimeline extends Component {
         let backgroundSize = '';
         let backgroundImage = '';
         let backgroundPosition = '';
-
         let backgroundPositionCounter = -30;
 
         for (let i = 0; i <= 10; i++) {
             backgroundSize += `${ONE_MIN_WIDTH * ONE_HOUR_IN_MIN / 2}px ${ONE_MIN_WIDTH * 30}px`;
             backgroundImage += 'radial-gradient(1px 1px at left center, rgb(170, 170, 170) 1px, transparent 1px)';
             backgroundPosition += `0px ${backgroundPositionCounter}px`;
-
             backgroundPositionCounter += 5;
 
             if (i < 10) {
@@ -1917,7 +1869,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                             {!indexTime ? moment(itemDate + itemTime).format('DD MMM, ddd') : moment(itemDate + itemTime).format('ddd')}
                                         </span>
                                     )
-
                                 })
                             })}
                         </div>
@@ -1956,7 +1907,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                             {itemTimeMock.slice(-5)}
                                         </span>
                                     )
-
                                 })
                             })}
                         </div>
@@ -1970,10 +1920,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 >
                     <div
                         id="draggableTooltip"
-                        className="unavailable-draws"
-                        style={{
-                            display: 'none'
-                        }}
+                        className="unavailable-draws d-none"
                     />
                     {dateItem.draws && dateItem.draws.map((courtData, index) => {
                         if (index !== 0) {
@@ -1987,11 +1934,9 @@ class MultifieldDrawsNewTimeline extends Component {
                             <div key={"court" + index}>
                                 <div className="sr-no" style={{ height: 62, boxSizing: 'border-box' }}>
                                     <div
-                                        className="venueCourt-tex-div"
+                                        className="venueCourt-tex-div text-center ml-n20"
                                         style={{
                                             width: 95,
-                                            marginLeft: -20,
-                                            textAlign: 'center',
                                             height: 53,
                                         }}
                                     >
@@ -2033,12 +1978,11 @@ class MultifieldDrawsNewTimeline extends Component {
                                             <div key={"slot" + fieldItemDateIndex}>
                                                 <div
                                                     id={courtData.venueCourtId}
-                                                    className={'box unavailable-draws'}
+                                                    className="box unavailable-draws align-items-center"
                                                     style={{
                                                         left: prevDaysWidth,
                                                         top: topMargin,
                                                         width: diffDayScheduleTime,
-                                                        alignItems: 'center',
                                                         cursor: 'not-allowed',
                                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                                                     }}
@@ -2083,16 +2027,13 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     if (width) {
                                                         return (
                                                             <div
-                                                                className={'box unavailable-draws'}
+                                                                className="box unavailable-draws position-absolute align-items-center h-100"
                                                                 style={{
-                                                                    position: 'absolute',
                                                                     right: widthIndex ? 0 : 'auto',
                                                                     left: widthIndex ? 'auto' : 0,
                                                                     top: 0,
-                                                                    alignItems: 'center',
-                                                                    width: width,
+                                                                    width,
                                                                     minWidth: width,
-                                                                    height: '100%',
                                                                     background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                                                                 }}
                                                             >
@@ -2239,11 +2180,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                         >
                                                                             <SubMenu
                                                                                 disabled={disabledStatus}
-                                                                                style={{
-                                                                                    margin: 0,
-                                                                                    display: 'flex',
-                                                                                    justifyContent: 'center'
-                                                                                }}
+                                                                                className="m-0 d-flex justify-content-center"
                                                                                 key="sub1"
                                                                                 title={
                                                                                     (
@@ -2286,7 +2223,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                             )
                                                                                         }
                                                                                     >
-                                                                                        <div style={{ display: 'flex' }}>
+                                                                                        <div className="d-flex">
                                                                                             <span>Unlock</span>
                                                                                         </div>
                                                                                     </Menu.Item>
@@ -2475,7 +2412,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     <div>
                         <div className="comp-buttons-view">
                             <Tooltip
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() =>
                                     this.setState({
                                         tooltipVisibleDelete: isPublish,

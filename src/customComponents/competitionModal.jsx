@@ -11,18 +11,18 @@ class CompetitionModal extends React.Component {
         super(props);
         this.state = {
             competitionState: true,
-            buttonClicked: ""
-        }
+            buttonClicked: "",
+        };
         this.formRef = React.createRef();
     }
 
     componentDidUpdate() {
         if (this.props.visible === true && this.state.competitionState === true) {
-            this.setState({ competitionState: false })
-            this.setFieldValues()
+            this.setState({ competitionState: false });
+            this.setFieldValues();
         }
         if (this.props.visible === false && this.state.competitionState === false) {
-            this.setState({ competitionState: true })
+            this.setState({ competitionState: true });
         }
     }
 
@@ -30,23 +30,23 @@ class CompetitionModal extends React.Component {
         if (this.formRef.current) {
             this.formRef.current.setFieldsValue({
                 compName: this.props.competitionName,
-                date: this.props.selectedDate
+                date: this.props.selectedDate,
             });
         }
     }
 
-    onOKsubmit = (values) => {
+    onSubmit = () => {
         if (this.state.buttonClicked === "save") {
-            this.props.handleOK()
+            this.props.handleOK();
         } else {
-            this.props.handleCompetitionNext()
+            this.props.handleCompetitionNext();
         }
     }
 
     render() {
-        const { modalTitle, handleOK, onCancel, competitionChange, updateDate, onCompetitionBack, selectedDate, handleCompetitionNext } = this.props
+        const { modalTitle, handleOK, onCancel, competitionChange, updateDate } = this.props;
         return (
-            <div style={{ backgroundColor: "red" }}>
+            <div className="bg-danger">
                 <Modal
                     {...this.props}
                     className="add-membership-type-modal modalFooter"
@@ -55,29 +55,31 @@ class CompetitionModal extends React.Component {
                     onOk={handleOK}
                     onCancel={onCancel}
                     footer={
-                        <div style={{ display: "none" }} />
+                        <div className="d-none" />
                     }
                 >
                     <Form
                         ref={this.formRef}
                         autoComplete="off"
-                        onFinish={this.onOKsubmit}
-                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
+                        onFinish={this.onSubmit}
+                        onFinishFailed={({ errorFields }) => this.formRef.current.scrollToField(errorFields[0].name)}
                         noValidate="noValidate"
                     >
-                        {/* <div style={{ display: 'flex' }}>
-                            <span style={{ fontSize: 16 }} className="comment-heading">{'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}   </span>
+                        {/* <div className="d-flex">
+                            <span className="comment-heading" style={{ fontSize: 16 }}>
+                                {'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}
+                            </span>
                         </div> */}
                         <div className="inside-container-view mt-3">
                             <div className="col-sm pl-0 pb-2">
-                                <Form.Item name='compName' rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}>
+                                <Form.Item name="compName" rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}>
                                     <InputWithHead
-                                        required={"required-field pt-0"}
+                                        required="required-field pt-0"
                                         heading={AppConstants.competition_name}
-                                        placeholder={"Enter competition Name"}
+                                        placeholder="Enter competition Name"
                                         onChange={(e) => competitionChange(e)}
                                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                                            'compName': captializedString(i.target.value)
+                                            compName: captializedString(i.target.value),
                                         })}
                                     />
                                 </Form.Item>
@@ -87,11 +89,11 @@ class CompetitionModal extends React.Component {
                                     required="required-field"
                                     heading={AppConstants.competitionStartDate}
                                 />
-                                <Form.Item name='date' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                                <Form.Item name="date" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
-                                        onChange={date => updateDate(date)}
+                                        // size="large"
+                                        className="w-100"
+                                        onChange={(date) => updateDate(date)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
                                         showTime={false}
@@ -100,18 +102,28 @@ class CompetitionModal extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
-                                <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
+                            <div className="col-sm d-flex w-100" style={{ paddingTop: 10 }}>
+                                <div className="col-sm-6 d-flex w-50 justify-content-start">
                                     {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onCancel} style={{ marginRight: '20px' }}>
+                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onCancel} style={{ marginRight: 20 }}>
                                         {AppConstants.back}
                                     </Button>
                                 </div>
-                                <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
-                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "save" })}>
+                                <div className="col-sm-6 d-flex w-50 justify-content-end">
+                                    <Button
+                                        className="publish-button save-draft-text"
+                                        type="primary"
+                                        htmlType="submit"
+                                        onClick={() => this.setState({ buttonClicked: "save" })}
+                                    >
                                         {AppConstants.save}
                                     </Button>
-                                    <Button className="publish-button" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "next" })}>
+                                    <Button
+                                        className="publish-button"
+                                        type="primary"
+                                        htmlType="submit"
+                                        onClick={() => this.setState({ buttonClicked: "next" })}
+                                    >
                                         {AppConstants.next}
                                     </Button>
                                 </div>
@@ -120,7 +132,7 @@ class CompetitionModal extends React.Component {
                     </Form>
                 </Modal>
             </div>
-        )
+        );
     }
 }
 

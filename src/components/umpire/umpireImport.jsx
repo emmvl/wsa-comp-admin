@@ -141,14 +141,7 @@ class UmpireImport extends Component {
 
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
+            <Header className="form-header-view d-flex align-items-center bg-transparent">
                 <Breadcrumb separator=" > ">
                     <Breadcrumb.Item className="breadcrumb-add">
                         {this.state.screenName === "umpireDashboard" ? AppConstants.assignUmpireToMatch : AppConstants.importUmpire}
@@ -163,14 +156,7 @@ class UmpireImport extends Component {
             <div className="fluid-width">
                 <div className="row">
                     <div className="col-sm">
-                        <div
-                            style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}
-                        >
+                        <div className="w-ft d-flex flex-row align-items-center">
                             <span className="input-heading">{AppConstants.downLoadImportHeading}</span>
                         </div>
                     </div>
@@ -206,8 +192,7 @@ class UmpireImport extends Component {
                 <div className="row">
                     <label>
                         <input
-                            style={{ cursor: "pointer" }}
-                            className="pt-2 pb-2"
+                            className="pt-2 pb-2 pointer"
                             type="file"
                             ref={(input) => {
                                 this.filesInput = input
@@ -233,10 +218,10 @@ class UmpireImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         ) : (
-                                <Button onClick={this.onUploadBtn} className="primary-add-comp-form" type="primary">
-                                    {AppConstants.upload}
-                                </Button>
-                            )}
+                            <Button onClick={this.onUploadBtn} className="primary-add-comp-form" type="primary">
+                                {AppConstants.upload}
+                            </Button>
+                        )}
                     </div>
 
                     {this.state.screenName === "umpireDashboard" && (

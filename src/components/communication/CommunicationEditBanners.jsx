@@ -264,16 +264,9 @@ class CommunicationEditBanners extends Component {
 
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    backgroundColor: 'transparent',
-                }}
-            >
+            <Header className="form-header-view d-flex align-items-center bg-transparent">
                 <div className="row">
-                    <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">
                                 {this.state.isEdit === true ? AppConstants.editBanners : AppConstants.addBanners}
@@ -296,16 +289,7 @@ class CommunicationEditBanners extends Component {
     removeBtn = (isHoriz) => (
         <div className="comp-player-grades-header-drop-down-view">
             <div className="col-sm">
-                <div
-                    className="comp-dashboard-botton-view-mobile"
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                    }}
-                >
+                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                     <Button onClick={() => this.onRemoveBtn(isHoriz)} className="primary-add-comp-form" type="primary">
                         {AppConstants.removeBanner}
                     </Button>
@@ -351,7 +335,7 @@ class CommunicationEditBanners extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: '#f7fafc', paddingBottom: 10 }}>
+            <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
                 <DashboardLayout
                     menuHeading={AppConstants.Communication}
                     menuName={`${AppConstants.Communication} Banner Add/Edit`}

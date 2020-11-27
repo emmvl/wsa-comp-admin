@@ -64,7 +64,7 @@ export function* liveScoreMatchSheetSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            // history.push("/liveScoreDivisionList")
+            // history.push("/matchDayDivisionList")
             // message.success("Division created successfully")
 
         } else {

@@ -45,12 +45,12 @@ const columns = [
         render: (name, record) => {
             return (
                 // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
+                //     pathname: '/matchDayPlayerView',
                 //     state: { tableRecord: record }
                 // }}>
-                <span style={{ color: '#ff8237', cursor: "pointer" }}
-                    onClick={() => _this.checkUserId(record)}
-                >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
+                <span className="pointer" style={{ color: '#ff8237' }} onClick={() => _this.checkUserId(record)}>
+                    {(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}
+                </span>
                 // </NavLink>)
             )
         }
@@ -85,7 +85,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
+                        <NavLink to={{ pathname: "/matchDayAddPlayer", state: { isEdit: true, playerData: record } }}>
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -118,12 +118,12 @@ const columns_2 = [
         render: (name, record) => {
             return (
                 // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
+                //     pathname: '/matchDayPlayerView',
                 //     state: { tableRecord: record }
                 // }}>
-                <span style={{ color: '#ff8237', cursor: "pointer" }}
-                    onClick={() => _this.checkUserId(record)}
-                >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
+                <span className="pointer" style={{ color: '#ff8237' }} onClick={() => _this.checkUserId(record)}>
+                    {(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}
+                </span>
                 // </NavLink>)
             )
         }
@@ -167,7 +167,7 @@ class LiveScoreTeamView extends Component {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         } else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/matchDayPlayerList" })
         }
     }
 
@@ -183,7 +183,7 @@ class LiveScoreTeamView extends Component {
         if (teamIds) {
             this.props.getTeamViewPlayerList(teamIds)
         } else {
-            history.push("/liveScoreCompetitions")
+            history.push("/matchDayTeam")
         }
     }
 
@@ -341,7 +341,7 @@ class LiveScoreTeamView extends Component {
                 <div className="col-sm d-flex justify-content-end">
                     <div className="comp-dashboard-botton-view-mobile">
                         <NavLink to={{
-                            pathname: '/liveScoreAddPlayer',
+                            pathname: '/matchDayAddPlayer',
                             state: { ...this.props.location.state, screenName: this.state.screenName, screenKey: this.state.screenKey }
                         }}>
                             <Button disabled={roleId} className="primary-add-comp-form" type="primary">
@@ -349,8 +349,6 @@ class LiveScoreTeamView extends Component {
                             </Button>
                         </NavLink>
                     </div>
-
-
                 </div>
             </div>
         )
@@ -376,22 +374,18 @@ class LiveScoreTeamView extends Component {
         });
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         const { userRoleId, liveScoreCompIsParent } = this.state
         let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
             <div className="row mt-5">
-                <div className="col-sm d-flex align-items-center justify-content-end" style={{ width: '100%' }}>
-                    {liveScoreCompIsParent == true &&
-                        < div className="row">
+                <div className="col-sm d-flex align-items-center justify-content-end w-100">
+                    {liveScoreCompIsParent == true && (
+                        <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                    style={{ width: '100%' }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddTeam",
+                                        pathname: "/matchDayAddTeam",
                                         state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key, screenName: this.state.screenName, screenKey: this.state.screenKey }
                                     }}>
                                         <Button disabled={roleId} className="primary-add-comp-form" type="primary">
@@ -402,10 +396,7 @@ class LiveScoreTeamView extends Component {
                             </div>
                             {!this.state.sourceIdAvailable && (
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                        style={{ width: '100%' }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                         <Button
                                             disabled={roleId}
                                             onClick={() => this.showDeleteConfirm(this.state.teamId)}
@@ -418,9 +409,9 @@ class LiveScoreTeamView extends Component {
                                 </div>
                             )}
                         </div>
-                    }
+                    )}
                 </div>
-            </div >
+            </div>
             // </div>
         )
     }
@@ -454,7 +445,7 @@ class LiveScoreTeamView extends Component {
                 {screenName === 'userPersonal' ? (
                     <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 ) : (
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                     )}
 
                 {screenName === 'userPersonal' ? (
@@ -473,7 +464,7 @@ class LiveScoreTeamView extends Component {
                                 <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc" }}>
+                                <div className="col-sm-9 default-bg">
                                     {this.headerView()}
                                     {this.tableView()}
                                 </div>

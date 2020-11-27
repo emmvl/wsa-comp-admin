@@ -61,7 +61,7 @@ class CompetitionVenueModal extends React.Component {
                     onOk={handleVenueOK}
                     onCancel={onVenueCancel}
                     footer={
-                        <div style={{ display: "none" }} />
+                        <div className="d-none" />
                     }
                 >
                     <Form
@@ -73,15 +73,16 @@ class CompetitionVenueModal extends React.Component {
                     >
                         <div className="inside-container-view mt-3">
                             <div className="col-sm division">
-                                <InputWithHead required={"required-field pb-0 pt-0 "} heading={AppConstants.venue} />
-                                <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
+                                <InputWithHead required="required-field pb-0 pt-0" heading={AppConstants.venue} />
+                                <Form.Item name="selectedVenues" rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                                     <Select
                                         mode="multiple"
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
                                         onChange={(venueSelection) => onSelectValues(venueSelection)}
                                         placeholder={AppConstants.selectVenue}
                                         filterOption={false}
                                         onSearch={(value) => handleSearch(value)}
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                     >
                                         {appState.venueList.map((item) => (
                                             <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
@@ -91,13 +92,13 @@ class CompetitionVenueModal extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
-                                <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
-                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onVenueBack} style={{ marginRight: '20px' }}>
+                            <div className="col-sm d-flex w-100" style={{ paddingTop: 10 }}>
+                                <div className="col-sm-6 d-flex w-50 justify-content-start">
+                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onVenueBack} style={{ marginRight: 20 }}>
                                         {AppConstants.back}
                                     </Button>
                                 </div>
-                                <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
+                                <div className="col-sm-6 d-flex justify-content-end w-50">
                                     <Button className="publish-button save-draft-text" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "save" })}>
                                         {AppConstants.save}
                                     </Button>

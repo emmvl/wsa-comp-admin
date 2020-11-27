@@ -74,7 +74,7 @@ function* liveScoreCreateDivisionSaga(action) {
         status: result.status,
       });
 
-      history.push("/liveScoreDivisionList");
+      history.push("/matchDayDivisionList");
 
       message.success("Division created successfully");
     } else {
@@ -96,7 +96,7 @@ function* liveScoreDeleteDivisionSaga(action) {
         status: result.status,
       });
 
-      history.push("/liveScoreDivisionList");
+      history.push("/matchDayDivisionList");
 
       message.success("Division Deleted Successfully.");
     } else {
@@ -118,7 +118,7 @@ function* liveScoreDivisionImportSaga(action) {
       });
 
       if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/liveScoreDivisionList");
+        history.push("/matchDayDivisionList");
         message.success("Division Imported Successfully.");
       } else {
         receiptImportResult(result.result);

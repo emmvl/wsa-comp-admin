@@ -51,10 +51,10 @@ class LiveScoreAddDivision extends Component {
             if (getLiveScoreCompetiton()) {
                 const { sourceId } = JSON.parse(getLiveScoreCompetiton());
                 if (sourceId) {
-                    history.push("/liveScoreDivisionList")
+                    history.push("/matchDayDivisionList")
                 }
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         }
     }
@@ -91,10 +91,7 @@ class LiveScoreAddDivision extends Component {
 
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view d-flex align-items-center"
-                    style={{ backgroundColor: "transparent" }}
-                >
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <div className="row">
                         <div className="col-sm mt-5 d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -185,7 +182,8 @@ class LiveScoreAddDivision extends Component {
                         <InputWithHead heading={AppConstants.positionTracking} required="pb-3 pt-3" />
                         <Form.Item className="formMargin pt-0" name="positionTracking">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "positionTracking")}
                                 placeholder={AppConstants.positionTracking}
                             >
@@ -209,7 +207,8 @@ class LiveScoreAddDivision extends Component {
                         <InputWithHead heading={AppConstants.recordGoalAttempt} required="pb-3 pt-3" />
                         <Form.Item className="formMargin pt-0" name="recordGoalAttempts">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "recordGoalAttempts")}
                                 placeholder={AppConstants.recordGoalAttempt}
                             >
@@ -231,7 +230,6 @@ class LiveScoreAddDivision extends Component {
         this.props.createDivisionAction(name, divisionName, gradeName, id, divisionId, positionTracking, recordGoalAttempts)
     };
 
-    //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
@@ -239,7 +237,7 @@ class LiveScoreAddDivision extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to='/liveScoreDivisionList'>
+                                <NavLink to="/matchDayDivisionList">
                                     <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
@@ -263,7 +261,7 @@ class LiveScoreAddDivision extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.addDivision}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="9" />
@@ -280,7 +278,7 @@ class LiveScoreAddDivision extends Component {
                     >
                         <Content>
                             <div className="formView">
-                                {getLiveScoreCompetiton() ? this.contentView() : history.push('/liveScoreCompetitions')}
+                                {getLiveScoreCompetiton() ? this.contentView() : history.push('/matchDayCompetitions')}
                             </div>
                         </Content>
                         <Footer>

@@ -325,10 +325,7 @@ class RegistrationCompetitionList extends Component {
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
             <div className="row">
-                <div
-                    className="col-sm"
-                    style={{ display: 'flex', alignContent: 'center' }}
-                >
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             Competition Fees
@@ -392,7 +389,7 @@ class RegistrationCompetitionList extends Component {
 
                     <div className="col-sm" />
 
-                    <div style={{ marginRight: '25px', display: 'flex', alignItems: 'center' }}>
+                    <div className="d-flex align-items-center" style={{ marginRight: 25 }}>
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
@@ -412,7 +409,7 @@ class RegistrationCompetitionList extends Component {
                     </div>
 
                     {/* {this.state.userRole == AppConstants.admin && ( */}
-                    <div style={{ marginRight: '1%', display: 'flex', alignItems: 'center' }}>
+                    <div className="d-flex align-items-center" style={{ marginRight: '1%' }}>
                         <div
                             className="d-flex flex-row-reverse button-with-search pb-3"
                             // className="col-sm d-flex justify-content-end"

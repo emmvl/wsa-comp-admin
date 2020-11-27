@@ -76,7 +76,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     key: "courtNumber",
                     render: (courtNumber, record, index) => {
                         return (
-                            <div style={{ textAlign: 'center' }}>
+                            <div className="text-center">
                                 {courtNumber}
                             </div>
                         )
@@ -167,7 +167,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: 'pointer', }}>
+                        <span className="w-100 d-flex justify-content-center" style={{ cursor: 'pointer' }}>
                             {/* {!record.isDisabled && ( */}
                             <img
                                 className="dot-image"
@@ -386,15 +386,11 @@ class CompetitionVenueAndTimesEdit extends Component {
         callback();
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-venue-courts-header-view">
                 <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: "flex", alignContent: "center" }}
-                    >
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">
                                 {AppConstants.venueAndTimes}
@@ -552,7 +548,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 <Form.Item name="stateRefId">
                     <Select
-                        style={{ width: '100%' }}
+                        className="w-100"
                         placeholder={AppConstants.select}
                         onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                         value={venuData.stateRefId}
@@ -603,7 +599,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Select
                                     // disabled={this.state.isUsed}
                                     mode="multiple"
-                                    style={{ width: '100%' }}
+                                    className="w-100"
                                     value={venuData.affiliateData}
                                     onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'editOrganisations', "editOrganisations")}
                                     placeholder="Select"
@@ -640,8 +636,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <InputWithHead heading={AppConstants.dayOfTheWeek} />
                     <Select
                         // disabled={item.isDisabled}
-                        // className="year-select"
-                        style={{ width: '100%' }}
+                        // className="year-select w-100"
+                        className="w-100"
                         onChange={(dayOfTheWeek) => this.props.updateVenuAndTimeDataAction(dayOfTheWeek, index, 'dayRefId', 'gameTimeslot')}
                         value={item.dayRefId}
                         placeholder="Select Week Day"
@@ -656,8 +652,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <TimePicker
                         // disabled={item.isDisabled}
                         key="startTime"
-                        className="comp-venue-time-timepicker"
-                        style={{ width: '100%' }}
+                        className="comp-venue-time-timepicker w-100"
                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
@@ -673,8 +668,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         key="endTime"
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
-                        className="comp-venue-time-timepicker"
-                        style={{ width: '100%' }}
+                        className="comp-venue-time-timepicker w-100"
                         onChange={(time) => this.onTimeChange(time, index, 'endTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
@@ -737,7 +731,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <InputWithHead required="pt-1" heading={AppConstants.dayOfTheWeek} />
                     <Select
                         disabled={item.isDisabled}
-                        style={{ width: '100%' }}
+                        className="w-100"
                         onChange={(dayOfTheWeek) => this.props.updateVenuAndTimeDataAction(dayOfTheWeek, index, 'dayRefId', 'addTimeSlotField', tableIndex)}
                         value={item.dayRefId}
                         placeholder="Select Week Day"
@@ -751,8 +745,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <InputWithHead required="pt-1" heading={AppConstants.startTime} />
                     <TimePicker
                         disabled={item.isDisabled}
-                        className="comp-venue-time-timepicker"
-                        style={{ width: '100%' }}
+                        className="comp-venue-time-timepicker w-100"
                         onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'startTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
@@ -765,10 +758,9 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <InputWithHead required="pt-1" heading={AppConstants.endTime} />
                     <TimePicker
                         disabled={item.isDisabled}
-                        className="comp-venue-time-timepicker"
+                        className="comp-venue-time-timepicker w-100"
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
-                        style={{ width: '100%' }}
                         onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'endTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
@@ -823,12 +815,12 @@ class CompetitionVenueAndTimesEdit extends Component {
         let { venueCourts } = venueTimestate.venuData;
         return (
             <div className="fees-view pt-5">
-                <div style={{ display: 'flex' }}>
+                <div className="d-flex">
                     <span className="form-heading">{AppConstants.courts}
-                        <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }} />
+                        <span className="required-field" style={{ fontSize: 14, paddingTop: 5 }} />
                     </span>
                     {/* {!this.state.isUsed && ( */}
-                    <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
+                    <Button className="primary-add-comp-form ml-auto" type="primary">
                         <div className="row">
                             <div className="col-sm">
                                 <label htmlFor="venueCourtUpload" className="csv-reader">
@@ -948,9 +940,9 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                <Button className="publish-button" type="primary" style={{ marginRight: '20px' }} onClick={() => this.navigateTo()}>
+                                <Button className="publish-button" type="primary" style={{ marginRight: 20 }} onClick={() => this.navigateTo()}>
                                     {AppConstants.cancel}
                                 </Button>
                                 {/* {!this.state.isUsed ? */}

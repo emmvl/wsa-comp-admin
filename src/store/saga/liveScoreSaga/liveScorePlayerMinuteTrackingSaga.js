@@ -46,7 +46,7 @@ export function* liveScorePlayerMinuteRecordSaga(action) {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_SUCCESS,
         status: result.status,
       });
-      history.push('/liveScoreMatches')
+      history.push('/matchDayMatches')
     } else {
       yield call(failSaga, result);
     }

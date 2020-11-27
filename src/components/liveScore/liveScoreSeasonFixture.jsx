@@ -73,7 +73,7 @@ const columns2 = [
                         </div>
                         <div className="table-live-score-table-fixture-style">
                             <NavLink to={{
-                                pathname: '/liveScoreTeamView',
+                                pathname: '/matchDayTeamView',
                                 state: { tableRecord: team1, screenName: 'fromMatchList' }
                             }}>
                                 <span className="input-heading-add-another pt-0">{team1 ? team1.name : ""}</span>
@@ -84,7 +84,7 @@ const columns2 = [
             } else {
                 return (
                     <NavLink to={{
-                        pathname: '/liveScoreTeamView',
+                        pathname: '/matchDayTeamView',
                         state: { tableRecord: team1, screenName: 'fromMatchList' }
                     }}>
                         <span className="input-heading-add-another pt-0">{team1 ? team1.name : ""}</span>
@@ -106,7 +106,7 @@ const columns2 = [
                         </div>
                         <div className="table-live-score-table-fixture-style">
                             <NavLink to={{
-                                pathname: '/liveScoreTeamView',
+                                pathname: '/matchDayTeamView',
                                 state: { tableRecord: team2, screenName: 'fromMatchList' }
                             }}>
                                 <span className="input-heading-add-another pt-0">{team2 ? team2.name : ""}</span>
@@ -117,7 +117,7 @@ const columns2 = [
             } else {
                 return (
                     <NavLink to={{
-                        pathname: '/liveScoreTeamView',
+                        pathname: '/matchDayTeamView',
                         state: { tableRecord: team2, screenName: 'fromMatchList' }
                     }}>
                         <span className="input-heading-add-another pt-0">{team2 ? team2.name : ""}</span>
@@ -167,7 +167,7 @@ const columns2 = [
                 )
             } else {
                 return (
-                    <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+                    <span className="d-flex justify-content-center w-50">
                         <img className="dot-image" src={matchResultImag(resultStatus)} alt="" width="12" height="12" />
                     </span>
                 )
@@ -258,7 +258,6 @@ class LiveScoreSeasonFixture extends Component {
         this.setState({ division })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -273,7 +272,6 @@ class LiveScoreSeasonFixture extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let competition = this.props.liveScoreFixtureCompState.comptitionList ? this.props.liveScoreFixtureCompState.comptitionList : []
         let division = this.props.liveScoreMatchState.divisionList ? this.props.liveScoreMatchState.divisionList : []
@@ -296,13 +294,7 @@ class LiveScoreSeasonFixture extends Component {
                         </div>
                     </div>
                     <div className="col-sm-2">
-                        <div style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginRight: 50
-                        }}>
+                        <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.division}:</span>
                             <Select
                                 className="year-select"

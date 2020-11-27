@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, } from 'antd';
+import { Layout, Breadcrumb, Button, message } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -8,14 +8,12 @@ import CSVReader from 'react-csv-reader'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader'
-import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
 import { NavLink } from 'react-router-dom';
 
 const { Content, Header, Footer } = Layout;
-
 
 class LiveScoreIncidentImport extends Component {
     constructor(props) {
@@ -25,15 +23,16 @@ class LiveScoreIncidentImport extends Component {
         }
     }
 
-    ///////view for breadcrumb
+    componentDidMount() {
+        if (!getLiveScoreCompetiton()) {
+            history.push('/matchDayCompetitions')
+        }
+    }
+
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}>
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -61,8 +60,7 @@ class LiveScoreIncidentImport extends Component {
                             onFileLoaded={this.handleForce}
                         /> */}
                         <input
-                            style={{ cursor: "pointer" }}
-                            className="pt-2 pb-2"
+                            className="pt-2 pb-2 pointer"
                             type="file"
                             ref={(input) => { this.filesInput = input }}
                             name="file"
@@ -77,8 +75,7 @@ class LiveScoreIncidentImport extends Component {
                     </div>
                 </div>
                 {/* <span className="user-contact-heading">{AppConstants.exampleBlock}</span> */}
-                <div className="col-sm"
-                    style={{ marginTop: 10 }}>
+                <div className="col-sm mt-10">
                     <div className="row">
                         <div className="reg-add-save-button">
                             <Button className="primary-add-comp-form" type="primary">
@@ -110,11 +107,10 @@ class LiveScoreIncidentImport extends Component {
         }
     }
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
                 <Loader visible={this.props.liveScoreMatchListState.onLoad} />
                 <Layout>
@@ -132,6 +128,7 @@ class LiveScoreIncidentImport extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({}, dispatch)
 }
@@ -141,4 +138,5 @@ function mapStateToProps(state) {
         liveScoreMatchListState: state.LiveScoreMatchState
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreIncidentImport));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreIncidentImport);

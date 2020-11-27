@@ -114,7 +114,7 @@ const columns = [
         dataIndex: "clear",
         key: "clear",
         render: clear => (
-            <span style={{ display: "flex", justifyContent: "center", width: '100%' }}>
+            <span className="d-flex justify-content-center w-100">
                 <img
                     className="dot-image"
                     src={AppImages.redCross}
@@ -178,18 +178,10 @@ class ProductAddRegistration extends Component {
         console.log("onCheck", checkedKeys, info);
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <NavLink to="/registration">
                             <Breadcrumb.Item separator=" > " className="breadcrumb-product">
@@ -212,7 +204,8 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.registration_type} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={registrationType => this.setState({ registrationType })}
                     value={this.state.registrationType}
                 >
@@ -223,7 +216,8 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.category} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={category => this.setState({ category })}
                     value={this.state.category}
                 >
@@ -255,7 +249,8 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.paymentFrequency} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={paymentFrequency => this.setState({ paymentFrequency })}
                     value={this.state.paymentFrequency}
                 >
@@ -272,8 +267,8 @@ class ProductAddRegistration extends Component {
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.dob__From} />
                             <DatePicker
-                                size="large"
-                                style={{ width: '100%' }}
+                                // size="large"
+                                className="w-100"
                                 onChange={date => this.dateOnChangeFrom(date)}
                                 format="DD-MM-YYYY"
                                 placeholder="dd-mm-yyyy"
@@ -287,8 +282,8 @@ class ProductAddRegistration extends Component {
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.dob__To} />
                             <DatePicker
-                                size="large"
-                                style={{ width: '100%' }}
+                                // size="large"
+                                className="w-100"
                                 disabledDate={this.disabledDate}
                                 disabledTime={this.disabledTime}
                                 onChange={date => this.dateOnChangeTo(date)}
@@ -352,7 +347,8 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.applyTo} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={applyTo => this.setState({ applyTo })}
                     value={this.state.applyTo}
                 >
@@ -393,8 +389,8 @@ class ProductAddRegistration extends Component {
                             <div className="col-sm">
                                 <InputWithHead heading={AppConstants.availableFrom} />
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -404,8 +400,8 @@ class ProductAddRegistration extends Component {
                             <div className="col-sm">
                                 <InputWithHead heading={AppConstants.availableTo} />
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
@@ -445,8 +441,8 @@ class ProductAddRegistration extends Component {
                             <div className="col-sm">
                                 <InputWithHead heading={AppConstants.availableFrom} />
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -456,8 +452,8 @@ class ProductAddRegistration extends Component {
                             <div className="col-sm">
                                 <InputWithHead heading={AppConstants.availableTo} />
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: '100%' }}
+                                    // size="large"
+                                    className="w-100"
                                     placeholder="dd-mm-yyyy"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}

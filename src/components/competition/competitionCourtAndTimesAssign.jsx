@@ -14,7 +14,7 @@ import AppImages from 'themes/appImages';
 import AppUniqueId from 'themes/appUniqueId';
 import history from 'util/history';
 import { isArrayNotEmpty } from 'util/helpers';
-import { getCurrentYear } from 'util/permissions';
+// import { getCurrentYear } from 'util/permissions';
 import {
     setOwnCompetitionYear,
     getOwnCompetitionYear,
@@ -89,7 +89,6 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-
         }
     }
 
@@ -116,8 +115,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
-                    let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
-                        competitionId && x.isQuickCompetition == 1);
+                    let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(yearId, competitionId);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
@@ -243,8 +241,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     getTitle(pool, grade) {
         if (this.state.finalTypeRefId == 2) {
             return pool
-        }
-        else {
+        } else {
             return grade
         }
     }
@@ -273,7 +270,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             timeSlotData.competitionTimeslotsEntity = []
             timeSlotData.competitionVenueTimeslotsDayTime = []
         }
-        /******************** */
+
         //filter data for if apply time slot for per venue
         if (timeSlotData.applyToVenueRefId == 2) {
             let newObj = null
@@ -324,7 +321,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             timeSlotData.competitionTimeslotManual = JSON.parse(JSON.stringify(updatedTimeSlotManualArr))
         }
 
-        // for key compitition time slot id param change
+        // for key competition time slot id param change
         if (timeSlotData.compititionTimeslotId) {
             timeSlotData['competitionTimeslotId'] = timeSlotData['compititionTimeslotId']
             delete timeSlotData['compititionTimeslotId']
@@ -418,11 +415,10 @@ class CompetitionCourtAndTimesAssign extends Component {
         }, 800);
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <Header className="comp-venue-courts-header-view">
             <div className="row">
-                <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.timeSlot}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -431,7 +427,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         </Header>
     );
 
-    //////year change onchange
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
@@ -558,7 +553,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     //     return hours;
     // }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
         return (
@@ -566,10 +560,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3 pb-3">
-                            <div
-                                className="d-flex align-items-center"
-                                style={{ width: 'fit-content' }}
-                            >
+                            <div className="d-flex align-items-center w-ft">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
                                   </span>
@@ -590,13 +581,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div
-                                className="d-flex align-items-center"
-                                style={{
-                                    width: 'fit-content',
-                                    marginRight: 50,
-                                }}
-                            >
+                            <div className="w-ft d-flex align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.competitionName_dpdnTimeslot}
@@ -676,7 +661,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <span className="applicable-to-heading">
                     {AppConstants.anyTimePreference}
                 </span>
-                <Form.Item name="mainTimeRotationID" rules={[{ required: true, message: 'Please select time slot preference' }]}  >
+                <Form.Item name="mainTimeRotationID" rules={[{ required: true, message: 'Please select time slot preference' }]}>
                     <Radio.Group
                         className="reg-competition-radio"
                         disabled={disabledStatus}
@@ -749,16 +734,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             </CustomTooltip>
                                         </div>
                                     </div>
-                                    {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
-                                    <div>
-                                        <div className="fluid-width">
-                                            {timeSlotData.competitionVenueTimeslotsDayTime.map((item, index) =>
-                                                this.addDataTimeSlot(item, index, timeSlotData.competitionVenueTimeslotsDayTime)
-                                            )}
+                                    {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) && (
+                                        <div>
+                                            <div className="fluid-width">
+                                                {timeSlotData.competitionVenueTimeslotsDayTime.map((item, index) =>
+                                                    this.addDataTimeSlot(item, index, timeSlotData.competitionVenueTimeslotsDayTime)
+                                                )}
+                                            </div>
+                                            <span id={AppUniqueId.timeRotation_matchDuration_Add_anotherday_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")}> + {AppConstants.addAnotherDay}</span>
                                         </div>
-                                        <span id={AppUniqueId.timeRotation_matchDuration_Add_anotherday_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")}> + {AppConstants.addAnotherDay}</span>
-                                    </div>
-                                    }
+                                    )}
                                     {timeSlotData.mainTimeRotationID === 8 && item.id == 1 && timeSlotData.timeslotGenerationRefId === index + 1 && (
                                         <div>
                                             <div className="fluid-width">
@@ -859,14 +844,11 @@ class CompetitionCourtAndTimesAssign extends Component {
     getReferenceTitle = (ItemArr) => {
         if (ItemArr.name == "EVEN_GRADES" && this.state.finalTypeRefId == 2) {
             return AppConstants.pools
-        }
-        else if (ItemArr.name == "ALLOCATE_GRADES" && this.state.finalTypeRefId == 2) {
+        } else if (ItemArr.name == "ALLOCATE_GRADES" && this.state.finalTypeRefId == 2) {
             return AppConstants.pools
-        }
-        else {
+        } else {
             return ItemArr.description
         }
-
     }
 
     addDataTimeSlotManualPerVenues(item, venueIndex, index, id, mainId, data) {
@@ -951,7 +933,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     mode="multiple"
                                                     placeholder="Select"
                                                     filterOption={false}
-                                                    style={{ display: 'grid', alignContent: 'center' }}
+                                                    className="d-grid align-content-center"
                                                     onBlur={() => this.props.ClearDivisionArr('divisions')}
                                                     onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
                                                     onSearch={(value) => this.handleSearch(value, mainDivisionList)}
@@ -980,7 +962,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     mode="multiple"
                                                     placeholder="Select"
                                                     filterOption={false}
-                                                    style={{ display: 'grid', alignContent: 'center' }}
+                                                    className="d-grid align-content-center"
                                                     onBlur={() => this.props.ClearDivisionArr('grades')}
                                                     onChange={(divisions) => this.onSelectGradesMatchDurationManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
                                                     onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
@@ -1082,7 +1064,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         disabled={disabledStatus}
                         id={AppUniqueId.timeRotation_matchDuration_AdddivisionTimeslotOrderTextField}
                         placeholder="Select"
-                        style={{ width: '100%', minWidth: 120, maxWidth: 180 }}
+                        className="w-100"
+                        style={{ minWidth: 120, maxWidth: 180 }}
                         filterOption={false}
                         onBlur={() => this.props.ClearDivisionArr('divisions')}
                         onSearch={(value) => { this.handleSearch(value, mainDivisionList) }}
@@ -1149,7 +1132,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         mode="multiple"
                         placeholder="Select"
                         disabled={disabledStatus}
-                        style={{ width: '100%', minWidth: 120, maxWidth: 180 }}
+                        className="w-100"
+                        style={{ minWidth: 120, maxWidth: 180 }}
                         filterOption={false}
                         onBlur={() => this.props.ClearDivisionArr('grades')}
                         onChange={(grades) => this.onSelectGrades(grades, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
@@ -1271,7 +1255,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 mode="multiple"
                                                 placeholder="Select"
                                                 filterOption={false}
-                                                style={{ display: 'grid', alignContent: 'center' }}
+                                                className="d-grid align-content-center"
                                                 onBlur={() => this.props.ClearDivisionArr('divisions')}
                                                 onChange={(divisions) => this.onSelectDivisionMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
                                                 onSearch={(value) => this.handleSearch(value, mainDivisionList)}
@@ -1299,7 +1283,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 disabled={disabledStatus}
                                                 mode="multiple"
                                                 placeholder="Select"
-                                                style={{ display: 'grid', alignContent: 'center' }}
+                                                className="d-grid align-content-center"
                                                 filterOption={false}
                                                 onBlur={() => this.props.ClearDivisionArr('grades')}
                                                 onChange={(divisions) => this.onSelectGradesMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
@@ -1360,7 +1344,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Tooltip
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() => {
                                     this.setState({
                                         tooltipVisibleDelete: isPublished,

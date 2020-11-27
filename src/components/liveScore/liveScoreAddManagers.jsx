@@ -62,7 +62,7 @@ class LiveScoreAddManager extends Component {
             }
             this.setState({ load: true, competition_id: id })
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -130,16 +130,11 @@ class LiveScoreAddManager extends Component {
         }, 300);
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}>
+                <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -205,16 +200,15 @@ class LiveScoreAddManager extends Component {
                     <div className="col-sm">
                         <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.team} />
                         <Form.Item
-                            name='managerTeamName'
+                            name="managerTeamName"
                             rules={[{ required: true, message: ValidationConstants.teamName }]}
                             className="slct-in-add-manager-livescore"
                         >
-
                             <Select
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: '100%', }}
+                                className="w-100"
                                 onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                 // value={teamId}
                                 optionFilterProp="children"
@@ -301,7 +295,6 @@ class LiveScoreAddManager extends Component {
                     </div>
                     <div className="col-sm">
                         <Form.Item
-
                             name={AppConstants.contactNO}
                             rules={[{ required: true, message: ValidationConstants.contactField }]}
                             help={hasError && ValidationConstants.mobileLength}
@@ -331,7 +324,7 @@ class LiveScoreAddManager extends Component {
                             <Select
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                 // value={teamId}
                                 showSearch
@@ -368,7 +361,7 @@ class LiveScoreAddManager extends Component {
                         <Radio value="existing">{AppConstants.existing}</Radio>
                     </div> */}
                     <div className="row ml-2" style={{ marginTop: 18 }}>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
                             <div className="mt-n10 ml-n10 width-50">
                                 <Tooltip>
@@ -376,7 +369,7 @@ class LiveScoreAddManager extends Component {
                                 </Tooltip>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
+                        <div className="d-flex align-items-center ml-n10">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
@@ -411,15 +404,14 @@ class LiveScoreAddManager extends Component {
         )
     }
 
-    //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
-            <div className="flud-widtih">
+            <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <NavLink to='/liveScoreManagerList'>
+                                <NavLink to='/matchDayManagerList'>
                                     <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
@@ -506,12 +498,14 @@ class LiveScoreAddManager extends Component {
         }
     };
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.matchDay}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
+                />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>

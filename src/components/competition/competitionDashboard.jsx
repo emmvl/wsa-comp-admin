@@ -329,10 +329,7 @@ class CompetitionDashboard extends Component {
         let storedYearID = localStorage.getItem('yearId');
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         return (
-            <div
-                className="comp-player-grades-header-drop-down-view"
-                style={{ marginTop: 15 }}
-            >
+            <div className="comp-player-grades-header-drop-down-view" style={{ marginTop: 15 }}>
                 <div className="row">
                     <div className="col-sm-8">
                         <div className="year-select-heading-view pb-3">
@@ -364,16 +361,10 @@ class CompetitionDashboard extends Component {
                                 </Tooltip>
                             </div>
                         </div>
-                        <div
-                            className="col-sm d-flex justify-content-end"
-                            style={{ maxWidth: '99%' }}
-                        >
+                        <div className="col-sm d-flex justify-content-end" style={{ maxWidth: '99%' }}>
                             <div className="row">
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                        style={{ width: '100%' }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                         <NavLink to="/quickCompetition">
                                             <Button
                                                 id={AppUniqueId.quickCom_Button}
@@ -386,10 +377,7 @@ class CompetitionDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                        style={{ width: '100%' }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                         <Button
                                             id={AppUniqueId.newCompetitionButton}
                                             className="primary-add-comp-form"
@@ -401,10 +389,7 @@ class CompetitionDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                                        style={{ width: '100%' }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                                         <NavLink to="/competitionReplicate">
                                             <Button
                                                 id={AppUniqueId.replicateCompetitionButton}
@@ -465,14 +450,7 @@ class CompetitionDashboard extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div
-                            className="col-sm"
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                            }}
-                        >
+                        <div className="col-sm d-flex flex-row align-items-center">
                             <span id={AppUniqueId.ownedCompetition_column_headers_table} className="form-heading">
                                 {AppConstants.participateInComp}
                             </span>

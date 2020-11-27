@@ -6,8 +6,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { getCompetitionFormatAction, saveCompetitionFormatAction, updateCompetitionFormatAction } from
-    "../../store/actions/competitionModuleAction/competitionFormatAction";
+import { getCompetitionFormatAction, saveCompetitionFormatAction, updateCompetitionFormatAction } from "../../store/actions/competitionModuleAction/competitionFormatAction";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from "../../util/history";
@@ -33,7 +32,6 @@ import {
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import moment from "moment";
-import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -286,8 +284,7 @@ class CompetitionFormat extends Component {
         competitionFormatDivisions[index].selectedDivisions = e;
 
         let competitionFormatTemplateId = competitionFormatDivisions[index].competitionFormatTemplateId;
-        let remainingFormatDiv = competitionFormatDivisions.
-            filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
+        let remainingFormatDiv = competitionFormatDivisions.filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -352,7 +349,7 @@ class CompetitionFormat extends Component {
     onChangeSetValue = (id, fieldName) => {
         let data = this.props.competitionFormatState.competitionFormatList;
         let fixtureTemplateId = null;
-        if (fieldName == "noOfRounds") {
+        if (fieldName === "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
             //     if (item.noOfRounds == id) {
             //         fixtureTemplateId = item.id;
@@ -364,7 +361,7 @@ class CompetitionFormat extends Component {
                 this.props.updateCompetitionFormatAction(null, "noOfRounds");
                 // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
             }
-        } else if (fieldName == "matchTypeRefId") {
+        } else if (fieldName === "matchTypeRefId") {
             this.setFormFieldValue();
             // this.setState({matchTypeRefStateId: id});
         }
@@ -373,13 +370,13 @@ class CompetitionFormat extends Component {
     }
 
     onChangeSetCompFormatDivisionValue = (id, fieldName, competitionFormatDivisions, index) => {
-        if (fieldName == "matchDuration") {
+        if (fieldName === "matchDuration") {
             competitionFormatDivisions[index].matchDuration = id;
-        } else if (fieldName == "mainBreak") {
+        } else if (fieldName === "mainBreak") {
             competitionFormatDivisions[index].mainBreak = id;
-        } else if (fieldName == "qtrBreak") {
+        } else if (fieldName === "qtrBreak") {
             competitionFormatDivisions[index].qtrBreak = id;
-        } else if (fieldName == "timeBetweenGames") {
+        } else if (fieldName === "timeBetweenGames") {
             competitionFormatDivisions[index].timeBetweenGames = id;
         }
 
@@ -530,10 +527,9 @@ class CompetitionFormat extends Component {
                     </div>
                     <div className="col-sm">
                         <DatePicker
-                            className="comp-dashboard-botton-view-mobile"
-                            size="large"
+                            className="comp-dashboard-botton-view-mobile w-100"
+                            // size="large"
                             placeholder="dd-mm-yyyy"
-                            style={{ width: '100%' }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -578,7 +574,7 @@ class CompetitionFormat extends Component {
     }
 
     updateNonPlayingNames(data, index, key) {
-        if (key == "date") {
+        if (key === "date") {
             let obj = {
                 data: moment(data).format("YYYY-MM-DD"),
                 index,
@@ -595,22 +591,18 @@ class CompetitionFormat extends Component {
         }
     }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div className="col-sm d-flex align-content-center">
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.competitionFormat}</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-venue-courts-header-view">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.competitionFormat}</Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
+            </div>
+        </Header>
+    )
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr } = this.props.appState
         return (
@@ -618,12 +610,7 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span id={AppUniqueId.compYear_DrpDwn} className="year-select-heading">
                                     {AppConstants.year}:
                                 </span>
@@ -644,13 +631,7 @@ class CompetitionFormat extends Component {
                             </div>
                         </div>
                         <div className="col-sm-4 pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50,
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.compName_DrpDwn}
@@ -720,7 +701,8 @@ class CompetitionFormat extends Component {
                 </Checkbox> */}
                 {/* <InputWithHead heading={AppConstants.fixture_template} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                    className="w-100"
+                    style={{ paddingRight: 1, minWidth: 182 }}
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}
                 >
@@ -738,7 +720,8 @@ class CompetitionFormat extends Component {
                     <Select
                         disabled={disabledStatus}
                         id={AppUniqueId.matchType_Selection_dpdn}
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                        className="w-100"
+                        style={{ paddingRight: 1, minWidth: 182 }}
                         onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                         value={data.matchTypeRefId}
                     >
@@ -759,7 +742,8 @@ class CompetitionFormat extends Component {
                         <InputWithHead heading={AppConstants.numberOfRounds} />
                         <Select
                             disabled={disabledStatus}
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}
                         >
@@ -773,7 +757,8 @@ class CompetitionFormat extends Component {
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
                             disabled={disabledStatus}
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}
                         >
@@ -858,13 +843,13 @@ class CompetitionFormat extends Component {
                 {(data.competionFormatDivisions || []).map((item, index) => (
                     <div className="inside-container-view" key={"compFormat" + index}>
                         <div className="fluid-width">
-                            <div style={{ display: 'flex' }}>
-                                <div className="applicable-to-heading" style={{ paddingTop: 0 }}>
+                            <div className="d-flex">
+                                <div className="applicable-to-heading pt-0">
                                     {AppConstants.applyMatchFormat}
                                 </div>
                                 <div
-                                    className="transfer-image-view pt-0 pointer"
-                                    style={{ marginLeft: 'auto', cursor: disabledStatus && "no-drop" }}
+                                    className="transfer-image-view pt-0 pointer ml-auto"
+                                    style={{ cursor: disabledStatus && "no-drop" }}
                                     onClick={() => disabledStatus == false && this.deleteModal(index)}
                                 >
                                     <span className="user-remove-btn">
@@ -892,7 +877,8 @@ class CompetitionFormat extends Component {
                                             <Select
                                                 disabled={disabledStatus}
                                                 mode="multiple"
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
                                                 value={item.selectedDivisions}
                                             >
@@ -1087,7 +1073,7 @@ class CompetitionFormat extends Component {
                             {finalAvailable ? (
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() =>
                                             this.setState({
                                                 tooltipVisibleSave: isPublished,
@@ -1126,7 +1112,7 @@ class CompetitionFormat extends Component {
                             ) : (
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() =>
                                             this.setState({
                                                 tooltipVisibleSave: isPublished,
@@ -1151,7 +1137,7 @@ class CompetitionFormat extends Component {
                                         </Button>
                                     </Tooltip>
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() =>
                                             this.setState({
                                                 tooltipVisibleDelete: isPublished,

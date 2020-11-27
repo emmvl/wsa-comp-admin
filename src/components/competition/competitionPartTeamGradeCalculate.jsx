@@ -30,7 +30,6 @@ import {
 import InputWithHead from 'customComponents/InputWithHead';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
-import { getCurrentYear } from 'util/permissions'
 import './competition.css';
 
 const { Footer, Content } = Layout;
@@ -199,16 +198,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 dataIndex: `grades${i}`,
                 key: `grades${i}`,
                 render: (grades, record) => (
-                    <div
-                        style={{
-                            width: 'fit-content',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <a className="pb-3" style={{ marginBottom: 'auto', marginTop: 'auto' }}>
+                    <div className="w-ft h-100 d-flex flex-column justify-content-center">
+                        <a className="pb-3 mb-auto mt-auto">
                             <span
                                 className="year-select-heading"
                                 style={{ color: 'var(--app-color)' }}
@@ -265,7 +256,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         const disabledStatus = this.state.competitionStatus == 1;
         return (
@@ -282,15 +272,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         </CustomTooltip>
                     </div>
                     <div
-                        className="col-sm"
-                        style={{
-                            width: '100%',
-                            marginRight: '2.8%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                        }}
+                        className="col-sm w-100 d-flex flex-row justify-content-end align-items-center"
+                        style={{ marginRight: '2.8%' }}
                     >
                         <div className="row">
                             <div className="col-sm">
@@ -336,7 +319,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         );
     };
 
-    //////year change onchange
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId);
         setOwn_competition(undefined);
@@ -366,7 +348,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         });
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { yearRefId, firstTimeCompId } = this.state;
         const { own_YearArr, own_CompetitionArr } = this.props.appState;
@@ -394,15 +375,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div
-                                style={{
-                                    width: 'fit-content',
-                                    marginRight: 50,
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row justify-content-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.teamGradingYCompetition_dpdn}
@@ -419,7 +392,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        {/* <div className="col-sm-5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        {/* <div className="col-sm-5 d-flex justify-content-end">
                             <Button className="primary-add-comp-form" type="primary" onClick={this.addNewGrade}>
                                 + {AppConstants.addGrade}
                             </Button>
@@ -541,7 +514,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Tooltip
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() =>
                                     this.setState({
                                         tooltipVisibleDelete: isPublished,
@@ -562,7 +535,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     style={{
                                         height: isPublished && '100%',
                                         borderRadius: isPublished && 6,
-                                        width: isPublished && 'inherit'
+                                        width: isPublished && 'inherit',
                                     }}
                                 >
                                     {AppConstants.save}

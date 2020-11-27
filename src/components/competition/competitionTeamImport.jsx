@@ -77,8 +77,7 @@ class CompetitionTeamImport extends Component {
                             this.props.competitionImportDataCleanUpAction("Team");
                             if (this.state.screenNavigationKey == "ProposedPlayerGrading") {
                                 history.push('/competitionPartPlayerGrades');
-                            }
-                            else if (this.state.screenNavigationKey == "PlayerGrading") {
+                            } else if (this.state.screenNavigationKey == "PlayerGrading") {
                                 history.push('/competitionPlayerGrades');
                             }
                         }
@@ -88,15 +87,10 @@ class CompetitionTeamImport extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}>
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -139,8 +133,7 @@ class CompetitionTeamImport extends Component {
                 <div className="col-sm">
                     <div className="row">
                         <input
-                            style={{ cursor: "pointer" }}
-                            className="pt-2 pb-2"
+                            className="pt-2 pb-2 pointer"
                             type="file"
                             id="teamImport"
                             ref={(input) => { this.filesInput = input }}
@@ -163,7 +156,7 @@ class CompetitionTeamImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         </div>
-                        <div className="reg-add-save-button" style={{ marginLeft: '20px' }}>
+                        <div className="reg-add-save-button" style={{ marginLeft: 20 }}>
                             <NavLink to="/templates/wsa-import-teams.csv" target="_blank" download>
                                 <Button id={AppUniqueId.impPlayerTeam_template_btn} className="primary-add-comp-form" type="primary">
                                     {AppConstants.downloadTemplate}
@@ -206,11 +199,11 @@ class CompetitionTeamImport extends Component {
                         <div className="formView">
                             {this.contentView()}
                         </div>
-                        {invalidTeams != null && invalidTeams.length > 0 ?
+                        {invalidTeams != null && invalidTeams.length > 0 && (
                             <div className="formView">
                                 {this.invalidTeamsView()}
                             </div>
-                            : null}
+                        )}
                     </Content>
                 </Layout>
             </div>

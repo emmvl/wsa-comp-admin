@@ -52,7 +52,6 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
-
     {
         title: 'Division',
         dataIndex: 'divisionName',
@@ -77,9 +76,7 @@ const columns = [
             return (
                 <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
             )
-
         }
-
     },
     {
         title: 'Goal Attempts',
@@ -91,7 +88,6 @@ const columns = [
             return (
                 <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
             )
-
         },
     },
     {
@@ -122,9 +118,11 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
-                    {!this_Obj.state.sourceIdAvailable && <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.id)}>
-                        <span>Delete</span>
-                    </Menu.Item>}
+                    {!this_Obj.state.sourceIdAvailable && (
+                        <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.id)}>
+                            <span>Delete</span>
+                        </Menu.Item>
+                    )}
                 </SubMenu>
             </Menu>
         )
@@ -139,7 +137,6 @@ const participateColumns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
-
     {
         title: 'Division',
         dataIndex: 'divisionName',
@@ -176,10 +173,8 @@ const participateColumns = [
             return (
                 <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
             )
-
         },
     },
-
 ];
 
 class LiveScoreDivisionList extends Component {
@@ -212,12 +207,11 @@ class LiveScoreDivisionList extends Component {
                 let sortOrder = divisionListActionObject.sortOrder
                 this.setState({ offset, sortBy, sortOrder })
                 this.props.getMainDivisionListAction(id, offset, sortBy, sortOrder)
-            }
-            else {
+            } else {
                 this.props.getMainDivisionListAction(id, offset)
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -230,11 +224,9 @@ class LiveScoreDivisionList extends Component {
     checkValue = (data) => {
         if (data) {
             return "Yes"
-        }
-        else if (data == false) {
+        } else if (data == false) {
             return "No"
-        }
-        else {
+        } else {
             return "As per competition"
         }
     }
@@ -256,16 +248,7 @@ class LiveScoreDivisionList extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
@@ -291,7 +274,6 @@ class LiveScoreDivisionList extends Component {
         history.push('/competitionPartTeamGradeCalculate');
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let { liveScoreCompIsParent, sourceIdAvailable } = this.state
         return (
@@ -303,85 +285,56 @@ class LiveScoreDivisionList extends Component {
                                 {AppConstants.divisionList}
                             </span>
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "flex-end"
-                            }}
-                        >
+                        <div className="col-sm w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
-
-                                {sourceIdAvailable && <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
-                                        <Button
-                                            type="primary"
-                                            className="primary-add-comp-form"
-                                            onClick={() => this.teamGradingNavigation()}
-                                        >
-                                            {AppConstants.teamGrading}
-                                        </Button>
-                                    </div>
-                                </div>}
-
-                                {!sourceIdAvailable && <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        {liveScoreCompIsParent && <NavLink to={`/matchDayAddDivision`} className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary">
-                                                + {AppConstants.addDivision}
+                                {sourceIdAvailable && (
+                                    <div className="col-sm">
+                                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                            <Button
+                                                type="primary"
+                                                className="primary-add-comp-form"
+                                                onClick={() => this.teamGradingNavigation()}
+                                            >
+                                                {AppConstants.teamGrading}
                                             </Button>
-                                        </NavLink>}
+                                        </div>
                                     </div>
-                                </div>}
+                                )}
 
-                                {!sourceIdAvailable && <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <NavLink to={`/liveScoreDivisionImport`} className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary">
-                                                <div className="row">
-                                                    <div className="col-sm">
-                                                        <img
-                                                            src={AppImages.import}
-                                                            alt=""
-                                                            className="export-image"
-                                                        />
-                                                        {AppConstants.import}
+                                {!sourceIdAvailable && (
+                                    <div className="col-sm">
+                                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                            {liveScoreCompIsParent && (
+                                                <NavLink to="/matchDayAddDivision" className="text-decoration-none">
+                                                    <Button className="primary-add-comp-form" type="primary">
+                                                        + {AppConstants.addDivision}
+                                                    </Button>
+                                                </NavLink>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {!sourceIdAvailable && (
+                                    <div className="col-sm">
+                                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                            <NavLink to="/matchDayDivisionImport" className="text-decoration-none">
+                                                <Button className="primary-add-comp-form" type="primary">
+                                                    <div className="row">
+                                                        <div className="col-sm">
+                                                            <img
+                                                                src={AppImages.import}
+                                                                alt=""
+                                                                className="export-image"
+                                                            />
+                                                            {AppConstants.import}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Button>
-                                        </NavLink>
+                                                </Button>
+                                            </NavLink>
+                                        </div>
                                     </div>
-                                </div>}
+                                )}
                             </div>
                         </div>
                     </div>
@@ -416,7 +369,7 @@ class LiveScoreDivisionList extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="9" />
                 <Layout>

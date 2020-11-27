@@ -144,11 +144,10 @@ function getEnhancedRoundRobinAction() {
   };
 }
 
-function exportFilesAction(URL,key) {
+function exportFilesAction(URL) {
   return {
     type: ApiConstants.API_EXPORT_FILES_LOAD,
     URL,
-    key
   };
 }
 

@@ -2,11 +2,12 @@ import React from 'react';
 import { Modal, Select } from 'antd';
 import AppImages from "../themes/appImages";
 import AppConstants from '../themes/appConstants';
-import "./wizard.css"
 import { getImpersonation } from "../util/sessionStorage";
-const { Option } = Select;
-class RegistrationWizardModel extends React.Component {
+import "./wizard.css";
 
+const { Option } = Select;
+
+class RegistrationWizardModel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,7 +39,7 @@ class RegistrationWizardModel extends React.Component {
                         <div className="reg-filter-col-cont">
                             <span className="year-select-heading">
                                 {AppConstants.competition}:
-                                </span>
+                            </span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ width: '70%' }}
@@ -56,23 +57,22 @@ class RegistrationWizardModel extends React.Component {
 
                     <div className="wizard_div" style={{ minHeight: !showStripe ? 100 : 140, marginTop: 20 }}>
                         <div className="row">
-                            <div className="col-sm  pl-0 pb-2">
-                                <div className="col-sm-6" style={{ display: "flex", justifyContent: 'flex-start' }}>
+                            <div className="col-sm pl-0 pb-2">
+                                <div className="col-sm-6 d-flex justify-content-start">
                                     <span className="comment-heading">
-                                        {"Step"}
+                                        Step
                                     </span>
                                 </div>
-                                <div className="col-sm-6" style={{ display: "flex", justifyContent: 'flex-end', paddingRight: 5 }}>
+                                <div className="col-sm-6 d-flex justify-content-end" style={{ paddingRight: 5 }}>
                                     <span className="comment-heading">
-                                        {"Status"}
+                                        Status
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        {showStripe &&
-                            <div className="row" style={{ width: '100%' }}>
-
+                        {!stripeConnected && (
+                            <div className="row w-100">
                                 <div className="col-sm-1 serialView pb-2">
                                     <span className="comment-heading">
                                         {"1"}{" "}
@@ -88,11 +88,11 @@ class RegistrationWizardModel extends React.Component {
                                         </span>
                                     </a>
                                 </div>
-
                             </div>
-                        }
-                        <div className="row" style={{ width: '100%' }}>
-                            <div className="col-sm-1 serialView pb-2 ">
+                        )}
+
+                        <div className="row w-100">
+                            <div className="col-sm-1 serialView pb-2">
                                 <span className="comment-heading">
                                     {showStripe ? "2" : "1"}{" "}
                                 </span>
@@ -107,16 +107,16 @@ class RegistrationWizardModel extends React.Component {
                                 </span>
                             </div>
                             <div className="col-sm-1 tickView pb-2 pl-0">
-                                {competitionStatus &&
+                                {competitionStatus && (
                                     <img
                                         src={AppImages.tick}
                                         alt=""
                                         className="export-image"
                                     />
-                                }
+                                )}
                             </div>
                         </div>
-                        <div className="row" style={{ width: '100%' }}>
+                        <div className="row w-100">
                             <div className="col-sm-1 serialView pb-2">
                                 <span className="comment-heading">
                                     {showStripe ? "3" : "2"} {" "}
@@ -128,20 +128,18 @@ class RegistrationWizardModel extends React.Component {
                                     {AppConstants.createPublish} {" "}
                                 </span>
 
-
                                 <span onClick={registrationClick} className="comment-heading" style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
                                     {AppConstants.registrationForm}
                                 </span>
-
                             </div>
                             <div className="col-sm-1 tickView pb-2 pl-0">
-                                {registrationStatus &&
+                                {registrationStatus && (
                                     <img
                                         src={AppImages.tick}
                                         alt=""
                                         className="export-image"
                                     />
-                                }
+                                )}
 
                                 {/* </div> */}
                             </div>

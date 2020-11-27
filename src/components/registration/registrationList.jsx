@@ -13,14 +13,12 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
-
     },
     {
         title: 'Reg. date',
         dataIndex: 'regDate',
         key: 'regDate',
         sorter: (a, b) => a.regDate.length - b.regDate.length,
-
     },
     {
         title: 'Division/ Grade',
@@ -28,8 +26,6 @@ const columns = [
         key: 'divisionGrade',
         sorter: (a, b) => a.divisionGrade.length - b.divisionGrade.length,
     },
-
-
     {
         title: 'DOB',
         dataIndex: 'dob',
@@ -54,8 +50,6 @@ const columns = [
         key: 'fee',
         sorter: (a, b) => a.fee.length - b.fee.length,
     },
-
-
 ];
 
 const data = [
@@ -68,7 +62,6 @@ const data = [
         team: "Peninsual Lorikeet",
         products: "1st Membership Player Shop 2019 Coach",
         fee: "$250.00"
-
     },
     {
         key: '2',
@@ -78,7 +71,7 @@ const data = [
         dob: "10/02/2010",
         team: "Peninsual Lorikeet",
         products: "1st Membership Player 2nd Membership Payer ",
-        fee: "$400.00"
+        fee: "$400.00",
     },
     {
         key: '3',
@@ -89,7 +82,6 @@ const data = [
         team: "Peninsual Lorikeet",
         products: "Coach Member",
         fee: "$40.00"
-
     },
     {
         key: '4',
@@ -103,7 +95,6 @@ const data = [
     },
 ];
 
-
 class RegistrationList extends Component {
     constructor(props) {
         super(props);
@@ -112,7 +103,6 @@ class RegistrationList extends Component {
             competition: "all",
             product: "NETSETGO",
             dob: "NETSETGO",
-
         }
     }
 
@@ -122,7 +112,6 @@ class RegistrationList extends Component {
         });
     };
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view" style={{ marginTop: 15 }}>
@@ -186,8 +175,6 @@ class RegistrationList extends Component {
         )
     }
 
-
-
     ////////participatedView view for competition
     participatedView = () => {
         return (
@@ -200,6 +187,7 @@ class RegistrationList extends Component {
 
         )
     }
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
@@ -217,8 +205,6 @@ class RegistrationList extends Component {
             </div>
         )
     }
-
-
 
     render() {
         return (
@@ -239,5 +225,5 @@ class RegistrationList extends Component {
         );
     }
 }
-export default RegistrationList;
 
+export default RegistrationList;
