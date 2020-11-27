@@ -90,7 +90,7 @@ export function* liveScoreNewsNotificationSaga(action) {
             // message.success(action.newsId ? 'News Edited Successfully.' : 'News Added Successfully .');
             //screenKey
             history.push({
-                pathname: '/liveScoreNewsList',
+                pathname: '/matchDayNewsList',
                 state: { screenKey: action.screenKey }
             })
         } else {

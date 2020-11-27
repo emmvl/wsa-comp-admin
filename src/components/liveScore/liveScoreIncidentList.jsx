@@ -49,7 +49,7 @@ const columns = [
         onHeaderCell: () => listeners("date"),
         render: (incidentTime, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record, screenName: 'incident', umpireKey: this_Obj.props.liveScoreIncidentState.umpireKey }
             }}>
                 <span className="input-heading-add-another pt-0">{liveScore_MatchFormate(incidentTime)}</span>
@@ -63,7 +63,7 @@ const columns = [
         onHeaderCell: () => listeners("matchId"),
         render: (matchId, record) =>
             <NavLink to={{
-                pathname: "/liveScoreMatchDetails",
+                pathname: "/matchDayMatchDetails",
                 state: { matchId: matchId, screenName: 'incident', umpireKey: this_Obj.props.liveScoreIncidentState.umpireKey }
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
@@ -172,7 +172,7 @@ class LiveScoreIncidentList extends Component {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         } else {
-            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/liveScoreIncidentList" })
+            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/matchDayIncidentList" })
         }
     }
 
@@ -291,7 +291,7 @@ class LiveScoreIncidentList extends Component {
                             </div>
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/liveScoreIncidentImport">
+                                    <NavLink to="/matchDayIncidentImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">

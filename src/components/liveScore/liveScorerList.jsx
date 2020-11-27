@@ -62,7 +62,7 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: '/liveScorerView',
+                    pathname: '/matchDayScorerView',
                     // pathname: '/userPersonal',
                     state: { tableRecord: record, userId: record.id }
                 }}
@@ -80,7 +80,7 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: '/liveScorerView',
+                    pathname: '/matchDayScorerView',
                     state: { tableRecord: record, userId: record.id }
                 }}
             >
@@ -115,7 +115,7 @@ const columns = [
                         <div key={`teams${i}` + item.id}>
                             <NavLink
                                 to={{
-                                    pathname: '/liveScorerView',
+                                    pathname: '/matchDayScorerView',
                                     // pathname: '/userPersonal',
                                     state: { tableRecord: record, userId: record.id }
                                 }}

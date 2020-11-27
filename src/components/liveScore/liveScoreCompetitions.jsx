@@ -506,7 +506,7 @@ class LiveScoreCompetitions extends Component {
                                     onClick={() => {
                                         setKeyForStateWideMessage('stateWideMessage');
                                         this.props.history.push({
-                                            pathname: '/liveScoreNewsList',
+                                            pathname: '/matchDayNewsList',
                                             state: { screenKey: 'stateWideMsg' },
                                         });
                                     }}

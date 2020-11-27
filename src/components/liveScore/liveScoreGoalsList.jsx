@@ -74,7 +74,7 @@ const columns1 = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (firstName, record) =>
             <NavLink to={{
-                pathname: '/liveScorePlayerView',
+                pathname: '/matchDayPlayerView',
                 state: { tableRecord: record }
             }}>
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -88,7 +88,7 @@ const columns1 = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) =>
             <NavLink to={{
-                pathname: '/liveScorePlayerView',
+                pathname: '/matchDayPlayerView',
                 state: { tableRecord: record }
             }}>
                 <span className="input-heading-add-another pt-0">{lastName}</span>
@@ -148,7 +148,7 @@ const columns2 = [
         render: (firstName, record) => {
             return (
                 <NavLink to={{
-                    pathname: '/liveScorePlayerView',
+                    pathname: '/matchDayPlayerView',
                     state: { tableRecord: record }
                 }}>
                     <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -164,7 +164,7 @@ const columns2 = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) =>
             <NavLink to={{
-                pathname: '/liveScorePlayerView',
+                pathname: '/matchDayPlayerView',
                 state: { tableRecord: record }
             }}>
                 <span className="input-heading-add-another pt-0">{lastName}</span>

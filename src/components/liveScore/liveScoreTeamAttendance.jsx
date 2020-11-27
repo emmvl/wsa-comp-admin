@@ -61,7 +61,7 @@ const columns = [
         onHeaderCell: () => listeners("matchId"),
         render: (matchId) =>
             <NavLink to={{
-                pathname: '/liveScoreMatchDetails',
+                pathname: '/matchDayMatchDetails',
                 state: { matchId: matchId, umpireKey: null }
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
@@ -156,7 +156,7 @@ const borrowedColumns = [
         render: (matchId) => (
             <NavLink
                 to={{
-                    pathname: '/liveScoreMatchDetails',
+                    pathname: '/matchDayMatchDetails',
                     state: { matchId: matchId, umpireKey: null }
                 }}
             >
@@ -415,7 +415,7 @@ class LiveScoreTeamAttendance extends Component {
             history.push("/userPersonal", {
                 userId: record.userId,
                 screenKey: "livescore",
-                screen: "/liveScorePlayerList"
+                screen: "/matchDayPlayerList"
             })
         }
     }
@@ -428,7 +428,7 @@ class LiveScoreTeamAttendance extends Component {
             history.push("/userPersonal", {
                 userId: record.userId,
                 screenKey: "livescore",
-                screen: "/liveScorePlayerList"
+                screen: "/matchDayPlayerList"
             })
         }
     }

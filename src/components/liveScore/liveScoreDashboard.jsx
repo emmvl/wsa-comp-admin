@@ -152,7 +152,7 @@ const columnsTodaysMatch = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id, key: 'dashboard' }
         }}>
             <span className="input-heading-add-another pt-0" >{id}</span>
@@ -172,7 +172,7 @@ const columnsTodaysMatch = [
         sorter: (a, b) => tableSort(a, b, 'team1'),
         render: (team1) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0" >{team1.name}</span>
@@ -185,7 +185,7 @@ const columnsTodaysMatch = [
         sorter: (a, b) => tableSort(a, b, 'team2'),
         render: (team2) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0" >{team2.name}</span>
@@ -212,7 +212,7 @@ const columnsTodaysMatch = [
         sorter: (a, b, score) => checkSorting(a, b, score),
         render: (score, records) =>
             <NavLink to={{
-                pathname: '/liveScoreMatchDetails',
+                pathname: '/matchDayMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
             }}><span className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
@@ -276,7 +276,7 @@ const columnsTodaysMatch_1 = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id, key: 'dashboard' }
         }}>
             <span className="input-heading-add-another pt-0" >{id}</span>
@@ -297,7 +297,7 @@ const columnsTodaysMatch_1 = [
         sorter: (a, b) => tableSort(a, b, 'team1'),
         render: (team1, record) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
@@ -310,7 +310,7 @@ const columnsTodaysMatch_1 = [
         sorter: (a, b) => tableSort(a, b, 'team2'),
         render: (team2, record) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
@@ -338,7 +338,7 @@ const columnsTodaysMatch_1 = [
         sorter: (a, b, score) => checkSorting(a, b, score),
         render: (score, records) =>
             <NavLink to={{
-                pathname: '/liveScoreMatchDetails',
+                pathname: '/matchDayMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0">{setMatchResult(records)}</span>
@@ -400,7 +400,7 @@ const columnsTodaysIncient = [
         sorter: (a, b) => tableSort(a, b, 'incidentTime'),
         render: (incidentTime, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record, screenName: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0">{liveScore_MatchFormate(incidentTime)}</span>
@@ -440,7 +440,7 @@ const columnsTodaysIncient = [
         render: (incidentPlayers, record) =>
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
                 // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
+                //     pathname: '/matchDayPlayerView',
                 //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
                 // }}>
                 <span className="desc-text-style side-bar-profile-data" >{getAssociationName(item)}</span>
@@ -467,7 +467,7 @@ const columnsTodaysIncient = [
                                 <span className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
                                 :
                                 <NavLink to={{
-                                    pathname: '/liveScoreTeamView',
+                                    pathname: '/matchDayTeamView',
                                     state: { tableRecord: record, screenName: 'liveScoreDashboard' }
                                 }}>
                                     <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>

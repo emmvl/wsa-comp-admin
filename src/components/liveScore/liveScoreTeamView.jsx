@@ -45,7 +45,7 @@ const columns = [
         render: (name, record) => {
             return (
                 // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
+                //     pathname: '/matchDayPlayerView',
                 //     state: { tableRecord: record }
                 // }}>
                 <span className="pointer" style={{ color: '#ff8237' }} onClick={() => _this.checkUserId(record)}>
@@ -118,7 +118,7 @@ const columns_2 = [
         render: (name, record) => {
             return (
                 // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
+                //     pathname: '/matchDayPlayerView',
                 //     state: { tableRecord: record }
                 // }}>
                 <span className="pointer" style={{ color: '#ff8237' }} onClick={() => _this.checkUserId(record)}>
@@ -167,7 +167,7 @@ class LiveScoreTeamView extends Component {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         } else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/matchDayPlayerList" })
         }
     }
 

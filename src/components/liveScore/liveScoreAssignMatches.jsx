@@ -45,7 +45,7 @@ const columns1 = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id }
         }}>
             <span className="input-heading-add-another pt-0">{id}</span>
@@ -95,7 +95,7 @@ const columns2 = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id }
         }}>
             <span className="input-heading-add-another pt-0">{id}</span>
@@ -326,7 +326,7 @@ class LiveScoreAssignMatch extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row justify-content-center">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <span onClick={() => history.push('/liveScorerList')} className="input-heading-add-another pointer">
+                                <span onClick={() => history.push('/matchDayScorerList')} className="input-heading-add-another pointer">
                                     {AppConstants.backToScorer}
                                 </span>
                             </div>

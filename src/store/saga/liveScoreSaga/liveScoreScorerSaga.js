@@ -70,7 +70,7 @@ export function* liveScoreAddEditScorerSaga(action) {
             });
             message.success('Add Scorer - Successfully Added')
             if (action.isEdit) {
-                history.push('/liveScorerList')
+                history.push('/matchDayScorerList')
             } else {
                 history.push('/matchDayAssignMatch', { record: result.result.data })
             }

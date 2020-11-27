@@ -212,7 +212,7 @@ class LiveScoreAddNews extends Component {
 
                 if (success) {
                     history.push({
-                        pathname: '/liveScoreNewsView',
+                        pathname: '/matchDayNewsView',
                         state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
                     })
                 }
@@ -777,10 +777,10 @@ class LiveScoreAddNews extends Component {
                     <div className="row">
                         <div className="col-sm pl-3">
                             <div className="reg-add-save-button">
-                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
+                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
                                     to={{
-                                        pathname: this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList',
+                                        pathname: this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList',
                                         state: { screenKey: this.state.screenKey }
                                     }}
                                 >

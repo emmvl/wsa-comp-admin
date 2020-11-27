@@ -224,7 +224,7 @@ class LiveScoreBanners extends Component {
                     </Breadcrumb>
                 </div>
                 <div className="col-sm live-form-view-button-container d-flex justify-content-end">
-                    <NavLink to="/liveScoreEditBanners">
+                    <NavLink to="/matchDayEditBanners">
                         <Button className="primary-add-comp-form" type="primary">{`+${AppConstants.addBanners}`}</Button>
                     </NavLink>
                 </div>
@@ -243,7 +243,7 @@ class LiveScoreBanners extends Component {
             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                 <NavLink
                     to={{
-                        pathname: '/liveScoreEditBanners',
+                        pathname: '/matchDayEditBanners',
                         state: { isEdit: true, tableRecord: record },
                     }}
                 >

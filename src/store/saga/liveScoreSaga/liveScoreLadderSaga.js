@@ -106,7 +106,7 @@ export function* ladderAdjustmentPostSaga(action) {
                 status: result.status,
             });
 
-            history.push('/liveScoreLadderList')
+            history.push('/matchDayLadderList')
             message.success('LadderAdjustment - Updated Successfully.')
 
         } else {

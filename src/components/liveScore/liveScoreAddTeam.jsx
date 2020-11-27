@@ -118,7 +118,7 @@ class LiveScoreAddTeam extends Component {
         }
         let isEditCheck = this.props.location.state ? this.props.location.state.isEdit : false
         if (sourceIdAvailable && isEditCheck === false) {
-            history.push("/liveScoreTeam")
+            history.push("/matchDayTeam")
         }
     }
 
@@ -550,7 +550,7 @@ class LiveScoreAddTeam extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScoreTeam')} className="cancelBtnWidth" type="cancel-button">
+                                <Button onClick={() => history.push('/matchDayTeam')} className="cancelBtnWidth" type="cancel-button">
                                     {AppConstants.cancel}
                                 </Button>
                             </div>

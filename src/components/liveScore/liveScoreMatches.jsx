@@ -90,7 +90,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (id) => {
             return (
-                _this.onMatchClick(id, '/liveScoreMatchDetails')
+                _this.onMatchClick(id, '/matchDayMatchDetails')
             )
         }
     },
@@ -111,7 +111,7 @@ const columns = [
         render: (team1, record) => teamListData(team1.id) ? (
             <NavLink
                 to={{
-                    pathname: '/liveScoreTeamView',
+                    pathname: '/matchDayTeamView',
                     state: { tableRecord: team1, screenName: 'fromMatchList' }
                 }}
             >
@@ -130,7 +130,7 @@ const columns = [
         render: (team2, record) => teamListData(team2.id) ? (
             <NavLink
                 to={{
-                    pathname: '/liveScoreTeamView',
+                    pathname: '/matchDayTeamView',
                     state: { tableRecord: team2, screenName: 'fromMatchList' }
                 }}
             >
@@ -324,7 +324,7 @@ class LiveScoreMatchesList extends Component {
         }
         setOwnCompetitionYear(yearRefId);
         setOwn_competition(compKey);
-        history.push({ pathname: '/competitionDraws', state: { screenKey: "/liveScoreMatches" } });
+        history.push({ pathname: '/competitionDraws', state: { screenKey: "/matchDayMatches" } });
     }
 
     scoreView(score, records, index) {
@@ -430,7 +430,7 @@ class LiveScoreMatchesList extends Component {
                             </div>
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/liveScoreMatchImport">
+                                    <NavLink to="/matchDayMatchImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">

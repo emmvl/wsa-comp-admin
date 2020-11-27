@@ -93,7 +93,7 @@ function* liveScoreDeleteTeamSaga(action) {
                 status: result.status,
             });
 
-            history.push('/liveScoreTeam');
+            history.push('/matchDayTeam');
 
             message.success('Team Deleted Successfully.');
         } else {
@@ -115,7 +115,7 @@ function* liveScoreDeletePlayerSaga(action) {
                 type: ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_SUCCESS,
                 status: result.status,
             });
-            history.push('/liveScoreTeam');
+            history.push('/matchDayTeam');
             message.success('Player Deleted Successfully.');
         } else {
             yield call(failSaga, result);
@@ -165,7 +165,7 @@ function* addTeamLiveScoreSaga(action) {
 
             message.success(action.teamId ? 'Team has been updated Successfully' : 'Team has been created Successfully.');
 
-            history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/liveScoreTeam');
+            history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/matchDayTeam');
 
             let updateCompData = {
                 teamUniqueKey: action.teamUniqueKey ? action.teamUniqueKey : "",
@@ -199,7 +199,7 @@ function* liveScoreTeamImportSaga(action) {
             });
 
             if (Object.keys(result.result.data.error).length === 0) {
-                history.push('/liveScoreTeam');
+                history.push('/matchDayTeam');
                 message.success('Team Imported Successfully.');
             } else {
                 receiptImportResult(result.result);

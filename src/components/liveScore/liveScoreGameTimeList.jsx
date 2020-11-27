@@ -106,7 +106,7 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners('id'),
         // render: (player, record) => <NavLink to={{
-        //     pathname: '/liveScorePlayerView',
+        //     pathname: '/matchDayPlayerView',
         //     state: { tableRecord: record }
         // }}>
         //     <span className="input-heading-add-another pt-0">{checkPlayerId(player)}</span>
@@ -150,7 +150,7 @@ const columns = [
         onHeaderCell: () => listeners('team'),
         render: (team) => teamListData(team.id) ?
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team, screenName: 'fromGameTimeList' }
             }}>
                 <span className="input-heading-add-another pt-0">{team.name}</span>
@@ -239,7 +239,7 @@ class LiveScoreGameTimeList extends Component {
             history.push("/userPersonal", {
                 userId: userId,
                 screenKey: "livescore",
-                screen: "/liveScorePlayerList"
+                screen: "/matchDayPlayerList"
             })
         }
     }

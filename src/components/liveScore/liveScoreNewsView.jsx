@@ -93,14 +93,14 @@ class LiveScoreNewsView extends Component {
         if (nextProps.newsState !== newsState) {
             if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading) {
                 if (newsState !== []) {
-                    history.push(this.state.id === 'dashboard' ? '/matchDayDashboard' : './liveScoreNewsList');
+                    history.push(this.state.id === 'dashboard' ? '/matchDayDashboard' : './matchDayNewsList');
                     // history.push(this.state.id === "dashboard" && "/matchDayDashboard")
                 }
             }
             if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading) {
                 if (this.props.liveScoreNewsState.deleteNews !== []) {
                     history.push({
-                        pathname: '/liveScoreNewsList',
+                        pathname: '/matchDayNewsList',
                         state: { screenKey: this.state.screenKey },
                     });
                 }
@@ -245,7 +245,7 @@ class LiveScoreNewsView extends Component {
                             <div className="reg-add-save-button">
                                 <span
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => history.push('/liveScoreNewsList')}
+                                    onClick={() => history.push('/matchDayNewsList')}
                                     className="input-heading-add-another"
                                 >
                                     {AppConstants.backToNews}

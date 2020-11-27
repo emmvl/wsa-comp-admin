@@ -47,7 +47,7 @@ const columns = [
         sorter: (a, b) => checkSorting(a, b, 'matchId'),
         render: (date, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{liveScore_formateDate(date.startTime)}</span>
@@ -66,7 +66,7 @@ const columns = [
         //  sorter: (a, b) => sort(a, b, "playerId"),
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{getIncidentPlayer(incidentPlayers)}</span>
@@ -79,7 +79,7 @@ const columns = [
         sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{getFirstName(incidentPlayers)}</span>
@@ -92,7 +92,7 @@ const columns = [
         // sorter: (a, b) => a.lastName.length - b.lastName.length,
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{getLastName(incidentPlayers)}</span>
@@ -104,7 +104,7 @@ const columns = [
         key: 'incidentType',
         render: (incidentType, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{incidentType.name}</span>
@@ -168,7 +168,7 @@ class LiveScoreIncidentList extends Component {
                             </div>
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/liveScoreMatchImport">
+                                    <NavLink to="/matchDayMatchImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">

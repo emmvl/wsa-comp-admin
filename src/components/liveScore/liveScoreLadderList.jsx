@@ -142,7 +142,7 @@ class LiveScoreLadderList extends Component {
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to={{
-                                            pathname: '/liveScoreLadderAdjustment',
+                                            pathname: '/matchDayLadderAdjustment',
                                             state: { divisionId: this.state.divisionId }
                                         }}>
                                             <Button className="primary-add-comp-form" type="primary">

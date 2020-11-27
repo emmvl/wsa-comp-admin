@@ -1768,7 +1768,7 @@ class MultifieldDrawsNew extends Component {
                 localStorage.removeItem('stateWideMessage')
                 setLiveScoreUmpireCompition(competitiondata.id)
                 setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
-                history.push('/liveScoreLadderList')
+                history.push('/matchDayLadderList')
             } else {
                 this.setState({ publishModalVisible: false })
             }

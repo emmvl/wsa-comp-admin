@@ -82,7 +82,7 @@ const columns = [
         key: 'title',
         sorter: (a, b) => a.title.length - b.title.length,
         render: (title, record) => <NavLink to={{
-            pathname: '/liveScoreNewsView',
+            pathname: '/matchDayNewsView',
             state: { item: record }
         }}>
             <span className="input-heading-add-another pt-0">{title}</span>
@@ -161,11 +161,15 @@ class LiveScoreNewsList extends Component {
     }
 
     componentDidMount() {
-        if (getLiveScoreCompetiton()) {
+        let stateWideMsg = getKeyForStateWideMessage()
+
+        if(stateWideMsg){
+            this.props.liveScoreNewsListAction(1)
+        }else if(getLiveScoreCompetiton()){
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.liveScoreNewsListAction(id)
-        } else {
-            this.props.liveScoreNewsListAction(1)
+        }else{
+            history.push('/matchDayCompetitions')
         }
     }
 

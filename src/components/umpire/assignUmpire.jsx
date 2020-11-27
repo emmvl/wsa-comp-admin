@@ -66,7 +66,7 @@ const column = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id, umpireKey: 'umpire', screenName: 'umpire' }
         }} >
             <span className="input-heading-add-another pt-0">{id}</span>

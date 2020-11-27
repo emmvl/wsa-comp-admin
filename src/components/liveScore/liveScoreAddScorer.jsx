@@ -410,8 +410,8 @@ class LiveScoreAddScorer extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <NavLink to='/liveScorerList'>
-                                    <Button className="cancelBtnWidth" onClick={() => history.push('/liveScorerList')} type="cancel-button">
+                                <NavLink to='/matchDayScorerList'>
+                                    <Button className="cancelBtnWidth" onClick={() => history.push('/matchDayScorerList')} type="cancel-button">
                                         {AppConstants.cancel}
                                     </Button>
                                 </NavLink>

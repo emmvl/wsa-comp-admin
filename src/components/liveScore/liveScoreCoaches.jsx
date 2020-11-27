@@ -104,7 +104,7 @@ const columns = [
                         <div key={`name${i}` + linkedEntity.entityId}>
                             <NavLink
                                 to={{
-                                    pathname: '/liveScoreTeamView',
+                                    pathname: '/matchDayTeamView',
                                     state: { teamId: item.entityId, screenKey: "livescore" }
                                 }}
                             >
@@ -279,7 +279,7 @@ class LiveScoreCoaches extends Component {
                             </div>
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/liveScoreCoachImport">
+                                    <NavLink to="/matchDayCoachImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">

@@ -411,7 +411,7 @@ class LiveScoreAddManager extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <NavLink to="/liveScoreManagerList">
+                                <NavLink to='/matchDayManagerList'>
                                     <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>

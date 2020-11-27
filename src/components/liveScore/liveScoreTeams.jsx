@@ -57,7 +57,7 @@ const columns = [
         onHeaderCell: () => listeners('teamName'),
         render: (name, record) => teamListData(record.id) ?
             <NavLink to={{
-                pathname: "/liveScoreTeamView",
+                pathname: "/matchDayTeamView",
                 state: { tableRecord: record, screenName: 'fromTeamList' }
             }}>
                 <span className="input-heading-add-another pt-0">{record.name}</span>
@@ -293,7 +293,7 @@ class LiveScoreTeam extends Component {
                             {liveScoreCompIsParent == true && !sourceIdAvailable && (
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <NavLink to="/liveScoreTeamImport">
+                                        <NavLink to="/matchDayTeamImport">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">

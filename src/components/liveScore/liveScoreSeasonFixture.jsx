@@ -73,7 +73,7 @@ const columns2 = [
                         </div>
                         <div className="table-live-score-table-fixture-style">
                             <NavLink to={{
-                                pathname: '/liveScoreTeamView',
+                                pathname: '/matchDayTeamView',
                                 state: { tableRecord: team1, screenName: 'fromMatchList' }
                             }}>
                                 <span className="input-heading-add-another pt-0">{team1 ? team1.name : ""}</span>
@@ -84,7 +84,7 @@ const columns2 = [
             } else {
                 return (
                     <NavLink to={{
-                        pathname: '/liveScoreTeamView',
+                        pathname: '/matchDayTeamView',
                         state: { tableRecord: team1, screenName: 'fromMatchList' }
                     }}>
                         <span className="input-heading-add-another pt-0">{team1 ? team1.name : ""}</span>
@@ -106,7 +106,7 @@ const columns2 = [
                         </div>
                         <div className="table-live-score-table-fixture-style">
                             <NavLink to={{
-                                pathname: '/liveScoreTeamView',
+                                pathname: '/matchDayTeamView',
                                 state: { tableRecord: team2, screenName: 'fromMatchList' }
                             }}>
                                 <span className="input-heading-add-another pt-0">{team2 ? team2.name : ""}</span>
@@ -117,7 +117,7 @@ const columns2 = [
             } else {
                 return (
                     <NavLink to={{
-                        pathname: '/liveScoreTeamView',
+                        pathname: '/matchDayTeamView',
                         state: { tableRecord: team2, screenName: 'fromMatchList' }
                     }}>
                         <span className="input-heading-add-another pt-0">{team2 ? team2.name : ""}</span>

@@ -57,7 +57,7 @@ class LiveScoreTeamImport extends Component {
             const { id, sourceId } = JSON.parse(getLiveScoreCompetiton());
             this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false });
             if (sourceId) {
-                history.push("/liveScoreTeam")
+                history.push("/matchDayTeam")
             }
             this.props.liveScoreTeamResetImportResultAction();
         } else {

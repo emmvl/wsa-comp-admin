@@ -24,7 +24,7 @@ class LiveScoreIncidentView extends Component {
             visible: false,
             modaldata: '',
             isVideo: false,
-            incidentItem: props.location.state.item,
+            incidentItem: props.location.state ? props.location.state.item : null,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
         };

@@ -49,10 +49,10 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    // pathname: '/liveScoreManagerView',
+                    // pathname: '/matchDayManagerView',
                     // state: { tableRecord: record }
                     pathname: '/userPersonal',
-                    state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
+                    state: { userId: record.id, screenKey: "livescore", screen: "/matchDayManagerList" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -69,8 +69,8 @@ const columns = [
             <NavLink
                 to={{
                     pathname: '/userPersonal',
-                    state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
-                    // pathname: '/liveScoreManagerView',
+                    state: { userId: record.id, screenKey: "livescore", screen: "/matchDayManagerList" }
+                    // pathname: '/matchDayManagerView',
                     // state: { tableRecord: record }
                 }}
             >
@@ -105,7 +105,7 @@ const columns = [
                         <div key={`managerName${i}` + item.entityId}>
                             <NavLink
                                 to={{
-                                    pathname: '/liveScoreTeamView',
+                                    pathname: '/matchDayTeamView',
                                     state: { teamId: item.entityId, screenKey: "livescore" }
                                 }}
                             >
@@ -312,7 +312,7 @@ class LiveScoreManagerList extends Component {
                                 </div>
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <NavLink to={`/liveScoreManagerImport`} className="text-decoration-none">
+                                        <NavLink to={`/matchDayManagerImport`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">

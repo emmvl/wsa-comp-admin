@@ -45,7 +45,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (match, record) =>
             <NavLink to={{
-                pathname: "/liveScoreMatchDetails",
+                pathname: "/matchDayMatchDetails",
                 state: { matchId: record.matchId }
             }}>
                 <span className="input-heading-add-another pt-0">{match.team1.name} vs {match.team2.name}</span>
@@ -57,7 +57,7 @@ const columns = [
         key: 'umpire1FullName',
         sorter: (a, b) => tableSort(a, b, "umpire1FullName"),
         render: (umpire1FullName) => <NavLink to={{
-            // pathname: "/liveScoreMatchDetails",
+            // pathname: "/matchDayMatchDetails",
             // state: { tableRecord: record }
         }}>
             <span className="input-heading-add-another pt-0">{umpire1FullName}</span>
@@ -76,7 +76,7 @@ const columns = [
         key: 'umpire2FullName',
         sorter: (a, b) => tableSort(a, b, "umpire2FullName"),
         render: (umpire2FullName) => <NavLink to={{
-            // pathname: "/liveScoreMatchDetails",
+            // pathname: "/matchDayMatchDetails",
             // state: { tableRecord: record }
         }}>
             <span className="input-heading-add-another pt-0">{umpire2FullName ? umpire2FullName : ""}</span>

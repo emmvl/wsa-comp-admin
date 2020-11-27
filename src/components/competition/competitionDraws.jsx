@@ -849,7 +849,7 @@ class CompetitionDraws extends Component {
             localStorage.removeItem('stateWideMessage')
             setLiveScoreUmpireCompition(competitiondata.id)
             setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
-            history.push('/liveScoreLadderList')
+            history.push('/matchDayLadderList')
         }
         this.setState({ publishModalVisible: false });
     }

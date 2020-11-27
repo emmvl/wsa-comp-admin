@@ -79,7 +79,7 @@ class LiveScoreLadderAdjustment extends Component {
 
         if (this.state.resetLoad && this.props.liveScoreLadderState.onResetLoad == false) {
             this.setState({ resetLoad: false });
-            history.push("/liveScoreLadderList")
+            history.push("/matchDayLadderList")
         }
     }
 

@@ -873,7 +873,7 @@ const columnsIncident = [
                             <span className="desc-text-style side-bar-profile-data">{teamName}</span>
                             :
                             <NavLink to={{
-                                pathname: '/liveScoreTeamView',
+                                pathname: '/matchDayTeamView',
                                 state: { tableRecord: record, screenName: 'userPersonal', screenKey: this_Obj.state.screenKey }
                             }}>
                                 <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data">{teamName}</span>

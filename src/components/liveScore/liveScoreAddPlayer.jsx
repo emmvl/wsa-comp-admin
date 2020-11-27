@@ -382,7 +382,7 @@ class LiveScoreAddPlayer extends Component {
                             <div className="reg-add-save-button">
                                 <Button
                                     className="cancelBtnWidth"
-                                    onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })}
+                                    onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/matchDayPlayerList', { ...this.props.location.state })}
                                     type="cancel-button"
                                 >
                                     {AppConstants.cancel}
