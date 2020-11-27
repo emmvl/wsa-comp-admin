@@ -309,7 +309,7 @@ class MultiFieldDraws extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.draws}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
                 />
 
                 <InnerHorizontalMenu menu="competition" compSelectedKey="18" />

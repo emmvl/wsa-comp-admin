@@ -245,7 +245,7 @@ class LiveScoreMatchDetails extends Component {
                 isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
                 this.setState({ competitionId: getUmpireCompetitonData().id })
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
             if (getLiveScoreCompetiton()) {
@@ -253,7 +253,7 @@ class LiveScoreMatchDetails extends Component {
                 isLineUpEnable = lineupSelectionEnabled;
                 this.setState({ competitionId: id })
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
 
@@ -644,7 +644,7 @@ class LiveScoreMatchDetails extends Component {
             if (getUmpireCompetitonData()) {
                 scoreType = getUmpireCompetitonData().scoringType;
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         } else {
             const { scoringType } = JSON.parse(getLiveScoreCompetiton());
@@ -740,13 +740,13 @@ class LiveScoreMatchDetails extends Component {
             if (getUmpireCompetitonData()) {
                 competition = JSON.parse(getUmpireCompetitonData());
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
             if (getLiveScoreCompetiton()) {
                 competition = JSON.parse(getLiveScoreCompetiton());
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
 
@@ -812,13 +812,13 @@ class LiveScoreMatchDetails extends Component {
             if (getUmpireCompetitonData()) {
                 competition = JSON.parse(getUmpireCompetitonData());
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
             if (getLiveScoreCompetiton()) {
                 competition = JSON.parse(getLiveScoreCompetiton());
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
@@ -2808,7 +2808,7 @@ class LiveScoreMatchDetails extends Component {
                 </Modal>
             )
         } else {
-            history.push("/liveScoreCompetitions")
+            history.push("/matchDayCompetitions")
         }
     }
 
@@ -2835,13 +2835,13 @@ class LiveScoreMatchDetails extends Component {
             if (getUmpireCompetitonData()) {
                 competition = JSON.parse(getUmpireCompetitonData());
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
             if (getLiveScoreCompetiton()) {
                 competition = JSON.parse(getLiveScoreCompetiton());
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
         let pt = (competition.positionTracking || competition.positionTracking == 1) ? true : false //// Position Tracking
@@ -2936,7 +2936,7 @@ class LiveScoreMatchDetails extends Component {
                         <DashboardLayout
                             menuHeading={AppConstants.matchDay}
                             menuName={AppConstants.liveScores}
-                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                            onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                         />
                     )}
 

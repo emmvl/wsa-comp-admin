@@ -54,10 +54,10 @@ class LiveScoreDivisionImport extends Component {
         if (getLiveScoreCompetiton()) {
             const { sourceId } = JSON.parse(getLiveScoreCompetiton());
             if (sourceId) {
-                history.push("/liveScoreDivisionList")
+                history.push("/matchDayDivisionList")
             }
         } else {
-            history.push("/liveScoreCompetitions")
+            history.push("/matchDayCompetitions")
         }
     }
 
@@ -156,7 +156,7 @@ class LiveScoreDivisionImport extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="9" />

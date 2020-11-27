@@ -665,7 +665,7 @@ class LiveScoreSettingsView extends Component {
                 {this.state.isEdit != "add" && (
                     <NavLink
                         to={{
-                            pathname: '/liveScoreDivisionList',
+                            pathname: '/matchDayDivisionList',
                         }}
                     >
                         <span className="input-heading-add-another pt-3 pb-3">
@@ -1464,7 +1464,7 @@ class LiveScoreSettingsView extends Component {
                 <DashboardLayout
                     menuHeading={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.matchDay}
                     menuName={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 {local_Id && (
                     <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="18" />

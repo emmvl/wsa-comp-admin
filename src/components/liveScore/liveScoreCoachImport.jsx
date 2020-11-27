@@ -72,7 +72,7 @@ class LiveScoreCoachImport extends Component {
 
             this.props.liveScoreCoachResetImportResultAction();
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -175,7 +175,7 @@ class LiveScoreCoachImport extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="23" />

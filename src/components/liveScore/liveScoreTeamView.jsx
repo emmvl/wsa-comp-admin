@@ -85,7 +85,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
+                        <NavLink to={{ pathname: "/matchDayAddPlayer", state: { isEdit: true, playerData: record } }}>
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -183,7 +183,7 @@ class LiveScoreTeamView extends Component {
         if (teamIds) {
             this.props.getTeamViewPlayerList(teamIds)
         } else {
-            history.push("/liveScoreCompetitions")
+            history.push("/matchDayCompetitions")
         }
     }
 
@@ -341,7 +341,7 @@ class LiveScoreTeamView extends Component {
                 <div className="col-sm d-flex justify-content-end">
                     <div className="comp-dashboard-botton-view-mobile">
                         <NavLink to={{
-                            pathname: '/liveScoreAddPlayer',
+                            pathname: '/matchDayAddPlayer',
                             state: { ...this.props.location.state, screenName: this.state.screenName, screenKey: this.state.screenKey }
                         }}>
                             <Button disabled={roleId} className="primary-add-comp-form" type="primary">
@@ -391,7 +391,7 @@ class LiveScoreTeamView extends Component {
                                     style={{ width: '100%' }}
                                 >
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddTeam",
+                                        pathname: "/matchDayAddTeam",
                                         state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key, screenName: this.state.screenName, screenKey: this.state.screenKey }
                                     }}>
                                         <Button disabled={roleId} className="primary-add-comp-form" type="primary">
@@ -454,7 +454,7 @@ class LiveScoreTeamView extends Component {
                 {screenName === 'userPersonal' ? (
                     <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 ) : (
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                     )}
 
                 {screenName === 'userPersonal' ? (

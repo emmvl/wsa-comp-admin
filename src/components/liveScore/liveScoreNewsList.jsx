@@ -256,7 +256,7 @@ class LiveScoreNewsList extends Component {
                 <div className="row">
                     <div className="col-sm-3 mt-5">
                         <div className="reg-add-save-button">
-                            <NavLink to="/liveScoreCompetitions">
+                            <NavLink to="/matchDayCompetitions">
                                 <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
@@ -270,7 +270,7 @@ class LiveScoreNewsList extends Component {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
 
                 {
                     stateWideMsg ?

@@ -462,7 +462,7 @@ class DashboardLayout extends React.Component {
                                                             style={{ display: showRoleLevelPermission(userRoleId, 'liveScores') ? 'visible' : 'none' }}>
                                                             <div className="lives-cores menu-wrap"
                                                                 onClick={() => this.props.clearDataOnCompChangeAction()}>
-                                                                <NavLink to="/liveScoreCompetitions">
+                                                                <NavLink to="/matchDayCompetitions">
                                                                     <span className="icon" />
                                                                     {AppConstants.matchDay}
                                                                 </NavLink>

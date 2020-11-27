@@ -189,7 +189,7 @@ class LiveScoreAssignMatch extends Component {
                 scoring_Type: scoringType
             };
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
 
         this_obj = this
@@ -210,7 +210,7 @@ class LiveScoreAssignMatch extends Component {
             }
 
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -369,7 +369,7 @@ class LiveScoreAssignMatch extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout>
                     {getLiveScoreCompetiton() && this.headerView()}

@@ -64,10 +64,10 @@ class LiveScoreBulkChange extends Component {
                 this.props.getCompetitionVenuesList(id, this.state.search);
                 this.props.liveScoreRoundListAction(id)
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -1138,7 +1138,7 @@ class LiveScoreBulkChange extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreDashboard')} type="cancel-button">
+                                <Button className="cancelBtnWidth" onClick={() => history.push('/matchDayDashboard')} type="cancel-button">
                                     {AppConstants.cancel}
                                 </Button>
                             </div>
@@ -1163,7 +1163,7 @@ class LiveScoreBulkChange extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="12" />
                 <Layout>

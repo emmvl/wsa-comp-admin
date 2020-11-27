@@ -51,10 +51,10 @@ class LiveScoreVenueChange extends Component {
             if (id !== null) {
                 this.props.getCompetitionVenuesList(id, this.state.search);
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -345,7 +345,7 @@ class LiveScoreVenueChange extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreDashboard')} type="cancel-button">
+                                <Button className="cancelBtnWidth" onClick={() => history.push('/matchDayDashboard')} type="cancel-button">
                                     {AppConstants.cancel}
                                 </Button>
                             </div>
@@ -385,7 +385,7 @@ class LiveScoreVenueChange extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="13" />
                 <Layout>

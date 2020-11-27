@@ -133,7 +133,7 @@ class LiveScorerView extends Component {
                 </div>
             )
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -177,7 +177,7 @@ class LiveScorerView extends Component {
                                     }}
                                 >
                                     <NavLink to={{
-                                        pathname: "/liveScoreAddScorer",
+                                        pathname: "/matchDayAddScorer",
                                         state: { isEdit: true, tableRecord: this.state.data }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
@@ -232,7 +232,7 @@ class LiveScorerView extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

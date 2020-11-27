@@ -124,7 +124,7 @@ class LiveScoreAddMatch extends Component {
                     })
                     this.setState({ loadvalue: true, allDisabled: true })
                 } else {
-                    history.push('/liveScoreCompetitions')
+                    history.push('/matchDayCompetitions')
                 }
             } else {
                 if (getLiveScoreCompetiton()) {
@@ -143,7 +143,7 @@ class LiveScoreAddMatch extends Component {
                     })
                     this.setState({ loadvalue: true, allDisabled: false })
                 } else {
-                    history.push('/liveScoreCompetitions')
+                    history.push('/matchDayCompetitions')
                 }
             }
 
@@ -175,7 +175,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.liveScoreUpdateMatchAction('', "addMatch")
             }
         } else {
-            history.push('/liveScoreCompetitions');
+            history.push('/matchDayCompetitions');
         }
     }
 
@@ -1654,7 +1654,7 @@ class LiveScoreAddMatch extends Component {
                         <DashboardLayout
                             menuHeading={AppConstants.matchDay}
                             menuName={AppConstants.liveScores}
-                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                            onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                         />
                     )}
 

@@ -62,7 +62,7 @@ class LiveScoreAddManager extends Component {
             }
             this.setState({ load: true, competition_id: id })
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -511,7 +511,7 @@ class LiveScoreAddManager extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>

@@ -71,7 +71,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {longName}
@@ -131,7 +131,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {teamCount}
@@ -150,7 +150,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {playerCount}
@@ -169,7 +169,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {status}
@@ -228,7 +228,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {longName}
@@ -288,7 +288,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {teamCount}
@@ -307,7 +307,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {playerCount}
@@ -326,7 +326,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {status}

@@ -133,7 +133,7 @@ class LiveScoreAddPlayer extends Component {
                     }
                 }
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
 
@@ -429,7 +429,7 @@ class LiveScoreAddPlayer extends Component {
                     screenKey == 'umpire' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
 
                 {

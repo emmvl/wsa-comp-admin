@@ -171,7 +171,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
+                        <NavLink to={{ pathname: "/matchDayAddPlayer", state: { isEdit: true, playerData: record } }}>
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -216,10 +216,10 @@ class LiveScorePlayerList extends Component {
                     this.props.playerListWithPaginationAction(id, 0, 10)
                 }
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -375,7 +375,7 @@ class LiveScorePlayerList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <NavLink to="/liveScoreAddPlayer" className="text-decoration-none">
+                                        <NavLink to="/matchDayAddPlayer" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addPlayer}
                                             </Button>
@@ -478,7 +478,7 @@ class LiveScorePlayerList extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="7" />
                 <Layout>

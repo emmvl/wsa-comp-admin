@@ -51,10 +51,10 @@ class LiveScoreAddDivision extends Component {
             if (getLiveScoreCompetiton()) {
                 const { sourceId } = JSON.parse(getLiveScoreCompetiton());
                 if (sourceId) {
-                    history.push("/liveScoreDivisionList")
+                    history.push("/matchDayDivisionList")
                 }
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         }
     }
@@ -239,7 +239,7 @@ class LiveScoreAddDivision extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to='/liveScoreDivisionList'>
+                                <NavLink to='/matchDayDivisionList'>
                                     <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
@@ -263,7 +263,7 @@ class LiveScoreAddDivision extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.addDivision}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="9" />
@@ -280,7 +280,7 @@ class LiveScoreAddDivision extends Component {
                     >
                         <Content>
                             <div className="formView">
-                                {getLiveScoreCompetiton() ? this.contentView() : history.push('/liveScoreCompetitions')}
+                                {getLiveScoreCompetiton() ? this.contentView() : history.push('/matchDayCompetitions')}
                             </div>
                         </Content>
                         <Footer>

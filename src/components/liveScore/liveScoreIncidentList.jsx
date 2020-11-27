@@ -164,7 +164,7 @@ class LiveScoreIncidentList extends Component {
                     this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
                 }
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
     }
@@ -414,7 +414,7 @@ class LiveScoreIncidentList extends Component {
                     umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
 
                 {

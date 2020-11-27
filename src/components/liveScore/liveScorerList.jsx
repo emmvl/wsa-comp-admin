@@ -155,7 +155,7 @@ const columns = [
                     <Menu.Item key="1">
                         <NavLink
                             to={{
-                                pathname: '/liveScoreAddScorer',
+                                pathname: '/matchDayAddScorer',
                                 state: { isEdit: true, tableRecord: record }
                             }}
                         >
@@ -165,7 +165,7 @@ const columns = [
                     <Menu.Item key="2">
                         <NavLink
                             to={{
-                                pathname: "./liveScoreAssignMatch",
+                                pathname: "./matchDayAssignMatch",
                                 state: { record }
                             }}
                         >
@@ -224,7 +224,7 @@ class LiveScorerList extends Component {
                 history.push('/');
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -282,7 +282,7 @@ class LiveScorerList extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <NavLink to="/liveScoreAddScorer">
+                                    <NavLink to="/matchDayAddScorer">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addScorer}
                                         </Button>
@@ -440,7 +440,7 @@ class LiveScorerList extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout>

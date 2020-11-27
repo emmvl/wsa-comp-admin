@@ -97,7 +97,7 @@ class LiveScoreAddTeam extends Component {
                 this.props.liveScoreGetAffiliate({ id, name: '' })
                 this.props.liveScoreManagerListAction(5, 1, id)
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
         else {
@@ -117,7 +117,7 @@ class LiveScoreAddTeam extends Component {
                 this.props.liveScoreGetAffiliate({ id, name: '' })
                 this.props.liveScoreManagerListAction(5, 1, id)
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
         let isEditCheck = this.props.location.state ? this.props.location.state.isEdit : false
@@ -722,7 +722,7 @@ class LiveScoreAddTeam extends Component {
                     screenName == 'userPersonal' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
                 {
                     screenName == 'userPersonal' ?

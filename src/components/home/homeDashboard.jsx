@@ -605,7 +605,7 @@ class HomeDashboard extends Component {
                                 <div
                                     className="col-sm-2"
                                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
-                                    onClick={() => userRoleId == 2 && history.push('/liveScoreCompetitions')}
+                                    onClick={() => userRoleId == 2 && history.push('/matchDayCompetitions')}
                                 >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>

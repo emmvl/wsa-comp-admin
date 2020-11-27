@@ -57,7 +57,7 @@ class LiveScoreAddEditCoach extends Component {
                 this.setInitalFiledValue()
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -398,7 +398,7 @@ class LiveScoreAddEditCoach extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <NavLink to="/liveScoreCoaches">
+                                <NavLink to="/matchDayCoaches">
                                     <Button className="cancelBtnWidth" type="cancel-button">
                                         {AppConstants.cancel}
                                     </Button>
@@ -499,7 +499,7 @@ class LiveScoreAddEditCoach extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <Loader visible={this.props.liveScoreCoachState.loading} />

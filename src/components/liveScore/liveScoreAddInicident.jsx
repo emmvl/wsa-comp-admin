@@ -112,7 +112,7 @@ class LiveScoreAddIncident extends Component {
                     this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
                 }
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         }
     }
@@ -647,7 +647,7 @@ class LiveScoreAddIncident extends Component {
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                     )}
 
                 {umpireKey ? (

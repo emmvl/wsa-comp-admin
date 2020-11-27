@@ -94,7 +94,7 @@ class LiveScoreEditBanners extends Component {
     }
 
     goBack = () => {
-        history.push('/liveScoreBanners');
+        history.push('/matchDayBanners');
     };
 
     // Image picker
@@ -447,7 +447,7 @@ class LiveScoreEditBanners extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
                 />
 
                 <Loader visible={this.props.liveScoreBannerState.onLoad} />

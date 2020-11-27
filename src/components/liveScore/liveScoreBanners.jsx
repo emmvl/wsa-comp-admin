@@ -61,10 +61,10 @@ class LiveScoreBanners extends Component {
             if (id !== null) {
                 this.props.getLiveScoreBanners(id);
             } else {
-                history.push('/liveScoreCompetitions');
+                history.push('/matchDayCompetitions');
             }
         } else {
-            history.push('/liveScoreCompetitions');
+            history.push('/matchDayCompetitions');
         }
     }
 
@@ -275,7 +275,7 @@ class LiveScoreBanners extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="20" />

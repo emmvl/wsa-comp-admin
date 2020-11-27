@@ -160,7 +160,7 @@ class InnerHorizontalMenu extends React.Component {
         }
         this.props.clearDataOnCompChangeAction()
         localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj));
-        history.push("/liveScoreDashboard");
+        history.push("/matchDayDashboard");
     };
 
     setYearId = (yearId) => {
@@ -173,7 +173,7 @@ class InnerHorizontalMenu extends React.Component {
         this.props.clearDataOnCompChangeAction()
         this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList);
 
-        history.push("/liveScoreDashboard");
+        history.push("/matchDayDashboard");
     };
 
     render() {
@@ -391,7 +391,7 @@ class InnerHorizontalMenu extends React.Component {
                                 onClick={() => this.props.clearDataOnCompChangeAction()}
                             >
                                 <Menu.Item key="1">
-                                    <NavLink to="/liveScoreDashboard">
+                                    <NavLink to="/matchDayDashboard">
                                         <span>Dashboard</span>
                                     </NavLink>
                                 </Menu.Item>
@@ -417,7 +417,7 @@ class InnerHorizontalMenu extends React.Component {
                                         </NavLink>
                                     </Menu.Item>
                                     <Menu.Item key="23">
-                                        <NavLink to="/LiveScoreCoaches">
+                                        <NavLink to="/matchDayCoaches">
                                             <span>Coaches</span>
                                         </NavLink>
                                     </Menu.Item>
@@ -448,7 +448,7 @@ class InnerHorizontalMenu extends React.Component {
                                         </NavLink>
                                     </Menu.Item>
                                     <Menu.Item key="9">
-                                        <NavLink to="/liveScoreDivisionList">
+                                        <NavLink to="/matchDayDivisionList">
                                             <span>Divisions</span>
                                         </NavLink>
                                     </Menu.Item>
@@ -471,7 +471,7 @@ class InnerHorizontalMenu extends React.Component {
                                 >
                                     {liveScoreCompIsParent && (
                                         <Menu.Item key="12">
-                                            <NavLink to="/liveScoreBulkChange">
+                                            <NavLink to="/matchDayBulkChange">
                                                 <span>Bulk Match Change</span>
                                             </NavLink>
                                         </Menu.Item>
@@ -546,7 +546,7 @@ class InnerHorizontalMenu extends React.Component {
                                             </NavLink>
                                         </Menu.Item>
                                         <Menu.Item key="20">
-                                            <NavLink to="/liveScoreBanners">
+                                            <NavLink to="/matchDayBanners">
                                                 <span>Banners</span>
                                             </NavLink>
                                         </Menu.Item>

@@ -93,8 +93,8 @@ class LiveScoreNewsView extends Component {
         if (nextProps.newsState !== newsState) {
             if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading) {
                 if (newsState !== []) {
-                    history.push(this.state.id === 'dashboard' ? '/liveScoreDashboard' : './liveScoreNewsList');
-                    // history.push(this.state.id === "dashboard" && "/liveScoreDashboard")
+                    history.push(this.state.id === 'dashboard' ? '/matchDayDashboard' : './liveScoreNewsList');
+                    // history.push(this.state.id === "dashboard" && "/matchDayDashboard")
                 }
             }
             if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading) {
@@ -167,7 +167,7 @@ class LiveScoreNewsView extends Component {
         const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={newsData ? newsData.title : history.push('/liveScoreCompetitions')} />
+                <InputWithHead heading={newsData ? newsData.title : history.push('/matchDayCompetitions')} />
                 {(newsData && newsData.newsImage) && (
                     <img
                         style={{ cursor: 'pointer' }}
@@ -314,7 +314,7 @@ class LiveScoreNewsView extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
                 />
                 {stateWideMsg
                     ? <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />
