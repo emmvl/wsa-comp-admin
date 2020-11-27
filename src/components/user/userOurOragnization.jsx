@@ -116,7 +116,7 @@ class UserOurOrganization extends Component {
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 } else {
-                    history.push('/userAffiliatesList');
+                     // history.push('/userAffiliatesList');
                 }
             }
         }

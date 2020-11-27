@@ -121,6 +121,7 @@ function* saveAffiliateSaga(action) {
         result: result.result.data,
         status: result.status,
       });
+      history.push('/userAffiliatesList');
     } else {
       yield call(failSaga, result);
     }
