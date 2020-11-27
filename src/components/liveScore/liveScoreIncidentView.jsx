@@ -30,6 +30,14 @@ class LiveScoreIncidentView extends Component {
         };
     }
 
+    componentDidMount() {
+        let incidentData = this.props.location.state ? this.props.location.state.item : null
+        console.log(incidentData, 'incidentData')
+        if (!incidentData) {
+            history.push('/matchDayIncidentList')
+        }
+    }
+
     ////method to show modal view after click
     showModal = (data, isVideo) => {
         this.setState({
@@ -118,29 +126,29 @@ class LiveScoreIncidentView extends Component {
                 <div className="col-sm">
                     <div><span className="year-select-heading">Incident Data</span></div>
                     <div className="pt-2">
-                        <span className="side-bar-profile-data">{liveScore_formateDate(DATA.incidentTime)}</span>
+                        <span className="side-bar-profile-data">{DATA && liveScore_formateDate(DATA.incidentTime)}</span>
                     </div>
                 </div>
 
                 <div className="col-sm">
                     <div><span className="year-select-heading">Time</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{getTime(DATA.incidentTime)}</span></div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA && getTime(DATA.incidentTime)}</span></div>
                 </div>
                 <div className="col-sm">
                     <div><span className="year-select-heading">Match Id</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.matchId}</span></div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA && DATA.matchId}</span></div>
                 </div>
                 <div className="col-sm">
                     <div><span className="year-select-heading">Incident Type</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.incidentType.name}</span></div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA && DATA.incidentType.name}</span></div>
                 </div>
             </div>
         )
     }
 
     mediaView = () => {
-        let array = this.state.incidentItem.incidentPlayers
-        let mediaPlayer = isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : []
+        let array = this.state.incidentItem ? this.state.incidentItem.incidentPlayers : []
+        let mediaPlayer = this.state.incidentItem ? isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : [] : []
 
         return (
             <div className="col-sm pt-3 pb-3 mt-5">

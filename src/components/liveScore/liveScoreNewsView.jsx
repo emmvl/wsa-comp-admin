@@ -167,7 +167,7 @@ class LiveScoreNewsView extends Component {
         const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={newsData ? newsData.title : history.push('/matchDayCompetitions')} />
+                <InputWithHead heading={newsData ? newsData.title : history.push('/matchDayNewsList')} />
                 {(newsData && newsData.newsImage) && (
                     <img
                         style={{ cursor: 'pointer' }}
@@ -311,7 +311,7 @@ class LiveScoreNewsView extends Component {
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayNewsList')}
                 />
                 {stateWideMsg
                     ? <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />

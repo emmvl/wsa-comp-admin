@@ -6,6 +6,8 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+
 const { Content } = Layout;
 const { Option } = Select;
 const columns = [
@@ -81,6 +83,13 @@ class LiveScorePlayerProfile extends Component {
         this.playerName = this.props.location.state ? this.props.location.state.playerName : ''
     }
 
+    componentDidMount() {
+
+        if (!getLiveScoreCompetiton()) {
+            history.push('/matchDayCompetitions')
+        }
+
+    }
 
     onChange = e => {
         this.setState({

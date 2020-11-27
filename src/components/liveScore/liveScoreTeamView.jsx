@@ -183,7 +183,7 @@ class LiveScoreTeamView extends Component {
         if (teamIds) {
             this.props.getTeamViewPlayerList(teamIds)
         } else {
-            history.push("/matchDayCompetitions")
+            history.push("/matchDayTeam")
         }
     }
 

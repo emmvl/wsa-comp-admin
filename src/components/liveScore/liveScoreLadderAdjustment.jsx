@@ -41,6 +41,7 @@ class LiveScoreLadderAdjustment extends Component {
     }
 
     componentDidMount() {
+        let divisionId = this.props.location ? this.props.location.state ? this.props.location.state.divisionId : null : null
         if (getLiveScoreCompetiton()) {
             this.props.updateLadderSetting({ key: 'refresh' })
 
@@ -53,6 +54,13 @@ class LiveScoreLadderAdjustment extends Component {
         } else {
             history.push('/matchDayCompetitions')
         }
+
+        if (getLiveScoreCompetiton()) {
+            if (!divisionId) {
+                history.push('/matchDayLadderList')
+            }
+        }
+
     }
 
     componentDidUpdate(nextProps) {
@@ -61,7 +69,8 @@ class LiveScoreLadderAdjustment extends Component {
                 const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
                 this.props.getliveScoreTeams(id, this.state.divisionId)
 
-                if (this.props.location.state.divisionId) {
+                let divisionId = this.props.location ? this.props.location.state ? this.props.location.state.divisionId : null : null
+                if (divisionId) {
                     this.props.ladderAdjustmentGetData({
                         uniqueKey: uniqueKey,
                         divisionId: this.props.location.state.divisionId

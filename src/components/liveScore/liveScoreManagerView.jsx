@@ -85,7 +85,7 @@ class LiveScoreManagerView extends Component {
                 <div className='profile-image-view mr-5'>
                     <span className="user-contact-heading">{AppConstants.managerProfile}</span>
                     <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
-                    <span className="user-contact-heading">{data.firstName + " " + data.lastName}</span>
+                    <span className="user-contact-heading">{data && (data.firstName + " " + data.lastName)}</span>
                 </div>
 
                 <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutManager}</span>
@@ -98,7 +98,7 @@ class LiveScoreManagerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.emailAddress}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.email}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && data.email}</span>
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -108,7 +108,7 @@ class LiveScoreManagerView extends Component {
                             </div>
                             <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data && data.mobileNumber}</span>
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -119,7 +119,7 @@ class LiveScoreManagerView extends Component {
                             <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
 
-                        {data.linkedEntity.map((item) => (
+                        {data && data.linkedEntity.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.name}</span>
                         ))}
                     </div>
@@ -142,14 +142,14 @@ class LiveScoreManagerView extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to={{
+                                    {/* <NavLink to={{
                                         pathname: "/matchDayAddManagers",
                                         state: { isEdit: true, tableRecord: this.state.data }
-                                    }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.edit}
-                                        </Button>
-                                    </NavLink>
+                                    }}> */}
+                                    <Button className="primary-add-comp-form" type="primary">
+                                        + {AppConstants.edit}
+                                    </Button>
+                                    {/* </NavLink> */}
                                 </div>
                             </div>
                             <div className="col-sm">

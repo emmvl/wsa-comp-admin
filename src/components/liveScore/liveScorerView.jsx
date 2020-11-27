@@ -7,6 +7,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 
 const { Content } = Layout;
 
@@ -78,6 +79,16 @@ class LiveScorerView extends Component {
         }
     }
 
+    componentDidMount() {
+        let data = this.props.location.state ? this.props.location.state.tableRecord : null
+        if (getLiveScoreCompetiton()) {
+            if (!data) {
+                history.push('/matchDayScorerList')
+            }
+        }
+
+    }
+
     ////view for profile image
     profileImageView = () => {
         let data = this.state.data
@@ -129,7 +140,7 @@ class LiveScorerView extends Component {
                 </div>
             )
         } else {
-            history.push('/matchDayCompetitions')
+            history.push('/matchDayScorerList')
         }
     }
 

@@ -221,6 +221,7 @@ class LiveScoreMatchDetails extends Component {
     }
 
     componentDidMount() {
+        let isMatchId = this.props.location.state ? this.props.location.state.matchId : null
         let isLineUpEnable = null;
         this.props.getLiveScoreGamePositionsList();
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
@@ -238,20 +239,31 @@ class LiveScoreMatchDetails extends Component {
         if (this.state.matchId) {
             this.props.liveScoreGameAttendanceListAction(this.state.matchId);
             this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
+        } else {
+            history.push('/matchDayMatches')
         }
 
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
-                isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
-                this.setState({ competitionId: getUmpireCompetitonData().id })
+
+                if (isMatchId) {
+                    isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
+                    this.setState({ competitionId: getUmpireCompetitonData().id })
+                } else {
+                    history.push('/matchDayMatches')
+                }
             } else {
                 history.push('/matchDayCompetitions')
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton());
-                isLineUpEnable = lineupSelectionEnabled;
-                this.setState({ competitionId: id })
+                if (isMatchId) {
+                    const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton());
+                    isLineUpEnable = lineupSelectionEnabled;
+                    this.setState({ competitionId: id })
+                } else {
+                    history.push('/matchDayMatches')
+                }
             } else {
                 history.push('/matchDayCompetitions')
             }

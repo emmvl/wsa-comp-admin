@@ -23,6 +23,12 @@ class LiveScoreIncidentImport extends Component {
         }
     }
 
+    componentDidMount() {
+        if (!getLiveScoreCompetiton()) {
+            history.push('/matchDayCompetitions')
+        }
+    }
+
     headerView = () => {
         return (
             <div className="header-view">
