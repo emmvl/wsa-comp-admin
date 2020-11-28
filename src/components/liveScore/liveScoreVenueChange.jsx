@@ -51,10 +51,10 @@ class LiveScoreVenueChange extends Component {
             if (id !== null) {
                 this.props.getCompetitionVenuesList(id, this.state.search);
             } else {
-                history.push('/liveScoreCompetitions')
+                history.push('/matchDayCompetitions')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -80,18 +80,10 @@ class LiveScoreVenueChange extends Component {
         })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.venueChange}
@@ -146,7 +138,7 @@ class LiveScoreVenueChange extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="d-flex align-items-center">
                     <span className="text-heading-large mt-0 mb-0">{AppConstants.changeMatchCriteria}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -162,7 +154,7 @@ class LiveScoreVenueChange extends Component {
                             <Form.Item name="changeMatchDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     // size="large"
-                                    style={{ width: '100%' }}
+                                    className="w-100"
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -175,8 +167,7 @@ class LiveScoreVenueChange extends Component {
                             <InputWithHead required="required-field pb-1" heading={AppConstants.startTime} />
                             <Form.Item name="startTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
-                                    className="comp-venue-time-timepicker"
-                                    style={{ width: '100%' }}
+                                    className="comp-venue-time-timepicker w-100"
                                     defaultOpenValue={moment("00:00", "hh:mm")}
                                     format="hh:mm"
                                     use12Hours={false}
@@ -199,7 +190,7 @@ class LiveScoreVenueChange extends Component {
                             <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     // size="large"
-                                    style={{ width: '100%' }}
+                                    className="w-100"
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -213,8 +204,7 @@ class LiveScoreVenueChange extends Component {
                             <InputWithHead required="required-field pb-1" heading={AppConstants.endTime} />
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
-                                    className="comp-venue-time-timepicker"
-                                    style={{ width: '100%' }}
+                                    className="comp-venue-time-timepicker w-100"
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     placeholder="Select Time"
@@ -233,7 +223,8 @@ class LiveScoreVenueChange extends Component {
                     <Form.Item name="venues" rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
                             showSearch
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectVenue}
                             onChange={(venueId) => this.onChangeVenue(venueId)}
                             // value={venueChangeData.venueId}
@@ -254,7 +245,8 @@ class LiveScoreVenueChange extends Component {
                 <Form.Item name="courts" rules={[{ required: true, message: ValidationConstants.court }]} className="form-conr space">
                     <Select
                         mode="multiple"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
+                        className="w-100"
+                        style={{ paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
                         placeholder={AppConstants.selectCourt}
                         onChange={(courtId) => {
                             this.props.liveScoreUpdateVenueChange(courtId, "courtId")
@@ -291,7 +283,8 @@ class LiveScoreVenueChange extends Component {
                     <Form.Item name="venueTo" rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
                             showSearch
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectVenue}
                             onChange={(venueId) => this.onChangeToVenue(venueId)}
                             // value={venueChangeData.changeToVenueId}
@@ -313,7 +306,8 @@ class LiveScoreVenueChange extends Component {
                     <Form.Item name="courtTo" rules={[{ required: true, message: ValidationConstants.court }]}>
                         <Select
                             // mode='multiple'
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectCourt}
                             onChange={(courtId) => {
                                 this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")
@@ -345,7 +339,7 @@ class LiveScoreVenueChange extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreDashboard')} type="cancel-button">
+                                <Button className="cancelBtnWidth" onClick={() => history.push('/matchDayDashboard')} type="cancel-button">
                                     {AppConstants.cancel}
                                 </Button>
                             </div>
@@ -383,9 +377,9 @@ class LiveScoreVenueChange extends Component {
         return (
             <div className="fluid-width">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="13" />
                 <Layout>

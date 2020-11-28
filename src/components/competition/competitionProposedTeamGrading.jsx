@@ -18,7 +18,9 @@ import {
     clearTeamGradingReducerDataAction,
     getCompFinalGradesListAction,
     teamGradingCommentAction,
-    changeHistoryHover, deleteTeamActionAction, changeDivisionTeamAction,
+    changeHistoryHover,
+    deleteTeamActionAction,
+    changeDivisionTeamAction,
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
@@ -83,7 +85,8 @@ const columns = [
             //     </Select>
             // )
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
-                <Select className="select-inside-team-grades-table"
+                <Select
+                    className="select-inside-team-grades-table"
                     value={sortOrder}
                     disabled={this_obj.state.competitionStatus == 1}
                     onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
@@ -110,7 +113,8 @@ const columns = [
             // ) : (
             //     <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
             //         <Input
-            //             className="input-inside-team-grades-table" style={{ width: '230px' }}
+            //             className="input-inside-team-grades-table"
+            //             style={{ width: 230 }}
             //             onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
             //             placeholder="Team Name"
             //             value={teamName}
@@ -119,7 +123,9 @@ const columns = [
             // )
 
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
-                <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
+                <Input
+                    className="input-inside-team-grades-table"
+                    style={{ width: 230 }}
                     disabled={this_obj.state.competitionStatus == 1}
                     onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
                     placeholder="Team Name"
@@ -150,8 +156,7 @@ const columns = [
                 {playerHistory.map((item, index) => (
                     (item.divisionGrade != null && item.divisionGrade != "" && this_obj.state.competitionStatus != 1) && (
                         <Tooltip
-                            className="comp-player-table-tag2"
-                            style={{ height: '100%' }}
+                            className="comp-player-table-tag2 h-100"
                             onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
                             onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
                             visible={item.hoverVisible}
@@ -161,7 +166,7 @@ const columns = [
                                 pathname: `/userPersonal`,
                                 state: { userId: item.userId, screenKey: 'competitionProposedTeamGrading', screen: "/competitionProposedTeamGrading" }
                             }}>
-                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                <Tag className="comp-player-table-tag pointer" key={item.historyPlayerId + index}>
                                     {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
                                 </Tag>
                             </NavLink>
@@ -205,8 +210,8 @@ const columns = [
                         ))}
                     </Select>
                 ) : (
-                        <span>{record.delIndicationMsg}</span>
-                    )}
+                    <span>{record.delIndicationMsg}</span>
+                )}
             </span>
         ),
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
@@ -218,8 +223,7 @@ const columns = [
         width: 110,
         render: (responseComments, record) => (
             <div
-                className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}
-                style={{ display: "flex", justifyContent: "center", cursor: "pointer", backgroundColor: "none" }}
+                className={`${(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : ''} d-flex justify-content-center bg-none pointer`}
                 onClick={() => this_obj.state.competitionStatus != 1 && this_obj.onClickComment(record)}
             >
                 <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
@@ -307,7 +311,6 @@ class CompetitionProposedTeamGrading extends Component {
         this.props.clearYearCompetitionAction()
     }
 
-
     onClickComment(record) {
         this.props.commentListingAction(this.state.firstTimeCompId, record.teamId, "2")
         // this.props.commentListing(this.state.firstTimeCompId    )
@@ -347,11 +350,11 @@ class CompetitionProposedTeamGrading extends Component {
         this.props.changeHistoryHover(record, index, historyIndex, key)
 
     }
+
     getTitle(pool, grade) {
         if (this.state.finalTypeRefId == 2) {
             return pool
-        }
-        else {
+        } else {
             return grade
         }
     }
@@ -404,7 +407,6 @@ class CompetitionProposedTeamGrading extends Component {
         this.setState({ loading: true });
 
         // this_obj.props.onchangeCompOwnFinalTeamGradingData(this.state.actionType, this.state.rowIndex, "actionType");
-
     }
 
     handleDeleteTeamCancel = () => {
@@ -433,16 +435,14 @@ class CompetitionProposedTeamGrading extends Component {
             })
             this.props.getDivisionsListAction(yearId, storedCompetitionId, this.state.sourceModule)
             // this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId, 1, 6)
-        }
-        else {
+        } else {
             if (yearId) {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId),
                     compLoad: true
                 })
-            }
-            else {
+            } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
                 // setOwnCompetitionYear(1)
             }
@@ -500,15 +500,12 @@ class CompetitionProposedTeamGrading extends Component {
             }
         }
 
-
         if (nextProps.ownTeamGradingState != this.props.ownTeamGradingState) {
             if (this.props.ownTeamGradingState.onDivisionChangeLoad == false && this.state.divisionLoad === true) {
                 this.setState({ divisionLoad: false });
                 this.props.getCompFinalGradesListAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
             }
         }
-
-
     }
 
     ////save the final team grading data
@@ -525,7 +522,6 @@ class CompetitionProposedTeamGrading extends Component {
                 }
             })
         }
-
 
         if (!isError) {
             finalTeamGradingData.map((item) => {
@@ -544,18 +540,15 @@ class CompetitionProposedTeamGrading extends Component {
             }
             this.props.saveOwnFinalTeamGradingDataAction(payload)
             this.setState({ saveLoad: true })
-        }
-        else {
+        } else {
             message.error(ValidationConstants.finalGrading[0]);
         }
-
     }
 
     cancelCall = () => {
         history.push('/competitionPartTeamGradeCalculate');
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -570,7 +563,6 @@ class CompetitionProposedTeamGrading extends Component {
         )
     }
 
-    /////year change onchange
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
@@ -580,7 +572,6 @@ class CompetitionProposedTeamGrading extends Component {
         this.props.clearReducerDataAction("allDivisionsData")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, gradeRefId: null, competitionStatus: 0, finalTypeRefId: null })
-
     }
 
     // on Competition change
@@ -613,7 +604,6 @@ class CompetitionProposedTeamGrading extends Component {
         this.setState({ gradeRefId })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let disableStatus = this.state.competitionStatus == 1
         return (
@@ -639,12 +629,7 @@ class CompetitionProposedTeamGrading extends Component {
                             </div>
                         </div>
                         <div className="col-sm pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select-competition ml-2"
@@ -660,12 +645,7 @@ class CompetitionProposedTeamGrading extends Component {
                             </div>
                         </div>
                         <div className="col-sm pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.division}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -686,12 +666,7 @@ class CompetitionProposedTeamGrading extends Component {
                             </div>
                         </div>
                         <div className="col-sm pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{this.getTitle(AppConstants.pool, AppConstants.grade)}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -708,10 +683,10 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
+                        {/* <div className="col-sm d-flex justify-content-start align-items-center">
                             <span className="comp-grading-final-text ml-1">{AppConstants.final}</span>
                         </div> */}
-                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                        {/* <div className="col-sm d-flex justify-content-end align-items-center">
                             <Button className="primary-add-comp-form" type="primary"
                             // onClick={this.addNewGrade}
                             >
@@ -733,7 +708,7 @@ class CompetitionProposedTeamGrading extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"}
+                        // className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={proposedTeamGradingData}
@@ -752,14 +727,14 @@ class CompetitionProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                // owner={this.state.commentsCreatedBy}
-                // OwnCreatedComment={this.state.commentsCreatedOn}
-                // ownnerComment={this.state.comments}
-                // affilate={this.state.responseCommentsCreatedBy}
-                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                // affilateComment={this.state.responseComments}
-                // finalGradeId={this.state.finalGradeId}
-                // proposedGradeID={this.state.proposedGradeID}
+                    // owner={this.state.commentsCreatedBy}
+                    // OwnCreatedComment={this.state.commentsCreatedOn}
+                    // ownnerComment={this.state.comments}
+                    // affilate={this.state.responseCommentsCreatedBy}
+                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                    // affilateComment={this.state.responseComments}
+                    // finalGradeId={this.state.finalGradeId}
+                    // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal
@@ -808,14 +783,13 @@ class CompetitionProposedTeamGrading extends Component {
                 <div className="row">
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
-                            <Button className="cancelBtnWidth" type="cancel-button"
-                                onClick={() => this.cancelCall()}
-                            >{AppConstants.cancel}
+                            <Button className="cancelBtnWidth" type="cancel-button" onClick={() => this.cancelCall()}>
+                                {AppConstants.cancel}
                             </Button>
                         </div>
                     </div>
                     <div className="col-sm">
-                        {this.state.divisionId != null &&
+                        {this.state.divisionId != null && (
                             <div className="comp-buttons-view">
                                 <Button
                                     id={AppUniqueId.finalteamgrad_save_bn}
@@ -827,7 +801,7 @@ class CompetitionProposedTeamGrading extends Component {
                                     {AppConstants.save}
                                 </Button>
                                 <Tooltip
-                                    style={{ height: '100%' }}
+                                    className="h-100"
                                     onMouseEnter={() =>
                                         this.setState({
                                             tooltipVisibleDelete: isPublished,
@@ -849,13 +823,12 @@ class CompetitionProposedTeamGrading extends Component {
                                     </Button>
                                 </Tooltip>
                             </div>
-                        }
+                        )}
                     </div>
                 </div>
             </div>
         )
     }
-
 
     render() {
         return (

@@ -130,23 +130,23 @@ const columns = [
             return (
                 <div>
                     {(record.paidByUsers || []).map((item, index) => (
-                   
+
                         record.userId == item.paidByUserId ? <div>{'Self'}</div> :
-                        <div>
-                        <NavLink
-                            to={{
-                                pathname: `/userPersonal`,
-                                state: {
-                                    userId: item.paidByUserId,
-                                    tabKey: "registration"
-                                },
-                            }}
-                        >
-                            <span className="input-heading-add-another pt-0">{item.paidBy}</span>
-                        </NavLink>
-                        </div>
-                        ))}
-                        
+                            <div>
+                                <NavLink
+                                    to={{
+                                        pathname: `/userPersonal`,
+                                        state: {
+                                            userId: item.paidByUserId,
+                                            tabKey: "registration"
+                                        },
+                                    }}
+                                >
+                                    <span className="input-heading-add-another pt-0">{item.paidBy}</span>
+                                </NavLink>
+                            </div>
+                    ))}
+
                 </div>
             )
         },
@@ -180,48 +180,48 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-            record.actionView  ?
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    }
+            record.actionView ?
+                <Menu
+                    className="action-triple-dot-submenu"
+                    theme="light"
+                    mode="horizontal"
+                    style={{ lineHeight: "25px" }}
                 >
-                    <Menu.Item key="1">
-                        <NavLink to={{ pathname: "/" }}>
-                            <span>View</span>
-                        </NavLink>
-                    </Menu.Item>
-                    {
-                        record.actionView == 1 &&
-                        <Menu.Item key="2" onClick = {() => this_Obj.setCashPayment(record)}>
-                            <span>Receive Cash Payment</span>
+
+                    <SubMenu
+                        key="sub1"
+                        title={
+                            <img
+                                className="dot-image"
+                                src={AppImages.moreTripleDot}
+                                alt=""
+                                width="16"
+                                height="16"
+                            />
+                        }
+                    >
+                        <Menu.Item key="1">
+                            <NavLink to={{ pathname: "/" }}>
+                                <span>View</span>
+                            </NavLink>
                         </Menu.Item>
+                        {
+                            record.actionView == 1 &&
+                            <Menu.Item key="2" onClick={() => this_Obj.setCashPayment(record)}>
+                                <span>Receive Cash Payment</span>
+                            </Menu.Item>
 
-                    }
-                    {
-                        record.actionView == 2 &&
-                        <Menu.Item key="2">
-                            <span>Refund</span>
-                        </Menu.Item>
-                    }
+                        }
+                        {
+                            record.actionView == 2 &&
+                            <Menu.Item key="2">
+                                <span>Refund</span>
+                            </Menu.Item>
+                        }
 
-                </SubMenu>
+                    </SubMenu>
 
-            </Menu> : ""
+                </Menu> : ""
         ),
     },
 ];
@@ -320,8 +320,8 @@ class Registration extends Component {
 
     componentDidUpdate() {
         let userRegistrationState = this.props.userRegistrationState;
-        if(this.state.loading == true && userRegistrationState.onTranSaveLoad == false){
-            this.setState({loading: false});
+        if (this.state.loading == true && userRegistrationState.onTranSaveLoad == false) {
+            this.setState({ loading: false });
             this.handleRegTableList(1);
         }
     }
@@ -438,13 +438,13 @@ class Registration extends Component {
         this.handleRegTableList(1);
     };
 
-    updateTransaction = () =>{
+    updateTransaction = () => {
         let selectedRow = this.state.selectedRow;
         let amount = 0;
-        if(this.state.cashTranferType == 1){
+        if (this.state.cashTranferType == 1) {
             amount = selectedRow.amountToTransfer;
         }
-        else{
+        else {
             amount = this.state.amount;
         }
         let payload = {
@@ -453,32 +453,29 @@ class Registration extends Component {
             transactionId: selectedRow.transactionId,
             pendingFee: selectedRow.pendingFee
         }
-
-        console.log("payload::" + JSON.stringify(payload));
         this.props.regTransactionUpdateAction(payload)
-        this.setState({loading: true});
+        this.setState({ loading: true });
     }
 
     setCashPayment = (record) => {
-        console.log(record);
-        this.setState({selectedRow: record, visible: true, amount: 0, cashTranferType: 1 });
+        this.setState({ selectedRow: record, visible: true, amount: 0, cashTranferType: 1 });
     }
 
-    receiveCashPayment = (key) =>{
-        if(key == "cancel"){
-            this.setState({visible: false});
+    receiveCashPayment = (key) => {
+        if (key == "cancel") {
+            this.setState({ visible: false });
         }
-        else if(key == "ok"){
+        else if (key == "ok") {
             let selectedRow = this.state.selectedRow;
             let pendingFee = selectedRow.pendingFee;
             let amountToTransfer = selectedRow.amountToTransfer;
             let amount = this.state.amount;
             let totalAmt = Number(amountToTransfer) - Number(amount);
-            if(totalAmt >= 0){
-                this.setState({visible: false});
+            if (totalAmt >= 0) {
+                this.setState({ visible: false });
                 this.updateTransaction();
             }
-            else{
+            else {
                 message.config({ duration: 0.9, maxCount: 1 })
                 message.error("Amount exceeded");
             }
@@ -854,6 +851,7 @@ class Registration extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
+                        rowKey={(record, index) => record.orgRegistrationId + index}
                         dataSource={userRegDashboardList}
                         pagination={false}
                         loading={userRegistrationState.onUserRegDashboardLoad === true}
@@ -888,7 +886,7 @@ class Registration extends Component {
                 <Radio.Group
                     className="reg-competition-radio"
                     value={this.state.cashTranferType}
-                    onChange={(e) => {this.setState({cashTranferType: e.target.value})}}
+                    onChange={(e) => { this.setState({ cashTranferType: e.target.value }) }}
                 >
                     <Radio value={1}>{AppConstants.fullCashAmount}</Radio>
                     <Radio value={2}>{AppConstants.partialCashAmount}</Radio>
@@ -897,7 +895,7 @@ class Registration extends Component {
                         <InputWithHead
                             placeholder={AppConstants.amount}
                             value={this.state.amount}
-                            onChange={(e) => this.setState({amount: e.target.value})}
+                            onChange={(e) => this.setState({ amount: e.target.value })}
                         />
                     )}
                 </Radio.Group>

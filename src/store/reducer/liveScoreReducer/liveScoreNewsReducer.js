@@ -174,7 +174,7 @@ function liveScoreNewsState(state = initialState, action) {
                 ...state, onLoad_2: true,success:false
             }
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_SUCCESS:
-            // history.push('/liveScoreNewsList')
+            // history.push('/matchDayNewsList')
             let data = action.result
             return {
                 ...state,
@@ -233,8 +233,6 @@ function liveScoreNewsState(state = initialState, action) {
 
 
         case ApiConstants.API_DEFAULT_NEWS_IMAGE_VIDEO:
-            console.log(action.payload)
-
             return {
                 ...state,
                 addEditNews: {

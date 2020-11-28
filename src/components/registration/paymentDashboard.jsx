@@ -82,9 +82,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("affiliate"),
         render: affiliateName => (
             <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
-
         ),
-
     },
     {
         title: "Competition",
@@ -95,7 +93,6 @@ const columns = [
         render: competitionName => (
             <span>{competitionName}</span>
         ),
-
     },
     {
         title: "Fee Type",
@@ -140,9 +137,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("status"),
         render: paymentStatus => (
             <span>{paymentStatus === "pending" ? "Not Paid" : "Paid"}</span>
-
         ),
-
     },
     {
         title: "Action",
@@ -171,8 +166,7 @@ const columns = [
                     <Menu.Item key="1">
                         <span>Redeem Voucher</span>
                     </Menu.Item>
-                    <Menu.Item key="2"
-                    >
+                    <Menu.Item key="2">
                         <span>Cash Payment received</span>
                     </Menu.Item>
                 </SubMenu>
@@ -204,8 +198,8 @@ class PaymentDashboard extends Component {
             searchText: ''
         };
         this_Obj = this;
-
     }
+
     async componentDidMount() {
         const { paymentDashboardListAction } = this.props.paymentState
         this.referenceCalls(this.state.organisationUniqueKey);
@@ -229,7 +223,6 @@ class PaymentDashboard extends Component {
 
             this.handlePaymentTableList(page, userId, registrationId, this.state.searchText)
         } else {
-
             let userInfo = this.props.location.state ? this.props.location.state.personal : null;
             let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
             this.setState({ userInfo: userInfo, registrationId: registrationId });
@@ -238,8 +231,6 @@ class PaymentDashboard extends Component {
 
             this.handlePaymentTableList(1, userId, regId, this.state.searchText)
         }
-
-
     }
 
     referenceCalls = (organisationId) => {
@@ -278,32 +269,33 @@ class PaymentDashboard extends Component {
         }
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         let tagName = this.state.userInfo != null ? this.state.userInfo.firstName + " " + this.state.userInfo.lastName : null;
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className='col-sm' style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.dashboard}
                             </span>
                         </div>
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
-                                {this.state.userInfo &&
-                                    <div className="col-sm pt-1" style={{ alignSelf: "center" }}>
+                                {this.state.userInfo && (
+                                    <div className="col-sm pt-1 align-self-center">
                                         <Tag
                                             closable
                                             color="volcano"
-                                            style={{ paddingTop: "3px", height: "30px" }}
+                                            style={{ paddingTop: 3, height: 30 }}
                                             onClose={() => { this.clearFilterByUserId() }}
-                                        >{tagName}</Tag>
+                                        >
+                                            {tagName}
+                                        </Tag>
                                     </div>
-                                }
+                                )}
 
-                                <div className="pt-1" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                                <div className="pt-1 d-flex justify-content-end">
                                     <div className="comp-product-search-inp-width">
                                         <Input
                                             className="product-reg-search-input"
@@ -323,20 +315,12 @@ class PaymentDashboard extends Component {
                                 </div>
 
                                 <div className="col-sm pt-1">
-
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             onClick={() => this.onExport()}
-                                            className="primary-add-comp-form" type="primary">
+                                            className="primary-add-comp-form"
+                                            type="primary"
+                                        >
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -357,15 +341,6 @@ class PaymentDashboard extends Component {
             </div>
         );
     };
-    ///setting the available from date
-    dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
-    }
-
-    ////setting the available to date
-    dateOnChangeTo = date => {
-        console.log(date)
-    }
 
     handlePaymentTableList = (page, userId, regId, searchValue) => {
         let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchText } = this.state
@@ -376,7 +351,7 @@ class PaymentDashboard extends Component {
             userId: userId,
             registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder, -1, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
     };
 
     onChangeDropDownValue = async (value, key) => {
@@ -397,7 +372,6 @@ class PaymentDashboard extends Component {
             this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         }
     };
-
 
     dropdownView_1 = () => {
         let affiliateToData = this.props.userState.affiliateTo;
@@ -426,8 +400,8 @@ class PaymentDashboard extends Component {
                     <div className="col-sm">
                         <InputWithHead required="pt-0" heading={AppConstants.year} />
                         <Select
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                             onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                             value={this.state.yearRefId}
                         >
@@ -444,8 +418,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                             value={this.state.competitionUniqueKey}
                         >
@@ -466,8 +440,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
                             value={this.state.filterOrganisation}
                         >
@@ -482,9 +456,9 @@ class PaymentDashboard extends Component {
                     <div className="col-sm">
                         <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                         <DatePicker
-                            className="reg-payment-datepicker"
+                            className="reg-payment-datepicker w-100"
                             size="default"
-                            style={{ width: '100%', minWidth: 160 }}
+                            style={{ minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -495,9 +469,9 @@ class PaymentDashboard extends Component {
                     <div className="col-sm">
                         <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                         <DatePicker
-                            className="reg-payment-datepicker"
+                            className="reg-payment-datepicker w-100"
                             size="default"
-                            style={{ width: '100%', minWidth: 160 }}
+                            style={{ minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -513,8 +487,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(type) => this.setState({ type })}
                             value={this.state.type}
                         >
@@ -531,8 +505,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(status) => this.setState({ status })}
                             value={this.state.status}
                         >
@@ -547,7 +521,6 @@ class PaymentDashboard extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
@@ -575,8 +548,8 @@ class PaymentDashboard extends Component {
                     <div className="col-sm-3">
                         <InputWithHead required="pt-0" heading={AppConstants.year} />
                         <Select
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                             onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                             value={this.state.yearRefId}
                         >
@@ -593,8 +566,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                             value={this.state.competitionUniqueKey}
                         >
@@ -615,8 +588,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
                             value={this.state.filterOrganisation}
                         >
@@ -634,8 +607,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(type) => this.setState({ type })}
                             value={this.state.type}
                         >
@@ -647,7 +620,6 @@ class PaymentDashboard extends Component {
                             <Option key={"umpire"} value={"umpire"}>{"Umpire"}</Option>
                         </Select>
                     </div>
-
                 </div>
 
                 <div className='row pb-5'>
@@ -656,8 +628,8 @@ class PaymentDashboard extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            className="reg-payment-select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(status) => this.setState({ status })}
                             value={this.state.status}
                         >
@@ -671,9 +643,9 @@ class PaymentDashboard extends Component {
                     <div className="col-sm-3 pt-2">
                         <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                         <DatePicker
-                            className="reg-payment-datepicker"
+                            className="reg-payment-datepicker w-100"
                             size="default"
-                            style={{ width: '100%', minWidth: 160 }}
+                            style={{ minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -685,9 +657,9 @@ class PaymentDashboard extends Component {
                     <div className="col-sm-3 pt-2">
                         <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                         <DatePicker
-                            className="reg-payment-datepicker"
+                            className="reg-payment-datepicker w-100"
                             size="default"
-                            style={{ width: '100%', minWidth: 160 }}
+                            style={{ minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -696,7 +668,6 @@ class PaymentDashboard extends Component {
                         />
                     </div>
                 </div>
-
             </div>
         )
     }
@@ -707,7 +678,6 @@ class PaymentDashboard extends Component {
         let userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         let regId = this.state.registrationId != null ? this.state.registrationId : '-1';
         return (
-
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
                 <div className="table-responsive home-dash-table-view">
@@ -749,6 +719,7 @@ class PaymentDashboard extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
@@ -758,7 +729,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         paymentState: state.StripeState,
         appState: state.AppState,
@@ -766,4 +737,5 @@ function mapStatetoProps(state) {
         userRegistrationState: state.EndUserRegistrationState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((PaymentDashboard));
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentDashboard);

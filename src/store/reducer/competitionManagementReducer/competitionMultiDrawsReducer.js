@@ -160,7 +160,7 @@ function structureDrawsData(data, key, venuesData) {
   let sortedDateArray = [];
   let legendArray = [];
   let sortMainCourtNumberArray = [];
-if(data.length >0){
+if(data.length >0 && venuesData){
   venuesData.forEach(venue => {
     venue.courts.forEach(court => {
       const isCourtNotEmpty = data.some(dataSlot => dataSlot.venueCourtId === court.courtId);
@@ -365,7 +365,6 @@ function getDrawsDuplicate(drawsArray,drawsObject){
 }
 
 function pushColorDivision(division, drawsResultData) {
-  console.log(division.length,'called',drawsResultData.length)
   let newDivisionArray = []
   for (let i in division) {
     let divisionGradeId = division[i].competitionDivisionGradeId
@@ -392,7 +391,6 @@ function pushColorDivision(division, drawsResultData) {
       }
     }
   }
-  console.log('called',newDivisionArray)
   return newDivisionArray
 }
 
@@ -537,6 +535,7 @@ function setupDateObjectArray(dateArray, drawObject) {
   var tempDateArray = JSON.parse(JSON.stringify(dateArray))
   let defaultDateObject = {
     date: drawObject.matchDate,
+    endTime: drawObject.endTime,
     notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
   }
   for (let i in dateArray) {

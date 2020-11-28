@@ -50,7 +50,6 @@ function assignUmpireState(state = initialState, action) {
                 onLoad: true
             }
         case ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_SUCCESS:
-            console.log(action, 'API_ASSIGN_UMPIRE_FROM_LIST_SUCCESS')
             let responseData = action.result.umpires[0]
             let name = responseData.umpireName.split(" ", 2)
             let obj = {
@@ -84,7 +83,6 @@ function assignUmpireState(state = initialState, action) {
             }
         case ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_SUCCESS:
             state.assignUmpireList[action.index][action.umpireKey] = null
-            console.log(action, 'API_UNASSIGN_UMPIRE_FROM_LIST_SUCCESS')
             // state.assignUmpireList[action.index][action.umpireKey] = action.result.data
             return {
                 ...state,

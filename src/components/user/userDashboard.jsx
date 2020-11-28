@@ -6,7 +6,6 @@ import Chart from "chart.js";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 
-
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const columns = [
@@ -15,7 +14,6 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
-
     },
     {
         title: 'Role',
@@ -35,7 +33,6 @@ const columns = [
         key: 'phone',
         sorter: (a, b) => a.phone.length - b.phone.length,
     },
-
 ];
 
 const data = [
@@ -60,8 +57,6 @@ const data = [
         dob: "1/02/2010",
         phone: "0411 565 878",
     },
-
-
 ];
 
 class UserDashboard extends Component {
@@ -87,15 +82,11 @@ class UserDashboard extends Component {
     componentDidMount() {
         this.ageBarChart()
         this.roleChart()
-        this.compititionChart()
+        this.competitionChart()
         this.genderChart()
     }
 
-
-
-
-
-    compititionChart = () => {
+    competitionChart = () => {
         const compititionsChartRef = this.chartRefCompititions.current.getContext("2d");
         new Chart(compititionsChartRef, {
             type: 'doughnut',
@@ -106,9 +97,7 @@ class UserDashboard extends Component {
                         data: [2199, 4849, 5255, 1221],
                         backgroundColor: ["#9966ff", "#ad85ff", "#c2a3ff", "#d6c2ff"]
                     },
-
                 ]
-
             },
             options: {
                 legend: {
@@ -129,9 +118,7 @@ class UserDashboard extends Component {
                         data: [2199, 4849, 5255],
                         backgroundColor: ["#ffa1b5", "#86c7f3"]
                     },
-
                 ]
-
             },
             options: {
                 legend: {
@@ -140,7 +127,6 @@ class UserDashboard extends Component {
             }
         })
     }
-
 
     roleChart = () => {
         const roleChartRef = this.chartRef2.current.getContext("2d");
@@ -178,16 +164,14 @@ class UserDashboard extends Component {
         const myChartRef = this.chartRef.current.getContext("2d");
         new Chart(myChartRef, {
             type: "horizontalBar",
-
             data: {
-                //Bring in data
+                // Bring in data
                 labels: ["0-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
                 datasets: [
                     {
                         label: "Ages",
                         data: [2199, 4849, 5255, 1231, 3223, 1262, 2363],
                         backgroundColor: ["#ff9f40", "#ffa853", "#ffb266", "#ffbc79", "#ffc58c", "#ffcf9f", "#ffd9b3",],
-
                     },
                 ]
             },
@@ -211,7 +195,6 @@ class UserDashboard extends Component {
         });
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-player-grades-header-view container mb-n3">
@@ -226,7 +209,6 @@ class UserDashboard extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div>
@@ -246,12 +228,7 @@ class UserDashboard extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center">
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
@@ -329,7 +306,7 @@ class UserDashboard extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 {/* <Button className="save-draft-text" type="save-draft-text">Save Draft</Button>
                                 <Button className="open-reg-button" type="primary">Finalise</Button> */}
                             </div>

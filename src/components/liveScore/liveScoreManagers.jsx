@@ -49,10 +49,10 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    // pathname: '/liveScoreManagerView',
+                    // pathname: '/matchDayManagerView',
                     // state: { tableRecord: record }
                     pathname: '/userPersonal',
-                    state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
+                    state: { userId: record.id, screenKey: "livescore", screen: "/matchDayManagerList" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -69,8 +69,8 @@ const columns = [
             <NavLink
                 to={{
                     pathname: '/userPersonal',
-                    state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
-                    // pathname: '/liveScoreManagerView',
+                    state: { userId: record.id, screenKey: "livescore", screen: "/matchDayManagerList" }
+                    // pathname: '/matchDayManagerView',
                     // state: { tableRecord: record }
                 }}
             >
@@ -105,7 +105,7 @@ const columns = [
                         <div key={`managerName${i}` + item.entityId}>
                             <NavLink
                                 to={{
-                                    pathname: '/liveScoreTeamView',
+                                    pathname: '/matchDayTeamView',
                                     state: { teamId: item.entityId, screenKey: "livescore" }
                                 }}
                             >
@@ -164,7 +164,7 @@ const columns = [
                     <Menu.Item key="1">
                         <NavLink
                             to={{
-                                pathname: '/liveScoreAddManagers',
+                                pathname: '/matchDayAddManagers',
                                 state: { isEdit: true, tableRecord: record }
                             }}
                         >
@@ -174,7 +174,7 @@ const columns = [
                     {/* <Menu.Item key="2">
                         <NavLink
                             to={{
-                                pathname: "./liveScoreAssignMatch",
+                                pathname: "./matchDayAssignMatch",
                                 state: { record }
                             }}
                         >
@@ -220,7 +220,7 @@ class LiveScoreManagerList extends Component {
                 this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset, 'managerList')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -248,16 +248,7 @@ class LiveScoreManagerList extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
@@ -278,7 +269,6 @@ class LiveScoreManagerList extends Component {
         this.props.userExportFilesAction(url)
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -289,29 +279,11 @@ class LiveScoreManagerList extends Component {
                                 {AppConstants.managersList}
                             </span>
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "flex-end"
-                            }}
-                        >
+                        <div className="col-sm w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <NavLink to={`/liveScoreAddManagers`} className="text-decoration-none">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to="/matchDayAddManagers" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addManager}
                                             </Button>
@@ -319,16 +291,7 @@ class LiveScoreManagerList extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             onClick={() => this.onExport()}
                                             className="primary-add-comp-form"
@@ -348,17 +311,8 @@ class LiveScoreManagerList extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <NavLink to={`/liveScoreManagerImport`} className="text-decoration-none">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to={`/matchDayManagerImport`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
@@ -378,7 +332,7 @@ class LiveScoreManagerList extends Component {
                         </div>
                     </div>
                     {/* search box */}
-                    <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }}>
+                    <div className="col-sm pt-5 ml-3 d-flex justify-content-end">
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
@@ -438,9 +392,9 @@ class LiveScoreManagerList extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>

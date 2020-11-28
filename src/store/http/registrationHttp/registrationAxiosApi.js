@@ -372,7 +372,6 @@ let AxiosApi = {
 
     ///// Get Competition Venue
     async getCompetitionVenue(competitionId, startDate, endDate) {
-        console.log(competitionId, startDate, endDate)
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let payload = {
@@ -484,7 +483,6 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
     updateCompetitionStatus(payload) {
-        console.log(payload)
         let body = payload
         var url = `/api/competitionfee/status/update`;
         return Method.dataPost(url, token, body);
@@ -781,7 +779,6 @@ const Method = {
                 })
                 .then(result => {
                     if (result.status === 200) {
-                        console.log("*************" + JSON.stringify(result.data));
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;

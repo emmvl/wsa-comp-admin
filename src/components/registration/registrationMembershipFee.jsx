@@ -92,7 +92,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={casualFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualFee")}
-                //disabled={this_Obj.state.membershipIsUsed}
+            //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     },
@@ -107,7 +107,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={casualFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualGst")}
-                //disabled={this_Obj.state.membershipIsUsed}
+            //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     },
@@ -130,7 +130,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={seasonalFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalFee")}
-                //disabled={this_Obj.state.membershipIsUsed}
+            //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     },
@@ -145,7 +145,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={seasonalFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalGst")}
-                //disabled={this_Obj.state.membershipIsUsed}
+            //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     }
@@ -269,9 +269,9 @@ class RegistrationMembershipFee extends Component {
             }
         } else if (this.state.membershipTabKey == "2") {
             let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
-            if(finalMembershipFeesData.isAlreadyRegistered == 1 && this.state.membershipIsUsed == true){
-                this.setState({confirmRePayFeesModalVisible: true})
-            }else{
+            if (finalMembershipFeesData.isAlreadyRegistered == 1 && this.state.membershipIsUsed == true) {
+                this.setState({ confirmRePayFeesModalVisible: true })
+            } else {
                 finalMembershipFeesData.membershipFees.map((item) => {
                     delete item['membershipProductName']
                     delete item['membershipProductTypeRefName']
@@ -346,7 +346,6 @@ class RegistrationMembershipFee extends Component {
     setFieldDecoratorValues = () => {
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : []
-        // this.formRef.current.validateFields((err, values) => console.log("values266", Object.keys(values)))
         this.formRef.current.setFieldsValue({
             yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getCurrentYear(this.props.appState.yearList) : null,
             membershipProductName: membershipProductData.membershipProductName,
@@ -426,14 +425,7 @@ class RegistrationMembershipFee extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading required-field">
                                     {AppConstants.year}:
                                 </span>
@@ -511,7 +503,7 @@ class RegistrationMembershipFee extends Component {
 
     //////dynamic membership type view
     membershipTypesView = () => {
-        try{
+        try {
             let registrationState = this.props.registrationState
             const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
             let allData = this.props.registrationState.getMembershipProductDetails
@@ -523,7 +515,7 @@ class RegistrationMembershipFee extends Component {
                     </span>
 
                     {defaultTypes.map((item, index) => {
-                        return(
+                        return (
                             <div key={index} className="prod-reg-inside-container-view">
                                 <div className="row">
                                     <div className="col-sm">
@@ -566,8 +558,7 @@ class RegistrationMembershipFee extends Component {
                                             )}
                                         </div>
                                         <Checkbox
-                                            className="single-checkbox"
-                                            style={{ width: '100%' }}
+                                            className="single-checkbox w-100"
                                             checked={item.isMandate}
                                             onChange={e =>
                                                 this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
@@ -590,8 +581,8 @@ class RegistrationMembershipFee extends Component {
                                                             }]}
                                                         >
                                                             <DatePicker
-                                                                size="large"
-                                                                style={{ width: '100%' }}
+                                                                // size="large"
+                                                                className="w-100"
                                                                 onChange={date => this.dateOnChangeFrom(date, index)}
                                                                 format="DD-MM-YYYY"
                                                                 placeholder="dd-mm-yyyy"
@@ -612,8 +603,8 @@ class RegistrationMembershipFee extends Component {
                                                             }]}
                                                         >
                                                             <DatePicker
-                                                                size="large"
-                                                                style={{ width: '100%' }}
+                                                                // size="large"
+                                                                className="w-100"
                                                                 onChange={date => this.dateOnChangeTo(date, index)}
                                                                 format="DD-MM-YYYY"
                                                                 placeholder="dd-mm-yyyy"
@@ -630,8 +621,7 @@ class RegistrationMembershipFee extends Component {
                                         )}
                                         <div className="fluid-width">
                                             <Checkbox
-                                                className="single-checkbox"
-                                                style={{ marginLeft: "0px" }}
+                                                className="single-checkbox ml-0"
                                                 checked={item.isAllow}
                                                 onChange={e =>
                                                     this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
@@ -643,8 +633,7 @@ class RegistrationMembershipFee extends Component {
                                         </div>
                                         {item.isPlaying != 1 && (
                                             <Checkbox
-                                                className="single-checkbox"
-                                                style={{ marginLeft: "0px" }}
+                                                className="single-checkbox ml-0"
                                                 checked={item.isChildrenCheckNumber}
                                                 onChange={e =>
                                                     this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
@@ -655,7 +644,7 @@ class RegistrationMembershipFee extends Component {
                                             </Checkbox>
                                         )}
                                         {item.isAllow && item.isPlaying == 1 && (
-                                            <div className="fluid-width" style={{ marginTop: "10px" }}>
+                                            <div className="fluid-width mt-10">
                                                 <div className="row">
                                                     <div className="col-sm" style={{ marginLeft: 25 }}>
                                                         <Form.Item
@@ -708,8 +697,8 @@ class RegistrationMembershipFee extends Component {
                     </Modal>
                 </div>
             )
-        }catch(ex){
-            console.log("Error in membershipTypesView::"+ex)
+        } catch (ex) {
+            console.log("Error in membershipTypesView::" + ex)
         }
     }
 
@@ -720,6 +709,25 @@ class RegistrationMembershipFee extends Component {
         return (
             <div className="content-view pt-5">
                 <span className="form-heading">{AppConstants.membershipProduct}</span>
+
+                <InputWithHead
+                    required="required-field pb-2"
+                    heading={AppConstants.year}
+                />
+
+                <Form.Item name="yearRefId" rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}>
+                    <Select
+                        className="year-select reg-filter-select1"
+                        style={{ maxWidth: 80 }}
+                    >
+                        {this.props.appState.yearList.map(item => (
+                            <Option key={'year_' + item.id} value={item.id}>
+                                {item.description}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+
                 <Form.Item
                     name="membershipProductName"
                     rules={[{ required: true, message: ValidationConstants.membershipProductIsRequired }]}
@@ -800,7 +808,7 @@ class RegistrationMembershipFee extends Component {
                                 className="reg-competition-radio"
                                 onChange={e => this.membershipFeeApplyRadio(e.target.value, index)}
                                 defaultValue={item.membershipProductFeesTypeRefId}
-                                //disabled={this.state.membershipIsUsed}
+                            //disabled={this.state.membershipIsUsed}
                             >
                                 {this.props.appState.membershipProductFeesTypes.map((item) => (
                                     <div className="row" key={'membershipProductFeesType_' + item.id}>
@@ -833,7 +841,7 @@ class RegistrationMembershipFee extends Component {
                         className="reg-competition-radio"
                         //onChange={e => this.membershipFeeApplyRadio(e.target.value)}
                         defaultValue={data?.paymentOptionRefId}
-                        //disabled={this.state.membershipIsUsed}
+                    //disabled={this.state.membershipIsUsed}
                     >
                         {this.props.commonReducerState.membershipPaymentOptions.map((item) => (
                             <div className="row pl-2" key={'membershipPaymentOption_' + item.id}>
@@ -854,7 +862,8 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -895,8 +904,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -908,8 +917,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
                                         onChange={date => this.onChangeDiscountAvailableTo(date, index)}
@@ -930,7 +939,8 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -979,8 +989,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -992,8 +1002,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
                                         onChange={date => this.onChangeDiscountAvailableTo(date, index)}
@@ -1052,7 +1062,8 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -1093,8 +1104,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -1106,8 +1117,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
-                                        style={{ width: '100%' }}
+                                        // size="large"
+                                        className="w-100"
                                         placeholder="dd-mm-yyyy"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
@@ -1311,7 +1322,8 @@ class RegistrationMembershipFee extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectDiscountType }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={discountType => this.onChangeMembershipProductDisType(discountType, index)}
                                         placeholder="Select"
                                         // value={item.membershipPrdTypeDiscountTypeRefId !== 0 && item.membershipPrdTypeDiscountTypeRefId}
@@ -1335,7 +1347,8 @@ class RegistrationMembershipFee extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={discountMembershipType =>
                                             this.onChangeMembershipTypeDiscount(discountMembershipType, index)
                                         }
@@ -1360,7 +1373,7 @@ class RegistrationMembershipFee extends Component {
                     </div>
                 ))}
                 <span className="input-heading-add-another"
-                      onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
+                    onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
                     + {AppConstants.addDiscount}
                 </span>
             </div>
@@ -1424,7 +1437,7 @@ class RegistrationMembershipFee extends Component {
     };
 
     handleConfirmRepayFeesModal = (key) => {
-        if(key == "ok"){
+        if (key == "ok") {
             let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
             finalMembershipFeesData.membershipFees.map((item) => {
                 delete item['membershipProductName']
@@ -1433,9 +1446,9 @@ class RegistrationMembershipFee extends Component {
             });
             this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
             this.setState({ loading: true })
-            this.setState({confirmRePayFeesModalVisible: false});
-        }else{
-            this.setState({confirmRePayFeesModalVisible: false});
+            this.setState({ confirmRePayFeesModalVisible: false });
+        } else {
+            this.setState({ confirmRePayFeesModalVisible: false });
         }
     }
 
@@ -1450,7 +1463,7 @@ class RegistrationMembershipFee extends Component {
                     onOk={() => this.handleConfirmRepayFeesModal("ok")}
                     onCancel={() => this.handleConfirmRepayFeesModal("cancel")}
                 >
-                    <InputWithHead heading={AppConstants.membershipFeesRepayConfirmMsg} required="pt-0"/>
+                    <InputWithHead heading={AppConstants.membershipFeesRepayConfirmMsg} required="pt-0" />
                 </Modal>
             )
         } catch (ex) {
@@ -1474,7 +1487,7 @@ class RegistrationMembershipFee extends Component {
                         noValidate="noValidate"
                         initialValues={{ yearRefId: 1, validityRefId: 1 }}
                     >
-                        {this.dropdownView()}
+                        {/* {this.dropdownView()} */}
                         <Content>
                             <div className="tab-view">
                                 <Tabs

@@ -51,11 +51,10 @@ class OrderDetails extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view header-transaparent">
+                <Header className="form-header-view header-transaparent" style={{ backgroundColor: "transparent" }}>
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.orderDetails}
@@ -95,7 +94,7 @@ class OrderDetails extends Component {
                                     </div>
                                 </div>
                                 <div className="w-25 d-flex justify-content-center align-items-center">
-                                    <span className="order-details-desc-text">{(item.SKU ? item.SKU.quantity : 0)}</span>
+                                    <span className="order-details-desc-text">{(item.SKU ? item.quantity : 0)}</span>
                                     <span className="order-details-desc-text ml-2">{"x"}</span>
                                     <span className="order-details-desc-text ml-2">{currencyFormat(item.SKU ? item.SKU.price : 0)}</span>
                                 </div>

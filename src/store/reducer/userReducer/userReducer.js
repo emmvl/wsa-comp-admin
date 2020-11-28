@@ -1,5 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty } from "../../../util/helpers";
+import {setImpersonation} from 'util/sessionStorage'
 
 let affiliate = {
   affiliateId: 0,
@@ -148,7 +149,8 @@ const initialState = {
   onSaveOrgPhotoLoad: false,
   onDeleteOrgPhotoLoad: false,
   bannerCount: null,
-  onLoadSearch: false
+  onLoadSearch: false,
+  impersonationAccess:false
 };
 
 function userReducer(state = initialState, action) {
@@ -566,7 +568,6 @@ function userReducer(state = initialState, action) {
       return { ...state, onSaveOrgPhotoLoad: true };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS:
-      console.log("$$$$$$$$$$$$$$");
       return {
         ...state,
         onSaveOrgPhotoLoad: false,
@@ -578,7 +579,6 @@ function userReducer(state = initialState, action) {
       return { ...state, onDeleteOrgPhotoLoad: true };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS:
-      console.log("&&&&&&&&&&&&&");
       return {
         ...state,
         onDeleteOrgPhotoLoad: false,
@@ -760,11 +760,13 @@ function userReducer(state = initialState, action) {
       return { ...state, impersonationLoad: true };
 
     case ApiConstants.API_IMPERSONATION_SUCCESS:
+      setImpersonation(action.impersonationAccess)
       return {
         ...state,
         impersonationLoad: false,
         impersonation: action.result.success,
         status: action.status,
+        impersonationAccess:action.impersonationAccess
       };
     case ApiConstants.API_USER_DELETE_LOAD:
       return {
@@ -843,7 +845,6 @@ function userReducer(state = initialState, action) {
       return { ...state, umpireActivityOnLoad: true };
 
     case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_SUCCESS:
-      console.log("action***", action.result);
       let umpireActivityData = action.result;
       return {
         ...state,

@@ -135,7 +135,7 @@ const columnsInvite = [
         render: (id) => (
             <NavLink
                 to={{
-                    pathname: "/liveScoreMatchDetails",
+                    pathname: "/matchDayMatchDetails",
                     state: { matchId: id, umpireKey: "umpire", screenName: "umpireDashboard" },
                 }}
             >
@@ -185,7 +185,8 @@ const columnsInvite = [
             let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : [];
             return (
                 <span
-                    style={{ color: validateColor(umpire1), cursor: "pointer" }}
+                    className="pointer"
+                    style={{ color: validateColor(umpire1) }}
                     onClick={() => this_obj.checkUserIdUmpire(umpire1)}
                 >
                     {umpire1.umpireName}
@@ -226,7 +227,8 @@ const columnsInvite = [
             let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : [];
             return (
                 <span
-                    style={{ color: validateColor(umpire2), cursor: "pointer" }}
+                    className="pointer"
+                    style={{ color: validateColor(umpire2) }}
                     onClick={() => this_obj.checkUserIdUmpire(umpire2)}
                 >
                     {umpire2.umpireName}
@@ -277,11 +279,15 @@ const columnsInvite = [
         render: (umpireReserves, record) => {
             let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
             return (
-                <span style={{ color: validateUmpireColor(umpireReserve), cursor: "pointer" }} onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
-                    className="multi-column-text-aligned">{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
+                <span
+                    style={{ color: validateUmpireColor(umpireReserve) }}
+                    onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
+                    className="multi-column-text-aligned pointer"
+                >
+                    {umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}
+                </span>
             )
         }
-
     },
     {
         title: 'Umpire Coach',
@@ -291,12 +297,15 @@ const columnsInvite = [
         render: (umpireCoaches, record) => {
             let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
             return (
-                <span style={{ color: validateUmpireColor(umpireCoach), cursor: "pointer" }}
+                <span
+                    style={{ color: validateUmpireColor(umpireCoach) }}
                     onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
-                    className="multi-column-text-aligned">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
+                    className="multi-column-text-aligned pointer"
+                >
+                    {umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}
+                </span>
             )
         }
-
     },
     {
         title: "Action",
@@ -333,32 +342,29 @@ const columnsInvite = [
                         </NavLink>
                     </Menu.Item>
 
-                    {umpires
-                        ? umpires[0] && umpires[0].verifiedBy === null && (
-                            <Menu.Item key="1">
-                                <NavLink
-                                    to={{
-                                        pathname: "/liveScoreAddMatch",
-                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
-                                    }}
-                                >
-                                    <span>Edit</span>
-                                </NavLink>
-                            </Menu.Item>
-                        )
-                        : (
-                            <Menu.Item key="2">
-                                <NavLink
-                                    to={{
-                                        pathname: "/liveScoreAddMatch",
-                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
-                                    }}
-                                >
-                                    <span>Edit</span>
-                                </NavLink>
-                            </Menu.Item>
-                        )
-                    }
+                    {umpires ? umpires[0] && umpires[0].verifiedBy === null && (
+                        <Menu.Item key="1">
+                            <NavLink
+                                to={{
+                                    pathname: "/matchDayAddMatch",
+                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
+                                }}
+                            >
+                                <span>Edit</span>
+                            </NavLink>
+                        </Menu.Item>
+                    ) : (
+                        <Menu.Item key="2">
+                            <NavLink
+                                to={{
+                                    pathname: "/matchDayAddMatch",
+                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
+                                }}
+                            >
+                                <span>Edit</span>
+                            </NavLink>
+                        </Menu.Item>
+                    )}
                 </Menu.SubMenu>
             </Menu>
         ),
@@ -375,7 +381,7 @@ const columns = [
         render: (id) => (
             <NavLink
                 to={{
-                    pathname: "/liveScoreMatchDetails",
+                    pathname: "/matchDayMatchDetails",
                     state: { matchId: id, umpireKey: "umpire", screenName: "umpireDashboard" }
                 }}
             >
@@ -517,11 +523,15 @@ const columns = [
         render: (umpireReserves, record) => {
             let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
             return (
-                <span style={{ color: validateUmpireColor(umpireReserve), cursor: "pointer" }} className="multi-column-text-aligned" onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
-                >{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
+                <span
+                    style={{ color: validateUmpireColor(umpireReserve) }}
+                    className="multi-column-text-aligned pointer"
+                    onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
+                >
+                    {umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}
+                </span>
             )
         }
-
     },
     {
         title: 'Umpire Coach',
@@ -531,12 +541,15 @@ const columns = [
         render: (umpireCoaches, record) => {
             let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
             return (
-                <span style={{ color: validateUmpireColor(umpireCoach), cursor: "pointer" }}
+                <span
+                    style={{ color: validateUmpireColor(umpireCoach) }}
                     onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
-                    className="multi-column-text-aligned">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
+                    className="multi-column-text-aligned pointer"
+                >
+                    {umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}
+                </span>
             )
         }
-
     },
     {
         title: "Action",
@@ -562,30 +575,27 @@ const columns = [
                         />
                     }
                 >
-                    {umpires
-                        ? umpires[0] && umpires[0].verifiedBy === null && (
-                            <Menu.Item key="1">
-                                <NavLink to={{
-                                    pathname: "/liveScoreAddMatch",
+                    {umpires ? umpires[0] && umpires[0].verifiedBy === null && (
+                        <Menu.Item key="1">
+                            <NavLink to={{
+                                pathname: "/matchDayAddMatch",
+                                state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
+                            }}>
+                                <span>Edit</span>
+                            </NavLink>
+                        </Menu.Item>
+                    ) : (
+                        <Menu.Item key="2">
+                            <NavLink
+                                to={{
+                                    pathname: "/matchDayAddMatch",
                                     state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
-                                }}>
-                                    <span>Edit</span>
-                                </NavLink>
-                            </Menu.Item>
-                        )
-                        : (
-                            <Menu.Item key="2">
-                                <NavLink
-                                    to={{
-                                        pathname: "/liveScoreAddMatch",
-                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
-                                    }}
-                                >
-                                    <span>Edit</span>
-                                </NavLink>
-                            </Menu.Item>
-                        )
-                    }
+                                }}
+                            >
+                                <span>Edit</span>
+                            </NavLink>
+                        </Menu.Item>
+                    )}
                 </Menu.SubMenu>
             </Menu>
         ),
@@ -732,7 +742,6 @@ class UmpireDashboard extends Component {
                 });
 
                 this.props.umpireRoundListAction(this.state.selectedComp, this.state.division === "All" ? "" : this.state.division);
-
             }
         }
     }
@@ -744,12 +753,12 @@ class UmpireDashboard extends Component {
                 screenKey: "umpire",
                 screen: "/umpireDashboard",
             });
-            // } else if (record.matchUmpiresId) {
-            //     history.push("/userPersonal", {
-            //         userId: record.matchUmpiresId,
-            //         screenKey: "umpire",
-            //         screen: "/umpireDashboard",
-            //     });
+        // } else if (record.matchUmpiresId) {
+        //     history.push("/userPersonal", {
+        //         userId: record.matchUmpiresId,
+        //         screenKey: "umpire",
+        //         screen: "/umpireDashboard",
+        //     });
         } else {
             // message.config({ duration: 1.5, maxCount: 1 });
             // message.warn(ValidationConstants.umpireMessage);
@@ -799,15 +808,7 @@ class UmpireDashboard extends Component {
                 </div>
 
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                        }}>
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                     </div>
 
                     <div className="d-flex justify-content-end">
@@ -946,35 +947,17 @@ class UmpireDashboard extends Component {
         <div className="comp-player-grades-header-drop-down-view mt-4">
             <div className="fluid-width">
                 <div className="row">
-                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm pt-1 d-flex align-content-center">
                         <span className="form-heading">
                             {AppConstants.dashboard}
                         </span>
                     </div>
 
-                    <div
-                        className="col-sm-8"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                        }}
-                    >
+                    <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
                             {/*
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink to="/addUmpire" className="text-decoration-none">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addUmpire}
@@ -985,16 +968,7 @@ class UmpireDashboard extends Component {
                             */}
 
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button
                                         type="primary"
                                         className="primary-add-comp-form"
@@ -1015,16 +989,7 @@ class UmpireDashboard extends Component {
                             </div>
 
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
                                         className="text-decoration-none"
                                         to={{
@@ -1145,7 +1110,7 @@ class UmpireDashboard extends Component {
                     {umpireType && umpireType !== "USERS" && (
                         <div>
                             <NavLink to={{
-                                pathname: "/liveScoreSettingsView",
+                                pathname: "/matchDaySettingsView",
                                 state: {
                                     selectedComp: this.state.selectedComp,
                                     screenName: "umpireDashboard",

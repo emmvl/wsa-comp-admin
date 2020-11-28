@@ -93,14 +93,14 @@ class LiveScoreNewsView extends Component {
         if (nextProps.newsState !== newsState) {
             if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading) {
                 if (newsState !== []) {
-                    history.push(this.state.id === 'dashboard' ? '/liveScoreDashboard' : './liveScoreNewsList');
-                    // history.push(this.state.id === "dashboard" && "/liveScoreDashboard")
+                    history.push(this.state.id === 'dashboard' ? '/matchDayDashboard' : './matchDayNewsList');
+                    // history.push(this.state.id === "dashboard" && "/matchDayDashboard")
                 }
             }
             if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading) {
                 if (this.props.liveScoreNewsState.deleteNews !== []) {
                     history.push({
-                        pathname: '/liveScoreNewsList',
+                        pathname: '/matchDayNewsList',
                         state: { screenKey: this.state.screenKey },
                     });
                 }
@@ -137,12 +137,12 @@ class LiveScoreNewsView extends Component {
         return (
             <Header className="comp-venue-courts-header-view live-form-view-button-header">
                 <div className="row">
-                    <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.newsDetail}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className="col-sm live-form-view-button-container d-flex justify-content-end">
                         <NavLink to={{
                             pathname: 'liveScoreAddNews',
                             state: { isEdit: true, item: this.state.newsItem, screenKey: this.state.screenKey },
@@ -167,7 +167,7 @@ class LiveScoreNewsView extends Component {
         const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={newsData ? newsData.title : history.push('/liveScoreCompetitions')} />
+                <InputWithHead heading={newsData ? newsData.title : history.push('/matchDayNewsList')} />
                 {(newsData && newsData.newsImage) && (
                     <img
                         style={{ cursor: 'pointer' }}
@@ -208,7 +208,7 @@ class LiveScoreNewsView extends Component {
     /// / this method called inside modal view function to show content of the modal
     innerViewOfModal() {
         return (
-            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="comp-dashboard-botton-view-mobile d-flex justify-content-center">
                 {this.state.isVideo
                     ? <ReactPlayer url={this.state.modaldata} playing={this.state.visible} controls />
                     : <img src={this.state.modaldata} height="250" width="250" />}
@@ -245,7 +245,7 @@ class LiveScoreNewsView extends Component {
                             <div className="reg-add-save-button">
                                 <span
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => history.push('/liveScoreNewsList')}
+                                    onClick={() => history.push('/matchDayNewsList')}
                                     className="input-heading-add-another"
                                 >
                                     {AppConstants.backToNews}
@@ -253,14 +253,11 @@ class LiveScoreNewsView extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div
-                                className="comp-buttons-view"
-                                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}
-                            >
+                            <div className="comp-buttons-view d-flex flex-row justify-content-end">
                                 {(newsDataArr && !newsDataArr.published_at)
-                                // <div style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 50, }}>
+                                // <div className="d-flex flex-row" style={{ paddingHorizontal: 50 }}>
                                 && (
-                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div className="d-flex flex-row">
                                         <Button
                                             className="open-reg-button mr-0"
                                             type="primary"
@@ -277,7 +274,7 @@ class LiveScoreNewsView extends Component {
                                 )
                                     // </div>
                                 }
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                <div className="d-flex flex-row">
                                     <Button
                                         className="open-reg-button"
                                         type="primary"
@@ -312,9 +309,9 @@ class LiveScoreNewsView extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push('./liveScoreCompetitions')}
+                    onMenuHeadingClick={() => history.push('./matchDayNewsList')}
                 />
                 {stateWideMsg
                     ? <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />

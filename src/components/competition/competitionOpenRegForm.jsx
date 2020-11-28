@@ -137,8 +137,8 @@ const divisionTableColumns = [
                     rules={[{ required: true, message: ValidationConstants.genderRestriction }]}
                 >
                     <Select
-                        className="division-age-select"
-                        style={{ width: '100%', minWidth: 120, }}
+                        className="division-age-select w-100"
+                        style={{ minWidth: 120 }}
                         onChange={genderRefId => this_Obj.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
                         value={genderRefId}
                         placeholder="Select"
@@ -187,8 +187,8 @@ const divisionTableColumns = [
             >
                 <DatePicker
                     size="default"
-                    className="comp-venue-time-datepicker"
-                    style={{ width: '100%', minWidth: 135 }}
+                    className="comp-venue-time-datepicker w-100"
+                    style={{ minWidth: 135 }}
                     onChange={date => this_Obj.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
                     format="DD-MM-YYYY"
                     placeholder="dd-mm-yyyy"
@@ -212,8 +212,8 @@ const divisionTableColumns = [
             >
                 <DatePicker
                     size="default"
-                    className="comp-venue-time-datepicker"
-                    style={{ width: '100%', minWidth: 135 }}
+                    className="comp-venue-time-datepicker w-100"
+                    style={{ minWidth: 135 }}
                     onChange={date => this_Obj.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
                     format="DD-MM-YYYY"
                     placeholder="dd-mm-yyyy"
@@ -230,7 +230,7 @@ const divisionTableColumns = [
         dataIndex: "clear",
         key: "clear",
         render: (clear, record, index) => (
-            <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: "pointer" }}>
+            <span className="d-flex justify-content-center w-100 pointer">
                 <img
                     className="dot-image"
                     src={AppImages.redCross}
@@ -362,14 +362,14 @@ class CompetitionOpenRegForm extends Component {
                     }
 
                     let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
-                    
+
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, yearRefId)
                     if (competitionStatus == 2) {
                         setOwn_competitionStatus(statusRefId)
                         setOwn_competition(competitionId)
                         setOwn_CompetitionFinalRefId(finalTypeRefId)
                     }
-                    
+
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
@@ -711,10 +711,6 @@ class CompetitionOpenRegForm extends Component {
         }
     }
 
-    onChange(checkedValues) {
-        // console.log("checked = ", checkedValues);
-    }
-
     divisionTableDataOnchange(checked, record, index, keyword) {
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword)
         this.setState({ divisionState: true })
@@ -726,32 +722,22 @@ class CompetitionOpenRegForm extends Component {
         }
     };
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
-                    <Breadcrumb separator="">
-                        <Breadcrumb.Item className="breadcrumb-add">
-                            {AppConstants.competitionDetails}
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div className="mt-n20">
-                        <CustomToolTip placement="top">
-                            <span>{AppConstants.compDetailsMsg}</span>
-                        </CustomToolTip>
-                    </div>
-                </Header>
-            </div>
-        );
-    };
+    headerView = () => (
+        <div className="header-view">
+            <Header className="form-header-view d-flex bg-transparent align-items-center">
+                <Breadcrumb separator="">
+                    <Breadcrumb.Item className="breadcrumb-add">
+                        {AppConstants.competitionDetails}
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+                <div className="mt-n20">
+                    <CustomToolTip placement="top">
+                        <span>{AppConstants.compDetailsMsg}</span>
+                    </CustomToolTip>
+                </div>
+            </Header>
+        </div>
+    );
 
     // year change and get competition lost
     onYearChange(yearId) {
@@ -782,7 +768,6 @@ class CompetitionOpenRegForm extends Component {
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, all_own_CompetitionArr } = this.props.appState
         return (
@@ -790,14 +775,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3 pb-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
                                 </span>
@@ -816,16 +794,7 @@ class CompetitionOpenRegForm extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    minWidth: 300,
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginRight: 50
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ minWidth: 300, marginRight: 50 }}>
                                 <span id={AppUniqueId.existing_comp_dropdown} className="year-select-heading">
                                     {AppConstants.competition}:
                                 </span>
@@ -909,10 +878,9 @@ class CompetitionOpenRegForm extends Component {
                     </div>
                     <div className="col-sm">
                         <DatePicker
-                            className="comp-dashboard-botton-view-mobile"
-                            size="large"
+                            className="comp-dashboard-botton-view-mobile w-100"
+                            // size="large"
                             placeholder="dd-mm-yyyy"
-                            style={{ width: '100%' }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -1037,14 +1005,11 @@ class CompetitionOpenRegForm extends Component {
                                 disabled={disabledStatus || compDetailDisable}
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
                             />
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", justifyContent: 'center', alignItems: 'flex-start', flexDirection: "column", }}
-                        >
+                        <div className="col-sm d-flex justify-content-center align-items-start flex-column">
                             {defaultCompFeesOrgLogo !== null && (
                                 <Checkbox
                                     className="single-checkbox"
@@ -1093,7 +1058,8 @@ class CompetitionOpenRegForm extends Component {
                         <Select
                             id={AppUniqueId.select_Venues}
                             mode="multiple"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={venueSelection => {
                                 this.onSelectValues(venueSelection, detailsData)
                             }}
@@ -1180,7 +1146,7 @@ class CompetitionOpenRegForm extends Component {
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
                                     size="default"
-                                    style={{ width: '100%' }}
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date, "startDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1197,7 +1163,7 @@ class CompetitionOpenRegForm extends Component {
                             >
                                 <DatePicker
                                     size="default"
-                                    style={{ width: '100%' }}
+                                    className="w-100"
                                     onChange={date => this.dateOnChangeFrom(date, "endDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1214,7 +1180,8 @@ class CompetitionOpenRegForm extends Component {
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field pb-1" />
                         <Form.Item name="numberOfRounds" rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectRound}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
                                 value={detailsData.competitionDetailData.noOfRounds}
@@ -1442,7 +1409,7 @@ class CompetitionOpenRegForm extends Component {
                             {this.state.competitionStatus == 1 && tabKey == "2" ? (
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() => this.setState({ tooltipVisiblePublish: true })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}
@@ -1458,7 +1425,7 @@ class CompetitionOpenRegForm extends Component {
                                                 statusRefId: tabKey == "2" ? 2 : 1,
                                                 buttonPressed: tabKey == "2" ? "publish" : "next"
                                             })}
-                                            style={{ width: 92.5, }}
+                                            style={{ width: 92.5 }}
                                         >
                                             {tabKey === "2" ? AppConstants.save : AppConstants.next}
                                         </Button>
@@ -1478,7 +1445,7 @@ class CompetitionOpenRegForm extends Component {
                             ) : (
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: '100%' }}
+                                        className="h-100"
                                         onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}

@@ -35,13 +35,11 @@ function checkSorting(a, b, key) {
 }
 
 function getFirstName(incidentPlayers) {
-    let firstName = incidentPlayers ? incidentPlayers[0].player.firstName : ""
-    return firstName
+    return incidentPlayers ? incidentPlayers[0].player.firstName : ""
 }
 
 function getLastName(incidentPlayers) {
-    let lastName = incidentPlayers ? incidentPlayers[0].player.lastName : ""
-    return lastName
+    return incidentPlayers ? incidentPlayers[0].player.lastName : ""
 }
 
 function setMatchResult(record) {
@@ -57,8 +55,8 @@ function setMatchResult(record) {
         return record.team1Score + " : " + record.team2Score
     }
 }
-function getVenueName(data) {
 
+function getVenueName(data) {
     let venue_name = ""
     if (data.venue.shortName) {
         venue_name = data.venue.shortName + " - " + data.name
@@ -72,18 +70,13 @@ function getVenueName(data) {
 function getTeamName(data) {
     if (data.player) {
         if (data.player.team) {
-
             return data.player.team.name
         } else {
-
             return ''
         }
     } else {
-
         return ''
     }
-
-
 }
 
 function getAssociationName(data) {
@@ -91,18 +84,13 @@ function getAssociationName(data) {
         if (data.player.team) {
             if (data.player.team.competitionOrganisation) {
                 return data.player.team.competitionOrganisation.name
-
             } else {
-
                 return ''
             }
-
         } else {
-
             return ''
         }
     } else {
-
         return ''
     }
 }
@@ -113,14 +101,12 @@ const columnActiveNews = [
         dataIndex: 'title',
         key: 'title',
         sorter: (a, b) => tableSort(a, b, "title")
-
     },
     {
         title: 'Author',
         dataIndex: 'author',
         key: 'author',
         sorter: (a, b) => tableSort(a, b, "author")
-
     },
     {
         title: 'Expiry',
@@ -129,47 +115,35 @@ const columnActiveNews = [
         sorter: (a, b) => tableSort(a, b, "news_expire_date"),
         render: (news_expire_date) =>
             <span>{news_expire_date && liveScore_formateDate(news_expire_date)}</span>
-
     },
     {
         title: 'Recipients',
         dataIndex: 'recipients',
         key: 'recipients',
         sorter: (a, b) => tableSort(a, b, 'recipients'),
-
     },
     {
         title: "Published",
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
-
-        render: isActive =>
-            <span>{isActive == 1 ? "Yes" : "NO"}</span>
+        render: isActive => <span>{isActive == 1 ? "Yes" : "NO"}</span>
     },
     {
         title: "Published Date",
         dataIndex: 'published_at',
         key: 'published_at',
         sorter: (a, b) => tableSort(a, b, 'published_at'),
-        render: (published_at) =>
-            <span>{published_at && liveScore_formateDate(published_at)}</span>
-
-
-
+        render: (published_at) => <span>{published_at && liveScore_formateDate(published_at)}</span>
     },
     {
         title: "Notification",
         dataIndex: 'isNotification',
         key: 'isNotification',
         sorter: (a, b) => tableSort(a, b, 'isNotification'),
-        render: (isNotification) =>
-            <span>
-                {isNotification == 0 ? 'No' : 'Yes'}
-            </span>
+        render: (isNotification) => <span>{isNotification == 0 ? 'No' : 'Yes'}</span>
     }
 ];
-
 
 const columnsTodaysMatch = [
     {
@@ -178,7 +152,7 @@ const columnsTodaysMatch = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id, key: 'dashboard' }
         }}>
             <span className="input-heading-add-another pt-0" >{id}</span>
@@ -189,33 +163,29 @@ const columnsTodaysMatch = [
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, 'startTime'),
-        render: (startTime) =>
-            <span >{liveScore_formateDateTime(startTime)}</span>
-
+        render: (startTime) => <span>{liveScore_formateDateTime(startTime)}</span>
     },
-
     {
         title: 'Home',
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
-        render: (team1, record) =>
+        render: (team1) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
-
     },
     {
         title: 'Away',
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
-        render: (team2, record) =>
+        render: (team2) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0" >{team2.name}</span>
@@ -226,16 +196,14 @@ const columnsTodaysMatch = [
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
-        render: (venueCourt, record) => <span>{getVenueName(venueCourt)}</span>
-
+        render: (venueCourt) => <span>{getVenueName(venueCourt)}</span>
     },
     {
         title: "Div",
         dataIndex: 'division',
         key: 'division',
         sorter: (a, b, division) => checkSorting(a, b, division.name),
-        render: (division) =>
-            <span >{division.name}</span>
+        render: (division) => <span>{division.name}</span>
     },
     {
         title: "Score",
@@ -244,16 +212,15 @@ const columnsTodaysMatch = [
         sorter: (a, b, score) => checkSorting(a, b, score),
         render: (score, records) =>
             <NavLink to={{
-                pathname: '/liveScoreMatchDetails',
+                pathname: '/matchDayMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }}><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+            }}><span className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b, umpires) => checkSorting(a, b, umpires),
         render: (umpires) =>
-
             isArrayNotEmpty(umpires) && umpires.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
                     // className="desc-text-style side-bar-profile-data"
@@ -274,23 +241,23 @@ const columnsTodaysMatch = [
         key: 'scorer2Status',
         sorter: (a, b, scorer2Status) => checkSorting(a, b, scorer2Status),
         render: (scorer2Status, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
+            <span>{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
     },
     {
         title: "Player Att. Team A",
         dataIndex: 'teamAttendanceCountA',
         key: 'teamAttendanceCountA',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
-        render: (teamAttendanceCountA, record) =>
-            <span >{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
+        render: (teamAttendanceCountA) =>
+            <span>{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
         title: "Player Att. Team B",
         dataIndex: 'teamAttendanceCountB',
         key: 'teamAttendanceCountB',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
-        render: (teamAttendanceCountB, record) =>
-            <span >{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
+        render: (teamAttendanceCountB) =>
+            <span>{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
         title: "Status",
@@ -298,20 +265,18 @@ const columnsTodaysMatch = [
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
         render: (matchStatus, record) =>
-            <span >{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
+            <span>{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
     },
-
-
 ];
 
 const columnsTodaysMatch_1 = [
     {
-        title: <span nowrap className="column-width-style" >{"Match ID"} </span>,
+        title: <span className="column-width-style" >{"Match ID"} </span>,
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id, key: 'dashboard' }
         }}>
             <span className="input-heading-add-another pt-0" >{id}</span>
@@ -323,10 +288,8 @@ const columnsTodaysMatch_1 = [
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, 'startTime'),
         render: (startTime) =>
-            <span nowrap className="column-width-style" >{liveScore_formateDateTime(startTime)}</span>
-
+            <span className="column-width-style">{liveScore_formateDateTime(startTime)}</span>
     },
-
     {
         title: 'Home',
         dataIndex: 'team1',
@@ -334,12 +297,11 @@ const columnsTodaysMatch_1 = [
         sorter: (a, b) => tableSort(a, b, 'team1'),
         render: (team1, record) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }}>
-                <span className="input-heading-add-another pt-0" >{team1.name}</span>
+                <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
-
     },
     {
         title: 'Away',
@@ -348,10 +310,10 @@ const columnsTodaysMatch_1 = [
         sorter: (a, b) => tableSort(a, b, 'team2'),
         render: (team2, record) =>
             <NavLink to={{
-                pathname: '/liveScoreTeamView',
+                pathname: '/matchDayTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }}>
-                <span className="input-heading-add-another pt-0" >{team2.name}</span>
+                <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
     },
     {
@@ -359,7 +321,7 @@ const columnsTodaysMatch_1 = [
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
-        render: (venueCourt, record) => <span nowrap className="column-width-style">{getVenueName(venueCourt)}</span>
+        render: (venueCourt) => <span className="column-width-style">{getVenueName(venueCourt)}</span>
 
     },
     {
@@ -367,8 +329,7 @@ const columnsTodaysMatch_1 = [
         dataIndex: 'division',
         key: 'division',
         sorter: (a, b, division) => checkSorting(a, b, division.name),
-        render: (division) =>
-            <span >{division.name}</span>
+        render: (division) => <span>{division.name}</span>
     },
     {
         title: "Score",
@@ -377,46 +338,49 @@ const columnsTodaysMatch_1 = [
         sorter: (a, b, score) => checkSorting(a, b, score),
         render: (score, records) =>
             <NavLink to={{
-                pathname: '/liveScoreMatchDetails',
+                pathname: '/matchDayMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }}><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+            }}>
+                <span className="input-heading-add-another pt-0">{setMatchResult(records)}</span>
+            </NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b, umpires) => checkSorting(a, b, umpires),
         render: (umpires, record) =>
-
             isArrayNotEmpty(umpires) && umpires.map((item, index) => (
-                <span key={record.id + index} style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
+                <span
+                    key={record.id + index}
+                    style={{ color: '#ff8237', cursor: 'pointer' }}
+                    onClick={() => this_obj.umpireName(item)}
                     // className="desc-text-style side-bar-profile-data"
-                      className='multi-column-text-aligned'
-                >{item.umpireName}</span>
+                    className="multi-column-text-aligned"
+                >
+                    {item.umpireName}
+                </span>
             ))
     }, {
-        title: <span nowrap className="column-width-style" >{"Scorer 1"} </span>,
+        title: <span className="column-width-style">Scorer 1</span>,
         dataIndex: 'scorer1Status',
         key: 'scorer1Status',
         sorter: (a, b) => tableSort(a, b, "scorer1Status"),
         render: (scorer1Status) =>
             <span>{scorer1Status ? scorer1Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
-
     },
     {
-        title: <span nowrap className="column-width-style" >{"Player Att. Team A"} </span>,
+        title: <span className="column-width-style">Player Att. Team A</span>,
         dataIndex: 'teamAttendanceCountA',
         key: 'teamAttendanceCountA',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
-        render: (teamAttendanceCountA, record) =>
-            <span >{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
+        render: (teamAttendanceCountA) => <span>{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
-        title: <span nowrap className="column-width-style" >{"Player Att. Team B"} </span>,
+        title: <span className="column-width-style">Player Att. Team B</span>,
         dataIndex: 'teamAttendanceCountB',
         key: 'teamAttendanceCountB',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
-        render: (teamAttendanceCountB, record) =>
-            <span >{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
+        render: (teamAttendanceCountB) => <span>{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
         title: "Status",
@@ -424,12 +388,9 @@ const columnsTodaysMatch_1 = [
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
         render: (matchStatus, record) =>
-            <span >{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
+            <span>{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
     },
-
-
 ];
-
 
 const columnsTodaysIncient = [
     {
@@ -439,7 +400,7 @@ const columnsTodaysIncient = [
         sorter: (a, b) => tableSort(a, b, 'incidentTime'),
         render: (incidentTime, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record, screenName: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0">{liveScore_MatchFormate(incidentTime)}</span>
@@ -457,11 +418,9 @@ const columnsTodaysIncient = [
         key: 'First Name',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
         render: (incidentPlayers, record) =>
-
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
             ))
-
     },
     {
         title: 'Last Name',
@@ -480,9 +439,8 @@ const columnsTodaysIncient = [
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
         render: (incidentPlayers, record) =>
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-
                 // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
+                //     pathname: '/matchDayPlayerView',
                 //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
                 // }}>
                 <span className="desc-text-style side-bar-profile-data" >{getAssociationName(item)}</span>
@@ -505,12 +463,11 @@ const columnsTodaysIncient = [
                 <>
                     {
                         isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-
                             item.player ? item.player.team ? item.player.team.deleted_at ?
                                 <span className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
                                 :
                                 <NavLink to={{
-                                    pathname: '/liveScoreTeamView',
+                                    pathname: '/matchDayTeamView',
                                     state: { tableRecord: record, screenName: 'liveScoreDashboard' }
                                 }}>
                                     <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
@@ -590,7 +547,6 @@ const playerTopay = [
     }
 ]
 
-
 class LiveScoreDashboard extends Component {
     constructor(props) {
         super(props);
@@ -604,15 +560,13 @@ class LiveScoreDashboard extends Component {
     componentDidMount() {
         let competitionID = getCompetitonId()
         let startDay = this.getStartofDay()
-
         let currentTime = moment.utc().format()
 
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
-
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
@@ -622,19 +576,18 @@ class LiveScoreDashboard extends Component {
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
+            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/matchDayDashboard" })
         }
     }
 
     umpireName(item) {
         if (item.userId) {
-            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
+            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/matchDayDashboard" })
         } else {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         }
     }
-
 
     getStartofDay() {
         var start = new Date();
@@ -655,7 +608,8 @@ class LiveScoreDashboard extends Component {
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardIncidentList" + record.id + index} />
+                        rowKey={(record, index) => "dashboardIncidentList" + record.id + index}
+                    />
                 </div>
             </div>
         )
@@ -667,10 +621,9 @@ class LiveScoreDashboard extends Component {
     //             <div className="col-sm">
     //                 <span className="home-dash-left-text">{AppConstants.todaysMatch}</span>
     //             </div>
-
     //             <div className="col-sm text-right">
     //                 <NavLink to={{
-    //                     pathname: '/liveScoreAddMatch',
+    //                     pathname: '/matchDayAddMatch',
     //                     state: { key: 'dashboard' }
     //                 }}>
     //                     <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
@@ -683,7 +636,7 @@ class LiveScoreDashboard extends Component {
     matchHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="col-sm d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.todaysMatch}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -695,17 +648,8 @@ class LiveScoreDashboard extends Component {
                 <div className="col-sm text-right">
                     <div className="row">
                         <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
-                                <NavLink to="/liveScoreBulkChange">
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                <NavLink to="/matchDayBulkChange">
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.bulkMatchChange}
                                     </Button>
@@ -713,51 +657,30 @@ class LiveScoreDashboard extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end"
-                                }}
-                            >
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <NavLink to={{
-                                    pathname: '/liveScoreVenueChange',
+                                    pathname: '/matchDayVenueChange',
                                     state: { key: 'dashboard' }
                                 }}>
                                     <Button className="primary-add-comp-form" type="primary">
                                         {AppConstants.courtChange}
                                     </Button>
                                 </NavLink>
-
-
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end"
-                                }}
-                            >
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <NavLink to={{
-                                    pathname: '/liveScoreAddMatch',
+                                    pathname: '/matchDayAddMatch',
                                     state: { key: 'dashboard' }
                                 }}>
-                                    <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
+                                    <Button className="primary-add-comp-form" type="primary">+ {AppConstants.addNew}</Button>
                                 </NavLink>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         )
     }
 
@@ -771,12 +694,14 @@ class LiveScoreDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 {this.matchHeading()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreDashboardState.onLoad}
-                           className="home-dashboard-table"
-                           columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
-                           dataSource={dashboardMatchList}
-                           pagination={false}
-                           rowKey={(record, index) => "dashboardMatchList" + record.id + index} />
+                    <Table
+                        loading={this.props.liveScoreDashboardState.onLoad}
+                        className="home-dashboard-table"
+                        columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
+                        dataSource={dashboardMatchList}
+                        pagination={false}
+                        rowKey={(record, index) => "dashboardMatchList" + record.id + index}
+                    />
                 </div>
             </div>
         )
@@ -785,7 +710,7 @@ class LiveScoreDashboard extends Component {
     incidentHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="col-sm mb-3 d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.todaysIncidents}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -796,7 +721,7 @@ class LiveScoreDashboard extends Component {
 
                 {/* <div className="col-sm text-right">
                     <NavLink to={{
-                        pathname: './liveScoreAddIncident',
+                        pathname: './matchDayAddIncident',
                         state: { key: 'dashboard' }
                     }}>
                         <Button className='primary-add-comp-form' type='primary'>
@@ -811,7 +736,7 @@ class LiveScoreDashboard extends Component {
     addNewsHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="col-sm d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.activeNews}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -820,10 +745,13 @@ class LiveScoreDashboard extends Component {
                     </div>
                 </div>
                 <div className="col-sm text-right">
-                    <NavLink to={{
-                        pathname: '/liveScoreAddNews',
-                        state: { key: 'dashboard', item: null }
-                    }} className="text-decoration-none">
+                    <NavLink
+                        to={{
+                            pathname: '/matchDayAddNews',
+                            state: { key: 'dashboard', item: null }
+                        }}
+                        className="text-decoration-none"
+                    >
                         <Button className="primary-add-comp-form" type="primary">
                             + {AppConstants.addNew}
                         </Button>
@@ -856,7 +784,7 @@ class LiveScoreDashboard extends Component {
     playersToPayHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="col-sm mb-3 d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.playersToPay}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -875,12 +803,13 @@ class LiveScoreDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreDashboardState.onLoad}
-                           className="home-dashboard-table"
-                           columns={columnsPlayersToPay}
-                           dataSource={playerTopay}
-                           pagination={false}
-                           rowKey={(record, index) => "playerTopay" + record.id + index}
+                    <Table
+                        loading={this.props.liveScoreDashboardState.onLoad}
+                        className="home-dashboard-table"
+                        columns={columnsPlayersToPay}
+                        dataSource={playerTopay}
+                        pagination={false}
+                        rowKey={(record, index) => "playerTopay" + record.id + index}
                     />
                 </div>
             </div>
@@ -890,22 +819,17 @@ class LiveScoreDashboard extends Component {
     // buttons
     btnView = () => {
         return (
-
             // <div className="footer-view">
-
-
             <div className="col-sm pt-4">
-                <div className="row" >
+                <div className="row">
                     <div className=" live-score-edit-match-buttons">
-                        <Button className='primary-add-comp-form' type='primary'>{AppConstants.publish}</Button>
-                    </div>
-
-
-                    <div className=" live-score-edit-match-buttons ml-3">
-                        <Button className='primary-add-comp-form' type='primary'>{AppConstants.publish_notify}</Button>
+                        <Button className="primary-add-comp-form" type="primary">{AppConstants.publish}</Button>
                     </div>
                     <div className=" live-score-edit-match-buttons ml-3">
-                        <Button className='primary-add-comp-form' type='primary'>{AppConstants.saveAsDraft}</Button>
+                        <Button className="primary-add-comp-form" type="primary">{AppConstants.publish_notify}</Button>
+                    </div>
+                    <div className=" live-score-edit-match-buttons ml-3">
+                        <Button className="primary-add-comp-form" type="primary">{AppConstants.saveAsDraft}</Button>
                     </div>
                 </div>
             </div>
@@ -915,8 +839,8 @@ class LiveScoreDashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+            <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
                     <Content>

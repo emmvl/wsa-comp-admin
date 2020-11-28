@@ -14,6 +14,7 @@ import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } fro
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
 
@@ -56,7 +57,7 @@ const columns = [
         onHeaderCell: () => listeners('teamName'),
         render: (name, record) => teamListData(record.id) ?
             <NavLink to={{
-                pathname: "/liveScoreTeamView",
+                pathname: "/matchDayTeamView",
                 state: { tableRecord: record, screenName: 'fromTeamList' }
             }}>
                 <span className="input-heading-add-another pt-0">{record.name}</span>
@@ -145,14 +146,16 @@ class LiveScoreTeam extends Component {
             sortBy: null,
             sortOrder: null,
             sourceIdAvailable: false,
+            liveScoreCompIsParent: false
         };
         this_Obj = this
     }
 
     componentDidMount() {
+        this.setLivScoreCompIsParent()
         let { livescoreTeamActionObject } = this.props.liveScoreTeamState
         if (getLiveScoreCompetiton()) {
-            const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
+            const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
             if (id !== null) {
                 if (livescoreTeamActionObject) {
@@ -161,16 +164,22 @@ class LiveScoreTeam extends Component {
                     let sortBy = livescoreTeamActionObject.sortBy
                     let sortOrder = livescoreTeamActionObject.sortOrder
                     this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder)
+                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, competitionOrganisation.id)
                 } else {
-                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
+                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, competitionOrganisation.id)
                 }
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         } else {
-            history.push("/liveScoreCompetitions")
+            history.push("/matchDayCompetitions")
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     /// Handle Page change
@@ -208,7 +217,8 @@ class LiveScoreTeam extends Component {
 
     // on Export
     onExport = () => {
-        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}`
+        const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}&organisationId=${competitionOrganisation.id} `
         this.props.exportFilesAction(url)
     }
 
@@ -225,31 +235,21 @@ class LiveScoreTeam extends Component {
         history.push('/competitionPartTeamGradeCalculate');
     }
 
-    ///////view for breadcrumb
     headerView = () => {
-        let { sourceIdAvailable } = this.state
+        let { sourceIdAvailable, liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm pt-1 d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamList}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
                         <div className="row">
                             {sourceIdAvailable && (
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             type="primary"
                                             className="primary-add-comp-form"
@@ -261,19 +261,10 @@ class LiveScoreTeam extends Component {
                                 </div>
                             )}
 
-                            {!sourceIdAvailable && (
+                            {liveScoreCompIsParent == true && !sourceIdAvailable && (
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
-                                        <NavLink to="/liveScoreAddTeam">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to="/matchDayAddTeam">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addTeam}
                                             </Button>
@@ -283,16 +274,7 @@ class LiveScoreTeam extends Component {
                             )}
 
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -308,19 +290,10 @@ class LiveScoreTeam extends Component {
                                 </div>
                             </div>
 
-                            {!sourceIdAvailable && (
+                            {liveScoreCompIsParent == true && !sourceIdAvailable && (
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <NavLink to="/liveScoreTeamImport">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to="/matchDayTeamImport">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
@@ -342,7 +315,7 @@ class LiveScoreTeam extends Component {
                 </div>
                 {/* search box */}
 
-                <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                <div className="col-sm pt-5 ml-3 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -400,9 +373,9 @@ class LiveScoreTeam extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="3" />

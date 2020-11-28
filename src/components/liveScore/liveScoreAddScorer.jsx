@@ -73,7 +73,7 @@ class LiveScoreAddScorer extends Component {
 
             this.formRef = React.createRef();
         } else {
-            history.push('/liveScoreCompetitions');
+            history.push('/matchDayCompetitions');
         }
     }
 
@@ -113,19 +113,11 @@ class LiveScoreAddScorer extends Component {
         })
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
@@ -192,7 +184,7 @@ class LiveScoreAddScorer extends Component {
                                     mode="multiple"
                                     showSearch
                                     placeholder={AppConstants.selectTeam}
-                                    style={{ width: '100%', }}
+                                    className="w-100"
                                     onChange={(teamId) => this.props.liveScoreScorerUpdate(teamId, "teamId")}
                                     // value={teamId}
                                 >
@@ -319,7 +311,7 @@ class LiveScoreAddScorer extends Component {
                                 loading={this.props.liveScoreTeamState.onLoad && true}
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: '100%', }}
+                                className="w-100"
                                 onChange={(teamId) => this.props.liveScoreScorerUpdate(teamId, "teamId")}
                                 value={teamId}
                             >
@@ -353,7 +345,7 @@ class LiveScoreAddScorer extends Component {
                         {/* <Radio value="new">{AppConstants.new}</Radio>
                         <Radio value="existing">{AppConstants.existing}</Radio> */}
 
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
                             <div className="mt-n10 ml-n10 width-50">
                                 <Tooltip>
@@ -362,7 +354,7 @@ class LiveScoreAddScorer extends Component {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
+                        <div className="d-flex align-items-center ml-n10">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
@@ -411,7 +403,6 @@ class LiveScoreAddScorer extends Component {
         )
     }
 
-    //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
@@ -419,8 +410,8 @@ class LiveScoreAddScorer extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <NavLink to='/liveScorerList'>
-                                    <Button className="cancelBtnWidth" onClick={() => history.push('/liveScorerList')} type="cancel-button">
+                                <NavLink to='/matchDayScorerList'>
+                                    <Button className="cancelBtnWidth" onClick={() => history.push('/matchDayScorerList')} type="cancel-button">
                                         {AppConstants.cancel}
                                     </Button>
                                 </NavLink>
@@ -474,9 +465,9 @@ class LiveScoreAddScorer extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Loader visible={this.props.liveScoreScorerState.onLoad} />

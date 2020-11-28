@@ -107,8 +107,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         </div>
                     ),
                     render: (lat, record, index) => (
-                        // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: index > 0 ? 0 : 150 }}>
-                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                        // <div className="d-flex flex-row align-items-center" style={{ height: index > 0 ? 0 : 150 }}>
+                        <div className="d-flex flex-row align-items-center">
                             <Form.Item
                                 name={`lat${index}`}
                                 rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
@@ -136,7 +136,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         </div>
                     ),
                     render: (lng, record, index) => (
-                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                        <div className="d-flex flex-row align-items-center">
                             <Form.Item name={`lng${index}`} rules={[{ required: true, message: ValidationConstants.courtField[2] }]}>
                                 <Input
                                     className="input-inside-table-venue-court"
@@ -163,7 +163,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         </div>
                     ),
                     render: (overideSlot, record, index) => (
-                        // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                        // <div className="d-flex flex-row align-items-center">
                         <Checkbox
                             className="single-checkbox mt-1 d-flex justify-content-center"
                             defaultChecked={overideSlot}
@@ -177,7 +177,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: 'pointer' }}>
+                        <span className="w-100 d-flex justify-content-center pointer">
                             <img
                                 className="dot-image"
                                 src={AppImages.redCross}
@@ -367,15 +367,11 @@ class CompetitionVenueAndTimesAdd extends Component {
             this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, key1, key2)
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-venue-courts-header-view">
                 <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: "flex", alignContent: "center" }}
-                    >
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">
                                 {AppConstants.venueAndTimes}
@@ -663,7 +659,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         const { gameDays } = this.props.venueTimeState.venuData
         return (
             <div className="fees-view pt-5">
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                <div className="d-flex flex-row align-items-center">
                     <span className="form-heading">
                         {AppConstants.game_Days}
                         <span className="required-field" style={{ fontSize: "14px" }} />
@@ -777,8 +773,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         let venueCourts = [...this.props.venueTimeState.venuData.venueCourts];
         return (
             <div className="fees-view pt-5">
-                <div style={{ display: 'flex' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
+                <div className="d-flex">
+                    <div className="d-flex flex-row align-items-center justify-content-center">
                         <span className="form-heading">
                             {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }} />
                         </span>
@@ -788,7 +784,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             </Tooltip>
                         </div>
                     </div>
-                    <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
+                    <Button className="primary-add-comp-form ml-auto" type="primary">
                         <div className="row">
                             <div className="col-sm">
                                 <label htmlFor="venueCourtUpload" className="csv-reader">
@@ -902,7 +898,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
                                 <Button
                                     className="publish-button"

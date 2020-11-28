@@ -8,6 +8,7 @@ import AppConstants from "../../themes/appConstants";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+
 const columns = [
     {
         title: 'Court Numbers',
@@ -20,42 +21,35 @@ const columns = [
         dataIndex: 'longitude',
         key: 'longitude',
         render: longitude => <Input className="input-inside-table-venue-court" value={longitude} />,
-
     },
     {
         title: 'Latitude',
         dataIndex: 'latitude',
         key: 'latitude',
         render: latitude => <Input className="input-inside-table-venue-court" value={latitude} />,
-
     },
-
 ];
+
 const data = [
     {
         key: '1',
         courtNumbers: "1",
         longitude: "123456788",
         latitude: "9874563121",
-
     },
     {
         key: '2',
         courtNumbers: "2",
         longitude: "123456788",
         latitude: "9874563121",
-
     },
     {
         key: '3',
         courtNumbers: "3",
         longitude: "123456788",
         latitude: "9874563121",
-
     },
-
 ];
-
 
 class CompetitionVenueAndCourts extends Component {
     constructor(props) {
@@ -73,11 +67,8 @@ class CompetitionVenueAndCourts extends Component {
         });
     };
 
-
-    ///////view for breadcrumb
     headerView = () => {
         return (
-
             <Header className="comp-venue-courts-header-view">
                 <div className="row">
                     <div className="col-sm d-flex align-content-center">
@@ -85,16 +76,11 @@ class CompetitionVenueAndCourts extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Step_3}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-
                 </div>
-
             </Header>
-
-
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
@@ -114,13 +100,7 @@ class CompetitionVenueAndCourts extends Component {
                             </div>
                         </div>
                         <div className="col-sm-2">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50
-                            }}>
+                            <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
@@ -165,7 +145,7 @@ class CompetitionVenueAndCourts extends Component {
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
                                 <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
                             </div>
@@ -175,7 +155,6 @@ class CompetitionVenueAndCourts extends Component {
             </div>
         )
     }
-
 
     render() {
         return (
@@ -197,8 +176,8 @@ class CompetitionVenueAndCourts extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 export default CompetitionVenueAndCourts;

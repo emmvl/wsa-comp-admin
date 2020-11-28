@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { getRefBadgeData } from '../../store/actions/appAction'
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
@@ -136,6 +137,15 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
+        title: 'Accreditation',
+        dataIndex: 'accreditationLevelUmpireRefId',
+        key: 'accreditationLevelUmpireRefId',
+        sorter: false,
+        render: (accreditationLevelUmpireRefId, record) => (
+            <span>{this_obj.checkAccreditationLevel(accreditationLevelUmpireRefId)}</span>
+        )
+    },
+    {
         title: "Organisation",
         dataIndex: "linkedEntity",
         key: "linkedEntity",
@@ -234,8 +244,7 @@ class Umpire extends Component {
         this_obj = this;
     }
 
-    async  componentDidMount() {
-
+    async componentDidMount() {
         const { umpireListActionObject } = this.props.umpireState
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
@@ -250,12 +259,10 @@ class Umpire extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
+        this.props.getRefBadgeData(this.props.appstate.accreditation)
     }
 
     componentDidUpdate(nextProps) {
-
-
-
         const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
@@ -320,6 +327,19 @@ class Umpire extends Component {
         }
     }
 
+    checkAccreditationLevel = (accreditation) => {
+        if (this.props.appstate.accreditation) {
+            let accreditationArr = this.props.appstate.accreditation
+            for (let i in accreditationArr) {
+                if (accreditationArr[i].id == accreditation) {
+                    return accreditationArr[i].description
+                }
+            }
+
+        }
+        return ""
+    }
+
     handlePageChange = (page) => {
         const { sortBy, sortOrder } = this.state;
         let offset = page ? 10 * (page - 1) : 0;
@@ -355,16 +375,7 @@ class Umpire extends Component {
                 </div>
 
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                        }}
-                    />
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -476,34 +487,16 @@ class Umpire extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm pt-1 d-flex align-content-center">
                             <span className="form-heading">
                                 {AppConstants.umpireList}
                             </span>
                         </div>
 
-                        <div
-                            className="col-sm-8"
-                            style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                width: '100%',
-                            }}
-                        >
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/addUmpire" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addUmpire}
@@ -513,16 +506,7 @@ class Umpire extends Component {
                                 </div>
 
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
                                             className="primary-add-comp-form"
                                             type="primary"
@@ -543,16 +527,7 @@ class Umpire extends Component {
                                 </div>
 
                                 <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: '100%',
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink
                                             className="text-decoration-none"
                                             to={{
@@ -579,16 +554,8 @@ class Umpire extends Component {
                         </div>
                     </div>
 
-                    <div className="mt-5" style={{ display: "flex", justifyContent: "space-between" }}>
-                        <div
-                            style={{
-                                width: "fit-content",
-                                marginRight: 50,
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                            }}
-                        >
+                    <div className="mt-5 d-flex justify-content-between">
+                        <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                             <span className="year-select-heading">{AppConstants.competition}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -649,6 +616,7 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         umpireMainListAction,
         userExportFilesAction,
+        getRefBadgeData
     }, dispatch);
 }
 
@@ -656,6 +624,7 @@ function mapStateToProps(state) {
     return {
         umpireState: state.UmpireState,
         umpireCompetitionState: state.UmpireCompetitionState,
+        appstate: state.AppState
     };
 }
 

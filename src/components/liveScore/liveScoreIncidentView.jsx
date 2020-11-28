@@ -24,10 +24,18 @@ class LiveScoreIncidentView extends Component {
             visible: false,
             modaldata: '',
             isVideo: false,
-            incidentItem: props.location.state.item,
+            incidentItem: props.location.state ? props.location.state.item : null,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
         };
+    }
+
+    componentDidMount() {
+        let incidentData = this.props.location.state ? this.props.location.state.item : null
+        console.log(incidentData, 'incidentData')
+        if (!incidentData) {
+            history.push('/matchDayIncidentList')
+        }
     }
 
     ////method to show modal view after click
@@ -55,7 +63,6 @@ class LiveScoreIncidentView extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <Header className="comp-venue-courts-header-view live-form-view-button-header">
@@ -65,9 +72,9 @@ class LiveScoreIncidentView extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidentDetails}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="col-sm live-form-view-button-container d-flex justify-content-end">
                         <NavLink to={{
-                            pathname: '/liveScoreAddIncident',
+                            pathname: '/matchDayAddIncident',
                             state: { isEdit: true, tableRecord: this.state.incidentItem, umpireKey: this.state.umpireKey }
                         }}>
                             <Button className="primary-add-comp-form" type="primary">
@@ -80,18 +87,16 @@ class LiveScoreIncidentView extends Component {
         )
     }
 
-
     //// this method called insside modal view function to show content of the modal
     innerViewOfModal() {
         return (
-            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} onClick={this.showModal}>
+            <div className="comp-dashboard-botton-view-mobile d-flex justify-content-center" onClick={this.showModal}>
                 {
                     this.state.isVideo ?
                         <ReactPlayer playing={this.state.visible} url={this.state.modaldata} controls />
                         :
                         <img src={this.state.modaldata} height='250' width='250' />
                 }
-
             </div>
         )
     }
@@ -121,32 +126,29 @@ class LiveScoreIncidentView extends Component {
                 <div className="col-sm">
                     <div><span className="year-select-heading">Incident Data</span></div>
                     <div className="pt-2">
-                        <span className="side-bar-profile-data">{liveScore_formateDate(DATA.incidentTime)}</span>
+                        <span className="side-bar-profile-data">{DATA && liveScore_formateDate(DATA.incidentTime)}</span>
                     </div>
                 </div>
 
                 <div className="col-sm">
                     <div><span className="year-select-heading">Time</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{getTime(DATA.incidentTime)}</span>
-                    </div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA && getTime(DATA.incidentTime)}</span></div>
                 </div>
                 <div className="col-sm">
                     <div><span className="year-select-heading">Match Id</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.matchId}</span>
-                    </div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA && DATA.matchId}</span></div>
                 </div>
                 <div className="col-sm">
                     <div><span className="year-select-heading">Incident Type</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{DATA.incidentType.name}</span>
-                    </div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{DATA && DATA.incidentType.name}</span></div>
                 </div>
             </div>
         )
     }
 
     mediaView = () => {
-        let array = this.state.incidentItem.incidentPlayers
-        let mediaPlayer = isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : []
+        let array = this.state.incidentItem ? this.state.incidentItem.incidentPlayers : []
+        let mediaPlayer = this.state.incidentItem ? isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : [] : []
 
         return (
             <div className="col-sm pt-3 pb-3 mt-5">
@@ -195,9 +197,9 @@ class LiveScoreIncidentView extends Component {
                                 return <div className="side-bar-profile-data">
                                     {
                                         res === "video" ?
-                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
+                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
                                             :
-                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
+                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
                                     }
                                 </div>
                             })}
@@ -216,7 +218,7 @@ class LiveScoreIncidentView extends Component {
                     this.state.umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                        <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 }
 
                 {

@@ -9,7 +9,7 @@ import {
     DatePicker,
     Radio, Form, Modal
 } from "antd";
- import "./product.scss";
+import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -661,19 +661,11 @@ class AppRegistrationForm extends Component {
         this.props.saveEndUserRegistrationAction(formData);
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "flex-start"
-                }}
-            >
+            <Header className="form-header-view bg-transparent d-flex align-items-center">
                 <Breadcrumb
-                    style={{ alignItems: "center", alignSelf: "center" }}
+                    className="align-items-center align-self-center"
                     separator=" > "
                 >
                     {/* <NavLink to="/registration">
@@ -705,13 +697,13 @@ class AppRegistrationForm extends Component {
 
     registrationQuestionView = (item, index) => (
         <div className="formView content-view pt-5">
-             <span className="form-heading"> {AppConstants.registration}</span>
-             {this.state.registeringYourself == 3 && (
-                 <div>
+            <span className="form-heading">{AppConstants.registration}</span>
+            {this.state.registeringYourself == 3 && (
+                <div>
                     <InputWithHead heading={AppConstants.whoAreYouRegistering} />
                     <Radio.Group
                         className="reg-competition-radio"
-                        onChange={ (e) => this.onChangeSetParticipantValue(e.target.value, "whoAreYouRegistering", index)}
+                        onChange={(e) => this.onChangeSetParticipantValue(e.target.value, "whoAreYouRegistering", index)}
                         value={item.whoAreYouRegistering}
                     >
                         <Radio value={1}>{AppConstants.child}</Radio>
@@ -722,7 +714,7 @@ class AppRegistrationForm extends Component {
                     <InputWithHead heading={AppConstants.whatTypeOfRegistration} />
                     <Radio.Group
                         className="reg-competition-radio"
-                        onChange={ (e) => this.onChangeSetParticipantValue(e.target.value, "whatTypeOfRegistration", index)}
+                        onChange={(e) => this.onChangeSetParticipantValue(e.target.value, "whatTypeOfRegistration", index)}
                         value={item.whatTypeOfRegistration}
                     >
                         <Radio value={1}>{AppConstants.playerHeading}</Radio>
@@ -754,8 +746,8 @@ class AppRegistrationForm extends Component {
                 rules={[{ required: true, message: ValidationConstants.dateOfBirth }]}
             >
                 <DatePicker
-                    size="large"
-                    style={{ width: '100%' }}
+                    // size="large"
+                    className="w-100"
                     onChange={e => this.onChangeSetParticipantValue(e, "dateOfBirth", index)}
                     format="DD-MM-YYYY"
                     placeholder="dd-mm-yyyy"
@@ -771,7 +763,7 @@ class AppRegistrationForm extends Component {
         let membershipProdecutInfo = this.props.endUserRegistrationState.membershipProductInfo;
         return (
             <div className="formView content-view pt-5">
-             <span className="form-heading">{AppConstants.competitionMembershipProductDivision}</span>
+                <span className="form-heading">{AppConstants.competitionMembershipProductDivision}</span>
                 {index == 0 && (
                     <InputWithHead
                         heading={AppConstants.enterPostCode}
@@ -791,7 +783,7 @@ class AppRegistrationForm extends Component {
                 )}
 
                 <InputWithHead heading={AppConstants.competition_name} />
-                <div style={{ display: 'flex' }} className="applicable-to-text">
+                <div className="applicable-to-text d-flex">
                     <div>{membershipProdecutInfo.competitionName}</div>
                     {index == 0 && (
                         <div className="another-competition">Find Another Competition</div>
@@ -936,18 +928,18 @@ class AppRegistrationForm extends Component {
                             </div>
                             <input
                                 type="file"
-                                id= {"user-pic" + index}
-                                style={{ display: 'none' }}
+                                id={"user-pic" + index}
+                                className="d-none"
                                 onChange={(evt) => this.setImage(evt.target, index, "participantPhoto")}
                             />
                         </div>
-                        <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                        <div className="col-sm-2 d-flex align-items-center">
                             <InputWithHead heading={AppConstants.takePhoto} />
                         </div>
-                        <div className="col-sm-1" style={{ display: "flex", alignItems: "center" }}>
+                        <div className="col-sm-1 d-flex align-items-center">
                             <InputWithHead heading={AppConstants.or} />
                         </div>
-                        <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                        <div className="col-sm-2 d-flex align-items-center">
                             <InputWithHead heading={AppConstants.uploadPhoto} />
                         </div>
                     </div>
@@ -991,7 +983,7 @@ class AppRegistrationForm extends Component {
                     rules={[{ required: true, message: ValidationConstants.stateField[0] }]}
                 >
                     <Select
-                        style={{ width: '100%' }}
+                        className="w-100"
                         placeholder={AppConstants.select}
                         onChange={(e) => this.onChangeSetParticipantValue(e, "stateRefId", index )}
                         value={item.stateRefId}
@@ -1161,7 +1153,7 @@ class AppRegistrationForm extends Component {
                             rules={[{ required: true, message: ValidationConstants.stateField[0] }]}
                         >
                             <Select
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 placeholder={AppConstants.select}
                                 onChange={(e) => this.onChangeSetParentValue(e, "stateRefId", index)}
                                 value={item.parentOrGuardian.stateRefId}
@@ -1268,7 +1260,8 @@ class AppRegistrationForm extends Component {
 
                 <InputWithHead heading={AppConstants.position1} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1 }}
+                    className="w-100"
+                    style={{ paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetValue(e, index, participantOrProduct, productIndex, "positions", subIndex, "position1")}
                     value={item.position1}
                 >
@@ -1419,7 +1412,7 @@ class AppRegistrationForm extends Component {
         const { favouriteTeamsList, firebirdPlayerList, heardByList } = this.props.commonReducerState;
         return (
             <div className="formView content-view pt-5">
-                <span className="form-heading"> {AppConstants.additionalInfoReqd} </span>
+                <span className="form-heading">{AppConstants.additionalInfoReqd} </span>
                 <InputWithHead heading={AppConstants.existingMedConditions} required="required-field" />
                 <Form.Item name={`existingMedicalCondition${index}`}
                            rules={[{ required: true, message: ValidationConstants.existingMedicalCondition[0] }]}>
@@ -1470,7 +1463,8 @@ class AppRegistrationForm extends Component {
                     rules={[{ required: true, message: ValidationConstants.favoriteTeamField[0] }]}
                 >
                     <Select
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                        className="w-100"
+                        style={{ paddingRight: 1, minWidth: 182 }}
                         onChange={(e) => this.onChangeSetParticipantValue(e, "favouriteTeamRefId", index)}
                         value={item.favouriteTeamRefId}
                     >
@@ -1488,7 +1482,8 @@ class AppRegistrationForm extends Component {
                             message: ValidationConstants.firebirdField[0]
                         }]}>
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={(e) => this.onChangeSetParticipantValue(e, "favouriteFireBird", index)}
                                 value={item.favouriteFireBird}
                             >
@@ -1546,11 +1541,7 @@ class AppRegistrationForm extends Component {
                             <div className="row">
                                 <div className="col-sm">
                                     {(this.state.volunteerList || []).map((info, index) => (
-                                        <div key={info.id} style={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center"
-                                        }}>
+                                        <div key={info.id} className="d-flex flex-column justify-content-center">
                                             <Checkbox
                                                 className="single-checkbox" checked={info.isActive}
                                                 onChange={(e) => this.onChangeSetVolunteerValue(e.target.checked, index)}
@@ -1577,7 +1568,7 @@ class AppRegistrationForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.childCountry} />
                         <Select
-                            style={{ width: '100%' }}
+                            className="w-100"
                             placeholder={AppConstants.select}
                             onChange={(e) => this.onChangeSetRegistrationValue(e, "countryRefId")}
                             value={registrationDetail.countryRefId}
@@ -1593,7 +1584,7 @@ class AppRegistrationForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.childNationality} />
                         <Select
-                            style={{ width: '100%' }}
+                            className="w-100"
                             placeholder={AppConstants.select}
                             onChange={(e) => this.onChangeSetRegistrationValue(e, "nationalityRefId")}
                             value={registrationDetail.nationalityRefId}
@@ -1642,8 +1633,12 @@ class AppRegistrationForm extends Component {
                                     <div className="col-sm">
                                         <span className="user-contact-heading">{"VOUCHER " + (index + 1)}</span>
                                     </div>
-                                    <div className="transfer-image-view pointer" onClick={() =>
-                                        this.deleteEnableOrDisablePopup("voucher", true, 0, 0, index, AppConstants.voucherDeleteConfirmMsg)}>
+                                    <div
+                                        className="transfer-image-view pointer"
+                                        onClick={() =>
+                                            this.deleteEnableOrDisablePopup("voucher", true, 0, 0, index, AppConstants.voucherDeleteConfirmMsg)
+                                        }
+                                    >
                                         <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                                         <span className="user-remove-text">
                                             {AppConstants.remove}
@@ -1658,7 +1653,8 @@ class AppRegistrationForm extends Component {
                                 />
                                 <InputWithHead heading={AppConstants.participant} />
                                 <Select
-                                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                    className="w-100"
+                                    style={{ paddingRight: 1, minWidth: 182 }}
                                     onChange={(e) => this.onChangeSetVoucherValue(e, "tempParticipantId", index)}
                                     value={voc.tempParticipantId}
                                 >
@@ -1686,16 +1682,17 @@ class AppRegistrationForm extends Component {
     membershipProductProductView = (item, prod, prodIndex, index) => {
         return (
             <div className="formView content-view pt-5">
-                <span className="form-heading"> {AppConstants.competitionMembershipProductDivision}</span>
+                <span className="form-heading">{AppConstants.competitionMembershipProductDivision}</span>
 
                 <InputWithHead heading={AppConstants.competition_name} />
-                <div style={{ display: 'flex' }} className="applicable-to-text">
+                <div className="applicable-to-text d-flex">
                     <div>{this.state.competitionName}</div>
                 </div>
 
                 <InputWithHead heading={AppConstants.membershipProduct} />
                 <Select
-                    style={{ width: '100%', paddingRight: 1 }}
+                    className="w-100"
+                    style={{ paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetProdMemberTypeValue(e, index, prodIndex)}
                     value={prod.competitionMembershipProductTypeId}
                 >
@@ -1719,12 +1716,12 @@ class AppRegistrationForm extends Component {
     dividerTextView = (text, styles, playerOrProduct, index, prodIndex) => {
         return (
             <div className="form-heading formView end-user-divider-header" style={styles}>
-                <div className="end-user-divider-side" style={{ width: '75px' }} />
+                <div className="end-user-divider-side" style={{ width: 75 }} />
                 <div className="end-user-divider-text">{text}</div>
                 <div className="end-user-divider-side" style={{ flexGrow: '1' }} />
                 <div
                     className="transfer-image-view pointer"
-                    style={{ paddingLeft: '33px' }}
+                    style={{ paddingLeft: 33 }}
                     onClick={() => this.deleteEnableOrDisablePopup(playerOrProduct, true, index, prodIndex, 0, "", null)}
                 >
                     <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
@@ -1760,48 +1757,48 @@ class AppRegistrationForm extends Component {
         const stylesProd = { paddingTop: '20px', marginBottom: '20px' };
         return (
             <div>
-                <div style={{ marginBottom: "20px" }}>
+                <div className="mb-20">
                     {this.registeringYourselfView()}
                 </div>
 
                 {(userRegistrations || []).map((item, index) => (
                     <div key={"userReg" + index}>
                         {this.dividerTextView("PARTICIPANT " + (index + 1), styles, "participant", index, -1)}
-                        <div style={{ marginBottom: "20px" }}>
+                        <div className="mb-20">
                             {this.registrationQuestionView(item, index)}
                         </div>
                         {item.isPlayer != -1 && (
                             <div>
-                                <div style={{ marginBottom: "20px" }}>
+                                <div className="mb-20">
                                     {this.membershipProductView(item, index)}
                                 </div>
-                                <div style={{ marginBottom: "20px" }}>
+                                <div className="mb-20">
                                     {this.participantDetailView(item, index)}
                                 </div>
                                 {(getAge(item.dateOfBirth) <= 18) && (
-                                    <div style={{ marginBottom: "20px" }}>
+                                    <div className="mb-20">
                                         {this.parentGuardianView(item, index)}
                                     </div>
                                 )}
                                 {regSetting.last_captain === 1 || regSetting.played_before === 1 && (
-                                    <div style={{ marginBottom: "20px" }}>
+                                    <div className="mb-20">
                                         {this.additionalPersonalInfoView(item, index)}
                                     </div>
                                 )}
                                 {item.isPlayer === 1 && (
                                     <div>
                                         {regSetting.nominate_positions === 1 && (
-                                            <div style={{ marginBottom: "20px" }}>
+                                            <div className="mb-20">
                                                 {this.playerPosition(item, index, "participant", index)}
                                             </div>
                                         )}
                                         {regSetting.play_friend == 1 && (
-                                            <div style={{ marginBottom: "20px" }}>
+                                            <div className="mb-20">
                                                 {this.playWithFriendView(item, index, "participant", index)}
                                             </div>
                                         )}
                                         {regSetting.refer_friend === 1 && (
-                                            <div style={{ marginBottom: "10px" }}>
+                                            <div style={{ marginBottom: 10 }}>
                                                 {this.referAFriendView(item, index, "participant", index)}
                                             </div>
                                         )}
@@ -1816,17 +1813,17 @@ class AppRegistrationForm extends Component {
                                         {prod.isPlayer && (
                                             <div>
                                                 {regSetting.nominate_positions === 1 && (
-                                                    <div style={{ marginBottom: "20px" }}>
+                                                    <div className="mb-20">
                                                         {this.playerPosition(prod, index, "product", prodIndex)}
                                                     </div>
                                                 )}
                                                 {regSetting.play_friend === 1 && (
-                                                    <div style={{ marginBottom: "20px" }}>
+                                                    <div className="mb-20">
                                                         {this.playWithFriendView(prod, index, "product", prodIndex)}
                                                     </div>
                                                 )}
                                                 {regSetting.refer_friend === 1 && (
-                                                    <div style={{ marginBottom: "40px" }}>
+                                                    <div style={{ marginBottom: 40 }}>
                                                         {this.referAFriendView(prod, index, "product", prodIndex)}
                                                     </div>
                                                 )}
@@ -1835,34 +1832,33 @@ class AppRegistrationForm extends Component {
                                     </div>
                                 ))}
 
-                                <div className="formView" style={{ background: "none", marginBottom: "30px" }}>
-                                    <span className="input-heading-add-another pointer"
-                                          onClick={() => this.addProduct(index)}>
+                                <div className="formView" style={{ background: "none", marginBottom: 30 }}>
+                                    <span className="input-heading-add-another pointer" onClick={() => this.addProduct(index)}>
                                         + {AppConstants.addAnotherProduct}
                                     </span>
                                 </div>
-                                <div style={{ marginBottom: "20px" }}>
+                                <div className="mb-20">
                                     {this.additionalInfoView(item, index)}
                                 </div>
                             </div>
                         )}
                     </div>
                 ))}
-                {this.state.registeringYourself != 0 && userRegistrations.length > 0 && userRegistrations[0].isPlayer != -1 ? (
+                {this.state.registeringYourself != 0 && userRegistrations.length > 0 && userRegistrations[0].isPlayer != -1 && (
                     <div>
-                        <div className="formView" style={{ background: "none", marginBottom: "40px" }}>
+                        <div className="formView" style={{ background: "none", marginBottom: 40 }}>
                             <span className="input-heading-add-another pointer"
                                   onClick={() => this.addParticipant(this.state.registeringYourself)}>
                                 + {AppConstants.addAnotherParticipant}
                             </span>
                         </div>
                         {(regSetting.language === 1 || regSetting.nationality == 1 || regSetting.country === 1 || regSetting.club_volunteer === 1) && (
-                            <div style={{ marginBottom: "20px" }}>
+                            <div className="mb-20">
                                 {this.otherInfoReqdView()}
                             </div>
                         )}
                         {regSetting.shop === 1 && (
-                            <div style={{ marginBottom: "20px" }}>
+                            <div className="mb-20">
                                 {this.uniformAndMerchandise()}
                             </div>
                         )}
@@ -1871,8 +1867,7 @@ class AppRegistrationForm extends Component {
                                 {this.voucherView()}
                             </div>
                         )}
-                        <Form.Item name='termsAndCondition'
-                                   rules={[{ required: true, message: ValidationConstants.termsAndCondition[0] }]}>
+                        <Form.Item name='termsAndCondition' rules={[{ required: true, message: ValidationConstants.termsAndCondition[0] }]}>
                             <div className="formView" style={{ background: "none" }}>
                                 <Checkbox
                                     className="single-checkbox pt-3"
@@ -1887,7 +1882,7 @@ class AppRegistrationForm extends Component {
                             </div>
                         </Form.Item>
                     </div>
-                ) : null}
+                )}
                 {this.removeModalView()}
             </div>
         )
@@ -1900,7 +1895,7 @@ class AppRegistrationForm extends Component {
         let userRegistrations = registrationDetail.userRegistrations;
         return (
             <div className="fluid-width">
-                {this.state.registeringYourself != 0 && userRegistrations.length > 0 && userRegistrations[0].isPlayer != -1 ? (
+                {this.state.registeringYourself != 0 && userRegistrations.length > 0 && userRegistrations[0].isPlayer != -1 && (
                     <div className="footer-view">
                         <div className="row">
                             <div className="col-sm">
@@ -1909,7 +1904,8 @@ class AppRegistrationForm extends Component {
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
                                     <Button
-                                        className="save-draft-text" type="save-draft-text"
+                                        className="save-draft-text"
+                                        type="save-draft-text"
                                         onClick={() => this.setState({ buttonPressed: "save" })}
                                     >
                                         {AppConstants.reviewOrder}
@@ -1927,7 +1923,7 @@ class AppRegistrationForm extends Component {
                             </div>
                         </div>
                     </div>
-                ) : null}
+                )}
             </div>
         );
     };

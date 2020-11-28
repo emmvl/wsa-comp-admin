@@ -13,18 +13,15 @@ import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 
 function getIncidentPlayer(incidentPlayers) {
-    let playerId = incidentPlayers.length > 0 ? incidentPlayers[0].playerId : ""
-    return playerId
+    return incidentPlayers.length > 0 ? incidentPlayers[0].playerId : ""
 }
 
 function getFirstName(incidentPlayers) {
-    let firstName = incidentPlayers.length > 0 ? incidentPlayers[0].player.firstName : ""
-    return firstName
+    return incidentPlayers.length > 0 ? incidentPlayers[0].player.firstName : ""
 }
 
 function getLastName(incidentPlayers) {
-    let lastName = incidentPlayers.length > 0 ? incidentPlayers[0].player.lastName : ""
-    return lastName
+    return incidentPlayers.length > 0 ? incidentPlayers[0].player.lastName : ""
 }
 
 function checkSorting(a, b, key) {
@@ -33,7 +30,6 @@ function checkSorting(a, b, key) {
     }
 }
 
-
 // function checkSorting2(a, b, key) {
 //     if (a[key] && b[key]) {
 //         return a[key].length - b[key].length
@@ -41,9 +37,9 @@ function checkSorting(a, b, key) {
 // }
 
 const { Content } = Layout;
+
 ////columens data
 const columns = [
-
     {
         title: 'Date',
         dataIndex: 'createdAt',
@@ -51,7 +47,7 @@ const columns = [
         sorter: (a, b) => checkSorting(a, b, 'matchId'),
         render: (date, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{liveScore_formateDate(date.startTime)}</span>
@@ -68,10 +64,9 @@ const columns = [
         dataIndex: 'incidentPlayers',
         key: 'incidentPlayers',
         //  sorter: (a, b) => sort(a, b, "playerId"),
-
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{getIncidentPlayer(incidentPlayers)}</span>
@@ -84,7 +79,7 @@ const columns = [
         sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{getFirstName(incidentPlayers)}</span>
@@ -97,7 +92,7 @@ const columns = [
         // sorter: (a, b) => a.lastName.length - b.lastName.length,
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{getLastName(incidentPlayers)}</span>
@@ -109,16 +104,14 @@ const columns = [
         key: 'incidentType',
         render: (incidentType, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
+                pathname: "/matchDayIncidentView",
                 state: { item: record }
             }}>
                 <span className="input-heading-add-another pt-0">{incidentType.name}</span>
             </NavLink>,
         sorter: (a, b) => checkSorting(a, b, 'incidentType')
-
     },
 ];
-
 
 class LiveScoreIncidentList extends Component {
     constructor(props) {
@@ -128,7 +121,6 @@ class LiveScoreIncidentList extends Component {
     }
 
     componentDidMount() {
-
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
             this.props.liveScoreIncidentList(id);
@@ -137,31 +129,21 @@ class LiveScoreIncidentList extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}  >
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidents}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
-                                    {/* <NavLink to="/liveScoreAddIncident">
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                    {/* <NavLink to="/matchDayAddIncident">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
                                         </Button>
@@ -169,19 +151,8 @@ class LiveScoreIncidentList extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
-
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button className="primary-add-comp-form" type="primary">
-
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -196,19 +167,9 @@ class LiveScoreIncidentList extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
-                                    <NavLink to="/liveScoreMatchImport">
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                    <NavLink to="/matchDayMatchImport">
                                         <Button className="primary-add-comp-form" type="primary">
-
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -239,7 +200,7 @@ class LiveScoreIncidentList extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreIncidentState.onLoad && true} className="home-dashboard-table"
+                        loading={this.props.liveScoreIncidentState.onLoad && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={DATA}
@@ -247,22 +208,14 @@ class LiveScoreIncidentList extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}>
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             defaultCurrent={1}
                             total={8}
-                        // onChange={this.handleTableChange}
+                            // onChange={this.handleTableChange}
                         />
                     </div>
                 </div>
@@ -273,7 +226,7 @@ class LiveScoreIncidentList extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./matchDayCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
                 <Layout>
                     {this.headerView()}
@@ -290,9 +243,10 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({ liveScoreIncidentList }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreIncidentState: state.LiveScoreIncidentState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((LiveScoreIncidentList));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreIncidentList);

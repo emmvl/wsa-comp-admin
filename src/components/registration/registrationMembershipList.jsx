@@ -260,8 +260,6 @@ class RegistrationMembershipList extends Component {
         this.props.regMembershipListAction(offset, yearRefId, sortBy, sortOrder)
     };
 
-
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -276,13 +274,11 @@ class RegistrationMembershipList extends Component {
         )
     }
 
-    //////year change onchange
     yearChange = (yearRefId) => {
         this.setState({ yearRefId })
         this.handleMembershipTableList(1, yearRefId)
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
@@ -375,11 +371,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         registrationState: state.RegistrationState,
         appState: state.AppState,
     }
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)(RegistrationMembershipList);
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationMembershipList);

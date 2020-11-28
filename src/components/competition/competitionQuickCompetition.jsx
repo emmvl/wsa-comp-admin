@@ -94,7 +94,7 @@ class CompetitionQuickCompetition extends Component {
                     this.props.updateCompetition("", "allData")
                     let competitionId = selectedCompetition;
                     this.props.getQuickCompetitionAction(competitionId)
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true,yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId  });
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId });
                 }
             }
         }
@@ -312,7 +312,7 @@ class CompetitionQuickCompetition extends Component {
 
     //close competition modal and call create competition
     closeCompModal = () => {
-        const { competitionName, competitionDate,yearId } = this.props.quickCompetitionState
+        const { competitionName, competitionDate, yearId } = this.props.quickCompetitionState
         this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
@@ -323,7 +323,7 @@ class CompetitionQuickCompetition extends Component {
 
     //nextCompModal
     nextCompModal = () => {
-        const { competitionName, competitionDate,yearId  } = this.props.quickCompetitionState
+        const { competitionName, competitionDate, yearId } = this.props.quickCompetitionState
         this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
@@ -452,7 +452,6 @@ class CompetitionQuickCompetition extends Component {
         }, 100);
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let appState = this.props.appState
         let timeSlotData = this.props.quickCompetitionState.timeSlot
@@ -478,15 +477,7 @@ class CompetitionQuickCompetition extends Component {
                     <div className='col-sm-8'>
                         <div className="row pb-3">
                             <div className="col-sm-3 pb-3">
-                                <div
-                                    style={{
-                                        width: "fit-content",
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginRight: 50,
-                                    }}
-                                >
+                                <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                     <span className="year-select-heading">{AppConstants.year}:</span>
                                     <Select
                                         name="yearRefId"
@@ -504,15 +495,7 @@ class CompetitionQuickCompetition extends Component {
                                 </div>
                             </div>
                             <div className="col-sm pb-3">
-                                <div
-                                    style={{
-                                        width: "fit-content",
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginRight: 50
-                                    }}
-                                >
+                                <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                     <span className="year-select-heading">{AppConstants.competition}:</span>
                                     <Select
                                         name="competition"
@@ -532,9 +515,7 @@ class CompetitionQuickCompetition extends Component {
                                 </div>
                             </div>
                             <div className="col-sm ml-3 pb-3 d-flex justify-content-start">
-
                                 <Button className="open-reg-button save-draft-text" onClick={() => this.visibleCompetitionModal()} type="primary">+ {AppConstants.newCompetition}</Button>
-
                             </div>
                         </div>
                     </div>
@@ -608,7 +589,7 @@ class CompetitionQuickCompetition extends Component {
         let appState = this.props.appState
         let quickCompetitionState = this.props.quickCompetitionState
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
-        console.log(quickCompetitionData)
+
         return (
             <div className="comp-draw-content-view mt-0">
                 <div className="row comp-draw-list-top-head">
@@ -647,7 +628,8 @@ class CompetitionQuickCompetition extends Component {
                         >
                             <Select
                                 mode="multiple"
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                className="w-100"
+                                style={{ paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
                                     this.onSelectValues(venueSelection, quickCompetitionState.selectedVenues)
                                 }}
@@ -748,8 +730,7 @@ class CompetitionQuickCompetition extends Component {
                                             <Tooltip
                                                 arrowPointAtCenter
                                                 placement="top"
-                                                className="comp-player-table-tag2"
-                                                style={{ height: '100%' }}
+                                                className="comp-player-table-tag2 h-100"
                                                 title={slotObject.drawsId && slotObject.divisionName + "-" + slotObject.gradeName}
                                             >
                                                 <div
@@ -775,8 +756,8 @@ class CompetitionQuickCompetition extends Component {
                                                                 {slotObject.divisionName + "-" + slotObject.gradeName}
                                                             </span>
                                                         ) : (
-                                                                <span>Free</span>
-                                                            )}
+                                                            <span>Free</span>
+                                                        )}
                                                     </CompetitionSwappable>
                                                 </div>
                                             </Tooltip>
@@ -829,8 +810,6 @@ class CompetitionQuickCompetition extends Component {
         )
     }
 
-
-    /// render function
     render() {
         return (
             <div className="fluid-width default-bg">

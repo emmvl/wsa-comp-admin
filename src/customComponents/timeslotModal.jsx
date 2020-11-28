@@ -44,7 +44,7 @@ class TimeSlotModal extends React.Component {
                     onCancel={onCancel}
                     okText={AppConstants.save}
                     footer={
-                        <div style={{ display: "none" }} />
+                        <div className="d-none" />
                     }
                 >
                     <div className="inside-container-view">
@@ -69,11 +69,11 @@ class TimeSlotModal extends React.Component {
                                 <div className="col-sm">
                                     {item.startTime.map((timeItem, timeIndex) => (
                                         <div className="row" key={"timevalue" + timeIndex}>
-                                            <div className={"col-sm"}>
+                                            <div className="col-sm">
                                                 <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
                                                 <TimePicker
                                                     key="startTime"
-                                                    style={{ minWidth: 100, }}
+                                                    style={{ minWidth: 100 }}
                                                     className="comp-venue-time-timepicker"
                                                     onChange={(time) => this.onTimeChange(time, index, timeIndex)}
                                                     onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex)}
@@ -117,18 +117,18 @@ class TimeSlotModal extends React.Component {
                         <span className="input-heading-add-another pointer" onClick={addTimeSlot}> + {AppConstants.addAnotherDay}</span>
                     </div>
                     <div className="row">
-                        <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
-                            <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
+                        <div className="col-sm d-flex w-100" style={{ paddingTop: 10 }}>
+                            <div className="col-sm-6 d-flex w-50 justify-content-start">
                                 <Button
                                     className="cancelBtnWidth"
                                     type="cancel-button"
                                     onClick={onTimslotBack}
-                                    style={{ marginRight: '20px' }}
+                                    style={{ marginRight: 20 }}
                                 >
                                     {AppConstants.back}
                                 </Button>
                             </div>
-                            <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
+                            <div className="col-sm-6 d-flex w-50 justify-content-end">
                                 <Button className="publish-button save-draft-text" type="primary" onClick={() => timeSlotOK()}>
                                     {AppConstants.save}
                                 </Button>

@@ -71,7 +71,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {longName}
@@ -102,14 +102,14 @@ const columnsOwned = [
                                         </Tag>
                                     )
                                 ) : (
-                                        <Tag
-                                            className="comp-dashboard-table-tag"
-                                            color="#c2c2c2"
-                                            key={data}
-                                        >
-                                            {data}
-                                        </Tag>
-                                    )
+                                    <Tag
+                                        className="comp-dashboard-table-tag"
+                                        color="#c2c2c2"
+                                        key={data}
+                                    >
+                                        {data}
+                                    </Tag>
+                                )
                             ))
                         )}
                     </span>
@@ -131,7 +131,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {teamCount}
@@ -150,7 +150,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {playerCount}
@@ -169,7 +169,7 @@ const columnsOwned = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {status}
@@ -197,7 +197,7 @@ const columnsOwned = [
                             this_Obj.setCompetitionID(record);
                         }}
                     >
-                        <NavLink to={{ pathname: '/liveScoreSettingsView', state: 'edit' }}>
+                        <NavLink to={{ pathname: '/matchDaySettingsView', state: 'edit' }}>
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -228,7 +228,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {longName}
@@ -259,14 +259,14 @@ const columnsParticipate = [
                                         </Tag>
                                     )
                                 ) : (
-                                        <Tag
-                                            className="comp-dashboard-table-tag"
-                                            color="#c2c2c2"
-                                            key={data}
-                                        >
-                                            {data}
-                                        </Tag>
-                                    )
+                                    <Tag
+                                        className="comp-dashboard-table-tag"
+                                        color="#c2c2c2"
+                                        key={data}
+                                    >
+                                        {data}
+                                    </Tag>
+                                )
                             ))
                         )}
                     </span>
@@ -288,7 +288,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {teamCount}
@@ -307,7 +307,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {playerCount}
@@ -326,7 +326,7 @@ const columnsParticipate = [
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                     this_Obj.setCompetitionID(record);
-                    this_Obj.props.history.push('/liveScoreDashboard');
+                    this_Obj.props.history.push('/matchDayDashboard');
                 }}
             >
                 {status}
@@ -482,117 +482,80 @@ class LiveScoreCompetitions extends Component {
         this.handlePagination();
     };
 
-    dropdownButtonView = () =>
-        // let yearList = this.props.liveScoreCompetition.yearList;
-        (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
-                <div
-                    className="row fluid-width"
-                    style={{
-                        maxWidth: '99%',
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                    }}
-                >
-                    <div className="col-sm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <span className="form-heading">
-                            {AppConstants.ownedCompetitions}
-                        </span>
-                        <div className="mt-n20">
-                            <Tooltip placement="top">
-                                <span>{AppConstants.ownedCompetitionMsg}</span>
-                            </Tooltip>
+    dropdownButtonView = () => (
+        <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="row fluid-width d-flex justify-content-end">
+                <div className="col-sm d-flex flex-row align-items-center">
+                    <span className="form-heading">
+                        {AppConstants.ownedCompetitions}
+                    </span>
+                    <div className="mt-n20">
+                        <Tooltip placement="top">
+                            <span>{AppConstants.ownedCompetitionMsg}</span>
+                        </Tooltip>
+                    </div>
+                </div>
+
+                <div className="row fluid-width">
+                    {this.state.orgLevel === 'state' && (
+                        <div className="col-sm">
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                <Button
+                                    type="primary"
+                                    className="primary-add-comp-form"
+                                    onClick={() => {
+                                        setKeyForStateWideMessage('stateWideMessage');
+                                        this.props.history.push({
+                                            pathname: '/matchDayNewsList',
+                                            state: { screenKey: 'stateWideMsg' },
+                                        });
+                                    }}
+                                >
+                                    {AppConstants.comunityWideMsg}
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="col-sm">
+                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                            <Button
+                                className="primary-add-comp-form"
+                                type="primary"
+                                onClick={() => {
+                                    localStorage.removeItem('LiveScoreCompetition');
+                                    this.props.history.push('/matchDaySettingsView', 'add');
+                                }}
+                            >
+                                +
+                                {' '}
+                                {AppConstants.addCompetition}
+                            </Button>
                         </div>
                     </div>
 
-                    <div className="row fluid-width">
-                        {this.state.orgLevel === 'state' && (
-                            <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'flex-end',
-                                    }}
-                                >
-                                    <Button
-                                        type="primary"
-                                        className="primary-add-comp-form"
-                                        onClick={() => {
-                                            setKeyForStateWideMessage('stateWideMessage');
-                                            this.props.history.push({
-                                                pathname: '/liveScoreNewsList',
-                                                state: { screenKey: 'stateWideMsg' },
-                                            });
-                                        }}
-                                    >
-                                        {AppConstants.comunityWideMsg}
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                }}
+                    <div className="col-sm">
+                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                            <Button
+                                className="primary-add-comp-form"
+                                type="primary"
                             >
-                                <Button
-                                    className="primary-add-comp-form"
-                                    type="primary"
-                                    onClick={() => {
-                                        localStorage.removeItem('LiveScoreCompetition');
-                                        this.props.history.push('/liveScoreSettingsView', 'add');
-                                    }}
-                                >
-                                    +
-                                    {' '}
-                                    {AppConstants.addCompetition}
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
-                                <Button
-                                    className="primary-add-comp-form"
-                                    type="primary"
-                                >
-                                    +
-                                    {' '}
-                                    {AppConstants.replicateCompetition}
-                                </Button>
-                            </div>
+                                +
+                                {' '}
+                                {AppConstants.replicateCompetition}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        )
-        ;
+        </div>
+    );
 
     partHeaderView = () => (
         <div className="comp-player-grades-header-drop-down-view">
             <div className="fluid-width">
                 <div className="row">
-                    <div className="col-sm-4" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div className="col-sm-4 d-flex flex-row align-items-center">
                         <span className="form-heading">
                             {AppConstants.participateInComp}
                         </span>
@@ -714,7 +677,7 @@ class LiveScoreCompetitions extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" /> */}
                 {this.dropdownButtonView()}
                 {this.dropDownView()}

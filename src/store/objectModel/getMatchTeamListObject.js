@@ -3,7 +3,6 @@ import { liveScore_formateDate } from '../../themes/dateformate'
 
 function getMatchListSettings(data) {
 
-    // console.log(data, "array setting");
     var matchlist = [];
     for (let i in data) {
         var object = getData(data[i]);

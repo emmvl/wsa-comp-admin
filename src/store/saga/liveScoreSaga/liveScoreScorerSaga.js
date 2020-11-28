@@ -70,9 +70,9 @@ export function* liveScoreAddEditScorerSaga(action) {
             });
             message.success('Add Scorer - Successfully Added')
             if (action.isEdit) {
-                history.push('/liveScorerList')
+                history.push('/matchDayScorerList')
             } else {
-                history.push('/liveScoreAssignMatch', { record: result.result.data })
+                history.push('/matchDayAssignMatch', { record: result.result.data })
             }
         } else {
             yield call(failSaga, result)
@@ -124,7 +124,6 @@ export function* liveScoreChangeAssignStatus(action) {
 export function* liveScoreUnAssignMatcheSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.unAssignMatcheStatus, action.records)
-        console.log(action)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_SUCCESS,

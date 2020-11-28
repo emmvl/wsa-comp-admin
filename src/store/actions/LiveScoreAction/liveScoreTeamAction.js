@@ -84,7 +84,7 @@ function liveScoreGetTeamDataAction(teamId) {
 }
 
 // Team list with pagination
-function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, sortOrder) {
+function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, sortOrder,competitionOrganisationId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGING_LOAD,
         competitionID,
@@ -93,6 +93,7 @@ function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, so
         search,
         sortBy,
         sortOrder,
+        competitionOrganisationId
     };
 }
 

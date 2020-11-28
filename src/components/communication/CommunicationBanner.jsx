@@ -47,7 +47,7 @@ class CommunicationBanner extends Component {
                 key: 'bannerUrl',
                 render: (bannerUrl, record) => (
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+                        <div className="d-flex align-items-end justify-content-between">
                             <div className="mb-3" style={{ width: '400px' }}>
                                 <InputWithHead
                                     heading={AppConstants.sponsorName}
@@ -111,10 +111,7 @@ class CommunicationBanner extends Component {
 
     headerView = () => (
         <div className="row">
-            <div
-                className="col-sm live-form-view-button-container"
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-            >
+            <div className="col-sm live-form-view-button-container d-flex justify-content-end">
                 <NavLink to="/communicationEditBanners">
                     <Button
                         type="primary"
@@ -134,16 +131,7 @@ class CommunicationBanner extends Component {
 
     removeBtn = (record) => (
         <div className="mb-3">
-            <div
-                className="comp-dashboard-botton-view-mobile"
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                }}
-            >
+            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                 <NavLink
                     to={{
                         pathname: '/communicationEditBanners',
@@ -169,7 +157,7 @@ class CommunicationBanner extends Component {
     );
 
     imageView = (bannerUrl, record, type) => (
-        <div className="flex-row" style={{ marginTop: '1em', display: 'flex' }}>
+        <div className="flex-row d-flex" style={{ marginTop: '1em' }}>
             <ImageLoader
                 // closeable
                 // removeImage={() => this.removeImage(record.id, type)}

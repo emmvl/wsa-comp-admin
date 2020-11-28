@@ -90,7 +90,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (id) => {
             return (
-                _this.onMatchClick(id, '/liveScoreMatchDetails')
+                _this.onMatchClick(id, '/matchDayMatchDetails')
             )
         }
     },
@@ -111,15 +111,15 @@ const columns = [
         render: (team1, record) => teamListData(team1.id) ? (
             <NavLink
                 to={{
-                    pathname: '/liveScoreTeamView',
+                    pathname: '/matchDayTeamView',
                     state: { tableRecord: team1, screenName: 'fromMatchList' }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-                <span>{team1.name}</span>
-            )
+            <span>{team1.name}</span>
+        )
     },
     {
         title: 'Away',
@@ -130,15 +130,15 @@ const columns = [
         render: (team2, record) => teamListData(team2.id) ? (
             <NavLink
                 to={{
-                    pathname: '/liveScoreTeamView',
+                    pathname: '/matchDayTeamView',
                     state: { tableRecord: team2, screenName: 'fromMatchList' }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-                <span>{team2.name}</span>
-            )
+            <span>{team2.name}</span>
+        )
     },
     {
         title: 'Venue',
@@ -242,7 +242,7 @@ class LiveScoreMatchesList extends Component {
                 this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
                 this.handleMatchTableList(page, id)
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         } else {
             if (getLiveScoreCompetiton()) {
@@ -252,7 +252,7 @@ class LiveScoreMatchesList extends Component {
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, selectedDivision === 'All' ? '' : selectedDivision)
             } else {
-                history.push("/liveScoreCompetitions")
+                history.push("/matchDayCompetitions")
             }
         }
     }
@@ -324,9 +324,8 @@ class LiveScoreMatchesList extends Component {
         }
         setOwnCompetitionYear(yearRefId);
         setOwn_competition(compKey);
-        history.push({ pathname: '/competitionDraws', state: { screenKey: "/liveScoreMatches" } });
+        history.push({ pathname: '/competitionDraws', state: { screenKey: "/matchDayMatches" } });
     }
-
 
     scoreView(score, records, index) {
         return (
@@ -334,7 +333,7 @@ class LiveScoreMatchesList extends Component {
                 {this.state.isBulkUpload ? (
                     <div>
                         {setMatchBulkScore(records) === false ? (
-                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                            <div className="d-flex flex-row align-items-center justify-content-start">
                                 <Input
                                     className="table-input-box-style"
                                     value={records.team1Score}
@@ -352,13 +351,12 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                    )}
+                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                )}
             </div>
         )
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         const { liveScoreMatchListData } = this.props.liveScoreMatchListState;
         let matchData = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
@@ -372,20 +370,11 @@ class LiveScoreMatchesList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
 
                             {sourceIdAvailable && <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button
                                         type="primary"
                                         className="primary-add-comp-form"
@@ -397,18 +386,9 @@ class LiveScoreMatchesList extends Component {
                             </div>}
 
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     {/* <NavLink to={{
-                                        pathname: '/liveScoreAddMatch',
+                                        pathname: '/matchDayAddMatch',
                                     }}> */}
                                     <Button
                                         type="primary"
@@ -423,17 +403,8 @@ class LiveScoreMatchesList extends Component {
                             </div>
 
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
-                                    <NavLink to={{ pathname: '/liveScoreAddMatch' }}>
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                    <NavLink to={{ pathname: '/matchDayAddMatch' }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addMatches}
                                         </Button>
@@ -442,16 +413,7 @@ class LiveScoreMatchesList extends Component {
                             </div>
 
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -467,17 +429,8 @@ class LiveScoreMatchesList extends Component {
                                 </div>
                             </div>
                             <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
-                                    <NavLink to="/liveScoreMatchImport">
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                    <NavLink to="/matchDayMatchImport">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -496,7 +449,7 @@ class LiveScoreMatchesList extends Component {
                         </div>
                     </div>
                 </div>
-                {/* <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                {/* <div className="mt-5 d-flex justify-content-end">
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
@@ -537,7 +490,8 @@ class LiveScoreMatchesList extends Component {
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreMatchListState.onLoadMatch}
-                        className="home-dashboard-table" columns={columns}
+                        className="home-dashboard-table"
+                        columns={columns}
                         dataSource={DATA}
                         pagination={false}
                         rowKey={(record, index) => record.id + index}
@@ -649,7 +603,6 @@ class LiveScoreMatchesList extends Component {
         this.setState({ selectedRound: roundName })
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let { divisionList, roundList } = this.props.liveScoreMatchListState
         let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
@@ -690,7 +643,7 @@ class LiveScoreMatchesList extends Component {
                         </div>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }}>
+                    <div className="col-sm d-flex justify-content-end align-items-center">
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
@@ -719,18 +672,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                        <DashboardLayout
-                            menuHeading={AppConstants.liveScores}
-                            menuName={AppConstants.liveScores}
-                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                        />
-                    )}
+                    <DashboardLayout
+                        menuHeading={AppConstants.matchDay}
+                        menuName={AppConstants.liveScores}
+                        onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
+                    />
+                )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
                 ) : (
-                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
-                    )}
+                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
+                )}
 
                 <Layout>
                     {this.headerView()}

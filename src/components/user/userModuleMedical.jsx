@@ -27,17 +27,16 @@ class UserModuleMedical extends Component{
         }
         this_Obj = this;
         let userId = 877;
-
     }
 
     componentDidMount(){
-       let userState =  this.props.userState;
-       let userId = userState.userId;
-       this.apiCalls(userId);
+        let userState =  this.props.userState;
+        let userId = userState.userId;
+        this.apiCalls(userId);
     }
 
     componentDidUpdate(nextProps){
-       let userState = this.props.userState;
+        let userState = this.props.userState;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -51,8 +50,7 @@ class UserModuleMedical extends Component{
         this.props.getUserModuleMedicalInfoAction(userId);
     };
 
-     ///////view for breadcrumb
-     headerView = () => {
+    headerView = () => {
         return (
             <Header className="comp-player-grades-header-view container mb-n3">
                 <div className="row">
@@ -87,9 +85,9 @@ class UserModuleMedical extends Component{
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                <Button className="open-reg-button" type="primary" style={{marginRight: '20px'}} onClick={() =>  history.push('/userTextualDashboard')}>
+                                <Button className="open-reg-button" type="primary" style={{ marginRight: 20 }} onClick={() =>  history.push('/userTextualDashboard')}>
                                     {AppConstants.cancel}
                                 </Button>
                             </div>
@@ -113,24 +111,20 @@ class UserModuleMedical extends Component{
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
             </div>
-
         );
     }
-
 }
 
-function mapDispatchToProps(dispatch)
-{
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserModuleMedicalInfoAction
     }, dispatch);
-
 }
 
-function mapStatetoProps(state){
+function mapStateToProps(state){
     return {
         userState: state.UserState
     }
 }
 
-export default connect(mapStatetoProps,mapDispatchToProps)(UserModuleMedical);
+export default connect(mapStateToProps, mapDispatchToProps)(UserModuleMedical);

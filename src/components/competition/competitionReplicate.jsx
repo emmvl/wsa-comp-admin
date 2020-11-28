@@ -74,18 +74,10 @@ class CompetitionReplicate extends Component {
         }
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.replicateCompetition}
@@ -198,7 +190,8 @@ class CompetitionReplicate extends Component {
                                 <div className="col-sm">
                                     <Form.Item name="oldYearRefId" rules={[{ required: true, message: ValidationConstants.yearIsRequired }]}>
                                         <Select
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                                            className="w-100"
+                                            style={{ paddingRight: 1, minWidth: 160 }}
                                             onChange={(year) => this.onChangeReplicateValue(year, "details", "oldYearRefId")}
                                             value={replicateSave.details.oldYearRefId}
                                         >
@@ -224,7 +217,8 @@ class CompetitionReplicate extends Component {
                                         rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
                                     >
                                         <Select
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                            className="w-100"
+                                            style={{ paddingRight: 1, minWidth: 182 }}
                                             onChange={(compName) => this.onChangeReplicateValue(compName, "details", "oldCompetitionId")}
                                             value={replicateSave.details.oldCompetitionId}
                                         >
@@ -261,7 +255,8 @@ class CompetitionReplicate extends Component {
                                     }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(year) => this.onChangeReplicateValue(year, "details", "newYearRefId")}
                                         value={replicateSave.details.newYearRefId}
                                     >
@@ -305,7 +300,7 @@ class CompetitionReplicate extends Component {
 
                 {this.state.hasRegistration == 1 && (
                     <div>
-                        <span className="form-heading pt-4" style={{ fontSize: "16px" }}>
+                        <span className="form-heading pt-4" style={{ fontSize: 16 }}>
                             {AppConstants.setMembershipProducts}
                         </span>
 
@@ -323,8 +318,17 @@ class CompetitionReplicate extends Component {
                                         }]}
                                     >
                                         <Select
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                                            onChange={(membershipProductUniqueKey) => this.onChangeReplicateValue(membershipProductUniqueKey, "membershipProducts", null, oldProductIndex)}
+                                            className="w-100"
+                                            onChange={
+                                                (membershipProductUniqueKey) =>
+                                                    this.onChangeReplicateValue(
+                                                        membershipProductUniqueKey,
+                                                        "membershipProducts",
+                                                        null,
+                                                        oldProductIndex
+                                                    )
+                                            }
+                                            style={{ paddingRight: 1, minWidth: 182 }}
                                             value={replicateSave.details.newYearRefId}
                                         >
                                             {(newMembershipProducs || []).map(item => (
@@ -358,7 +362,7 @@ class CompetitionReplicate extends Component {
                                     }]}
                                 >
                                     <RangePicker
-                                        size="large"
+                                        // size="large"
                                         onChange={this.onChangeDates}
                                         format="DD-MM-YYYY"
                                         style={{ width: '100%', minWidth: 180 }}
@@ -384,9 +388,9 @@ class CompetitionReplicate extends Component {
                                     }]}
                                 >
                                     <DatePicker
-                                        size="large"
+                                        // size="large"
                                         placeholder="dd-mm-yyyy"
-                                        style={{ width: '100%' }}
+                                        className="w-100"
                                         onChange={e => this.onChangeReplicateValue(e, "details", "registrationCloseDate")}
                                         format="DD-MM-YYYY"
                                         showTime={false}

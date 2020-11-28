@@ -128,7 +128,7 @@ class ImportTeamPlayerModal extends React.Component {
                         pagination={false}
                     />
                 </div>
-                <div className="d-flex justify-content-end" style={{ marginTop: '20px' }}>
+                <div className="d-flex justify-content-end" style={{ marginTop: 20 }}>
                     <div className="reg-add-save-button">
                         <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
                             {AppConstants.proceed}
@@ -152,8 +152,7 @@ class ImportTeamPlayerModal extends React.Component {
                     onOk={onOK}
                     onCancel={onCancel}
                     footer={
-                        <div style={{ display: "none" }}
-                        />
+                        <div className="d-none" />
                     }
                 >
                     {this.props.quickCompetitionState.onLoad &&
@@ -164,8 +163,7 @@ class ImportTeamPlayerModal extends React.Component {
                         <div className="col-sm">
                             <div className="row">
                                 <input
-                                    style={{ cursor: "pointer" }}
-                                    className="pt-2 pb-2"
+                                    className="pt-2 pb-2 pointer"
                                     type="file"
                                     id="quickPlayerImport"
                                     ref={(input) => { this.filesInput = input }}
@@ -189,7 +187,7 @@ class ImportTeamPlayerModal extends React.Component {
                                         {AppConstants.upload}
                                     </Button>
                                 </div>
-                                <div className="reg-add-save-button" style={{ marginLeft: '20px' }}>
+                                <div className="reg-add-save-button" style={{ marginLeft: 20 }}>
                                     <NavLink to="/templates/wsa-import-quickTeamPlayer.csv" target="_blank" download>
                                         <Button className="primary-add-comp-form" type="primary">
                                             {AppConstants.downloadTemplate}

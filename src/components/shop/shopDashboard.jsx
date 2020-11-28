@@ -53,7 +53,7 @@ class ShopDashboard extends Component {
             }
         })
     }
-    ///////view for breadcrumb
+
     headerView = () => {
         let product = [{
             id: 1, name: "T-Shirt"
@@ -115,12 +115,11 @@ class ShopDashboard extends Component {
         );
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">
-                    <div className="row reg-filter-row" style={{ marginLeft:'0px'}}>
+                    <div className="row reg-filter-row ml-0">
                         <div className="reg-col">
                             <div className="reg-filter-col-cont">
                                 <div className="year-select-heading">{AppConstants.year} :</div>
@@ -172,7 +171,7 @@ class ShopDashboard extends Component {
                     <div className="col-sm-6">
                         <div className="home-dash-white-box-view pt-3 pb-3">
                             <div className="row">
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-6 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-price-text">{"$"}{" "}{"400.20"}</span>
                                 </div>
                                 <div className="col-sm-6">
@@ -185,7 +184,7 @@ class ShopDashboard extends Component {
                     <div className="col-sm-6">
                         <div className="home-dash-white-box-view pt-3 pb-3">
                             <div className="row">
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-6 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-price-text">{"$"}{" "}{"4,400.20"}</span>
                                 </div>
                                 <div className="col-sm-6">
@@ -200,7 +199,7 @@ class ShopDashboard extends Component {
                     <div className="col-sm-6">
                         <div className="home-dash-white-box-view pt-3 pb-3">
                             <div className="row">
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-6 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-price-text">{"$"}{" "}{"21,400.20"}</span>
                                 </div>
                                 <div className="col-sm-6">
@@ -214,7 +213,7 @@ class ShopDashboard extends Component {
                     <div className="col-sm-6">
                         <div className="home-dash-white-box-view pt-3 pb-3">
                             <div className="row">
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-6 d-flex align-items-center justify-content-center">
                                     <span className="reg-payment-price-text">{"$"}{" "}{"20,400.20"}</span>
                                 </div>
                                 <div className="col-sm-6">
@@ -231,7 +230,7 @@ class ShopDashboard extends Component {
                             <div className="col-sm-9">
                                 <span style={{ fontSize: 15, fontWeight: 500 }}>{AppConstants.topSellers}</span>
                                 <canvas
-                                    style={{ display: "block", justifycontent: "center" }}
+                                    className="d-block justify-content-center"
                                     id="myChart"
                                     ref={this.chartRefCompititions}
                                 />

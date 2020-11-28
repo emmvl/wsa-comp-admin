@@ -12,10 +12,10 @@ import {
     accountBalanceAction, saveStripeAccountAction,
     getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
-import { liveScore_formateDate } from './../../themes/dateformate';
+import { liveScore_formateDate } from "../../themes/dateformate";
 import StripeKeys from "../stripe/stripeKeys";
 
 const { Header, Content } = Layout;
@@ -99,6 +99,7 @@ class RegistrationPayments extends Component {
             paymentFor: "all",
             loadingSave: false,
             stripeDashBoardLoad: false,
+            isImpersonation: false
         }
     }
 
@@ -117,17 +118,19 @@ class RegistrationPayments extends Component {
     }
 
     componentDidMount() {
+
         let urlSplit = this.props.location.search.split("?code=")
         if (this.stripeConnected()) {
             this.props.getStripeTransferListAction(1, null, null)
             this.props.accountBalanceAction()
-        }
-        else if (urlSplit[1]) {
+        } else if (urlSplit[1]) {
             let codeSplit = urlSplit[1].split("&state=")
             let code = codeSplit[0]
             this.props.saveStripeAccountAction(code)
             this.setState({ loadingSave: true })
         }
+
+
     }
 
     onChange = e => {
@@ -141,7 +144,6 @@ class RegistrationPayments extends Component {
         this.props.exportPaymentApi("transfer")
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             // <Header className="reg-payment-header-view mt-5">
@@ -157,24 +159,15 @@ class RegistrationPayments extends Component {
             // <div className="comp-player-grades-header-drop-down-view">
             <div className="reg-payment-header-view mt-5">
                 <div className="row">
-                    <div className='col-sm' style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <span className="form-heading">
                             {AppConstants.dashboard}
                         </span>
                     </div>
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm pt-1">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
+                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button
                                         onClick={() => this.onExport()}
                                         className="primary-add-comp-form"
@@ -201,15 +194,14 @@ class RegistrationPayments extends Component {
         )
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="row">
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.year} />
                     <Select
-                        className="reg-payment-select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                        className="reg-payment-select w-100"
+                        style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
@@ -224,8 +216,8 @@ class RegistrationPayments extends Component {
                     <InputWithHead required="pt-0" heading={AppConstants.competition} />
 
                     <Select
-                        className="reg-payment-select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                        className="reg-payment-select w-100"
+                        style={{ paddingRight: 1, minWidth: 160 }}
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
@@ -240,8 +232,8 @@ class RegistrationPayments extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
-                        className="reg-payment-select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
+                        className="reg-payment-select w-100"
+                        style={{ paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
@@ -256,9 +248,9 @@ class RegistrationPayments extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
-                        className="reg-payment-datepicker"
-                        size="large"
-                        style={{ width: '100%', minWidth: 160 }}
+                        className="reg-payment-datepicker w-100"
+                        // size="large"
+                        style={{ minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
@@ -268,9 +260,9 @@ class RegistrationPayments extends Component {
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                     <DatePicker
-                        className="reg-payment-datepicker"
-                        size="large"
-                        style={{ width: '100%', minWidth: 160 }}
+                        className="reg-payment-datepicker w-100"
+                        // size="large"
+                        style={{ minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
@@ -314,24 +306,26 @@ class RegistrationPayments extends Component {
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
         // let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
+        let isImpersonation = getImpersonation()
         return (
             <div className="pb-5 pt-5">
                 <div className="row">
                     <div className="col-sm">
                         <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
                     </div>
-                    <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
-                        {stripeConnected ? (
-                            <Button
-                                className="open-reg-button"
-                                type="primary"
-                                onClick={() => this.stripeDashboardLoginUrl()}
-                            >
-                                {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
-                                {AppConstants.goToStripeDashboard}
-                                {/* </a> */}
-                            </Button>
-                        ) : (
+                    {isImpersonation !== "true" && (
+                        <div className="col-sm d-flex justify-content-end">
+                            {stripeConnected ? (
+                                <Button
+                                    className="open-reg-button"
+                                    type="primary"
+                                    onClick={() => this.stripeDashboardLoginUrl()}
+                                >
+                                    {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                    {AppConstants.goToStripeDashboard}
+                                    {/* </a> */}
+                                </Button>
+                            ) : (
                                 <Button
                                     className="open-reg-button"
                                     type="primary"
@@ -343,9 +337,10 @@ class RegistrationPayments extends Component {
                                     </a>
                                 </Button>
                             )}
-                    </div>
+                        </div>
+                    )}
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -398,7 +393,7 @@ class RegistrationPayments extends Component {
                         columns={columns}
                         dataSource={stripeTransferList}
                         pagination={false}
-                    // loading={this.props.stripeState.onLoad && true}
+                        // loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">
@@ -436,18 +431,18 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-price-text">$422,500</span>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-paid-reg-text">Paid Registrations 100</span>
                                 </div>
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                                <div className="col-sm-2 d-flex justify-content-end align-items-center">
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>
                             </div>
@@ -457,18 +452,18 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-price-text">$4,732</span>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-paid-reg-text">Outstanding Payments 50</span>
                                 </div>
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                                <div className="col-sm-2 d-flex justify-content-end align-items-center">
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>
                             </div>
@@ -480,18 +475,18 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-price-text">$2,450</span>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-paid-reg-text">Cash Payments 30</span>
                                 </div>
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                                <div className="col-sm-2 d-flex justify-content-end align-items-center">
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>
                             </div>
@@ -501,18 +496,18 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-price-text">$16,900</span>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-paid-reg-text">Pending Payments 30</span>
                                 </div>
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                                <div className="col-sm-2 d-flex justify-content-end align-items-center">
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>
                             </div>
@@ -524,18 +519,18 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view">
                             <div className="row">
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
+                                <div className="col-sm-2 d-flex align-items-center">
                                     <div className="reg-payment-regist-view">
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-price-text">$7,605</span>
                                 </div>
-                                <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div className="col-sm-4 d-flex justify-content-center align-items-center">
                                     <span className="reg-payment-paid-reg-text">Refunds / Reimbursements 100</span>
                                 </div>
-                                <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                                <div className="col-sm-2 d-flex justify-content-end align-items-center">
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>
                             </div>
@@ -563,7 +558,6 @@ class RegistrationPayments extends Component {
                     </Content>
                 </Layout>
             </div>
-
         );
     }
 }
@@ -581,6 +575,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         stripeState: state.StripeState,
+        userState: state.UserState,
     }
 }
 

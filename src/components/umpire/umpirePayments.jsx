@@ -114,7 +114,7 @@ const columns = [
         render: (matchId) => (
             <NavLink
                 to={{
-                    pathname: '/liveScoreMatchDetails',
+                    pathname: '/matchDayMatchDetails',
                     state: { matchId, umpireKey: 'umpire', screenName: 'umpirePayment' },
                 }}
             >
@@ -183,17 +183,16 @@ const columns = [
                         onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: 'selectedValue', index, allData: record })}
                     />
                 ) : (
-                        <Tooltip
-                            className="comp-player-table-tag2"
-                            style={{ height: '100%' }}
-                            onMouseEnter={() => this_obj.changeHover(record, index, true)}
-                            onMouseLeave={() => this_obj.changeHover(record, index, false)}
-                            visible={record.hoverVisible}
-                            title="Please ask the user to set up their bank details"
-                        >
-                            <Checkbox className="single-checkbox" disabled />
-                        </Tooltip>
-                    )
+                    <Tooltip
+                        className="comp-player-table-tag2 h-100"
+                        onMouseEnter={() => this_obj.changeHover(record, index, true)}
+                        onMouseLeave={() => this_obj.changeHover(record, index, false)}
+                        visible={record.hoverVisible}
+                        title="Please ask the user to set up their bank details"
+                    >
+                        <Checkbox className="single-checkbox" disabled />
+                    </Tooltip>
+                )
             )
         }
     }
@@ -336,8 +335,7 @@ class UmpirePayments extends Component {
         }
 
         if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
-            const body =
-            {
+            const body = {
                 paging: {
                     offset: 0,
                     limit: 10,
@@ -382,10 +380,7 @@ class UmpirePayments extends Component {
                 </div>
 
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                        style={{ width: '100%' }}
-                    />
+                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100" />
 
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -498,7 +493,6 @@ class UmpirePayments extends Component {
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view mt-4">
             <div className="fluid-width">
-
                 <div className="row">
                     <div className="col-sm pt-1 d-flex align-content-center">
                         <span className="form-heading">
@@ -506,10 +500,7 @@ class UmpirePayments extends Component {
                         </span>
                     </div>
 
-                    <div
-                        className="col-sm-8 d-flex align-items-center justify-content-end"
-                        style={{ width: '100%' }}
-                    >
+                    <div className="col-sm-8 d-flex align-items-center justify-content-end w-100">
                         <div className="row">
                             <div className="col-sm pt-1">
                                 <div className="comp-product-search-inp-width">
@@ -567,16 +558,7 @@ class UmpirePayments extends Component {
                         </div>
 
                         <div className="col-sm-8">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                }}
-                            >
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex align-items-center justify-content-end">
                                 <Button
                                     type="primary"
                                     className="primary-add-comp-form"
@@ -598,16 +580,8 @@ class UmpirePayments extends Component {
 
                         <div className="col-sm">
                             <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    // width: "96.5%",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "flex-end",
-                                    justifyContent: "flex-end",
-                                    alignContent: "center",
-                                    paddingRight: "35px"
-                                }}
+                                className="comp-dashboard-botton-view-mobile d-flex flex-column align-items-end justify-content-end align-content-center"
+                                style={{ paddingRight: 35 }}
                             >
                                 <Checkbox
                                     className="single-checkbox"

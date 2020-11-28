@@ -72,20 +72,13 @@ class LiveScoreCoachImport extends Component {
 
             this.props.liveScoreCoachResetImportResultAction();
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/matchDayCompetitions')
         }
     }
 
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
+            <Header className="form-header-view bg-transparent d-flex align-items-center">
                 <div className="row">
                     <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
@@ -129,8 +122,7 @@ class LiveScoreCoachImport extends Component {
                 <div className="row">
                     <label>
                         <input
-                            style={{ cursor: "pointer" }}
-                            className="pt-2 pb-2"
+                            className="pt-2 pb-2 pointer"
                             type="file"
                             ref={(input) => {
                                 this.filesInput = input
@@ -148,7 +140,7 @@ class LiveScoreCoachImport extends Component {
                 </div>
             </div>
 
-            <div className="col-sm" style={{ marginTop: 10 }}>
+            <div className="col-sm mt-10">
                 <div className="row">
                     <div className="reg-add-save-button">
                         <Button onClick={this.onUploadBtn} className="primary-add-comp-form" type="primary">
@@ -173,9 +165,9 @@ class LiveScoreCoachImport extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="23" />

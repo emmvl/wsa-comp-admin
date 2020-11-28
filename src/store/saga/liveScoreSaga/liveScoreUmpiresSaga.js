@@ -72,7 +72,7 @@ function* liveScoreUmpiresImportSaga(action) {
             });
 
             if (Object.keys(result.result.data.error).length === 0) {
-                history.push("/liveScoreUmpireList");
+                history.push("/matchDayUmpireList");
                 message.success("Umpire Imported Successfully.");
             } else {
                 receiptImportResult(result.result);

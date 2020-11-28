@@ -90,7 +90,6 @@ function ladderFormatReducer(state = initialState, action) {
             }
             else if(getKey =="allDivision")
             {
-                console.log("AllDivision::" + updatedValue);
                 state.isAllDivisionChecked = updatedValue;
             }
             else{

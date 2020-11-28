@@ -66,7 +66,7 @@ const column = [
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
+            pathname: '/matchDayMatchDetails',
             state: { matchId: id, umpireKey: 'umpire', screenName: 'umpire' }
         }} >
             <span className="input-heading-add-another pt-0">{id}</span>
@@ -116,7 +116,7 @@ const column = [
                             {user1 && (`${user1.firstName} ${user1.lastName}`)}
                         </span>
                     </div>
-                    <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className="col-sm d-flex justify-content-end">
                         <span
                             style={{ textDecoration: 'underline' }}
                             onClick={() => this_obj.onChangeStatus(index, record, 'user1', statusText, user1)}
@@ -168,7 +168,6 @@ class AssignUmpire extends Component {
             selectedComp: null,
         };
         this_obj = this
-
     }
 
     componentDidMount() {
@@ -176,7 +175,6 @@ class AssignUmpire extends Component {
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
     }
-
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
@@ -260,7 +258,6 @@ class AssignUmpire extends Component {
         this.props.getAssignUmpireListAction(compID, body);
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
@@ -275,11 +272,7 @@ class AssignUmpire extends Component {
                     </div>
                     <div className="d-flex justify-content-between">
                         {/* <div className="mt-5"> */}
-                        {/* <div style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
+                        {/* <div className="w-100 d-flex flex-row align-items-center"
                         }}> */}
                         {/* <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
@@ -339,15 +332,10 @@ class AssignUmpire extends Component {
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile d-flex justify-content-end"
-                        style={{ width: '100%' }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile d-flex justify-content-end w-100">
                         {/* <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <span style={{ cursor: "pointer" }}
-                                    onClick={() => history.push('/umpire')}
-                                    className="input-heading-add-another">
+                                <span onClick={() => history.push('/umpire')} className="input-heading-add-another pointer">
                                     {AppConstants.backToUmpire}
                                 </span>
                             </div>

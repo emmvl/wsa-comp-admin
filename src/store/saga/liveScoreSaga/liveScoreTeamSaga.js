@@ -93,7 +93,7 @@ function* liveScoreDeleteTeamSaga(action) {
                 status: result.status,
             });
 
-            history.push('/liveScoreTeam');
+            history.push('/matchDayTeam');
 
             message.success('Team Deleted Successfully.');
         } else {
@@ -115,7 +115,7 @@ function* liveScoreDeletePlayerSaga(action) {
                 type: ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_SUCCESS,
                 status: result.status,
             });
-            history.push('/liveScoreTeam');
+            history.push('/matchDayTeam');
             message.success('Player Deleted Successfully.');
         } else {
             yield call(failSaga, result);
@@ -165,16 +165,14 @@ function* addTeamLiveScoreSaga(action) {
 
             message.success(action.teamId ? 'Team has been updated Successfully' : 'Team has been created Successfully.');
 
-            history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/liveScoreTeam');
+            history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/matchDayTeam');
 
-            console.log("*******", action.sourceIdAvailable, action.teamUniqueKey)
             let updateCompData = {
                 teamUniqueKey: action.teamUniqueKey ? action.teamUniqueKey : "",
                 name: result.result.data.name
             }
             if (action.sourceIdAvailable === true && action.teamUniqueKey) {
                 const result1 = yield call(CompetitionAxiosApi.updateCompTeamName, updateCompData);
-                console.log("result1",result1)
                 if (result1.status === 1) {
                 yield put({
                     type: ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS,
@@ -201,7 +199,7 @@ function* liveScoreTeamImportSaga(action) {
             });
 
             if (Object.keys(result.result.data.error).length === 0) {
-                history.push('/liveScoreTeam');
+                history.push('/matchDayTeam');
                 message.success('Team Imported Successfully.');
             } else {
                 receiptImportResult(result.result);
@@ -243,6 +241,7 @@ function* liveScoreTeamPagingSaga(action) {
             action.search,
             action.sortBy,
             action.sortOrder,
+            action.competitionOrganisationId
         );
 
         if (result.status === 1) {

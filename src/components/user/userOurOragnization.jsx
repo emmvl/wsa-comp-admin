@@ -57,7 +57,7 @@ class UserOurOrganization extends Component {
             loggedInuserOrgTypeRefId: 0,
             loading: false,
             photoLoading: false,
-            photoDeleteLoading:false,
+            photoDeleteLoading: false,
             buttonPressed: "",
             getDataLoading: false,
             deleteModalVisible: false,
@@ -116,15 +116,17 @@ class UserOurOrganization extends Component {
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 } else {
-                    history.push('/userAffiliatesList');
+                     // history.push('/userAffiliatesList');
                 }
             }
         }
 
-        if(nextProps.userState!= userState){
+        if (nextProps.userState != userState) {
             if (userState.onSaveOrgPhotoLoad == false && this.state.photoLoading == true) {
-                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
-                    photoLoading: false });
+                this.setState({
+                    isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
+                    photoLoading: false
+                });
 
                 this.props.getOrganisationPhotoAction(obj);
             }
@@ -374,15 +376,15 @@ class UserOurOrganization extends Component {
     }
 
     addPhoto = () => {
-        try{
+        try {
             let obj = {
                 id: 0,
                 photoTypeRefId: null,
                 photoUrl: null
             }
             this.setState({ isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null });
-        }catch(ex){
-            console.log("Error in addPhoto::"+ex);
+        } catch (ex) {
+            console.log("Error in addPhoto::" + ex);
         }
     }
 
@@ -477,11 +479,6 @@ class UserOurOrganization extends Component {
                     formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
                     formData.append("logoIsDefault", affiliate.logoIsDefault ? 1 : 0);
                     formData.append("contacts", contacts);
-                    // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-                    // formData.append("termsAndConditions", termsAndConditionsValue);
-                    // formData.append("organisationLogo", this.state.termsAndCondititionFile);
-                    // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
-                    console.log("formData", formData);
                     this.setState({ loading: true });
                     this.props.saveAffiliateAction(formData);
                 }
@@ -513,7 +510,7 @@ class UserOurOrganization extends Component {
         formData.append("organisationId", getOrganisationData().organisationUniqueKey);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
         formData.append("termsAndConditions", termsAndConditionsValue ? termsAndConditionsValue : "");
-        formData.append("termsAndCondition", this.state.termsAndCondititionFile? this.state.termsAndCondititionFile : "");
+        formData.append("termsAndCondition", this.state.termsAndCondititionFile ? this.state.termsAndCondititionFile : "");
 
         this.setState({ loading: true });
         this.props.updateTermsAndConditionAction(formData);
@@ -533,17 +530,9 @@ class UserOurOrganization extends Component {
         this.props.updateCharityAction(payload);
     }
 
-    ///////view for breadcrumb
     headerView = () => (
         <div className="header-view">
-            <Header
-                className="form-header-view"
-                style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
+            <Header className="form-header-view d-flex align-items-center bg-transparent">
                 {this.state.sourcePage == "AFF" ? (
                     <Breadcrumb separator=" > ">
                         <NavLink to="/userAffiliatesList">
@@ -553,10 +542,10 @@ class UserOurOrganization extends Component {
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
                     </Breadcrumb>
                 ) : (
-                    <NavLink to="/affiliatedirectory">
-                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
-                    </NavLink>
-                )}
+                        <NavLink to="/affiliatedirectory">
+                            <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                        </NavLink>
+                    )}
             </Header>
         </div>
     );
@@ -614,9 +603,9 @@ class UserOurOrganization extends Component {
             : null;
 
         let defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
-        } ${affiliate.suburb ? `${affiliate.suburb},` : ''
-        } ${state ? `${state},` : ''
-        } Australia`;
+            } ${affiliate.suburb ? `${affiliate.suburb},` : ''
+            } ${state ? `${state},` : ''
+            } Australia`;
 
         return (
             <div className="content-view pt-4">
@@ -655,14 +644,11 @@ class UserOurOrganization extends Component {
                             <input
                                 type="file"
                                 id="user-pic"
-                                style={{ display: 'none' }}
+                                className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
                             />
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", justifyContent: 'center', alignItems: 'flex-start', flexDirection: "column", }}
-                        >
+                        <div className="col-sm d-flex justify-content-center align-items-start flex-column">
                             <Checkbox
                                 className="single-checkbox"
                                 // defaultChecked={false}
@@ -691,7 +677,7 @@ class UserOurOrganization extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.organisationType} />
                     </div>
-                    <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
+                    <div className="col-sm d-flex align-items-center">
                         <InputWithHead heading={affiliate.organisationTypeRefName} />
                     </div>
                 </div>
@@ -699,7 +685,7 @@ class UserOurOrganization extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.affiliatedTo} />
                     </div>
-                    <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
+                    <div className="col-sm d-flex align-items-center">
                         <InputWithHead heading={affiliate.affiliatedToOrgName} />
                     </div>
                 </div>
@@ -882,8 +868,7 @@ class UserOurOrganization extends Component {
                         <div className="pl-5 pb-5 pt-4">
                             <label className="pt-2">
                                 <input
-                                    style={{ cursor: "pointer" }}
-                                    className="pt-2 pb-2"
+                                    className="pt-2 pb-2 pointer"
                                     type="file"
                                     id="teamImport"
                                     ref={(input) => { this.filesInput = input }}
@@ -992,10 +977,7 @@ class UserOurOrganization extends Component {
         return (
             <div className="mb-3">
                 {/* <div className="col-sm"> */}
-                <div
-                    className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                    style={{ width: '100%' }}
-                >
+                <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                     <Button onClick={() => this.editPhotos(record)} className="primary-add-comp-form ml-5" type="primary">
                         {AppConstants.edit}
                     </Button>
@@ -1096,10 +1078,7 @@ class UserOurOrganization extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="col-sm">
-                    <div
-                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
-                        style={{ width: '100%' }}
-                    >
+                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
                         <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
                             {AppConstants.remove}
                         </Button>
@@ -1206,7 +1185,7 @@ class UserOurOrganization extends Component {
                 <div className="inside-container-view">
                     <span className="form-heading">{AppConstants.roundUp}</span>
                     {charityRoundUp.map((item, index) => (
-                        <div className="row" key={index} style={{ marginLeft: '0px' }}>
+                        <div className="row ml-0" key={index}>
                             <Checkbox
                                 className="single-checkbox mt-3"
                                 checked={item.isSelected}
@@ -1323,12 +1302,12 @@ class UserOurOrganization extends Component {
                                                     {this.photosListView()}
                                                 </div>
                                             ) : (
-                                                <div>
-                                                    {this.photosEditHeaderView()}
-                                                    {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
-                                                    {this.photosAddEditView()}
-                                                </div>
-                                            )}
+                                                    <div>
+                                                        {this.photosEditHeaderView()}
+                                                        {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
+                                                        {this.photosAddEditView()}
+                                                    </div>
+                                                )}
                                         </div>
                                         {this.state.isEditView && (
                                             <div>{this.photosEditViewFooterView()}</div>
@@ -1342,12 +1321,12 @@ class UserOurOrganization extends Component {
                                     </TabPane>
                                     {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
                                         (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
-                                        <TabPane tab={AppConstants.charity} key="4">
-                                            <div className="tab-formView mt-5">
-                                                {this.charityVoucherView()}
-                                            </div>
-                                        </TabPane>
-                                    )}
+                                            <TabPane tab={AppConstants.charity} key="4">
+                                                <div className="tab-formView mt-5">
+                                                    {this.charityVoucherView()}
+                                                </div>
+                                            </TabPane>
+                                        )}
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />

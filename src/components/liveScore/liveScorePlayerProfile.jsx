@@ -6,6 +6,8 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+
 const { Content } = Layout;
 const { Option } = Select;
 const columns = [
@@ -81,6 +83,13 @@ class LiveScorePlayerProfile extends Component {
         this.playerName = this.props.location.state ? this.props.location.state.playerName : ''
     }
 
+    componentDidMount() {
+
+        if (!getLiveScoreCompetiton()) {
+            history.push('/matchDayCompetitions')
+        }
+
+    }
 
     onChange = e => {
         this.setState({
@@ -88,7 +97,6 @@ class LiveScorePlayerProfile extends Component {
         });
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -221,7 +229,7 @@ class LiveScorePlayerProfile extends Component {
                         <div className="table-responsive home-dash-table-view">
                             <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false} />
                         </div>
-                        <div className="fluid-width" style={{ marginTop: 10 }}>
+                        <div className="fluid-width mt-10">
                             <div className="row">
                                 <div className="col-sm">
                                     <span className="input-heading-add-another">+ {AppConstants.addAnotherDetail}</span>
@@ -260,9 +268,9 @@ class LiveScorePlayerProfile extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
+                    menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
@@ -275,7 +283,7 @@ class LiveScorePlayerProfile extends Component {
                                 <div className="col-sm-3">
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
+                                <div className="col-sm-9 default-bg" style={{ paddingBottom: 10 }}>
                                     {this.tableView()}
                                 </div>
                             </div>

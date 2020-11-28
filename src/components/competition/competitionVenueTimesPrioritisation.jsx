@@ -283,25 +283,19 @@ class CompetitionVenueTimesPrioritisation extends Component {
     //     });
     // }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: "flex", alignContent: "center" }}
-                    >
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {AppConstants.venues}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-venue-courts-header-view">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {AppConstants.venues}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        );
-    };
+            </div>
+        </Header>
+    );
 
     onYearClick(yearId) {
         setOwnCompetitionYear(yearId)
@@ -334,7 +328,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
         }
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr } = this.props.appState
         return (
@@ -360,15 +353,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginRight: 50
-                                }}
-                            >
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">
                                     {AppConstants.competition}:
                                 </span>
@@ -417,9 +402,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             rules={[{ required: true, message: ValidationConstant.dateField }]}
                         >
                             <DatePicker
-                                className="comp-dashboard-botton-view-mobile"
-                                size="large"
-                                style={{ width: '100%' }}
+                                className="comp-dashboard-botton-view-mobile w-100"
+                                // size="large"
                                 format="DD/MM/YYYY"
                                 placeholder="dd-mm-yyyy"
                                 showTime={false}
@@ -428,10 +412,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             />
                         </Form.Item>
                     </div>
-                    <div
-                        className="col-sm-2 delete-image-view pb-4"
-
-                    >
+                    <div className="col-sm-2 delete-image-view pb-4">
                         <span className="user-remove-btn" onClick={() => this.props.removePrefencesObjectAction(index, item, 'nonPlayingDates')}>
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
@@ -488,7 +469,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         >
                             <Select
                                 disabled={disabledStatus}
-                                style={{ width: '100%', minWidth: 182 }}
+                                className="w-100"
+                                style={{ minWidth: 182 }}
                                 placeholder="Select Court"
                                 onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
                                 // value={item.venueCourtId}
@@ -514,7 +496,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <Select
                                     disabled={disabledStatus}
                                     mode="multiple"
-                                    style={{ width: '100%', minWidth: 182, display: "grid", alignItems: 'center' }}
+                                    className="w-100 d-grid align-items-center"
+                                    style={{ minWidth: 182 }}
                                     placeholder="Select Division"
                                     onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
                                     // value={item.entitiesDivisionId}
@@ -540,7 +523,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <Select
                                     disabled={disabledStatus}
                                     mode="multiple"
-                                    style={{ width: '100%', minWidth: 182, display: "grid", alignItems: 'center' }}
+                                    className="w-100 d-grid align-items-center"
+                                    style={{ minWidth: 182 }}
                                     placeholder="Select Grade"
                                     // value={item.entitiesGradeId}
                                     onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
@@ -558,10 +542,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         </div>
                     )}
 
-                    <div
-                        className="col-sm-2 delete-image-view pb-4"
-
-                    >
+                    <div className="col-sm-2 delete-image-view pb-4">
                         <span className="user-remove-btn" onClick={() => disabledStatus == false && this.removePreferencesObjectAction(index, item)}>
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
@@ -581,7 +562,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="col-sm">
                     <InputWithHead heading="Court" />
                     <Select
-                        style={{ width: '100%', minWidth: 182 }}
+                        className="w-100"
+                        style={{ minWidth: 182 }}
                         placeholder="Select Court"
                     >
                         {courtArray.map((item) => (
@@ -593,7 +575,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     <InputWithHead heading="Grade" />
                     <Select
                         mode="tags"
-                        style={{ width: '100%', minWidth: 182, display: "grid", alignItems: 'center' }}
+                        className="w-100 d-grid align-items-center"
+                        style={{ minWidth: 182 }}
                         placeholder="Select Grade"
                     >
                         {gradesList.map((item) => (
@@ -637,17 +620,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
     getReferenceTitle = (ItemArr) => {
-        console.log(ItemArr)
-        if (ItemArr.name == "EVEN_GRADES" && this.state.finalTypeRefId == 2) {
+        if (ItemArr.name === "EVEN_GRADES" && this.state.finalTypeRefId == 2) {
             return AppConstants.pools
-        }
-        else if (ItemArr.name == "ALLOCATE_GRADES" && this.state.finalTypeRefId == 2) {
+        } else if (ItemArr.name === "ALLOCATE_GRADES" && this.state.finalTypeRefId == 2) {
             return AppConstants.pools
-        }
-        else {
+        } else {
             return ItemArr.description
         }
-
     }
 
     homeTeamRotationView() {
@@ -860,7 +839,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         <Select
                             mode="multiple"
                             disabled={disabledStatus}
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
                             onChange={venueId => {
                                 this.onSelectValues(venueId)
                             }}
@@ -968,16 +948,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
         const { venueConstrainstData, venuePost } = this.props.venueTimeState;
 
         return (
-            <div className="content-view" style={{ paddingTop: '30px' }}>
-                <span className="applicable-to-heading" style={{ paddingTop: '0px', paddingBottom: '20px' }}>
+            <div className="content-view" style={{ paddingTop: 30 }}>
+                <span className="applicable-to-heading pt-0" style={{ paddingBottom: 20 }}>
                     {AppConstants.matchPreference}
                 </span>
                 {(venueConstrainstData.matchPreference || []).map((item, index) => (
-                    <div className="fluid-width comp-venue-time-inside-container-view" style={{ marginBottom: '20px' }}>
-                        <div
-                            className="col-sm delete-image-view pb-4"
-
-                        >
+                    <div className="fluid-width comp-venue-time-inside-container-view mb-20">
+                        <div className="col-sm delete-image-view pb-4">
                             <span className="user-remove-btn" onClick={() => this.removeDetail(index, "matchPreference")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
@@ -993,7 +970,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.divisionName }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'competitionMembershipProductDivisionId', index)}
                                         value={item.competitionMembershipProductDivisionId}
                                     >
@@ -1015,7 +993,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.gradeNameRequired }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'competitionDivisionGradeId', index)}
                                         value={item.competitionDivisionGradeId}
                                     >
@@ -1034,7 +1013,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.teamName }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'team1Id', index)}
                                         value={item.team1Id}
                                     >
@@ -1051,7 +1031,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.teamName }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'team2Id', index)}
                                         value={item.team2Id}
                                     >
@@ -1070,7 +1051,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'venueId', index)}
                                         value={item.venueId}
                                     >
@@ -1087,7 +1069,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.court }]}
                                 >
                                     <Select
-                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                        className="w-100"
+                                        style={{ paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'courtId', index)}
                                         value={item.courtId}
                                     >
@@ -1106,9 +1089,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.dateField }]}
                                 >
                                     <DatePicker
-                                        size="large"
+                                        // size="large"
                                         placeholder="dd-mm-yyyy"
-                                        style={{ width: '100%' }}
+                                        className="w-100"
                                         onChange={(e) => this.onChangeSetMPValue(e, 'matchDate', index)}
                                         name="matchDate"
                                         format="DD-MM-YYYY"
@@ -1123,8 +1106,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.startTime }]}
                                 >
                                     <TimePicker
-                                        className="comp-venue-time-timepicker"
-                                        style={{ width: '100%' }}
+                                        className="comp-venue-time-timepicker w-100"
                                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                                         // value={moment(item.endTime, "HH:mm")}
@@ -1154,19 +1136,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
         const { venueConstrainstData, venuePost } = this.props.venueTimeState;
         let lockedDraws = venueConstrainstData.lockedDraws != null ? venueConstrainstData.lockedDraws : [];
         return (
-            <div className="content-view" style={{ paddingTop: '30px' }}>
-                <span className="applicable-to-heading" style={{ paddingTop: '0px', paddingBottom: '20px' }}>{AppConstants.lockedDraws}</span>
+            <div className="content-view pt-5">
+                <span className="applicable-to-heading pt-0 pb-4">{AppConstants.lockedDraws}</span>
                 {(lockedDraws || []).map((item, index) => (
                     <div>
                         {item.isLocked && (
-                            <div
-                                className="fluid-width comp-venue-time-inside-container-view"
-                                style={{ marginBottom: '20px' }}
-                            >
-                                <div
-                                    className="col-sm delete-image-view pb-4"
-
-                                >
+                            <div className="fluid-width comp-venue-time-inside-container-view mb-20">
+                                <div className="col-sm delete-image-view pb-4">
                                     <span className="user-remove-btn" onClick={() => this.removeDetail(index, "lockedDraws")}>
                                         <i className="fa fa-trash-o" aria-hidden="true" />
                                     </span>
@@ -1183,7 +1159,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.divisionName }]}
                                         >
                                             <Select
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'competitionMembershipProductDivisionId', index)}
                                                 value={item.competitionMembershipProductDivisionId}
                                             >
@@ -1205,7 +1182,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.gradeNameRequired }]}
                                         >
                                             <Select
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'competitionDivisionGradeId', index)}
                                                 value={item.competitionDivisionGradeId}
                                             >
@@ -1224,7 +1202,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.teamName }]}
                                         >
                                             <Select
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'team1Id', index)}
                                                 value={item.team1Id}
                                             >
@@ -1243,7 +1222,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.teamName }]}
                                         >
                                             <Select
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'team2Id', index)}
                                                 value={item.team2Id}
                                             >
@@ -1264,7 +1244,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                         >
                                             <Select
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'venueId', index)}
                                                 value={item.venueId}
                                             >
@@ -1283,7 +1264,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.court }]}
                                         >
                                             <Select
-                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'courtId', index)}
                                                 value={item.courtId}
                                             >
@@ -1302,9 +1284,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.dateField }]}
                                         >
                                             <DatePicker
-                                                size="large"
+                                                // size="large"
                                                 placeholder="dd-mm-yyyy"
-                                                style={{ width: '100%' }}
+                                                className="w-100"
                                                 onChange={(e) => this.onChangeSetLDValue(e, 'matchDate', index)}
                                                 name="matchDate"
                                                 format="DD-MM-YYYY"
@@ -1319,8 +1301,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.startTime }]}
                                         >
                                             <TimePicker
-                                                className="comp-venue-time-timepicker"
-                                                style={{ width: '100%' }}
+                                                className="comp-venue-time-timepicker w-100"
                                                 onChange={(time) => this.onDLTimeChange(time, index, 'startTime')}
                                                 onBlur={(e) => this.onDLTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                                                 // value={moment(item.endTime, "HH:mm")}
@@ -1391,7 +1372,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Tooltip
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() =>
                                     this.setState({
                                         tooltipVisibleDelete: isPublished,
@@ -1451,17 +1432,17 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         if (venueConstrainstData.courtRotationRefId != 0 && venueConstrainstData.homeTeamRotationRefId != 0) {
             let postObject = {
-                competitionUniqueKey: competitionUniqueKey,
+                competitionUniqueKey,
                 yearRefId: this.state.yearRefId,
                 organisationId: 1,
                 venues: venueConstarintsDetails.venuePost,
-                "nonPlayingDates": venueConstrainstData.nonPlayingDates,
-                "venueConstraintId": venueConstrainstData.venueConstraintId,
-                "courtRotationRefId": venueConstrainstData.courtRotationRefId,
-                "homeTeamRotationRefId": venueConstrainstData.homeTeamRotationRefId,
-                "courtPreferences": courtPreferencesPost,
-                "matchPreference": venueConstrainstData.matchPreference,
-                "lockedDraws": venueConstrainstData.lockedDraws
+                nonPlayingDates: venueConstrainstData.nonPlayingDates,
+                venueConstraintId: venueConstrainstData.venueConstraintId,
+                courtRotationRefId: venueConstrainstData.courtRotationRefId,
+                homeTeamRotationRefId: venueConstrainstData.homeTeamRotationRefId,
+                courtPreferences: courtPreferencesPost,
+                matchPreference: venueConstrainstData.matchPreference,
+                lockedDraws: venueConstrainstData.lockedDraws
             }
 
             this.setState({ saveContraintLoad: true })
@@ -1513,12 +1494,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                             {/* {venueConstrainstData.competitionTypeRefId == 1 && (
                                 <div>
-                                    <div className="formView" style={{marginTop: '20px'}}>
+                                    <div className="formView" style={{ marginTop: 20 }}>
                                         {this.matchPreferenceView()}
                                     </div>
 
                                     {venueConstrainstData.lockedDraws!= null && venueConstrainstData.lockedDraws.length > 0 && (
-                                        <div className="formView" style={{marginTop: '20px'}}>
+                                        <div className="formView" style={{ marginTop: 20 }}>
                                             {this.lockedGradesView()}
                                         </div>
                                     )}

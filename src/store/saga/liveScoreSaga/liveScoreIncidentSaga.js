@@ -73,7 +73,7 @@ export function* liveScoreAddEditIncidentSaga(action) {
                     status: mediaResult.status,
                     umpireKey: action.data.umpireKey
                 });
-                history.push('/liveScoreIncidentList')
+                history.push('/matchDayIncidentList')
                 message.success('Add Incident - Added Successfully')
             }
             else {
@@ -92,7 +92,7 @@ export function* liveScoreAddEditIncidentSaga(action) {
         //             result: result.result.data,
         //             status: result.status,
         //         });
-        //         history.push('/liveScoreIncidentList')
+        //         history.push('/matchDayIncidentList')
         //         message.success('Add Incident - Added Successfully')
         //     } else {
         //         yield call(failSaga, result)

@@ -12,6 +12,7 @@ import {
     getOrganisationData,
     clearUmpireStorage,
     setPrevUrl,
+    setImpersonation,
 } from "util/sessionStorage";
 import { clearHomeDashboardData } from "store/actions/homeAction/homeAction";
 import {
@@ -66,7 +67,7 @@ class DashboardLayout extends React.Component {
 
                     await setOrganisationData(organisationItem);
                     this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
-
+                    setImpersonation(isImpersonation ? true : false)
                     this.setState({
                         dataOnload: false,
                         impersonationOrgData: isImpersonation ? orgData : null,
@@ -117,7 +118,7 @@ class DashboardLayout extends React.Component {
                     .findIndex((role) => role.roleId === 10) > -1;
 
                 const orgData = await getOrganisationData();
-
+                setImpersonation(isImpersonation ? true : false)
                 this.setState({
                     impersonationOrgData: isImpersonation ? orgData : null,
                 });
@@ -461,9 +462,9 @@ class DashboardLayout extends React.Component {
                                                             style={{ display: showRoleLevelPermission(userRoleId, 'liveScores') ? 'visible' : 'none' }}>
                                                             <div className="lives-cores menu-wrap"
                                                                 onClick={() => this.props.clearDataOnCompChangeAction()}>
-                                                                <NavLink to="/liveScoreCompetitions">
+                                                                <NavLink to="/matchDayCompetitions">
                                                                     <span className="icon" />
-                                                                    {AppConstants.liveScores}
+                                                                    {AppConstants.matchDay}
                                                                 </NavLink>
                                                             </div>
                                                         </li>

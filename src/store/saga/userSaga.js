@@ -121,6 +121,7 @@ function* saveAffiliateSaga(action) {
         result: result.result.data,
         status: result.status,
       });
+      history.push('/userAffiliatesList');
     } else {
       yield call(failSaga, result);
     }
@@ -789,6 +790,7 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
+        impersonationAccess:action.payload.access
       });
       if (action.payload.access == false) {
         history.push('/')

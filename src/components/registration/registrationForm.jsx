@@ -50,7 +50,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const Mailto = ({ email, subject, body, children }) => {
     return (
-        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{children}</a>
+        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank">{children}</a>
     );
 };
 
@@ -155,7 +155,7 @@ class RegistrationForm extends Component {
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
-        this.getRefernce();
+        this.getReference();
         this.formRef = React.createRef();
     }
 
@@ -178,7 +178,7 @@ class RegistrationForm extends Component {
         // this.props.getYearAndCompetitionAction(this.props.appState.yearList, null)
     }
 
-    getRefernce() {
+    getReference() {
         this.props.getVenuesTypeAction();
         this.props.getRegistrationMethod();
         this.props.getRegFormAdvSettings();
@@ -198,7 +198,7 @@ class RegistrationForm extends Component {
             }
         }
         if (this.state.onRegistrationSaveLoad === true && registrationState.onRegistrationSaveLoad === false) {
-            this.setState({onRegistrationSaveLoad: false});
+            this.setState({ onRegistrationSaveLoad: false });
             history.push("/registrationFormList")
         }
         if (nextProps.appState !== this.props.appState) {
@@ -296,7 +296,7 @@ class RegistrationForm extends Component {
 
             this.props.updateRegistrationForm(disclaimerData, "registrationDisclaimer")
         }
-    };
+    }
 
     // for remove disclaimer
     removeDisclaimer(e, index) {
@@ -330,7 +330,7 @@ class RegistrationForm extends Component {
         }
     };
 
-    registrationSend = (isResend) =>{
+    registrationSend = (isResend) => {
         let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
         const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
         let registration_settings = []
@@ -358,7 +358,7 @@ class RegistrationForm extends Component {
             SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
 
             this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
-            this.setState({onRegistrationSaveLoad: true});
+            this.setState({ onRegistrationSaveLoad: true });
         } else {
             message.error(ValidationConstants.pleaseSelectMembershipProduct)
         }
@@ -389,7 +389,7 @@ class RegistrationForm extends Component {
             this.registrationSend(0);
         }
 
-        this.setState({visible: false});
+        this.setState({ visible: false });
     }
 
     confirmationModalView() {
@@ -400,7 +400,7 @@ class RegistrationForm extends Component {
                 onCancel={() => this.handleModal("close")}
                 centered
                 footer={[
-                    <Button key="Cancel" className="save-draft-text" type="save-draft-text" style={{width: '100px'}} onClick={() => this.handleModal("cancel")}>
+                    <Button key="Cancel" className="save-draft-text" type="save-draft-text" style={{ width: '100px' }} onClick={() => this.handleModal("cancel")}>
                         {AppConstants.cancel}
                     </Button>,
                     <Button key="Proceed" onClick={() => this.handleModal("ok")} type="primary" className="open-reg-button">
@@ -413,23 +413,12 @@ class RegistrationForm extends Component {
         )
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <Header className="form-header-view d-flex bg-transparent align-items-center">
                     <div className="row">
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", alignContent: "center" }}
-                        >
+                        <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">
                                     {AppConstants.registrationForm}
@@ -450,14 +439,7 @@ class RegistrationForm extends Component {
     //             <div className="fluid-width">
     //                 <div className="row">
     //                     <div className="col-sm-3">
-    //                         <div
-    //                             style={{
-    //                                 width: "fit-content",
-    //                                 display: "flex",
-    //                                 flexDirection: "row",
-    //                                 alignItems: "center"
-    //                             }}
-    //                         >
+    //                         <div className="w-ft d-flex flex-row align-items-center">
     //                             <span className="year-select-heading">
     //                                 {AppConstants.year}:
     //                             </span>
@@ -477,15 +459,7 @@ class RegistrationForm extends Component {
     //                         </div>
     //                     </div>
     //                     <div className="col-sm-3">
-    //                         <div
-    //                             style={{
-    //                                 width: "fit-content",
-    //                                 display: "flex",
-    //                                 flexDirection: "row",
-    //                                 alignItems: "center",
-    //                                 marginRight: 50
-    //                             }}
-    //                         >
+    //                         <div className="d-flex align-items-center flex-row w-ft" style={{ marginRight: 50 }}>
     //                             <span className="year-select-heading">
     //                                 {AppConstants.competition}:
     //                             </span>
@@ -599,9 +573,9 @@ class RegistrationForm extends Component {
                             <DatePicker
                                 // size="large"
                                 placeholder="dd-mm-yyyy"
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 onChange={(e) => this.dateChange(e, "registrationOpenDate")}
-                                name={"registrationOpenDate"}
+                                name="registrationOpenDate"
                                 format="DD-MM-YYYY"
                                 showTime={false}
                                 disabledDate={this.disabledDate}
@@ -610,7 +584,7 @@ class RegistrationForm extends Component {
                                 disabledDate={d => !d || d.isAfter(closeDate)
                                     // || d.isSameOrBefore(dateOpen)
                                 }
-                                // value={dateOpen ? moment(dateOpen, "YYYY-MM-DD") : ''}
+                            // value={dateOpen ? moment(dateOpen, "YYYY-MM-DD") : ''}
                             />
                         </Form.Item>
                     </div>
@@ -630,7 +604,7 @@ class RegistrationForm extends Component {
                         >
                             <DatePicker
                                 // size="large"
-                                style={{ width: '100%' }}
+                                className="w-100"
                                 disabledDate={this.disabledDate}
                                 placeholder="dd-mm-yyyy"
                                 onChange={(e) => this.dateChange(e, "registrationCloseDate")}
@@ -641,7 +615,7 @@ class RegistrationForm extends Component {
                                 disabledDate={d => !d || d.isAfter(closeDate)
                                     // || d.isSameOrBefore(dateOpen)
                                 }
-                                // value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
+                            // value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
                             />
                         </Form.Item>
                     </div>
@@ -682,7 +656,7 @@ class RegistrationForm extends Component {
                         </div>
                     </div>
                 ))}
-                <div className="row ml-1" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="row ml-1 d-flex align-items-center">
                     <Checkbox
                         className="single-checkbox pt-2"
                         checked={defaultChecked.trainingVisible}
@@ -695,13 +669,12 @@ class RegistrationForm extends Component {
                             <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
                     </div>
-
                 </div>
                 {defaultChecked.trainingVisible && (
                     <div className="comp-open-reg-check-inpt-view">
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
+                                <div className="col-sm d-flex">
                                     <Checkbox
                                         className="comp-open-single-checkbox"
                                         checked={defaultChecked.daysVisible}
@@ -725,7 +698,7 @@ class RegistrationForm extends Component {
                         </div>
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
+                                <div className="col-sm d-flex">
                                     <Checkbox
                                         className="comp-open-single-checkbox"
                                         onChange={(e) => this.updateTraining(e.target.checked, "venueVisible")}
@@ -738,7 +711,8 @@ class RegistrationForm extends Component {
                                     <div className="col-sm">
                                         <Select
                                             name="trainingVenueId"
-                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                            className="w-100"
+                                            style={{ paddingRight: 1, minWidth: 182 }}
                                             onChange={(trainingVenueId) => this.props.updateRegistrationForm(trainingVenueId, "trainingVenueId")}
                                             value={formDataValue ? formDataValue.trainingVenueId : null}
                                             placeholder="Select"
@@ -798,11 +772,16 @@ class RegistrationForm extends Component {
                         {((formDataValue.organisationPhotos) || []).map((ph) => (
                             <div key={ph.organisationPhotoId}>
                                 <div>
-                                    <img src={ph.photoUrl} alt="" height={125} width={125}
-                                         style={{ borderRadius: 0, marginLeft: 0 }} name="image"
-                                         onError={ev => {
-                                             ev.target.src = AppImages.circleImage;
-                                         }}
+                                    <img
+                                        src={ph.photoUrl}
+                                        alt=""
+                                        height={125}
+                                        width={125}
+                                        style={{ borderRadius: 0, marginLeft: 0 }}
+                                        name="image"
+                                        onError={ev => {
+                                            ev.target.src = AppImages.circleImage;
+                                        }}
                                     />
                                 </div>
                                 <div className="photo-type">{ph.photoType}</div>
@@ -853,7 +832,7 @@ class RegistrationForm extends Component {
         let hasError = this.state.hasError
         return (
             <div className="fees-view">
-                <div className="row ml-1" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="row ml-1 d-flex align-items-center">
                     <Checkbox
                         className="single-checkbox mt-0"
                         checked={defaultChecked.replyContactVisible}
@@ -871,7 +850,7 @@ class RegistrationForm extends Component {
                     <div className="comp-open-reg-check-inpt-view">
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
+                                <div className="col-sm d-flex">
                                     <Checkbox
                                         className="comp-open-single-checkbox"
                                         checked={defaultChecked.replyName}
@@ -896,7 +875,7 @@ class RegistrationForm extends Component {
                         </div>
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
+                                <div className="col-sm d-flex">
                                     <Checkbox
                                         className="single-checkbox"
                                         checked={defaultChecked.replyRole}
@@ -921,7 +900,7 @@ class RegistrationForm extends Component {
                         </div>
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
+                                <div className="col-sm d-flex">
                                     <Checkbox
                                         className="single-checkbox"
                                         checked={defaultChecked.replyEmail}
@@ -956,7 +935,7 @@ class RegistrationForm extends Component {
                         </div>
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
+                                <div className="col-sm d-flex">
                                     <Checkbox
                                         className="single-checkbox"
                                         checked={defaultChecked.replyPhone}
@@ -1243,7 +1222,7 @@ class RegistrationForm extends Component {
     };
 
     advancedNode = item => {
-        return <span style={{ display: 'block', marginTop: 4 }}>{item.description}</span>;
+        return <span className="d-block" style={{ marginTop: 4 }}>{item.description}</span>;
     };
 
     showSubAdvancedNode(item) {
@@ -1297,7 +1276,7 @@ class RegistrationForm extends Component {
                                 placeholder={AppConstants.disclaimers}
                                 onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerText")}
                                 disabled={isPublished}
-                                // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
+                            // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
                             />
                         </Form.Item>
                         <Form.Item name={`disclaimerLink${index}`} rules={[{
@@ -1310,7 +1289,7 @@ class RegistrationForm extends Component {
                                 placeholder={AppConstants.disclaimerLink}
                                 onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerLink")}
                                 disabled={isPublished}
-                                // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
+                            // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
                             />
                         </Form.Item>
                     </div>
@@ -1330,7 +1309,6 @@ class RegistrationForm extends Component {
         const registrationFormData = this.props.registrationState.registrationFormData[0]
         let { inviteTypeData } = this.props.commonReducerState;
         let isPublished = false; //this.state.isPublished; // CM-1513
-        console.log("CanSendInvite", this.props.registrationState.canInviteSend);
 
         return (
             <div className="discount-view pt-5">
@@ -1349,26 +1327,19 @@ class RegistrationForm extends Component {
                     <div>
                         <div className="fluid-width">
                             <div className="row">
-                                <div className="col-sm-3" style={{ marginRight: '25px' }}>
-                                    <div
-                                        style={{
-                                            width: "fit-content",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center"
-                                        }}
-                                    >
+                                <div className="col-sm-3" style={{ marginRight: 25 }}>
+                                    <div className="w-ft d-flex flex-row align-items-center">
                                         <span className="year-select-heading">
                                             {AppConstants.year}:
                                         </span>
                                         <Select
                                             name="yearRefId"
-                                            className="year-select  reg-filter-select"
-                                            style={{ marginLeft: "25px", minWidth: 100 }}
+                                            className="year-select reg-filter-select"
+                                            style={{ marginLeft: 25, minWidth: 100 }}
                                             disabled={isPublished}
                                             onChange={yearRefId => this.onYearChange(yearRefId)}
                                             value={registrationFormData.inviteYearRefId}
-                                            // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+                                        // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
                                         >
                                             {this.props.appState.allYearList.map(item => (
                                                 <Option key={'year_' + item.id} value={item.id}>
@@ -1379,20 +1350,12 @@ class RegistrationForm extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
-                                    <div
-                                        style={{
-                                            width: "fit-content",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            marginRight: 50
-                                        }}
-                                    >
+                                    <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                         <span className="year-select-heading">
                                             {AppConstants.competition}:
                                         </span>
                                         <Select
-                                            style={{ marginLeft: "25px", minWidth: 160 }}
+                                            style={{ marginLeft: 25, minWidth: 160 }}
                                             name="competition"
                                             className="year-select reg-filter-select1"
                                             disabled={isPublished}
@@ -1443,13 +1406,13 @@ class RegistrationForm extends Component {
                         </Radio.Group>
                         {(registrationFormData.dobPreferenceRefId == 2) && (
                             <div>
-                                <div style={{ display: "flex", marginLeft: 23 }}>
+                                <div className="d-flex" style={{ marginLeft: 23 }}>
                                     <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
                                     <div className="dob-pref-date-picker">
                                         <DatePicker
-                                            size="large"
+                                            // size="large"
                                             placeholder="dd-mm-yyyy"
-                                            style={{ width: '100%' }}
+                                            className="w-100"
                                             onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
                                             name="dobPreferenceMoreThan"
                                             format="DD-MM-YYYY"
@@ -1460,12 +1423,12 @@ class RegistrationForm extends Component {
                                         />
                                     </div>
                                 </div>
-                                <div style={{ display: "flex", marginLeft: 23 }}>
+                                <div className="d-flex" style={{ marginLeft: 23 }}>
                                     <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>
                                     <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
                                         <DatePicker
-                                            size="large"
-                                            style={{ width: '100%' }}
+                                            // size="large"
+                                            className="w-100"
                                             placeholder="dd-mm-yyyy"
                                             onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
                                             name="dobPreferenceLessThan"
@@ -1495,9 +1458,9 @@ class RegistrationForm extends Component {
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
-                {hardShipCodesList.map((item, index) => (
+                {hardShipCodesList.map((item) => (
                     <div>
-                        <div style={{ display: "flex", marginTop: "13px" }}>
+                        <div className="d-flex" style={{ marginTop: "13px" }}>
                             <div className={item.isActive == 0 ? "hardshipcode-text-active" : "hardshipcode-text"}>
                                 {item.code}
                             </div>
@@ -1534,7 +1497,7 @@ class RegistrationForm extends Component {
                         <div className="col-sm-9">
                             <div className="comp-buttons-view">
                                 <Tooltip
-                                    style={{ height: '100%' }}
+                                    className="h-100"
                                     onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 })}
                                     onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
                                     visible={this.state.tooltipVisibleDraft}
@@ -1567,8 +1530,8 @@ class RegistrationForm extends Component {
                                     htmlType="submit"
                                     type="primary"
                                     onClick={() => this.setState({ statusRefId: 2 })}
-                                    // disabled={statusRefId == 2}
-                                    // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                // disabled={statusRefId == 2}
+                                // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                 >
                                     {statusRefId == 2 ? AppConstants.update : AppConstants.openRegistrations}
                                 </Button>
@@ -1595,7 +1558,7 @@ class RegistrationForm extends Component {
             <div>
                 {statusRefId == 2 && (
                     <div className="formView">
-                        <div className="content-view pt-4" style={{ marginBottom: '20px' }}>
+                        <div className="content-view pt-4 mb-20">
                             <div className="row">
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
@@ -1651,7 +1614,7 @@ class RegistrationForm extends Component {
 
                             <Loader
                                 visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
-                                this.props.registrationState.onRegistrationSaveLoad}
+                                    this.props.registrationState.onRegistrationSaveLoad}
                             />
                         </Content>
                         <Footer>{this.footerView()}</Footer>

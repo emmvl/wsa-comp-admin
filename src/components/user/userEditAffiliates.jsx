@@ -89,7 +89,7 @@ class UserEditAffiliates extends Component {
                     if (this.state.isSameUserEmailChanged) {
                         this.logout();
                     } else {
-                        history.push("/userAffiliatesList");
+                        // history.push("/userAffiliatesList");
                     }
                 }
             }
@@ -413,8 +413,8 @@ class UserEditAffiliates extends Component {
         });
 
         const stateRefId = stateList.length > 0 && address.state
-          ? stateList.find((state) => state.name === address.state).id
-          : null;
+            ? stateList.find((state) => state.name === address.state).id
+            : null;
 
         const newAddress = {
             stateRefId,
@@ -437,18 +437,10 @@ class UserEditAffiliates extends Component {
         }
     };
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
+                <Header className="form-header-view d-flex align-items-center bg-transparent">
                     <Breadcrumb separator=" > ">
                         <NavLink to="/userAffiliatesList">
                             <Breadcrumb.Item separator=" > " className="breadcrumb-product">
@@ -480,17 +472,16 @@ class UserEditAffiliates extends Component {
         let organisationTypeRefId = affiliate.organisationTypeRefId;
 
         const state = stateList.length > 0 && affiliate.stateRefId
-          ? stateList.find((state) => state.id === affiliate.stateRefId).name
-          : null;
+            ? stateList.find((state) => state.id === affiliate.stateRefId).name
+            : null;
 
         let defaultAffiliateAddress = `${
-          affiliate.street1 ? `${affiliate.street1},` : ''
+            affiliate.street1 ? `${affiliate.street1},` : ''
         } ${
-          affiliate.suburb ? `${affiliate.suburb},` : ''
+            affiliate.suburb ? `${affiliate.suburb},` : ''
         } ${
-          state ? `${state},` : ''
+            state ? `${state},` : ''
         } Australia`;
-
 
         return (
             <div className="content-view pt-4">
@@ -519,10 +510,7 @@ class UserEditAffiliates extends Component {
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.affiliatedTo} />
                         </div>
-                        <div
-                            className="col-sm"
-                            style={{ display: "flex", alignItems: "center" }}
-                        >
+                        <div className="col-sm d-flex align-items-center">
                             <InputWithHead
                                 auto_complete="new-affilatedTo"
                                 heading={affiliate.affiliatedToOrgName}
@@ -583,16 +571,16 @@ class UserEditAffiliates extends Component {
                 </Form.Item>
                 <Form.Item name="affiliateAddress">
                     <PlacesAutocomplete
-                      defaultValue={defaultAffiliateAddress}
-                      heading={AppConstants.address}
-                      required
-                      error={this.state.affiliateAddressError}
-                      onBlur={() => {
-                          this.setState({
-                              affiliateAddressError: ''
-                          })
-                      }}
-                      onSetData={this.handlePlacesAutocomplete}
+                        defaultValue={defaultAffiliateAddress}
+                        heading={AppConstants.address}
+                        required
+                        error={this.state.affiliateAddressError}
+                        onBlur={() => {
+                            this.setState({
+                                affiliateAddressError: ''
+                            })
+                        }}
+                        onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
 
@@ -796,8 +784,7 @@ class UserEditAffiliates extends Component {
                         <div className=" pl-5 pb-5 pt-4">
                             <label className="pt-2">
                                 <input
-                                    style={{ cursor: "pointer" }}
-                                    className="pt-2 pb-2"
+                                    className="pt-2 pb-2 pointer"
                                     type="file"
                                     id="teamImport"
                                     ref={(input) => {
@@ -966,7 +953,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UserEditAffiliates);
+export default connect(mapStateToProps, mapDispatchToProps)(UserEditAffiliates);

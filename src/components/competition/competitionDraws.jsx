@@ -43,7 +43,6 @@ import {
 import Loader from '../../customComponents/loader';
 import history from "../../util/history"
 import { setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData } from "../../util/sessionStorage"
-
 import {
     setOwnCompetitionYear,
     getOwnCompetitionYear,
@@ -58,7 +57,6 @@ import {
     setDraws_division_grade,
     getDraws_division_grade,
     getOrganisationData,
-
     getOwn_competitionStatus,
     setOwn_competitionStatus
 } from '../../util/sessionStorage';
@@ -69,13 +67,13 @@ import AllLegendComponent from '../../customComponents/allCompetitionLegendCompo
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
-import { date } from 'yup';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 const { RangePicker } = DatePicker;
+
 class CompetitionDraws extends Component {
     constructor(props) {
         super(props);
@@ -127,10 +125,7 @@ class CompetitionDraws extends Component {
         let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
         let changeStatus = this.props.drawsState.changeStatus
 
-        if (
-            this.state.venueLoad &&
-            this.props.drawsState.updateLoad == false
-        ) {
+        if (this.state.venueLoad && this.props.drawsState.updateLoad == false) {
             if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
                 if (venueData.length > 0) {
                     let venueId = this.state.firstTimeCompId == -1 || this.state.dateRangeCheck ? this.state.venueId : venueData[0].id;
@@ -139,7 +134,7 @@ class CompetitionDraws extends Component {
                         if (drawsRoundData.length > 0) {
                             let roundId = null;
                             let roundTime = null;
-                            //let currentDate = this.state.dateRangeCheck ? moment(new Date()).format("YYYY-MM-DD") : null;
+                            // let currentDate = this.state.dateRangeCheck ? moment(new Date()).format("YYYY-MM-DD") : null;
                             if (drawsRoundData.length > 1) {
                                 roundId = drawsRoundData[1].roundId;
                                 setDraws_round(roundId);
@@ -183,8 +178,7 @@ class CompetitionDraws extends Component {
                                 venueLoad: false,
                             });
                         }
-                    }
-                    else if (this.state.changeDateLoad == false) {
+                    } else if (this.state.changeDateLoad == false) {
                         let NullDate = new Date()
                         // if (this.props.drawsState.allcompetitionDateRange.length > 0) {
                         // let dateRangeData = this.props.drawsState.allcompetitionDateRange
@@ -201,8 +195,7 @@ class CompetitionDraws extends Component {
                             0, null, startDate, endDate, this.state.dateRangeCheck
                         );
                         // }
-                    }
-                    else {
+                    } else {
                         this.setState({
                             venueId, changeDateLoad: false
                         })
@@ -269,7 +262,7 @@ class CompetitionDraws extends Component {
             if (this.props.drawsState.changeStatus == false && this.state.changeStatus) {
                 let statusRefId = this.props.drawsState.publishStatus
                 setOwn_competitionStatus(statusRefId)
-                message.success("Draws published to live scores successfully");
+                message.success("Draws published to Match Day successfully");
                 this.setState({ changeStatus: false, competitionStatus: statusRefId })
 
                 if (this.props.drawsState.teamNames != null && this.props.drawsState.teamNames != "") {
@@ -277,15 +270,12 @@ class CompetitionDraws extends Component {
                 }
             }
         }
-        if (
-            this.state.roundLoad && this.props.drawsState.onActRndLoad == false
-        ) {
+        if (this.state.roundLoad && this.props.drawsState.onActRndLoad == false) {
             this.setState({ roundLoad: false });
             if (this.props.drawsState.activeDrawsRoundsData != null &&
                 this.props.drawsState.activeDrawsRoundsData.length > 0) {
                 this.setState({ drawGenerateModalVisible: true })
-            }
-            else {
+            } else {
                 this.callGenerateDraw();
                 // message.config({ duration: 0.9, maxCount: 1 });
                 // message.info(AppConstants.roundsNotAvailable);
@@ -309,25 +299,21 @@ class CompetitionDraws extends Component {
         let yearId = getOwnCompetitionYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let propsData =
-            this.props.appState.own_YearArr.length > 0
-                ? this.props.appState.own_YearArr
-                : undefined;
-        let compData =
-            this.props.appState.own_CompetitionArr.length > 0
-                ? this.props.appState.own_CompetitionArr
-                : undefined;
+        let propsData = this.props.appState.own_YearArr.length > 0
+            ? this.props.appState.own_YearArr
+            : undefined;
+        let compData = this.props.appState.own_CompetitionArr.length > 0
+            ? this.props.appState.own_CompetitionArr
+            : undefined;
         let venueId = getDraws_venue();
         let roundId = getDraws_round();
         let roundTime = getDraws_roundTime();
-        let roundData =
-            this.props.drawsState.getDrawsRoundsData.length > 0
-                ? this.props.drawsState.getDrawsRoundsData
-                : undefined;
-        let venueData =
-            this.props.drawsState.competitionVenues.length > 0
-                ? this.props.drawsState.competitionVenues
-                : undefined;
+        let roundData = this.props.drawsState.getDrawsRoundsData.length > 0
+            ? this.props.drawsState.getDrawsRoundsData
+            : undefined;
+        let venueData = this.props.drawsState.competitionVenues.length > 0
+            ? this.props.drawsState.competitionVenues
+            : undefined;
         let competitionDivisionGradeId = getDraws_division_grade();
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
@@ -491,10 +477,7 @@ class CompetitionDraws extends Component {
     };
 
     check = () => {
-        if (
-            this.state.firstTimeCompId == null ||
-            this.state.firstTimeCompId == ''
-        ) {
+        if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == '') {
             message.config({ duration: 0.9, maxCount: 1 });
             message.error(ValidationConstants.pleaseSelectCompetition);
         } else if (this.state.venueId == null && this.state.venueId == '') {
@@ -563,58 +546,38 @@ class CompetitionDraws extends Component {
         this.props.matchesListDrawsAction(this.state.firstTimeCompId);
     };
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-draws-header-view mt-4">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: 'flex', alignContent: 'center' }}
-                    >
-                        <Breadcrumb
-                            style={{
-                                display: 'flex',
-                                lignItems: 'center',
-                                alignSelf: 'center',
-                            }}
-                            separator=" > "
-                        >
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {' '}
-                                {AppConstants.draws}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-draws-header-view mt-4">
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb className="d-flex align-items-center align-self-center">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {' '}
+                            {AppConstants.draws}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-                <div className="col-sm" style={{ alignSelf: 'center' }}>
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                        }}
+            </div>
+            <div className="col-sm align-self-center">
+                <div className="comp-dashboard-botton-view-mobile d-flex w-100 justify-content-end">
+                    <Button
+                        disabled={this.state.competitionStatus == 1}
+                        id={AppUniqueId.matchList_Btn}
+                        onClick={() => this.onMatchesList()}
+                        className="primary-add-comp-form"
+                        type="primary"
                     >
-                        <Button
-                            disabled={this.state.competitionStatus == 1}
-                            id={AppUniqueId.matchList_Btn}
-                            onClick={() => this.onMatchesList()}
-                            className="primary-add-comp-form"
-                            type="primary"
-                        >
-                            <div className="row">
-                                <div className="col-sm">
-                                    <img src={AppImages.export} alt="" className="export-image" />
-                                    {AppConstants.matchesList}
-                                </div>
+                        <div className="row">
+                            <div className="col-sm">
+                                <img src={AppImages.export} alt="" className="export-image" />
+                                {AppConstants.matchesList}
                             </div>
-                        </Button>
-                    </div>
+                        </div>
+                    </Button>
                 </div>
-            </Header>
-        );
-    };
+            </div>
+        </Header>
+    );
 
     onchangeOrganisation = (organisation_Id) => {
         this.setState({
@@ -622,7 +585,6 @@ class CompetitionDraws extends Component {
         })
     }
 
-    //////year change onchange
     onYearChange = (yearId) => {
         this.props.clearDraws('rounds');
         setOwnCompetitionYear(yearId);
@@ -691,26 +653,12 @@ class CompetitionDraws extends Component {
         this.setState({ competitionDivisionGradeId });
     }
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let disabledStatus = this.state.competitionStatus == 1
         return (
-            <div style={{
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap"
-            }}>
+            <div className="align-items-center d-flex justify-content-between flex-wrap">
                 <div className="pb-3">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            //marginRight: 50,
-                        }}
-                    >
+                    <div className="w-100 d-flex flex-row align-items-center">
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
                             name="yearRefId"
@@ -728,19 +676,11 @@ class CompetitionDraws extends Component {
                     </div>
                 </div>
                 <div className="pb-3">
-                    <div style={{ display: "flex" }}>
-                        <div
-                            style={{
-                                width: "fit-content",
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                //marginRight: 50,
-                            }}
-                        >
-              <span className="year-select-heading">
-                {AppConstants.competition}:
-              </span>
+                    <div className="d-flex">
+                        <div className="w-ft d-flex flex-row align-items-center">
+                            <span className="year-select-heading">
+                                {AppConstants.competition}:
+                            </span>
                             <Select
                                 id={AppUniqueId.draw_comp_dpdn}
                                 // style={{ minWidth: 200 }}
@@ -762,40 +702,23 @@ class CompetitionDraws extends Component {
                             </Select>
                         </div>
 
-                        <div
-                            style={{
-                                width: "fit-content",
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginLeft: "10px"
-                            }}
-                        >
+                        <div className="w-ft d-flex flex-row align-items-center" style={{ marginLeft: 10 }}>
                             <Checkbox
                                 className="year-select-heading"
                                 disabled={this.state.firstTimeCompId == -1}
                                 onChange={(e) => this.onDateRangeCheck(e.target.checked)}
                                 checked={this.state.dateRangeCheck}
                             >
-                                {"Date Range"}
+                                Date Range
                             </Checkbox>
                         </div>
                     </div>
-
                 </div>
                 <div className="pb-3">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            // marginRight: 50
-                        }}
-                    >
-            <span className="year-select-heading">
-              {AppConstants.division}:
-            </span>
+                    <div className="w-100 d-flex flex-row align-items-center">
+                        <span className="year-select-heading">
+                            {AppConstants.division}:
+                        </span>
                         <Select
                             id={AppUniqueId.division_dpdn}
                             style={{ minWidth: 160 }}
@@ -822,18 +745,10 @@ class CompetitionDraws extends Component {
 
                 </div>
                 <div className="pb-3">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            // marginRight: 50
-                        }}
-                    >
-            <span className="year-select-heading">
-              {AppConstants.organisation}:
-            </span>
+                    <div className="w-100 d-flex flex-row align-items-center">
+                        <span className="year-select-heading">
+                            {AppConstants.organisation}:
+                        </span>
                         <Select
                             disabled={disabledStatus}
                             id={AppUniqueId.organisation_dpdn}
@@ -898,11 +813,9 @@ class CompetitionDraws extends Component {
         if (competitionStatus == 2) {
             this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
             this.setState({ roundLoad: true });
-        }
-        else {
+        } else {
             this.callGenerateDraw();
         }
-
     };
 
     handleGenerateDrawModal = (key) => {
@@ -910,12 +823,10 @@ class CompetitionDraws extends Component {
             if (this.state.generateRoundId != null) {
                 this.callGenerateDraw();
                 this.setState({ drawGenerateModalVisible: false });
-            }
-            else {
+            } else {
                 message.error("Please select round");
             }
-        }
-        else {
+        } else {
             this.setState({ drawGenerateModalVisible: false });
         }
     }
@@ -938,18 +849,16 @@ class CompetitionDraws extends Component {
             localStorage.removeItem('stateWideMessage')
             setLiveScoreUmpireCompition(competitiondata.id)
             setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
-            history.push('/liveScoreLadderList')
+            history.push('/matchDayLadderList')
         }
         this.setState({ publishModalVisible: false });
     }
-
 
     //unlockDraws
     unlockDraws(id, round_Id, venueCourtId) {
         let key = this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? 'all' : "singleCompetition"
         this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
     }
-
 
     onChangeRadio = e => {
         this.setState({
@@ -960,8 +869,7 @@ class CompetitionDraws extends Component {
             this.setState({
                 publishPartModel: this.state.publishPartModel
             })
-        }
-        else {
+        } else {
             this.state.publishPartModel.isShowPart = false;
         }
     };
@@ -979,8 +887,7 @@ class CompetitionDraws extends Component {
     checkDivision = e => {
         if (e.target.checked) {
             this.state.publishPartModel.publishPart.isShowDivision = true;
-        }
-        else {
+        } else {
             this.state.publishPartModel.publishPart.isShowDivision = false;
             this.onSelectDivisionsValues(null)
         }
@@ -992,8 +899,7 @@ class CompetitionDraws extends Component {
     checkRound = e => {
         if (e.target.checked) {
             this.state.publishPartModel.publishPart.isShowRound = true;
-        }
-        else {
+        } else {
             this.state.publishPartModel.publishPart.isShowRound = false;
             this.onSelectRoundValues(null)
         }
@@ -1026,8 +932,7 @@ class CompetitionDraws extends Component {
 
     onChangeStartDate = (startDate, endDate) => {
         // this.props.clearDraws()
-        // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-        //   this.state.firstTimeCompId, startDate, this.state.endDate)
+        // this.props.changeDrawsDateRangeAction(this.state.yearRefId, this.state.firstTimeCompId, startDate, this.state.endDate)
         this.setState({
             startDate: startDate,
             endDate: endDate
@@ -1036,11 +941,10 @@ class CompetitionDraws extends Component {
 
     applyDateFilter = () => {
         this.props.clearDraws()
-        this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-            this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
+        this.props.changeDrawsDateRangeAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
         this.setState({
             roundId: 0,
-            //venueId: null,
+            // venueId: null,
             roundTime: null,
             venueLoad: true,
             competitionDivisionGradeId: null,
@@ -1061,7 +965,7 @@ class CompetitionDraws extends Component {
 
     ////// Publish draws
     // publishDraws() {
-    //   this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
+    //     this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
     // }
 
     contentView = () => {
@@ -1081,17 +985,10 @@ class CompetitionDraws extends Component {
                         <span className="form-heading">{AppConstants.draws}</span>
                         <div className="row">
                             <div className="col-sm-4 mr-0">
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                  <span className="year-select-heading">
-                    {AppConstants.venue}:
-                  </span>
+                                <div className="w-100 d-flex flex-row align-content-center">
+                                    <span className="year-select-heading">
+                                        {AppConstants.venue}:
+                                    </span>
                                     <Select
                                         disabled={disabledStatus}
                                         id={AppUniqueId.drawsVenueList_dpdn}
@@ -1113,37 +1010,17 @@ class CompetitionDraws extends Component {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="col-sm pl-0" style={{ display: "flex", alignItems: "center" }}>
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
-                                        <div
-                                            style={{
-                                                width: '100%',
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                            }}
-                                        >
+                            <div className="col-sm pl-0 d-flex align-items-center">
+                                <div className="w-100 d-flex flex-row align-items-center">
+                                    {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? (
+                                        <div className="w-100 d-flex flex-row align-items-center">
                                             <div className="col-sm-7">
-                                                <div
-                                                    style={{
-                                                        width: '100%',
-                                                        display: 'flex',
-                                                        flexDirection: 'row',
-                                                        alignItems: 'center',
-                                                    }}>
-                          <span className="year-select-heading" style={{ width: 100 }}>
-                            {AppConstants.dateRange}:
-                          </span>
+                                                <div className="w-100 d-flex flex-row align-items-center">
+                                                    <span className="year-select-heading" style={{ width: 100 }}>
+                                                        {AppConstants.dateRange}:
+                                                    </span>
                                                     <RangePicker
-                                                        size={'large'}
+                                                        // size="large"
                                                         onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
                                                         format="DD-MM-YYYY"
                                                         style={{ width: '100%', minWidth: 180, paddingLeft: 5 }}
@@ -1153,49 +1030,37 @@ class CompetitionDraws extends Component {
                                             </div>
 
                                             {/* <div className="col-sm-6">
-                        <div
-                          style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}>
-                          <span className="year-select-heading">
-                            {AppConstants.fromDate}:
-                          </span>
-                          <DatePicker
-                            size="large"
-                            style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
-                            format="DD-MM-YYYY"
-                            // defaultValue={new}
-                            onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
-                            value={moment(this.state.startDate)}
-                            // disabledDate={d => !d || d.isAfter(this.state.endDate)}
-                          />
-                        </div>
-                      </div> */}
+                                                <div className="w-100 d-flex flex-row align-items-center">
+                                                    <span className="year-select-heading">
+                                                        {AppConstants.fromDate}:
+                                                    </span>
+                                                    <DatePicker
+                                                        // size="large"
+                                                        style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
+                                                        format="DD-MM-YYYY"
+                                                        // defaultValue={new}
+                                                        onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
+                                                        value={moment(this.state.startDate)}
+                                                        // disabledDate={d => !d || d.isAfter(this.state.endDate)}
+                                                    />
+                                                </div>
+                                            </div> */}
                                             {/* <div className="col-sm-5">
-                        <div
-                          style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}>
-                          <span className="year-select-heading">
-                            {AppConstants.toDate}:
-                          </span>
-                          <DatePicker
-                            size="large"
-                            style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
-                            format="DD-MM-YYYY"
-                            placeholder="dd-mm-yyyy"
-                            onChange={(endDate) => this.onChangeEndDate(moment(endDate).format("YYYY-MM-DD"))}
-                            value={moment(this.state.endDate)}
-                            // disabledDate={d => !d || d.isBefore(this.state.startDate)}
-                          />
-                        </div>
-                      </div> */}
+                                                <div className="w-100 d-flex flex-row align-items-center">
+                                                    <span className="year-select-heading">
+                                                        {AppConstants.toDate}:
+                                                    </span>
+                                                    <DatePicker
+                                                        // size="large"
+                                                        style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
+                                                        format="DD-MM-YYYY"
+                                                        placeholder="dd-mm-yyyy"
+                                                        onChange={(endDate) => this.onChangeEndDate(moment(endDate).format("YYYY-MM-DD"))}
+                                                        value={moment(this.state.endDate)}
+                                                        // disabledDate={d => !d || d.isBefore(this.state.startDate)}
+                                                    />
+                                                </div>
+                                            </div> */}
                                             <div className="col-sm-1.5">
                                                 <Button
                                                     id={AppUniqueId.apply_date_btn}
@@ -1207,16 +1072,11 @@ class CompetitionDraws extends Component {
                                                 </Button>
                                             </div>
                                         </div>
-                                        :
-                                        <div style={{
-                                            width: '100%',
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                        }}>
-                      <span className="year-select-heading">
-                        {AppConstants.round}:
-                      </span>
+                                    ) : (
+                                        <div className="w-100 d-flex flex-row align-items-center">
+                                            <span className="year-select-heading">
+                                                {AppConstants.round}:
+                                            </span>
                                             <Select
                                                 id={AppUniqueId.draw_rounds_dpdn}
                                                 disabled={disabledStatus}
@@ -1233,12 +1093,12 @@ class CompetitionDraws extends Component {
                                             </Select>
                                             {roundTime !== '' && (
                                                 <span className="year-select-heading pb-1">
-                          {'Starting'} {'  '}
+                                                    {'Starting'} {'  '}
                                                     {roundTime}
-                        </span>
+                                                </span>
                                             )}
                                         </div>
-                                    }
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -1251,15 +1111,8 @@ class CompetitionDraws extends Component {
                 </div>
                 <div>
                     {this.props.drawsState.spinLoad && (
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                height: 100,
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Spin size='default' spinning={this.props.drawsState.spinLoad} />
+                        <div className="h-100 d-flex justify-content-center align-items-center">
+                            <Spin size="default" spinning={this.props.drawsState.spinLoad} />
                         </div>
                     )}
                     {this.props.drawsState.updateLoad ? (
@@ -1269,9 +1122,9 @@ class CompetitionDraws extends Component {
                             {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
                                 <div key={"drawData" + dateIndex}>
                                     <div className="draws-round-view">
-                    <span className="draws-round">
-                      {dateItem.roundName}
-                    </span>
+                                        <span className="draws-round">
+                                            {dateItem.roundName}
+                                        </span>
                                     </div>
 
                                     {this.draggableView(dateItem)}
@@ -1283,7 +1136,7 @@ class CompetitionDraws extends Component {
                                             />
                                         </div>
                                     ) : (
-                                        <div style={{ display: 'table', marginTop: 35 }}>
+                                        <div className="d-table" style={{ marginTop: 35 }}>
                                             <LegendComponent
                                                 disabled={disabledStatus}
                                                 legendArray={dateItem.legendsArray}
@@ -1300,9 +1153,9 @@ class CompetitionDraws extends Component {
                                     {dateItem.legendsArray.length > 0 ? (
                                         <div key={"drawData" + dateIndex}>
                                             <div className="draws-round-view">
-                          <span className="draws-round">
-                            {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
-                          </span>
+                                                <span className="draws-round">
+                                                    {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
+                                                </span>
                                             </div>
 
                                             {this.draggableView(dateItem)}
@@ -1314,7 +1167,7 @@ class CompetitionDraws extends Component {
                                                     />
                                                 </div>
                                             ) : (
-                                                <div style={{ display: 'table', marginTop: 35 }}>
+                                                <div className="d-table" style={{ marginTop: 35 }}>
                                                     <LegendComponent
                                                         disabled={disabledStatus}
                                                         legendArray={dateItem.legendsArray}
@@ -1325,7 +1178,9 @@ class CompetitionDraws extends Component {
                                     ) : (
                                         <div>
                                             {this.state.firstTimeCompId == -1 && (
-                                                <div className="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
+                                                <div className="comp-warning-info" style={{ paddingBottom: 40 }}>
+                                                    {AppConstants.noFixturesMessage}
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -1343,13 +1198,8 @@ class CompetitionDraws extends Component {
             if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
                 return slot.colorCode
             }
-            else {
-                return "#999999"
-            }
         }
-        else {
-            return "#999999"
-        }
+        return "#999999";
     }
 
     checkSwap(slot) {
@@ -1359,17 +1209,9 @@ class CompetitionDraws extends Component {
                 if (!disabledStatus) {
                     return true
                 }
-                else {
-                    return false
-                }
-            }
-            else {
-                return false
             }
         }
-        else {
-            return false
-        }
+        return false
     }
 
     //////the gragable content view inside the container
@@ -1398,8 +1240,8 @@ class CompetitionDraws extends Component {
                                 }
                                 return (
                                     <span key={"day" + index} style={{ left: dateMargin }}>
-                    {item.notInDraw == false ? getDayName(item.date) : ''}
-                  </span>
+                                        {item.notInDraw == false ? getDayName(item.date) : ''}
+                                    </span>
                                 );
                             })}
                         </div>
@@ -1422,8 +1264,8 @@ class CompetitionDraws extends Component {
                                             fontSize: item.notInDraw !== false && 11,
                                         }}
                                     >
-                    {item.notInDraw == false ? getTime(item.date) : 'Not in draw'}
-                  </span>
+                                        {item.notInDraw == false ? getTime(item.date) : 'Not in draw'}
+                                    </span>
                                 );
                             })}
                         </div>
@@ -1439,9 +1281,9 @@ class CompetitionDraws extends Component {
                             <div key={"court" + index}>
                                 <div className="sr-no" style={{ height: 62 }}>
                                     <div className="venueCourt-tex-div">
-                    <span className="venueCourt-text">
-                      {courtData.venueShortName + '-' + courtData.venueCourtNumber}
-                    </span>
+                                        <span className="venueCourt-text">
+                                            {courtData.venueShortName + '-' + courtData.venueCourtNumber}
+                                        </span>
                                     </div>
                                 </div>
                                 {courtData.slotsArray.map((slotObject, slotIndex) => {
@@ -1453,34 +1295,24 @@ class CompetitionDraws extends Component {
                                     }
                                     return (
                                         <div key={"slot" + slotIndex}>
-                      <span
-                          style={{ left: leftMargin, top: topMargin }}
-                          className={'border'}
-                      />
+                                            <span
+                                                style={{ left: leftMargin, top: topMargin }}
+                                                className="border"
+                                            />
                                             <div
-                                                className={'box purple-bg'}
+                                                className="box purple-bg overflow-hidden column-width-style"
                                                 style={{
                                                     backgroundColor: this.checkColor(slotObject),
                                                     left: leftMargin,
                                                     top: topMargin,
-                                                    overflow: 'hidden',
-                                                    whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop"
                                                 }}
                                             >
-                                                {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? <Swappable
-                                                        id={
-                                                            index.toString() +
-                                                            ':' +
-                                                            slotIndex.toString()
-                                                            +
-                                                            ':' +
-                                                            "1"
-                                                        }
+                                                {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? (
+                                                    <Swappable
+                                                        id={`${index.toString()}:${slotIndex.toString()}:1`}
                                                         content={1}
-                                                        swappable={
-                                                            this.checkSwap(slotObject)
-                                                        }
+                                                        swappable={this.checkSwap(slotObject)}
                                                         onSwap={(source, target) =>
                                                             this.onSwap(
                                                                 source,
@@ -1492,26 +1324,18 @@ class CompetitionDraws extends Component {
                                                     >
                                                         {slotObject.drawsId != null ? (
                                                             <span>
-                              {slotObject.homeTeamName} <br />
+                                                                {slotObject.homeTeamName} <br />
                                                                 {slotObject.awayTeamName}
-                            </span>
+                                                            </span>
                                                         ) : (
                                                             <span>Free</span>
                                                         )}
-                                                    </Swappable> :
+                                                    </Swappable>
+                                                ) : (
                                                     <Swappable
-                                                        id={
-                                                            index.toString() +
-                                                            ':' +
-                                                            slotIndex.toString()
-                                                            +
-                                                            ':' +
-                                                            dateItem.roundId.toString()
-                                                        }
+                                                        id={`${index.toString()}:${slotIndex.toString()}:${dateItem.roundId.toString()}`}
                                                         content={1}
-                                                        swappable={
-                                                            this.checkSwap(slotObject)
-                                                        }
+                                                        swappable={this.checkSwap(slotObject)}
                                                         onSwap={(source, target) =>
                                                             this.onSwap(
                                                                 source,
@@ -1523,114 +1347,104 @@ class CompetitionDraws extends Component {
                                                     >
                                                         {slotObject.drawsId != null ? (
                                                             <span>
-                                {slotObject.homeTeamName} <br />
+                                                                {slotObject.homeTeamName} <br />
                                                                 {slotObject.awayTeamName}
-                              </span>
+                                                            </span>
                                                         ) : (
                                                             <span>Free</span>
                                                         )}
-                                                    </Swappable>}
+                                                    </Swappable>
+                                                )}
                                             </div>
-                                            {
-                                                slotObject.drawsId !== null && (
-                                                    <div
-                                                        className="box-exception"
-                                                        style={{
-                                                            left: leftMargin,
-                                                            top: topMargin + 50,
-                                                            overflow: 'hidden',
-                                                            whiteSpace: 'nowrap',
-                                                        }}
+                                            {slotObject.drawsId !== null && (
+                                                <div className="box-exception overflow-hidden column-width-style">
+                                                    <Menu
+                                                        className="action-triple-dot-draws border-bottom-0"
+                                                        theme="light"
+                                                        mode="horizontal"
+                                                        style={{ lineHeight: '16px', cursor: disabledStatus && "no-drop" }}
                                                     >
-                                                        <Menu
-                                                            className="action-triple-dot-draws"
-                                                            theme="light"
-                                                            mode="horizontal"
-                                                            style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
-                                                        >
-                                                            <SubMenu
-                                                                disabled={disabledStatus}
-                                                                // style={{ borderBottomStyle: "solid", borderBottom: 2 }}
-                                                                key="sub1"
-                                                                title={
-                                                                    slotObject.isLocked == 1 ? (
-                                                                        <div
-                                                                            style={{
-                                                                                display: 'flex',
-                                                                                justifyContent: 'space-between',
-                                                                                width: 80,
-                                                                                maxWidth: 80,
-                                                                            }}
-                                                                        >
-                                                                            <img
-                                                                                className="dot-image"
-                                                                                src={AppImages.drawsLock}
-                                                                                alt=""
-                                                                                width="16"
-                                                                                height="10"
-                                                                            />
-                                                                            <img
-                                                                                className="dot-image"
-                                                                                src={AppImages.moreTripleDot}
-                                                                                alt=""
-                                                                                width="16"
-                                                                                height="10"
-                                                                            />
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div>
-                                                                            <img
-                                                                                className="dot-image"
-                                                                                src={AppImages.moreTripleDot}
-                                                                                alt=""
-                                                                                width="16"
-                                                                                height="10"
-                                                                            />
-                                                                        </div>
-                                                                    )
-                                                                }
-                                                            >
-                                                                {slotObject.isLocked == 1 && (
-                                                                    <Menu.Item
-                                                                        key="1"
-                                                                        onClick={() => this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
-                                                                            this.unlockDraws(
-                                                                                slotObject.drawsId,
-                                                                                "1",
-                                                                                courtData.venueCourtId
-                                                                            ) :
-                                                                            this.unlockDraws(
-                                                                                slotObject.drawsId,
-                                                                                dateItem.roundId,
-                                                                                courtData.venueCourtId
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <div style={{ display: 'flex' }}>
-                                                                            <span>Unlock</span>
-                                                                        </div>
-                                                                    </Menu.Item>
-                                                                )}
-                                                                <Menu.Item key="2">
-                                                                    <NavLink
-                                                                        to={{
-                                                                            pathname: `/competitionException`,
-                                                                            state: {
-                                                                                drawsObj: slotObject,
-                                                                                yearRefId: this.state.yearRefId,
-                                                                                competitionId: this.state.firstTimeCompId,
-                                                                                organisationId: this.state.organisationId,
-                                                                            },
+                                                        <SubMenu
+                                                            disabled={disabledStatus}
+                                                            // style={{ borderBottomStyle: "solid", borderBottom: 2 }}
+                                                            key="sub1"
+                                                            title={
+                                                                slotObject.isLocked == 1 ? (
+                                                                    <div
+                                                                        className="d-flex justify-content-between"
+                                                                        style={{
+                                                                            width: 80,
+                                                                            maxWidth: 80,
                                                                         }}
                                                                     >
-                                                                        <span>Exception</span>
-                                                                    </NavLink>
+                                                                        <img
+                                                                            className="dot-image"
+                                                                            src={AppImages.drawsLock}
+                                                                            alt=""
+                                                                            width="16"
+                                                                            height="10"
+                                                                        />
+                                                                        <img
+                                                                            className="dot-image"
+                                                                            src={AppImages.moreTripleDot}
+                                                                            alt=""
+                                                                            width="16"
+                                                                            height="10"
+                                                                        />
+                                                                    </div>
+                                                                ) : (
+                                                                    <div>
+                                                                        <img
+                                                                            className="dot-image"
+                                                                            src={AppImages.moreTripleDot}
+                                                                            alt=""
+                                                                            width="16"
+                                                                            height="10"
+                                                                        />
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        >
+                                                            {slotObject.isLocked == 1 && (
+                                                                <Menu.Item
+                                                                    key="1"
+                                                                    onClick={() => this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
+                                                                        this.unlockDraws(
+                                                                            slotObject.drawsId,
+                                                                            "1",
+                                                                            courtData.venueCourtId
+                                                                        ) :
+                                                                        this.unlockDraws(
+                                                                            slotObject.drawsId,
+                                                                            dateItem.roundId,
+                                                                            courtData.venueCourtId
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <div className="d-flex">
+                                                                        <span>Unlock</span>
+                                                                    </div>
                                                                 </Menu.Item>
-                                                            </SubMenu>
-                                                        </Menu>
-                                                    </div>
-                                                )
-                                            }
+                                                            )}
+                                                            <Menu.Item key="2">
+                                                                <NavLink
+                                                                    to={{
+                                                                        pathname: `/competitionException`,
+                                                                        state: {
+                                                                            drawsObj: slotObject,
+                                                                            yearRefId: this.state.yearRefId,
+                                                                            competitionId: this.state.firstTimeCompId,
+                                                                            organisationId: this.state.organisationId,
+                                                                        },
+                                                                    }}
+                                                                >
+                                                                    <span>Exception</span>
+                                                                </NavLink>
+                                                            </Menu.Item>
+                                                        </SubMenu>
+                                                    </Menu>
+                                                </div>
+                                            )}
                                         </div>
                                     );
                                 })}
@@ -1681,7 +1495,7 @@ class CompetitionDraws extends Component {
                     <div>
                         <div className="comp-buttons-view">
                             <Tooltip
-                                style={{ height: '100%' }}
+                                className="h-100"
                                 onMouseEnter={() =>
                                     this.setState({
                                         tooltipVisibleDelete: isPublish,

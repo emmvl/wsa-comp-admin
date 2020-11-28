@@ -19,6 +19,18 @@ code {
     background-color: #f7fafc;
 }
 
+.default-max-w-bg {
+    max-width: 180px !important;
+}
+
+.w-ft {
+    width: fit-content;
+}
+
+.d-grid {
+    display: grid !important;
+}
+
 .mt-n10 {
     margin-top: -10px;
 }
@@ -47,10 +59,18 @@ code {
     margin-left: -22px;
 }
 
+.mb-20 {
+    margin-bottom: 20px;
+}
+
 .width-50 {
     width: 50px;
 }
 
 .Tooltip_Wrapper__3AlJ0 >  svg > path:first-child {
     fill: #ff8237;
+}
+
+.pointer {
+    cursor: pointer;
 }

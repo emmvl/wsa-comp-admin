@@ -53,10 +53,7 @@ const columns = [
     },
 ];
 
-
-
 class LiveScoreSocialSheet extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -69,22 +66,20 @@ class LiveScoreSocialSheet extends Component {
         }
     }
 
-
     ///Match details
     matchDetailsContainer = (result) => {
-
         return (
             <div className="content-view pt-4 pb-0">
                 <div className="drop-reverse">
                     <div className="col-sm">
                         <div className="row pl-1 pr-1">
-                            <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-start' }}>
+                            <div className="col-sm d-flex justify-content-start">
                                 <div>
-                                    <span style={{ display: 'flex', }} className="live-score-profile-user-name">Brisban City Netball Association</span>
-                                    <span style={{ display: 'flex', }} className="live-score-profile-user-name">Social Scoresheet</span>
+                                    <span className="live-score-profile-user-name d-flex">Brisban City Netball Association</span>
+                                    <span className="live-score-profile-user-name d-flex">Social Scoresheet</span>
                                 </div>
                             </div>
-                            <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                            <div className="col-sm d-flex justify-content-end">
                                 <img
                                     src={AppImages.squareImage}
                                     height="80"
@@ -97,20 +92,17 @@ class LiveScoreSocialSheet extends Component {
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         )
     }
-
 
     /// Round and Teams container
     roundAndteamsContainer = () => {
         return (
             <div className="match-details-rl-padding row mt-5">
-                <div className="col-sm" style={{ flexDirection: "column", display: "flex" }}>
-                    <div className="pl-5" style={{ display: "flex", flexDirection: "column" }}>
+                <div className="col-sm d-flex flex-column">
+                    <div className="pl-5 d-flex flex-column">
                         <span className="year-select-heading">Round 1</span>
                         <span className='year-select-heading mt-2'>Venue : John Fisher Court 1</span>
                         <span className='year-select-heading mt-2'>H: Team 1</span>
@@ -123,8 +115,8 @@ class LiveScoreSocialSheet extends Component {
 
                     </div>
                 </div>
-                <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }}>
-                    <div className="pl-5" style={{ display: "flex", flexDirection: "column" }}>
+                <div className="col-sm d-flex flex-column align-content-center">
+                    <div className="pl-5 d-flex flex-column">
                         <span className="year-select-heading">Date: 08/06/2020</span>
                         <span className='year-select-heading mt-2'>Time : 10:00am</span>
                         <span className='year-select-heading mt-2'>H: Team 2</span>
@@ -132,21 +124,18 @@ class LiveScoreSocialSheet extends Component {
 
                     <div className="comp-dash-table-view mt-2">
                         <div>
-                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={[]} pagination={false}
-                            />
+                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={[]} pagination={false} />
                         </div>
-
                     </div>
                 </div>
             </div>
         )
     }
 
-    /// Center pass conatainer
-
+    /// Center pass container
     progressiveScoreContainer = () => {
         return (
-            <div className="row match-details-rl-padding  mt-5" style={{ display: "flex", flexDirection: "row" }}>
+            <div className="row match-details-rl-padding mt-5 d-flex flex-row">
                 <div className="col-sm">
                     <div className="progressive-container">
                         {
@@ -158,7 +147,6 @@ class LiveScoreSocialSheet extends Component {
                                 )
                             })
                         }
-
                     </div>
                 </div>
 
@@ -195,4 +183,5 @@ class LiveScoreSocialSheet extends Component {
         )
     }
 }
+
 export default LiveScoreSocialSheet

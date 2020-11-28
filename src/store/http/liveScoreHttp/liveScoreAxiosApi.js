@@ -184,7 +184,6 @@ const LiveScoreAxiosApi = {
 
     liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamId, sortBy, sortOrder) {
         let url;
-
         if (teamId !== undefined) {
             url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamId}`;
         } else if (divisionId && roundName) {
@@ -1049,12 +1048,13 @@ const LiveScoreAxiosApi = {
     },
 
     // Get Teams with pagination
-    getTeamWithPaging(competitionID, offset, limit, search, sortBy, sortOrder) {
+ async getTeamWithPaging(competitionID, offset, limit, search, sortBy, sortOrder,competitionOrganisationId) {
+    // const { organisationId } = await getOrganisationData();
         let url = null;
         if (search && search.length > 0) {
-            url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+            url = `/teams/list?competitionId=${competitionID}&organisationId=${competitionOrganisationId}&offset=${offset}&limit=${limit}&search=${search}`;
         } else {
-            url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+            url = `/teams/list?competitionId=${competitionID}&organisationId=${competitionOrganisationId}&offset=${offset}&limit=${limit}&search=${search}`;
         }
 
         if (sortBy && sortOrder) {
@@ -1081,7 +1081,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// / Export Files
-    exportFiles(url) {
+    async  exportFiles(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
 

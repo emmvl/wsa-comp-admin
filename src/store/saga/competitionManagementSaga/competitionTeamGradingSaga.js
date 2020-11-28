@@ -310,7 +310,6 @@ export function* finalPlayersExportSaga(action) {
 export function* proposedTeamsExportSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.proposedTeamsExportApi, action.payload);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_EXPORT_PROPOSED_TEAMS_SUCCESS,
@@ -330,7 +329,6 @@ export function* proposedTeamsExportSaga(action) {
 export function* proposedPlayersExportSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.proposedPlayersExportApi, action.payload);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_EXPORT_PROPOSED_PLAYERS_SUCCESS,
@@ -350,7 +348,6 @@ export function* proposedPlayersExportSaga(action) {
 export function* teamChangeDivisionSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.teamChangeDivisionApi, action.payload);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_SUCCESS,

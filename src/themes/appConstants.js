@@ -1143,16 +1143,12 @@ const AppConstants = {
   orgTypeMsg: 'Detail the type of organisation being added. State Organisations can add Associations/ Leagues and Clubs/ Schools, Associations can only add Clubs/ Schools.',
   addAffiliatePermissionLevelMsg: `Choose the permission level for each contact.\n\n
       Admin - can access all areas in the platform.\n\n
-      Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
       Umpires Admin - can access the Umpires platform.\n\n
-      Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
       Finance Admin - can access Payments and the Registration platform.`,
 
   ourOrgPermissionLevelMsg: `Choose the permission level for each contact.\n\n
       Admin - can access all areas in the platform.\n\n
-      Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
       Umpires Admin - can access the Umpires platform.\n\n
-      Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
       Finance Admin - can access Payments and the Registration platform.`,
 
   selectedTeams: 'Selected Teams Array',
@@ -1475,10 +1471,10 @@ const AppConstants = {
   uponRegistration: 'Upon Registration',
   reg: 'REG',
   dateRange: 'Date Range',
-  publishToLivescore: 'Do you want to publish teams and players to live scores so managers and coaches can communicate with their teams (prior to the draw being finalised)?',
+  publishToLivescore: 'Do you want to publish teams and players to Match Day so managers and coaches can communicate with their teams (prior to the draw being finalised)?',
   finalGrading: 'Publish - Final Grading',
   onlyCompMngmt: 'Only Competition Management',
-  deletePublishToLsMsg: 'Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Live Scores. Would you like to Delete?',
+  deletePublishToLsMsg: 'Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Match Day. Would you like to Delete?',
   deleteCompetition: 'Delete Competition',
   enterCode: 'Registration Code',
   finalExtraTime: 'Final Extra Time',
@@ -1552,6 +1548,7 @@ const AppConstants = {
   reasonForTransfer: 'Reason for Transfer',
   registrationCloseDate: 'Registration close date',
   filterDates: 'Filter Dates',
+  showOnlyScheduledMatches: 'Show only scheduled matches',
   uploadBankAccount: 'Upload Bank Account',
   editBankAccount: 'Edit Bank Account',
   theyAlreadyTakenCourt: 'They have already taken the court for training, grading or a competition game',
@@ -1610,7 +1607,12 @@ const AppConstants = {
   notification: "Notification",
   news: "News",
   sms: "SMS",
-  backToCommunication: "Back to all communication"
+  backToCommunication: "Back to all communication",
+  matchDay: "Match Day",
+  matchDayComp: 'Match Day Competitions',
+  backToMatchDay: 'Back To Match Day',
+  umpireAccreditation: "Umpire Accreditation",
+  expiry: "Expiry"
 };
 
 export default AppConstants;

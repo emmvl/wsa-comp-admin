@@ -654,6 +654,14 @@ let CompetitionAxiosApi = {
     updateCompTeamName(payload){
         var url = `api/teamName`
         return Method.dataPut(url, token, payload)
+    },
+
+    async exportPlayerGrading(competition,division){
+        let orgItem = await getOrganisationData()
+        let userId = await getUserId()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `/api/proposedplayerlist/export?userId=${userId}&competitionMembershipProductDivisionId=${division}&competitionUniqueKey=${competition}&organisationId=${organisationUniqueKey}`
+        return Method.dataGetDownload(url, token, "proposedplayerlist");
     }
 };
 

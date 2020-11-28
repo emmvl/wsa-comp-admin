@@ -84,7 +84,7 @@ function* liveScoreAddEditManagerSaga(action) {
 
       message.success("Add Manager - Successfully Added");
 
-      history.push("/liveScoreManagerList");
+      history.push("/matchDayManagerList");
     } else {
       yield call(failSaga, result);
     }
@@ -130,7 +130,7 @@ function* liveScoreManagerImportSaga(action) {
       });
 
       if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/liveScoreManagerList");
+        history.push("/matchDayManagerList");
         message.success("Manager Imported Successfully.");
       } else {
         receiptImportResult(result.result);

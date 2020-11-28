@@ -97,6 +97,8 @@ class AddCommunication extends Component {
             sortOrder: null,
             offsetData: 0,
             postCode: "-1",
+            exsitingValue: undefined,
+            userValue: undefined
         };
         this.formRef = React.createRef();
     }
@@ -232,7 +234,7 @@ class AddCommunication extends Component {
 
                 if (success) {
                     history.push({
-                        pathname: '/liveScoreNewsView',
+                        pathname: '/matchDayNewsView',
                         state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
                     })
                 }
@@ -719,7 +721,6 @@ class AddCommunication extends Component {
         //     }
         // }
 
-
         const selctedRolArr = [
             { label: 'Managers', value: "manager", },
             { label: 'Coaches', value: "coaches", },
@@ -771,15 +772,15 @@ class AddCommunication extends Component {
                             }}
                             value={orgName ? orgName : undefined}
                         >
-                            {/* {
+                            {
 
-                                this.state.exsitingValue && */}
-                            {affiliateToData.map((org) => (
-                                <Option key={org.organisationId} value={org.organisationId}>
-                                    {org.name}
-                                </Option>
-                            ))}
-                            {/* } */}
+                                this.state.exsitingValue &&
+                                affiliateToData.map((org) => (
+                                    <Option key={org.organisationId} value={org.organisationId}>
+                                        {org.name}
+                                    </Option>
+                                ))
+                            }
                         </Select>
 
                     </div>
@@ -855,22 +856,22 @@ class AddCommunication extends Component {
                             }}
                             notFoundContent={onTextualLoad === true ? <Spin size="small" /> : null}
                             onSearch={(value) => {
-                                this.setState({ exsitingValue: value })
+                                this.setState({ userValue: value })
                                 value && value.length > 2
                                     && this.userSearchApi(value)
                                 // : this.props.clearListAction()
                             }}
                             value={userName ? userName : undefined}
                         >
-                            {/* {
+                            {
 
-                                this.state.exsitingValue && */}
-                            {userData.map((item) => (
-                                <Option key={item.userId} value={item.userId}>
-                                    {item.name}
-                                </Option>
-                            ))}
-                            {/* } */}
+                                this.state.userValue &&
+                                userData.map((item) => (
+                                    <Option key={item.userId} value={item.userId}>
+                                        {item.name}
+                                    </Option>
+                                ))
+                            }
                         </Select>
 
                     </div>
@@ -966,7 +967,7 @@ class AddCommunication extends Component {
                     <div className="row">
                         <div className="col-sm pl-3">
                             <div className="reg-add-save-button">
-                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
+                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
                                     to={{
                                         pathname: "/CommunicationList",
