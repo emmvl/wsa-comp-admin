@@ -157,6 +157,7 @@ class LiveScoreTeam extends Component {
         if (getLiveScoreCompetiton()) {
             const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
+            let compOrgId = competitionOrganisation? competitionOrganisation.id :0
             if (id !== null) {
                 if (livescoreTeamActionObject) {
                     let offset = livescoreTeamActionObject.offset
@@ -164,9 +165,9 @@ class LiveScoreTeam extends Component {
                     let sortBy = livescoreTeamActionObject.sortBy
                     let sortOrder = livescoreTeamActionObject.sortOrder
                     this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, competitionOrganisation.id)
+                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, compOrgId)
                 } else {
-                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, competitionOrganisation.id)
+                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, compOrgId)
                 }
             } else {
                 history.push("/matchDayCompetitions")
@@ -218,7 +219,8 @@ class LiveScoreTeam extends Component {
     // on Export
     onExport = () => {
         const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
-        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}&organisationId=${competitionOrganisation.id} `
+        let compOrgId = competitionOrganisation? competitionOrganisation.id :0
+        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}&organisationId=${compOrgId} `
         this.props.exportFilesAction(url)
     }
 
