@@ -516,23 +516,6 @@ class AddCommunication extends Component {
                         })}
                     />
                 </Form.Item>
-
-                <InputWithHead required="pb-1" heading={AppConstants.recipients} />
-                <div>
-                    <Select
-                        placeholder={AppConstants.recipientSelection}
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                        onChange={recipientSelection => this.setRecipientData(recipientSelection, 'recipients')}
-                        value={editData.recipients}
-                    >
-                        <Option value="All Managers">All Managers</Option>
-                        <Option value="All Scorers">All Scorers</Option>
-                        <Option value="All Managers and Scorers">All Managers and Scorers</Option>
-                        <Option value="All Users">All Users</Option>
-                        <Option value="Individual Manager">Individual Manager</Option>
-                        <Option value="Individual Scorer">Individual Scorer</Option>
-                    </Select>
-                </div>
                 {this.state.recipientSelection === "Individual Manager" && this.managerView()}
                 {this.state.recipientSelection === "Individual Scorer" && this.scorerView()}
                 <div className="row">

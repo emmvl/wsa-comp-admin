@@ -144,7 +144,7 @@ class LiveScoreNewsView extends Component {
                     </div>
                     <div className="col-sm live-form-view-button-container d-flex justify-content-end">
                         <NavLink to={{
-                            pathname: 'liveScoreAddNews',
+                            pathname: 'matchDayAddNews',
                             state: { isEdit: true, item: this.state.newsItem, screenKey: this.state.screenKey },
                         }}
                         >
