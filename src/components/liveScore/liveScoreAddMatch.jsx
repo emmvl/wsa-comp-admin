@@ -856,77 +856,77 @@ class LiveScoreAddMatch extends Component {
                             </div>
                         </div>
                     ) : (
-                        recordUmpireType === 'NAMES' && (
-                            <div>
-                                <div className="row">
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            type="text"
-                                            heading={AppConstants.umpire1Name}
-                                            // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
-                                            // value={addEditMatch.umpire1}
-                                            onChange={(e) => {
-                                                this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1TextField');
-                                            }}
-                                            value={umpire1TextField || undefined}
-                                            placeholder={AppConstants.enterUmpire1name}
-                                        />
+                            recordUmpireType === 'NAMES' && (
+                                <div>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                type="text"
+                                                heading={AppConstants.umpire1Name}
+                                                // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
+                                                // value={addEditMatch.umpire1}
+                                                onChange={(e) => {
+                                                    this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1TextField');
+                                                }}
+                                                value={umpire1TextField || undefined}
+                                                placeholder={AppConstants.enterUmpire1name}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                heading={AppConstants.umpire2Name}
+                                                // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
+                                                // value={addEditMatch.umpire2}
+                                                onChange={(e) => {
+                                                    this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2TextField');
+                                                }}
+                                                value={umpire2TextField}
+                                                placeholder={AppConstants.enterUmpire2name}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            heading={AppConstants.umpire2Name}
-                                            // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
-                                            // value={addEditMatch.umpire2}
-                                            onChange={(e) => {
-                                                this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2TextField');
-                                            }}
-                                            value={umpire2TextField}
-                                            placeholder={AppConstants.enterUmpire2name}
-                                        />
-                                    </div>
-                                </div>
 
-                                <div className="row">
-                                    <div className="col-sm">
-                                        <InputWithHead heading={AppConstants.umpire1Club} />
-                                        <Select
-                                            // mode='multiple'
-                                            className="w-100"
-                                            style={{ paddingRight: 1, minWidth: 182 }}
-                                            // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
-                                            onChange={(umpire1Orag) => {
-                                                this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag');
-                                            }}
-                                            value={umpire1Orag || undefined}
-                                            placeholder="Select Umpire 1 Organisation"
-                                        >
-                                            {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                <Option key={`umpire1Org_${item.id}`} value={item.id}>{item.name}</Option>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                    <div className="col-sm">
-                                        <InputWithHead heading={AppConstants.umpire2Club} />
-                                        <Select
-                                            // mode='multiple'
-                                            className="w-100"
-                                            style={{ paddingRight: 1, minWidth: 182 }}
-                                            // onChange={(umpire2Club) => this.setUmpireClub(umpire2Club)}
-                                            onChange={(umpire2Orag) => {
-                                                this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag');
-                                            }}
-                                            value={umpire2Orag || undefined}
-                                            placeholder="Select Umpire 2 Organisation"
-                                        >
-                                            {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                <option key={item.id} value={item.id}>{item.name}</option>
-                                            ))}
-                                        </Select>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <InputWithHead heading={AppConstants.umpire1Club} />
+                                            <Select
+                                                // mode='multiple'
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
+                                                // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
+                                                onChange={(umpire1Orag) => {
+                                                    this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag');
+                                                }}
+                                                value={umpire1Orag || undefined}
+                                                placeholder="Select Umpire 1 Organisation"
+                                            >
+                                                {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                                    <Option key={`umpire1Org_${item.id}`} value={item.id}>{item.name}</Option>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead heading={AppConstants.umpire2Club} />
+                                            <Select
+                                                // mode='multiple'
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
+                                                // onChange={(umpire2Club) => this.setUmpireClub(umpire2Club)}
+                                                onChange={(umpire2Orag) => {
+                                                    this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag');
+                                                }}
+                                                value={umpire2Orag || undefined}
+                                                placeholder="Select Umpire 2 Organisation"
+                                            >
+                                                {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                                    <option key={item.id} value={item.id}>{item.name}</option>
+                                                ))}
+                                            </Select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    )}
+                            )
+                        )}
 
                 <div className="row">
                     <div className="col-sm-6">

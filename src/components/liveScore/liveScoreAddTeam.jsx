@@ -73,7 +73,8 @@ class LiveScoreAddTeam extends Component {
             screenName: this.props.location.state ? this.props.location.state.screenName : null,
             screenKey: this.props.location.state ? this.props.location.state.screenKey : null,
             sourceIdAvailable: false,
-            liveScoreCompIsParent: false
+            liveScoreCompIsParent: false,
+            compOrgId: 0
         };
         this.formRef = React.createRef();
     }
@@ -88,30 +89,32 @@ class LiveScoreAddTeam extends Component {
                 } else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
-                const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
+                const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
                 sourceIdAvailable = sourceId ? true : false
-                this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
+                this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false, compOrgId: compOrgId })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
-                this.props.liveScoreManagerListAction(5, 1, id)
+                this.props.liveScoreManagerListAction(5, 6, null, null, null, null, null, null, compOrgId)
             } else {
                 history.push('/matchDayCompetitions')
             }
         } else {
             this.setLivScoreCompIsParent()
             if (getLiveScoreCompetiton()) {
-                const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
+                const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
                 if (this.state.isEdit) {
                     this.props.liveScoreGetTeamDataAction(this.state.teamId)
-                    this.setState({ load: true, localCompetitionID: id })
+                    this.setState({ load: true, localCompetitionID: id, })
                 } else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
                 sourceIdAvailable = sourceId ? true : false
-                this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
+                this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false, compOrgId: compOrgId })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
-                this.props.liveScoreManagerListAction(5, 1, id)
+                this.props.liveScoreManagerListAction(5, 6, null, null, null, null, null, null, compOrgId)
             } else {
                 history.push('/matchDayCompetitions')
             }
@@ -388,19 +391,19 @@ class LiveScoreAddTeam extends Component {
                             }}
                             onSearch={(value) => {
                                 value
-                                    ? this.props.liveScoreManagerSearch(value, this.state.localCompetitionID)
-                                    : this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)
+                                    ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 3)
+                                    : this.props.liveScoreManagerListAction(5, 6, null, null, null, null, null, null, this.state.compOrgId)
                             }}
-                            onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)}
+                            onBlur={() => this.props.liveScoreManagerListAction(5, 6, null, null, null, null, null, null, this.state.compOrgId)}
                             optionFilterProp="children"
-                            // onSearch={(value) => {
-                            //     this.setState({ showOption: true })
-                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                            //         return data.firstName.indexOf(value) > -1
-                            //     })
-                            //     this.props.liveScoreManagerFilter(filteredData)
-                            // }}
-                            // value={selectedManager}
+                        // onSearch={(value) => {
+                        //     this.setState({ showOption: true })
+                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                        //         return data.firstName.indexOf(value) > -1
+                        //     })
+                        //     this.props.liveScoreManagerFilter(filteredData)
+                        // }}
+                        // value={selectedManager}
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
@@ -511,7 +514,7 @@ class LiveScoreAddTeam extends Component {
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
                                 }}
-                                // value={teamManagerData.email}
+                            // value={teamManagerData.email}
                             />
                         </Form.Item>
 
@@ -531,7 +534,7 @@ class LiveScoreAddTeam extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                // value={teamManagerData.mobileNumber}
+                            // value={teamManagerData.mobileNumber}
                             />
                         </Form.Item>
 

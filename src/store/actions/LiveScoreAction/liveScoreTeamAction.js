@@ -1,10 +1,12 @@
 import ApiConstants from "themes/apiConstants";
 
-function getliveScoreTeams(competitionID, divisionId) {
+function getliveScoreTeams(competitionID, divisionId,compOrgId) {
+    console.log(competitionID,divisionId,compOrgId)
     return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_LOAD,
         competitionID,
         divisionId,
+        compOrgId
     };
 }
 

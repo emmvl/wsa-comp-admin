@@ -29,23 +29,25 @@ class LiveScoreAddEditCoach extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            conpetitionId: null,
+            competitionId: null,
             searchText: "",
             loader: false,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             teamLoad: false,
             exsitingValue: '',
+            compOrgId: 0
         }
         this.formRef = createRef();
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ conpetitionId: id })
+            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+            this.setState({ competitionId: id, compOrgId: compOrgId })
             if (id !== null) {
-                this.props.getliveScoreTeams(id)
+                this.props.getliveScoreTeams(id, null, compOrgId)
             }
             if (this.state.isEdit === true) {
                 this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
@@ -323,11 +325,11 @@ class LiveScoreAddEditCoach extends Component {
                                 onSearch={(value) => {
                                     this.setState({ exsitingValue: value })
                                     // value
-                                    //     ? this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
-                                    //     : this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId)
-                                    // this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId, value)
+                                    //     ? this.props.liveScoreManagerSearch(value, this.state.competitionId)
+                                    //     : this.props.liveScoreCoachListAction(3, 1, this.state.competitionId)
+                                    // this.props.liveScoreCoachListAction(3, 1, this.state.competitionId, value)
                                     value && value.length > 2
-                                        ? this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
+                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 17)
                                         : this.props.clearListAction()
                                 }}
                             >
@@ -415,6 +417,7 @@ class LiveScoreAddEditCoach extends Component {
 
     onSaveClick = values => {
         const { coachdata, teamId, coachRadioBtn, exsitingManagerId } = this.props.liveScoreCoachState
+        const { compOrgId } = this.state
         if (coachRadioBtn == 'new') {
             if (coachdata.mobileNumber.length !== 10) {
                 this.setState({
@@ -441,13 +444,13 @@ class LiveScoreAddEditCoach extends Component {
                             teams: coachdata.teams
                         }
                     }
-                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
                 } else if (coachRadioBtn == 'existing') {
                     body = {
                         id: exsitingManagerId,
                         teams: coachdata.teams
                     }
-                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
                 }
             }
         } else {
@@ -471,13 +474,13 @@ class LiveScoreAddEditCoach extends Component {
                         teams: coachdata.teams
                     }
                 }
-                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
             } else if (coachRadioBtn == 'existing') {
                 body = {
                     id: exsitingManagerId,
                     teams: coachdata.teams
                 }
-                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
             }
         }
     };

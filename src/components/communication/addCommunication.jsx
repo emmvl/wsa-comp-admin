@@ -892,7 +892,6 @@ class AddCommunication extends Component {
             let expiryTime = moment(data.expire_time).format("HH:mm")
             let postDate = moment(expiry__Date + " " + expiryTime);
 
-            // let postDate = experyDate + " " + expiryTime + " " + "UTC"
             let formatedDate = new Date(postDate).toISOString()
             liveScoreNewsState.addEditNews.news_expire_date = formatedDate
         }
@@ -904,13 +903,7 @@ class AddCommunication extends Component {
             }
 
             let bodyDetails = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-            // let bodyText = newstringArr.join("")
             liveScoreNewsState.addEditNews.body = bodyDetails
-
-            // let bodyText = newstringArr.join(`<br/>`)
-            // let bodyText = JSON.stringify(data.newsBody)
-            // let bodyText = newstringArr.join("")
-            // liveScoreNewsState.addEditNews.body = bodyText
         }
 
         let editData = liveScoreNewsState.addEditNews;
@@ -950,7 +943,6 @@ class AddCommunication extends Component {
                     <div className="row">
                         <div className="col-sm pl-3">
                             <div className="reg-add-save-button">
-                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
                                     to={{
                                         pathname: "/CommunicationList",

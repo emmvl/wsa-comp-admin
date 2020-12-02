@@ -103,20 +103,20 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder,compOrgId) {
     let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offset}&limit=${10}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}&userName=${searchText}&offset=${offset}&limit=${10}`;
       } else {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}&userName=${searchText}`;
       }
     } else {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offset}&limit=${10}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}&offset=${offset}&limit=${10}`;
       } else {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}`;
       }
 
     }
@@ -194,17 +194,17 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  liveScoreSearchManager(data, competitionId) {
+  liveScoreSearchManager(data, competitionOrgId,roleId) {
+    let role_Id=roleId?roleId:5
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
     if (data) {
-      const url = `users/byRole?roleId=5&entityTypeId=1&entityId=${competitionId}&userName=${data}`;
+      const url = `users/byRole?roleId=${role_Id}&entityTypeId=6&entityId=${competitionOrgId}&userName=${data}`;
       return Method.dataGet(url, token);
     }
   },
 
   // Search scorer
   scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
-    console.log(searchText, 'searchText');
     // if (searchText && searchText.length > 0) {
     //   const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
     //   return Method.dataGet(url, token)
@@ -265,9 +265,9 @@ let userHttpApi = {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url;
     if (offset != null) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=6&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=6&entityId=${entityId}&userName=${search}`
     }
 
     if (sortBy && sortOrder) {

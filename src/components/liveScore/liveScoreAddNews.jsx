@@ -382,8 +382,8 @@ class LiveScoreAddNews extends Component {
                         mode="tags"
                         placeholder={AppConstants.searchScorer}
                         className="w-100"
-                        // onChange={(scorerId) => this.props.liveScoreUpdateNewsAction(scorerId, "title")}
-                        // value={editData.title}
+                    // onChange={(scorerId) => this.props.liveScoreUpdateNewsAction(scorerId, "title")}
+                    // value={editData.title}
                     >
                         {scorerList.map((item) => (
                             <Option key={'scorer_' + item.firstName} value={item.firstName}>
@@ -409,8 +409,8 @@ class LiveScoreAddNews extends Component {
                         mode="tags"
                         placeholder="Select Manager"
                         className="w-100"
-                        // onChange={e => this.venueChange(e)}
-                        // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
+                    // onChange={e => this.venueChange(e)}
+                    // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
                         {managerList.map((item) => (
                             <Option key={'manager_' + item.firstName} value={item.firstName}>
@@ -469,7 +469,7 @@ class LiveScoreAddNews extends Component {
                 <InputWithHead
                     required="pb-0"
                     heading={AppConstants.newsBody}
-                    // value={editData.body}
+                // value={editData.body}
                 />
 
                 {this.EditorView()}
@@ -780,7 +780,7 @@ class LiveScoreAddNews extends Component {
                                 {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
                                     to={{
-                                        pathname: this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList',
+                                        pathname: this.state.key === 'dashboard' ? '/matchDayDashboard' : '/matchDayNewsList',
                                         state: { screenKey: this.state.screenKey }
                                     }}
                                 >
@@ -817,8 +817,8 @@ class LiveScoreAddNews extends Component {
                 {stateWideMsg ? (
                     <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : "21"} />
-                )}
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : "21"} />
+                    )}
 
                 <Layout>
                     {this.headerView()}

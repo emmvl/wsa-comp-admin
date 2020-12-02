@@ -44,23 +44,25 @@ class LiveScoreAddManager extends Component {
             showOption: false,
             competition_id: null,
             teamLoad: false,
-            exsitingValue: ''
+            exsitingValue: '',
+            compOrgId: 0
         }
         this.formRef = createRef();
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.props.liveScoreManagerListAction(5, 1, id)
-            this.props.getliveScoreTeams(id)
+            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+            this.props.liveScoreManagerListAction(5, 6, null, null, null, null, null, null, compOrgId)
+            this.props.getliveScoreTeams(id, null, compOrgId)
             if (this.state.isEdit === true) {
                 this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
                 this.setState({ loader: true })
             } else {
                 this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
             }
-            this.setState({ load: true, competition_id: id })
+            this.setState({ load: true, competition_id: id, compOrgId: compOrgId })
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -180,7 +182,7 @@ class LiveScoreAddManager extends Component {
                                     //     ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                     //     : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
                                     value && value.length > 2
-                                        ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
+                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 3)
                                         : this.props.clearListAction()
                                 }}
                             >
@@ -308,7 +310,7 @@ class LiveScoreAddManager extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                // value={managerData.mobileNumber}
+                            // value={managerData.mobileNumber}
                             />
                         </Form.Item>
                     </div>
@@ -431,6 +433,7 @@ class LiveScoreAddManager extends Component {
 
     onSaveClick = values => {
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+        const { compOrgId } = this.state
         if (managerRadioBtn === 'new') {
             if (managerData.mobileNumber.length !== 10) {
                 this.setState({
@@ -457,13 +460,13 @@ class LiveScoreAddManager extends Component {
                             teams: managerData.teams
                         }
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
                 } else if (managerRadioBtn === 'existing') {
                     body = {
                         id: exsitingManagerId,
                         teams: managerData.teams
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
                 }
             }
         } else {
@@ -487,13 +490,13 @@ class LiveScoreAddManager extends Component {
                         teams: managerData.teams
                     }
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
             } else if (managerRadioBtn === 'existing') {
                 body = {
                     id: exsitingManagerId,
                     teams: managerData.teams
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
             }
         }
     };

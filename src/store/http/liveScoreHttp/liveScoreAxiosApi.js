@@ -200,6 +200,7 @@ const LiveScoreAxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
+        
 
         return Method.dataGet(url, localStorage.token);
     },
@@ -209,12 +210,15 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    liveScoreTeam(competitionID, divisionId) {
+    liveScoreTeam(competitionID, divisionId,compOrgId) {
         let url;
         if (divisionId) {
             url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}&includeBye=1`;
         } else {
             url = `/teams/list?competitionId=${competitionID}`;
+        }
+        if(compOrgId){
+           url +=  `&organisationId=${compOrgId}`
         }
         return Method.dataGet(url, localStorage.token);
     },
@@ -756,11 +760,11 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    async liveScoreAddEditManager(data, teamId, existingManagerId) {
+    async liveScoreAddEditManager(data, teamId, existingManagerId,compOrgId) {
         const body = data;
         const userId = await getUserId();
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        const url = `/users/manager?userId=${userId}&competitionId=${id}`;
+        const url = `/users/manager?userId=${userId}&entityId=${compOrgId}&entityTypeId=${6}`;
         return Method.dataPost(url, token, body);
 
         // if (existingManagerId) {
@@ -1099,10 +1103,10 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreAddCoach(data, teamId, existingManagerId) {
+    liveScoreAddCoach(data, teamId, existingManagerId,compOrgId) {
         const body = data;
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        const url = `/users/coach?competitionId=${id}`;
+        const url = `/users/coach?entityId=${compOrgId}&entityTypeId=${6}`;
         return Method.dataPost(url, token, body);
     },
 

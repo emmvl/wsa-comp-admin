@@ -118,8 +118,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-            <span>{team1.name}</span>
-        )
+                <span>{team1.name}</span>
+            )
     },
     {
         title: 'Away',
@@ -137,8 +137,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-            <span>{team2.name}</span>
-        )
+                <span>{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -351,8 +351,8 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                )}
+                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                    )}
             </div>
         )
     }
@@ -672,18 +672,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.matchDay}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.matchDay}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
+                        />
+                    )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
-                )}
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
+                    )}
 
                 <Layout>
                     {this.headerView()}

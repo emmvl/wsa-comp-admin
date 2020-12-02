@@ -21,12 +21,13 @@ function liveScoreUpdateCoach(data, key) {
     };
 }
 
-function liveScoreAddEditCoach(data, teamId, existingManagerId) {
+function liveScoreAddEditCoach(data, teamId, existingManagerId,compOrgId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD,
         data,
         teamId,
         existingManagerId,
+        compOrgId
     };
 }
 

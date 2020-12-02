@@ -47,7 +47,7 @@ function* errorSaga(error) {
 
 function* liveScoreTeamSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreTeam, action.competitionID, action.divisionId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreTeam, action.competitionID, action.divisionId,action.compOrgId);
 
         if (result.status === 1) {
             yield put({
@@ -156,7 +156,6 @@ function* liveScoreAffiliateSaga(action) {
 function* addTeamLiveScoreSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddNewTeam, action.payload);
-        console.log("result", result.result.data.name)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS,

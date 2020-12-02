@@ -71,7 +71,7 @@ function* liveScoreCoachSaga(action) {
 
 function* liveScoreAddCoachSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.existingManagerId);
+    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.existingManagerId,action.compOrgId );
 
     if (result.status === 1) {
       yield put({
