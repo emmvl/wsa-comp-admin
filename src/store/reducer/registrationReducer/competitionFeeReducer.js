@@ -2612,17 +2612,18 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_SECTION:
             let array = JSON.parse(JSON.stringify(state.competitionFeesData))
             let index = array.findIndex(x => x.membershipProductUniqueKey == action.record.membershipProductUniqueKey)
-
+  
             if (index > -1) {
                 if (array[index].isAllType === "allDivisions") {
                     if (action.key === "fee") {
-                        array[index][action.arrayKey].allType[action.tableIndex].fee = (action.data)
+                        array[index][action.arrayKey].allType[action.tableIndex].fee = Number(action.data)
                         let gstAll = (Number(action.data) / 10).toFixed(2)
                         let nominationFees = array[index][action.arrayKey].allType[action.tableIndex].nominationFees
                         let nominationGST = array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
                         array[index][action.arrayKey].allType[action.tableIndex].gst = gstAll
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                            Number(nominationFees) + Number(nominationGST))).toFixed(2)
+                            Number(nominationFees ? nominationFees : 0) + Number(nominationGST ? nominationGST : 0))).toFixed(2)
+                           
                     } else if (action.key === "gst") {
                         let fee = array[index][action.arrayKey].allType[action.tableIndex].fee
                         let nominationFees = array[index][action.arrayKey].allType[action.tableIndex].nominationFees

@@ -540,7 +540,7 @@ const playerSeasonalTableAssociation = [
         key: 'affNominationFees',
         width: 84,
         render: (fee, record, index) => (
-            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
+            (fee != null || record.teamRegChargeTypeRefId == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -568,7 +568,7 @@ const playerSeasonalTableAssociation = [
         key: 'affNominationGST',
         width: 84,
         render: (gst, record, index) => (
-            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
+            (gst != null || record.teamRegChargeTypeRefId == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1467,7 +1467,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1495,7 +1495,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1523,7 +1523,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'affNominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1551,7 +1551,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'affNominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1773,7 +1773,7 @@ const playerSeasonalTableTeamClub = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1801,7 +1801,7 @@ const playerSeasonalTableTeamClub = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1829,7 +1829,7 @@ const playerSeasonalTableTeamClub = [
         key: 'affNominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1857,7 +1857,7 @@ const playerSeasonalTableTeamClub = [
         key: 'affNominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2080,7 +2080,7 @@ const playerSeasonalTeamTable = [
         width: 84,
         render: (fee, record, index) => {
             return (
-                ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ?
+                ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ?
                     (
                         <Input
                             prefix="$"
@@ -2110,7 +2110,7 @@ const playerSeasonalTeamTable = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2138,7 +2138,7 @@ const playerSeasonalTeamTable = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) =>
-            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2169,7 +2169,7 @@ const playerSeasonalTeamTable = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) =>
-            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
+            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2322,7 +2322,7 @@ const playerCasualTableTeamAssociation = [
                             index,
                             record,
                             'fee',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2350,7 +2350,7 @@ const playerCasualTableTeamAssociation = [
                             index,
                             record,
                             'gst',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2378,7 +2378,7 @@ const playerCasualTableTeamAssociation = [
                             index,
                             record,
                             'affiliateFee',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2406,7 +2406,7 @@ const playerCasualTableTeamAssociation = [
                             index,
                             record,
                             'affiliateGst',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2544,7 +2544,7 @@ const playerCasualTableTeamClub = [
                             index,
                             record,
                             'fee',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2572,7 +2572,7 @@ const playerCasualTableTeamClub = [
                             index,
                             record,
                             'gst',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2600,7 +2600,7 @@ const playerCasualTableTeamClub = [
                             index,
                             record,
                             'affiliateFee',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2628,7 +2628,7 @@ const playerCasualTableTeamClub = [
                             index,
                             record,
                             'affiliateGst',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2752,7 +2752,7 @@ const playerCasualTeamTable = [
                             index,
                             record,
                             'fee',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -2780,7 +2780,7 @@ const playerCasualTeamTable = [
                             index,
                             record,
                             'gst',
-                            'casualTeam'
+                            'seasonalTeam'
                         )
                     }
                 />
@@ -3696,7 +3696,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
                                     feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
                                     feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
-                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
@@ -3767,7 +3767,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j]?.gst;
                                     feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j]?.affiliateFee;
                                     feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affiliateGst;
-                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
@@ -3824,7 +3824,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
                                     feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
                                     feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
-                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
@@ -3894,7 +3894,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
                                     feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
                                     feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
-                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                         feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                         feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -3961,7 +3961,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
                                     feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
                                     feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
-                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                         feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
                                         feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
                                         feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
@@ -4021,7 +4021,7 @@ class RegistrationCompetitionFee extends Component {
                                     feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                     feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                     feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                         feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                         feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                         feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -4080,7 +4080,7 @@ class RegistrationCompetitionFee extends Component {
                     item['teamSeasonalGST'] = item.gst;
                     item['affiliateTeamSeasonalFees'] = item.affiliateFee;
                     item['affiliateTeamSeasonalGST'] = item.affiliateGst;
-                    if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                    if (fee_data[i].teamRegChargeTypeRefId == 1) {
                         item['nominationTeamSeasonalFee'] = item.nominationFees;
                         item['nominationTeamSeasonalGST'] = item.nominationGST;
                         item['affNominationTeamSeasonalFee'] = item.affNominationFees;
@@ -4127,7 +4127,7 @@ class RegistrationCompetitionFee extends Component {
                                 feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                     feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -4154,7 +4154,7 @@ class RegistrationCompetitionFee extends Component {
                                 feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                if (fee_data[i].teamRegChargeTypeRefId != 3) {
+                                if (fee_data[i].teamRegChargeTypeRefId == 1) {
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
                                     feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
                                     feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
@@ -5552,6 +5552,7 @@ class RegistrationCompetitionFee extends Component {
     casualFeesTeamOnOrgTLevel() {
         let isCreatorEdit = this.state.isCreatorEdit;
         let orgLevel = this.getOrgLevelForFeesTable();
+
         if (isCreatorEdit && orgLevel == AppConstants.association) {
             return playerCasualTableTeamAssociation;
         } else if (isCreatorEdit && orgLevel == AppConstants.club) {
@@ -5585,6 +5586,7 @@ class RegistrationCompetitionFee extends Component {
         let allStates = this.props.competitionFeesState;
         let feeDetails = allStates.competitionFeesData;
         let feesTableDisable = this.state.permissionState.feesTableDisable;
+        
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.fees}</span>
@@ -5849,7 +5851,7 @@ class RegistrationCompetitionFee extends Component {
                                                 <Table
                                                     // ref= {(tableReference) => this.tableReference = tableReference}
                                                     className="fees-table"
-                                                    columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()}
+                                                    columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel()  : this.casualFeesTeamOnOrgTLevel()}
                                                     dataSource={
                                                         item.isAllType !== 'allDivisions'
                                                             ? item.seasonalTeam.perType
@@ -6387,7 +6389,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamSeasonal = (feeDetails) => {
         let isSeasonalValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].teamRegChargeTypeRefId == 1 || feeDetails[i].teamRegChargeTypeRefId == 2) {
+            if (feeDetails[i].teamRegChargeTypeRefId == 1) {
                 isSeasonalValue = true;
                 break;
             }
@@ -6398,7 +6400,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamCasual = (feeDetails) => {
         let isCasualValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].teamRegChargeTypeRefId == 3) {
+            if (feeDetails[i].teamRegChargeTypeRefId == 2 || feeDetails[i].teamRegChargeTypeRefId == 3) {
                 isCasualValue = true;
                 break;
             }
