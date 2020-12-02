@@ -18,6 +18,7 @@ import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/li
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
+import { checkLivScoreCompIsParent } from "../../util/permissions";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -215,11 +216,14 @@ class LiveScoreMatchesList extends Component {
             sortBy: null,
             sortOrder: null,
             sourceIdAvailable: false,
+            liveScoreCompIsParent: false,
+            competitionOrganisationId: null
         }
         _this = this
     }
 
     async componentDidMount() {
+        this.setLivScoreCompIsParent()
         let matchListActionObject = this.props.liveScoreMatchListState.matchListActionObject
         let selectedDivision = this.state.selectedDivision
         let page = 1
@@ -238,23 +242,31 @@ class LiveScoreMatchesList extends Component {
 
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
-                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
-                this.handleMatchTableList(page, id)
+                const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData())
+                let compOrg = competitionOrganisation ? competitionOrganisation.id : 0;
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: compOrg })
+                this.handleMatchTableList(page, id, compOrg)                
             } else {
                 history.push("/matchDayCompetitions")
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
-                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
-                this.handleMatchTableList(page, id, sortBy, sortOrder)
+                const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: competitionOrganisation ? competitionOrganisation.id : null })
+                if (competitionOrganisation) {
+
+                    this.handleMatchTableList(page, id, sortBy, sortOrder, competitionOrganisation.id)
+                } else {
+                    this.handleMatchTableList(page, id, sortBy, sortOrder)
+                }
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, selectedDivision === 'All' ? '' : selectedDivision)
             } else {
                 history.push("/matchDayCompetitions")
             }
         }
+
+
     }
 
     componentDidUpdate(nextProps) {
@@ -263,6 +275,12 @@ class LiveScoreMatchesList extends Component {
                 this.setState({ isBulkUpload: false, onScoreUpdate: false })
             }
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     onMatchClick(data, screenName) {
@@ -276,15 +294,37 @@ class LiveScoreMatchesList extends Component {
         )
     }
 
-    handleMatchTableList(page, competitionID, sortBy, sortOrder) {
+    handleMatchTableList(page, competitionID, sortBy, sortOrder, competitionOrganisationId) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder, competitionOrganisationId)
     }
 
     onExport() {
-        let url = AppConstants.matchExport + this.state.competitionId
+
+        let competition = null
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                competition = JSON.parse(getUmpireCompetitonData());
+            } else {
+                history.push('/matchDayCompetitions')
+            }
+        } else {
+            if (getLiveScoreCompetiton()) {
+                competition = JSON.parse(getLiveScoreCompetiton());
+            } else {
+                history.push('/matchDayCompetitions')
+            }
+        }
+
+        let competitionOrganisationId = competition.competitionOrganisation ? competition.competitionOrganisation.id : null
+        let url = null
+        if (competitionOrganisationId) {
+            url = AppConstants.matchExport + this.state.competitionId + `&competitionOrganisationId=${competitionOrganisationId}`
+        } else {
+            url = AppConstants.matchExport + this.state.competitionId
+        }
         this.props.exportFilesAction(url)
     }
 
@@ -360,7 +400,7 @@ class LiveScoreMatchesList extends Component {
     headerView = () => {
         const { liveScoreMatchListData } = this.props.liveScoreMatchListState;
         let matchData = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
-        let { sourceIdAvailable } = this.state
+        let { sourceIdAvailable, liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -385,32 +425,34 @@ class LiveScoreMatchesList extends Component {
                                 </div>
                             </div>}
 
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    {/* <NavLink to={{
-                                        pathname: '/matchDayAddMatch',
-                                    }}> */}
-                                    <Button
-                                        type="primary"
-                                        className="primary-add-comp-form"
-                                        disabled={this.state.isBulkUpload || matchData.length === 0}
-                                        onClick={() => this.setState({ isBulkUpload: true })}
-                                    >
-                                        {AppConstants.bulkScoreUpload}
-                                    </Button>
-                                    {/* </NavLink> */}
-                                </div>
-                            </div>
-
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to={{ pathname: '/matchDayAddMatch' }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.addMatches}
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <Button
+                                            type="primary"
+                                            className="primary-add-comp-form"
+                                            disabled={this.state.isBulkUpload || matchData.length === 0}
+                                            onClick={() => this.setState({ isBulkUpload: true })}
+                                        >
+                                            {AppConstants.bulkScoreUpload}
                                         </Button>
-                                    </NavLink>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to={{ pathname: '/matchDayAddMatch' }}>
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                + {AppConstants.addMatches}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            }
 
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
@@ -428,24 +470,27 @@ class LiveScoreMatchesList extends Component {
                                     </Button>
                                 </div>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/matchDayMatchImport">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.import}
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to="/matchDayMatchImport">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Button>
-                                    </NavLink>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -475,7 +520,7 @@ class LiveScoreMatchesList extends Component {
         if (checkScoreChanged === true) {
             message.info("Please save or cancel the current changes! ");
         } else {
-            this.handleMatchTableList(page, this.state.competitionId, this.state.sortBy, this.state.sortOrder)
+            this.handleMatchTableList(page, this.state.competitionId, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 

@@ -59,6 +59,7 @@ function* liveScoreMatchListSaga(action) {
             action.teamIds,
             action.sortBy,
             action.sortOrder,
+            action.competitionOrganisationId
         );
 
         if (result.status === 1) {
