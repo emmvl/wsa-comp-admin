@@ -189,7 +189,7 @@ const columns = [
                     </Menu.Item>
                     {e.alreadyDeRegistered == 0 && (
                         <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
-                            <span>De-register</span>
+                            <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
                     <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
