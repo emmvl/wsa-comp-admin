@@ -164,7 +164,7 @@ function* addTeamLiveScoreSaga(action) {
 
             message.success(action.teamId ? 'Team has been updated Successfully' : 'Team has been created Successfully.');
 
-            history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/matchDayTeam');
+            history.push(action.key ? 'matchDayDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/matchDayTeam');
 
             let updateCompData = {
                 teamUniqueKey: action.teamUniqueKey ? action.teamUniqueKey : "",
