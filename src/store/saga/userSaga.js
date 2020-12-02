@@ -954,6 +954,24 @@ function* updateBannerCount(action) {
   }
 }
 
+function* getSpectatorListSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getSpectatorList, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_SPECTATOR_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1002,4 +1020,5 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD, getUmpireActivityListSaga);
   yield takeEvery(ApiConstants.API_BANNER_COUNT_LOAD, getBannerCount);
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
+  yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
 }

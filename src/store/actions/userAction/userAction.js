@@ -407,6 +407,15 @@ function clearListAction(payload) {
     };
 }
 
+function getSpectatorListAction(payload, sortBy, sortOrder) {
+    return {
+        type: ApiConstants.API_GET_SPECTATOR_LIST_LOAD,
+        payload,
+        sortBy,
+        sortOrder,
+    };
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -459,5 +468,6 @@ export {
     getUmpireActivityListAction,
     getBannerCnt,
     updateBannerAction,
-    clearListAction
+    clearListAction,
+    getSpectatorListAction
 };

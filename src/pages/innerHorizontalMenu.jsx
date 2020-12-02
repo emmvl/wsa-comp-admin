@@ -716,6 +716,11 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>{AppConstants.referaFriend}</span>
                                 </NavLink>
                             </Menu.Item>
+                            <Menu.Item key="67">
+                                <NavLink to="/spectator">
+                                    <span>{AppConstants._spectator}</span>
+                                </NavLink>
+                            </Menu.Item>
                         </SubMenu>
                         {/*
                         <SubMenu
