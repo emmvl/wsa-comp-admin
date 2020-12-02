@@ -83,6 +83,7 @@ import UmpireSetting from 'components/umpire/umpireSetting';
 import AffiliateDirectory from 'components/user/affiliateDirectory';
 import PlayWithFriend from 'components/user/playWithFriend';
 import ReferFriend from 'components/user/referFriend';
+import Spectator from 'components/user/spectator';
 import UserAddAffiliates from 'components/user/userAddAffiliates';
 import UserAffiliateApproveRejectForm from 'components/user/userAffiliateApproveRejectForm';
 import UserAffiliatesList from 'components/user/userAffiliatesList';
@@ -740,6 +741,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/referFriend"
                     component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(ReferFriend) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/spectator"
+                    component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
