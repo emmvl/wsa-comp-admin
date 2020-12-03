@@ -438,6 +438,10 @@ let userHttpApi = {
       url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`;
     }
     return Method.dataGet(url, token);
+  },
+  getSpectatorList(payload){
+    const url = `users/dashboard/spectator`;
+    return Method.dataPost(url, token, payload);
   }
 
 };

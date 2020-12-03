@@ -150,7 +150,11 @@ const initialState = {
   onDeleteOrgPhotoLoad: false,
   bannerCount: null,
   onLoadSearch: false,
-  impersonationAccess:false
+  impersonationAccess:false,
+  spectatorList: [],
+  spectatorPage: null,
+  spectatorTotalCount: null,
+  spectatorListAction: null
 };
 
 function userReducer(state = initialState, action) {
@@ -860,7 +864,22 @@ function userReducer(state = initialState, action) {
       state.userAffiliateListAction = null;
       state.userFriendListAction = null;
       state.userReferFriendListAction = null;
+      state.spectatorListAction = null;
       return { ...state, onLoad: false };
+
+    case ApiConstants.API_GET_SPECTATOR_LIST_LOAD:
+      return { ...state, onLoad: true,spectatorListAction: action };
+
+    case ApiConstants.API_GET_SPECTATOR_LIST_SUCCESS:
+      let spectatorData = action.result;
+      return {
+        ...state,
+        onLoad: false,
+        spectatorList: spectatorData ? spectatorData.spectator : [],
+        spectatorPage: (spectatorData && spectatorData.page) ? spectatorData.page.currentPage : 1,
+        spectatorTotalCount: (spectatorData && spectatorData.page) ? spectatorData.page.totalCount : 1,
+        status: action.status
+      };
 
     ////Coach
     case ApiConstants.API_CLEAR_LIST_DATA:
