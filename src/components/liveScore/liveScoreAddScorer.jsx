@@ -53,9 +53,9 @@ class LiveScoreAddScorer extends Component {
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             if (id !== null) {
-                this.props.getliveScoreTeams(id)
+                // this.props.getliveScoreTeams(id);
             } else {
                 history.push('/')
             }
@@ -69,7 +69,7 @@ class LiveScoreAddScorer extends Component {
                 this.props.liveScoreScorerUpdate("", "isAddScorer")
             }
 
-            this.setState({ load: true, competition_id: id });
+            this.setState({ load: true, competition_id: competitionOrganisation ? competitionOrganisation.id : 0 });
 
             this.formRef = React.createRef();
         } else {
@@ -151,13 +151,14 @@ class LiveScoreAddScorer extends Component {
                                 style={{ width: '100%', height: '39.93px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
-                                    const ScorerId = JSON.parse(option.key)
+                                    let newKey = option.key.split('_');
+                                    const ScorerId = (parseInt(newKey[1]))
                                     this.props.liveScoreClear()
                                     this.props.liveScoreScorerUpdate(ScorerId, "scorerSearch")
                                 }}
                                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
-                                    this.props.liveScoreScorerSearch(8, 1, this.state.competition_id, value)
+                                    this.props.liveScoreScorerSearch(8, 6, this.state.competition_id, value)
                                     // this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                     // :
                                     // this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)

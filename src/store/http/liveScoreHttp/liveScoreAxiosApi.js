@@ -659,13 +659,15 @@ const LiveScoreAxiosApi = {
 
     liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder) {
         // const competitionID = localStorage.getItem('competitionId');
-        const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-
-        let url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
+        const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+        let compOrgId = competitionOrganisation? competitionOrganisation.id :0
+        let url = `/roster/admin?entityTypeId=${6}&roleId=${roleId}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-
+        if(compOrgId!==0){
+            url += `&entityId=${compOrgId}`;
+        }
         return Method.dataPost(url, token, body);
     },
 
@@ -965,8 +967,8 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
-        const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-
+        const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+        let compOrgId = competitionOrganisation? competitionOrganisation.id :0
         let body = null;
         if (scorerRadioBtn === 'new') {
             if (scorerData.id) {
@@ -991,7 +993,7 @@ const LiveScoreAxiosApi = {
             };
         }
 
-        const url = `/users/member?competitionId=${id}`;
+        const url = `/users/member?competitionId=${id}&organisationId=${compOrgId}`;
         return Method.dataPost(url, token, body);
     },
 

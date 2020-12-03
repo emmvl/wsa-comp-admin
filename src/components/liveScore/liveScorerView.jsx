@@ -25,12 +25,12 @@ const columns = [
         key: 'homatchme',
         sorter: (a, b) => a.match.length - b.match.length,
         render: (text, record) =>
-            <NavLink to={{
-                pathname: '/matchDayMatchDetails',
-                state: { matchId: record.match }
-            }}>
-                <span className="input-heading-add-another pt-0">{text}</span>
-            </NavLink>
+            // <NavLink to={{
+            //     pathname: '/matchDayMatchDetails',
+            //     state: { matchId: record.match }
+            // }}>
+            <span className="input-heading-add-another pt-0">{text}</span>
+        // </NavLink>
     },
     {
         title: 'Team',

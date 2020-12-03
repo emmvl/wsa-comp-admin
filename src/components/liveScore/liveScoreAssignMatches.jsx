@@ -130,9 +130,13 @@ const columns2 = [
                     <div className="col-sm d-flex justify-content-start">
                         <span className="pt-0">{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
-                    <div className="col-sm d-flex justify-content-end">
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer1)}</span>
-                    </div>
+                    {
+                        this_obj.checkToShowAssignText(records.team1) &&
+                        <div className="col-sm d-flex justify-content-end">
+                            <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer1)}</span>
+                        </div>
+                    }
+
                 </div>
             )
         }
@@ -162,7 +166,7 @@ const columns2 = [
                             <span className="pt-0">{records.team2.name}</span>
                         }
                     </div>
-                    {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm d-flex justify-content-end">
+                    {this_obj.state.scoring_Type !== "SINGLE" && this_obj.checkToShowAssignText(records.team2) ? <div className="col-sm d-flex justify-content-end">
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer2)}</span>
                     </div> : null}
                 </div>
@@ -202,7 +206,7 @@ class LiveScoreAssignMatch extends Component {
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const { id ,competitionOrganisation} = JSON.parse(getLiveScoreCompetiton())
             this.setState({ lodding: true })
 
             if (id !== null) {
@@ -231,6 +235,18 @@ class LiveScoreAssignMatch extends Component {
             }
         }
     }
+
+    checkToShowAssignText = (team) => {
+        const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+        if (team.competitionOrganisationId === compOrgId) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+
 
     /// on status change
     onChangeStatus(index, data, scorerKey, teamKey, isScorer) {
@@ -276,7 +292,7 @@ class LiveScoreAssignMatch extends Component {
 
     headerView = () => {
         let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.allTeamData) ? this.props.liveScoreScorerState.allTeamData : []
-
+        
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -337,7 +353,7 @@ class LiveScoreAssignMatch extends Component {
                                 current={1}
                                 total={matcheList.assignMatchTotalCount}
                                 onChange={(page) => this.handlePaggination(page)}
-                                // defaultPageSize={10}
+                            // defaultPageSize={10}
                             />
                         </div>
                     </div>

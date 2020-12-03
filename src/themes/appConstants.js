@@ -995,7 +995,7 @@ const AppConstants = {
 
   coachExport: '/users/byRole/export?roleId=17&entityTypeId=6&entityId=',
   managerExport: '/users/byRole/export?roleId=3&entityTypeId=6&entityId=',
-  scorerExport: '/roster/exportScorer?competitionId=',
+  scorerExport: '/roster/exportScorer?entityTypeId=',
   teamExport: '/teams/export?competitionId=',
   playersToPay: 'Players to Pay',
   exportTeams: 'Export Teams',
