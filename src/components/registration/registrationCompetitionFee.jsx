@@ -2310,7 +2310,8 @@ const playerCasualTableTeamAssociation = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) => (
-            fee != null ? (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     type="number"
                     disabled
@@ -2337,7 +2338,8 @@ const playerCasualTableTeamAssociation = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) => (
-            gst != null ? (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     type="number"
@@ -2365,7 +2367,8 @@ const playerCasualTableTeamAssociation = [
         key: 'affiliateFee',
         width: 84,
         render: (affiliateFee, record, index) => (
-            affiliateFee != null ? (
+            ((affiliateFee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2393,7 +2396,8 @@ const playerCasualTableTeamAssociation = [
         key: 'affiliateGst',
         width: 84,
         render: (affiliateGst, record, index) => (
-            affiliateGst != null ? (
+            ((affiliateGst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2531,7 +2535,8 @@ const playerCasualTableTeamClub = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) => (
-            fee != null ? (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     type="number"
@@ -2559,7 +2564,8 @@ const playerCasualTableTeamClub = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) => (
-            gst != null ? (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     type="number"
@@ -2587,7 +2593,8 @@ const playerCasualTableTeamClub = [
         key: 'affiliateFee',
         width: 84,
         render: (affiliateFee, record, index) => (
-            affiliateFee != null ? (
+            ((affiliateFee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2615,7 +2622,8 @@ const playerCasualTableTeamClub = [
         key: 'affiliateGst',
         width: 84,
         render: (affiliateGst, record, index) => (
-            affiliateGst != null ? (
+            ((affiliateGst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+            && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2739,7 +2747,8 @@ const playerCasualTeamTable = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) => (
-            fee != null ? (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+                        && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2767,7 +2776,8 @@ const playerCasualTeamTable = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) => (
-            gst != null ? (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
+                && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
