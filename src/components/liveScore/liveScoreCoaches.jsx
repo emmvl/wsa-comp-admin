@@ -193,7 +193,7 @@ class LiveScoreCoaches extends Component {
             }
 
             if (id !== null) {
-                this.props.getliveScoreTeams(id)
+                this.props.getliveScoreTeams(id, null, compOrgId)
             } else {
                 history.push('/matchDayCompetitions')
             }

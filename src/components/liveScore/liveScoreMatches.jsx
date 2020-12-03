@@ -35,7 +35,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder);
+    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder, _this.state.competitionOrganisationId);
 }
 
 var _this = null
@@ -217,7 +217,7 @@ class LiveScoreMatchesList extends Component {
             sortOrder: null,
             sourceIdAvailable: false,
             liveScoreCompIsParent: false,
-            competitionOrganisationId: null
+            competitionOrganisationId: 0
         }
         _this = this
     }
@@ -245,20 +245,15 @@ class LiveScoreMatchesList extends Component {
                 const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData())
                 let compOrg = competitionOrganisation ? competitionOrganisation.id : 0;
                 this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: compOrg })
-                this.handleMatchTableList(page, id, compOrg)                
+                this.handleMatchTableList(page, id, compOrg)
             } else {
                 history.push("/matchDayCompetitions")
             }
         } else {
             if (getLiveScoreCompetiton()) {
                 const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
-                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: competitionOrganisation ? competitionOrganisation.id : null })
-                if (competitionOrganisation) {
-
-                    this.handleMatchTableList(page, id, sortBy, sortOrder, competitionOrganisation.id)
-                } else {
-                    this.handleMatchTableList(page, id, sortBy, sortOrder)
-                }
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: competitionOrganisation ? competitionOrganisation.id : 0 })
+                this.handleMatchTableList(page, id, sortBy, sortOrder, competitionOrganisation ? competitionOrganisation.id : 0)
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, selectedDivision === 'All' ? '' : selectedDivision)
             } else {
@@ -323,7 +318,7 @@ class LiveScoreMatchesList extends Component {
         if (competitionOrganisationId) {
             url = AppConstants.matchExport + this.state.competitionId + `&competitionOrganisationId=${competitionOrganisationId}`
         } else {
-            url = AppConstants.matchExport + this.state.competitionId
+            url = AppConstants.matchExport + this.state.competitionId + `&competitionOrganisationId=${0}`
         }
         this.props.exportFilesAction(url)
     }
@@ -332,7 +327,7 @@ class LiveScoreMatchesList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -341,7 +336,7 @@ class LiveScoreMatchesList extends Component {
         var code = e.keyCode || e.which;
         this.setState({ offset: 0 })
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -350,7 +345,7 @@ class LiveScoreMatchesList extends Component {
         this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -634,7 +629,7 @@ class LiveScoreMatchesList extends Component {
         const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
 
         setTimeout(() => {
-            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }, 200);
         this.props.liveScoreRoundListAction(competitionId, division === 'All' ? '' : division)
 
@@ -644,7 +639,7 @@ class LiveScoreMatchesList extends Component {
         let offset = 0;
         let start = 1
         const { competitionId, searchText, selectedDivision, sortBy, sortOrder } = this.state;
-        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder)
+        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         this.setState({ selectedRound: roundName })
     }
 

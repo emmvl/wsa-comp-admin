@@ -59,8 +59,9 @@ class LiveScoreAddPlayer extends Component {
 
         if (screenKey == 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id } = JSON.parse(getUmpireCompetitonData())
-                this.props.getliveScoreTeams(id)
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getUmpireCompetitonData())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.props.getliveScoreTeams(id, null, compOrgId)
 
                 if (this.state.isEdit) {
                     if (this.props.location.state.screen === 'editTeam') {
@@ -98,8 +99,9 @@ class LiveScoreAddPlayer extends Component {
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.props.getliveScoreTeams(id)
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.props.getliveScoreTeams(id, null, compOrgId)
 
                 if (this.state.isEdit) {
                     if (this.props.location.state.screen === 'editTeam') {

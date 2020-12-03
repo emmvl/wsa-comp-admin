@@ -81,6 +81,7 @@ class LiveScoreAddMatch extends Component {
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             sourceIdAvailable: false,
             modalVisible: false,
+            compOrgId: 0
         };
         this.props.clearMatchAction();
         this.formRef = React.createRef();
@@ -106,8 +107,9 @@ class LiveScoreAddMatch extends Component {
         this.props.getRefBadgeData(this.props.appstate.accreditation)
         if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey === 'umpire') {
-                const { id, scoringType, sourceId } = JSON.parse(getUmpireCompetitonData());
-                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId });
+                const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId, compOrgId: compOrgId });
 
                 if (id !== null) {
                     this.props.getCompetitionVenuesList(id, "");
@@ -125,8 +127,9 @@ class LiveScoreAddMatch extends Component {
                     history.push('/matchDayCompetitions');
                 }
             } else if (getLiveScoreCompetiton()) {
-                const { id, scoringType, sourceId } = JSON.parse(getLiveScoreCompetiton());
-                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId });
+                const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId, compOrgId: compOrgId });
 
                 this.props.getCompetitionVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id);
@@ -186,7 +189,7 @@ class LiveScoreAddMatch extends Component {
                     // const { id } = JSON.parse(getLiveScoreCompetiton())
                     const division = this.props.liveScoreMatchState.matchData.divisionId;
                     this.setInitialFieldValue(addEditMatch, start_date, start_time, displayTime);
-                    this.props.getliveScoreTeams(this.state.compId, division);
+                    this.props.getliveScoreTeams(this.state.compId, division, this.state.compOrgId);
                     this.props.liveScoreRoundListAction(this.state.compId, division);
                     this.setState({ loadvalue: false });
                 }
@@ -548,7 +551,7 @@ class LiveScoreAddMatch extends Component {
         this.props.liveScoreUpdateMatchAction(divisionId, 'divisionId');
         this.setState({ selectedDivision: divisionId });
         // const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.getliveScoreTeams(this.state.compId, divisionId);
+        this.props.getliveScoreTeams(this.state.compId, divisionId, this.state.compOrgId);
         this.props.liveScoreRoundListAction(this.state.compId, divisionId);
     }
 
