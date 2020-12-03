@@ -216,7 +216,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: '/registrationCompetitionFee',
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId },
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId , yearRefId: this_Obj.state.yearRefId },
                             }}
                         >
                             <span>Edit</span>

@@ -427,7 +427,7 @@ class RegistrationCompetitionForm extends Component {
 
     ////all the api calls
     apiCalls = (competitionId) => {
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.props.getOnlyYearListAction()
         this.props.getDefaultCompFeesLogoAction()
         this.props.competitionDiscountTypesAction()
         this.props.competitionFeeInit();
@@ -856,6 +856,7 @@ class RegistrationCompetitionForm extends Component {
                 >
                     <Select className="year-select reg-filter-select-year"
                         style={{ maxWidth: 80 }}
+                        disabled={compDetailDisable}
                         onChange={(e) => this.setYear(e)}>
                         {this.props.appState.yearList.map(item => (
                             <Option key={'year_' + item.id} value={item.id}>
