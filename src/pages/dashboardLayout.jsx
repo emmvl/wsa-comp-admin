@@ -27,6 +27,7 @@ import Loader from "customComponents/loader";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
 import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
+import { getUserId } from 'util/sessionStorage';
 
 const { Option } = Select;
 
@@ -356,6 +357,12 @@ class DashboardLayout extends React.Component {
                             <NavLink id={AppConstants.help_support_label} to="/support">Help & Support</NavLink>
                         </li>
                     </div>
+
+                    <li className="acc-help-support-list-view">
+                    <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
+                        {AppConstants.profileMenu}
+                    </NavLink>
+                    </li>
 
                     <li className="log-out">
                         <a id={AppConstants.log_out} onClick={this.logout}>Log Out</a>
