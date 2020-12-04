@@ -230,14 +230,11 @@ class ShopSettings extends Component {
                         min={0}
                     />
                 </Form.Item>
+                <span className="input-heading">{AppConstants.pickupInstructions}</span>
                 <Form.Item 
                     name="pickupInstruction"
                 >
-                    <div>
-                    <span className="input-heading">{AppConstants.pickupInstructions}</span>
-                    <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>
-                    </div>
-
+                    <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>    
                 </Form.Item>
             </div>
         );

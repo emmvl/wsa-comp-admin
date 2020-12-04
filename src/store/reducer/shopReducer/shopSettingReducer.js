@@ -32,6 +32,7 @@ function modifySettingData(data) {
         suburb: singleAddress ? singleAddress.suburb : "",
         organisationUniqueKey: singleAddress ? singleAddress.organisationUniqueKey : 0,
         types: isArrayNotEmpty(data.types) ? data.types : [],
+        pickupInstruction: singleAddress ? singleAddress.pickupInstruction : ""
     }
     return newObject
 }
