@@ -646,6 +646,7 @@ const playerSeasonalTableAssociation = [
         render: (affiliateFee, record, index) => (
             <Input
                 prefix="$"
+                autoFocus={index === 0 ? true : false}
                 disabled={this_Obj.state.permissionState.allDisable}
                 type="number"
                 className="input-inside-table-fees"
@@ -1137,6 +1138,7 @@ const playerSeasonalTableClub = [
         render: (affiliateFee, record, index) => (
             <Input
                 prefix="$"
+                autoFocus={index === 0 ? true : false}
                 disabled={this_Obj.state.permissionState.allDisable}
                 type="number"
                 className="input-inside-table-fees"

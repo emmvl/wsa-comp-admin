@@ -69,7 +69,7 @@ class LiveScoreAddScorer extends Component {
                 this.props.liveScoreScorerUpdate("", "isAddScorer")
             }
 
-            this.setState({ load: true, competition_id: competitionOrganisation ? competitionOrganisation.id : 0 });
+            this.setState({ load: true, competition_id: id });
 
             this.formRef = React.createRef();
         } else {
@@ -158,7 +158,7 @@ class LiveScoreAddScorer extends Component {
                                 }}
                                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
-                                    this.props.liveScoreScorerSearch(8, 6, this.state.competition_id, value)
+                                    this.props.liveScoreScorerSearch(8, 1, this.state.competition_id, value)
                                     // this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                     // :
                                     // this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)
