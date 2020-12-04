@@ -793,7 +793,7 @@ export function* impersonationSaga(action) {
         impersonationAccess:action.payload.access
       });
       if (action.payload.access == false) {
-        history.push('/')
+        history.push('/homeDashboard')
       }
     } else {
       yield call(failSaga, result);
