@@ -207,10 +207,11 @@ class LiveScoreAssignMatch extends Component {
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
             const { id ,competitionOrganisation} = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             this.setState({ lodding: true })
 
             if (id !== null) {
-                this.props.getliveScoreTeams(id)
+                this.props.getliveScoreTeams(id,null,compOrgId)
             } else {
                 history.push('/')
             }
