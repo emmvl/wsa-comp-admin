@@ -361,7 +361,7 @@ class DashboardLayout extends React.Component {
 
                     <li className="acc-help-support-list-view">
                     <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
-                        {AppConstants.profileMenu}
+                        {AppConstants.myProfile}
                     </NavLink>
                     </li>
 

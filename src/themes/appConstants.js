@@ -15,6 +15,7 @@ const AppConstants = {
   graphicalDashboard: 'Graphical Display',
   textualDashboard: 'Textual Display',
   userProfile: 'User Profile',
+  myProfile: 'My Profile',
   affiliates: 'Affiliates',
   affiliateApproveReject: 'Affiliate - Approve / Reject',
   current: 'Current',
