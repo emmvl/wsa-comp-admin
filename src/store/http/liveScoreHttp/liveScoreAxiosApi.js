@@ -85,9 +85,9 @@ const LiveScoreAxiosApi = {
     liveScoreGetAffiliate(data) {
         let url = '';
         if (data.name) {
-            url = `organisation/name=${data.name}&competitionId=${data.id}`;
+            url = `linkedCompetitionOrganisation/name=${data.name}&competitionId=${data.id}`;
         } else {
-            url = `organisation?competitionId=${data.id}`;
+            url = `linkedCompetitionOrganisation?competitionId=${data.id}`;
         }
         return Method.dataGet(url, null);
     },

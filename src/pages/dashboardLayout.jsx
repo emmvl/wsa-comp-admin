@@ -85,15 +85,16 @@ class DashboardLayout extends React.Component {
                         )
                         : null;
 
-                    this.setState({
+                    await this.setState({
                         impersonationOrgData: impersonationAffiliate,
                         impersonationAffiliateOrgId: this.state.impersonationAffiliateOrgId,
                     });
 
-                    window.location.reload();
+
                     if (!this.props.userState.impersonationLoad) {
                         history.push("/");
                     }
+                    window.location.reload();
                 }
             }
 
