@@ -1590,7 +1590,7 @@ const AppConstants = {
   membershipFeesRepayConfirmMsg: 'Users have already registered to this membership fee. Do you want to proceed?',
   whichCompetitionSettingPrecedence: 'Please select which competition’s settings will take precedence',
   quickCompetitionMismatchMsg: 'The venue you have selected for this quick competition will override the competition you are merging to',
-  regoFormConfirmMsg: 'Some users may receive this email a second time. Are you sure you want to proceed?',
+  regoFormConfirmMsg: 'Some users may receive this email a second time. Do you want to proceed with an email notification?',
   emailNotificationUpdate: 'Email Notification Update',
 
   unavailable: "Unavailable",
