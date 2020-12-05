@@ -922,9 +922,9 @@ const AppConstants = {
   friends: 'Friends',
   referFriends: 'Referred Friends',
 
-  logoImageSize: 'Selected file must be less then 250 KB',
+  logoImageSize: 'Selected file must be less then 2 MB',
   logoType: 'Selected file must be PNG, GIF or JPEG formate',
-  logo_size: 250000,
+  logo_size: 2000000,
   referaFriend: 'Refer a Friend',
   playWithAFriend: 'Play with a Friend',
 
