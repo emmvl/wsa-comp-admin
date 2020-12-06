@@ -273,7 +273,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     </div>
                     <div
                         className="col-sm w-100 d-flex flex-row justify-content-end align-items-center"
-                        style={{ marginRight: '2.8%' }}
                     >
                         <div className="row">
                             <div className="col-sm">

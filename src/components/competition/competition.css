@@ -88,12 +88,12 @@
 
 .comp-player-grades-header-view-design {
     margin-top: 28px;
-    padding-left: 2.8%;
+    padding-left: 22px;
 }
 
 .comp-player-grades-header-drop-down-view {
-    padding-left: 2.8%;
-    padding-right: 2.8%;
+    padding-left: 22px;
+    padding-right: 22px;
     padding-top: 20px;
 }
 
@@ -328,7 +328,7 @@
 }
 
 .comp-dash-table-view {
-    padding: 10px 2.8%;
+    padding: 10px 22px;
 }
 
 .comp-expanded-row-view {

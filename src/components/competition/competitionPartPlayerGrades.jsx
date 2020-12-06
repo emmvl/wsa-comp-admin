@@ -156,7 +156,7 @@ class CompetitionPartPlayerGrades extends Component {
                         <span>{AppConstants.playerGradingMsg}</span>
                     </Tooltip>
                 </div>
-                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100" style={{ marginRight: '2.8%' }}>
+                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100">
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile">
