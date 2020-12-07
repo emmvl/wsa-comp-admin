@@ -411,6 +411,7 @@ class HomeDashboard extends Component {
                         <Pagination
                             className="antd-pagination action-box-pagination"
                             current={actionBoxPage}
+                            showSizeChanger={false}
                             total={actionBoxTotalCount}
                             onChange={this.handleActionBoxList}
                         />

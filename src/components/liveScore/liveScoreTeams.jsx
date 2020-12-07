@@ -364,6 +364,7 @@ class LiveScoreTeam extends Component {
                         current={teamCurrentPage}
                         total={total}
                         onChange={this.handlePageChange}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

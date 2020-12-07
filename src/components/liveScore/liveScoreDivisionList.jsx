@@ -253,6 +253,7 @@ class LiveScoreDivisionList extends Component {
                             className="antd-pagination"
                             current={currentPage}
                             total={totalCount}
+                            showSizeChanger={false}
                             onChange={(page) => this.onPageChange(page)}
                         />
                     </div>

@@ -384,6 +384,7 @@ class Umpire extends Component {
                             total={totalCount_Data}
                             // defaultPageSize={10}
                             onChange={this.handlePageChange}
+                            showSizeChanger={false}
                         />
                     </div>
                 </div>

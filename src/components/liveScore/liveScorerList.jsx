@@ -406,7 +406,8 @@ class LiveScorerList extends Component {
                         current={scorerListCurrentPage}
                         total={scorerListTotalCount}
                         onChange={(page) => this.handlePagination(page)}
-                        // defaultPageSize={10}
+                        showSizeChanger={false}
+                    // defaultPageSize={10}
                     />
                 </div>
             </div>

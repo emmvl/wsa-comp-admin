@@ -695,6 +695,7 @@ class PaymentDashboard extends Component {
                         current={paymentState.paymentListPage}
                         total={total}
                         onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

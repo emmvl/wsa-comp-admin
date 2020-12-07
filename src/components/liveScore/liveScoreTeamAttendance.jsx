@@ -621,6 +621,7 @@ class LiveScoreTeamAttendance extends Component {
                                 this.state.selectedRound
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

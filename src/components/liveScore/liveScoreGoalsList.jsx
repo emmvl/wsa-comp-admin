@@ -390,6 +390,7 @@ class LiveScoreGoalList extends Component {
                             className="antd-pagination"
                             defaultCurrent={currentPage}
                             total={totalCount}
+                            showSizeChanger={false}
                             onChange={(page) => this.onPageChange(page)}
                         />
                     </div>

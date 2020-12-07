@@ -389,6 +389,7 @@ class UmpirePayments extends Component {
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
                             current={currentPage}
+                            showSizeChanger={false}
                         />
                     </div>
                 </div>

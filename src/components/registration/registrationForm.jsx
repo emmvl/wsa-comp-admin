@@ -643,7 +643,7 @@ class RegistrationForm extends Component {
                         <span className="form-heading pt-2 pl-2">
                             {item.membershipProductName}
                         </span>
-                        <div className="table-responsive">
+                        <div className="table-responsive home-dash-table-view table-competition">
                             <Table
                                 rowKey={item => item.id}
                                 showHeader

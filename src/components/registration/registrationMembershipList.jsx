@@ -339,6 +339,7 @@ class RegistrationMembershipList extends Component {
                         current={registrationState.regMembershipFeeListPage}
                         total={total}
                         onChange={(page) => this.handleMembershipTableList(page, this.state.yearRefId)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

@@ -673,6 +673,7 @@ class UserTextualDashboard extends Component {
                     <Pagination
                         className="antd-pagination"
                         current={userState.userDashboardTextualPage}
+                        showSizeChanger={false}
                         total={total}
                         onChange={this.handleTextualTableList}
                     />

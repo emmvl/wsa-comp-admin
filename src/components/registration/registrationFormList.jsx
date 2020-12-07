@@ -286,6 +286,7 @@ class RegistrationFormList extends Component {
                         current={dashboardState.regDashboardListPage}
                         total={total}
                         onChange={(page) => this.handleMembershipTableList(page, this.state.yearRefId)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

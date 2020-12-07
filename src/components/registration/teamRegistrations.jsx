@@ -523,6 +523,7 @@ class TeamRegistrations extends Component {
                         current={teamRegDashboardList.page.currentPage}
                         total={teamRegDashboardList.page.totalCount}
                         onChange={this.handleRegTableList}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

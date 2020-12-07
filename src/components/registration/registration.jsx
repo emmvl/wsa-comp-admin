@@ -863,6 +863,7 @@ class Registration extends Component {
                         current={userRegistrationState.userRegDashboardListPage}
                         total={total}
                         onChange={this.handleRegTableList}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

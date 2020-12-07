@@ -352,6 +352,7 @@ class LiveScoreAssignMatch extends Component {
                             <Pagination
                                 className="antd-pagination"
                                 current={1}
+                                showSizeChanger={false}
                                 total={matcheList.assignMatchTotalCount}
                                 onChange={(page) => this.handlePaggination(page)}
                             // defaultPageSize={10}
