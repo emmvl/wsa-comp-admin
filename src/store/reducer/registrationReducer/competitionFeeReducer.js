@@ -1509,7 +1509,6 @@ function createProductFeeArr(data) {
                         "isPlayer": memberShipProductType[k].isPlaying
                     }
                 }
-                console.log("status",statusSeasonal.status)
                 if (statusSeasonal.status) {
                     let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
                     type_Object_seasonal = {

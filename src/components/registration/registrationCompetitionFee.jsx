@@ -217,26 +217,24 @@ const playerSeasonalTable = [
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
-        render: (fee, record, index) => {
-            return(
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'fee',
-                            'seasonal'
-                        )
-                    }
-                />
-            )
-        }
+        render: (fee, record, index) => (
+            <Input
+                prefix="$"
+                disabled={this_Obj.state.permissionState.allDisable}
+                type="number"
+                className="input-inside-table-fees"
+                value={fee}
+                onChange={(e) =>
+                    this_Obj.onChangeDetails(
+                        e.target.value,
+                        index,
+                        record,
+                        'fee',
+                        'seasonal'
+                    )
+                }
+            />
+        )
     },
     {
         title: 'GST',
