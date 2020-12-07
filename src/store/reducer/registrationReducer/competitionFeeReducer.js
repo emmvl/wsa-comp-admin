@@ -1054,6 +1054,7 @@ function checkFeeDivisionType(data, uniqueKey) {
 }
 
 function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
+    // console.log("checkStatus",getCompetitionFeeArray, item, divisionId, feeTypeRefId)
     let object = {
         status: false,
         result: []
@@ -1061,7 +1062,7 @@ function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
     for (let i in getCompetitionFeeArray) {
         if (getCompetitionFeeArray[i].competitionMembershipProductTypeId == item.competitionMembershipProductTypeId &&
             getCompetitionFeeArray[i].feeTypeRefId == feeTypeRefId
-            && getCompetitionFeeArray[i].competitionMembershipProductDivisionId == divisionId) {
+            && (item.isPlaying == 0 || getCompetitionFeeArray[i].competitionMembershipProductDivisionId == divisionId)) {
             object = {
                 status: true,
                 result: getCompetitionFeeArray[i]
@@ -1508,7 +1509,7 @@ function createProductFeeArr(data) {
                         "isPlayer": memberShipProductType[k].isPlaying
                     }
                 }
-
+                console.log("status",statusSeasonal.status)
                 if (statusSeasonal.status) {
                     let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
                     type_Object_seasonal = {
