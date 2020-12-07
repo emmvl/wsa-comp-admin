@@ -142,7 +142,7 @@ class CommunicationList extends Component {
     }
 
     componentDidMount() {
-        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
+        let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
         // this.props.getCommunicationListAction(organisationUniqueKey)
         // this.props.liveScoreNewsListAction(1)
     }

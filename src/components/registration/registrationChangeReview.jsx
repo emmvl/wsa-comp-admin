@@ -122,8 +122,8 @@ class RegistrationChangeReview extends Component {
             acceptVisible: false,
             declineVisible: false,
             deRegisterId: null,
-            organisationId: getOrganisationData().organisationUniqueKey,
-            organisationTypeRefId: getOrganisationData().organisationTypeRefId,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            organisationTypeRefId: getOrganisationData() ? getOrganisationData().organisationTypeRefId : null,
             loading: false,
             deRegData: null
         };

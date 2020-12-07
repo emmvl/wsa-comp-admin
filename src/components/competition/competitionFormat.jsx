@@ -44,7 +44,7 @@ class CompetitionFormat extends Component {
             deleteModalVisible: false,
             currentIndex: 0,
             competitionId: '',
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: null,
             firstTimeCompId: '',
             getDataLoading: false,
@@ -448,7 +448,7 @@ class CompetitionFormat extends Component {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
@@ -747,7 +747,7 @@ class CompetitionFormat extends Component {
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}
                         >
-                            <Option style={{ height: '30px' }} value={null} key={null}>{}</Option>
+                            <Option style={{ height: '30px' }} value={null} key={null}>{ }</Option>
                             {(data.fixtureTemplates || []).map((fixture) => (
                                 <Option value={fixture.noOfRounds} key={'fixtureTemplate_' + fixture.noOfRounds}>
                                     {fixture.noOfRounds}
@@ -1110,59 +1110,59 @@ class CompetitionFormat extends Component {
                                     </Button>
                                 </div>
                             ) : (
-                                <div className="comp-buttons-view">
-                                    <Tooltip
-                                        className="h-100"
-                                        onMouseEnter={() =>
-                                            this.setState({
-                                                tooltipVisibleSave: isPublished,
-                                            })
-                                        }
-                                        onMouseLeave={() =>
-                                            this.setState({ tooltipVisibleSave: false })
-                                        }
-                                        visible={this.state.tooltipVisibleSave}
-                                        title={AppConstants.statusPublishHover}
-                                    >
-                                        <Button
-                                            id={AppUniqueId.compformat_save_btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
-                                            className="publish-button save-draft-text"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => this.setState({ buttonClicked: "save" })}
-                                            disabled={isPublished}
+                                    <div className="comp-buttons-view">
+                                        <Tooltip
+                                            className="h-100"
+                                            onMouseEnter={() =>
+                                                this.setState({
+                                                    tooltipVisibleSave: isPublished,
+                                                })
+                                            }
+                                            onMouseLeave={() =>
+                                                this.setState({ tooltipVisibleSave: false })
+                                            }
+                                            visible={this.state.tooltipVisibleSave}
+                                            title={AppConstants.statusPublishHover}
                                         >
-                                            {AppConstants.save}
-                                        </Button>
-                                    </Tooltip>
-                                    <Tooltip
-                                        className="h-100"
-                                        onMouseEnter={() =>
-                                            this.setState({
-                                                tooltipVisibleDelete: isPublished,
-                                            })
-                                        }
-                                        onMouseLeave={() =>
-                                            this.setState({ tooltipVisibleDelete: false })
-                                        }
-                                        visible={this.state.tooltipVisibleDelete}
-                                        title={AppConstants.statusPublishHover}
-                                    >
-                                        <Button
-                                            id={AppUniqueId.create_Draft_Draw_Btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
-                                            className="open-reg-button"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => this.setState({ buttonClicked: "createDraw" })}
-                                            disabled={isPublished}
+                                            <Button
+                                                id={AppUniqueId.compformat_save_btn}
+                                                style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
+                                                className="publish-button save-draft-text"
+                                                type="primary"
+                                                htmlType="submit"
+                                                onClick={() => this.setState({ buttonClicked: "save" })}
+                                                disabled={isPublished}
+                                            >
+                                                {AppConstants.save}
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip
+                                            className="h-100"
+                                            onMouseEnter={() =>
+                                                this.setState({
+                                                    tooltipVisibleDelete: isPublished,
+                                                })
+                                            }
+                                            onMouseLeave={() =>
+                                                this.setState({ tooltipVisibleDelete: false })
+                                            }
+                                            visible={this.state.tooltipVisibleDelete}
+                                            title={AppConstants.statusPublishHover}
                                         >
-                                            {AppConstants.createDraftDraw}
-                                        </Button>
-                                    </Tooltip>
-                                </div>
-                            )}
+                                            <Button
+                                                id={AppUniqueId.create_Draft_Draw_Btn}
+                                                style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
+                                                className="open-reg-button"
+                                                type="primary"
+                                                htmlType="submit"
+                                                onClick={() => this.setState({ buttonClicked: "createDraw" })}
+                                                disabled={isPublished}
+                                            >
+                                                {AppConstants.createDraftDraw}
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>

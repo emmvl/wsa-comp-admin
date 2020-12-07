@@ -207,7 +207,7 @@ class LiveScoreEditBanners extends Component {
 
         return (
             <div className="content-view pt-2">
-                {/* <img alt="" className="banner-image" src={bannerImage ? bannerImage : this.state.bannerImg} /> */ }
+                {/* <img alt="" className="banner-image" src={bannerImage ? bannerImage : this.state.bannerImg} /> */}
                 <ImageLoader
                     className="banner-image"
                     height
@@ -221,7 +221,7 @@ class LiveScoreEditBanners extends Component {
                         <div className="col-sm">
                             <span className="user-contact-heading">{AppConstants.uploadImage}</span>
                             <div onClick={this.selectImage}>
-                                {/* <label></label> */ }
+                                {/* <label></label> */}
                             </div>
                             <Form.Item
                                 name="bannerImage"
@@ -244,7 +244,7 @@ class LiveScoreEditBanners extends Component {
                                     }}
                                 />
                             </Form.Item>
-                            <span className="form-err">{ this.state.imageError }</span>
+                            <span className="form-err">{this.state.imageError}</span>
                         </div>
                         <div className="col-sm pt-1">
                             <InputWithHead

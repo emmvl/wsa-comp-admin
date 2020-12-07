@@ -27,7 +27,7 @@ import {
 } from '../../store/actions/commonAction/commonAction';
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
-import { getOrganisationData,getUserId } from "../../util/sessionStorage";
+import { getOrganisationData, getUserId } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -43,7 +43,7 @@ class UserProfileEdit extends Component {
             loadValue: false,
             saveLoad: false,
             tabKey: "3",
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             userData: {
                 genderRefId: 0,
                 firstName: "",
@@ -170,12 +170,12 @@ class UserProfileEdit extends Component {
     };
 
     setAddressFormFields = () => {
-        let userData  = this.state.userData;
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
             mobileNumber: userData.mobileNumber,
-            dateOfBirth:  ((userData.dateOfBirth != null && userData.dateOfBirth != '') ?
+            dateOfBirth: ((userData.dateOfBirth != null && userData.dateOfBirth != '') ?
                 moment(userData.dateOfBirth, "YYYY-MM-DD") : null),
             street1: userData.street1,
             email: userData.email,
@@ -185,8 +185,8 @@ class UserProfileEdit extends Component {
         })
     }
 
-    setPrimaryContactFormFields = () =>{
-        let userData  = this.state.userData;
+    setPrimaryContactFormFields = () => {
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -200,7 +200,7 @@ class UserProfileEdit extends Component {
     }
 
     setEmergencyFormField = () => {
-        let userData  = this.state.userData;
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
             emergencyFirstName: userData.emergencyFirstName,
             emergencyLastName: userData.emergencyLastName,
@@ -209,9 +209,9 @@ class UserProfileEdit extends Component {
     }
 
     setOtherInfoFormField = () => {
-        let userData  = this.state.userData;
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
-            genderRefId: userData.genderRefId!= null ?  parseInt(userData.genderRefId) : 0
+            genderRefId: userData.genderRefId != null ? parseInt(userData.genderRefId) : 0
         })
     }
 
@@ -233,7 +233,7 @@ class UserProfileEdit extends Component {
         }
         data[key] = value;
 
-        this.setState({userData: data});
+        this.setState({ userData: data });
     }
 
     headerView = () => {
@@ -305,7 +305,7 @@ class UserProfileEdit extends Component {
                             showTime={false}
                             placeholder="dd-mm-yyyy"
                             name="dateOfBirth"
-                            value={userData.dateOfBirth!= null && moment(userData.dateOfBirth)}
+                            value={userData.dateOfBirth != null && moment(userData.dateOfBirth)}
                         />
                     </div>
                 </div>
@@ -390,7 +390,7 @@ class UserProfileEdit extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <div style={{paddingTop: 10, paddingBottom: 10}}>
+                        <div style={{ paddingTop: 10, paddingBottom: 10 }}>
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
                         <Select

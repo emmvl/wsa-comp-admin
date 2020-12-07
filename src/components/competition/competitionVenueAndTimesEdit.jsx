@@ -186,7 +186,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         };
         this_Obj = this;
         this.props.getCommonRefData();
-        const organisationData = getOrganisationData();
+        const organisationData = getOrganisationData() ? getOrganisationData() : null;
         this.props.getAffiliatesListingAction({
             organisationId: organisationData.organisationUniqueKey,
             affiliatedToOrgId: -1,
@@ -311,7 +311,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let isVenueMapped = venueData.isVenueMapped;
         let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.affiliateList;
-        let organisationId =getOrganisationData()? getOrganisationData().organisationUniqueKey:null;
+        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);

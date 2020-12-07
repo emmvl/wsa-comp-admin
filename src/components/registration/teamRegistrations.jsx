@@ -139,7 +139,7 @@ class TeamRegistrations extends Component {
         super(props);
 
         this.state = {
-            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: "-1",
             filterOrganisation: -1,

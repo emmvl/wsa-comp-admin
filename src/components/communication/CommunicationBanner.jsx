@@ -125,7 +125,7 @@ class CommunicationBanner extends Component {
     );
 
     removeBanner = (record) => {
-        const { organisationId } = getOrganisationData();
+        const { organisationId } = getOrganisationData() ? getOrganisationData() : null;
         this.props.liveScoreRemoveBanner(record.id, organisationId);
     };
 

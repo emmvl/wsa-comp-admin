@@ -284,13 +284,13 @@ class RegistrationPayments extends Component {
     }
 
     stripeConnected = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
         return stripeAccountID
     }
 
     userEmail = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
         return email
     }
@@ -326,17 +326,17 @@ class RegistrationPayments extends Component {
                                     {/* </a> */}
                                 </Button>
                             ) : (
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                >
-                                    <a href={stripeConnectURL} className="stripe-connect">
-                                        <span>
-                                            {AppConstants.connectToStripe}
-                                        </span>
-                                    </a>
-                                </Button>
-                            )}
+                                    <Button
+                                        className="open-reg-button"
+                                        type="primary"
+                                    >
+                                        <a href={stripeConnectURL} className="stripe-connect">
+                                            <span>
+                                                {AppConstants.connectToStripe}
+                                            </span>
+                                        </a>
+                                    </Button>
+                                )}
                         </div>
                     )}
                 </div>
@@ -393,7 +393,7 @@ class RegistrationPayments extends Component {
                         columns={columns}
                         dataSource={stripeTransferList}
                         pagination={false}
-                        // loading={this.props.stripeState.onLoad && true}
+                    // loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">

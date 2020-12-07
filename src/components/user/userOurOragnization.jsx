@@ -53,7 +53,7 @@ class UserOurOrganization extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             loggedInuserOrgTypeRefId: 0,
             loading: false,
             photoLoading: false,
@@ -116,7 +116,7 @@ class UserOurOrganization extends Component {
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 } else {
-                     // history.push('/userAffiliatesList');
+                    // history.push('/userAffiliatesList');
                 }
             }
         }
@@ -522,7 +522,7 @@ class UserOurOrganization extends Component {
         let charityRoundUpArr = affiliate.charityRoundUp.filter(x => x.isSelected);
 
         let payload = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             charityRoundUp: charityRoundUpArr,
             charity: affiliate.charity
         }

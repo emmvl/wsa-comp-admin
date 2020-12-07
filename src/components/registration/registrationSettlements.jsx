@@ -123,7 +123,7 @@ class RegistrationSettlements extends Component {
     }
 
     stripeConnected = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
         return stripeAccountID
     }

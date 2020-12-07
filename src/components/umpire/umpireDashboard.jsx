@@ -347,24 +347,24 @@ const columnsInvite = [
                             <NavLink
                                 to={{
                                     pathname: "/matchDayAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
+                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
                                 }}
                             >
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
                     ) : (
-                        <Menu.Item key="2">
-                            <NavLink
-                                to={{
-                                    pathname: "/matchDayAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
-                                }}
-                            >
-                                <span>Edit</span>
-                            </NavLink>
-                        </Menu.Item>
-                    )}
+                            <Menu.Item key="2">
+                                <NavLink
+                                    to={{
+                                        pathname: "/matchDayAddMatch",
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
+                                    }}
+                                >
+                                    <span>Edit</span>
+                                </NavLink>
+                            </Menu.Item>
+                        )}
                 </Menu.SubMenu>
             </Menu>
         ),
@@ -579,23 +579,23 @@ const columns = [
                         <Menu.Item key="1">
                             <NavLink to={{
                                 pathname: "/matchDayAddMatch",
-                                state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
+                                state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" }
                             }}>
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
                     ) : (
-                        <Menu.Item key="2">
-                            <NavLink
-                                to={{
-                                    pathname: "/matchDayAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
-                                }}
-                            >
-                                <span>Edit</span>
-                            </NavLink>
-                        </Menu.Item>
-                    )}
+                            <Menu.Item key="2">
+                                <NavLink
+                                    to={{
+                                        pathname: "/matchDayAddMatch",
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" }
+                                    }}
+                                >
+                                    <span>Edit</span>
+                                </NavLink>
+                            </Menu.Item>
+                        )}
                 </Menu.SubMenu>
             </Menu>
         ),
@@ -646,7 +646,7 @@ class UmpireDashboard extends Component {
 
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
-            let orgId = getOrganisationData().organisationId;
+            let orgId = getOrganisationData() ? getOrganisationData().organisationId : null;
             this.setState({ loading: true, orgId });
             this.props.umpireCompetitionListAction(null, null, organisationId);
         } else {
@@ -753,12 +753,12 @@ class UmpireDashboard extends Component {
                 screenKey: "umpire",
                 screen: "/umpireDashboard",
             });
-        // } else if (record.matchUmpiresId) {
-        //     history.push("/userPersonal", {
-        //         userId: record.matchUmpiresId,
-        //         screenKey: "umpire",
-        //         screen: "/umpireDashboard",
-        //     });
+            // } else if (record.matchUmpiresId) {
+            //     history.push("/userPersonal", {
+            //         userId: record.matchUmpiresId,
+            //         screenKey: "umpire",
+            //         screen: "/umpireDashboard",
+            //     });
         } else {
             // message.config({ duration: 1.5, maxCount: 1 });
             // message.warn(ValidationConstants.umpireMessage);

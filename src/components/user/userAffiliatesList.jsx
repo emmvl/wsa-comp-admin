@@ -134,7 +134,7 @@ class UserAffiliatesList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             affiliatedToOrgId: -1,
             organisationTypeRefId: -1,
             statusRefId: -1,

@@ -111,7 +111,7 @@ class CompetitionPlayerImport extends Component {
         let payload = {
             competitionMembershipProductDivisionId: this.state.divisionId,
             competitionUniqueKey: this.state.competitionId,
-            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             csvFile: this.state.csvdata,
             isProceed: this.state.isProceed
         }

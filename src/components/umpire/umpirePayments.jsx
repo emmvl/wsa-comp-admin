@@ -183,16 +183,16 @@ const columns = [
                         onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: 'selectedValue', index, allData: record })}
                     />
                 ) : (
-                    <Tooltip
-                        className="comp-player-table-tag2 h-100"
-                        onMouseEnter={() => this_obj.changeHover(record, index, true)}
-                        onMouseLeave={() => this_obj.changeHover(record, index, false)}
-                        visible={record.hoverVisible}
-                        title="Please ask the user to set up their bank details"
-                    >
-                        <Checkbox className="single-checkbox" disabled />
-                    </Tooltip>
-                )
+                        <Tooltip
+                            className="comp-player-table-tag2 h-100"
+                            onMouseEnter={() => this_obj.changeHover(record, index, true)}
+                            onMouseLeave={() => this_obj.changeHover(record, index, false)}
+                            visible={record.hoverVisible}
+                            title="Please ask the user to set up their bank details"
+                        >
+                            <Checkbox className="single-checkbox" disabled />
+                        </Tooltip>
+                    )
             )
         }
     }
@@ -693,7 +693,7 @@ class UmpirePayments extends Component {
 
         let data = {
             statusId: statusId,
-            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             transfers: paymentTransferPostData,
         };
 

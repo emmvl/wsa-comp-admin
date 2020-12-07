@@ -177,7 +177,7 @@ class UserTextualDashboard extends Component {
         super(props);
 
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
@@ -197,7 +197,7 @@ class UserTextualDashboard extends Component {
         this_Obj = this;
     }
 
-    async  componentDidMount() {
+    async componentDidMount() {
         const prevUrl = getPrevUrl();
 
         const { userTextualDasboardListAction } = this.props.userState

@@ -75,7 +75,7 @@ class LiveScoreSettingsView extends Component {
 
     componentDidMount() {
         localStorage.setItem("regInvitees", "true")
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.onInviteeSearch('', 3)

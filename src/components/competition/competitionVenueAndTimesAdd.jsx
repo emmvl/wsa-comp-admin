@@ -194,7 +194,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         };
         this.myRef = React.createRef();
         this.props.getCommonRefData();
-        const organisationData = getOrganisationData();
+        const organisationData = getOrganisationData() ? getOrganisationData() : null;
         this.props.getAffiliatesListingAction({
             organisationId: organisationData.organisationUniqueKey,
             affiliatedToOrgId: -1,

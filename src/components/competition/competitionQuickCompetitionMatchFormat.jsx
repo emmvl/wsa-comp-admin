@@ -41,7 +41,7 @@ class QuickCompetitionMatchFormat extends Component {
             deleteModalVisible: false,
             currentIndex: 0,
             competitionId: '',
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: null,
             firstTimeCompId: '',
             getDataLoading: false,
@@ -567,7 +567,7 @@ class QuickCompetitionMatchFormat extends Component {
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}
                         >
-                            <Option style={{ height: '30px' }} value={null} key={null}>{}</Option>
+                            <Option style={{ height: '30px' }} value={null} key={null}>{ }</Option>
                             {(data.fixtureTemplates || []).map((fixture) => (
                                 <Option value={`fixtureTemplate_${fixture.noOfRounds}`} key={fixture.noOfRounds}>
                                     {fixture.noOfRounds}

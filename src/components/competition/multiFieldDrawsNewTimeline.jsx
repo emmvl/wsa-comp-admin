@@ -77,7 +77,7 @@ class MultifieldDrawsNewTimeline extends Component {
             venueLoad: false,
             roundTime: null,
             competitionDivisionGradeId: '',
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             updateLoad: false,
             organisation_Id: '-1',
             visible: false,
@@ -1629,13 +1629,13 @@ class MultifieldDrawsNewTimeline extends Component {
                         <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                     </div>
                 ) : (
-                    <div
-                        className="d-flex align-items-center mt-1 pointer"
-                        onClick={() => this.filterOnClick()}
-                    >
-                        <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
-                    </div>
-                )}
+                        <div
+                            className="d-flex align-items-center mt-1 pointer"
+                            onClick={() => this.filterOnClick()}
+                        >
+                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
+                        </div>
+                    )}
                 {filterEnable && this.venueLeftView()}
                 {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
                 {filterEnable && this.divisionLeftView()}
@@ -1661,7 +1661,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     className="single-checkbox-radio-style"
                                     checked={this.state.isFilterSchedule}
                                     onChange={e => this.onScheduledMatchesRangeCheck(e.target.checked)}
-                                    // disabled={this.state.firstTimeCompId == "-1"}
+                                // disabled={this.state.firstTimeCompId == "-1"}
                                 >
                                     {AppConstants.showOnlyScheduledMatches}
                                 </Checkbox>
@@ -1720,23 +1720,23 @@ class MultifieldDrawsNewTimeline extends Component {
                             ))}
                         </div>
                     ) : (
-                        <div className="draggable-wrap draw-data-table">
-                            <Loader visible={this.props.drawsState.updateLoad} />
+                            <div className="draggable-wrap draw-data-table">
+                                <Loader visible={this.props.drawsState.updateLoad} />
 
-                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
-                                    {this.state.firstTimeCompId != "-1" && (
-                                        <div className="draws-round-view">
-                                            <span className="draws-round">
-                                                {dateItem.roundName}
-                                            </span>
-                                        </div>
-                                    )}
-                                    {this.draggableView(dateItem)}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                                {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                    <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
+                                        {this.state.firstTimeCompId != "-1" && (
+                                            <div className="draws-round-view">
+                                                <span className="draws-round">
+                                                    {dateItem.roundName}
+                                                </span>
+                                            </div>
+                                        )}
+                                        {this.draggableView(dateItem)}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                 </div>
             </div>
         );
@@ -2353,7 +2353,7 @@ class MultifieldDrawsNewTimeline extends Component {
         const payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             roundId: this.state.generateRoundId
         };
         if (regenerateExceptionRefId) {

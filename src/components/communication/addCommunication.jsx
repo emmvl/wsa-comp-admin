@@ -82,7 +82,7 @@ class AddCommunication extends Component {
             screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
@@ -688,7 +688,7 @@ class AddCommunication extends Component {
             affiliateTo,
             onLoadSearch
         } = this.props.communicationModuleState;
-        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
+        let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         let affiliateToData = isArrayNotEmpty(affiliateTo.affiliatedTo) ? affiliateTo.affiliatedTo : [];
         let userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
         let uniqueValues = [];

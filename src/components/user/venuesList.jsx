@@ -35,7 +35,7 @@ function tableSort(key) {
 
     const filter = {
         searchText: this_Obj.state.searchText,
-        organisationId: getOrganisationData().organisationUniqueKey,
+        organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         paging: {
             limit: 10,
             offset: this_Obj.state.offset,
@@ -201,7 +201,7 @@ class VenuesList extends Component {
         const offset = (page ? (10 * (page - 1)) : 0);
         const filter = {
             searchText,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             paging: {
                 limit: 10,
                 offset,
@@ -210,7 +210,7 @@ class VenuesList extends Component {
 
         this.setState({
             searchText,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             offset,
         });
 
