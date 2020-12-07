@@ -2582,24 +2582,24 @@ const playerCasualTableTeamAssociation = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'fee',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={fee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'fee',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2610,25 +2610,25 @@ const playerCasualTableTeamAssociation = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={gst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'gst',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={gst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'gst',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2639,25 +2639,25 @@ const playerCasualTableTeamAssociation = [
         key: 'affiliateFee',
         width: 84,
         render: (affiliateFee, record, index) => (
-            ((affiliateFee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={affiliateFee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'affiliateFee',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((affiliateFee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={affiliateFee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'affiliateFee',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2668,25 +2668,25 @@ const playerCasualTableTeamAssociation = [
         key: 'affiliateGst',
         width: 84,
         render: (affiliateGst, record, index) => (
-            ((affiliateGst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={affiliateGst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'affiliateGst',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((affiliateGst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={affiliateGst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'affiliateGst',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2771,25 +2771,25 @@ const playerCasualTableTeamClub = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'nominationFees',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={fee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'nominationFees',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2800,25 +2800,25 @@ const playerCasualTableTeamClub = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={gst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'nominationGST',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={gst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'nominationGST',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2829,25 +2829,25 @@ const playerCasualTableTeamClub = [
         key: 'affNominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'affNominationFees',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={fee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'affNominationFees',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2858,25 +2858,25 @@ const playerCasualTableTeamClub = [
         key: 'affNominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={gst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'affNominationGST',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={gst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'affNominationGST',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2887,25 +2887,25 @@ const playerCasualTableTeamClub = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'fee',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={fee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'fee',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2916,25 +2916,25 @@ const playerCasualTableTeamClub = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    type="number"
-                    disabled
-                    className="input-inside-table-fees"
-                    value={gst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'gst',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        type="number"
+                        disabled
+                        className="input-inside-table-fees"
+                        value={gst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'gst',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2945,25 +2945,25 @@ const playerCasualTableTeamClub = [
         key: 'affiliateFee',
         width: 84,
         render: (affiliateFee, record, index) => (
-            ((affiliateFee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={affiliateFee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'affiliateFee',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((affiliateFee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={affiliateFee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'affiliateFee',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -2974,25 +2974,25 @@ const playerCasualTableTeamClub = [
         key: 'affiliateGst',
         width: 84,
         render: (affiliateGst, record, index) => (
-            ((affiliateGst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={affiliateGst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'affiliateGst',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((affiliateGst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={affiliateGst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'affiliateGst',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -3077,27 +3077,27 @@ const playerCasualTeamTable = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-            && record.isPlayer == 1) ? (
-            <Input
-                prefix="$"
-                disabled={this_Obj.state.permissionState.allDisable}
-                type="number"
-                className="input-inside-table-fees"
-                value={fee}
-                onChange={(e) =>
-                    this_Obj.onChangeDetails(
-                        e.target.value,
-                        index,
-                        record,
-                        'nominationFees',
-                        'seasonalTeam'
-                    )
-                }
-            />
-            ) : (
-                <Input disabled className="input-inside-table-fees" value="N/A" />
-            )
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={fee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'nominationFees',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
+                    <Input disabled className="input-inside-table-fees" value="N/A" />
+                )
         ),
     },
     {
@@ -3106,25 +3106,25 @@ const playerCasualTeamTable = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-                        && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={gst}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'nominationGST',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((gst != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={gst}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'nominationGST',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -3135,25 +3135,25 @@ const playerCasualTeamTable = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3)) 
-                        && record.isPlayer == 1) ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'fee',
-                            'seasonalTeam'
-                        )
-                    }
-                />
-            ) : (
+            ((fee != null || (record.teamRegChargeTypeRefId == 2 || record.teamRegChargeTypeRefId == 3))
+                && record.isPlayer == 1) ? (
+                    <Input
+                        prefix="$"
+                        disabled={this_Obj.state.permissionState.allDisable}
+                        type="number"
+                        className="input-inside-table-fees"
+                        value={fee}
+                        onChange={(e) =>
+                            this_Obj.onChangeDetails(
+                                e.target.value,
+                                index,
+                                record,
+                                'fee',
+                                'seasonalTeam'
+                            )
+                        }
+                    />
+                ) : (
                     <Input disabled className="input-inside-table-fees" value="N/A" />
                 )
         ),
@@ -3314,9 +3314,11 @@ class RegistrationCompetitionFee extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
+                            <div className="mt-2 ml-n40">
                             <CustomToolTip placement="bottom">
                                 <span>{AppConstants.genderRestrictionMsg}</span>
                             </CustomToolTip>
+                            </div>
                         );
                     },
                     render: (genderRestriction, record, index) => (
@@ -3383,9 +3385,11 @@ class RegistrationCompetitionFee extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
+                            <div className="mt-2 ml-n35">
                             <CustomToolTip placement="bottom">
                                 <span>{AppConstants.ageRestrictionMsg}</span>
                             </CustomToolTip>
+                            </div>
                         );
                     },
                     render: (ageRestriction, record, index) => (
@@ -5466,7 +5470,7 @@ class RegistrationCompetitionFee extends Component {
                                     {item.description}
                                 </Radio>
 
-                                <div className="mt-0 ml-25">
+                                <div className="mt-2 ml-n15">
                                     <CustomToolTip>
                                         <span>{item.helpMsg}</span>
                                     </CustomToolTip>
@@ -5815,7 +5819,7 @@ class RegistrationCompetitionFee extends Component {
                             </span>
                             {item.isPlayingStatus ? (
                                 <div>
-                                    <div className="table-responsive">
+                                    <div className="table-responsive home-dash-table-view table-competition">
                                         <Table
                                             className="fees-table"
                                             columns={this.state.divisionTable}
@@ -5839,10 +5843,10 @@ class RegistrationCompetitionFee extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}
@@ -5986,7 +5990,7 @@ class RegistrationCompetitionFee extends Component {
         let allStates = this.props.competitionFeesState;
         let feeDetails = allStates.competitionFeesData;
         let feesTableDisable = this.state.permissionState.feesTableDisable;
-        
+
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.fees}</span>
@@ -6021,7 +6025,7 @@ class RegistrationCompetitionFee extends Component {
                                                 <Radio value="allDivisions">
                                                     {AppConstants.allDivisions}
                                                 </Radio>
-                                                <div className="ml-n10">
+                                                <div className="ml-n20 mt-2">
                                                     <CustomToolTip>
                                                         <span>{AppConstants.allDivisionsMsg}</span>
                                                     </CustomToolTip>
@@ -6033,7 +6037,7 @@ class RegistrationCompetitionFee extends Component {
                                                 <Radio value="perDivision">
                                                     {AppConstants.perDivision}
                                                 </Radio>
-                                                <div className="ml-n20">
+                                                <div className="ml-n20 mt-2">
                                                     <CustomToolTip>
                                                         <span>{AppConstants.perDivisionMsg}</span>
                                                     </CustomToolTip>
@@ -6135,8 +6139,8 @@ class RegistrationCompetitionFee extends Component {
                                     ? item.seasonalTeam.perType
                                     : item.seasonalTeam.allType
                                 ).length > 0 && (
-                                    <div style={{ marginTop: 25 }}>
-                                        {/* <div style={{ marginTop: 15 }}>
+                                        <div style={{ marginTop: 25 }}>
+                                            {/* <div style={{ marginTop: 15 }}>
                                             <Checkbox
                                                 checked={item.isTeamReg}
                                                 className="single-checkbox"
@@ -6243,27 +6247,27 @@ class RegistrationCompetitionFee extends Component {
                                                             </div>
                                                         </div>
                                                     </div> */}
-                                                </Radio.Group>
-                                            </div>
-                                        )}
-                                        {item.isTeamSeasonal && (
-                                            <div className="table-responsive mt-2">
-                                                <Table
-                                                    // ref= {(tableReference) => this.tableReference = tableReference}
-                                                    className="fees-table"
-                                                    columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel()  : this.casualFeesTeamOnOrgTLevel()}
-                                                    dataSource={
-                                                        item.isAllType !== 'allDivisions'
-                                                            ? item.seasonalTeam.perType
-                                                            : item.seasonalTeam.allType
-                                                    }
-                                                    pagination={false}
-                                                    Divider="false"
-                                                />
-                                            </div>
-                                        )}
+                                                    </Radio.Group>
+                                                </div>
+                                            )}
+                                            {item.isTeamSeasonal && (
+                                                <div className="table-responsive mt-2">
+                                                    <Table
+                                                        // ref= {(tableReference) => this.tableReference = tableReference}
+                                                        className="fees-table"
+                                                        columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
+                                                        dataSource={
+                                                            item.isAllType !== 'allDivisions'
+                                                                ? item.seasonalTeam.perType
+                                                                : item.seasonalTeam.allType
+                                                        }
+                                                        pagination={false}
+                                                        Divider="false"
+                                                    />
+                                                </div>
+                                            )}
 
-                                        {/* <div className="mt-10">
+                                            {/* <div className="mt-10">
                                                 <Checkbox
                                                     checked={item.isTeamCasual}
                                                     className="single-checkbox"
@@ -6894,7 +6898,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.seasonalFee}</span>
-                                    <div className="mt-4">
+                                    <div className="mt-2">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
                                         </CustomToolTip>
@@ -6926,7 +6930,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.singleGameFee}</span>
-                                    <div className="mt-4">
+                                    <div className="mt-2">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>
@@ -6950,7 +6954,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
-                                    <div className="mt-4">
+                                    <div className="mt-2">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7639,7 +7643,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="discount-view pt-5">
                 <div className="contextualHelp-RowDirection">
                     <span className="form-heading">{AppConstants.discounts}</span>
-                    <div className="mt-4">
+                    <div className="mt-2">
                         <CustomToolTip placement="bottom">
                             <span>{AppConstants.discountMsg}</span>
                         </CustomToolTip>

@@ -100,7 +100,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     // Sorter: true,
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div className="mt-10">
+                        <div className="mt-2 ml-n95">
                             <Tooltip placement="bottom">
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
@@ -129,7 +129,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     key: "lng",
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div className="mt-10">
+                        <div className="mt-2 ml-n80">
                             <Tooltip placement="bottom">
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
@@ -156,7 +156,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     width: "22%",
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div className="mt-10">
+                        <div className="mt-2 ml-n25">
                             <Tooltip placement="bottom">
                                 {AppConstants.overRideSlotMsg}
                             </Tooltip>

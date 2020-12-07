@@ -47,6 +47,10 @@ code {
     margin-left: 5px;
 }
 
+.ml-n15 {
+    margin-left: -15px;
+}
+
 .ml-n10 {
     margin-left: -10px;
 }
@@ -73,4 +77,25 @@ code {
 
 .pointer {
     cursor: pointer;
+}
+.ml-n95 {
+    margin-left: -95px;
+}
+.ml-n80 {
+    margin-left: -80px;
+}
+.ml-n25 {
+    margin-left: -25px;
+}
+.ml-n40 {
+    margin-left: -40px;
+}
+.ml-n35 {
+    margin-left: -35px;
+}
+
+@media (max-width: 767px) {
+    .ml-n20 {
+        margin-left: -10px;
+    }
 }

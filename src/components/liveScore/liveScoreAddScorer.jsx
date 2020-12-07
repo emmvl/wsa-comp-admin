@@ -348,18 +348,18 @@ class LiveScoreAddScorer extends Component {
 
                         <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div className="mt-n10 ml-n10 width-50">
+                            <div className="mt-n10 ml-n10 width-50 mt-1">
                                 <Tooltip>
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
                             </div>
                         </div>
 
-                        <div className="d-flex align-items-center ml-n10">
+                        <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div className="mt-n10 mt-n10">
+                            <div className="mt-n10 ml-n10 mt-1">
                                 <Tooltip>
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>

@@ -94,7 +94,7 @@ const columns = [
         key: "registrationLock",
         filterDropdown: true,
         filterIcon: () => (
-            <div className="mt-5">
+            <div className="mt-2">
                 <CustomTooltip placement="top">
                     <span>{AppConstants.regLockMsg}</span>
                 </CustomTooltip>
@@ -664,7 +664,7 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.training}
                     </Checkbox>
-                    <div className="mt-8" style={{ marginLeft: -8 }}>
+                    <div className="mt-4" style={{ marginLeft: -8 }}>
                         <CustomTooltip>
                             <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
@@ -840,7 +840,7 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.replyToContactDetails}
                     </Checkbox>
-                    <div style={{ marginTop: -15, marginLeft: -8 }}>
+                    <div style={{ marginTop: -8, marginLeft: -8 }}>
                         <CustomTooltip>
                             <span>{AppConstants.replyContactDetailMsg}</span>
                         </CustomTooltip>
@@ -1136,7 +1136,7 @@ class RegistrationForm extends Component {
             <div className="discount-view pt-5">
                 <div className="row ml-1">
                     <span className="form-heading">{AppConstants.additionalQuestions}</span>
-                    <div className="mt-0 ml-n2">
+                    <div className="mt-2">
                         <CustomTooltip>
                             <span>{AppConstants.additionQuesMsg}</span>
                         </CustomTooltip>
