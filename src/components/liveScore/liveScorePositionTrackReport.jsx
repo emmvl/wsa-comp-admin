@@ -653,6 +653,7 @@ class LiveScorePositionTrackReport extends Component {
                         className="antd-pagination pb-5"
                         defaultCurrent={1}
                         total={totalCount}
+                        showSizeChanger={false}
                         onChange={(page) => this.handlePageChnage(page)}
                     />
                 </div>

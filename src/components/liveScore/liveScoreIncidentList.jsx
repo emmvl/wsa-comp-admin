@@ -356,6 +356,7 @@ class LiveScoreIncidentList extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={liveScoreIncidentCurrentPage}
+                            showSizeChanger={false}
                             total={liveScoreIncidentTotalCount}
                             onChange={this.handleTableChange}
                         />

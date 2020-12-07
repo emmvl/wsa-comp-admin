@@ -243,6 +243,7 @@ class ReferFriend extends Component {
                         current={userState.referFriendPage}
                         total={total}
                         onChange={(page) => this.handleFriendTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

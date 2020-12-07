@@ -443,6 +443,7 @@ class AffiliateDirectory extends Component {
                         current={userState.affiliateDirectoryPage}
                         total={total}
                         onChange={(page) => this.handleAffiliateTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

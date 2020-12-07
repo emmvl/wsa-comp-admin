@@ -369,6 +369,7 @@ class UserAffiliatesList extends Component {
                         current={userState.affiliateListPage}
                         total={total}
                         onChange={(page) => this.handleAffiliateTableList(page, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, this.state.statusRefId)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

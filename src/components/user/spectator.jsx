@@ -260,6 +260,7 @@ class Spectator extends Component {
                         current={userState.spectatorPage}
                         total={total}
                         onChange={(page) => this.handleSpectatorTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

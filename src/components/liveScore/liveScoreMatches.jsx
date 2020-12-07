@@ -541,6 +541,7 @@ class LiveScoreMatchesList extends Component {
                     <Pagination
                         className="antd-pagination"
                         current={liveScoreMatchListPage}
+                        showSizeChanger={false}
                         total={total}
                         onChange={(page) => this.onPageChange(page)}
                         defaultPageSize={10}

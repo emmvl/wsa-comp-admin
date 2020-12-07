@@ -1812,6 +1812,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1849,6 +1850,7 @@ class UserModulePersonalDetail extends Component {
                                 "parent"
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1887,6 +1889,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1924,6 +1927,7 @@ class UserModulePersonalDetail extends Component {
                                 "manager"
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2244,6 +2248,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2415,6 +2420,7 @@ class UserModulePersonalDetail extends Component {
                         onChange={(page) =>
                             this.handleHistoryTableList(page, this.state.userId)
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2463,6 +2469,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2501,6 +2508,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2539,6 +2547,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2628,6 +2637,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.userId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2658,6 +2668,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.userId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

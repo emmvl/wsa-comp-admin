@@ -460,6 +460,7 @@ class RegistrationCompetitionList extends Component {
                         current={competitionFeesState.regCompetitonFeeListPage}
                         total={total}
                         onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

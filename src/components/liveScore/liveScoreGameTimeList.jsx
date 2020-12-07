@@ -392,8 +392,9 @@ class LiveScoreGameTimeList extends Component {
                             className="antd-pagination"
                             current={this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticsPage}
                             total={total}
+                            showSizeChanger={false}
                             onChange={(page) => this.handleGameTimeTableList(page, id, this.state.filter)}
-                            // defaultPageSize={10}
+                        // defaultPageSize={10}
                         />
                     </div>
                 </div>

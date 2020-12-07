@@ -346,6 +346,7 @@ class AssignUmpire extends Component {
                                 // current={1}
                                 total={totalAssignUmpireCount}
                                 onChange={(page) => this.handlePageChange(page)}
+                                showSizeChanger={false}
                             />
                         </div>
                     </div>

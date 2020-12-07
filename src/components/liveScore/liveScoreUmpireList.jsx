@@ -291,6 +291,7 @@ class LiveScoreUmpireList extends Component {
                             total={10}
                             onChange={(page) => this.handleUmpireTableList(page, id)}
                             defaultPageSize={10}
+                            showSizeChanger={false}
                         />
                     </div>
                 </div>

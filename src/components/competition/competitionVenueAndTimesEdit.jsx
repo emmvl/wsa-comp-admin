@@ -311,7 +311,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let isVenueMapped = venueData.isVenueMapped;
         let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.affiliateList;
-        let organisationId = getOrganisationData().organisationUniqueKey;
+        let organisationId =getOrganisationData()? getOrganisationData().organisationUniqueKey:null;
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);

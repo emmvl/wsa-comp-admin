@@ -357,6 +357,7 @@ class UmpireRoaster extends Component {
                             className="antd-pagination"
                             total={umpireTotalCount}
                             onChange={(page) => this.handlePageChnage(page)}
+                            showSizeChanger={false}
                         />
                     </div>
                 </div>

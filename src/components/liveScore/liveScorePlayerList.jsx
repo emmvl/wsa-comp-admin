@@ -275,6 +275,7 @@ class LiveScorePlayerList extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
+                            showSizeChanger={false}
                             total={totalCount}
                             onChange={this.handlePageChange}
                         />

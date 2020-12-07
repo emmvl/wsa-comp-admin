@@ -479,6 +479,7 @@ class RegistrationChange extends Component {
                         current={regChangeDashboardListPage}
                         total={regChangeDashboardListTotalCount}
                         onChange={(page) => this.handleRegChangeList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

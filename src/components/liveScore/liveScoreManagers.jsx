@@ -262,6 +262,7 @@ class LiveScoreManagerList extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
+                            showSizeChanger={false}
                             total={totalCount}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}

@@ -591,6 +591,7 @@ class LiveScoreCompetitions extends Component {
                     <Pagination
                         className="antd-pagination"
                         current={participateCurrentPage}
+                        showSizeChanger={false}
                         total={participateTotalCount}
                         onChange={(page) => this.handlePagination(page, 'part')}
                     />
@@ -666,6 +667,7 @@ class LiveScoreCompetitions extends Component {
                     <Pagination
                         className="antd-pagination pb-0"
                         current={ownedCurrentPage}
+                        showSizeChanger={false}
                         total={ownedTotalCount}
                         onChange={(page) => this.handlePagination(page, 'own')}
                     />

@@ -383,6 +383,7 @@ class VenuesList extends Component {
                         current={commonReducerState.venuesListPage}
                         total={total}
                         onChange={(page) => this.handleVenuesTableList(page, this.state.searchText)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

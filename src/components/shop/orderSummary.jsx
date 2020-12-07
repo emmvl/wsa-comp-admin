@@ -469,6 +469,7 @@ class OrderSummary extends Component {
                         current={orderSummaryCurrentPage}
                         total={orderSummaryTotalCount}
                         onChange={(page) => this.handleTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

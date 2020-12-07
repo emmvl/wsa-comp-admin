@@ -196,6 +196,7 @@ class ListProducts extends Component {
                             onChange={(page) => this.handlePagination(page)}
                             pageSize={this.state.limit}
                             current={productListingCurrentPage}
+                            showSizeChanger={false}
                         />
                     )}
                 </div>

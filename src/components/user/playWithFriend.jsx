@@ -243,6 +243,7 @@ class PlayWithFriend extends Component {
                         current={userState.friendPage}
                         total={total}
                         onChange={(page) => this.handleFriendTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
