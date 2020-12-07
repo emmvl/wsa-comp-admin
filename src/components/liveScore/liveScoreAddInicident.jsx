@@ -69,11 +69,12 @@ class LiveScoreAddIncident extends Component {
     componentDidMount() {
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id } = JSON.parse(getUmpireCompetitonData())
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getUmpireCompetitonData())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
                 const { incidentData } = this.props.liveScoreIncidentState
                 this.props.liveScoreIncidentTypeAction();
                 if (id !== null) {
-                    this.props.getliveScoreTeams(id);
+                    this.props.getliveScoreTeams(id, null, compOrgId);
                 }
 
                 if (this.state.isEdit === true) {
@@ -91,11 +92,12 @@ class LiveScoreAddIncident extends Component {
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
+                const { id, competitionOrganisation, competitionOrganisationId  } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
                 const { incidentData } = this.props.liveScoreIncidentState
                 this.props.liveScoreIncidentTypeAction();
                 if (id !== null) {
-                    this.props.getliveScoreTeams(id);
+                    this.props.getliveScoreTeams(id, null, compOrgId);
                 }
 
                 if (this.state.isEdit === true) {
