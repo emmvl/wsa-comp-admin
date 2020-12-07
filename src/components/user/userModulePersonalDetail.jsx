@@ -129,20 +129,20 @@ const columns = [
                         this_Obj.state.userId == item.paidByUserId ? (
                             <div>Self</div>
                         ) : (
-                            <div>
-                                <NavLink
-                                    to={{
-                                        pathname: `/userPersonal`,
-                                        state: {
-                                            userId: item.paidByUserId,
-                                            tabKey: "registration"
-                                        },
-                                    }}
-                                >
-                                    <span className="input-heading-add-another pt-0">{item.paidBy}</span>
-                                </NavLink>
-                            </div>
-                        )
+                                <div>
+                                    <NavLink
+                                        to={{
+                                            pathname: `/userPersonal`,
+                                            state: {
+                                                userId: item.paidByUserId,
+                                                tabKey: "registration"
+                                            },
+                                        }}
+                                    >
+                                        <span className="input-heading-add-another pt-0">{item.paidBy}</span>
+                                    </NavLink>
+                                </div>
+                            )
                     ))}
                 </div>
             )
@@ -1294,7 +1294,7 @@ class UserModulePersonalDetail extends Component {
     apiCalls = (userId) => {
         let payload = {
             userId: userId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         };
         this.props.getUserRole(userId)
         this.props.getUserModulePersonalDetailsAction(payload);
@@ -1522,7 +1522,7 @@ class UserModulePersonalDetail extends Component {
     hanleActivityTableList = (page, userId, competition, key, yearRefId) => {
         let filter = {
             competitionId: competition.competitionUniqueKey,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             userId: this.state.userId,
             yearRefId,
             paging: {
@@ -1542,7 +1542,7 @@ class UserModulePersonalDetail extends Component {
         let filter = {
             competitionId: competition.competitionUniqueKey,
             userId: userId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId,
             paging: {
                 limit: 10,
@@ -1615,10 +1615,10 @@ class UserModulePersonalDetail extends Component {
                         {personal.photoUrl ? (
                             <img src={personal.photoUrl} alt="" />
                         ) : (
-                            <span className="user-contact-heading">
-                                {AppConstants.noImage}
-                            </span>
-                        )}
+                                <span className="user-contact-heading">
+                                    {AppConstants.noImage}
+                                </span>
+                            )}
                     </div>
                     <span className="user-contact-heading">
                         {personal.firstName + " " + personal.lastName}
@@ -2278,15 +2278,15 @@ class UserModulePersonalDetail extends Component {
                                 {item.contentValue === "No" ? (
                                     <div className="applicable-to-text">{item.contentValue}</div>
                                 ) : (
-                                    <div className="table-responsive home-dash-table-view">
-                                        <Table
-                                            className="home-dashboard-table"
-                                            columns={columnsPlayedBefore}
-                                            dataSource={item.playedBefore}
-                                            pagination={false}
-                                        />
-                                    </div>
-                                )}
+                                        <div className="table-responsive home-dash-table-view">
+                                            <Table
+                                                className="home-dashboard-table"
+                                                columns={columnsPlayedBefore}
+                                                dataSource={item.playedBefore}
+                                                pagination={false}
+                                            />
+                                        </div>
+                                    )}
                             </div>
                         ) : null}
                         {item.registrationSettingsRefId == 8 ? (
@@ -2726,11 +2726,11 @@ class UserModulePersonalDetail extends Component {
                                                 {scorerActivityRoster != null && scorerActivityRoster.length > 0 && this.scorerActivityView()}
                                                 {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                                                 {activityPlayerList.length === 0 &&
-                                                activityManagerList.length === 0 &&
-                                                scorerActivityRoster.length === 0 &&
-                                                coachActivityRoster.length === 0 &&
-                                                umpireActivityRoster.length === 0 &&
-                                                this.noDataAvailable()}
+                                                    activityManagerList.length === 0 &&
+                                                    scorerActivityRoster.length === 0 &&
+                                                    coachActivityRoster.length === 0 &&
+                                                    umpireActivityRoster.length === 0 &&
+                                                    this.noDataAvailable()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
                                                 {this.statisticsView()}

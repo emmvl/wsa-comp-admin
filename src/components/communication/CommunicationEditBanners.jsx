@@ -50,7 +50,7 @@ class CommunicationEditBanners extends Component {
     }
 
     componentDidMount() {
-        const { organisationId } = getOrganisationData();
+        const { organisationId } = getOrganisationData() ? getOrganisationData() : null;
         this.props.getBannerCnt(organisationId);
 
         if (this.state.isEdit === true) {
@@ -151,7 +151,7 @@ class CommunicationEditBanners extends Component {
     };
 
     onUploadButton = () => {
-        const { organisationId } = getOrganisationData();
+        const { organisationId } = getOrganisationData() ? getOrganisationData() : null;
 
         const bannerId = this.state.isEdit === true ? this.state.tableRecord.id : 0;
         this.props.liveScoreAddCommunicationBanner(

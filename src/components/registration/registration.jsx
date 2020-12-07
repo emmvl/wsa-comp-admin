@@ -232,7 +232,7 @@ class Registration extends Component {
 
         this.state = {
             year: "2020",
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: "-1",
             dobFrom: "-1",

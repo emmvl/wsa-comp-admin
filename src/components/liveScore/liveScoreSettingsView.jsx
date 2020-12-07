@@ -75,7 +75,7 @@ class LiveScoreSettingsView extends Component {
 
     componentDidMount() {
         localStorage.setItem("regInvitees", "true")
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.onInviteeSearch('', 3)
@@ -974,7 +974,7 @@ class LiveScoreSettingsView extends Component {
                             <div className="row ml-2 mt-0">
                                 <div className="d-flex align-items-center">
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="SINGLE">{AppConstants.single}</Radio>
-                                    <div className="mt-n10 ml-n10">
+                                    <div className="mt-n10 ml-n10 mt-1">
                                         <Tooltip>
                                             <span>{AppConstants.singleScoringMsg}</span>
                                         </Tooltip>
@@ -983,7 +983,7 @@ class LiveScoreSettingsView extends Component {
 
                                 <div className="d-flex align-items-center" style={{ marginLeft: 10 }}>
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="50_50">50/50</Radio>
-                                    <div className="mt-n10 mt-n10">
+                                    <div className="mt-n10 ml-n10 mt-1">
                                         <Tooltip>
                                             <span>{AppConstants.fiftyScoringMsg}</span>
                                         </Tooltip>

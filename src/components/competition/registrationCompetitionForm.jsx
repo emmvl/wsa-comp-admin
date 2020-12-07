@@ -295,7 +295,7 @@ class RegistrationCompetitionForm extends Component {
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
-                let orgData = getOrganisationData()
+                let orgData = getOrganisationData() ? getOrganisationData() : null
                 let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
                 let isCreatorEdit = creatorId != organisationUniqueKey;
 
@@ -340,10 +340,10 @@ class RegistrationCompetitionForm extends Component {
 
                 this.setState({
                     onYearLoad: false,
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 })
                 this.formRef.current.setFieldsValue({
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
             }
@@ -414,7 +414,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     componentDidMount() {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(competitionId)
@@ -440,7 +440,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     setYear = (e) => {
-        this.setState({yearRefId: e})
+        this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
 
@@ -646,7 +646,7 @@ class RegistrationCompetitionForm extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}
                                 >
                                     <Select className="year-select reg-filter-select-year ml-2"
-                                    onChange = {(e) => this.setYear(e)}>
+                                        onChange={(e) => this.setYear(e)}>
                                         {this.props.appState.yearList.map(item => (
                                             <Option key={'year_' + item.id} value={item.id}>
                                                 {item.description}
@@ -1248,10 +1248,10 @@ class RegistrationCompetitionForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}

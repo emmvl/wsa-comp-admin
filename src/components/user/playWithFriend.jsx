@@ -119,7 +119,7 @@ class PlayWithFriend extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             pageNo: 1,
             sortBy: null,
@@ -173,8 +173,8 @@ class PlayWithFriend extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key === "yearRefId")
-          await this.setState({yearRefId: value});
+        if (key === "yearRefId")
+            await this.setState({ yearRefId: value });
 
         this.handleFriendTableList(1);
     }
@@ -254,7 +254,7 @@ class PlayWithFriend extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu  menu="user" userSelectedKey="5" />
+                <InnerHorizontalMenu menu="user" userSelectedKey="5" />
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -117,7 +117,7 @@ class CompetitionReplicate extends Component {
                     });
                     let payload = {
                         competitionUniqueKey: competition.competitionId,
-                        organisationUniqueKey: getOrganisationData().organisationUniqueKey
+                        organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
                     }
                     this.props.getOldMembershipProductsByCompIdAction(payload);
                 }
@@ -132,7 +132,7 @@ class CompetitionReplicate extends Component {
             if (this.state.hasRegistration == 1) {
                 let payload = {
                     yearRefId,
-                    organisationUniqueKey: getOrganisationData().organisationUniqueKey
+                    organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
                 }
                 this.props.getNewMembershipProductByYearAction(payload)
             }

@@ -177,7 +177,7 @@ class OrderSummary extends Component {
     }
 
     referenceCalls = () => {
-        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
+        let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
         this.props.getAffiliateToOrganisationAction(organisationUniqueKey);
         this.props.getOnlyYearListAction();
     }
@@ -231,7 +231,7 @@ class OrderSummary extends Component {
     // on change search text
     onChangeSearchText = async (e) => {
         let value = e.target.value;
-        await this.setState({ searchText: e.target.value,offset: 0 })
+        await this.setState({ searchText: e.target.value, offset: 0 })
         if (value == null || value == "") {
             this.handleTableList(1);
         }

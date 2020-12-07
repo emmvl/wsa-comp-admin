@@ -61,7 +61,7 @@ class CompetitionDrawEditOld extends Component {
             roundTime: null,
             competitionDivisionGradeId: "",
             updateLoad: false,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         };
     }
 
@@ -186,7 +186,7 @@ class CompetitionDrawEditOld extends Component {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
-            organisationId: getOrganisationData().organisationUniqueKey
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
         }
         this.props.generateDrawAction(payload);
         this.setState({ venueLoad: true });
@@ -647,91 +647,91 @@ class CompetitionDrawEditOld extends Component {
                                                 <span>Free</span>
                                             </div>
                                         ) : (
-                                            <div>
-                                                <span
-                                                    className={'border huge-border'}
-                                                    style={{ top: topMargin, left: leftMargin }}
-                                                />
-                                                <div
-                                                    className={
-                                                        'small-undraggable-box'
-                                                        +
-                                                        ' purple-dark'
-                                                    }
-                                                    style={{
-                                                        top: topMargin,
-                                                        backgroundColor: slotObject.colorCode,
-                                                        left: leftMargin
-                                                    }}
-                                                >
-                                                    <span>{slotObject.divisionName + " - " + slotObject.gradeName}</span>
-                                                </div>
-                                                <span
-                                                    className={'border'}
-                                                    style={{
-                                                        top: topMarginHomeTeam,
-                                                        left: leftMargin
-                                                    }}
-                                                />
-                                                <div
-                                                    className={
-                                                        'box purple-box' + ' purple-bg'
-                                                    }
-                                                    style={{
-                                                        top: topMarginHomeTeam,
-                                                        backgroundColor: slotObject.colorCode,
-                                                        left: leftMargin
-                                                    }}
-                                                >
-                                                    <SwappableComponentEdit
-                                                        id={
-                                                            index.toString() +
-                                                            ':' +
-                                                            slotIndex.toString() +
-                                                            ':0:' + slotObject.competitionDivisionGradeId
+                                                <div>
+                                                    <span
+                                                        className={'border huge-border'}
+                                                        style={{ top: topMargin, left: leftMargin }}
+                                                    />
+                                                    <div
+                                                        className={
+                                                            'small-undraggable-box'
+                                                            +
+                                                            ' purple-dark'
                                                         }
-                                                        content={1}
-                                                        swappable
-                                                        onSwap={(source, target) =>
-                                                            this.onSwap(source, target)
-                                                        }
+                                                        style={{
+                                                            top: topMargin,
+                                                            backgroundColor: slotObject.colorCode,
+                                                            left: leftMargin
+                                                        }}
                                                     >
-                                                        <span>{slotObject.homeTeamName}</span>
-                                                    </SwappableComponentEdit>
-                                                </div>
-                                                <span
-                                                    className={'border'}
-                                                    style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                />
-                                                <div
-                                                    className={
-                                                        'box purple-box ' +
-                                                        ' purple-bg'
-                                                    }
-                                                    style={{
-                                                        top: topMarginAwayTeam,
-                                                        backgroundColor: slotObject.colorCode,
-                                                        left: leftMargin
-                                                    }}
-                                                >
-                                                    <SwappableComponentEdit
-                                                        id={
-                                                            index.toString() +
-                                                            ':' +
-                                                            slotIndex.toString() +
-                                                            ':1:' + slotObject.competitionDivisionGradeId
+                                                        <span>{slotObject.divisionName + " - " + slotObject.gradeName}</span>
+                                                    </div>
+                                                    <span
+                                                        className={'border'}
+                                                        style={{
+                                                            top: topMarginHomeTeam,
+                                                            left: leftMargin
+                                                        }}
+                                                    />
+                                                    <div
+                                                        className={
+                                                            'box purple-box' + ' purple-bg'
                                                         }
-                                                        content={1}
-                                                        swappable
-                                                        onSwap={(source, target) =>
-                                                            this.onSwap(source, target)
-                                                        }
+                                                        style={{
+                                                            top: topMarginHomeTeam,
+                                                            backgroundColor: slotObject.colorCode,
+                                                            left: leftMargin
+                                                        }}
                                                     >
-                                                        <span>{slotObject.awayTeamName}</span>
-                                                    </SwappableComponentEdit>
+                                                        <SwappableComponentEdit
+                                                            id={
+                                                                index.toString() +
+                                                                ':' +
+                                                                slotIndex.toString() +
+                                                                ':0:' + slotObject.competitionDivisionGradeId
+                                                            }
+                                                            content={1}
+                                                            swappable
+                                                            onSwap={(source, target) =>
+                                                                this.onSwap(source, target)
+                                                            }
+                                                        >
+                                                            <span>{slotObject.homeTeamName}</span>
+                                                        </SwappableComponentEdit>
+                                                    </div>
+                                                    <span
+                                                        className={'border'}
+                                                        style={{ top: topMarginAwayTeam, left: leftMargin }}
+                                                    />
+                                                    <div
+                                                        className={
+                                                            'box purple-box ' +
+                                                            ' purple-bg'
+                                                        }
+                                                        style={{
+                                                            top: topMarginAwayTeam,
+                                                            backgroundColor: slotObject.colorCode,
+                                                            left: leftMargin
+                                                        }}
+                                                    >
+                                                        <SwappableComponentEdit
+                                                            id={
+                                                                index.toString() +
+                                                                ':' +
+                                                                slotIndex.toString() +
+                                                                ':1:' + slotObject.competitionDivisionGradeId
+                                                            }
+                                                            content={1}
+                                                            swappable
+                                                            onSwap={(source, target) =>
+                                                                this.onSwap(source, target)
+                                                            }
+                                                        >
+                                                            <span>{slotObject.awayTeamName}</span>
+                                                        </SwappableComponentEdit>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
+                                            );
                                     })}
                                 </div>
                             );

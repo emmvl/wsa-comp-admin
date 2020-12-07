@@ -312,7 +312,7 @@ class CompetitionException extends Component {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);

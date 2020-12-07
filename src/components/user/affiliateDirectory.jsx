@@ -171,7 +171,7 @@ class AffiliateDirectory extends Component {
         super(props);
         this.state = {
             yearRefId: -1,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             organisationTypeRefId: -1,
             deleteLoading: false,
             searchText: "",

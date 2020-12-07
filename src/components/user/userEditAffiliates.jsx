@@ -42,7 +42,7 @@ class UserEditAffiliates extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             affiliateOrgId: "",
             loggedInuserOrgTypeRefId: 0,
             loading: false,
@@ -475,13 +475,10 @@ class UserEditAffiliates extends Component {
             ? stateList.find((state) => state.id === affiliate.stateRefId).name
             : null;
 
-        let defaultAffiliateAddress = `${
-            affiliate.street1 ? `${affiliate.street1},` : ''
-        } ${
-            affiliate.suburb ? `${affiliate.suburb},` : ''
-        } ${
-            state ? `${state},` : ''
-        } Australia`;
+        let defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
+            } ${affiliate.suburb ? `${affiliate.suburb},` : ''
+            } ${state ? `${state},` : ''
+            } Australia`;
 
         return (
             <div className="content-view pt-4">
@@ -506,55 +503,55 @@ class UserEditAffiliates extends Component {
                     (this.state.loggedInuserOrgTypeRefId == 2 &&
                         affiliate.organisationTypeRefId == 4)
                 ) ? (
-                    <div className="row mt-3">
-                        <div className="col-sm">
-                            <InputWithHead heading={AppConstants.affiliatedTo} />
+                        <div className="row mt-3">
+                            <div className="col-sm">
+                                <InputWithHead heading={AppConstants.affiliatedTo} />
+                            </div>
+                            <div className="col-sm d-flex align-items-center">
+                                <InputWithHead
+                                    auto_complete="new-affilatedTo"
+                                    heading={affiliate.affiliatedToOrgName}
+                                    onChange={(e) =>
+                                        this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
+                                    }
+                                />
+                            </div>
                         </div>
-                        <div className="col-sm d-flex align-items-center">
+                    ) : (
+                        <div>
                             <InputWithHead
-                                auto_complete="new-affilatedTo"
-                                heading={affiliate.affiliatedToOrgName}
-                                onChange={(e) =>
-                                    this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
-                                }
+                                heading={AppConstants.affiliatedTo}
+                                required="required-field"
                             />
-                        </div>
-                    </div>
-                ) : (
-                    <div>
-                        <InputWithHead
-                            heading={AppConstants.affiliatedTo}
-                            required="required-field"
-                        />
-                        <Form.Item
-                            name='affiliatedToOrgId'
-                            rules={[{
-                                required: true,
-                                message: ValidationConstants.affiliateToRequired,
-                            }]}
-                        >
-                            <Select
-                                style={{ width: '100%', paddingRight: 1 }}
-                                value={affiliate.affiliatedToOrgId}
-                                onChange={(e) =>
-                                    this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
-                                }
+                            <Form.Item
+                                name='affiliatedToOrgId'
+                                rules={[{
+                                    required: true,
+                                    message: ValidationConstants.affiliateToRequired,
+                                }]}
                             >
-                                {(affiliateToData.affiliatedTo || [])
-                                    .filter(
-                                        (x) =>
-                                            x.organisationtypeRefId == organisationTypeRefId - 1 &&
-                                            x.organisationId != this.state.affiliateOrgId
-                                    )
-                                    .map((aff) => (
-                                        <Option key={'organization_' + aff.organisationId} value={aff.organisationId}>
-                                            {aff.name}
-                                        </Option>
-                                    ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                )}
+                                <Select
+                                    style={{ width: '100%', paddingRight: 1 }}
+                                    value={affiliate.affiliatedToOrgId}
+                                    onChange={(e) =>
+                                        this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
+                                    }
+                                >
+                                    {(affiliateToData.affiliatedTo || [])
+                                        .filter(
+                                            (x) =>
+                                                x.organisationtypeRefId == organisationTypeRefId - 1 &&
+                                                x.organisationId != this.state.affiliateOrgId
+                                        )
+                                        .map((aff) => (
+                                            <Option key={'organization_' + aff.organisationId} value={aff.organisationId}>
+                                                {aff.name}
+                                            </Option>
+                                        ))}
+                                </Select>
+                            </Form.Item>
+                        </div>
+                    )}
                 <Form.Item
                     name='name'
                     rules={[{ required: true, message: ValidationConstants.nameField[2] }]}

@@ -266,11 +266,11 @@ class RegistrationMainDashboard extends Component {
             let compName = competitionData[0].competitionName
             let regStatus = competitionData[0].orgRegistrationStatusId
             this.setState
-            ({
-                competitionId, publishStatus, orgRegistrationId,
-                wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
-                visible: true, compFeeStatus, compName, regStatus
-            })
+                ({
+                    competitionId, publishStatus, orgRegistrationId,
+                    wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
+                    visible: true, compFeeStatus, compName, regStatus
+                })
         } else {
             this.setState({
                 visible: true
@@ -279,13 +279,13 @@ class RegistrationMainDashboard extends Component {
     }
 
     userEmail = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
         return email
     }
 
     stripeConnected = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
         return stripeAccountID
     }

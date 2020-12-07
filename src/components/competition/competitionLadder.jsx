@@ -31,7 +31,7 @@ class CompetitionLadder extends Component {
             allDivisionVisible: false,
             currentIndex: 0,
             firstTimeCompId: '',
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: 1,
             deleteModalVisible: false,
             getDataLoading: false,
@@ -186,7 +186,7 @@ class CompetitionLadder extends Component {
 
         let schemeName = ladder.schemeName;
         let remainingFormatDiv = ladderFormat.
-        filter(x => x.schemeName != schemeName);
+            filter(x => x.schemeName != schemeName);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -314,7 +314,7 @@ class CompetitionLadder extends Component {
 
             for (let j in selectedDivisions) {
                 let matchDivisions = divisions.
-                find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                    find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
                 if (matchDivisions != "") {
                     let obj = {
                         competitionFormatDivisionId: 0,
@@ -436,12 +436,12 @@ class CompetitionLadder extends Component {
                                 </Select>
                             </div>
                         ) : (
-                            <InputWithHead
-                                placeholder={AppConstants.ladderFormatScheme}
-                                value={ladder.schemeName}
-                                onChange={(e) => this.onUpdateSchemeName(e, ladderFormat, index)}
-                            />
-                        )}
+                                <InputWithHead
+                                    placeholder={AppConstants.ladderFormatScheme}
+                                    value={ladder.schemeName}
+                                    onChange={(e) => this.onUpdateSchemeName(e, ladderFormat, index)}
+                                />
+                            )}
 
                         <Checkbox
                             className="single-checkbox pt-2"

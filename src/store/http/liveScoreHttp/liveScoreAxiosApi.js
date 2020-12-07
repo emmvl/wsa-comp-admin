@@ -659,12 +659,9 @@ const LiveScoreAxiosApi = {
         // const competitionID = localStorage.getItem('competitionId');
         const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         let compOrgId = competitionOrganisation? competitionOrganisation.id :0
-        let url = `/roster/admin?entityTypeId=${6}&roleId=${roleId}`;
+        let url = `/roster/admin?entityTypeId=${6}&roleId=${roleId}&entityId=${compOrgId}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
-        }
-        if(compOrgId!==0){
-            url += `&entityId=${compOrgId}`;
         }
         return Method.dataPost(url, token, body);
     },

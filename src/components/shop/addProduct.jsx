@@ -88,7 +88,7 @@ class AddProduct extends Component {
         if (shopProductState.getDetailsLoad === false && this.state.getLoad === true) {
             let imageUrls = shopProductState.imageUrls
             let creatorId = shopProductState.productDetailData.organisationUniqueKey;
-            let orgData = getOrganisationData();
+            let orgData = getOrganisationData() ? getOrganisationData() : null;
             let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
             let allDisabled = creatorId == organisationUniqueKey ? false : true;
 
@@ -102,7 +102,7 @@ class AddProduct extends Component {
     addProductPostAPI = (values) => {
         let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
         let description = JSON.parse(JSON.stringify(productDetailData.description))
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
         // let descriptionText = ''
@@ -635,13 +635,13 @@ class AddProduct extends Component {
                             {urls.length > 0 ? (
                                 <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} />
                             ) : (
-                                <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
-                                    <InputWithHead heading={AppConstants.dragImageToUpload} />
-                                    <div className="d-flex justify-content-center w-100">
-                                        {this.getImage()}
+                                    <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
+                                        <InputWithHead heading={AppConstants.dragImageToUpload} />
+                                        <div className="d-flex justify-content-center w-100">
+                                            {this.getImage()}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
                         </>
                     </div>
                     {urls.length > 0 && (
@@ -817,7 +817,7 @@ class AddProduct extends Component {
                                     {
                                         required: true,
                                         message:
-                                        ValidationConstants.pleaseEnterQuantity,
+                                            ValidationConstants.pleaseEnterQuantity,
                                     },
                                 ]}
                             >
@@ -887,7 +887,7 @@ class AddProduct extends Component {
                                             {
                                                 required: true,
                                                 message:
-                                                ValidationConstants.pleaseEnterVariantName,
+                                                    ValidationConstants.pleaseEnterVariantName,
                                             },
                                         ]}
                                     >
@@ -1052,7 +1052,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterLengthOfTheProduct,
+                                                ValidationConstants.enterLengthOfTheProduct,
                                         },
                                     ]}
                                 >
@@ -1089,7 +1089,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterWidthOfTheProduct,
+                                                ValidationConstants.enterWidthOfTheProduct,
                                         },
                                     ]}
                                 >
@@ -1126,7 +1126,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterHeightOfTheProduct,
+                                                ValidationConstants.enterHeightOfTheProduct,
                                         },
                                     ]}
                                 >
@@ -1156,7 +1156,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterWeightOfTheProduct,
+                                                ValidationConstants.enterWeightOfTheProduct,
                                         },
                                     ]}
                                 >

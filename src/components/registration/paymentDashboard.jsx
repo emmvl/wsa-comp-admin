@@ -179,7 +179,7 @@ class PaymentDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             deleteLoading: false,
             yearRefId: -1,
             competitionUniqueKey: "-1",

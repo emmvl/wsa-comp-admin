@@ -81,7 +81,7 @@ class ShopSettings extends Component {
     saveSettings = (values) => {
         let { settingDetailsData } = JSON.parse(JSON.stringify(this.props.shopSettingState));
         let payload = settingDetailsData;
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         payload.organisationUniqueKey = organisationUniqueKey;
         let key = 'update';
@@ -156,7 +156,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterAddress,
+                                ValidationConstants.enterAddress,
                         },
                     ]}
                 >
@@ -174,7 +174,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterSuburb,
+                                ValidationConstants.enterSuburb,
                         },
                     ]}
                 >
@@ -196,7 +196,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterState,
+                                ValidationConstants.enterState,
                         },
                     ]}
                 >
@@ -216,7 +216,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterPostcode,
+                                ValidationConstants.enterPostcode,
                         },
                     ]}
                 >
@@ -231,10 +231,10 @@ class ShopSettings extends Component {
                     />
                 </Form.Item>
                 <span className="input-heading">{AppConstants.pickupInstructions}</span>
-                <Form.Item 
+                <Form.Item
                     name="pickupInstruction"
                 >
-                    <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>    
+                    <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>
                 </Form.Item>
             </div>
         );

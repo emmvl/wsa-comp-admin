@@ -676,7 +676,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} value={item.id}>
                                         {item.description}
                                     </Radio>
-                                    <div className="mt-5 ml-n22">
+                                    <div className="mt-2 ml-n20">
                                         <CustomTooltip>
                                             <span>{item.helpMsg}</span>
                                         </CustomTooltip>
@@ -717,7 +717,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             className="reg-competition-radio"
                             disabled={disabledStatus}
                             onChange={(e) => this.changeTimeSlotGeneration(e)}
-                            // value={timeSlotData.timeslotGenerationRefId}
+                        // value={timeSlotData.timeslotGenerationRefId}
                         >
                             {commonState.timeSlotGeneration.map((item, index) => (
                                 <div key={'timeslotGeneration_' + item.id}>
@@ -728,7 +728,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         >
                                             {item.description}
                                         </Radio>
-                                        <div className="ml-5" style={{ marginTop: -22 }}>
+                                        {/* <div className="ml-5" style={{ marginTop: -22 }}> */}
+                                        <div className="ml-n20 mt-2" >
                                             <CustomTooltip>
                                                 <span>{item.helpMsg}</span>
                                             </CustomTooltip>

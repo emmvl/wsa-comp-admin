@@ -85,7 +85,7 @@ class CompetitionDraws extends Component {
             venueLoad: false,
             roundTime: null,
             competitionDivisionGradeId: '',
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             updateLoad: false,
             organisation_Id: '-1',
             visible: false,
@@ -835,7 +835,7 @@ class CompetitionDraws extends Component {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
@@ -1073,32 +1073,32 @@ class CompetitionDraws extends Component {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="w-100 d-flex flex-row align-items-center">
-                                            <span className="year-select-heading">
-                                                {AppConstants.round}:
+                                            <div className="w-100 d-flex flex-row align-items-center">
+                                                <span className="year-select-heading">
+                                                    {AppConstants.round}:
                                             </span>
-                                            <Select
-                                                id={AppUniqueId.draw_rounds_dpdn}
-                                                disabled={disabledStatus}
-                                                className="year-select"
-                                                style={{ minWidth: 100, maxWidth: 130 }}
-                                                onChange={(roundId) => this.onRoundsChange(roundId)}
-                                                value={this.state.roundId}
-                                            >
-                                                {this.props.drawsState.getDrawsRoundsData.map((item) => (
-                                                    <Option key={'drawsRound_' + item.roundId} value={item.roundId}>
-                                                        {item.name}
-                                                    </Option>
-                                                ))}
-                                            </Select>
-                                            {roundTime !== '' && (
-                                                <span className="year-select-heading pb-1">
-                                                    {'Starting'} {'  '}
-                                                    {roundTime}
-                                                </span>
-                                            )}
-                                        </div>
-                                    )}
+                                                <Select
+                                                    id={AppUniqueId.draw_rounds_dpdn}
+                                                    disabled={disabledStatus}
+                                                    className="year-select"
+                                                    style={{ minWidth: 100, maxWidth: 130 }}
+                                                    onChange={(roundId) => this.onRoundsChange(roundId)}
+                                                    value={this.state.roundId}
+                                                >
+                                                    {this.props.drawsState.getDrawsRoundsData.map((item) => (
+                                                        <Option key={'drawsRound_' + item.roundId} value={item.roundId}>
+                                                            {item.name}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                                {roundTime !== '' && (
+                                                    <span className="year-select-heading pb-1">
+                                                        {'Starting'} {'  '}
+                                                        {roundTime}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                 </div>
                             </div>
                         </div>
@@ -1136,58 +1136,58 @@ class CompetitionDraws extends Component {
                                             />
                                         </div>
                                     ) : (
-                                        <div className="d-table" style={{ marginTop: 35 }}>
-                                            <LegendComponent
-                                                disabled={disabledStatus}
-                                                legendArray={dateItem.legendsArray}
-                                            />
-                                        </div>
-                                    )}
+                                            <div className="d-table" style={{ marginTop: 35 }}>
+                                                <LegendComponent
+                                                    disabled={disabledStatus}
+                                                    legendArray={dateItem.legendsArray}
+                                                />
+                                            </div>
+                                        )}
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="draggable-wrap draw-data-table">
-                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                <div>
-                                    {dateItem.legendsArray.length > 0 ? (
-                                        <div key={"drawData" + dateIndex}>
-                                            <div className="draws-round-view">
-                                                <span className="draws-round">
-                                                    {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
-                                                </span>
+                            <div className="draggable-wrap draw-data-table">
+                                {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                    <div>
+                                        {dateItem.legendsArray.length > 0 ? (
+                                            <div key={"drawData" + dateIndex}>
+                                                <div className="draws-round-view">
+                                                    <span className="draws-round">
+                                                        {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
+                                                    </span>
+                                                </div>
+
+                                                {this.draggableView(dateItem)}
+
+                                                {(this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck) ? (
+                                                    <div>
+                                                        <AllLegendComponent
+                                                            allLegendArray={dateItem.legendsArray}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                        <div className="d-table" style={{ marginTop: 35 }}>
+                                                            <LegendComponent
+                                                                disabled={disabledStatus}
+                                                                legendArray={dateItem.legendsArray}
+                                                            />
+                                                        </div>
+                                                    )}
                                             </div>
-
-                                            {this.draggableView(dateItem)}
-
-                                            {(this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck) ? (
+                                        ) : (
                                                 <div>
-                                                    <AllLegendComponent
-                                                        allLegendArray={dateItem.legendsArray}
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="d-table" style={{ marginTop: 35 }}>
-                                                    <LegendComponent
-                                                        disabled={disabledStatus}
-                                                        legendArray={dateItem.legendsArray}
-                                                    />
+                                                    {this.state.firstTimeCompId == -1 && (
+                                                        <div className="comp-warning-info" style={{ paddingBottom: 40 }}>
+                                                            {AppConstants.noFixturesMessage}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            {this.state.firstTimeCompId == -1 && (
-                                                <div className="comp-warning-info" style={{ paddingBottom: 40 }}>
-                                                    {AppConstants.noFixturesMessage}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                 </div>
             </div>
         );
@@ -1328,33 +1328,33 @@ class CompetitionDraws extends Component {
                                                                 {slotObject.awayTeamName}
                                                             </span>
                                                         ) : (
-                                                            <span>Free</span>
-                                                        )}
+                                                                <span>Free</span>
+                                                            )}
                                                     </Swappable>
                                                 ) : (
-                                                    <Swappable
-                                                        id={`${index.toString()}:${slotIndex.toString()}:${dateItem.roundId.toString()}`}
-                                                        content={1}
-                                                        swappable={this.checkSwap(slotObject)}
-                                                        onSwap={(source, target) =>
-                                                            this.onSwap(
-                                                                source,
-                                                                target,
-                                                                dateItem.draws,
-                                                                dateItem.roundId
-                                                            )
-                                                        }
-                                                    >
-                                                        {slotObject.drawsId != null ? (
-                                                            <span>
-                                                                {slotObject.homeTeamName} <br />
-                                                                {slotObject.awayTeamName}
-                                                            </span>
-                                                        ) : (
-                                                            <span>Free</span>
-                                                        )}
-                                                    </Swappable>
-                                                )}
+                                                        <Swappable
+                                                            id={`${index.toString()}:${slotIndex.toString()}:${dateItem.roundId.toString()}`}
+                                                            content={1}
+                                                            swappable={this.checkSwap(slotObject)}
+                                                            onSwap={(source, target) =>
+                                                                this.onSwap(
+                                                                    source,
+                                                                    target,
+                                                                    dateItem.draws,
+                                                                    dateItem.roundId
+                                                                )
+                                                            }
+                                                        >
+                                                            {slotObject.drawsId != null ? (
+                                                                <span>
+                                                                    {slotObject.homeTeamName} <br />
+                                                                    {slotObject.awayTeamName}
+                                                                </span>
+                                                            ) : (
+                                                                    <span>Free</span>
+                                                                )}
+                                                        </Swappable>
+                                                    )}
                                             </div>
                                             {slotObject.drawsId !== null && (
                                                 <div className="box-exception overflow-hidden column-width-style">
@@ -1393,16 +1393,16 @@ class CompetitionDraws extends Component {
                                                                         />
                                                                     </div>
                                                                 ) : (
-                                                                    <div>
-                                                                        <img
-                                                                            className="dot-image"
-                                                                            src={AppImages.moreTripleDot}
-                                                                            alt=""
-                                                                            width="16"
-                                                                            height="10"
-                                                                        />
-                                                                    </div>
-                                                                )
+                                                                        <div>
+                                                                            <img
+                                                                                className="dot-image"
+                                                                                src={AppImages.moreTripleDot}
+                                                                                alt=""
+                                                                                width="16"
+                                                                                height="10"
+                                                                            />
+                                                                        </div>
+                                                                    )
                                                             }
                                                         >
                                                             {slotObject.isLocked == 1 && (
