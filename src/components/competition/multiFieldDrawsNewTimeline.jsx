@@ -1119,12 +1119,15 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const findSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === itemDateDayOfWeek);
 
-        const startDayTime = findSchedule.timeslot.startTime;
-        const endDayTime = findSchedule.timeslot.endTime;
+        const startDayTime = findSchedule ? findSchedule.timeslot.startTime : '00:00';
+        const endDayTime = findSchedule ? findSchedule.timeslot.endTime : '24:00';
 
-        const timeAllDayScheduleHours = [startDayTime];
+        const startDayTimeStartHour = this.getEndTime(fieldItemDate + startDayTime);
+        const endDayTimeStartHour = this.getEndTime(fieldItemDate + endDayTime);
 
-        while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
+        const timeAllDayScheduleHours = [startDayTimeStartHour];
+
+        while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTimeStartHour) {
             const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
             timeAllDayScheduleHours.push(newTime)
         }
@@ -1143,7 +1146,7 @@ class MultifieldDrawsNewTimeline extends Component {
         if (venueData[0]?.availableTimeslots) {
             venueData.forEach(venue => {
                 const daySchedule = venue.availableTimeslots.find(venueDaySchedule =>
-                    venueDaySchedule?.venueId && venueDaySchedule.venueId === courtVenueId && venueDaySchedule.day === findSchedule.day);
+                    venueDaySchedule?.venueId && venueDaySchedule.venueId === courtVenueId && venueDaySchedule.day === findSchedule?.day);
 
                 if (daySchedule) {
                     venueDaySchedule = daySchedule.timeslot;
@@ -1171,11 +1174,21 @@ class MultifieldDrawsNewTimeline extends Component {
 
         // unavailable time during the whole day
 
-        return workingDayInTimeline ? {
-            startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
-            endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
-        }
-            : null;
+        const dayTimeRestrictions = workingDayInTimeline 
+            ?   {
+                    startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
+                    endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime,
+                    isUnavailable: false
+                } 
+            :   !findSchedule
+            ?   {
+                    startTime: moment(fieldItemDate + '00:00'),
+                    endTime: moment(fieldItemDate + '23:59'),
+                    isUnavailable: true
+                } 
+                : null;
+
+        return dayTimeRestrictions;
     }
 
     headerView = () => {
@@ -1742,6 +1755,26 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
+    getStartTime = dateWithStartTime => {
+        const isTimeStartsAtHourStart = moment(dateWithStartTime).format('HH:mm') === moment(dateWithStartTime).startOf('hour').format('HH:mm');
+
+        const startTime = isTimeStartsAtHourStart
+            ? moment(dateWithStartTime).format('HH:mm')
+            : moment(dateWithStartTime).startOf('hour').format('HH:mm');
+
+        return startTime;
+    }
+
+    getEndTime = dateWithEndTime => {
+        const isTimeEndsAtHourEnd = moment(dateWithEndTime).format('HH:mm') === moment(dateWithEndTime).startOf('hour').format('HH:mm');
+
+        const endTime = isTimeEndsAtHourEnd
+            ? moment(dateWithEndTime).format('HH:mm')
+            : moment(dateWithEndTime).endOf('hour').add(1, 'minutes').format('HH:mm');
+
+        return endTime;
+    }
+
     getStartAndEndDayTime = (itemDate, dateNewArray) => {
         const schedule = this.getWeeklySchedule();
         const { isFilterSchedule } = this.state;
@@ -1761,19 +1794,18 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const firstEventHourStart = moment(firstEventInDayStart).startOf('hour').format('HH:mm');
 
-        const isLastEventEndsAtDayEnd = moment(lastEventInDayEnd).format('HH:mm') === moment(lastEventInDayEnd).startOf('hour').format('HH:mm');
-
-        const lastEventHourEnd = isLastEventEndsAtDayEnd
-            ? moment(lastEventInDayEnd).format('HH:mm')
-            : moment(lastEventInDayEnd).endOf('hour').add(1, 'minutes').format('HH:mm');
+        const lastEventHourEnd = this.getEndTime(lastEventInDayEnd);
         ////
 
         const itemDateDayOfWeek = moment(itemDate).format('dddd').toLowerCase();
 
         const findSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === itemDateDayOfWeek);
 
-        const startDayTime = isFilterSchedule ? firstEventHourStart : findSchedule.timeslot.startTime;
-        const endDayTime = isFilterSchedule ? lastEventHourEnd : findSchedule.timeslot.endTime;
+        const scheduleHourStart = findSchedule && this.getStartTime(dayDate + findSchedule.timeslot.startTime);
+        const scheduleHourEnd = findSchedule && this.getEndTime(dayDate + findSchedule.timeslot.endTime);
+
+        const startDayTime = isFilterSchedule || !findSchedule ? firstEventHourStart : scheduleHourStart;
+        const endDayTime = isFilterSchedule || !findSchedule ? lastEventHourEnd : scheduleHourEnd;
 
         return { startDayTime, endDayTime };
     }
@@ -1781,9 +1813,12 @@ class MultifieldDrawsNewTimeline extends Component {
     getDraggableViewHeaderData = (itemDate, dateNewArray) => {
         const { startDayTime, endDayTime } = this.getStartAndEndDayTime(itemDate, dateNewArray);
 
-        const timeAllDayScheduleHours = [startDayTime];
+        const startDayTimeStartHour = this.getStartTime(itemDate + startDayTime);
+        const endDayTimeStartHour = this.getEndTime(itemDate + endDayTime);
 
-        while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
+        const timeAllDayScheduleHours = [startDayTimeStartHour];
+
+        while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTimeStartHour) {
             const newTime = moment(itemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
             timeAllDayScheduleHours.push(newTime)
         }
@@ -1920,7 +1955,11 @@ class MultifieldDrawsNewTimeline extends Component {
                 >
                     <div
                         id="draggableTooltip"
-                        className="unavailable-draws d-none"
+                        className="unavailable-draws"
+                        // don't change this inline style, tooltip won't work !!
+                        style={{
+                            display: 'none'
+                        }}
                     />
                     {dateItem.draws && dateItem.draws.map((courtData, index) => {
                         if (index !== 0) {
@@ -1952,6 +1991,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                     const startDayDate = moment(fieldItemDate + startDayTime);
                                     const endDayDate = moment(fieldItemDate + endDayTime);
 
+                                    const dateNow = moment();
+                                    const isDayInPast = dateNow.isAfter(endDayDate);
+
                                     if (fieldItemDateIndex !== 0) {
                                         prevDaysWidth += diffDayScheduleTime;
                                     }
@@ -1961,7 +2003,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                     if (fieldItemDateIndex === date.length - 1) {
                                         // for the last day in schedule width and right dashed line in the end of the day
-                                        diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH + 2;
+                                        diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH + 1;
                                     } else if (fieldItemDateIndex === date.length - 1 && isFilterSchedule) {
                                         diffDayScheduleTime = (endDayDate.diff(startDayDate, 'minutes') - ONE_HOUR_IN_MIN) * ONE_MIN_WIDTH;
                                     } else {
@@ -1998,12 +2040,16 @@ class MultifieldDrawsNewTimeline extends Component {
                                         )
                                     }
 
+                                    const dayBg = timeRestrictionsSchedule.isUnavailable ? {
+                                            background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
+                                        } : {
+                                            backgroundSize,
+                                            backgroundImage,
+                                            backgroundPosition,
+                                        };
+
                                     return (
                                         <div key={"slot" + fieldItemDateIndex}>
-                                            {/* <span
-                                                style={{ left: leftMargin, top: topMargin }}
-                                                className={'border'}
-                                            /> */}
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
                                                 className={'box white-bg-timeline day-box'}
@@ -2016,13 +2062,29 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     cursor: disabledStatus && "no-drop",
                                                     width: diffDayScheduleTime,
                                                     borderRadius: '0px',
-                                                    backgroundSize,
-                                                    backgroundImage,
-                                                    backgroundPosition,
+                                                    ...dayBg
                                                 }}
-                                                onDragOver={e => this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)}
-                                                onDragEnd={e => this.dayLineDragEnd(e)}
+                                                onDragOver={e => {
+                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
+                                                        this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
+                                                    } 
+                                                }}
+                                                onDragEnd={e => {
+                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
+                                                        this.dayLineDragEnd(e)
+                                                }}
                                             >
+                                                {timeRestrictionsSchedule.isUnavailable && 
+                                                    <div
+                                                        className="box unavailable-draws align-items-center"
+                                                        style={{
+                                                            width: '100%',
+                                                            background: 'transparent',
+                                                        }}
+                                                    >
+                                                        <span>{AppConstants.unavailable}</span>
+                                                    </div>
+                                                }
                                                 {unavailableWidth.map((width, widthIndex) => {
                                                     if (width) {
                                                         return (
@@ -2057,10 +2119,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes') * ONE_MIN_WIDTH;
                                                         return (
                                                             <div key={"slot" + slotIndex}>
-                                                                {/* <span
-                                                                    style={{ left: diffTimeStartEvent, top: topMargin }}
-                                                                    className={'border'}
-                                                                /> */}
                                                                 <div
                                                                     id={slotObject.drawsId}
                                                                     onMouseDown={e => this.slotObjectMouseDown(e, slotObject)}
@@ -2074,10 +2132,11 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                         left: diffTimeStartEvent,
                                                                         overflow: 'hidden',
                                                                         whiteSpace: 'nowrap',
-                                                                        cursor: disabledStatus && "no-drop",
+                                                                        cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
                                                                         width: diffTimeEventDuration,
                                                                         minWidth: diffTimeEventDuration,
                                                                         height: 48,
+                                                                        opacity: isDayInPast ? 0.7 : 1,
                                                                     }}
                                                                 >
                                                                     {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
@@ -2091,7 +2150,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 "1"
                                                                             }
                                                                             content={1}
-                                                                            swappable={this.checkSwap(slotObject)}
+                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast ? false : this.checkSwap(slotObject)}
                                                                             onSwap={(source, target) =>
                                                                                 this.onSwap(
                                                                                     source,
@@ -2101,11 +2160,13 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 )
                                                                             }
                                                                             isCurrentSwappable={(source, target) =>
-                                                                                this.checkCurrentSwapObjects(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                )
+                                                                                isDayInPast 
+                                                                                    ? false
+                                                                                    : this.checkCurrentSwapObjects(
+                                                                                            source,
+                                                                                            target,
+                                                                                            dateItem.draws,
+                                                                                        )
                                                                             }
                                                                         >
                                                                             <span
@@ -2130,7 +2191,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     dateItem.roundId.toString()
                                                                                 }
                                                                                 content={1}
-                                                                                swappable={this.checkSwap(slotObject)}
+                                                                                swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast ? false : this.checkSwap(slotObject)}
                                                                                 onSwap={(source, target) =>
                                                                                     this.onSwap(
                                                                                         source,
@@ -2140,11 +2201,13 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     )
                                                                                 }
                                                                                 isCurrentSwappable={(source, target) =>
-                                                                                    this.checkCurrentSwapObjects(
-                                                                                        source,
-                                                                                        target,
-                                                                                        dateItem.draws,
-                                                                                    )
+                                                                                    isDayInPast 
+                                                                                        ? false
+                                                                                        : this.checkCurrentSwapObjects(
+                                                                                                source,
+                                                                                                target,
+                                                                                                dateItem.draws,
+                                                                                            )
                                                                                 }
                                                                             >
                                                                                 <span
@@ -2172,7 +2235,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                             minWidth: diffTimeEventDuration,
                                                                         }}
                                                                     >
-                                                                        <Menu
+                                                                        {!timeRestrictionsSchedule.isUnavailable && !isDayInPast && <Menu
                                                                             className="action-triple-dot-draws"
                                                                             theme="light"
                                                                             mode="horizontal"
@@ -2245,6 +2308,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 </Menu.Item>
                                                                             </SubMenu>
                                                                         </Menu>
+                                                                        }
                                                                     </div>
                                                                 )}
                                                             </div>
