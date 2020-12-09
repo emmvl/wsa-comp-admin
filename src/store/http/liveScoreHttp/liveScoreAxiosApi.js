@@ -113,13 +113,15 @@ const LiveScoreAxiosApi = {
         return Method.dataDelete(url, localStorage.token);
     },
 
-    liveScoreCompetition(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder) {
+    liveScoreCompetition(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder, isumpiredCompsOnly, isParticipating) {
+        let umpiredCompsOnly = isumpiredCompsOnly ? isumpiredCompsOnly : false
+        let isParticipatingInCompetition = isParticipating ? isParticipating : false
         let url = null;
         if (orgKey) {
             if (recordUmpireTypes) {
-                url = `/competitions/admin?organisationId=${orgKey}&recordUmpireType=${recordUmpireTypes}`;
+                url = `/competitions/admin?organisationId=${orgKey}&recordUmpireType=${recordUmpireTypes}&umpiredCompsOnly=${umpiredCompsOnly}&isParticipatingInCompetition=${isParticipatingInCompetition}`;
             } else {
-                url = `/competitions/admin?organisationId=${orgKey}`;
+                url = `/competitions/admin?organisationId=${orgKey}&umpiredCompsOnly=${umpiredCompsOnly}&isParticipatingInCompetition=${isParticipatingInCompetition}`;
             }
         } else {
             url = '/competitions/admin';
@@ -183,26 +185,26 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamId, sortBy, sortOrder, competitionOrganisationId) {
-        let url;        
-            if (teamId !== undefined) {
-                url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamId}&competitionOrganisationId=${competitionOrganisationId}`;
-            } else if (divisionId && roundName) {
-                // eslint-disable-next-line max-len
-                url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
-            } else if (divisionId) {
-                url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&competitionOrganisationId=${competitionOrganisationId}`;
-            } else if (roundName) {
-                url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
-            } else {
-                url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&competitionOrganisationId=${competitionOrganisationId}`;
-            }        
+        let url;
+        if (teamId !== undefined) {
+            url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamId}&competitionOrganisationId=${competitionOrganisationId}`;
+        } else if (divisionId && roundName) {
+            // eslint-disable-next-line max-len
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
+        } else if (divisionId) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&competitionOrganisationId=${competitionOrganisationId}`;
+        } else if (roundName) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
+        } else {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&competitionOrganisationId=${competitionOrganisationId}`;
+        }
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        
 
-        console.log('url in fetch ====>' , url);
+
+        console.log('url in fetch ====>', url);
         return Method.dataGet(url, localStorage.token);
     },
 
@@ -211,14 +213,14 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    liveScoreTeam(competitionID, divisionId,compOrgId) {
+    liveScoreTeam(competitionID, divisionId, compOrgId) {
         let url;
         if (divisionId) {
             url = `/teams/list?competitionId=${competitionID}&competitionOrganisationId=${compOrgId}&divisionId=${divisionId}&includeBye=1`;
         } else {
             url = `/teams/list?competitionId=${competitionID}&competitionOrganisationId=${compOrgId}`;
         }
-        
+
         return Method.dataGet(url, localStorage.token);
     },
 
@@ -658,7 +660,7 @@ const LiveScoreAxiosApi = {
     liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder) {
         // const competitionID = localStorage.getItem('competitionId');
         const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        let compOrgId = competitionOrganisation? competitionOrganisation.id :0
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
         let url = `/roster/admin?entityTypeId=${6}&roleId=${roleId}&entityId=${compOrgId}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -758,7 +760,7 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    async liveScoreAddEditManager(data, teamId, existingManagerId,compOrgId) {
+    async liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId) {
         const body = data;
         const userId = await getUserId();
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
@@ -963,7 +965,7 @@ const LiveScoreAxiosApi = {
 
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
         const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        let compOrgId = competitionOrganisation? competitionOrganisation.id :0
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
         let body = null;
         if (scorerRadioBtn === 'new') {
             if (scorerData.id) {
@@ -1083,7 +1085,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// / Export Files
-    async  exportFiles(url) {
+    async exportFiles(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
 
@@ -1101,7 +1103,7 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreAddCoach(data, teamId, existingManagerId,compOrgId) {
+    liveScoreAddCoach(data, teamId, existingManagerId, compOrgId) {
         const body = data;
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         const url = `/users/coach?entityId=${compOrgId}&entityTypeId=${6}`;

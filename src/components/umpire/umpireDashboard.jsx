@@ -618,16 +618,18 @@ class UmpireDashboard extends Component {
             compArray: [],
             competitionObj: null,
             liveScoreUmpire: (props.location && props.location.state && props.location.state.liveScoreUmpire) ? props.location.state.liveScoreUmpire : null,
+            isParticipateInCompetition: (props.location && props.location.state && props.location.state.isParticiapte) ? props.location.state.isParticiapte : false,
             round: "All",
             offsetData: 0,
             sortBy: null,
             sortOrder: null,
-        };
 
+        };
         this_obj = this;
     }
 
     async componentDidMount() {
+        console.log(this.state.liveScoreUmpire)
         const prevUrl = getPrevUrl();
         const { umpireDashboardListActionObject } = this.props.umpireDashboardState
         // let offsetData = this.state.offsetData
@@ -648,7 +650,7 @@ class UmpireDashboard extends Component {
             let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
             let orgId = getOrganisationData() ? getOrganisationData().organisationId : null;
             this.setState({ loading: true, orgId });
-            this.props.umpireCompetitionListAction(null, null, organisationId);
+            this.props.umpireCompetitionListAction(null, null, organisationId, null, null, null, true, this.state.isParticipateInCompetition);
         } else {
             history.push("/");
         }
@@ -1029,7 +1031,7 @@ class UmpireDashboard extends Component {
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : [];
         let roundList = isArrayNotEmpty(umpireRoundList) ? umpireRoundList : [];
         let umpireType = this.state.competitionObj ? this.state.competitionObj.recordUmpireType : null;
-
+        console.log(competition, "********-*")
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">

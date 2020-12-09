@@ -35,7 +35,11 @@ export function* getUmpireCompSaga(action) {
             action.data,
             action.yearId,
             action.orgId,
-            action.recordUmpireTypes
+            action.recordUmpireTypes,
+            action.sortBy,
+            action.sortOrder,
+            action.isumpiredCompsOnly,
+            action.isParticipateInCompetition
         )
         if (result.status == 1) {
             yield put({
