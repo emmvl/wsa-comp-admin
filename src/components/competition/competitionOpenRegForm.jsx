@@ -287,7 +287,7 @@ class CompetitionOpenRegForm extends Component {
         this.formRef = createRef();
     }
 
-    componentDidUpdate(nextProps) {
+    async componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
             this.setState({ loading: false })
@@ -393,8 +393,12 @@ class CompetitionOpenRegForm extends Component {
                     this.setState({
                         nextButtonClicked: false,
                         loading: false
-                    })
-                    history.push("/competitionPlayerGrades")
+                    });
+                    let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+                    await setOwnCompetitionYear(this.state.yearRefId)
+                    await setOwn_competition(this.props.competitionFeesState.competitionId);
+                    await setOwn_competitionStatus(this.state.statusRefId);
+                    history.push("/competitionPlayerGrades",{fromReplicate: fromReplicate});
                 } else {
                     this.setState({
                         loading: false
@@ -764,7 +768,7 @@ class CompetitionOpenRegForm extends Component {
             setOwn_CompetitionFinalRefId(finalTypeRefId)
         }
         this.props.clearCompReducerDataAction("all")
-        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
+        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule,null,this.state.yearRefId)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
@@ -1432,7 +1436,8 @@ class CompetitionOpenRegForm extends Component {
                                     </Tooltip>
                                     {tabKey == "2" && (
                                         <Button
-                                            onClick={() => this.setState({ nextButtonClicked: true })}
+                                            onClick={() => this.setState({ nextButtonClicked: true,
+                                                statusRefId: tabKey == "2" ? 2 : 1 })}
                                             className="publish-button"
                                             type="primary"
                                             htmlType="submit"
@@ -1468,7 +1473,8 @@ class CompetitionOpenRegForm extends Component {
                                         </Tooltip>
                                         {tabKey == "2" && (
                                             <Button
-                                                onClick={() => this.setState({ nextButtonClicked: true })}
+                                                onClick={() => this.setState({ nextButtonClicked: true ,
+                                                    statusRefId: tabKey == "2" ? 2 : 1})}
                                                 htmlType="submit"
                                                 className="publish-button"
                                                 type="primary"

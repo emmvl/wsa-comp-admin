@@ -177,6 +177,11 @@ textarea {
 	display: flex;
 }
 
+.logo-box img {
+	height: 34px;
+	margin-right: 22px;
+}
+
 .user-right {
 	flex: 1;
 }
