@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal, Tag } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
 import moment from "moment";
@@ -252,7 +252,9 @@ class Registration extends Component {
             cashTranferType: 1,
             amount: null,
             selectedRow: null,
-            loading: false
+            loading: false,
+            teamName: null,
+            teamId : -1
         }
 
         this_Obj = this;
@@ -311,6 +313,9 @@ class Registration extends Component {
 
                 this.handleRegTableList(page);
             } else {
+                let teamName = this.props.location.state ? this.props.location.state.teamName : null;
+                let teamId = this.props.location.state ? this.props.location.state.teamId : -1;
+                this.setState({teamName: teamName, teamId: teamId})
                 this.handleRegTableList(1);
             }
         } else {
@@ -344,7 +349,8 @@ class Registration extends Component {
             regFrom,
             regTo,
             sortBy,
-            sortOrder
+            sortOrder,
+            teamId,
         } = this.state;
 
         let filter = {
@@ -363,6 +369,7 @@ class Registration extends Component {
             paymentId,
             paymentStatusRefId,
             searchText,
+            teamId,
             // regFrom: (regFrom !== "-1" && !isNaN(regFrom)) ? moment(regFrom).format("YYYY-MM-DD") : "-1",
             regFrom: (regFrom !== "-1") ? moment(regFrom).format("YYYY-MM-DD") : "-1",
             // regTo: (regTo !== "-1" && !isNaN(regTo)) ? moment(regTo).format("YYYY-MM-DD") : "-1",
@@ -483,6 +490,11 @@ class Registration extends Component {
         }
     }
 
+    clearFilterByTeamId = () => {
+        this.setState({teamName: null, teamId: -1})
+        this.handleRegTableList(1);   
+    }
+
     headerView = () => (
         <div className="comp-player-grades-header-view-design" style={{ marginBottom: -10 }}>
             <div className="row" style={{ marginRight: 42 }}>
@@ -517,6 +529,18 @@ class Registration extends Component {
                 <div className="row" style={{ marginRight: 42 }}>
                     <div className="col-sm-9 padding-right-reg-dropdown-zero">
                         <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2">
+                            {this.state.teamName && 
+                                <div className="col-sm pt-1 align-self-center">
+                                    <Tag
+                                        closable
+                                        color="volcano"
+                                        style={{ paddingTop: 3, height: 30 }}
+                                        onClose={() => { this.clearFilterByTeamId() }}
+                                    >
+                                        {this.state.teamName}
+                                    </Tag>
+                                </div>
+                            }
                             <div className="year-select-heading" style={{ width: 90 }}>
                                 {AppConstants.status}
                             </div>

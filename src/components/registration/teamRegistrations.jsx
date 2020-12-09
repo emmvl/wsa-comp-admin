@@ -18,6 +18,7 @@ import { getAllCompetitionAction } from "store/actions/registrationAction/regist
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import moment from "moment";
 
 import "./product.scss";
 
@@ -47,29 +48,19 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: "First Name",
-        dataIndex: "firstName",
-        key: "firstName",
+        title: "Team Name",
+        dataIndex: "teamName",
+        key: "teamName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (firstName, record) => (
-            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
-                <span className="input-heading-add-another pt-0">{firstName}</span>
+        render: (teamName, record) => (
+            <NavLink to={{pathname:"/registration", state: {teamName: record.teamName, teamId :record.teamId}}}>
+                {console.log("h1",record)}
+                <span className="input-heading-add-another pt-0">{teamName}</span>
             </NavLink>
-        ),
+        )
     },
-    {
-        title: "Last Name",
-        dataIndex: "lastName",
-        key: "lastName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (lastName, record) => (
-            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
-                <span className="input-heading-add-another pt-0">{lastName}</span>
-            </NavLink>
-        ),
-    },
+
     {
         title: "Organisation",
         dataIndex: "organisationName",
@@ -77,60 +68,68 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
+
     {
-        title: "Team",
-        dataIndex: "teamName",
-        key: "teamName",
+        title: "Division",
+        key:"divisionName",
+        dataIndex: "divisionName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        onHeaderCell: ({dataIndex}) => listeners(dataIndex)
     },
+
     {
-        title: "User Reg.Team",
-        dataIndex: "userRegTeam",
-        key: "userRegTeam",
+        title: "Product",
+        key:"productName",
+        dataIndex: "productName",
+        sorter: true,
+        onHeaderCell: ({dataIndex}) => listeners(dataIndex)
+    },
+
+    {
+        title: "Registered By",
+        dataIndex: "registeredBy",
+        key: "registeredBy",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (userRegTeam, record) => (
+        render: (registeredBy, record) => (
             <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
-                <span className="input-heading-add-another pt-0">{userRegTeam}</span>
+                <span className="input-heading-add-another pt-0">{registeredBy}</span>
             </NavLink>
         ),
     },
+
     {
-        title: "User Role",
-        dataIndex: "roles",
-        key: "roles",
+        title: "Registration Date",
+        key:"registrationDate",
+        dataIndex: "registrationDate",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (roles) => (
+        onHeaderCell : ({dataIndex}) => listeners(dataIndex),
+        render: (registrationDate) => (
             <div>
-                {(roles || []).map((item) => (
-                    <div key={item.roleDesc}>{item.roleDesc}</div>
-                ))}
+                {registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}
             </div>
         ),
     },
-    {
-        title: "Team Reg. Type",
-        dataIndex: "teamRegType",
-        key: "teamRegType",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
+
     {
         title: "Status",
-        dataIndex: "status",
+        // dataIndex: "status",
         key: "status",
-        filterDropdown: true,
-        filterIcon: () => (
-            <div className="mt-10">
-                <Tooltip>
-                    <span>{AppConstants.statusContextMsg}</span>
-                </Tooltip>
-            </div>
-        ),
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        // filterDropdown: true,
+        // filterIcon: () => (
+        //     <div className="mt-10">
+        //         <Tooltip>
+        //             <span>{AppConstants.statusContextMsg}</span>
+        //         </Tooltip>
+        //     </div>
+        // ),
+        // sorter: true,
+        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+
+    {
+        title: "Action",
+        key:"action"
     },
 ];
 
@@ -144,11 +143,11 @@ class TeamRegistrations extends Component {
             competitionUniqueKey: "-1",
             filterOrganisation: -1,
             competitionId: "",
-            statusRefId: -1,
+            divisionId: -1,
             searchText: '',
             sortBy: null,
             sortOrder: null,
-            roleId: -1
+            membershipProductUniqueKey: "-1"
         }
 
         this_Obj = this;
@@ -172,10 +171,10 @@ class TeamRegistrations extends Component {
             let competitionUniqueKey = teamRegListAction.payload.competitionUniqueKey
             let filterOrganisation = teamRegListAction.payload.filterOrganisation
             let searchText = teamRegListAction.payload.searchText
-            let statusRefId = teamRegListAction.payload.statusRefId
+            let divisionId = teamRegListAction.payload.divisionId
             let yearRefId = teamRegListAction.payload.yearRefId
-            let roleId = teamRegListAction.payload.roleId
-            await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, statusRefId, yearRefId, roleId })
+            let membershipProductUniqueKey = teamRegListAction.payload.membershipProductUniqueKey
+            await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, divisionId, yearRefId, membershipProductUniqueKey })
             page = Math.floor(offset / 10) + 1;
 
             this.handleRegTableList(page);
@@ -191,10 +190,10 @@ class TeamRegistrations extends Component {
             competitionUniqueKey,
             filterOrganisation,
             searchText,
-            statusRefId,
+            divisionId,
             sortBy,
             sortOrder,
-            roleId
+            membershipProductUniqueKey
         } = this.state;
 
         const filter = {
@@ -203,8 +202,8 @@ class TeamRegistrations extends Component {
             competitionUniqueKey,
             filterOrganisation,
             searchText,
-            statusRefId,
-            roleId,
+            divisionId,
+            membershipProductUniqueKey,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0),
@@ -223,8 +222,8 @@ class TeamRegistrations extends Component {
             competitionUniqueKey: this.state.competitionUniqueKey,
             filterOrganisation: this.state.filterOrganisation,
             searchText: this.state.searchText,
-            statusRefId: this.state.statusRefId,
-            roleId: this.state.roleId
+            divisionId: this.state.divisionId,
+            membershipProductUniqueKey: this.state.membershipProductUniqueKey
         };
         this.props.exportTeamRegistrationAction(obj);
 
@@ -250,11 +249,11 @@ class TeamRegistrations extends Component {
         } else if (key === "filterOrganisation") {
             await this.setState({ filterOrganisation: value });
             this.handleRegTableList(1);
-        } else if (key === "statusRefId") {
-            await this.setState({ statusRefId: value });
+        } else if (key === "divisionId") {
+            await this.setState({ divisionId: value });
             this.handleRegTableList(1);
-        } else if (key === "roleId") {
-            await this.setState({ roleId: value });
+        } else if (key === "membershipProductUniqueKey") {
+            await this.setState({ membershipProductUniqueKey: value });
             this.handleRegTableList(1);
         }
     };
@@ -402,7 +401,9 @@ class TeamRegistrations extends Component {
             }
         }
 
-        const competitions = this.props.registrationState.teamRegistrationTableData.competitionList;
+        const competitions = this.props.registrationState.teamRegistrationTableData.competitionsList;
+        const divisions = this.props.registrationState.teamRegistrationTableData.divisionList;
+        const products = this.props.registrationState.teamRegistrationTableData.membershipProductList;
         const roles = this.props.registrationState.teamRegistrationTableData.roles;
         return (
             <div className="comp-player-grades-header-view-design">
@@ -442,7 +443,7 @@ class TeamRegistrations extends Component {
                                             key={'competition_' + item.competitionUniqueKey}
                                             value={item.competitionUniqueKey}
                                         >
-                                            {item.name}
+                                            {item.competitionName}
                                         </Option>
                                     ))}
                                 </Select>
@@ -469,30 +470,30 @@ class TeamRegistrations extends Component {
                         </div>
                         <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont" style={{ marginRight: "30px" }}>
-                                <div className="year-select-heading">{AppConstants.status}</div>
+                                <div className="year-select-heading">{AppConstants.division}</div>
                                 <Select
                                     className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, "statusRefId")}
-                                    value={this.state.statusRefId}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "divisionId")}
+                                    value={this.state.divisionId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(paymentStatus || []).map((g) => (
-                                        <Option key={'status_' + g.id} value={g.id}>{g.description}</Option>
+                                    {(divisions || []).map((g) => (
+                                        <Option key={'division_' + g.divisionId} value={g.divisionId}>{g.divisionName}</Option>
                                     ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont" style={{ marginRight: "30px" }}>
-                                <div className="year-select-heading">{AppConstants.role}</div>
+                                <div className="year-select-heading">{AppConstants.product}</div>
                                 <Select
                                     className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, "roleId")}
-                                    value={this.state.roleId}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "membershipProductUniqueKey")}
+                                    value={this.state.membershipProductUniqueKey}
                                 >
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(roles || []).map((g) => (
-                                        <Option key={'status_' + g.id} value={g.id}>{g.description}</Option>
+                                    <Option key={-1} value="-1">{AppConstants.all}</Option>
+                                    {(products || []).map((g) => (
+                                        <Option key={'status_' + g.membershipProductUniqueKey} value={g.membershipProductUniqueKey}>{g.productName}</Option>
                                     ))}
                                 </Select>
                             </div>
