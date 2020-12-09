@@ -341,6 +341,9 @@ class LiveScoreAddScorer extends Component {
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChange(e)}
                     value={scorerRadioBtn}
+                    style={{
+                        overflowX: 'unset'
+                    }}
                 >
                     <div className="row ml-4" style={{ marginTop: 18 }}>
                         {/* <Radio value="new">{AppConstants.new}</Radio>

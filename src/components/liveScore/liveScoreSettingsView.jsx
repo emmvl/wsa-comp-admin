@@ -969,6 +969,9 @@ class LiveScoreSettingsView extends Component {
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={e => this.competition_format(e)}
+                            style={{
+                                overflowX: 'unset'
+                            }}
                         // value={this.props.liveScoreSetting.form.scoring}
                         >
                             <div className="row ml-2 mt-0">

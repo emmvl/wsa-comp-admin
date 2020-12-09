@@ -586,8 +586,8 @@ class Registration extends Component {
         let uniqueValues = [];
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null,
             };
 
             uniqueValues.push(obj);

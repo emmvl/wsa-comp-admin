@@ -222,7 +222,7 @@ class RegistrationForm extends Component {
 
     // mail client details
     mailClientView = (code) => {
-        let affiliateName = getOrganisationData().name;
+        let affiliateName = getOrganisationData() ? getOrganisationData().name : null;
         let body = `${AppConstants.mailBodyText} \n${code}  \n \nRegards,  \n${affiliateName}`;
         return (
             <div>
@@ -548,6 +548,7 @@ class RegistrationForm extends Component {
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = false; // this.state.isPublished // CM-1513
+        let orgLogoUrl = getOrganisationData() ? getOrganisationData().orgLogoUrl : null
 
         return (
             <div className="content-view pt-4">
@@ -751,13 +752,13 @@ class RegistrationForm extends Component {
                     marginTop={0}
                 />
                 {((formDataValue.organisationPhotos == null || formDataValue.organisationPhotos.length === 0) &&
-                    (getOrganisationData().orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
+                    (orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
                     <div className="org-photos">
-                        {getOrganisationData().orgLogoUrl != null && (
+                        {orgLogoUrl != null && (
                             <div>
                                 <div>
                                     <img
-                                        src={getOrganisationData().orgLogoUrl}
+                                        src={orgLogoUrl}
                                         alt=""
                                         height={125}
                                         width={125}
