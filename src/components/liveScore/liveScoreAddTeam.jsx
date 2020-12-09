@@ -337,6 +337,9 @@ class LiveScoreAddTeam extends Component {
                         onChange={e => {
                             this.onRadioSwitch(e)
                         }}
+                        style={{
+                            overflowX: 'unset'
+                        }}
                         value={managerType}
                     >
                         <div className="row ml-2" style={{ marginTop: 18 }}>

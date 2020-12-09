@@ -52,16 +52,18 @@ class LiveScoreMatchSheet extends Component {
             selectedMatch: null,
             selectedTemplateId: null,
             templateType: null,
+            competitionOrganisationId : null,
             rounds: [],
         };
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton());
+            const { id , competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             if (id !== undefined) {
                 this.props.getLiveScoreDivisionList(id);
-                this.setState({ onDivisionLoad: true, competitionId: id });
+                this.setState({ onDivisionLoad: true, competitionId: id , competitionOrganisationId : compOrgId });
                 this.props.getMatchPrintTemplateType();
                 this.refreshDownloads();
             }
@@ -81,8 +83,8 @@ class LiveScoreMatchSheet extends Component {
                     onDivisionLoad: false,
                     onTeamLoad: true,
                     division,
-                });
-                this.props.getliveScoreTeams(this.state.competitionId, division);
+                });      
+                this.props.getliveScoreTeams(this.state.competitionId, division, this.state.competitionOrganisationId);
             }
 
             if (this.props.liveScoreMatchSheetState.onTeamLoad === false && this.state.onTeamLoad === true) {
@@ -174,7 +176,7 @@ class LiveScoreMatchSheet extends Component {
 
     changeDivision(divisionId) {
         const { division } = divisionId;
-        this.props.getliveScoreTeams(this.state.competitionId, division);
+        this.props.getliveScoreTeams(this.state.competitionId, division , this.state.competitionOrganisationId);
         this.setState({
             division,
             teamLoad: true,
@@ -204,7 +206,10 @@ class LiveScoreMatchSheet extends Component {
             undefined,
             divisionId,
             undefined,
-            teamId
+            teamId,
+            undefined,
+            undefined,
+            this.state.competitionOrganisationId
         );
     }
 

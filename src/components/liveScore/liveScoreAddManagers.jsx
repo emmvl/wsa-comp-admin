@@ -357,6 +357,9 @@ class LiveScoreAddManager extends Component {
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}
                     value={managerRadioBtn}
+                    style={{
+                        overflowX: 'unset'
+                    }}
                 >
                     {/* <div className="row ml-2" style={{ marginTop: 18 }}>
                         <Radio value="new">{AppConstants.new}</Radio>
