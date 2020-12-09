@@ -55,7 +55,6 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (teamName, record) => (
             <NavLink to={{pathname:"/registration", state: {teamName: record.teamName, teamId :record.teamId}}}>
-                {console.log("h1",record)}
                 <span className="input-heading-add-another pt-0">{teamName}</span>
             </NavLink>
         )
