@@ -54,15 +54,17 @@ class LiveScoreEditBanners extends Component {
     }
 
     componentDidMount() {
-        const { organisationId } = getOrganisationData();
-        this.props.getBannerCnt(organisationId);
+        const { organisationId } = getOrganisationData() ? getOrganisationData() : null;
+        if (organisationId !== null) {
+            this.props.getBannerCnt(organisationId);
 
-        if (this.state.isEdit === true) {
-            this.props.liveScoreAddBannerUpdate(this.state.tableRecord, 'isEditBanner');
-        } else {
-            const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-            this.props.getLiveScoreBanners(id, organisationId);
-            this.props.liveScoreAddBannerUpdate('', 'isAddBanner');
+            if (this.state.isEdit === true) {
+                this.props.liveScoreAddBannerUpdate(this.state.tableRecord, 'isEditBanner');
+            } else {
+                const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+                this.props.getLiveScoreBanners(id, organisationId);
+                this.props.liveScoreAddBannerUpdate('', 'isAddBanner');
+            }
         }
     }
 

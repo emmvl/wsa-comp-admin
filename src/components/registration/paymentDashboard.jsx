@@ -384,8 +384,8 @@ class PaymentDashboard extends Component {
 
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null,
             };
             uniqueValues.push(obj);
             let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
@@ -532,8 +532,8 @@ class PaymentDashboard extends Component {
 
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null,
             };
             uniqueValues.push(obj);
             let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];

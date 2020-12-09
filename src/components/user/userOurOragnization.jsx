@@ -467,7 +467,7 @@ class UserOurOrganization extends Component {
                     formData.append("affiliateOrgId", affiliate.affiliateOrgId)
                     formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
                     formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
-                    formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+                    formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
                     formData.append("name", affiliate.name);
                     formData.append("street1", affiliate.street1);
                     formData.append("street2", affiliate.street2);
@@ -490,7 +490,7 @@ class UserOurOrganization extends Component {
             formData.append("organisationPhotoId", tableRowData.id);
             formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
             formData.append("photoUrl", tableRowData.photoUrl);
-            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+            formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
 
             this.setState({ photoLoading: true });
             this.props.saveOrganisationPhotoAction(formData);
@@ -507,7 +507,7 @@ class UserOurOrganization extends Component {
         if (this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2) {
             termsAndConditionsValue = affiliate.termsAndConditionsFile;
         }
-        formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+        formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
         formData.append("termsAndConditions", termsAndConditionsValue ? termsAndConditionsValue : "");
         formData.append("termsAndCondition", this.state.termsAndCondititionFile ? this.state.termsAndCondititionFile : "");
@@ -1319,7 +1319,7 @@ class UserOurOrganization extends Component {
                                             {this.termsAndConditionsView()}
                                         </div>
                                     </TabPane>
-                                    {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
+                                    {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
                                         (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
                                             <TabPane tab={AppConstants.charity} key="4">
                                                 <div className="tab-formView mt-5">

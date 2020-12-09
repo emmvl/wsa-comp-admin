@@ -174,7 +174,7 @@ class UserEditAffiliates extends Component {
                 )
             ) {
                 let orgVal = this.state.organisationId;
-                let name = getOrganisationData().name;
+                let name = getOrganisationData() ? getOrganisationData().name : null;
                 this.props.updateAffiliateAction(
                     orgVal,
                     AppConstants.affiliatedToOrgId
@@ -353,8 +353,8 @@ class UserEditAffiliates extends Component {
                 );
                 formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
                 formData.append(
-                    "organisationId",
-                    getOrganisationData().organisationUniqueKey
+                    "organisationId", getOrganisationData() ?
+                    getOrganisationData().organisationUniqueKey : null
                 );
                 formData.append("name", affiliate.name);
                 formData.append("street1", affiliate.street1);
