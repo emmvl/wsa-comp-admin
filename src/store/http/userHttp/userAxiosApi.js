@@ -442,8 +442,15 @@ let userHttpApi = {
   getSpectatorList(payload){
     const url = `users/dashboard/spectator`;
     return Method.dataPost(url, token, payload);
-  }
-
+  },
+  registrationResendEmail(teamId,userId){
+    let payload = {
+      teamId :teamId,
+      userId :userId
+    }
+    const url = `api/users/registration/resendmail`;
+    return Method.dataPost(url, token, payload);
+  },
 };
 
 let Method = {

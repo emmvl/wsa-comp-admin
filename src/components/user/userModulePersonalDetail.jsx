@@ -33,6 +33,7 @@ import {
     getUmpireData,
     getCoachData,
     getUmpireActivityListAction,
+    registrationResendEmailAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -2796,6 +2797,7 @@ function mapDispatchToProps(dispatch) {
             getUmpireActivityListAction,
             getPurchasesListingAction,
             getReferenceOrderStatus,
+            registrationResendEmailAction
         },
         dispatch
     );

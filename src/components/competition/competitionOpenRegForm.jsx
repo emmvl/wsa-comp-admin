@@ -1468,7 +1468,7 @@ class CompetitionOpenRegForm extends Component {
                                                 })}
                                                 style={{ width: 92.5 }}
                                             >
-                                                {tabKey === "2" ? AppConstants.save : AppConstants.next}
+                                                {tabKey === "2" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next}
                                             </Button>
                                         </Tooltip>
                                         {tabKey == "2" && (
