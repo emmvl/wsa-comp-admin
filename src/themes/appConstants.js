@@ -906,6 +906,7 @@ const AppConstants = {
   selectOrganisation: 'Select Organisation',
 
   goalExport: '/stats/export/scoringByPlayer?competitionId=',
+  incidentExport : '/incident/export?entityId=',
   gameTimeExport: '/stats/export/gametime?competitionId=',
   teamAttendanceExport: '/players/export/teamattendance?competitionId=',
   proceed: 'Skip and Proceed',
@@ -1613,7 +1614,8 @@ const AppConstants = {
   matchDayComp: 'Match Day Competitions',
   backToMatchDay: 'Back To Match Day',
   umpireAccreditation: "Umpire Accreditation",
-  expiry: "Expiry"
+  expiry: "Expiry",
+  incidentExport : '/incident/export?entityId=',
 };
 
 export default AppConstants;
