@@ -16,6 +16,8 @@ import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sess
 import { isArrayNotEmpty } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 
+import { exportFilesAction } from "../../store/actions/appAction"
+
 const { Content } = Layout;
 let this_Obj = null;
 
@@ -121,6 +123,7 @@ class LiveScoreIncidentList extends Component {
             sortBy: null,
             sortOrder: null,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
+            competitionId:null
         };
         this_Obj = this
     }
@@ -150,6 +153,7 @@ class LiveScoreIncidentList extends Component {
         } else {
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
+                this.setState({ competitionId : id})
                 if (incidentListActionObject) {
                     let offset = incidentListActionObject.offset
                     let searchText = incidentListActionObject.search
@@ -166,6 +170,13 @@ class LiveScoreIncidentList extends Component {
             }
         }
     }
+
+
+    onExport = () => {
+        let url = AppConstants.incidentExport + this.state.competitionId + `&entityTypeId=1&search=`
+        this.props.exportFilesAction(url)
+    }
+
 
     checkUserId = (record) => {
         if (record.player.userId == null) {
@@ -275,7 +286,7 @@ class LiveScoreIncidentList extends Component {
                             </div> */}
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() =>this.onExport()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -397,7 +408,7 @@ class LiveScoreIncidentList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreIncidentList }, dispatch)
+    return bindActionCreators({ liveScoreIncidentList , exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

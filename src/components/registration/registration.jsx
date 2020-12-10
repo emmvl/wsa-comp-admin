@@ -316,7 +316,9 @@ class Registration extends Component {
                 let teamName = this.props.location.state ? this.props.location.state.teamName : null;
                 let teamId = this.props.location.state ? this.props.location.state.teamId : -1;
                 this.setState({teamName: teamName, teamId: teamId})
+                setTimeout(()=> {
                 this.handleRegTableList(1);
+                }, 300)
             }
         } else {
             history.push("/");
@@ -492,7 +494,9 @@ class Registration extends Component {
 
     clearFilterByTeamId = () => {
         this.setState({teamName: null, teamId: -1})
+        setTimeout(() => {
         this.handleRegTableList(1);   
+        }, 300)
     }
 
     headerView = () => (

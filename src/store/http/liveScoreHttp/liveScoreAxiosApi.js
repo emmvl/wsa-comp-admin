@@ -256,7 +256,7 @@ const LiveScoreAxiosApi = {
 
     liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder) {
         let url = null;
-        url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}`;
+        url = `/incident?entityId=${competitionID}&entityTypeId=1&search=${search}&limit=${limit}&offset=${offset}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
