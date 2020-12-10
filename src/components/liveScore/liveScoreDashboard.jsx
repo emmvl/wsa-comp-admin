@@ -17,6 +17,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import ValidationConstants from "../../themes/validationConstant";
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
 let this_obj = null;
@@ -224,7 +225,7 @@ const columnsTodaysMatch = [
             isArrayNotEmpty(umpires) && umpires.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
                     // className="desc-text-style side-bar-profile-data"
-                      className='multi-column-text-aligned'
+                    className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
     }, {
@@ -551,7 +552,8 @@ class LiveScoreDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            incidents: "incidents"
+            incidents: "incidents",
+            liveScoreCompIsParent: false
         }
         this_obj = this
         this.props.initializeCompData()
@@ -563,11 +565,19 @@ class LiveScoreDashboard extends Component {
         let currentTime = moment.utc().format()
 
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.props.liveScoreDashboardListAction(id, startDay, currentTime)
+            this.setLivScoreCompIsParent()
+            const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId)
         } else {
             history.push('/matchDayCompetitions')
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     checkUserId(record) {
@@ -645,7 +655,7 @@ class LiveScoreDashboard extends Component {
                     </div>
                 </div>
 
-                <div className="col-sm text-right">
+                {this.state.liveScoreCompIsParent && <div className="col-sm text-right">
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
@@ -680,6 +690,7 @@ class LiveScoreDashboard extends Component {
                         </div>
                     </div>
                 </div>
+                }
             </div>
         )
     }

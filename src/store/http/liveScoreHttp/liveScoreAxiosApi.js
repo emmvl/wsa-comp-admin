@@ -755,8 +755,8 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, localStorage.token, data);
     },
 
-    liveScoreDashboard(competitionID, startDay, currentTime) {
-        const url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}`;
+    liveScoreDashboard(competitionID, startDay, currentTime, competitionOrganisationId) {
+        const url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}&competitionOrganisationId=${competitionOrganisationId}`;
         return Method.dataGet(url, token);
     },
 
