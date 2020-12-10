@@ -74,11 +74,11 @@ const columns = [
     },
     {
         title: 'Affiliate',
-        dataIndex: 'competitionOrganisation',
+        dataIndex: 'linkedCompetitionOrganisation',
         key: 'organisation',
         sorter: true,
         onHeaderCell: () => listeners('affiliate'),
-        render: (competitionOrganisation) => <span>{competitionOrganisation ? competitionOrganisation.name : ""}</span>
+        render: (linkedCompetitionOrganisation) => <span>{linkedCompetitionOrganisation ? linkedCompetitionOrganisation.name : ""}</span>
     },
     // Affiliate
     {

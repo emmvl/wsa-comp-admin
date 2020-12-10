@@ -9,6 +9,7 @@ import LiveScoreAxiosApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
 import CompetitionAxiosApi from 'store/http/competitionHttp/competitionAxiosApi';
 
 function* failSaga(result) {
+    console.log(result)
     yield put({
         type: ApiConstants.API_LIVE_SCORE_TEAM_FAIL,
         error: result,
@@ -24,6 +25,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log(error)
     yield put({
         type: ApiConstants.API_LIVE_SCORE_TEAM_ERROR,
         error,
@@ -47,7 +49,7 @@ function* errorSaga(error) {
 
 function* liveScoreTeamSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreTeam, action.competitionID, action.divisionId,action.compOrgId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreTeam, action.competitionID, action.divisionId, action.compOrgId);
 
         if (result.status === 1) {
             yield put({
@@ -173,11 +175,11 @@ function* addTeamLiveScoreSaga(action) {
             if (action.sourceIdAvailable === true && action.teamUniqueKey) {
                 const result1 = yield call(CompetitionAxiosApi.updateCompTeamName, updateCompData);
                 if (result1.status === 1) {
-                yield put({
-                    type: ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS,
-                    payload: result1.result.data
-                });
-            }
+                    yield put({
+                        type: ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS,
+                        payload: result1.result.data
+                    });
+                }
             }
         } else {
             yield call(failSaga, result);

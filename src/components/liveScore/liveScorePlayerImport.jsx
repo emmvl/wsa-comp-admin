@@ -123,10 +123,6 @@ class LiveScorerPlayerImport extends Component {
         }
     };
 
-    onExport = () => {
-        let url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`;
-        this.props.exportFilesAction(url);
-    };
 
     contentView = () => (
         <div className="content-view pt-4">

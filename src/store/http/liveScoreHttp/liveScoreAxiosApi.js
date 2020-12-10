@@ -958,8 +958,9 @@ const LiveScoreAxiosApi = {
         const body = new FormData();
         body.append('file', csvFile, csvFile.name);
 
-        const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        const url = `/players/import?competitionId=${id}`;
+        const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+        const url = `/players/import?competitionOrganisationId=${compOrgId}`;
         return Method.dataPost(url, token, body);
     },
 
