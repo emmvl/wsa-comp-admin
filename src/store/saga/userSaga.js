@@ -972,6 +972,24 @@ function* getSpectatorListSaga(action) {
   }
 }
 
+function* registrationResendEmailSaga(action){
+  try {
+    const result = yield call(UserAxiosApi.registrationResendEmail, action.teamId,action.userId);
+    
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1021,4 +1039,5 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_BANNER_COUNT_LOAD, getBannerCount);
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
   yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
+  yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
 }

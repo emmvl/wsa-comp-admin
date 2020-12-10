@@ -881,6 +881,16 @@ function userReducer(state = initialState, action) {
         status: action.status
       };
 
+    case ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD:
+      return{...state,onLoad: true};
+    
+    case ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS:
+      return{
+        ...state,
+        onLoad: false,
+        status: action.status
+      }
+
     ////Coach
     case ApiConstants.API_CLEAR_LIST_DATA:
       state.affiliateTo = []

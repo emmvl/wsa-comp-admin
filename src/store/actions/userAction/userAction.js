@@ -416,6 +416,15 @@ function getSpectatorListAction(payload, sortBy, sortOrder) {
     };
 }
 
+function registrationResendEmailAction(teamId,userId){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD,
+        teamId,
+        userId
+    } 
+    return action;
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -469,5 +478,6 @@ export {
     getBannerCnt,
     updateBannerAction,
     clearListAction,
-    getSpectatorListAction
+    getSpectatorListAction,
+    registrationResendEmailAction
 };
