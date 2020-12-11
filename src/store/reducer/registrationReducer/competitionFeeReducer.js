@@ -445,6 +445,7 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
     selectedSeasonalFeeKey = [];
     selectedSeasonalInstalmentDates = [];
     //if (paymentDataArray) {
+
     for (let item of seasonalFee) {
         let paymentOptObj = {
             feesTypeRefId: 2,
@@ -1925,7 +1926,7 @@ function competitionFees(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                seasonalPaymentDefault: seasonalPaymentData,
+                seasonalPaymentDefault: seasonalPayment,
                 seasonalTeamPaymentDefault: seasonalPayment,
                 error: null
             };
@@ -2985,6 +2986,9 @@ function competitionFees(state = initialState, action) {
                 state.competitionDetailData[action.key] = action.value;
             }
             if (action.key === "teamSeasonalSchoolRegCode") {
+                state.competitionDetailData[action.key] = action.value;
+            }
+            if(action.key === "seasonalSchoolRegCode"){
                 state.competitionDetailData[action.key] = action.value;
             }
             return { ...state };
