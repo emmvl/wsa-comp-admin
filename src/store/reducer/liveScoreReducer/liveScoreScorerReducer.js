@@ -105,15 +105,15 @@ function liveScoreScorerState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
-            let compOrgId = competitionOrganisation? competitionOrganisation.id :0
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             let teamsArray = JSON.parse(JSON.stringify(action.result))
             // state.allTeamData = JSON.parse(JSON.stringify(action.result))
             let teamObject = {
                 name: "All Teams",
                 id: null
             }
-            
-            state.allTeamData = teamsArray.filter(item => item.competitionOrganisation.id == compOrgId);                         
+
+            state.allTeamData = teamsArray.filter(item => item?.linkedCompetitionOrganisation?.id == compOrgId);
             state.allTeamData.unshift(teamObject)
 
             return {

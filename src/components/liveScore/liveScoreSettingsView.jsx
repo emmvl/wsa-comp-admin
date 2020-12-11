@@ -345,7 +345,7 @@ class LiveScoreSettingsView extends Component {
         formData.append('gamesBorrowedThreshold', gamesBorrowedThreshold)
         formData.append('linkedCompetitionId', linkedCompetitionId)
         formData.append('yearRefId', yearRefId)
-        formData.append('isInvitorsChanged', selectionValue)
+        formData.append('isInvitorsChanged', selectionValue.toString())
         if (attendenceRecordingTime) {
             formData.append('attendanceSelectionTime', attendenceRecordingTime)
         }

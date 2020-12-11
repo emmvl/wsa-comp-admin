@@ -634,7 +634,7 @@ class LiveScoreAddTeam extends Component {
                 }
 
                 formData.append('competitionId', compId)
-                formData.append('organisationId', organisationId)
+                formData.append('competitionOrganisationId', organisationId)
                 formData.append('divisionId', divisionId)
                 formData.append('userIds', usersArray)
 
@@ -663,7 +663,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                 }
                 formData.append('competitionId', compId)
-                formData.append('organisationId', organisationId)
+                formData.append('competitionOrganisationId', organisationId)
                 formData.append('divisionId', divisionId)
                 formData.append('firstName', firstName)
                 formData.append('lastName', lastName)
@@ -693,7 +693,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                 }
                 formData.append('competitionId', compId)
-                formData.append('organisationId', organisationId)
+                formData.append('competitionOrganisationId', organisationId)
                 formData.append('divisionId', divisionId)
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey, this.state.sourceIdAvailable, teamUniqueKey)
             }

@@ -1,7 +1,6 @@
 import ApiConstants from "themes/apiConstants";
 
-function getliveScoreTeams(competitionID, divisionId,compOrgId) {
-    console.log(competitionID,divisionId,compOrgId)
+function getliveScoreTeams(competitionID, divisionId, compOrgId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_LOAD,
         competitionID,
@@ -53,14 +52,14 @@ function liveScoreGetAffiliate(payload) {
     };
 }
 
-function liveAddNewTeam(data, teamId, key, screenKey,sourceIdAvailable, teamUniqueKey) {
+function liveAddNewTeam(data, teamId, key, screenKey, sourceIdAvailable, teamUniqueKey) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_LOAD,
         payload: data,
         teamId,
         key,
         screenKey,
-        sourceIdAvailable, 
+        sourceIdAvailable,
         teamUniqueKey
     };
 }
@@ -86,7 +85,7 @@ function liveScoreGetTeamDataAction(teamId) {
 }
 
 // Team list with pagination
-function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, sortOrder,competitionOrganisationId) {
+function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, sortOrder, competitionOrganisationId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGING_LOAD,
         competitionID,

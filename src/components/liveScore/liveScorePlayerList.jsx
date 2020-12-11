@@ -58,8 +58,8 @@ const columns = [
                 profilePicture ? (
                     <img className="user-image" src={profilePicture} alt="" height="70" width="70" />
                 ) : (
-                    <span>{AppConstants.noImage}</span>
-                )
+                        <span>{AppConstants.noImage}</span>
+                    )
             )
         }
     },
@@ -144,8 +144,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team.name}</span>
             </NavLink>
         ) : (
-            <span>{team.name}</span>
-        )
+                <span>{team.name}</span>
+            )
     },
     {
         title: 'Contact No',
@@ -195,6 +195,7 @@ class LiveScorePlayerList extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            compOrgId: null
         }
         _this = this;
     }
@@ -202,8 +203,10 @@ class LiveScorePlayerList extends Component {
     componentDidMount() {
         let { playerListActionObject } = this.props.liveScorePlayerState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
+            const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
+            console.log(JSON.parse(getLiveScoreCompetiton()));
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            this.setState({ competitionId: id, compOrgId: compOrgId })
             if (id !== null) {
                 if (playerListActionObject) {
                     let offset = playerListActionObject.offset
@@ -315,7 +318,7 @@ class LiveScorePlayerList extends Component {
     }
 
     onExport = () => {
-        let url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`
+        let url = AppConstants.exportUrl + `competitionOrganisationId=${this.state.compOrgId}`
         this.props.exportFilesAction(url)
     }
 
