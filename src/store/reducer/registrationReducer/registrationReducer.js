@@ -1040,19 +1040,24 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
+      console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      if(action.key){
+        state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
+      }else{
+        state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;
+      }
       return {
         ...state,
         error: null
       };
 
     ///membership fees radip apply fees on change
-    case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
-      return {
-        ...state,
-        error: null
-      };
+    // case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
+    //   state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
+    //   return {
+    //     ...state,
+    //     error: null
+    //   };
 
 
     ////age mandate and membershipTypes onchange selection checkbox

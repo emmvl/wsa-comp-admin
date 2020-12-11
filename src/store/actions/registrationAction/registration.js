@@ -135,11 +135,12 @@ function updatedDiscountDataAction(discountData) {
 }
 
 ////membership fees radio apply fees on change
-function membershipFeesApplyRadioAction(radioApplyId, feesIndex) {
+function membershipFeesApplyRadioAction(radioApplyId, feesIndex, key) {
     return {
         type: ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES,
         radioApplyId,
         feesIndex,
+        key
     };
 }
 
