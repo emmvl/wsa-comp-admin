@@ -31,7 +31,7 @@ function* errorSaga(error) {
 
 export function* liveScoreDashboardSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreDashboard, action.competitionID, action.startDay, action.currentTime, action.competitionOrganisationId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreDashboard, action.competitionID, action.startDay, action.currentTime, action.competitionOrganisationId,action.liveScoreCompIsParent);
         if (result.status === 1) {
 
             yield put({

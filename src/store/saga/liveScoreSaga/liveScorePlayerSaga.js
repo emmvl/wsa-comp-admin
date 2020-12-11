@@ -99,7 +99,7 @@ function* liveScoreAddEditPlayerSaga(action) {
 // Match Import
 function* liveScorePlayerImportSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile);
+        const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile, action.key);
 
         if (result.status === 1) {
             yield put({
