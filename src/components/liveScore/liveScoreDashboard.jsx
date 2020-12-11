@@ -565,20 +565,22 @@ class LiveScoreDashboard extends Component {
         let currentTime = moment.utc().format()
 
         if (getLiveScoreCompetiton()) {
-            this.setLivScoreCompIsParent()
             const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
-            this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId)
+            checkLivScoreCompIsParent().then((value) => {
+                this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
+                this.setState({
+                    liveScoreCompIsParent: value
+                })
+            })
+
+
         } else {
             history.push('/matchDayCompetitions')
         }
     }
 
-    setLivScoreCompIsParent = () => {
-        checkLivScoreCompIsParent().then((value) => (
-            this.setState({ liveScoreCompIsParent: value })
-        ))
-    }
+
 
     checkUserId(record) {
         if (record.player.userId == null) {

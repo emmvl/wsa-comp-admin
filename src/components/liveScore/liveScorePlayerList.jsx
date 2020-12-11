@@ -20,6 +20,7 @@ import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { exportFilesAction } from "../../store/actions/appAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { teamListData } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -195,14 +196,18 @@ class LiveScorePlayerList extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
-            compOrgId: null
+            compOrgId: null,
+            liveScoreCompIsParent: false
         }
         _this = this;
     }
 
+
+
     componentDidMount() {
         let { playerListActionObject } = this.props.liveScorePlayerState
         if (getLiveScoreCompetiton()) {
+            this.setLivScoreCompIsParent()
             const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
             console.log(JSON.parse(getLiveScoreCompetiton()));
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
@@ -224,6 +229,11 @@ class LiveScorePlayerList extends Component {
         } else {
             history.push('/matchDayCompetitions')
         }
+    }
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     // Delete player
@@ -318,7 +328,12 @@ class LiveScorePlayerList extends Component {
     }
 
     onExport = () => {
-        let url = AppConstants.exportUrl + `competitionOrganisationId=${this.state.compOrgId}`
+        let url = null
+        if (this.state.liveScoreCompIsParent) {
+            url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`
+        } else {
+            url = AppConstants.exportUrl + `competitionOrganisationId=${this.state.compOrgId}`
+        }
         this.props.exportFilesAction(url)
     }
 
