@@ -117,6 +117,13 @@ class UserProfileEdit extends Component {
             } else if (moduleFrom === "6") {
                 titleLabel = AppConstants.edit + ' ' + AppConstants.child;
                 section = "child";
+            } else if (moduleFrom === "7") {
+                titleLabel = AppConstants.addChild;
+                section = "child";
+            }
+            else if (moduleFrom === "8") {
+                titleLabel = AppConstants.addParent_guardian;
+                section = "primary";
             }
             await this.setState({
                 displaySection: moduleFrom,
@@ -778,6 +785,77 @@ class UserProfileEdit extends Component {
         )
     }
 
+    addParentOrChild = () => {
+        return(
+            <div className="content-view pt-0">
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.firstName }]}>
+                            <InputWithHead
+                                auto_complete="new-firstName"
+                                required="required-field"
+                                heading={AppConstants.firstName}
+                                placeholder={AppConstants.firstName}
+                                name={'firstName'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
+                            />
+                        </Form.Item>
+                    </div>
+                    <div className="col-sm">
+                        <Form.Item name='lastName' rules={[{ required: false }]}>
+                            <InputWithHead
+                                auto_complete="new-lastName"
+                                required="required-field"
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.lastName}
+                                name={'lastName'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
+                            />
+                        </Form.Item>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item name='email' rules={[{ required: true, message: ValidationConstants.emailField[0] }]}>
+                            <InputWithHead
+                                auto_complete="new-email"
+                                heading={AppConstants.emailAdd}
+                                placeholder={AppConstants.emailAdd}
+                                name={'email'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                            />
+                        </Form.Item>
+                    </div>
+                    <div className="col-sm">
+                        <InputWithHead heading={AppConstants.dob} />
+                        <DatePicker
+                            // size="large"
+                            style={{ width: '100%'}}
+                            onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
+                            format="DD-MM-YYYY"
+                            showTime={false}
+                            placeholder="dd-mm-yyyy"
+                            name={'dateOfBirth'}
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-6">
+                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}>
+                            <InputWithHead
+                                auto_complete="new-mobileNumber"
+                                heading={AppConstants.contactMobile}
+                                placeholder={AppConstants.contactMobile}
+                                name={'mobileNumber'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
+                            />
+                        </Form.Item>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     contentView = () => {
         const { displaySection } = this.state;
         return (
@@ -787,6 +865,7 @@ class UserProfileEdit extends Component {
                 {displaySection === "3" && <div>{this.emergencyContactEdit()}</div>}
                 {displaySection === "4" && <div>{this.otherInfoEdit()}</div>}
                 {displaySection === "5" && <div>{this.medicalEdit()}</div>}
+                {(displaySection === "7" || displaySection === "8") && <div>{this.addParentOrChild()}</div>}
             </div>
         );
     };
@@ -795,6 +874,12 @@ class UserProfileEdit extends Component {
         let data = this.state.userData;
         data["section"] = this.state.section;
         data["organisationId"] = this.state.organisationId;
+        if(this.state.displaySection == 8 && !data.parentUserId){
+            data["parentUserId"] = 0;
+        }
+        else if(this.state.displaySection == 7 && !data.childUserId){
+            data["childUserId"] = 0;
+        }
         this.props.userProfileUpdateAction(data);
         this.setState({ saveLoad: true });
     }

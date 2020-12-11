@@ -46,11 +46,12 @@ function liveScoreDeletePlayerAction(playerId, competitionId, offset, key) {
 
 
 
-function liveScorePlayerImportAction(competitionID, csvFile) {
+function liveScorePlayerImportAction(competitionID, csvFile, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD,
         competitionID,
         csvFile,
+        key
     };
 }
 

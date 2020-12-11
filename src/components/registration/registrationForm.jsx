@@ -107,6 +107,28 @@ const columns = [
                 onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
             />
         )
+    },
+
+    {
+        title:"Registration Cap",
+        dataIndex: "registrationType",
+        key:"registrationCap",
+        render: (registrationCap, record, index) =>  {
+            console.log("hi",record)
+            return (
+                <div>
+                
+                 <InputWithHead
+                 placeholder="Registration Cap"
+                 onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                 value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
+                 ></InputWithHead>
+  
+                </div>
+ 
+            )
+        }
+
     }
 ];
 
@@ -645,6 +667,7 @@ class RegistrationForm extends Component {
                             {item.membershipProductName}
                         </span>
                         <div className="table-responsive home-dash-table-view table-competition">
+                            {console.log(item.membershipProductTypes)}
                             <Table
                                 rowKey={item => item.id}
                                 showHeader

@@ -68,11 +68,14 @@ function getRegistrationForm(yearId, competitionId) {
 }
 
 /// update registration object
-function updateRegistrationForm(updatedData, key) {
+function updateRegistrationForm(updatedData, key, subKey, membershipProductTypeIndex, getMembershipproductItem) {
     return {
         type: ApiConstants.API_UPDATE_REG_FORM_LOAD,
         updatedData,
-        key
+        key,
+        subKey,
+        membershipProductTypeIndex,
+        getMembershipproductItem
     };
 }
 

@@ -755,8 +755,14 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, localStorage.token, data);
     },
 
-    liveScoreDashboard(competitionID, startDay, currentTime, competitionOrganisationId) {
-        const url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}&competitionOrganisationId=${competitionOrganisationId}`;
+    liveScoreDashboard(competitionID, startDay, currentTime, competitionOrganisationId, liveScoreCompIsParent) {
+        console.log("liveScoreCompIsParent", liveScoreCompIsParent)
+        let url = ""
+        if (!liveScoreCompIsParent) {
+            url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}&competitionOrganisationId=${competitionOrganisationId}`;
+        } else {
+            url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}`;
+        }
         return Method.dataGet(url, token);
     },
 
@@ -954,13 +960,16 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    liveScorePlayerImport(competitionId, csvFile) {
+    liveScorePlayerImport(competitionId, csvFile, key) {
+        console.log('called', key)
         const body = new FormData();
         body.append('file', csvFile, csvFile.name);
 
         const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
-        const url = `/players/import?competitionOrganisationId=${compOrgId}`;
+        const url = key !== "own" ? `/players/import?competitionOrganisationId=${compOrgId}` : `/players/import?competitionId=${id}`
+
+        console.log(url)
         return Method.dataPost(url, token, body);
     },
 
