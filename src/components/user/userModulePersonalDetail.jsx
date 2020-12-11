@@ -33,7 +33,8 @@ import {
     getUmpireData,
     getCoachData,
     getUmpireActivityListAction,
-    registrationResendEmailAction
+    registrationResendEmailAction,
+    userProfileUpdateAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -569,6 +570,10 @@ const columnsPersonalPrimaryContacts = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
+
+                    <Menu.Item key="2">
+                        <span onClick={() => this_Obj.parentUnLinkView(record)}>Unlink</span>
+                    </Menu.Item>
                 </SubMenu>
             </Menu>
         ),
@@ -654,6 +659,10 @@ const columnsPersonalChildContacts = [
                         >
                             <span>Edit</span>
                         </NavLink>
+                    </Menu.Item>
+
+                    <Menu.Item key="2">
+                        <span onClick={() => this_Obj.childUnLinkView(record)}>Unlink</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -1203,7 +1212,7 @@ class UserModulePersonalDetail extends Component {
             UmpireActivityListSortOrder: null,
             purchasesOffset: 0,
             purchasesListSortBy: null,
-            purchasesListSortOrder: null
+            purchasesListSortOrder: null,
         };
     }
 
@@ -1325,6 +1334,40 @@ class UserModulePersonalDetail extends Component {
             return statusValue
         }
         return statusValue
+    }
+
+    parentUnLinkView = (data) => {
+        let userState = this.props.userState;
+        let personal = userState.personalData;
+        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        let payload = {
+            userId: personal.userId,
+            organisationId: organisationId
+        };
+        data["section"]  = "unlink";
+        data["childUserId"] = personal.userId;
+        data["organisationId"] = organisationId;
+        this.props.userProfileUpdateAction(data);
+        setTimeout(() => {
+            this.props.getUserModulePersonalByCompetitionAction(payload);
+        }, 300);
+    }
+
+    childUnLinkView = (data) => {
+        let userState = this.props.userState;
+        let personal = userState.personalData;
+        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        let payload = {
+            userId: personal.userId,
+            organisationId: organisationId
+        };
+        data["section"]  = "unlink";
+        data["parentUserId"] = personal.userId;
+        data["organisationId"] = organisationId;
+        this.props.userProfileUpdateAction(data);
+        setTimeout(() => {
+            this.props.getUserModulePersonalByCompetitionAction(payload);
+        }, 300);
     }
 
     onChangeYear = (value) => {
@@ -1990,6 +2033,16 @@ class UserModulePersonalDetail extends Component {
                         >
                             {AppConstants.parentOrGuardianDetail}
                         </div>
+                        <NavLink
+                            to={{
+                                pathname: `/userProfileEdit`,
+                                state: { moduleFrom: "8", userData: userState.personalData },
+                            }}
+                        >
+                            <span className="input-heading-add-another" style={{paddingTop:"unset", marginBottom:"15px"}}>
+                                + {AppConstants.addParent_guardian}
+                            </span>
+                        </NavLink>
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
@@ -2009,6 +2062,17 @@ class UserModulePersonalDetail extends Component {
                         >
                             {AppConstants.childDetails}
                         </div>
+                        <NavLink
+                            to={{
+                                pathname: `/userProfileEdit`,
+                                state: { moduleFrom: "7", userData: userState.personalData },
+                            }}
+                        >
+                            <span className="input-heading-add-another" style={{paddingTop:"unset", marginBottom:"15px"}}>
+                                + {AppConstants.addChild}
+                            </span>
+                        </NavLink>
+            
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
@@ -2797,7 +2861,8 @@ function mapDispatchToProps(dispatch) {
             getUmpireActivityListAction,
             getPurchasesListingAction,
             getReferenceOrderStatus,
-            registrationResendEmailAction
+            registrationResendEmailAction,
+            userProfileUpdateAction
         },
         dispatch
     );
