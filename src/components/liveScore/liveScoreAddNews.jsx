@@ -93,11 +93,11 @@ class LiveScoreAddNews extends Component {
             const { id, organisationId } = JSON.parse(getLiveScoreCompetiton())
             if (this.state.screenKey === 'stateWideMsg') {
                 this.props.getliveScoreScorerList(organisationId, 4)
-                this.props.liveScoreManagerListAction(3, 1, organisationId)
+                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, organisationId)
             } else {
 
                 this.props.getliveScoreScorerList(id, 4)
-                this.props.liveScoreManagerListAction(3, 1, 1)
+                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, 1)
             }
         } else {
             history.push('/matchDayCompetitions')
