@@ -9,7 +9,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUmpireCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompetiton, getUmpireCompetitonData, getOrganisationData } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import history from "../../util/history";
@@ -49,22 +49,30 @@ class AddUmpire extends Component {
             isUmpire: false,
             isUmpireAffiliate: false,
             existingUmpireCoach_CheckBox: false,
-            existingUmpireCheckBox: false
+            existingUmpireCheckBox: false,
+            isCompParent: false,
         }
         this.formRef = React.createRef();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         let compId = null
 
         if (getUmpireCompetiton()) {
             compId = JSON.parse(getUmpireCompetiton())
-
+            let compData = JSON.parse(getUmpireCompetitonData())
+            let orgItem = await getOrganisationData();
+            let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let compOrgId = compData ? compData.organisationId : 0
+            let isCompParent = userOrganisationId === compOrgId
+            this.setState({ isCompParent });
+            console.log("isCompParent", isCompParent)
             this.props.umpireListAction({ refRoleId: JSON.stringify([5]), entityTypes: 1, compId: compId, offset: 0 })
             if (compId !== null) {
                 this.props.getUmpireAffiliateList({ id: compId })
                 this.setState({ isUmpireAffiliate: true })
             }
+            this.setInitialFieldValue()
         }
     }
 
@@ -115,13 +123,25 @@ class AddUmpire extends Component {
 
     setInitialFieldValue = () => {
         const { umpireData, affiliateId } = this.props.umpireState
-        this.formRef.current.setFieldsValue({
-            'First Name': umpireData.firstName,
-            'Last Name': umpireData.lastName,
-            'Email Address': umpireData.email,
-            'Contact no': umpireData.mobileNumber,
-            'umpireNewAffiliateName': affiliateId
-        })
+        let compData = JSON.parse(getUmpireCompetitonData())
+        console.log("compData", compData)
+        let competitionOrgId = compData.competitionOrganisation ? compData.competitionOrganisation.id : null
+        let umpireNewAffiliateName = !this.state.isCompParent ? competitionOrgId : affiliateId
+        if (this.state.isEdit) {
+            this.formRef.current.setFieldsValue({
+                'First Name': umpireData.firstName,
+                'Last Name': umpireData.lastName,
+                'Email Address': umpireData.email,
+                'Contact no': umpireData.mobileNumber,
+                'umpireNewAffiliateName': umpireNewAffiliateName
+            })
+        } else {
+
+            umpireNewAffiliateName && this.formRef.current.setFieldsValue({
+                'umpireNewAffiliateName': umpireNewAffiliateName
+            })
+        }
+
     }
 
     filterUmpireList = () => {
@@ -360,14 +380,15 @@ class AddUmpire extends Component {
                         >
                             <Select
                                 mode="multiple"
+                                disabled={!this.state.isCompParent}
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
                                 className="w-100"
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 // value={affiliateId}
                                 optionFilterProp="children"
-                                // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
-                                // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
+                            // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
+                            // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
                             >
                                 {affiliateListResult.map((item) => (
                                     <Option key={'organisation_' + item.id} value={item.id}>{item.name}</Option>
