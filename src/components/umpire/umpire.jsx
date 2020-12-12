@@ -12,7 +12,7 @@ import ValidationConstants from "themes/validationConstant";
 import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from "util/sessionStorage";
+import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
 import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
@@ -70,12 +70,13 @@ function tableSort(key) {
     this_obj.setState({ sortBy, sortOrder });
     this_obj.props.umpireMainListAction({
         refRoleId: JSON.stringify([15, 20]),
-        entityTypes: entityTypes("COMPETITION"),
+        entityTypes: this_obj.state.isCompParent ? 1 : 6,
         compId: this_obj.state.selectedComp,
         offset: this_obj.state.offsetData,
         sortBy,
         sortOrder,
-        userName: this_obj.state.searchText
+        userName: this_obj.state.searchText,
+        competitionOrgId: this_obj.state.compOrganisationId
     })
 }
 
@@ -237,8 +238,9 @@ class Umpire extends Component {
             compArray: [],
             offsetData: 0,
             sortBy: null,
-            sortOrder: null
-
+            sortOrder: null,
+            isCompParent: false,
+            compOrganisationId: 0
         };
 
         this_obj = this;
@@ -262,7 +264,7 @@ class Umpire extends Component {
         this.props.getRefBadgeData(this.props.appstate.accreditation)
     }
 
-    componentDidUpdate(nextProps) {
+    async componentDidUpdate(nextProps) {
         const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
@@ -287,19 +289,25 @@ class Umpire extends Component {
                     setUmpireCompition(firstComp);
                     setUmpireCompitionData(JSON.stringify(compData));
                 }
-
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+                let orgItem = await getOrganisationData();
+                let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+                let compOrgId = compData ? compData.organisationId : 0
+                let compOrganisationId = compData ? compData.competitionOrganisation ? compData.competitionOrganisation.id : 0 : 0
+                let isCompParent = userOrganisationId === compOrgId
+                this.setState({ isCompParent, compOrganisationId });
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
                     this.props.umpireMainListAction({
                         refRoleId: JSON.stringify([15, 20]),
-                        entityTypes: entityTypes("COMPETITION"),
+                        entityTypes: isCompParent ? 1 : 6,
                         compId: firstComp,
                         offset: this.state.offsetData,
                         sortBy,
                         sortOrder,
                         userName: this.state.searchText,
+                        competitionOrgId: compOrganisationId
                     });
                     this.setState({
                         selectedComp: firstComp,
@@ -349,12 +357,13 @@ class Umpire extends Component {
 
         this.props.umpireMainListAction({
             refRoleId: JSON.stringify([15, 20]),
-            entityTypes: entityTypes("COMPETITION"),
+            entityTypes: this.state.isCompParent ? 1 : 6,
             compId: this.state.selectedComp,
             offset,
             sortBy,
             sortOrder,
             userName: this.state.searchText,
+            competitionOrgId: this.state.compOrganisationId
         });
     };
 
@@ -392,7 +401,7 @@ class Umpire extends Component {
         );
     };
 
-    onChangeComp = (compID) => {
+    onChangeComp = async (compID) => {
         let selectedComp = compID.comp;
         // setUmpireCompId(selectedComp);
 
@@ -404,6 +413,11 @@ class Umpire extends Component {
                 break;
             }
         }
+        let orgItem = await getOrganisationData();
+        let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+        let compOrgId = compObj ? compObj.organisationId : 0
+        let isCompParent = userOrganisationId === compOrgId
+        this.setState({ isCompParent });
 
         setUmpireCompition(selectedComp);
         setUmpireCompitionData(JSON.stringify(compObj));
@@ -412,12 +426,13 @@ class Umpire extends Component {
 
         this.props.umpireMainListAction({
             refRoleId: JSON.stringify([15, 20]),
-            entityTypes: entityTypes("COMPETITION"),
+            entityTypes: this.state.isCompParent ? 1 : 6,
             compId: selectedComp,
             offset: 0,
             sortBy,
             sortOrder,
             userName: this.state.searchText,
+            competitionOrgId: this.state.compOrganisationId
         });
 
         this.setState({ selectedComp, competitionUniqueKey: compKey });
@@ -431,12 +446,13 @@ class Umpire extends Component {
         if (e.target.value === null || e.target.value === "") {
             this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
-                entityTypes: entityTypes("COMPETITION"),
+                entityTypes: this.state.isCompParent ? 1 : 6,
                 compId: this.state.selectedComp,
                 offset: 0,
                 userName: e.target.value,
                 sortBy,
                 sortOrder,
+                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -449,12 +465,13 @@ class Umpire extends Component {
         if (code === 13) { // 13 is the enter keycode
             this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
-                entityTypes: entityTypes("COMPETITION"),
+                entityTypes: this.state.isCompParent ? 1 : 6,
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
                 offset: 0,
                 sortBy,
                 sortOrder,
+                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -467,12 +484,13 @@ class Umpire extends Component {
         } else {
             this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
-                entityTypes: entityTypes("COMPETITION"),
+                entityTypes: this.state.isCompParent ? 1 : 6,
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
                 offset: 0,
                 sortBy,
                 sortOrder,
+                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -484,6 +502,8 @@ class Umpire extends Component {
 
     headerView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : [];
+        let { isCompParent } = this.state
+        console.log("isCompParent", isCompParent)
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -528,7 +548,7 @@ class Umpire extends Component {
                                 </div>
 
                                 <div className="col-sm pt-1">
-                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                    {isCompParent && <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink
                                             className="text-decoration-none"
                                             to={{
@@ -549,7 +569,7 @@ class Umpire extends Component {
                                                 </div>
                                             </Button>
                                         </NavLink>
-                                    </div>
+                                    </div>}
                                 </div>
                             </div>
                         </div>

@@ -36,7 +36,8 @@ export function* umpireRoasterListSaga(action) {
             action.status,
             action.refRoleId,
             action.paginationBody, action.sortBy,
-            action.sortOrder);
+            action.sortOrder,
+            action.entityType);
 
         if (result.status === 1) {
             yield put({

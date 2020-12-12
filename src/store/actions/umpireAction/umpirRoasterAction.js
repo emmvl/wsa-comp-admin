@@ -1,7 +1,7 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 function umpireRoasterListAction(competitionID, status, refRoleId, paginationBody, sortBy,
-    sortOrder) {
+    sortOrder , entityType) {
     const action = {
         type: ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD,
         competitionID,
@@ -9,7 +9,8 @@ function umpireRoasterListAction(competitionID, status, refRoleId, paginationBod
         refRoleId,
         paginationBody,
         sortBy,
-        sortOrder
+        sortOrder,
+        entityType
 
     };
     return action;

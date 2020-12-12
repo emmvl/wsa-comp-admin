@@ -833,7 +833,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Line up selection */}
                 <Checkbox
-                    className="single-checkbox pt-5 d-flex flex-column justify-content-center"
+                    className="single-checkbox pt-5 justify-content-center"
                     onChange={(e) => this.onChnageLineUpSelection(e.target.checked, record1)}
                     // onChange={(e) => this.props.onChangeSettingForm({ key: "lineupSelection", data: e.target.checked })}
                     checked={lineupSelection}
@@ -932,7 +932,7 @@ class LiveScoreSettingsView extends Component {
 
                 <div style={{ marginTop: 20 }}>
                     <Checkbox
-                        className="single-checkbox d-flex flex-column justify-content-center"
+                        className="single-checkbox  justify-content-center"
                         onChange={(e) => this.props.onChangeSettingForm({
                             key: "premierCompLink",
                             data: e.target.checked
@@ -1035,7 +1035,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={0} heading={AppConstants.buzzer} />
                 <div className="row mt-0 ml-1">
                     <Checkbox
-                        className="single-checkbox d-flex flex-column justify-content-center"
+                        className="single-checkbox d-flex justify-content-center"
                         onChange={(e) => this.props.onChangeSettingForm({
                             key: "buzzerEnabled",
                             data: e.target.checked
