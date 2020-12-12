@@ -254,9 +254,15 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder) {
+    liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder, isParent, competitionOrganisationId) {
         let url = null;
-        url = `/incident?entityId=${competitionID}&entityTypeId=1&search=${search}&limit=${limit}&offset=${offset}`;
+
+        if (isParent !== true) {
+            url = `/incident?entityId=${competitionOrganisationId}&entityTypeId=6&search=${search}&limit=${limit}&offset=${offset}`;
+
+        } else {
+            url = `/incident?entityId=${competitionID}&entityTypeId=1&search=${search}&limit=${limit}&offset=${offset}`;
+        }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
@@ -657,11 +663,17 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder) {
+    liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder, liveScoreCompIsParent) {
         // const competitionID = localStorage.getItem('competitionId');
         const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
-        let url = `/roster/admin?entityTypeId=${6}&roleId=${roleId}&entityId=${compOrgId}`;
+        let url = ""
+        if (!liveScoreCompIsParent) {
+            url = `/roster/admin?entityTypeId=${6}&roleId=${roleId}&entityId=${compOrgId}`;
+        } else {
+            url = `/roster/admin?entityTypeId=${1}&roleId=${roleId}&entityId=${id}`;
+        }
+
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
@@ -1079,12 +1091,22 @@ const LiveScoreAxiosApi = {
     },
 
     /// Get Player list with paging
-    getPlayerWithPagination(competitionID, offset, limit, search, sortBy, sortOrder) {
+    getPlayerWithPagination(competitionID, offset, limit, search, sortBy, sortOrder, isParent, competitionOrganisationId) {
+        console.log(isParent)
+
         let url = null;
-        if (search && search.length > 0) {
-            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+        if (!isParent) {
+            if (search && search.length > 0) {
+                url = `/players/admin?competitionOrganisationId=${competitionOrganisationId}&offset=${offset}&limit=${limit}&search=${search}`;
+            } else {
+                url = `/players/admin?competitionOrganisationId=${competitionOrganisationId}&offset=${offset}&limit=${limit}&search=`;
+            }
         } else {
-            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
+            if (search && search.length > 0) {
+                url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+            } else {
+                url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
+            }
         }
 
         if (sortBy && sortOrder) {

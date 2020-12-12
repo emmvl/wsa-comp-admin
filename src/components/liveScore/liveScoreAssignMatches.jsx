@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { assignMatchesAction, changeAssignStatus, unAssignMatcheStatus } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -195,7 +195,8 @@ class LiveScoreAssignMatch extends Component {
                 // columns: scoringType === "SINGLE" ? columns1 : columns2,
                 columns: columns2,
                 lodding: false,
-                scoring_Type: scoringType
+                scoring_Type: scoringType,
+                liveScoreCompIsParent: false,
             };
         } else {
             history.push('/matchDayCompetitions')
@@ -204,14 +205,18 @@ class LiveScoreAssignMatch extends Component {
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id ,competitionOrganisation} = JSON.parse(getLiveScoreCompetiton())
+            const { id, competitionOrganisation, organisationId } = JSON.parse(getLiveScoreCompetiton())
+            const orgItem = await getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
+
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
-            this.setState({ lodding: true })
+            this.setState({ lodding: true, liveScoreCompIsParent })
 
             if (id !== null) {
-                this.props.getliveScoreTeams(id,null,compOrgId)
+                this.props.getliveScoreTeams(id, null, compOrgId)
             } else {
                 history.push('/')
             }
@@ -238,12 +243,16 @@ class LiveScoreAssignMatch extends Component {
     }
 
     checkToShowAssignText = (team) => {
-        const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
-        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
-        if (team.competitionOrganisationId === compOrgId) {
+        if(!this.state.liveScoreCompIsParent){
+            const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            if (team.competitionOrganisationId === compOrgId) {
+                return true
+            } else {
+                return false
+            }
+        }else{
             return true
-        } else {
-            return false
         }
     }
 
@@ -293,7 +302,7 @@ class LiveScoreAssignMatch extends Component {
 
     headerView = () => {
         let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.allTeamData) ? this.props.liveScoreScorerState.allTeamData : []
-        
+
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">

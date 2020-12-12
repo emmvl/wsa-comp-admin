@@ -177,6 +177,8 @@ function* getPlayerListPaginationSaga(action) {
             action.search,
             action.sortBy,
             action.sortOrder,
+            action.isParent,
+            action.competitionOrganisationId
         );
 
         if (result.status === 1) {
