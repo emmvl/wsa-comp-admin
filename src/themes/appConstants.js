@@ -1618,7 +1618,9 @@ const AppConstants = {
   incidentExport : '/incident/export?entityId=',
   minNoDays: "Minimum number of days",
   _days: 'Days',
-  extendEndDate: "Extend End Date"
+  extendEndDate: "Extend End Date",
+  membershipFeeCap: "Membership Fee Cap",
+  perMatchFeesCannotSet: "Per match fees per player can't be set as this competition includes unnamed player type"
 };
 
 export default AppConstants;

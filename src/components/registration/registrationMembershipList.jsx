@@ -350,7 +350,7 @@ class RegistrationMembershipList extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="5" />
                 <Layout>
                     {this.headerView()}
                     <Content>
