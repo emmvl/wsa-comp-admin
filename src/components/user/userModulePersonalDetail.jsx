@@ -1213,6 +1213,7 @@ class UserModulePersonalDetail extends Component {
             purchasesOffset: 0,
             purchasesListSortBy: null,
             purchasesListSortOrder: null,
+            unlinkOnLoad: false
         };
     }
 
@@ -1299,6 +1300,17 @@ class UserModulePersonalDetail extends Component {
                 window.open(stripeDashboardUrl, '_newtab');
             }
         }
+
+        if(this.props.userState.onUpUpdateLoad == false && this.state.unlinkOnLoad == true){
+            let personal = this.props.userState.personalData;
+            let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+            let payload = {
+                userId: personal.userId,
+                organisationId: organisationId
+            };
+            this.props.getUserModulePersonalByCompetitionAction(payload);
+            this.setState({unlinkOnLoad: false})
+        }
     }
 
     apiCalls = (userId) => {
@@ -1340,34 +1352,22 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        let payload = {
-            userId: personal.userId,
-            organisationId: organisationId
-        };
         data["section"]  = "unlink";
         data["childUserId"] = personal.userId;
         data["organisationId"] = organisationId;
         this.props.userProfileUpdateAction(data);
-        setTimeout(() => {
-            this.props.getUserModulePersonalByCompetitionAction(payload);
-        }, 300);
+        this.setState({unlinkOnLoad: true});
     }
 
     childUnLinkView = (data) => {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        let payload = {
-            userId: personal.userId,
-            organisationId: organisationId
-        };
         data["section"]  = "unlink";
         data["parentUserId"] = personal.userId;
         data["organisationId"] = organisationId;
         this.props.userProfileUpdateAction(data);
-        setTimeout(() => {
-            this.props.getUserModulePersonalByCompetitionAction(payload);
-        }, 300);
+        this.setState({unlinkOnLoad: true});
     }
 
     onChangeYear = (value) => {

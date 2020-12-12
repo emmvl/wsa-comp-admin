@@ -52,6 +52,7 @@ const routeAdminRole = [
     "/appRegistrationForm",
     "/notFound",
     "/registrationMembershipList",
+    "/registrationMembershipCap",
     "/registrationCompetitionList",
     "/registrationFormList",
     "/competitionPlayerImport",

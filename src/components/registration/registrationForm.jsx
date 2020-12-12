@@ -116,7 +116,8 @@ const columns = [
         render: (registrationCap, record, index) =>  {
             return (
                 <InputWithHead
-                    placeholder="Registration Cap"
+                    style={{width: "70%"}}
+                    placeholder=" "
                     onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
                     value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
                     />

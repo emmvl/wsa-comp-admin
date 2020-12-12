@@ -389,12 +389,15 @@ class RegistrationMembershipFee extends Component {
 
         let membershipProductFeesTableData = this.props.registrationState.membershipProductFeesTableData;
         let feesData = membershipProductFeesTableData ? membershipProductFeesTableData.membershipFees.length > 0 ? membershipProductFeesTableData.membershipFees : [] : []
-        for(let item of feesData){
-            if(item.membershipProductFeesTypeRefId == 1){
+        for(let i in feesData){
+            if(feesData[i].membershipProductFeesTypeRefId == 1){
+                if(feesData[i].extendEndDate){
+                    this.membershipFeeApplyRadio(true, i, "isNeedExtendedDate")
+                }
                 this.formRef.current.setFieldsValue({
-                    [`validityDays`]: item.validityDays ? item.validityDays : null,
-                    [`extendEndDate`]: item.extendEndDate ? moment(item.extendEndDate,"MM-DD-YYYY") : null 
-                })
+                    [`validityDays${i}`]: feesData[i].validityDays ? feesData[i].validityDays : null,
+                    [`extendEndDate${i}`]: feesData[i].extendEndDate ? moment(feesData[i].extendEndDate,"YYYY-MM-DD") : null 
+                });
             }
         }
     }
@@ -847,10 +850,11 @@ class RegistrationMembershipFee extends Component {
                                                 <div className="row" style={{marginTop: 10,alignItems: "center"}}>
                                                     <div className="col-md-6">
                                                         <Form.Item
-                                                            name={`validityDays`}
+                                                            name={`validityDays${index}`}
                                                             rules={[{ required: true, message: ValidationConstants.daysRequired }]}
                                                         >
                                                             <InputWithHead
+                                                                setFieldsValue={item.validityDays}
                                                                 placeholder={AppConstants._days}
                                                                 onChange={(e) => this.membershipFeeApplyRadio(e.target.value, index, "validityDays")}
                                                                 type={"number"}
@@ -869,10 +873,11 @@ class RegistrationMembershipFee extends Component {
                                                 {item.isNeedExtendedDate && (
                                                     <div style={{marginLeft: 35,marginTop: 12}}>
                                                         <Form.Item
-                                                            name={`extendEndDate`}
+                                                            name={`extendEndDate${index}`}
                                                             rules={[{ required: true, message: ValidationConstants.extendEndDateRequired }]}
                                                         >
                                                             <DatePicker
+                                                                setFieldsValue={item.extendEndDate ? moment(item.extendEndDate,"MM-DD-YYYY") : null}
                                                                 size="large"
                                                                 placeholder={"dd-mm-yyyy"}
                                                                 style={{ width: "100%" }}
