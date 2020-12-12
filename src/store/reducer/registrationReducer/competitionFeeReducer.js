@@ -1361,7 +1361,8 @@ function createProductFeeArr(data) {
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
                         "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal,
                         "teamRegChargeTypeRefId": statusteamSeasonal.result.teamRegChargeTypeRefId,
-                        "isPlayer": memberShipProductType[j].isPlaying
+                        "isPlayer": memberShipProductType[j].isPlaying,
+                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId
                     }
                 } else {
                     type_object_team_seasonal = {
@@ -1385,7 +1386,8 @@ function createProductFeeArr(data) {
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
                         "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
                         "teamRegChargeTypeRefId": 1,
-                        "isPlayer": memberShipProductType[j].isPlaying
+                        "isPlayer": memberShipProductType[j].isPlaying,
+                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId
                     }
                 }
 
@@ -1587,7 +1589,8 @@ function createProductFeeArr(data) {
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
                             "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal,
                             "teamRegChargeTypeRefId": statusTeamSeasonal.result.teamRegChargeTypeRefId,
-                            "isPlayer": memberShipProductType[k].isPlaying
+                            "isPlayer": memberShipProductType[k].isPlaying,
+                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId
                         }
                     } else {
                         type_object_team_seasonal = {
@@ -1612,7 +1615,8 @@ function createProductFeeArr(data) {
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
                             "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
                             "teamRegChargeTypeRefId": 1,
-                            "isPlayer": memberShipProductType[k].isPlaying
+                            "isPlayer": memberShipProductType[k].isPlaying,
+                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId
                         }
                     }
 

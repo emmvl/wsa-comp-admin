@@ -6026,6 +6026,8 @@ class RegistrationCompetitionFee extends Component {
                 ))}
 
                 {feeDetails && feeDetails.map((item, index) => {
+                    // console.log("perfees",item.seasonalTeam.perType);
+                    // console.log("allType",item.seasonalTeam.allType)
                     return (
                         <div className="inside-container-view">
                             <span className="form-heading pt-2 pl-2">
@@ -6222,7 +6224,9 @@ class RegistrationCompetitionFee extends Component {
                                                                 {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
                                                                     <div className="d-flex">
                                                                         <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
-                                                                        <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                        {!item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
+                                                                            <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                        )}
                                                                     </div>
                                                                 )}
                                                             </div>
