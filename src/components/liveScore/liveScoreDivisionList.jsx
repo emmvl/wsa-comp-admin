@@ -288,7 +288,7 @@ class LiveScoreDivisionList extends Component {
                         </div>
                         <div className="col-sm w-100 d-flex flex-row align-items-center justify-content-end">
                             <div className="row">
-                                {sourceIdAvailable && (
+                                {sourceIdAvailable && this.state.liveScoreCompIsParent && (
                                     <div className="col-sm">
                                         <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                             <Button
