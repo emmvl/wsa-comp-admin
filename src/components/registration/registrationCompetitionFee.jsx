@@ -6822,7 +6822,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamSeasonal = (feeDetails) => {
         let isSeasonalValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].teamRegChargeTypeRefId == 1) {
+            if (feeDetails[i].isTeamSeasonal && feeDetails[i].teamRegChargeTypeRefId == 1) {
                 isSeasonalValue = true;
                 break;
             }
@@ -6833,7 +6833,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamCasual = (feeDetails) => {
         let isCasualValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].teamRegChargeTypeRefId == 2 || feeDetails[i].teamRegChargeTypeRefId == 3) {
+            if (feeDetails[i].isTeamSeasonal && (feeDetails[i].teamRegChargeTypeRefId == 2 || feeDetails[i].teamRegChargeTypeRefId == 3)) {
                 isCasualValue = true;
                 break;
             }
