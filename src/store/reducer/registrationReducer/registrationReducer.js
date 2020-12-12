@@ -1054,7 +1054,7 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
       if(action.key){
         state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
       }else{
