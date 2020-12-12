@@ -841,7 +841,7 @@ class RegistrationMembershipFee extends Component {
                                                 </Tooltip>
                                             </div>
                                         </div>
-                                        {feeTypeItem.id == 1 && (
+                                        {item.membershipProductFeesTypeRefId == 1 && feeTypeItem.id == 1 && (
                                             <div className="validity-period-bg">
                                                 <span className="applicable-to-heading required-field" style={{paddingTop: 0}}>{AppConstants.minNoDays}</span>
                                                 <div className="row" style={{marginTop: 10,alignItems: "center"}}>

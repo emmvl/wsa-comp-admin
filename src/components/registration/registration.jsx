@@ -176,6 +176,16 @@ const columns = [
         ),
     },
     {
+        title: "Due per Match",
+        dataIndex: "duePenMatch",
+        key: "duePenMatch"
+    },
+    {
+        title: "Due per Instalment",
+        dataIndex: "duePerInstalment",
+        key: "duePerInstalment"
+    },
+    {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
