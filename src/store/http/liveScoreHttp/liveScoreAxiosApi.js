@@ -1122,7 +1122,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// / Export Files
-    async exportFiles(url) {
+    async exportFiles(url) {        
         return Method.dataGetDownload(url, localStorage.token);
     },
 
@@ -1172,18 +1172,21 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder) {
+    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder , entityType) {
         let url = null;
         const body = paginationBody;
 
-        if (status === 'All') {
-            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
+        if (status === 'All') {            
+            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;            
+            url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&roleIds=${refRoleId}`;
         } else {
-            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}`;
+            url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&status=${status}&roleIds=${refRoleId}`;
+            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
+        console.log(url)
         return Method.dataPost(url, token, body);
     },
 

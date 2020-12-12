@@ -306,15 +306,25 @@ let userHttpApi = {
 
   umpireList(data) {
     let url = null;
-    if (data.userName) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
-    } else if (data.offset != null) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+    if (data.entityTypes == 6) {
+      if (data.userName) {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`
+      } else if (data.offset != null) {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`
+      }
+      else {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`
+      }
+    } else {
+      if (data.userName) {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      } else if (data.offset != null) {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      }
+      else {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      }
     }
-    else {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
-    }
-
     if (data.sortBy && data.sortOrder) {
       url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
     }
