@@ -68,11 +68,14 @@ function getRegistrationForm(yearId, competitionId) {
 }
 
 /// update registration object
-function updateRegistrationForm(updatedData, key) {
+function updateRegistrationForm(updatedData, key, subKey, membershipProductTypeIndex, getMembershipproductItem) {
     return {
         type: ApiConstants.API_UPDATE_REG_FORM_LOAD,
         updatedData,
-        key
+        key,
+        subKey,
+        membershipProductTypeIndex,
+        getMembershipproductItem
     };
 }
 
@@ -135,11 +138,12 @@ function updatedDiscountDataAction(discountData) {
 }
 
 ////membership fees radio apply fees on change
-function membershipFeesApplyRadioAction(radioApplyId, feesIndex) {
+function membershipFeesApplyRadioAction(radioApplyId, feesIndex, key) {
     return {
         type: ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES,
         radioApplyId,
         feesIndex,
+        key
     };
 }
 

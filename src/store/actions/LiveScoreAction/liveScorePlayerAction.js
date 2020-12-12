@@ -46,11 +46,12 @@ function liveScoreDeletePlayerAction(playerId, competitionId, offset, key) {
 
 
 
-function liveScorePlayerImportAction(competitionID, csvFile) {
+function liveScorePlayerImportAction(competitionID, csvFile, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD,
         competitionID,
         csvFile,
+        key
     };
 }
 
@@ -61,7 +62,7 @@ function liveScorePlayerResetImportResultAction() {
 }
 
 // Player list with pagination
-function playerListWithPaginationAction(competitionID, offset, limit, search, sortBy, sortOrder) {
+function playerListWithPaginationAction(competitionID, offset, limit, search, sortBy, sortOrder, isParent, competitionOrganisationId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_LOAD,
         competitionID,
@@ -70,6 +71,8 @@ function playerListWithPaginationAction(competitionID, offset, limit, search, so
         search,
         sortBy,
         sortOrder,
+        isParent,
+        competitionOrganisationId
     };
 }
 

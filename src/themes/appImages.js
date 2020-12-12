@@ -54,7 +54,8 @@ const AppImages = {
   filterIcon: require("../images/filter-results-button.png"),
   chatIcon: require("../images/chat.svg"),
   wentWrong: require("../images/went_wrong.jpg"),
-  whistleIcon: require("../images/whistle.png")
+  whistleIcon: require("../images/whistle.png"),
+  docsIcon: require("../images/google-docs.png"),
 };
 
 export default AppImages;

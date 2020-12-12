@@ -301,6 +301,9 @@ function makeProducrTypeArr(data, selected) {
         if (data[i].id == selected[j].id) {
           data[i]["isSelected"] = true;
           data[i].registrationLock = selected[j].registrationLock;
+
+          data[i].registrationCap = selected[j].registrationCap;
+          data[i].teamRegistrationCap = selected[j].teamRegistrationCap;
           break;
         } else {
           data[i]["isSelected"] = false;
@@ -892,10 +895,21 @@ function registration(state = initialState, action) {
           state.registrationFormData[0].hardShipCodes = [];
           state.registrationFormData[0].hardShipCodes.push(action.updatedData);
         }
-      }
-      else if (action.key === "addHardshipCodeValueChange") {
+      }else if (action.key === "addHardshipCodeValueChange") {
         let {value,index} = action.updatedData;
         state.registrationFormData[0].hardShipCodes[index].code = value;
+      }else if (action.key === "membershipProductTypes") {
+          let index = -1;
+          for(let i in state.selectedMemberShipType){
+            let membershipProductType = state.selectedMemberShipType[i].membershipProductTypes.find(x => x.membershipProductTypeId == action.getMembershipproductItem.membershipProductTypeId && x.membershipProductTypeMappingId == action.getMembershipproductItem.membershipProductTypeMappingId);
+            if(membershipProductType){
+              index = i;
+            }
+            break;
+          }
+          state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
+          state.registrationFormData[0][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
+    
       }
       else {
         let oldData = state.registrationFormData;
@@ -1040,19 +1054,24 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
+      // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      if(action.key){
+        state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
+      }else{
+        state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;
+      }
       return {
         ...state,
         error: null
       };
 
     ///membership fees radip apply fees on change
-    case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
-      return {
-        ...state,
-        error: null
-      };
+    // case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
+    //   state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
+    //   return {
+    //     ...state,
+    //     error: null
+    //   };
 
 
     ////age mandate and membershipTypes onchange selection checkbox

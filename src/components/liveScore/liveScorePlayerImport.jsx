@@ -17,6 +17,7 @@ import {
 import Loader from "customComponents/loader";
 import DashboardLayout from "pages/dashboardLayout";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 import "./liveScore.css";
 
@@ -67,11 +68,13 @@ class LiveScorerPlayerImport extends Component {
         this.state = {
             csvData: null,
             competitionId: null,
+            liveScoreCompIsParent: false
         };
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
+            this.setLivScoreCompIsParent()
             const { id } = JSON.parse(getLiveScoreCompetiton());
             this.setState({ competitionId: id });
 
@@ -97,6 +100,13 @@ class LiveScorerPlayerImport extends Component {
         </div>
     );
 
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
+    }
+
     handleForce = data => {
         this.setState({
             csvData: data.target.files[0],
@@ -107,7 +117,8 @@ class LiveScorerPlayerImport extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton());
 
         if (this.state.csvData) {
-            this.props.liveScorePlayerImportAction(id, this.state.csvData);
+            let key = this.state.liveScoreCompIsParent ? "own" : "participate"
+            this.props.liveScorePlayerImportAction(id, this.state.csvData, key);
 
             this.setState({
                 csvData: null,

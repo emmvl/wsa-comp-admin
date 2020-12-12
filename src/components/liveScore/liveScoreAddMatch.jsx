@@ -43,7 +43,7 @@ import {
     liveScoreRoundListAction,
 } from '../../store/actions/LiveScoreAction/liveScoreRoundAction';
 import history from "../../util/history";
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getOrganisationData, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { getVenuesTypeAction } from "../../store/actions/appAction";
 import Loader from '../../customComponents/loader';
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
@@ -81,7 +81,8 @@ class LiveScoreAddMatch extends Component {
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             sourceIdAvailable: false,
             modalVisible: false,
-            compOrgId: 0
+            compOrgId: 0,
+            isCompParent: false
         };
         this.props.clearMatchAction();
         this.formRef = React.createRef();
@@ -103,10 +104,16 @@ class LiveScoreAddMatch extends Component {
         });
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.getRefBadgeData(this.props.appstate.accreditation)
         if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey === 'umpire') {
+                let compData = JSON.parse(getUmpireCompetitonData())
+                let orgItem = await getOrganisationData();
+                let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+                let compOrg_Id = compData ? compData.organisationId : 0
+                let isCompParent = userOrganisationId === compOrg_Id
+                this.setState({ isCompParent });
                 const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
                 let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
                 this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId, compOrgId: compOrgId });
@@ -118,9 +125,10 @@ class LiveScoreAddMatch extends Component {
                     this.props.liveScoreClubListAction(id);
                     this.props.umpireListAction({
                         refRoleId: JSON.stringify([15, 20]),
-                        entityTypes: entityTypes('COMPETITION'),
+                        entityTypes: isCompParent ? 1 : 6,
                         compId: id,
                         offset: null,
+                        compOrgId: compOrgId
                     });
                     this.setState({ loadvalue: true, allDisabled: true });
                 } else {
@@ -128,6 +136,13 @@ class LiveScoreAddMatch extends Component {
                 }
             } else if (getLiveScoreCompetiton()) {
                 const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
+                let compData = JSON.parse(getLiveScoreCompetiton())
+                let orgItem = await getOrganisationData();
+                let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+                let compOrg_Id = compData ? compData.organisationId : 0
+                let isCompParent = userOrganisationId === compOrg_Id
+                this.setState({ isCompParent });
+
                 let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
                 this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId, compOrgId: compOrgId });
 
@@ -137,9 +152,10 @@ class LiveScoreAddMatch extends Component {
                 this.props.liveScoreClubListAction(id);
                 this.props.umpireListAction({
                     refRoleId: JSON.stringify([15, 20]),
-                    entityTypes: entityTypes('COMPETITION'),
+                    entityTypes: isCompParent ? 1 : 6,
                     compId: id,
                     offset: null,
+                    compOrgId: compOrgId
                 });
                 this.setState({ loadvalue: true, allDisabled: false });
             } else {
@@ -1026,7 +1042,7 @@ class LiveScoreAddMatch extends Component {
         return (
             <div>
                 <Checkbox
-                    className="single-checkbox mt-5 d-flex flex-column justify-content-center"
+                    className="single-checkbox mt-5  justify-content-center"
                     onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.checked, 'isFinals')}
                     checked={addEditMatch.isFinals}
                     disabled={this.state.umpireKey === 'umpire'}

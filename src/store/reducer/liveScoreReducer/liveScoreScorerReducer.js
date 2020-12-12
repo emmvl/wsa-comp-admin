@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
-import { getLiveScoreCompetiton } from '../../../util/sessionStorage'
+import { getLiveScoreCompetiton, getOrganisationData } from '../../../util/sessionStorage'
 let scorerObj = {
     id: null,
     firstName: "",
@@ -104,16 +104,22 @@ function liveScoreScorerState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            const { competitionOrganisation, organisationId } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            const orgItem = getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
             let teamsArray = JSON.parse(JSON.stringify(action.result))
             // state.allTeamData = JSON.parse(JSON.stringify(action.result))
             let teamObject = {
                 name: "All Teams",
                 id: null
             }
-
-            state.allTeamData = teamsArray.filter(item => item?.linkedCompetitionOrganisation?.id == compOrgId);
+            if (!liveScoreCompIsParent) {
+                state.allTeamData = teamsArray.filter(item => item ?.linkedCompetitionOrganisation ?.id == compOrgId);
+            } else {
+                state.allTeamData = teamsArray;
+            }
             state.allTeamData.unshift(teamObject)
 
             return {

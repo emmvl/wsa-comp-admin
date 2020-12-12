@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Pagination, Input, Button } from "antd";
+import { Layout, Breadcrumb, Table, Select, Pagination, Input, Button, Menu } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
 import Tooltip from "react-png-tooltip";
@@ -24,6 +24,7 @@ import "./product.scss";
 
 const { Content } = Layout;
 const { Option } = Select;
+const { SubMenu } = Menu;
 
 let this_Obj = null;
 
@@ -112,7 +113,7 @@ const columns = [
 
     {
         title: "Status",
-        // dataIndex: "status",
+        dataIndex: "status",
         key: "status",
         // filterDropdown: true,
         // filterIcon: () => (
@@ -122,13 +123,40 @@ const columns = [
         //         </Tooltip>
         //     </div>
         // ),
-        // sorter: true,
-        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
 
     {
         title: "Action",
-        key:"action"
+        key:"action",
+        dataIndex:"status",
+        render:(status) => (
+            status == "Registered" ?
+            <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: '25px' }}
+             >
+                <SubMenu
+                    key="sub"
+                    title={
+                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }
+                >
+                    <Menu.Item key="1">
+
+                            <span>Deregister</span>
+                        
+                    </Menu.Item>
+                </SubMenu>
+            </Menu> 
+            : 
+            null
+            
+        )
+        
     },
 ];
 

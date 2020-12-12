@@ -26,6 +26,7 @@ import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../..
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import Tooltip from 'react-png-tooltip'
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -45,7 +46,8 @@ class LiveScoreAddManager extends Component {
             competition_id: null,
             teamLoad: false,
             exsitingValue: '',
-            compOrgId: 0
+            compOrgId: 0,
+            liveScoreCompIsParent: false
         }
         this.formRef = createRef();
     }
@@ -54,15 +56,19 @@ class LiveScoreAddManager extends Component {
         if (getLiveScoreCompetiton()) {
             const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
-            this.props.liveScoreManagerListAction(5, 6, null, null, null, null, null, null, compOrgId)
-            this.props.getliveScoreTeams(id, null, compOrgId)
-            if (this.state.isEdit === true) {
-                this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
-                this.setState({ loader: true })
-            } else {
-                this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
-            }
-            this.setState({ load: true, competition_id: id, compOrgId: compOrgId })
+            checkLivScoreCompIsParent().then((value) => {
+                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, compOrgId)
+                this.props.getliveScoreTeams(id, null, compOrgId)
+                if (this.state.isEdit === true) {
+                    this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
+                    this.setState({ loader: true })
+                } else {
+                    this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
+                }
+                this.setState({ load: true, competition_id: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+
+            })
+
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -463,13 +469,13 @@ class LiveScoreAddManager extends Component {
                             teams: managerData.teams
                         }
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
                 } else if (managerRadioBtn === 'existing') {
                     body = {
                         id: exsitingManagerId,
                         teams: managerData.teams
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
                 }
             }
         } else {
@@ -493,13 +499,13 @@ class LiveScoreAddManager extends Component {
                         teams: managerData.teams
                     }
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
+                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
             } else if (managerRadioBtn === 'existing') {
                 body = {
                     id: exsitingManagerId,
                     teams: managerData.teams
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId)
+                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
             }
         }
     };

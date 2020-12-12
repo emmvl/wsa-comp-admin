@@ -44,7 +44,7 @@ function* errorSaga(error) {
 
 export function* liveScoreIncidentListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreIncidentList, action.competitionId, action.search, action.limit, action.offset, action.sortBy, action.sortOrder);
+        const result = yield call(LiveScoreAxiosApi.liveScoreIncidentList, action.competitionId, action.search, action.limit, action.offset, action.sortBy, action.sortOrder, action.liveScoreCompIsParent, action.competitionOrganisationId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_SUCCESS,

@@ -42,7 +42,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreCoachListAction(17, 6, _this.state.compOrgId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
+    _this.props.liveScoreCoachListAction(17, 6, _this.state.compOrgId, _this.state.searchText, _this.state.offset, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.competitionId);
 }
 
 const listeners = (key) => ({
@@ -177,26 +177,29 @@ class LiveScoreCoaches extends Component {
     componentDidMount() {
         let { coachListActionObject } = this.props.liveScoreCoachState
         if (getLiveScoreCompetiton()) {
-            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
-            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
-            this.setState({ competitionId: id, compOrgId: compOrgId })
-            let offset = 0
-            if (coachListActionObject) {
-                offset = coachListActionObject.offset
-                let searchText = coachListActionObject.search
-                let sortBy = coachListActionObject.sortBy
-                let sortOrder = coachListActionObject.sortOrder
-                this.setState({ offset, searchText, sortBy, sortOrder })
-                this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder);
-            } else {
-                this.props.liveScoreCoachListAction(17, 6, compOrgId, this.state.searchText, offset)
-            }
+            this.setLivScoreCompIsParent()
+            checkLivScoreCompIsParent().then((value) => {
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.setState({ competitionId: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+                let offset = 0
+                if (coachListActionObject) {
+                    offset = coachListActionObject.offset
+                    let searchText = coachListActionObject.search
+                    let sortBy = coachListActionObject.sortBy
+                    let sortOrder = coachListActionObject.sortOrder
+                    this.setState({ offset, searchText, sortBy, sortOrder })
+                    this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder, value, id);
+                } else {
+                    this.props.liveScoreCoachListAction(17, 6, compOrgId, this.state.searchText, offset, null, null, value, id)
+                }
 
-            if (id !== null) {
-                this.props.getliveScoreTeams(id, null, compOrgId)
-            } else {
-                history.push('/matchDayCompetitions')
-            }
+                if (id !== null) {
+                    this.props.getliveScoreTeams(id, null, compOrgId)
+                } else {
+                    history.push('/matchDayCompetitions')
+                }
+            })
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -215,7 +218,7 @@ class LiveScoreCoaches extends Component {
         this.setState({
             offset
         })
-        this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder)
+        this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
     }
 
     contentView = () => {
@@ -345,7 +348,7 @@ class LiveScoreCoaches extends Component {
         this.setState({ searchText: e.target.value, offset: 0 })
         let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder)
+            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
@@ -356,7 +359,7 @@ class LiveScoreCoaches extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder)
+            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
@@ -367,7 +370,7 @@ class LiveScoreCoaches extends Component {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreCoachListAction(17, 6, this.state.compOrgId, this.state.searchText, this.state.offset)
+            this.props.liveScoreCoachListAction(17, 6, this.state.compOrgId, this.state.searchText, this.state.offset, null, null, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 

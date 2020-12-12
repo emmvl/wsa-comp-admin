@@ -408,7 +408,7 @@ class LiveScoreMatchesList extends Component {
                     <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
 
-                            {sourceIdAvailable && <div className="col-sm">
+                            {sourceIdAvailable && liveScoreCompIsParent && <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button
                                         type="primary"

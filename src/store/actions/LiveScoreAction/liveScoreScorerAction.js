@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreScorerListAction(competitionId, roleId, body, search, sortBy, sortOrder) {
+function liveScoreScorerListAction(competitionId, roleId, body, search, sortBy, sortOrder,liveScoreCompIsParent) {
     return {
         type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_LOAD,
         competitionId,
@@ -9,6 +9,7 @@ function liveScoreScorerListAction(competitionId, roleId, body, search, sortBy, 
         search,
         sortBy,
         sortOrder,
+        liveScoreCompIsParent,
     };
 }
 

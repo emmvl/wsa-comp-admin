@@ -3823,9 +3823,11 @@ class RegistrationCompetitionFee extends Component {
         let isSeasonalUponReg = this.props.competitionFeesState.competitionDetailData["isSeasonalUponReg"];
         let isTeamSeasonalUponReg = this.props.competitionFeesState.competitionDetailData["isTeamSeasonalUponReg"];
         let teamSeasonalSchoolRegCode = this.props.competitionFeesState.competitionDetailData["teamSeasonalSchoolRegCode"];
+        let seasonalSchoolRegCode = this.props.competitionFeesState.competitionDetailData["seasonalSchoolRegCode"];
         paymentDataArr["isSeasonalUponReg"] = isSeasonalUponReg != undefined ? isSeasonalUponReg : false;
         paymentDataArr["isTeamSeasonalUponReg"] = isTeamSeasonalUponReg != undefined ? isTeamSeasonalUponReg : false;
         paymentDataArr["teamSeasonalSchoolRegCode"] = teamSeasonalSchoolRegCode != undefined ? teamSeasonalSchoolRegCode : null;
+        paymentDataArr["seasonalSchoolRegCode"] = seasonalSchoolRegCode != undefined ? seasonalSchoolRegCode : null;
 
         // selectedSeasonalFeeKey
 
@@ -3844,6 +3846,13 @@ class RegistrationCompetitionFee extends Component {
                     message.error(ValidationConstants.pleaseProvideInstalmentDate);
                     return;
                 }
+            }
+        }
+        if (SelectedSeasonalPaymentArr.find(x => x.paymentOptionRefId == 8)) {
+            if (paymentDataArr.seasonalSchoolRegCode.length === 0) {
+                message.error(ValidationConstants.pleaseFillRegistration);
+                this.setState({ loading: false });
+                return;
             }
         }
 
@@ -4907,6 +4916,22 @@ class RegistrationCompetitionFee extends Component {
                 {AppConstants.addInstalmentDate}
             </span>
         );
+    }
+
+    seasonalRegistrationcode(seasonalSchoolRegCode) {
+        return (
+            <div className="input-reg-text">
+                <InputWithHead
+                    auto_complete="new-membershipTypeName"
+                    // required="pt-0 mt-0"
+                    heading={AppConstants.enterCode}
+                    placeholder={AppConstants.enterCode}
+                    style={{ width: "100%", background: "white", height: 48 }}
+                    onChange={(e) => this.regCodeChange(e.target.value, "seasonalSchoolRegCode")}
+                    value={seasonalSchoolRegCode}
+                />
+            </div>
+        )
     }
 
     teamSeasonalRegistrationcode(teamSeasonalSchoolRegCode) {
@@ -6001,6 +6026,8 @@ class RegistrationCompetitionFee extends Component {
                 ))}
 
                 {feeDetails && feeDetails.map((item, index) => {
+                    // console.log("perfees",item.seasonalTeam.perType);
+                    // console.log("allType",item.seasonalTeam.allType)
                     return (
                         <div className="inside-container-view">
                             <span className="form-heading pt-2 pl-2">
@@ -6197,7 +6224,9 @@ class RegistrationCompetitionFee extends Component {
                                                                 {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
                                                                     <div className="d-flex">
                                                                         <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
-                                                                        <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                        {!item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
+                                                                            <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                        )}
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -6840,6 +6869,8 @@ class RegistrationCompetitionFee extends Component {
         let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
 
         let isSeasonalUponReg = competitionDetailData.isSeasonalUponReg != undefined ? competitionDetailData.isSeasonalUponReg : false;
+        let seasonalSchoolRegCode = competitionDetailData.seasonalSchoolRegCode != undefined ? competitionDetailData.seasonalSchoolRegCode : null;
+
         let isTeamSeasonalUponReg = competitionDetailData.isTeamSeasonalUponReg != undefined ? competitionDetailData.isTeamSeasonalUponReg : false;
         let teamSeasonalSchoolRegCode = competitionDetailData.teamSeasonalSchoolRegCode != undefined ? competitionDetailData.teamSeasonalSchoolRegCode : null;
 
@@ -6921,6 +6952,9 @@ class RegistrationCompetitionFee extends Component {
                                                 {this.showInstalmentDate(selectedSeasonalInstalmentDates, "seasonalfee")}
                                                 {this.addInstalmentDateBtn(selectedSeasonalInstalmentDates, "seasonalfee")}
                                             </div>
+                                        )}
+                                        {item.paymentOptionRefId == 8 && item.isChecked && (
+                                            this.seasonalRegistrationcode(seasonalSchoolRegCode)
                                         )}
                                     </div>
                                 ))}

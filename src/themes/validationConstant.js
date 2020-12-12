@@ -237,6 +237,9 @@ const ValidationConstants = {
     // Affiliate Add/Edit
     affiliateAddressRequiredError: 'Please input affiliate address in details',
     affiliateAddressDetailError: 'Please select a affiliate address which has a street address',
+
+    daysRequired: "Days is required",
+    extendEndDateRequired: "Extend end date is required"
 };
 
 export default ValidationConstants;

@@ -345,13 +345,13 @@ class RegistrationMembershipFee extends Component {
 
     setFieldDecoratorValues = () => {
         let allData = this.props.registrationState.getMembershipProductDetails
-        let membershipProductData = allData !== null ? allData.membershipproduct : []
+        let membershipProductData = allData !== null ? allData.membershipproduct : [];
         this.formRef.current.setFieldsValue({
             yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getCurrentYear(this.props.appState.yearList) : null,
             membershipProductName: membershipProductData.membershipProductName,
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
-        let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
+        let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : [];
 
         if (typesData.length > 0) {
             typesData.forEach((item, index) => {
@@ -366,7 +366,7 @@ class RegistrationMembershipFee extends Component {
                 }
                 this.formRef.current.setFieldsValue({
                     [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
-                })
+                }) 
             })
         }
         let data = this.props.registrationState.membershipProductDiscountData
@@ -386,6 +386,17 @@ class RegistrationMembershipFee extends Component {
                 })
             })
         })
+
+        let membershipProductFeesTableData = this.props.registrationState.membershipProductFeesTableData;
+        let feesData = membershipProductFeesTableData ? membershipProductFeesTableData.membershipFees.length > 0 ? membershipProductFeesTableData.membershipFees : [] : []
+        for(let item of feesData){
+            if(item.membershipProductFeesTypeRefId == 1){
+                this.formRef.current.setFieldsValue({
+                    [`validityDays`]: item.validityDays ? item.validityDays : null,
+                    [`extendEndDate`]: item.extendEndDate ? moment(item.extendEndDate,"MM-DD-YYYY") : null 
+                })
+            }
+        }
     }
 
     //////delete the membership product
@@ -747,7 +758,7 @@ class RegistrationMembershipFee extends Component {
                     />
                 </Form.Item>
 
-                <div className="contextualHelp-RowDirection">
+                {/* <div className="contextualHelp-RowDirection">
                     <span className="applicable-to-heading required-field">
                         {AppConstants.validity}
                     </span>
@@ -756,9 +767,9 @@ class RegistrationMembershipFee extends Component {
                             <span>{AppConstants.validityMsg}</span>
                         </Tooltip>
                     </div>
-                </div>
+                </div> */}
 
-                <Form.Item name='validityRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectValidity }]}>
+                {/* <Form.Item name='validityRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectValidity }]}>
                     <Radio.Group
                         className="reg-competition-radio"
                         disabled={this.state.membershipIsUsed}
@@ -771,15 +782,24 @@ class RegistrationMembershipFee extends Component {
                             </div>
                         ))}
                     </Radio.Group>
-                </Form.Item>
+                </Form.Item> */}
                 {this.membershipTypesView()}
             </div>
         );
     };
 
     ///membershipFees apply radio onchange
-    membershipFeeApplyRadio = (radioApplyId, feesIndex) => {
-        this.props.membershipFeesApplyRadioAction(radioApplyId, feesIndex)
+    membershipFeeApplyRadio = (radioApplyId, feesIndex, key) => {
+        this.props.membershipFeesApplyRadioAction(radioApplyId, feesIndex, key)
+    }
+
+    dateConversion = (f,key,index) => {
+        try{
+            let date = moment(f, "DD-MM-YYYY").format("MM-DD-YYYY");
+            this.membershipFeeApplyRadio(date, index, key)
+        }catch(ex){
+            console.log("Error in dateConversion::"+ex)
+        }
     }
 
     ////fees view inside the content
@@ -810,15 +830,61 @@ class RegistrationMembershipFee extends Component {
                                 defaultValue={item.membershipProductFeesTypeRefId}
                             //disabled={this.state.membershipIsUsed}
                             >
-                                {this.props.appState.membershipProductFeesTypes.map((item) => (
-                                    <div className="row" key={'membershipProductFeesType_' + item.id}>
-                                        <Radio key={'membershipFee_' + item.id} value={item.id}> {item.description}</Radio>
+                                {this.props.appState.membershipProductFeesTypes.map((feeTypeItem) => (
+                                    <div>
+                                         <div className="row" key={'membershipProductFeesType_' + feeTypeItem.id}>
+                                            <Radio key={'membershipFee_' + feeTypeItem.id} value={feeTypeItem.id}> {feeTypeItem.description}</Radio>
 
-                                        <div style={{ marginLeft: -18 }}>
-                                            <Tooltip>
-                                                <span>{item.helpMsg}</span>
-                                            </Tooltip>
+                                            <div style={{ marginLeft: -18 }}>
+                                                <Tooltip>
+                                                    <span>{feeTypeItem.helpMsg}</span>
+                                                </Tooltip>
+                                            </div>
                                         </div>
+                                        {item.membershipProductFeesTypeRefId == 1 && feeTypeItem.id == 1 && (
+                                            <div className="validity-period-bg">
+                                                <span className="applicable-to-heading required-field" style={{paddingTop: 0}}>{AppConstants.minNoDays}</span>
+                                                <div className="row" style={{marginTop: 10,alignItems: "center"}}>
+                                                    <div className="col-md-6">
+                                                        <Form.Item
+                                                            name={`validityDays`}
+                                                            rules={[{ required: true, message: ValidationConstants.daysRequired }]}
+                                                        >
+                                                            <InputWithHead
+                                                                placeholder={AppConstants._days}
+                                                                onChange={(e) => this.membershipFeeApplyRadio(e.target.value, index, "validityDays")}
+                                                                type={"number"}
+                                                            />
+                                                        </Form.Item>
+                                                    </div>
+                                                    <div className="col-md-6 applicable-to-heading" style={{paddingTop: 0}}>{AppConstants._days}</div>
+                                                </div>
+                                                <Checkbox
+                                                    onChange={(e) => this.membershipFeeApplyRadio(e.target.checked, index, "isNeedExtendedDate")}
+                                                    checked={item.isNeedExtendedDate ? true : false}
+                                                    style={{marginTop: 10}}
+                                                    className="single-checkbox pt-3">
+                                                    {AppConstants.extendEndDate}
+                                                </Checkbox>
+                                                {item.isNeedExtendedDate && (
+                                                    <div style={{marginLeft: 35,marginTop: 12}}>
+                                                        <Form.Item
+                                                            name={`extendEndDate`}
+                                                            rules={[{ required: true, message: ValidationConstants.extendEndDateRequired }]}
+                                                        >
+                                                            <DatePicker
+                                                                size="large"
+                                                                placeholder={"dd-mm-yyyy"}
+                                                                style={{ width: "100%" }}
+                                                                onChange={(e, f) => this.dateConversion(f,"extendEndDate",index)}
+                                                                format={"DD-MM-YYYY"}
+                                                                showTime={false}
+                                                            />
+                                                        </Form.Item>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </Radio.Group>

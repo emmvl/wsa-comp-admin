@@ -633,19 +633,23 @@ class UserTextualDashboard extends Component {
         let noOfUsers = userDashboardCounts !== null ? userDashboardCounts.noOfUsers : 0;
         return (
             <div className="comp-dash-table-view mt-2">
-                <div>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <div className="registration-count">
-                                <div className="reg-payment-paid-reg-text">No. of Users</div>
-                                <div className="reg-payment-price-text">{noOfUsers}</div>
-                            </div>
+                <div className="row">
+                    <div className="col-sm-4">
+                        <div className="registration-count">
+                            <div className="reg-payment-paid-reg-text">No. of Users</div>
+                            <div className="reg-payment-price-text">{noOfUsers}</div>
                         </div>
-                        <div className="col-sm-6">
-                            <div className="registration-count">
-                                <div className="reg-payment-paid-reg-text">No. of Registered Users</div>
-                                <div className="reg-payment-price-text">{noOfRegisteredUsers}</div>
-                            </div>
+                    </div>
+                    <div className="col-sm-4">
+                        <div className="registration-count">
+                            <div className="reg-payment-paid-reg-text">No. of Registered Users</div>
+                            <div className="reg-payment-price-text">{noOfRegisteredUsers}</div>
+                        </div>
+                    </div>
+                    <div className="col-sm-4">
+                        <div className="registration-count">
+                            <div className="reg-payment-paid-reg-text">No. of Spectators - Un-named</div>
+                            <div className="reg-payment-price-text">{noOfRegisteredUsers}</div>
                         </div>
                     </div>
                 </div>
