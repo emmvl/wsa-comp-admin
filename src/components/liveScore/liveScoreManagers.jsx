@@ -209,20 +209,22 @@ class LiveScoreManagerList extends Component {
         let { managerListActionObject } = this.props.liveScoreMangerState
         if (getLiveScoreCompetiton()) {
             this.setLivScoreCompIsParent()
-            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
-            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
-            this.setState({ competitionId: id, compOrgId: compOrgId })
-            let offset = 0
-            if (managerListActionObject) {
-                offset = managerListActionObject.offset
-                let searchText = managerListActionObject.searchText
-                let sortBy = managerListActionObject.sortBy
-                let sortOrder = managerListActionObject.sortOrder
-                this.setState({ offset, searchText, sortBy, sortOrder })
-                this.props.liveScoreManagerListAction(3, 6, id, searchText, offset, sortBy, sortOrder, 'managerList', compOrgId);
-            } else {
-                this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, offset, null, null, 'managerList', compOrgId)
-            }
+            checkLivScoreCompIsParent().then((value) => {
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.setState({ competitionId: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+                let offset = 0
+                if (managerListActionObject) {
+                    offset = managerListActionObject.offset
+                    let searchText = managerListActionObject.searchText
+                    let sortBy = managerListActionObject.sortBy
+                    let sortOrder = managerListActionObject.sortOrder
+                    this.setState({ offset, searchText, sortBy, sortOrder })
+                    this.props.liveScoreManagerListAction(3, 6, id, searchText, offset, sortBy, sortOrder, 'managerList', compOrgId, value);
+                } else {
+                    this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, offset, null, null, 'managerList', compOrgId, value)
+                }
+            })
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -240,7 +242,7 @@ class LiveScoreManagerList extends Component {
         this.setState({
             offset
         })
-        this.props.liveScoreManagerListAction(3, 6, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId)
+        this.props.liveScoreManagerListAction(3, 6, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
     }
 
     contentView = () => {
@@ -378,7 +380,7 @@ class LiveScoreManagerList extends Component {
         if (e.target.value == null || e.target.value === "") {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
-            this.props.liveScoreManagerListAction(3, 6, id, e.target.value, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId)
+            this.props.liveScoreManagerListAction(3, 6, id, e.target.value, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
         }
     }
 
@@ -389,7 +391,7 @@ class LiveScoreManagerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { // 13 is the enter keycode
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId)
+            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
         }
     }
 
@@ -400,7 +402,7 @@ class LiveScoreManagerList extends Component {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId)
+            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
         }
     }
 

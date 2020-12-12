@@ -52,6 +52,8 @@ function* liveScoreCoachSaga(action) {
       action.offset,
       action.sortBy,
       action.sortOrder,
+      action.isParent,
+      action.competitionId
     );
 
     if (result.status === 1) {
@@ -71,7 +73,7 @@ function* liveScoreCoachSaga(action) {
 
 function* liveScoreAddCoachSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.existingManagerId,action.compOrgId );
+    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.existingManagerId, action.compOrgId, action.isParent);
 
     if (result.status === 1) {
       yield put({

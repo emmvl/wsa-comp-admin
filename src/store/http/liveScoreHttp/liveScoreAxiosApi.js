@@ -778,11 +778,16 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    async liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId) {
+    async liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId, isParent) {
         const body = data;
-        const userId = await getUserId();
-        const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        const url = `/users/manager?userId=${userId}&entityId=${compOrgId}&entityTypeId=${6}`;
+        let url = null
+        let userId = await getUserId();
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+        if (isParent !== true) {
+            url = `/users/manager?userId=${userId}&entityId=${compOrgId}&entityTypeId=${6}&competitionId=${id}`;
+        } else {
+            url = `/users/manager?userId=${userId}&entityId=${id}&entityTypeId=${1}`
+        }
         return Method.dataPost(url, token, body);
 
         // if (existingManagerId) {
@@ -1135,10 +1140,18 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreAddCoach(data, teamId, existingManagerId, compOrgId) {
-        const body = data;
-        const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        const url = `/users/coach?entityId=${compOrgId}&entityTypeId=${6}`;
+    liveScoreAddCoach(data, teamId, existingManagerId, compOrgId, isParent) {
+        let body = data;
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+        let url = null
+        if (isParent !== true) {
+            url = `/users/coach?entityId=${compOrgId}&entityTypeId=${6}&competitionId=${id}`;
+        }
+        else {
+            url = `/users/coach?entityId=${id}&entityTypeId=${1}`;
+
+        }
+
         return Method.dataPost(url, token, body);
     },
 
