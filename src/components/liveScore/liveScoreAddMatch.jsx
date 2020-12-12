@@ -1042,7 +1042,7 @@ class LiveScoreAddMatch extends Component {
         return (
             <div>
                 <Checkbox
-                    className="single-checkbox mt-5 d-flex flex-column justify-content-center"
+                    className="single-checkbox mt-5  justify-content-center"
                     onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.checked, 'isFinals')}
                     checked={addEditMatch.isFinals}
                     disabled={this.state.umpireKey === 'umpire'}

@@ -7,6 +7,7 @@ import {
     getAuthToken,
     getLiveScoreCompetiton,
     getOrganisationData,
+    getUmpireCompetitonData,
 } from 'util/sessionStorage';
 import history from 'util/history';
 import { isArrayNotEmpty, regexNumberExpression } from 'util/helpers';
@@ -866,6 +867,7 @@ const LiveScoreAxiosApi = {
     // Delete Player
     liveScoreDeletePlayer(playerId) {
         const url = `/players/id/${playerId}`;
+        console.log(url)
         return Method.dataDelete(url, token);
     },
 
@@ -1098,13 +1100,15 @@ const LiveScoreAxiosApi = {
     /// Get Player list with paging
     getPlayerWithPagination(competitionID, offset, limit, search, sortBy, sortOrder, isParent, competitionOrganisationId) {
         console.log(isParent)
-
+        const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
         let url = null;
+        let compOrgId = competitionOrganisation.id;
+
         if (!isParent) {
             if (search && search.length > 0) {
-                url = `/players/admin?competitionOrganisationId=${competitionOrganisationId}&offset=${offset}&limit=${limit}&search=${search}`;
+                url = `/players/admin?competitionOrganisationId=${compOrgId}&offset=${offset}&limit=${limit}&search=${search}`;
             } else {
-                url = `/players/admin?competitionOrganisationId=${competitionOrganisationId}&offset=${offset}&limit=${limit}&search=`;
+                url = `/players/admin?competitionOrganisationId=${compOrgId}&offset=${offset}&limit=${limit}&search=`;
             }
         } else {
             if (search && search.length > 0) {
@@ -1122,7 +1126,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// / Export Files
-    async exportFiles(url) {        
+    async exportFiles(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
 
@@ -1158,7 +1162,17 @@ const LiveScoreAxiosApi = {
     addEditUmpire(data, teamId, existingManagerId, isUmpire, isUmpireCoach) {
         const body = data;
         const id = JSON.parse(localStorage.getItem('umpireCompetitionId'));
-        const url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
+        const compData = JSON.parse(getUmpireCompetitonData());
+        const { organisationId } = getOrganisationData();
+        let compOrgId = compData ? compData.organisationId : 0
+        let isCompParent = organisationId === compOrgId
+        let url = ""
+        if (!isCompParent) {
+            //  url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
+            url = `/users/umpire?entityTypeId=${6}&entityId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
+        } else {
+            url = `/users/umpire?entityTypeId=${1}&entityId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
+        }
         return Method.dataPost(url, token, body);
     },
 
@@ -1172,11 +1186,11 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder , entityType) {
+    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder, entityType) {
         let url = null;
         const body = paginationBody;
 
-        if (status === 'All') {            
+        if (status === 'All') {
             // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;            
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&roleIds=${refRoleId}`;
         } else {
