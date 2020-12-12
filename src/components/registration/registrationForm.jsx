@@ -107,6 +107,22 @@ const columns = [
                 onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
             />
         )
+    },
+
+    {
+        title:"Registration Cap",
+        dataIndex: "registrationType",
+        key:"registrationCap",
+        render: (registrationCap, record, index) =>  {
+            return (
+                <InputWithHead
+                    placeholder="Registration Cap"
+                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                    value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
+                    />
+            )
+        }
+
     }
 ];
 

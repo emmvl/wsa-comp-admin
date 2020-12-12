@@ -1616,6 +1616,9 @@ const AppConstants = {
   umpireAccreditation: "Umpire Accreditation",
   expiry: "Expiry",
   incidentExport : '/incident/export?entityId=',
+  minNoDays: "Minimum number of days",
+  _days: 'Days',
+  extendEndDate: "Extend End Date"
 };
 
 export default AppConstants;

@@ -981,3 +981,10 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
     font-weight: 700;
     margin-top: 15px;
 }
+
+.validity-period-bg{
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    width: 40%;
+}
