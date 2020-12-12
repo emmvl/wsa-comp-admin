@@ -21,7 +21,7 @@ import {
     liveScoreClear
 } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
 import { liveScoreManagerSearch, clearListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-
+import { checkLivScoreCompIsParent } from "util/permissions"
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
@@ -36,28 +36,31 @@ class LiveScoreAddEditCoach extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             teamLoad: false,
             exsitingValue: '',
-            compOrgId: 0
+            compOrgId: 0,
+            liveScoreCompIsParent: false
         }
         this.formRef = createRef();
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
-            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
-            this.setState({ competitionId: id, compOrgId: compOrgId })
-            if (id !== null) {
-                this.props.getliveScoreTeams(id, null, compOrgId)
-            }
-            if (this.state.isEdit === true) {
-                this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
-                this.setState({ loader: true })
-            } else {
-                this.props.liveScoreUpdateCoach('', 'isAddCoach')
-            }
-            if (this.state.isEdit === true) {
-                this.setInitalFiledValue()
-            }
+            checkLivScoreCompIsParent().then((value) => {
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.setState({ competitionId: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+                if (id !== null) {
+                    this.props.getliveScoreTeams(id, null, compOrgId)
+                }
+                if (this.state.isEdit === true) {
+                    this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
+                    this.setState({ loader: true })
+                } else {
+                    this.props.liveScoreUpdateCoach('', 'isAddCoach')
+                }
+                if (this.state.isEdit === true) {
+                    this.setInitalFiledValue()
+                }
+            })
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -444,13 +447,13 @@ class LiveScoreAddEditCoach extends Component {
                             teams: coachdata.teams
                         }
                     }
-                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
+                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
                 } else if (coachRadioBtn == 'existing') {
                     body = {
                         id: exsitingManagerId,
                         teams: coachdata.teams
                     }
-                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
+                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
                 }
             }
         } else {
@@ -474,13 +477,13 @@ class LiveScoreAddEditCoach extends Component {
                         teams: coachdata.teams
                     }
                 }
-                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
+                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
             } else if (coachRadioBtn == 'existing') {
                 body = {
                     id: exsitingManagerId,
                     teams: coachdata.teams
                 }
-                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId)
+                this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
             }
         }
     };

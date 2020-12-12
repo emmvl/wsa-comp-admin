@@ -757,19 +757,21 @@ class LiveScoreDashboard extends Component {
                         </Tooltip>
                     </div>
                 </div>
-                <div className="col-sm text-right">
-                    <NavLink
-                        to={{
-                            pathname: '/matchDayAddNews',
-                            state: { key: 'dashboard', item: null }
-                        }}
-                        className="text-decoration-none"
-                    >
-                        <Button className="primary-add-comp-form" type="primary">
-                            + {AppConstants.addNew}
-                        </Button>
-                    </NavLink>
-                </div>
+                {this.state.liveScoreCompIsParent &&
+                    <div className="col-sm text-right">
+                        <NavLink
+                            to={{
+                                pathname: '/matchDayAddNews',
+                                state: { key: 'dashboard', item: null }
+                            }}
+                            className="text-decoration-none"
+                        >
+                            <Button className="primary-add-comp-form" type="primary">
+                                + {AppConstants.addNew}
+                            </Button>
+                        </NavLink>
+                    </div>
+                }
             </div>
 
         )

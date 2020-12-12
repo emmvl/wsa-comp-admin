@@ -103,20 +103,20 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder,compOrgId) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, compOrgId, isParent) {
     let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}&userName=${searchText}&offset=${offset}&limit=${10}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}&offset=${offset}&limit=${10}`;
       } else {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}&userName=${searchText}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}`;
       }
     } else {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}&offset=${offset}&limit=${10}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&offset=${offset}&limit=${10}`;
       } else {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${compOrgId}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}`;
       }
 
     }
@@ -194,8 +194,8 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  liveScoreSearchManager(data, competitionOrgId,roleId) {
-    let role_Id=roleId?roleId:5
+  liveScoreSearchManager(data, competitionOrgId, roleId) {
+    let role_Id = roleId ? roleId : 5
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
     if (data) {
       const url = `users/byRole?roleId=${role_Id}&entityTypeId=6&entityId=${competitionOrgId}&userName=${data}`;
@@ -261,13 +261,13 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
+  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder, isParent, competitionId) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url;
     if (offset != null) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=6&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}&offset=${offset}&limit=${10}`
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=6&entityId=${entityId}&userName=${search}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}`
     }
 
     if (sortBy && sortOrder) {
@@ -439,14 +439,14 @@ let userHttpApi = {
     }
     return Method.dataGet(url, token);
   },
-  getSpectatorList(payload){
+  getSpectatorList(payload) {
     const url = `users/dashboard/spectator`;
     return Method.dataPost(url, token, payload);
   },
-  registrationResendEmail(teamId,userId){
+  registrationResendEmail(teamId, userId) {
     let payload = {
-      teamId :teamId,
-      userId :userId
+      teamId: teamId,
+      userId: userId
     }
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
