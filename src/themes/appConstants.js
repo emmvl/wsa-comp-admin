@@ -1551,6 +1551,7 @@ const AppConstants = {
   registrationCloseDate: 'Registration close date',
   filterDates: 'Filter Dates',
   showOnlyScheduledMatches: 'Show only scheduled matches',
+  showByDivision: 'Show by Division/Grade',
   uploadBankAccount: 'Upload Bank Account',
   editBankAccount: 'Edit Bank Account',
   theyAlreadyTakenCourt: 'They have already taken the court for training, grading or a competition game',
