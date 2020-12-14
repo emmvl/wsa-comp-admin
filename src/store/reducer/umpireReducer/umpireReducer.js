@@ -245,7 +245,11 @@ function umpireState(state = initialState, action) {
                 state.umpireRadioBtn = 'new'
                 state.umpireCoachCheckBox = false
                 state.umpireCheckbox = false
-            } else {
+            }else if(action.key === 'partcipateAffiliateId'){
+                let umpire_AffiliateObj = getAffiliateData(data, state.affilateList)
+                state.umpireData['affiliates'] = umpire_AffiliateObj
+            } 
+            else {
                 state.umpireData[action.key] = action.data
             }
             return {

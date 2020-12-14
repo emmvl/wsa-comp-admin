@@ -3314,7 +3314,7 @@ class RegistrationCompetitionFee extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-                            <div className="mt-2 ml-n40">
+                            <div className="mt-2">
                                 <CustomToolTip placement="bottom">
                                     <span>{AppConstants.genderRestrictionMsg}</span>
                                 </CustomToolTip>
@@ -3385,7 +3385,7 @@ class RegistrationCompetitionFee extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-                            <div className="mt-2 ml-n35">
+                            <div className="mt-2 ">
                                 <CustomToolTip placement="bottom">
                                     <span>{AppConstants.ageRestrictionMsg}</span>
                                 </CustomToolTip>

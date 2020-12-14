@@ -1165,10 +1165,11 @@ const LiveScoreAxiosApi = {
         const { organisationId } = getOrganisationData();
         let compOrgId = compData ? compData.organisationId : 0
         let isCompParent = organisationId === compOrgId
+        let comp_Org_Id= compData ? compData.competitionOrganisation ? compData.competitionOrganisation.id : 0 : 0
         let url = ""
         if (!isCompParent) {
             //  url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
-            url = `/users/umpire?entityTypeId=${6}&entityId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
+            url = `/users/umpire?entityTypeId=${6}&entityId=${comp_Org_Id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}&competitionId=${id}`;
         } else {
             url = `/users/umpire?entityTypeId=${1}&entityId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
         }
