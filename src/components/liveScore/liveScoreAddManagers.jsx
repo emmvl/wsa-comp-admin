@@ -188,7 +188,7 @@ class LiveScoreAddManager extends Component {
                                     //     ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                     //     : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
                                     value && value.length > 2
-                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 3)
+                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 5)
                                         : this.props.clearListAction()
                                 }}
                             >

@@ -332,7 +332,7 @@ class LiveScoreAddEditCoach extends Component {
                                     //     : this.props.liveScoreCoachListAction(3, 1, this.state.competitionId)
                                     // this.props.liveScoreCoachListAction(3, 1, this.state.competitionId, value)
                                     value && value.length > 2
-                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 17)
+                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 5)
                                         : this.props.clearListAction()
                                 }}
                             >

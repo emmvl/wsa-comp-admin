@@ -195,10 +195,9 @@ let userHttpApi = {
   },
 
   liveScoreSearchManager(data, competitionOrgId, roleId) {
-    let role_Id = roleId ? roleId : 5
-    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
+    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
     if (data) {
-      const url = `users/byRole?roleId=${role_Id}&entityTypeId=6&entityId=${competitionOrgId}&userName=${data}`;
+      const url = `users/byRole?roleId=5&entityTypeId=1&entityId=${id}&userName=${data}`;
       return Method.dataGet(url, token);
     }
   },
