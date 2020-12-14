@@ -1937,15 +1937,14 @@ class MultifieldDrawsNewTimeline extends Component {
         return (
             <>
                 <div
-                    className="scroll-bar pb-4"
+                    className="scroll-bar"
                     style={{
                         width: 'fit-content',
                     }}
                 >
                     <div className="table-head-wrap">
                         {/* Day name list */}
-                        <div className="tablehead-row" style={{ marginLeft: 34 }}>
-                            <div className="sr-no empty-bx" />
+                        <div className="tablehead-row" style={{ marginLeft: 34, height: 40 }}>
                             {date.map((itemDate, index) => {
                                 // for drawing days position
                                 const newTimeAllDayScheduleHours = [...this.getDraggableViewHeaderData(itemDate, dateNewArray)];
@@ -1979,8 +1978,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         </div>
 
                         {/* Times list */}
-                        <div className="tablehead-row" style={{ marginLeft: 34 }}>
-                            <div className="sr-no empty-bx" />
+                        <div className="tablehead-row" style={{ marginLeft: 34, height: 40 }}>
                             {date.map((itemDate, index) => {
                                 // for drawing time position
                                 const timeAllDayScheduleHours = this.getDraggableViewHeaderData(itemDate, dateNewArray);
@@ -2044,20 +2042,18 @@ class MultifieldDrawsNewTimeline extends Component {
                         let diffDayScheduleTime = 0;
 
                         return (
-                            <div key={"court" + index}>
-                                <div className="sr-no" style={{ height: 62, boxSizing: 'border-box' }}>
+                            <div key={"court" + index} style={{ height: 70 }}>
                                     <div
-                                        className="venueCourt-tex-div text-center ml-n20"
+                                        className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
                                         style={{
                                             width: 95,
-                                            height: 53,
+                                            height: 48,
                                         }}
                                     >
                                         <span className="venueCourt-text">
                                             {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                                         </span>
                                     </div>
-                                </div>
                                 {date.map((fieldItemDate, fieldItemDateIndex) => {
                                     // for check the schedule of the day
                                     const { startDayTime, endDayTime } = this.getStartAndEndDayTime(fieldItemDate, dateNewArray);
@@ -2123,14 +2119,13 @@ class MultifieldDrawsNewTimeline extends Component {
                                         };
 
                                     return (
-                                        <div key={"slot" + fieldItemDateIndex}>
+                                        <div key={"slot" + fieldItemDateIndex} className='position-relative'>
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
                                                 className={'box white-bg-timeline day-box'}
                                                 style={{
                                                     minWidth: 'unset',
                                                     left: prevDaysWidth,
-                                                    top: topMargin,
                                                     overflow: 'visible',
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",

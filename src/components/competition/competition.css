@@ -506,6 +506,7 @@ a.collapsed i {
     /* white-space: nowrap; */
     padding-right: 10px;
     width: 75px;
+    color: var(--app-9b9bad);
 }
 
 .Tooltip_Wrapper__3AlJ0 svg {
