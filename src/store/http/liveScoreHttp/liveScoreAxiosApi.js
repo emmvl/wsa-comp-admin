@@ -1099,10 +1099,9 @@ const LiveScoreAxiosApi = {
 
     /// Get Player list with paging
     getPlayerWithPagination(competitionID, offset, limit, search, sortBy, sortOrder, isParent, competitionOrganisationId) {
-        console.log(isParent)
         const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
         let url = null;
-        let compOrgId = competitionOrganisation.id;
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0;
 
         if (!isParent) {
             if (search && search.length > 0) {

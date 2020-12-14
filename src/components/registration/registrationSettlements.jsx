@@ -31,12 +31,12 @@ function tableSort(a, b, key) {
 const columns = [
     {
         title: "Transaction Id",
-        dataIndex: 'balance_transaction',
-        key: 'balance_transaction',
+        dataIndex: 'id',
+        key: 'id',
         sorter: false,
-        render: (balance_transaction, record) => (
+        render: (id, record) => (
             <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }}>
-                <span style={{ color: "#ff8237" }}>{balance_transaction}</span>
+                <span style={{ color: "#ff8237" }}>{id}</span>
             </NavLink>
         )
     },
