@@ -928,15 +928,15 @@ class Registration extends Component {
                     onChange={(e) => { this.setState({ cashTranferType: e.target.value }) }}
                 >
                     <Radio value={1}>{AppConstants.fullCashAmount}</Radio>
-                    <Radio value={2}>{AppConstants.partialCashAmount}</Radio>
+                    {/* <Radio value={2}>{AppConstants.partialCashAmount}</Radio> */}
 
-                    {this.state.cashTranferType == 2 && (
+                    {/* {this.state.cashTranferType == 2 && (
                         <InputWithHead
                             placeholder={AppConstants.amount}
                             value={this.state.amount}
                             onChange={(e) => this.setState({ amount: e.target.value })}
                         />
-                    )}
+                    )} */}
                 </Radio.Group>
             </Modal>
         )

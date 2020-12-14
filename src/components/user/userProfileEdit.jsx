@@ -860,12 +860,12 @@ class UserProfileEdit extends Component {
         const { displaySection } = this.state;
         return (
             <div className="content-view pt-0">
-                {displaySection === "1" && <div>{this.addressEdit()}</div>}
-                {(displaySection === "2" || displaySection === "6") && <div>{this.primaryContactEdit()}</div>}
+                {(displaySection === "1" || displaySection === "2"  || displaySection === "6" || displaySection === "7" || displaySection === "8") && <div>{this.addressEdit()}</div>}
+                {/* {(displaySection === "2" ) && <div>{this.primaryContactEdit()}</div>} */}
                 {displaySection === "3" && <div>{this.emergencyContactEdit()}</div>}
                 {displaySection === "4" && <div>{this.otherInfoEdit()}</div>}
                 {displaySection === "5" && <div>{this.medicalEdit()}</div>}
-                {(displaySection === "7" || displaySection === "8") && <div>{this.addParentOrChild()}</div>}
+                {/* {(displaySection === "7" || displaySection === "8") && <div>{this.addParentOrChild()}</div>} */}
             </div>
         );
     };

@@ -6224,9 +6224,15 @@ class RegistrationCompetitionFee extends Component {
                                                                 {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
                                                                     <div className="d-flex">
                                                                         <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
-                                                                        {!item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
-                                                                            <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
-                                                                        )}
+                                                                        <Radio className="team-reg-radio-custom-style" 
+                                                                            disabled={item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2)}
+                                                                            style={{ width: "50%" }} 
+                                                                            value={3}><span>{AppConstants.feesPaidAtEachMatchByPlayer}
+                                                                                            {item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
+                                                                                                <CustomToolTip>{AppConstants.perMatchFeesCannotSet}</CustomToolTip>
+                                                                                            )} 
+                                                                                    </span>
+                                                                            </Radio>
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -6822,7 +6828,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamSeasonal = (feeDetails) => {
         let isSeasonalValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].teamRegChargeTypeRefId == 1) {
+            if (feeDetails[i].isTeamSeasonal && feeDetails[i].teamRegChargeTypeRefId == 1) {
                 isSeasonalValue = true;
                 break;
             }
@@ -6833,7 +6839,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamCasual = (feeDetails) => {
         let isCasualValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].teamRegChargeTypeRefId == 2 || feeDetails[i].teamRegChargeTypeRefId == 3) {
+            if (feeDetails[i].isTeamSeasonal && (feeDetails[i].teamRegChargeTypeRefId == 2 || feeDetails[i].teamRegChargeTypeRefId == 3)) {
                 isCasualValue = true;
                 break;
             }
