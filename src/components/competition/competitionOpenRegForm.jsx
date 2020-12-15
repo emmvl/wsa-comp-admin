@@ -1118,7 +1118,7 @@ class CompetitionOpenRegForm extends Component {
                         {appState.competitionFormatTypes.map(item => (
                             <div className="contextualHelp-RowDirection" key={item.id}>
                                 <Radio key={item.id} value={item.id}>{item.description}</Radio>
-                                <div className="ml-5 mt-n20">
+                                <div className="ml-n20 mt-3">
                                     <CustomToolTip>
                                         <span>{item.helpMsg}</span>
                                     </CustomToolTip>

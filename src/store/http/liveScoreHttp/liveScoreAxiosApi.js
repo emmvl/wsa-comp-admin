@@ -1256,7 +1256,8 @@ const LiveScoreAxiosApi = {
     assignUmpire(payload, rosterLocked) {
         const body = payload;
         // const url = '/roster/admin/assign';
-        const url = `/matchUmpire?matchId=${payload[0].matchId}&rosterLocked=${rosterLocked}`;
+        // const url = `/matchUmpire?matchId=${payload[0].matchId}&rosterLocked=${rosterLocked}`;
+        const url = `/matchUmpire?matchId=${payload[0].matchId}`;
         return Method.dataPost(url, token, body);
     },
 
