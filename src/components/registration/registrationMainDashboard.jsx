@@ -21,12 +21,12 @@ const { Content } = Layout;
 const { Option } = Select;
 let this_Obj = null
 
-const listeners = (key) => ({
-    onClick: () => tableSort(key),
+const listeners = (key, tableName) => ({
+    onClick: () => tableSort(key, tableName),
 });
 
 /////function to sort table column
-function tableSort(key) {
+function tableSort(key, tableName) {
     let sortBy = key;
     let sortOrder = null;
     if (this_Obj.state.sortBy !== key) {
@@ -37,7 +37,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.registrationMainDashboardListAction(this_Obj.state.year, sortBy, sortOrder);
+    this_Obj.props.registrationMainDashboardListAction(this_Obj.state.year, sortBy, sortOrder, tableName);
 }
 
 const columns = [
@@ -46,7 +46,7 @@ const columns = [
         dataIndex: "competitionName",
         key: "competitionName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("pcompetitionName"),
+        onHeaderCell: ({ dataIndex }) => listeners("pcompetitionName", 'part'),
     },
     {
         title: "Registration Divisions",
@@ -69,7 +69,7 @@ const columns = [
             )
         },
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("pregistrationDivisions"),
+        onHeaderCell: ({ dataIndex }) => listeners("pregistrationDivisions", 'part'),
     },
     {
         title: "Registration Type",
@@ -85,14 +85,14 @@ const columns = [
             )
         },
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("pregistrationType"),
+        onHeaderCell: ({ dataIndex }) => listeners("pregistrationType", 'part'),
     },
     {
         title: "Status",
         dataIndex: "statusName",
         key: "statusName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("pstatus"),
+        onHeaderCell: ({ dataIndex }) => listeners("pstatus", 'part'),
     },
 ];
 
@@ -102,7 +102,7 @@ const columnsOwned = [
         dataIndex: "competitionName",
         key: "competitionName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("ocompetitionName"),
+        onHeaderCell: ({ dataIndex }) => listeners("ocompetitionName", 'own'),
     },
     {
         title: "Registration Divisions",
@@ -125,7 +125,7 @@ const columnsOwned = [
             )
         },
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("oregistrationDivisions"),
+        onHeaderCell: ({ dataIndex }) => listeners("oregistrationDivisions", 'own'),
     },
     {
         title: "Registration Type",
@@ -141,14 +141,14 @@ const columnsOwned = [
             )
         },
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("oregistrationType"),
+        onHeaderCell: ({ dataIndex }) => listeners("oregistrationType", 'own'),
     },
     {
         title: "Status",
         dataIndex: "statusName",
         key: "statusName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("ostatus"),
+        onHeaderCell: ({ dataIndex }) => listeners("ostatus", 'own'),
     },
 ];
 
@@ -187,8 +187,9 @@ class RegistrationMainDashboard extends Component {
             sortBy = regDashboardListAction.sortBy
             sortOrder = regDashboardListAction.sortOrder
             let year = regDashboardListAction.yearRefId
+            let key = regDashboardListAction.key
             await this.setState({ sortBy, sortOrder, year })
-            this.props.registrationMainDashboardListAction(year, sortBy, sortOrder)
+            this.props.registrationMainDashboardListAction(year, sortBy, sortOrder, key)
             this.props.getAllCompetitionAction(year)
         }
     }
@@ -204,7 +205,7 @@ class RegistrationMainDashboard extends Component {
                 } else {
                     yearRefId = storedYearID
                 }
-                this.props.registrationMainDashboardListAction(yearRefId, this.state.sortBy, this.state.sortOrder)
+                this.props.registrationMainDashboardListAction(yearRefId, this.state.sortBy, this.state.sortOrder, "all")
                 this.props.getAllCompetitionAction(yearRefId)
                 this.setState({ loading: false, year: yearRefId })
             }
@@ -247,7 +248,7 @@ class RegistrationMainDashboard extends Component {
         let { sortBy, sortOrder } = this.state
         localStorage.setItem("yearId", yearId)
         this.setState({ year: yearId })
-        this.props.registrationMainDashboardListAction(yearId, sortBy, sortOrder)
+        this.props.registrationMainDashboardListAction(yearId, sortBy, sortOrder, "all")
         this.props.getAllCompetitionAction(yearId)
     }
 
@@ -475,7 +476,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-dash-table-view">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.registrationDashboardState.onLoad && true}
+                        loading={this.props.registrationDashboardState.partLoad && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={this.props.registrationDashboardState.participatingInRegistrations}
@@ -497,7 +498,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.registrationDashboardState.onLoad === true && true}
+                        loading={this.props.registrationDashboardState.ownedLoad === true && true}
                         className="home-dashboard-table"
                         columns={columnsOwned}
                         dataSource={this.props.registrationDashboardState.ownedRegistrations}

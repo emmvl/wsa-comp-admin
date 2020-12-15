@@ -23,7 +23,7 @@ import { liveScoreCoachListAction } from "../../store/actions/LiveScoreAction/li
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { getliveScoreTeams } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { userExportFilesAction } from "../../store/actions/appAction";
-import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import { checkLivScoreCompIsParent } from "util/permissions"
 
 const { Content } = Layout;
@@ -101,7 +101,7 @@ const columns = [
         render: (linkedEntity) => (
             <div>
                 {linkedEntity.map((item, i) => (
-                    teamListData(item.entityId) ? (
+                    teamListDataCheck(item.entityId, _this.state.liveScoreCompIsParent, item, _this.state.compOrgId) ? (
                         <div key={`name${i}` + linkedEntity.entityId}>
                             <NavLink
                                 to={{

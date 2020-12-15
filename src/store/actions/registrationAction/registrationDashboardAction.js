@@ -23,11 +23,12 @@ function getAllCompetitionAction(yearRefId) {
 }
 
 ///////registration main dashboard listing owned and participate registration
-function registrationMainDashboardListAction(yearRefId, sortBy, sortOrder) {
+function registrationMainDashboardListAction(yearRefId, sortBy, sortOrder, key) {
     const action = {
         type: ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD,
         yearRefId,
-        sortBy, sortOrder
+        sortBy, sortOrder,
+        key
     }
     return action
 }

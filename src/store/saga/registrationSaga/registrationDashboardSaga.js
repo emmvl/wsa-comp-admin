@@ -81,7 +81,8 @@ export function* registrationMainDashboardListSaga(action) {
             yield put({
                 type: ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_SUCCESS,
                 result: result.result.data,
-                status: result.status
+                status: result.status,
+                key: action.key
             });
         } else {
             yield call(failSaga, result)

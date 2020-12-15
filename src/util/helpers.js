@@ -55,6 +55,29 @@ const teamListData = (value) => {
     }
 };
 
+const teamListDataCheck = (value, isParent, data, compOrgId) => {
+    if (isParent) {
+        if (value == 1) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        if (value == 1) {
+            return false;
+        }
+        else if (data.competitionOrganisationId == compOrgId) {
+            return true
+        }
+        else {
+            return false
+        }
+
+
+    }
+
+}
+
 const regexNumberExpression = (number) => {
     if (number) {
         return number.replace(/[^\d]/g, '');
@@ -90,5 +113,6 @@ module.exports = {
     regexNumberExpression,
     isImageFormatValid,
     isNotNullAndUndefined,
-    randomKeyGen
+    randomKeyGen,
+    teamListDataCheck
 };

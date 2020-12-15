@@ -15,7 +15,7 @@ import { liveScoreManagerListAction } from "../../store/actions/LiveScoreAction/
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import history from "../../util/history";
 import { userExportFilesAction } from "../../store/actions/appAction";
-import { teamListData } from "../../util/helpers";
+import { teamListDataCheck } from "../../util/helpers";
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
@@ -102,7 +102,7 @@ const columns = [
         render: (linkedEntity) => (
             <div>
                 {linkedEntity.map((item, i) => (
-                    teamListData(item.entityId) ? (
+                    teamListDataCheck(item.entityId, _this.state.liveScoreCompIsParent, item, _this.state.compOrgId) ? (
                         <div key={`managerName${i}` + item.entityId}>
                             <NavLink
                                 to={{

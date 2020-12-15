@@ -90,7 +90,7 @@ const columns = [
     {
         title: "Registration Lock",
         dataIndex: "registrationLock",
-        width: "25%",
+        width: "15%",
         key: "registrationLock",
         filterDropdown: true,
         filterIcon: () => (

@@ -263,6 +263,7 @@ const AppConstants = {
 
   //* ****************Competition Format */
   competition_name: 'Competition Name',
+  newCompetition_name : 'Competition Name you are Transferring to?',
   use_default_competitionFormat: 'Use default Competition Format Settings',
   standard_round_robin: 'Standard Round Robin',
   double_round_robin: 'Double Round Robin',
@@ -462,6 +463,7 @@ const AppConstants = {
   perDivision: 'Per Division',
   paymentOptions: 'Payment Options',
   organisationName: 'Organisation Name',
+  newOrganisationName : 'Organisation Name you are Transferring to?',
   organisationLogo: 'Organisation Logo',
   registrationOpen: 'Registration Open',
   registrationLock: 'Registration Lock',

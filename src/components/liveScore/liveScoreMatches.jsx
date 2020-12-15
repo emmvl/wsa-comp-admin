@@ -6,7 +6,7 @@ import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Select }
 import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
-import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
@@ -109,16 +109,19 @@ const columns = [
         key: 'team1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (team1, record) => teamListData(team1.id) ? (
-            <NavLink
-                to={{
-                    pathname: '/matchDayTeamView',
-                    state: { tableRecord: team1, screenName: 'fromMatchList' }
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{team1.name}</span>
-            </NavLink>
-        ) : (
+        render: (team1, record) => teamListDataCheck(team1.id, _this.state.liveScoreCompIsParent, record, _this.state.competitionOrganisationId) ?
+            (
+                <NavLink
+                    to={{
+                        pathname: '/matchDayTeamView',
+                        state: { tableRecord: team1, screenName: 'fromMatchList' }
+                    }}
+                >
+                    <span className="input-heading-add-another pt-0">{team1.name}</span>
+                </NavLink>
+            ) : (
+
+
                 <span>{team1.name}</span>
             )
     },
@@ -128,7 +131,7 @@ const columns = [
         key: 'team2',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (team2, record) => teamListData(team2.id) ? (
+        render: (team2, record) => teamListDataCheck(team2.id, _this.state.liveScoreCompIsParent, record, _this.state.competitionOrganisationId) ? (
             <NavLink
                 to={{
                     pathname: '/matchDayTeamView',
