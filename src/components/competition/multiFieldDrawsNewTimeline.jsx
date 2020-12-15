@@ -126,6 +126,7 @@ class MultifieldDrawsNewTimeline extends Component {
             filterDates: false,
             isFilterSchedule: false,
             isDivisionNameShow: false,
+            isAxisInverted: false,
             regenerateDrawExceptionModalVisible: false,
             regenerateExceptionRefId: 1,
             draggableEventObject: null,
@@ -1736,6 +1737,13 @@ class MultifieldDrawsNewTimeline extends Component {
                             onChange={e => this.onCalendarCheckboxChange('isDivisionNameShow', e.target.checked)}
                         >
                             {AppConstants.showByDivision}
+                        </Checkbox>
+                        <Checkbox
+                            className="single-checkbox-radio-style ml-0 my-2"
+                            checked={this.state.isAxisInverted}
+                            onChange={e => this.onCalendarCheckboxChange('isAxisInverted', e.target.checked)}
+                        >
+                            {AppConstants.invertAxis}
                         </Checkbox>
                     </div>
                     <div
