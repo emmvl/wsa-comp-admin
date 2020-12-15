@@ -24,7 +24,7 @@
   font-size: 13px;
   overflow-wrap: break-word;
   color: var(--app-9b9bad);
-  padding-left: 21px;
+  /* padding-left: 21px; */
   height: 48px;
   background-color: var(--app-white);
 }
@@ -35,7 +35,7 @@
   font-family: inter, sans-serif;
   height: 64px;
   background-color: var(--app-white);
-  padding-left: 21px;
+  /* padding-left: 21px; */
 }
 
 .home-dashboard-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,

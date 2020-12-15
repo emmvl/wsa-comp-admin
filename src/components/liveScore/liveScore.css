@@ -244,7 +244,7 @@
   font-size: 13px;
   overflow-wrap: break-word;
   color: var(--app-9b9bad);
-  padding-left: 21px;
+  /* padding-left: 21px; */
   height: 48px;
   background-color: var(--app-white);
 }
