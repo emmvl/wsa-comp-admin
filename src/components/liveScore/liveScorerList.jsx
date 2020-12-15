@@ -14,7 +14,7 @@ import { liveScoreScorerListAction } from "../../store/actions/LiveScoreAction/l
 import { getLiveScoreCompetiton, getOrganisationData } from "../../util/sessionStorage";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
-import { teamListData } from "../../util/helpers";
+import { teamListDataCheck } from "../../util/helpers";
 
 function getName(item) {
     return item.name;
@@ -111,7 +111,7 @@ const columns = [
         render: (teams, record) => (
             <div>
                 {teams.map((item, i) => (
-                    teamListData(item.id) ? (
+                    teamListDataCheck(item.id, _this.state.liveScoreCompIsParent, item, _this.state.compOrgId) ? (
                         <div key={`teams${i}` + item.id}>
                             <NavLink
                                 to={{
@@ -192,6 +192,7 @@ class LiveScorerList extends Component {
             sortBy: null,
             sortOrder: null,
             liveScoreCompIsParent: false,
+            compOrgId: 0
         }
 
         _this = this;
@@ -207,11 +208,12 @@ class LiveScorerList extends Component {
             search: ""
         };
         if (getLiveScoreCompetiton()) {
-            const { id, organisationId } = JSON.parse(getLiveScoreCompetiton());
+            const { id, organisationId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
             const orgItem = await getOrganisationData();
             const userOrganisationId = orgItem ? orgItem.organisationId : 0;
             let liveScoreCompIsParent = userOrganisationId === organisationId
-            this.setState({ competitionId: id, liveScoreCompIsParent });
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            this.setState({ competitionId: id, liveScoreCompIsParent, compOrgId });
             if (id !== null) {
                 if (scorerActionObject) {
                     let body = scorerActionObject.body

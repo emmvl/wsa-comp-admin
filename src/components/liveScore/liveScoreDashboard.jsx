@@ -13,7 +13,7 @@ import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
 import moment from "moment";
-import { isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import ValidationConstants from "../../themes/validationConstant";
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
@@ -171,26 +171,33 @@ const columnsTodaysMatch = [
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
-        render: (team1) =>
+        render: (team1, record) => teamListDataCheck(team1.id, this_obj.state.liveScoreCompIsParent, record, this_obj.state.compOrgId) ? (
             <NavLink to={{
                 pathname: '/matchDayTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
+        )
+            : (
+                <span  >{team1.name}</span>
+            )
     },
     {
         title: 'Away',
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
-        render: (team2) =>
-            <NavLink to={{
+        render: (team2, record) => teamListDataCheck(team2.id, this_obj.state.liveScoreCompIsParent, record, this_obj.state.compOrgId) ?
+            (<NavLink to={{
                 pathname: '/matchDayTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }}>
                 <span className="input-heading-add-another pt-0" >{team2.name}</span>
-            </NavLink>
+            </NavLink>)
+            : (
+                <span  >{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -296,26 +303,34 @@ const columnsTodaysMatch_1 = [
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
-        render: (team1, record) =>
+        render: (team1, record) => teamListDataCheck(team1.id, this_obj.state.liveScoreCompIsParent, record, this_obj.state.compOrgId) ? (
             <NavLink to={{
                 pathname: '/matchDayTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }}>
-                <span className="input-heading-add-another pt-0">{team1.name}</span>
+                <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
+        )
+            : (
+                <span  >{team1.name}</span>
+            )
     },
     {
         title: 'Away',
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
-        render: (team2, record) =>
-            <NavLink to={{
+        render: (team2, record) => teamListDataCheck(team2.id, this_obj.state.liveScoreCompIsParent, record, this_obj.state.compOrgId) ?
+            (<NavLink to={{
                 pathname: '/matchDayTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }}>
-                <span className="input-heading-add-another pt-0">{team2.name}</span>
+                <span className="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink>
+            )
+            : (
+                <span  >{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -465,14 +480,17 @@ const columnsTodaysIncient = [
                     {
                         isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
                             item.player ? item.player.team ? item.player.team.deleted_at ?
-                                <span className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                                < span className="desc-text-style side-bar-profile-data" > {getTeamName(item)}</span>
                                 :
-                                <NavLink to={{
-                                    pathname: '/matchDayTeamView',
-                                    state: { tableRecord: record, screenName: 'liveScoreDashboard' }
-                                }}>
-                                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
-                                </NavLink>
+                                teamListDataCheck(item.player.team.id, this_obj.state.liveScoreCompIsParent, item.player.team, this_obj.state.compOrgId) ?
+                                    <NavLink to={{
+                                        pathname: '/matchDayTeamView',
+                                        state: { tableRecord: record, screenName: 'liveScoreDashboard' }
+                                    }}>
+                                        <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                                    </NavLink>
+                                    :
+                                    < span className="desc-text-style side-bar-profile-data" > {getTeamName(item)}</span>
                                 :
                                 null
                                 :
@@ -553,7 +571,8 @@ class LiveScoreDashboard extends Component {
         super(props);
         this.state = {
             incidents: "incidents",
-            liveScoreCompIsParent: false
+            liveScoreCompIsParent: false,
+            compOrgId: 0
         }
         this_obj = this
         this.props.initializeCompData()
@@ -570,7 +589,8 @@ class LiveScoreDashboard extends Component {
             checkLivScoreCompIsParent().then((value) => {
                 this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
                 this.setState({
-                    liveScoreCompIsParent: value
+                    liveScoreCompIsParent: value,
+                    compOrgId: compOrgId
                 })
             })
 

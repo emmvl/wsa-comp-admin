@@ -6,7 +6,7 @@ import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Select }
 import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
-import { isArrayNotEmpty, teamListData, teamListDataCheck } from "../../util/helpers";
+import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
