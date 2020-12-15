@@ -66,7 +66,6 @@ class AddUmpire extends Component {
             let compOrgId = compData ? compData.organisationId : 0
             let isCompParent = userOrganisationId === compOrgId
             this.setState({ isCompParent });
-            console.log("isCompParent", isCompParent)
             this.props.umpireListAction({ refRoleId: JSON.stringify([5]), entityTypes: 1, compId: compId, offset: 0 })
             if (compId !== null) {
                 this.props.getUmpireAffiliateList({ id: compId })
@@ -111,6 +110,7 @@ class AddUmpire extends Component {
                 const { affiliateId } = this.props.umpireState
                 this.setSelectedAffiliateValue(affiliateId)
                 this.setState({ affiliateLoader: false })
+                this.setInitialFieldValue()
             }
         }
     }
@@ -124,7 +124,6 @@ class AddUmpire extends Component {
     setInitialFieldValue = () => {
         const { umpireData, affiliateId } = this.props.umpireState
         let compData = JSON.parse(getUmpireCompetitonData())
-        console.log("compData", compData)
         let competitionOrgId = compData.competitionOrganisation ? compData.competitionOrganisation.id : null
         let umpireNewAffiliateName = !this.state.isCompParent ? competitionOrgId : affiliateId
         if (this.state.isEdit) {
@@ -136,7 +135,7 @@ class AddUmpire extends Component {
                 'umpireNewAffiliateName': umpireNewAffiliateName
             })
         } else {
-
+            !this.state.isCompParent && this.props.updateAddUmpireData([umpireNewAffiliateName], 'partcipateAffiliateId')
             umpireNewAffiliateName && this.formRef.current.setFieldsValue({
                 'umpireNewAffiliateName': umpireNewAffiliateName
             })

@@ -19,7 +19,7 @@ import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { exportFilesAction } from "../../store/actions/appAction";
 import ValidationConstants from "../../themes/validationConstant";
-import { teamListData } from "../../util/helpers";
+import { teamListData, teamListDataCheck } from "../../util/helpers";
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
@@ -135,7 +135,7 @@ const columns = [
         key: 'team',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (team, record) => teamListData(team.id) ? (
+        render: (team, record) => teamListDataCheck(team.id, _this.state.liveScoreCompIsParent, record.team, _this.state.compOrgId) ? (
             <NavLink
                 to={{
                     pathname: "/matchDayTeamView",
