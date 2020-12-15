@@ -51,7 +51,7 @@ class UserProfileEdit extends Component {
                 mobileNumber: "",
                 email: "",
                 middleName: "",
-                dateOfBirth: "",
+                dateOfBirth: null,
                 street1: "",
                 street2: "",
                 suburb: "",
@@ -127,7 +127,7 @@ class UserProfileEdit extends Component {
             }
             await this.setState({
                 displaySection: moduleFrom,
-                userData: data,
+                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : this.state.userData,
                 titleLabel: titleLabel, section: section, loadValue: true
             })
         }
@@ -260,7 +260,7 @@ class UserProfileEdit extends Component {
     addressEdit = () => {
         let userData = this.state.userData
         const { stateList } = this.props.commonReducerState;
-
+        console.log("userData",userData)
         return (
             <div className="pt-0">
                 <div className="row">
@@ -272,7 +272,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 name={'firstName'}
-                                value={userData.firstName}
+                                value={userData?.firstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
                             />
                         </Form.Item>
@@ -285,7 +285,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 name={'lastName'}
-                                value={userData.lastName}
+                                value={userData?.lastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
                             />
                         </Form.Item>
@@ -299,7 +299,7 @@ class UserProfileEdit extends Component {
                             heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "middleName")}
-                            value={userData.middleName}
+                            value={userData?.middleName}
                         />
                     </div>
                     <div className="col-sm">
@@ -312,7 +312,7 @@ class UserProfileEdit extends Component {
                             showTime={false}
                             placeholder="dd-mm-yyyy"
                             name="dateOfBirth"
-                            value={userData.dateOfBirth != null && moment(userData.dateOfBirth)}
+                            value={userData?.dateOfBirth != null && moment(userData.dateOfBirth)}
                         />
                     </div>
                 </div>
@@ -324,7 +324,7 @@ class UserProfileEdit extends Component {
                                 required="required-field"
                                 heading={AppConstants.contactMobile}
                                 placeholder={AppConstants.contactMobile}
-                                value={userData.mobileNumber}
+                                value={userData?.mobileNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
                                 maxLength={10}
                             />
@@ -350,7 +350,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.contactEmail}
                                 placeholder={AppConstants.contactEmail}
                                 name={'email'}
-                                value={userData.email}
+                                value={userData?.email}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             />
                         </Form.Item>
@@ -369,7 +369,7 @@ class UserProfileEdit extends Component {
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={'street1'}
-                            value={userData.street1}
+                            value={userData?.street1}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         />
                     </div>
@@ -380,7 +380,7 @@ class UserProfileEdit extends Component {
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
-                            value={userData.street2}
+                            value={userData?.street2}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                         />
                     </div>
@@ -392,7 +392,7 @@ class UserProfileEdit extends Component {
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             name={'suburb'}
-                            value={userData.suburb}
+                            value={userData?.suburb}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                         />
                     </div>
@@ -403,7 +403,7 @@ class UserProfileEdit extends Component {
                         <Select
                             style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.select}
-                            value={userData.stateRefId}
+                            value={userData?.stateRefId}
                             name="stateRefId"
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         >
@@ -419,7 +419,7 @@ class UserProfileEdit extends Component {
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.postCode}
                             name={'postalCode'}
-                            value={userData.postalCode}
+                            value={userData?.postalCode}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
                         />
                     </div>
