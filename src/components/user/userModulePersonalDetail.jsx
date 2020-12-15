@@ -8,6 +8,7 @@ import {
     Button,
     Tabs,
     Menu,
+    Modal
 } from "antd";
 import "./user.css";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -537,6 +538,11 @@ const columnsPersonalPrimaryContacts = [
         key: "email",
     },
     {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+    },
+    {
         title: "Action",
         dataIndex: "isUser",
         key: "isUser",
@@ -572,7 +578,7 @@ const columnsPersonalPrimaryContacts = [
                     </Menu.Item>
 
                     <Menu.Item key="2">
-                        <span onClick={() => this_Obj.parentUnLinkView(record)}>Unlink</span>
+                        <span onClick={() => this_Obj.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -627,6 +633,11 @@ const columnsPersonalChildContacts = [
         key: "email",
     },
     {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+    },
+    {
         title: "Action",
         dataIndex: "isUser",
         key: "isUser",
@@ -662,7 +673,7 @@ const columnsPersonalChildContacts = [
                     </Menu.Item>
 
                     <Menu.Item key="2">
-                        <span onClick={() => this_Obj.childUnLinkView(record)}>Unlink</span>
+                        <span onClick={() => this_Obj.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -1213,7 +1224,10 @@ class UserModulePersonalDetail extends Component {
             purchasesOffset: 0,
             purchasesListSortBy: null,
             purchasesListSortOrder: null,
-            unlinkOnLoad: false
+            unlinkOnLoad: false,
+            unlinkRecord: null,
+            showChildUnlinkConfirmPopup: false,
+            showParentUnlinkConfirmPopup: false,
         };
     }
 
@@ -1352,7 +1366,7 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        data["section"]  = "unlink";
+        data["section"]  = data.status == "Linked" ? "unlink" : "link";
         data["childUserId"] = personal.userId;
         data["organisationId"] = organisationId;
         this.props.userProfileUpdateAction(data);
@@ -1363,7 +1377,7 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        data["section"]  = "unlink";
+        data["section"]  = data.status == "Linked" ? "unlink" : "link";
         data["parentUserId"] = personal.userId;
         data["organisationId"] = organisationId;
         this.props.userProfileUpdateAction(data);
@@ -2740,6 +2754,60 @@ class UserModulePersonalDetail extends Component {
         );
     };
 
+    unlinkChildConfirmPopup = () => {
+        let status = this.state.unlinkRecord?.status == "Linked" ? "de-link" : "link";
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.confirm}
+                    visible={this.state.showChildUnlinkConfirmPopup}
+                    onCancel={() => this.setState({ showChildUnlinkConfirmPopup: false })}
+                    footer={[
+                        <Button onClick={() => this.setState({ showChildUnlinkConfirmPopup: false })}>
+                            {AppConstants.cancel}
+                        </Button>,
+                        <Button onClick={() => {
+                            this.childUnLinkView(this.state.unlinkRecord);
+                            this.setState({ showChildUnlinkConfirmPopup: false })
+                        }}>
+                            {AppConstants.confirm}
+                        </Button>
+                    ]}
+                >
+                   <p> {"Are you sure you want to " + status + " your account?"}</p>
+                </Modal>
+            </div>
+        )
+    }
+
+    unlinkParentConfirmPopup = () => {
+        let status = this.state.unlinkRecord?.status == "Linked" ? "de-link" : "link";
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.confirm}
+                    visible={this.state.showParentUnlinkConfirmPopup}
+                    onCancel={() => this.setState({ showParentUnlinkConfirmPopup: false })}
+                    footer={[
+                        <Button onClick={() => this.setState({ showParentUnlinkConfirmPopup: false })}>
+                            {AppConstants.cancel}
+                        </Button>,
+                        <Button onClick={() => {
+                            this.parentUnLinkView(this.state.unlinkRecord);
+                            this.setState({ showParentUnlinkConfirmPopup: false })
+                        }}>
+                            {AppConstants.confirm}
+                        </Button>
+                    ]}
+                >
+                   <p> {"Are you sure you want to " + status + " your account?"}</p>
+                </Modal>
+            </div>
+        )
+    }
+
     render() {
         let {
             activityPlayerList,
@@ -2832,6 +2900,8 @@ class UserModulePersonalDetail extends Component {
                             </div>
                         </div>
                         <Loader visible={this.props.userState.onMedicalLoad} />
+                        {this.unlinkChildConfirmPopup()}
+                        {this.unlinkParentConfirmPopup()}
                     </Content>
                 </Layout>
             </div>
