@@ -1621,7 +1621,13 @@ const AppConstants = {
   _days: 'Days',
   extendEndDate: "Extend End Date",
   membershipFeeCap: "Membership Fee Cap",
-  perMatchFeesCannotSet: "Per match fees per player can't be set as this competition includes unnamed player type"
+  perMatchFeesCannotSet: "Per match fees per player can't be set as this competition includes unnamed player type",
+  applyMembershipProducts: "Apply to Membership Products",
+  allMembershipProducts: "All Membership Products",
+  fromDob: "From DOB",
+  toDob: "To DOB",
+  maxMembershipFeePayable: "Maximum Membership Fee Payable",
+  addAnotherMembershipProduct: "Add Another Membership Product"
 };
 
 export default AppConstants;
