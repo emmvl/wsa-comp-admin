@@ -2050,7 +2050,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         let diffDayScheduleTime = 0;
 
                         return (
-                            <div key={"court" + index} style={{ height: 70 }}>
+                            <div key={"court" + index} style={{ height: 70, display: 'flex', alignItems: 'center' }}>
                                     <div
                                         className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
                                         style={{
@@ -2095,7 +2095,10 @@ class MultifieldDrawsNewTimeline extends Component {
                                     // render for the whole unavailable day for court based on venue schedule
                                     if (!timeRestrictionsSchedule) {
                                         return (
-                                            <div key={"slot" + fieldItemDateIndex}>
+                                            <div
+                                                key={"slot" + fieldItemDateIndex}
+                                                style={{ width: '100%', height: '100%' }}
+                                            >
                                                 <div
                                                     id={courtData.venueCourtId}
                                                     className="box unavailable-draws align-items-center"
@@ -2127,7 +2130,11 @@ class MultifieldDrawsNewTimeline extends Component {
                                         };
 
                                     return (
-                                        <div key={"slot" + fieldItemDateIndex} className='position-relative'>
+                                        <div
+                                            key={"slot" + fieldItemDateIndex}
+                                            className='position-relative'
+                                            style={{ width: `calc(100%) - ${prevDaysWidth}`, height: '100%' }}
+                                        >
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
                                                 className={'box white-bg-timeline day-box'}
@@ -2139,6 +2146,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     cursor: disabledStatus && "no-drop",
                                                     width: diffDayScheduleTime,
                                                     borderRadius: '0px',
+                                                    transform: 'translate(0, 10px)',
                                                     ...dayBg
                                                 }}
                                                 onDragOver={e => {
