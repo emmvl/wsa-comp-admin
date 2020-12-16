@@ -93,12 +93,10 @@ const columns = [
         dataIndex: 'userRegistrationUrl',
         key: 'userRegistrationUrl',
         render: (userRegistrationUrl, record) => {
-            // let userRegistration_Url = "https://netball-registration-dev.worldsportaction.com/userRegistration?organisationId=0b3ae01e-885d-40ef-9a07-a94c870133e1&competitionId=17dce919-c961-4aeb-8c30-043a154d75c3"
-            let userRegistration_Url = null
             return (
                 record.status == "Published" &&
                 <span className="d-flex justify-content-center w-50">
-                    <a className="user-reg-link" href={userRegistration_Url} target='_blank'>
+                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank'>
                         <img className="dot-image pointer"
                             src={AppImages.docsIcon}
                             alt="" width="25" height="25" />
