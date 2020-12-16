@@ -1046,3 +1046,47 @@ input[type="number"] {
   width: 70%;
   margin: auto;
 }
+
+.membership-cap-heading-view{
+  width: 70%;
+  margin: auto;
+  padding-top: 20px
+}
+
+.membership-cap-heading{
+  font-family: inter-medium, sans-serif;
+  font-weight: 500;
+  color: var(--app-1b1b34);
+}
+
+.font-18{
+  font-size: 18px;
+}
+
+.membership-cap-check-box-lbl{
+  font-size: 13px;
+  color: var(--app-4c4c6d);
+  font-weight: 500;
+  font-family: inter-medium, sans-serif;
+}
+
+.membership-cap-border{
+  border: 1px solid #d9d9d9;
+  padding: 20px;
+}
+
+.orange-action-txt{
+  color: var(--app-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.membership-cap-cloase{
+  width: 20px;
+  height: 20px;
+  margin-left: auto
+}

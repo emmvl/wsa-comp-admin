@@ -263,6 +263,18 @@ function exportTeamRegistrationAction(payload) {
     };
 }
 
+function updateMembershipFeeCapListAction(value,key,index,subKey,subIndex){
+    const action = {
+        type: ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST,
+        value,
+        key,
+        index,
+        subKey,
+        subIndex
+    }
+    return action;
+}
+
 export {
     regMembershipListAction,
     regMembershipListDeleteAction,
@@ -293,5 +305,6 @@ export {
     isReplyCheckVisible,
     getDivisionsListAction,
     getTeamRegistrationsAction,
-    exportTeamRegistrationAction
+    exportTeamRegistrationAction,
+    updateMembershipFeeCapListAction
 };

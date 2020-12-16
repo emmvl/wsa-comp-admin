@@ -99,7 +99,24 @@ const initialState = {
   },
   teamRegListAction: null,
   regMembershipListAction: null,
-  canInviteSend: 0
+  canInviteSend: 0,
+  membershipFeeCapList: [
+    {
+        "membershipCapId": 0,
+        "organisationId": '',
+        "isAllMembershipProduct": 0,
+        "productsInfo": [],
+        "products": [],
+        "feeCaps": [
+            {
+                "membershipFeeCapId": 0,
+                "dateFrom": null,
+                "dateTo": null,
+                "amount": null
+            }
+        ]
+    }
+  ]
 };
 
 
@@ -1252,6 +1269,28 @@ function registration(state = initialState, action) {
       state.teamRegListAction = null
       state.regMembershipListAction = null
       return { ...state, onLoad: false };
+    
+    case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
+      if(action.key == 'membershipFeeCapList'){
+        state.membershipFeeCapList = action.value;
+      }else if(action.key == 'productsInfo'){
+        let productList = action.value;
+        state.membershipProductCapList[action.index].products = [];
+        for(let product of productList){
+          let obj = {
+            "membershipCapProductId": 0,
+            "membershipProductId": product.membershipProductUniqueKey
+          }
+          state.membershipProductCapList[action.index].products.push(obj);
+        }
+      }else if(action.key == 'feeCaps'){
+        state.membershipFeeCapList[action.index][action.key][action.subIndex][action.subKey] = action.value;
+      }else{
+        state.membershipFeeCapList[action.index][action.key] = action.value;
+      }
+      return{
+        ...state
+      }
 
     default:
       return state;

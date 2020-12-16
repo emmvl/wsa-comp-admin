@@ -242,6 +242,11 @@ const ValidationConstants = {
     extendEndDateRequired: "Extend end date is required",
     pleaseFillDivisionBeforePublishing : "Please fill division before publishing.",
     pleaseFillFeesBeforePublishing : "Please fill fees before publishing.",
+
+    membershipProductsRequired: "Membership products is required",
+    membershipFeeRequired: "Membership Fee is required",
+    fromDateIsRequired: "From date is required",
+    toDateIsRequired: "To date is required"
 };
 
 export default ValidationConstants;
