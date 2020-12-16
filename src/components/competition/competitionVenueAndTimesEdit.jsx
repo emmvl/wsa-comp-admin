@@ -104,29 +104,9 @@ class CompetitionVenueAndTimesEdit extends Component {
                         )
                     }
                 },
+
                 {
                     title: "Longitude",
-                    dataIndex: "lat",
-                    key: "lat",
-                    render: (lat, record, index) => {
-                        return (
-                            <Form.Item
-                                name={`lat${index}`}
-                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
-                            >
-                                <Input
-                                    className="input-inside-table-venue-court"
-                                    // disabled={record.isDisabled}
-                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
-                                    value={lat}
-                                    placeholder="Longitude"
-                                />
-                            </Form.Item>
-                        )
-                    }
-                },
-                {
-                    title: "Latitude",
                     dataIndex: "lng",
                     key: "lng",
                     render: (lng, record, index) => {
@@ -140,6 +120,27 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     // disabled={record.isDisabled}
                                     onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
                                     value={lng}
+                                    placeholder="Longitude"
+                                />
+                            </Form.Item>
+                        )
+                    }
+                },
+                {
+                    title: "Latitude",
+                    dataIndex: "lat",
+                    key: "lat",
+                    render: (lat, record, index) => {
+                        return (
+                            <Form.Item
+                                name={`lat${index}`}
+                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
+                            >
+                                <Input
+                                    className="input-inside-table-venue-court"
+                                    // disabled={record.isDisabled}
+                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                    value={lat}
                                     placeholder="Latitude"
                                 />
                             </Form.Item>

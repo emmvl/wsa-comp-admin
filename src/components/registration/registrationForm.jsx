@@ -90,7 +90,7 @@ const columns = [
     {
         title: "Registration Lock",
         dataIndex: "registrationLock",
-        width: "15%",
+        width: 120,
         key: "registrationLock",
         filterDropdown: true,
         filterIcon: () => (
@@ -110,19 +110,19 @@ const columns = [
     },
 
     {
-        title:"Registration Cap",
+        title: "Registration Cap",
         dataIndex: "registrationType",
-        key:"registrationCap",
-        render: (registrationCap, record, index) =>  {
+        key: "registrationCap",
+        render: (registrationCap, record, index) => {
             return (
                 <InputWithHead 
-                    style={{width: "70%"}}
+                    style={{ width: "70%" }}
                     placeholder=" "
                     type={"number"}
                     min="0"
                     onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : "", "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
                     value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
-                    />
+                />
             )
         }
 
