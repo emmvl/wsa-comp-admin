@@ -863,7 +863,7 @@ class RegistrationMembershipFee extends Component {
                                                                     })
                                                                 }}
                                                                 type={"number"}
-                                                                min={0}
+                                                                min={1}
                                                             />
                                                         </Form.Item>
                                                     </div>
