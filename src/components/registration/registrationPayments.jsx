@@ -17,6 +17,9 @@ import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
 import StripeKeys from "../stripe/stripeKeys";
+import { loadStripe } from '@stripe/stripe-js';
+import {Elements} from '@stripe/react-stripe-js';
+import PaymentSetupForm from './PaymentSetupForm';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -99,7 +102,8 @@ class RegistrationPayments extends Component {
             paymentFor: "all",
             loadingSave: false,
             stripeDashBoardLoad: false,
-            isImpersonation: false
+            isImpersonation: false,
+            showBankSetup: false
         }
     }
 
@@ -129,8 +133,6 @@ class RegistrationPayments extends Component {
             this.props.saveStripeAccountAction(code)
             this.setState({ loadingSave: true })
         }
-
-
     }
 
     onChange = e => {
@@ -145,6 +147,8 @@ class RegistrationPayments extends Component {
     }
 
     headerView = () => {
+        const stripeConnected = this.stripeConnected()
+        const isBecsSetupDone = this.isBecsSetupDone();
         return (
             // <Header className="reg-payment-header-view mt-5">
             //     <div className="row">
@@ -168,22 +172,28 @@ class RegistrationPayments extends Component {
                         <div className="row">
                             <div className="col-sm pt-1">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button
-                                        onClick={() => this.onExport()}
-                                        className="primary-add-comp-form"
-                                        type="primary"
-                                    >
-                                        <div className="row">
-                                            <div className="col-sm">
+                                    <div className="comp-buttons-view">
+                                        { stripeConnected ? (
+                                            <Button type="primary mx-4" onClick={() => this.onExport()}>
                                                 <img
                                                     src={AppImages.export}
                                                     alt=""
                                                     className="export-image"
                                                 />
-                                                {AppConstants.export}
-                                            </div>
-                                        </div>
-                                    </Button>
+                                                {AppConstants.exportPayments}
+                                            </Button>
+                                        ) : ('')}
+                                        { isBecsSetupDone ? (
+                                            <Button type="primary">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.exportWithdrawals}
+                                            </Button>
+                                        ) : ('')}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -289,6 +299,12 @@ class RegistrationPayments extends Component {
         return stripeAccountID
     }
 
+    isBecsSetupDone = () => {
+        const orgData = getOrganisationData();
+        const becsMandateId = orgData ? orgData.stripeBecsMandateId : null;
+        return becsMandateId;
+    }
+
     userEmail = () => {
         let orgData = getOrganisationData() ? getOrganisationData() : null
         let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
@@ -302,6 +318,7 @@ class RegistrationPayments extends Component {
 
     stripeView = () => {
         let stripeConnected = this.stripeConnected()
+        const isBecsSetupDone = this.isBecsSetupDone();
         let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.pending : "N/A"
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
@@ -313,19 +330,20 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
                     </div>
-                    {isImpersonation !== "true" && (
-                        <div className="col-sm d-flex justify-content-end">
-                            {stripeConnected ? (
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                    onClick={() => this.stripeDashboardLoginUrl()}
-                                >
-                                    {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
-                                    {AppConstants.goToStripeDashboard}
-                                    {/* </a> */}
-                                </Button>
-                            ) : (
+                    <div className="comp-buttons-view">
+                        {isImpersonation !== "true" && (
+                            <div className="col-sm d-flex justify-content-end">
+                                {stripeConnected ? (
+                                    <Button
+                                        className="open-reg-button mx-4"
+                                        type="primary"
+                                        onClick={() => this.stripeDashboardLoginUrl()}
+                                    >
+                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                        {AppConstants.stripePaymentDashboard}
+                                        {/* </a> */}
+                                    </Button>
+                                ) : (
                                     <Button
                                         className="open-reg-button"
                                         type="primary"
@@ -337,8 +355,28 @@ class RegistrationPayments extends Component {
                                         </a>
                                     </Button>
                                 )}
-                        </div>
-                    )}
+                                {isBecsSetupDone ? (
+                                    <Button
+                                        className="open-reg-button mx-1"
+                                        type="primary"
+                                        onClick={() => this.stripeDashboardLoginUrl()}
+                                    >
+                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                        {AppConstants.stripeWithdrawalsDashboard}
+                                        {/* </a> */}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="open-reg-button mx-1"
+                                        type="primary"
+                                        onClick={() => this.setState({showBankSetup: true})}
+                                    >
+                                        {AppConstants.setupStripeForWithdrawals}
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div >
         )
@@ -544,19 +582,45 @@ class RegistrationPayments extends Component {
         )
     }
 
+    PaymentSetupFormEl = () => {
+        const stripePromise = loadStripe(StripeKeys.publicKey);
+        return (
+            <Elements stripe={stripePromise}>
+                <PaymentSetupForm />
+            </Elements>
+        );
+    }
+
     render() {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="2" />
-                <Layout className="reg-payment-layout-view">
-                    {this.headerView()}
-                    {this.stripeView()}
-                    <Content>
-                        {this.contentView()}
-                        <Loader visible={this.props.stripeState.onLoad || this.state.loadingSave} />
-                    </Content>
-                </Layout>
+                {
+                    this.state.showBankSetup ? (
+                        <Layout className="reg-payment-layout-view">
+                            <div className="reg-payment-header-view mt-5">
+                                <div className="row">
+                                    <div className="col-sm d-flex align-content-center">
+                                        <span className="form-heading">
+                                            {AppConstants.bankAccountForWithdrawals}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {this.PaymentSetupFormEl()}
+                        </Layout>
+                    ) : (
+                        <Layout className="reg-payment-layout-view">
+                            {this.headerView()}
+                            {this.stripeView()}
+                            <Content>
+                                {this.contentView()}
+                                <Loader visible={this.props.stripeState.onLoad || this.state.loadingSave} />
+                            </Content>
+                        </Layout>
+                    )
+                }
             </div>
         );
     }
