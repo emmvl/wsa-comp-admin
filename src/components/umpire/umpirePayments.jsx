@@ -534,75 +534,12 @@ class UmpirePayments extends Component {
         this.props.exportFilesAction(url);
     };
 
-    dropdownView_1 = () => {
-        const { paymentStatus } = this.props.umpirePaymentState
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
-                <div className="fluid-width">
-                    <div className="row">
-                        {/* competition List */}
-                        <div className="col-sm-3">
-                            <div className="reg-filter-col-cont">
-                                <span className="year-select-heading">{AppConstants.competition}:</span>
-                                <Select
-                                    className="year-select reg-filter-select1 ml-3"
-                                    style={{ minWidth: 200 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
-                                    value={this.state.selectedComp}
-                                >
-                                    {competition.map((item) => (
-                                        <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="col-sm-8">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex align-items-center justify-content-end">
-                                <Button
-                                    type="primary"
-                                    className="primary-add-comp-form"
-                                    onClick={this.onExport}
-                                >
-                                    <div className="row">
-                                        <div className="col-sm">
-                                            <img
-                                                className="export-image"
-                                                src={AppImages.export}
-                                                alt=""
-                                            />
-                                            {AppConstants.export}
-                                        </div>
-                                    </div>
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile d-flex flex-column align-items-end justify-content-end align-content-center"
-                                style={{ paddingRight: 35 }}
-                            >
-                                <Checkbox
-                                    className="single-checkbox"
-                                    checked={paymentStatus}
-                                    onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
-                                >
-                                    All
-                                </Checkbox>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { paymentStatus } = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
             <div className="comp-player-grades-header-drop-down-view comp">
                 <div className="fluid-width">
@@ -632,6 +569,7 @@ class UmpirePayments extends Component {
                                 type="primary"
                                 className="primary-add-comp-form button-margin-top-ump-payment mr-5"
                                 onClick={this.onExport}
+                                disabled={isCompetitionAvailable}
                             >
                                 <div className="row">
                                     <div className="col-sm">

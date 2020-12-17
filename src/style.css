@@ -93,6 +93,9 @@ code {
 .ml-n35 {
     margin-left: -35px;
 }
+.mr-22{
+    margin-right: 22px;
+}
 
 @media (max-width: 767px) {
     .ml-n20 {

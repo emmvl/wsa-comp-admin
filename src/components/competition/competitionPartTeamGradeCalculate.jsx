@@ -272,7 +272,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         </CustomTooltip>
                     </div>
                     <div
-                        className="col-sm w-100 d-flex flex-row justify-content-end align-items-center"
+                        className="col-sm w-100 d-flex flex-row justify-content-end align-items-center mr-22"
                     >
                         <div className="row">
                             <div className="col-sm">
@@ -374,10 +374,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div className="w-ft d-flex flex-row justify-content-center" style={{ marginRight: 50 }}>
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
-                                    id={AppUniqueId.teamGradingYCompetition_dpdn}
+                                    id={AppUniqueId.teamGradingCompetition_dpdn}
                                     name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     value={JSON.parse(JSON.stringify(firstTimeCompId))}
