@@ -402,7 +402,8 @@ function discountDataObject(data) {
 
 // get selected casual fee payment option key
 function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selectedCasualFeeKey) {
-    selectedCasualFeeKey = []
+    selectedCasualFeeKey = [];
+    selectedCasualFee = [];
     //if (paymentData) {
     for (let item of casualFee) {
         let paymentOptObj = {
@@ -444,6 +445,7 @@ function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selec
 function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasonalFee, selectedSeasonalFeeKey, instalmentDates, selectedSeasonalInstalmentDates) {
     selectedSeasonalFeeKey = [];
     selectedSeasonalInstalmentDates = [];
+    selectedSeasonalFee = [];
     //if (paymentDataArray) {
 
     for (let item of seasonalFee) {
@@ -499,6 +501,7 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
 function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSeasonalTeamFee, selectedSeasonalTeamFeeKey, instalmentdates, selectedTeamSeasonalInstalmentDates) {
     selectedSeasonalTeamFeeKey = [];
     selectedTeamSeasonalInstalmentDates = [];
+    selectedSeasonalTeamFee = [];
     //if (paymentDataArray) {
 
     for (let item of seasonalFee) {
@@ -551,6 +554,7 @@ function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSea
 }
 
 function checkSelectedCasualTeamFee(paymentDataArray, casualFee, selectedCasualTeamFee) {
+    selectedCasualTeamFee = [];
     for (let item of casualFee) {
         let paymentOptObj = {
             "feesTypeRefId": 4,
@@ -577,6 +581,7 @@ function checkSelectedCasualTeamFee(paymentDataArray, casualFee, selectedCasualT
 }
 
 function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, selectedPaymentMethods) {
+    selectedPaymentMethods = [];
     for (let item of paymentMethodDefault) {
         let paymentMthObj = {
             "isChecked": false,
