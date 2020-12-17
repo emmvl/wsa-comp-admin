@@ -952,6 +952,12 @@ const AppConstants = {
   submitPayment: 'Submit Payment',
   connectToStripe: 'Connect to Stripe',
   goToStripeDashboard: 'Go to Stripe Dashboard',
+  exportPayments: 'Export Payments',
+  exportWithdrawals: 'Export Withdrawals',
+  stripePaymentDashboard: 'Stripe Payments Dashboard',
+  stripeWithdrawalsDashboard: 'Stripe Withdrawals Dashboard',
+  setupStripeForPayments: 'Set up Stripe for Payments',
+  setupStripeForWithdrawals: 'Set up Stripe for Withdrawals',
   disput_description: 'Result in dispute',
   draft_description: 'Final result entered and unconfirmed',
   final_description: 'Final result entered and confirmed',
@@ -988,6 +994,7 @@ const AppConstants = {
   logo: 'Logo',
   registrationFormQuestions: 'Registration Form Questions',
   noInformationProvided: 'No information provided',
+  bankAccountForWithdrawals: 'Bank Account for Withdrawals',
 
   previous: 'Previous',
   totalPages: 'Total pages',
@@ -1629,7 +1636,10 @@ const AppConstants = {
   fromDob: "From DOB",
   toDob: "To DOB",
   maxMembershipFeePayable: "Maximum Membership Fee Payable",
-  addAnotherMembershipProduct: "Add Another Membership Product"
+  addAnotherMembershipProduct: "Add Another Membership Product",
+  becsSetupNotificationTitle: "BECS Debit setup done",
+  becsSetupNotificationBody: "Congratulations, you have successfully completed BECS debit setup",
+  becsAlreadyCompletedMessage: 'BECS setup already done'
 };
 
 export default AppConstants;

@@ -218,7 +218,16 @@ class UmpirePayments extends Component {
         this_obj = this
     }
 
+    isBecsSetupDone = () => {
+        const orgData = getOrganisationData();
+        const becsMandateId = orgData ? orgData.stripeBecsMandateId : null;
+        return becsMandateId;
+    }
+
     async componentDidMount() {
+        if (!this.isBecsSetupDone()) {
+            this.props.history.push("/orgBecsSetup");
+        }
         let { organisationId, } = JSON.parse(localStorage.getItem("setOrganisationData"))
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS")
         const { umpirePaymentObject } = this.props.umpirePaymentState
