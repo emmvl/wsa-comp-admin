@@ -445,7 +445,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pt-0"
+                        required="required-field"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
                         onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(e.target.value), 'Venue', 'name')}

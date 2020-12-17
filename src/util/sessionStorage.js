@@ -220,6 +220,17 @@ const getImpersonation=()=>{
   return localStorage.Impersonation
 }
 
+// Set global Year
+const setGlobalYear = global_year => {
+  localStorage.setItem("global_year", global_year)
+}
+
+// get global Year
+const getGlobalYear = () => {
+  return localStorage.global_year
+}
+
+
 export {
   getOwn_CompetitionFinalRefId,
   setOwn_CompetitionFinalRefId,
@@ -269,5 +280,7 @@ export {
   getPrevUrl,
   clearCompetitionStorage,
   setImpersonation,
-  getImpersonation
+  getImpersonation,
+  setGlobalYear,
+  getGlobalYear,
 }
