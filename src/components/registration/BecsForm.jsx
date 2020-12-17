@@ -38,7 +38,7 @@ export default function BecsForm({ onSubmit, disabled }) {
         <form onSubmit={onSubmit}>
             <Card>
                 <div>
-                    <label style={{ width: '100%' }}>
+                    <label className="w-100">
                         Bank Account
                         <AuBankAccountElement
                             options={AU_BANK_ACCOUNT_ELEMENT_OPTIONS}

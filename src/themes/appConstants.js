@@ -1639,7 +1639,7 @@ const AppConstants = {
   addAnotherMembershipProduct: "Add Another Membership Product",
   becsSetupNotificationTitle: "BECS Debit setup done",
   becsSetupNotificationBody: "Congratulations, you have successfully completed BECS debit setup",
-  becsAlreadyCompletedMessage: 'BECS setup already one'
+  becsAlreadyCompletedMessage: 'BECS setup already done'
 };
 
 export default AppConstants;

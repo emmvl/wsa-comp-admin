@@ -17,9 +17,6 @@ import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
 import StripeKeys from "../stripe/stripeKeys";
-import { loadStripe } from '@stripe/stripe-js';
-import {Elements} from '@stripe/react-stripe-js';
-import PaymentSetupForm from './PaymentSetupForm';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -102,8 +99,7 @@ class RegistrationPayments extends Component {
             paymentFor: "all",
             loadingSave: false,
             stripeDashBoardLoad: false,
-            isImpersonation: false,
-            showBankSetup: false
+            isImpersonation: false
         }
     }
 
@@ -369,7 +365,7 @@ class RegistrationPayments extends Component {
                                     <Button
                                         className="open-reg-button mx-1"
                                         type="primary"
-                                        onClick={() => this.setState({showBankSetup: true})}
+                                        onClick={() => this.props.history.push('/orgBecsSetup')}
                                     >
                                         {AppConstants.setupStripeForWithdrawals}
                                     </Button>
@@ -582,45 +578,19 @@ class RegistrationPayments extends Component {
         )
     }
 
-    PaymentSetupFormEl = () => {
-        const stripePromise = loadStripe(StripeKeys.publicKey);
-        return (
-            <Elements stripe={stripePromise}>
-                <PaymentSetupForm />
-            </Elements>
-        );
-    }
-
     render() {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="2" />
-                {
-                    this.state.showBankSetup ? (
-                        <Layout className="reg-payment-layout-view">
-                            <div className="reg-payment-header-view mt-5">
-                                <div className="row">
-                                    <div className="col-sm d-flex align-content-center">
-                                        <span className="form-heading">
-                                            {AppConstants.bankAccountForWithdrawals}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            {this.PaymentSetupFormEl()}
-                        </Layout>
-                    ) : (
-                        <Layout className="reg-payment-layout-view">
-                            {this.headerView()}
-                            {this.stripeView()}
-                            <Content>
-                                {this.contentView()}
-                                <Loader visible={this.props.stripeState.onLoad || this.state.loadingSave} />
-                            </Content>
-                        </Layout>
-                    )
-                }
+                <Layout className="reg-payment-layout-view">
+                    {this.headerView()}
+                    {this.stripeView()}
+                    <Content>
+                        {this.contentView()}
+                        <Loader visible={this.props.stripeState.onLoad || this.state.loadingSave} />
+                    </Content>
+                </Layout>
             </div>
         );
     }
