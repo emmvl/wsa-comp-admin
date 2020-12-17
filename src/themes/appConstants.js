@@ -1629,7 +1629,11 @@ const AppConstants = {
   fromDob: "From DOB",
   toDob: "To DOB",
   maxMembershipFeePayable: "Maximum Membership Fee Payable",
-  addAnotherMembershipProduct: "Add Another Membership Product"
+  addAnotherMembershipProduct: "Add Another Membership Product",
+
+  childUnlinkMessage: "Your PAarent needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
+  parentUnlinkMessage: "Your Child needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
+  ok: "OK"
 };
 
 export default AppConstants;
