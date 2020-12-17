@@ -12,28 +12,28 @@ class Loader extends Component {
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
                 modalRender={() => {
-                    return(
+                    return (
                         <div style={{
                             flex: 1,
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',                    
-                            width:'100%',
-                            height:'100%',
-                            backgroundColor:'transparent'
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'transparent'
                         }}>
                             <Spin tip="Loading..." delay={this.props.delay} />
                         </div>
                     )
                 }}
                 centered
-                width={'100%'}
+                width={0}
                 height={0}
                 closable={false}
-                footer={null}                
+                footer={null}
             />
-              
-            
+
+
         );
     }
 }

@@ -629,7 +629,6 @@ class UmpireDashboard extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.state.liveScoreUmpire)
         const prevUrl = getPrevUrl();
         const { umpireDashboardListActionObject } = this.props.umpireDashboardState
         // let offsetData = this.state.offsetData
@@ -1031,7 +1030,6 @@ class UmpireDashboard extends Component {
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : [];
         let roundList = isArrayNotEmpty(umpireRoundList) ? umpireRoundList : [];
         let umpireType = this.state.competitionObj ? this.state.competitionObj.recordUmpireType : null;
-        console.log(competition, "********-*")
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">

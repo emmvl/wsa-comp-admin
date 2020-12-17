@@ -162,7 +162,7 @@ class ShopSettings extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-address"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.address}
                         placeholder={AppConstants.address}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'address')}
@@ -180,7 +180,7 @@ class ShopSettings extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-suburb"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
@@ -222,7 +222,7 @@ class ShopSettings extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-postCode"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.postCode}
                         placeholder={AppConstants.postcode}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
