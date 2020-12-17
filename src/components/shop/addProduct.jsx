@@ -532,7 +532,7 @@ class AddProduct extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-0 pt-3"
+                        required="required-field pt-3"
                         heading={AppConstants.title}
                         placeholder={AppConstants.enterTitle}
                         onChange={(e) =>
@@ -689,6 +689,7 @@ class AddProduct extends Component {
                                 placeholder={AppConstants.price}
                                 prefix="$"
                                 onChange={(e) =>
+
                                     this.props.onChangeProductDetails(
                                         e.target.value,
                                         'price'
@@ -696,6 +697,8 @@ class AddProduct extends Component {
                                 }
                                 value={productDetailData.price}
                                 type="number"
+                                min={0}
+
                                 disabled={this.state.allDisabled}
                             />
                         </div>
@@ -712,6 +715,7 @@ class AddProduct extends Component {
                                         'cost'
                                     )
                                 }
+                                min={0}
                                 value={productDetailData.cost}
                                 type="number"
                                 disabled={this.state.allDisabled}

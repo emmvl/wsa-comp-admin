@@ -297,11 +297,11 @@ class UserProfileEdit extends Component {
                         </Form.Item>
                     </div>
                 </div>
-                <div className="row" style={{ paddingTop: 11 }}>
+                <div className="row" >
                     <div className="col-sm">
                         <InputWithHead
                             auto_complete='new-middleName'
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "middleName")}
@@ -312,7 +312,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%', marginTop: 9 }}
+                            style={{ width: '100%'}}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -368,10 +368,10 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
                             auto_complete="new-addressOne"
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={'street1'}
@@ -379,10 +379,10 @@ class UserProfileEdit extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         />
                     </div>
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
                             auto_complete="new-addressTwo"
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
@@ -392,9 +392,9 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             name={'suburb'}
@@ -403,7 +403,7 @@ class UserProfileEdit extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                        <div >
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
                         <Select
@@ -469,9 +469,9 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={'street1'}
@@ -479,9 +479,9 @@ class UserProfileEdit extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         />
                     </div>
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
@@ -491,9 +491,9 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             name={'suburb'}
@@ -502,7 +502,7 @@ class UserProfileEdit extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                        <div >
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
 
@@ -524,9 +524,9 @@ class UserProfileEdit extends Component {
 
                 {/* PlayerId and Team Selection row */}
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.enterPostCode}
                             name={'postalCode'}

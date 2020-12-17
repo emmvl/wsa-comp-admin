@@ -375,7 +375,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                             <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.proposedTeamGrading}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100">
+                    <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100 mr-22">
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">

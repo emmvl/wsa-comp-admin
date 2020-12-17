@@ -85,7 +85,7 @@ const regexNumberExpression = (number) => {
 };
 
 const isImageFormatValid = value => {
-    let fileTypes = ['jpg', 'jpeg', 'png'];
+    let fileTypes = ['jpg', 'jpeg', 'png','webp'];
     return (fileTypes.indexOf(value) > -1);
 };
 

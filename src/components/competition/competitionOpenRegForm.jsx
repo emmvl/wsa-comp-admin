@@ -975,7 +975,7 @@ class CompetitionOpenRegForm extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
@@ -986,7 +986,7 @@ class CompetitionOpenRegForm extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead required="required-field pb-0" heading={AppConstants.competitionLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.competitionLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -1043,7 +1043,7 @@ class CompetitionOpenRegForm extends Component {
                     </div>
                 </div>
 
-                <InputWithHead required="pb-1" heading={AppConstants.description} />
+                <InputWithHead heading={AppConstants.description} />
 
                 <TextArea
                     placeholder={AppConstants.addShortNotes_registering}
@@ -1054,7 +1054,7 @@ class CompetitionOpenRegForm extends Component {
                 />
 
                 <div>
-                    <InputWithHead required="required-field pb-1" heading={AppConstants.venue} />
+                    <InputWithHead required="required-field" heading={AppConstants.venue} />
                     <Form.Item
                         name="selectedVenues"
                         rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
@@ -1146,7 +1146,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.compStartDate} required="required-field pb-1" />
+                            <InputWithHead heading={AppConstants.compStartDate} required="required-field" />
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
                                     size="default"
@@ -1160,7 +1160,7 @@ class CompetitionOpenRegForm extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.compCloseDate} required="required-field pb-1" />
+                            <InputWithHead heading={AppConstants.compCloseDate} required="required-field" />
                             <Form.Item
                                 name="endDate"
                                 rules={[{ required: true, message: ValidationConstants.endDateIsRequired }]}
@@ -1200,7 +1200,7 @@ class CompetitionOpenRegForm extends Component {
                         </Form.Item>
                     </div>
                 )}
-                <InputWithHead heading={AppConstants.timeBetweenRounds} required="pb-1" />
+                <InputWithHead heading={AppConstants.timeBetweenRounds}  />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.time_rounds_days} className="col-sm">
@@ -1233,7 +1233,7 @@ class CompetitionOpenRegForm extends Component {
                     </div>
                 </div>
                 <div className="inside-container-view pt-4">
-                    <InputWithHead heading={AppConstants.nonPlayingDates} required="pb-1" />
+                    <InputWithHead heading={AppConstants.nonPlayingDates} />
                     {detailsData.competitionDetailData.nonPlayingDates && detailsData.competitionDetailData.nonPlayingDates.map((item, index) =>
                         this.nonPlayingDateView(item, index))
                     }
@@ -1243,7 +1243,7 @@ class CompetitionOpenRegForm extends Component {
                         </span>
                     </a>
                 </div>
-                <InputWithHead heading={AppConstants.playerInEachTeam} required="pb-1" />
+                <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.team_min_players} className="col-sm">

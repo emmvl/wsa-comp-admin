@@ -747,7 +747,7 @@ class UserOurOrganization extends Component {
                         <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
                             <InputWithHead
                                 auto_complete='new-firstName'
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index)}
@@ -764,11 +764,12 @@ class UserOurOrganization extends Component {
                             value={item.middleName}
                             disabled={!this.state.isEditable}
                             auto_complete='new-middleName'
+                            // required="pt-0"
                         />
 
                         <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
-                                required="required-field pt-0 pb-0"
+                                required="required-field "
                                 heading={AppConstants.lastName} placeholder={AppConstants.lastName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
                                 value={item.lastName}
@@ -790,7 +791,7 @@ class UserOurOrganization extends Component {
                         ]}>
                             <InputWithHead
                                 auto_complete='new-email'
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
                                 disabled={!item.isSameUser}

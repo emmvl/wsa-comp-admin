@@ -503,7 +503,7 @@ class Umpire extends Component {
     headerView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : [];
         let { isCompParent } = this.state
-        console.log("isCompParent", isCompParent)
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -519,7 +519,7 @@ class Umpire extends Component {
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/addUmpire" className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button disabled={isCompetitionAvailable} className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addUmpire}
                                             </Button>
                                         </NavLink>
@@ -532,6 +532,7 @@ class Umpire extends Component {
                                             className="primary-add-comp-form"
                                             type="primary"
                                             onClick={this.onExport}
+                                            disabled={isCompetitionAvailable}
                                         >
                                             <div className="row">
                                                 <div className="col-sm">

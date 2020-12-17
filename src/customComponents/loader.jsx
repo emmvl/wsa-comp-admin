@@ -17,8 +17,20 @@ class Loader extends Component {
                 closable={false}
                 footer={null}
             >
-                <Spin tip="Loading..."  delay={this.props.delay} />
+                <div style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'transparent'
+                }}>
+                    <Spin tip="Loading..." delay={this.props.delay} />
+                </div>
             </Modal>
+
+
         );
     }
 }

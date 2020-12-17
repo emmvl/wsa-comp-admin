@@ -331,7 +331,7 @@ class UserAffiliatesList extends Component {
                             </div>
                         </div>
                         <div className="col-lg-2 col-md-6 add-affiliate-btn">
-                            {affiliateToData.isEligibleToAddAffiliate && (
+                            {affiliateToData.isEligibleToAddAffiliate === 1 && (
                                 <div className="d-flex flex-row-reverse">
                                     <NavLink to="/userAddAffiliates">
                                         <Button className="primary-add-product" type="primary">+ {AppConstants.addAffiliate}</Button>

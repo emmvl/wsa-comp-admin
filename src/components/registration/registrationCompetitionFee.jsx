@@ -5202,7 +5202,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="content-view pt-4">
 
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field"
                     heading={AppConstants.year}
                 />
 
@@ -5236,7 +5236,7 @@ class RegistrationCompetitionFee extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         // value={detailsData.competitionDetailData.competitionName}
@@ -5254,7 +5254,7 @@ class RegistrationCompetitionFee extends Component {
                 </Form.Item>
 
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field "
                     heading={AppConstants.competitionLogo}
                 />
 
@@ -5325,7 +5325,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 </div>
 
-                <InputWithHead required="pb-1" heading={AppConstants.heroImageForCompetition} />
+                <InputWithHead heading={AppConstants.heroImageForCompetition} />
                 <div className="reg-competition-hero-image-view" onClick={this.selectHeroImage}>
                     <div style={{ overflow: "hidden", minHeight: "150px", maxHeight: "287px" }}>
                         <img
@@ -5371,7 +5371,7 @@ class RegistrationCompetitionFee extends Component {
                     </span>
                 </div>
 
-                <InputWithHead required="pb-1" heading={AppConstants.description} />
+                <InputWithHead heading={AppConstants.description} />
                 <TextArea
                     placeholder={AppConstants.addShortNotes_registering}
                     allowClear
@@ -5387,7 +5387,7 @@ class RegistrationCompetitionFee extends Component {
 
                 <div style={{ marginTop: 15 }}>
                     <InputWithHead
-                        required="required-field pb-1"
+                        required="required-field"
                         heading={AppConstants.venue}
                     />
                     <Form.Item
@@ -5435,7 +5435,7 @@ class RegistrationCompetitionFee extends Component {
                         </span>
                     </NavLink>
                 )}
-                <span className="applicable-to-heading required-field pb-1">
+                <span className="applicable-to-heading required-field">
                     {AppConstants.typeOfCompetition}
                 </span>
                 <Form.Item
@@ -5466,7 +5466,7 @@ class RegistrationCompetitionFee extends Component {
                     </Radio.Group>
                 </Form.Item>
 
-                <span className="applicable-to-heading required-field pb-1">
+                <span className="applicable-to-heading required-field">
                     {AppConstants.competitionFormat}
                 </span>
                 <Form.Item
@@ -5510,7 +5510,7 @@ class RegistrationCompetitionFee extends Component {
                         <div className="col-sm">
                             <InputWithHead
                                 heading={AppConstants.compStartDate}
-                                required="required-field pb-1"
+                                required="required-field"
                             />
                             <Form.Item
                                 name="startDate"
@@ -5536,7 +5536,7 @@ class RegistrationCompetitionFee extends Component {
                         <div className="col-sm">
                             <InputWithHead
                                 heading={AppConstants.compCloseDate}
-                                required="required-field pb-1"
+                                required="required-field"
                             />
                             <Form.Item
                                 name="endDate"
@@ -5564,7 +5564,7 @@ class RegistrationCompetitionFee extends Component {
                     <div>
                         <InputWithHead
                             heading={AppConstants.numberOfRounds}
-                            required="required-field pb-1"
+                            required="required-field"
                         />
                         <Form.Item
                             name="numberOfRounds"
@@ -5593,7 +5593,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 )}
                 {/* </div> */}
-                <InputWithHead required="pb-1" heading={AppConstants.timeBetweenRounds} />
+                <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -5610,7 +5610,7 @@ class RegistrationCompetitionFee extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" >
                             <InputWithHead
                                 auto_complete="off"
                                 placeholder={AppConstants.hours}
@@ -5624,7 +5624,7 @@ class RegistrationCompetitionFee extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" >
                             <InputWithHead
                                 auto_complete="off"
                                 placeholder={AppConstants.mins}
@@ -5642,7 +5642,7 @@ class RegistrationCompetitionFee extends Component {
                 </div>
                 <InputWithHead
                     heading={AppConstants.registration_close}
-                    required="required-field pb-1"
+                    required="required-field"
                 />
                 <Form.Item
                     name="registrationCloseDate"
@@ -5682,7 +5682,7 @@ class RegistrationCompetitionFee extends Component {
                     </a>
                 </div>
 
-                <InputWithHead required="pb-1" heading={AppConstants.playerInEachTeam} />
+                <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -8108,6 +8108,7 @@ class RegistrationCompetitionFee extends Component {
                             </div>
 
                             <Loader visible={this.props.competitionFeesState.onLoad || this.state.getDataLoading} />
+                            {/* <Loader visible={true} /> */}
                         </Content>
 
                         <Footer>{this.footerView()}</Footer>

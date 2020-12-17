@@ -52,7 +52,7 @@ const AppUniqueId = {
     //// Unique Ids for TeamGrading ////////
 
     teamGradingYear_dpdn: "teamgrad_year_dpdn",
-    teamGradingYCompetition_dpdn: "teamgrad_compname_dpdn",
+    teamGradingCompetition_dpdn: "teamgrad_compname_dpdn",
     teamGrading_ExportBtn: "teamgrad_export_bn",
     teamGrading_ExportPlayer: "teamgrad_exportplayer_bn",
     teamGrading_PublishBtn: "teamgrad_publish_bn",

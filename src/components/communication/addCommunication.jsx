@@ -485,7 +485,7 @@ class AddCommunication extends Component {
             <div className="content-view pt-4">
                 <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
                     <InputWithHead
-                        required="required-field pt-0 pb-1"
+                        required="required-field pt-0"
                         heading={AppConstants.newsTitle}
                         placeholder={AppConstants.enterNewsTitle}
                         name="newsTitle"
@@ -497,7 +497,7 @@ class AddCommunication extends Component {
                     />
                 </Form.Item>
                 <InputWithHead
-                    required="pb-0"
+                    // required=""
                     heading={AppConstants.newsBody}
                 // value={editData.body}
                 />
@@ -506,7 +506,7 @@ class AddCommunication extends Component {
 
                 <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
                     <InputWithHead
-                        required="required-field pb-1 pt-4"
+                        required="required-field pt-4"
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
@@ -606,7 +606,7 @@ class AddCommunication extends Component {
                 {/* News expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryDate} />
+                        <InputWithHead heading={AppConstants.newsExpiryDate} />
                         <DatePicker
                             // size="large"
                             style={{ width: '100%' }}
@@ -619,7 +619,7 @@ class AddCommunication extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryTime} />
+                        <InputWithHead  heading={AppConstants.newsExpiryTime} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}
