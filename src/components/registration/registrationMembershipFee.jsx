@@ -856,8 +856,14 @@ class RegistrationMembershipFee extends Component {
                                                             <InputWithHead
                                                                 setFieldsValue={item.validityDays}
                                                                 placeholder={AppConstants._days}
-                                                                onChange={(e) => this.membershipFeeApplyRadio(e.target.value, index, "validityDays")}
+                                                                onChange={(e) => this.membershipFeeApplyRadio(e.target.value > 0 ? e.target.value : "", index, "validityDays")}
+                                                                onBlur={(e) => {
+                                                                    this.formRef.current.setFieldsValue({
+                                                                        [`validityDays${index}`]: e.target.value > 0 ? e.target.value : ""
+                                                                    })
+                                                                }}
                                                                 type={"number"}
+                                                                min={1}
                                                             />
                                                         </Form.Item>
                                                     </div>
