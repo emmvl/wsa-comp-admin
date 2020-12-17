@@ -211,7 +211,7 @@ class LiveScoreAddTeam extends Component {
                 <Form.Item name="teamName" rules={[{ required: true, message: ValidationConstants.teamName }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pt-0 pb-0"
+                        required="required-field pt-0 "
                         heading={AppConstants.teamName}
                         placeholder={AppConstants.enterTeamName}
                         onChange={(event) => {

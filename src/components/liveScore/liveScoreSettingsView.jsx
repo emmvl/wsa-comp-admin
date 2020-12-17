@@ -523,7 +523,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name='competition_name' rules={[{ required: true, message: ValidationConstants.competitionField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field "
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => {
@@ -546,7 +546,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name="short_name" rules={[{ required: true, message: ValidationConstants.shortField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field "
                         heading={AppConstants.short_Name}
                         placeholder={AppConstants.short_Name}
                         name="shortName"
@@ -616,7 +616,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* venue multi selection */}
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field "
                     heading={AppConstants.venues}
                 />
                 <div>
@@ -700,7 +700,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Record Umpire dropdown view */}
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field"
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.recordUmpireMsg}
                     marginTop={5}
@@ -733,7 +733,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            required="required-field pb-1"
+                            required="required-field"
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.recordMsg}
                             marginTop={5}
@@ -759,7 +759,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            required="required-field pb-1"
+                            required="required-field"
                             marginTop={5}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.reportMsg}
@@ -791,7 +791,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._days}
                             placeholder={AppConstants._days}
@@ -804,7 +804,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._hours}
                             placeholder={AppConstants._hours}
@@ -818,7 +818,7 @@ class LiveScoreSettingsView extends Component {
 
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._minutes}
                             placeholder={AppConstants._minutes}
@@ -1002,7 +1002,7 @@ class LiveScoreSettingsView extends Component {
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.timerMsg}
                     marginTop={5}
-                    required="required-field pb-1"
+                    required="required-field"
                     heading={AppConstants.timer}
                 />
                 {/* <div className="contextualHelp-RowDirection">
