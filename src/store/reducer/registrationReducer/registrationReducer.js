@@ -2,6 +2,21 @@ import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
+const membershipCapListDefObj = {
+  "membershipCapId": 0,
+  "organisationId": '',
+  "isAllMembershipProduct": 0,
+  "productsInfo": [],
+  "products": [],
+  "feeCaps": [
+      {
+          "membershipFeeCapId": 0,
+          "dobFrom": null,
+          "dobTo": null,
+          "amount": null
+      }
+  ]
+}
 
 const newObjvalue = {
   orgRegistrationId: 0,
@@ -100,23 +115,7 @@ const initialState = {
   teamRegListAction: null,
   regMembershipListAction: null,
   canInviteSend: 0,
-  membershipFeeCapList: [
-    {
-        "membershipCapId": 0,
-        "organisationId": '',
-        "isAllMembershipProduct": 0,
-        "productsInfo": [],
-        "products": [],
-        "feeCaps": [
-            {
-                "membershipFeeCapId": 0,
-                "dateFrom": null,
-                "dateTo": null,
-                "amount": null
-            }
-        ]
-    }
-  ]
+  membershipFeeCapList: []
 };
 
 
@@ -1270,6 +1269,38 @@ function registration(state = initialState, action) {
       state.regMembershipListAction = null
       return { ...state, onLoad: false };
     
+    case ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD:
+      return{...state,onLoad: true}  
+    
+    case ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_SUCCESS:
+      let membershipCapListTemp = [];
+      if(isArrayNotEmpty(action.result)){
+        membershipCapListTemp = action.result;
+        for(let item of membershipCapListTemp){
+          for(let product of item.products){
+            membershipCapListTemp["productsInfo"].push(product.membershipProductId);
+          }
+        }
+      }else{
+        membershipCapListTemp[0] = membershipCapListDefObj;
+      }
+      return{
+        ...state,
+        status: action.status,
+        membershipFeeCapList: membershipCapListTemp,
+        onLoad: false
+      }  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD:
+      return{...state,onLoad: true}  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS:
+      return{
+        ...state,
+        status: action.status,
+        onLoad: false
+      }  
+
     case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
       if(action.key == 'membershipFeeCapList'){
         state.membershipFeeCapList = action.value;

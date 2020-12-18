@@ -70,7 +70,9 @@ class UserProfileEdit extends Component {
                 nationalityRefId: null,
                 languages: "",
                 childrenCheckNumber: "",
-                childrenCheckExpiryDate: ""
+                childrenCheckExpiryDate: "",
+                parentUserId: 0,
+                childUserId: 0
             },
             titleLabel: "",
             section: "",
@@ -125,9 +127,13 @@ class UserProfileEdit extends Component {
                 titleLabel = AppConstants.addParent_guardian;
                 section = "primary";
             }
+            let userDataTemp = this.state.userData;
+            if(moduleFrom == 7 || moduleFrom == 8){
+                userDataTemp.userId = data.userId;
+            }
             await this.setState({
                 displaySection: moduleFrom,
-                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : this.state.userData,
+                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
                 titleLabel: titleLabel, section: section, loadValue: true
             })
         }
@@ -157,7 +163,7 @@ class UserProfileEdit extends Component {
                 } else {
                     history.push({
                         pathname: '/userPersonal',
-                        state: { tabKey: this.state.tabKey, userId: this.state.userData.userId }
+                        state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId }
                     });
                 }
             } else if (userState.status === 4) {
@@ -891,7 +897,7 @@ class UserProfileEdit extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.state.userData.userId } }}>
+                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId} }}>
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>

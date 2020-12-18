@@ -1639,7 +1639,10 @@ const AppConstants = {
   addAnotherMembershipProduct: "Add Another Membership Product",
   becsSetupNotificationTitle: "BECS Debit setup done",
   becsSetupNotificationBody: "Congratulations, you have successfully completed BECS debit setup",
-  becsAlreadyCompletedMessage: 'BECS setup already done'
+  becsAlreadyCompletedMessage: 'BECS setup already done',
+  childUnlinkMessage: "Your Parent needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
+  parentUnlinkMessage: "Your Child needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
+  ok: "OK"
 };
 
 export default AppConstants;

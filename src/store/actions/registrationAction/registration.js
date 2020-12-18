@@ -275,6 +275,23 @@ function updateMembershipFeeCapListAction(value,key,index,subKey,subIndex){
     return action;
 }
 
+function getMembershipCapListAction(organisationUniqueKey){
+    const action = {
+        type: ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD,
+        organisationUniqueKey
+    }
+    return action;
+}
+
+function updateMembershipFeeCapAction(organisationUniqueKey,payload){
+    const action = {
+        type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD,
+        organisationUniqueKey,
+        payload
+    }
+    return action;
+}
+
 export {
     regMembershipListAction,
     regMembershipListDeleteAction,
@@ -306,5 +323,7 @@ export {
     getDivisionsListAction,
     getTeamRegistrationsAction,
     exportTeamRegistrationAction,
-    updateMembershipFeeCapListAction
+    updateMembershipFeeCapListAction,
+    getMembershipCapListAction,
+    updateMembershipFeeCapAction
 };

@@ -497,6 +497,7 @@ const columnsPersonalPrimaryContacts = [
         dataIndex: "parentName",
         key: "parentName",
         render: (parentName, record) => (
+            record.status == "Linked" ?
             <NavLink
                 to={{
                     pathname: `/userPersonal`,
@@ -505,6 +506,9 @@ const columnsPersonalPrimaryContacts = [
             >
                 <span className="input-heading-add-another pt-0">{parentName}</span>
             </NavLink>
+            :
+            <span>{parentName}</span>
+
         ),
     },
     {
@@ -578,7 +582,7 @@ const columnsPersonalPrimaryContacts = [
                     </Menu.Item>
 
                     <Menu.Item key="2">
-                        <span onClick={() => this_Obj.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
+                        <span onClick={() => this_Obj.unlinkCheckParent(record)}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -592,7 +596,9 @@ const columnsPersonalChildContacts = [
         dataIndex: "childName",
         key: "childName",
         render: (childName, record) => (
+            record.status == "Linked" ?
             <NavLink
+
                 to={{
                     pathname: `/userPersonal`,
                     state: { userId: record.childUserId },
@@ -600,6 +606,8 @@ const columnsPersonalChildContacts = [
             >
                 <span className="input-heading-add-another pt-0">{childName}</span>
             </NavLink>
+            :
+            <span >{childName}</span>
         ),
     },
     {
@@ -673,7 +681,7 @@ const columnsPersonalChildContacts = [
                     </Menu.Item>
 
                     <Menu.Item key="2">
-                        <span onClick={() => this_Obj.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
+                        <span onClick={() => this_Obj.unlinkCheckChild(record)}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -1228,6 +1236,7 @@ class UserModulePersonalDetail extends Component {
             unlinkRecord: null,
             showChildUnlinkConfirmPopup: false,
             showParentUnlinkConfirmPopup: false,
+            showCannotUnlinkPopup: false
         };
     }
 
@@ -2754,6 +2763,64 @@ class UserModulePersonalDetail extends Component {
         );
     };
 
+    unlinkCheckParent = (record) => {
+        if(record.unlinkedBy){
+            if(record.unlinkedBy == record.userId){
+                this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
+            }
+            else{
+                this.setState({showCannotUnlinkPopup: true})
+            }
+        }
+        else{
+            this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
+        }
+
+        }
+
+    unlinkCheckChild = (record) => {
+        if(record.unlinkedBy){
+            if(record.unlinkedBy == record.userId){
+             this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
+            }
+            else{
+                this.setState({unlinkRecord: record, showCannotUnlinkPopup: true})
+            }
+        }
+        else{
+            this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
+        }
+
+        }
+
+    cannotUninkPopup = () => {
+        let data = this.state.unlinkRecord;
+        console.log("ulrec", data)
+        return(
+            <div>
+                
+                <Modal
+                    className="add-membership-type-modal"
+                    title="Warning"
+                    visible={this.state.showCannotUnlinkPopup}
+                    onCancel={() => this.setState({ showCannotUnlinkPopup : false})}
+                    footer={[
+                        <Button onClick={() => this.setState({ showCannotUnlinkPopup: false })}>
+                            {AppConstants.ok}
+                        </Button>,
+                    ]}
+                    >   
+                        {data?.childName ? 
+                        <p> {AppConstants.childUnlinkMessage}</p>
+                        :
+                        <p>{AppConstants.parentUnlinkMessage}</p>
+                        }
+
+                    </Modal>
+            </div>
+        )
+    }
+
     unlinkChildConfirmPopup = () => {
         let status = this.state.unlinkRecord?.status == "Linked" ? "de-link" : "link";
         return (
@@ -2902,6 +2969,7 @@ class UserModulePersonalDetail extends Component {
                         <Loader visible={this.props.userState.onMedicalLoad} />
                         {this.unlinkChildConfirmPopup()}
                         {this.unlinkParentConfirmPopup()}
+                        {this.cannotUninkPopup()}
                     </Content>
                 </Layout>
             </div>
