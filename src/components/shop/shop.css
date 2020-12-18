@@ -100,7 +100,7 @@
 .dragDropLeft {
     border-radius: 4px;
     padding-bottom: 18px;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
 
 
 }
@@ -152,6 +152,12 @@
 
 .ant-header-transaparent{
     background-color: transparent;
+}
+
+.image-size-format-text{
+    align-self: center;
+    color: var(--app-bbbbc6);
+    font-size: 13px;
 }
 
 @media (max-width: 767px) {

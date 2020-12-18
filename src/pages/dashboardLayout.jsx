@@ -550,9 +550,9 @@ class DashboardLayout extends React.Component {
                             filterOption={(input, data) =>
                                 data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
-                            loading={this.props.userState.onLoad}
+                            loading={this.props.userState.onImpersonationLoad}
                         >
-                            {(this.props.userState.affiliateList || []).map((affiliate) => (
+                            {(this.props.userState.impersonationList || []).map((affiliate) => (
                                 <Option key={'organization_' + affiliate.affiliateOrgId}
                                     value={affiliate.affiliateOrgId}>
                                     {affiliate.affiliateName}
