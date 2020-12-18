@@ -102,7 +102,7 @@ function randomKeyGen(keyLength) {
 }
 
 const isImageSizeValid = value => {
-    let maxImageSize = 1000000;
+    let maxImageSize = 2000000;
     return value > maxImageSize ? false : true;
 };
 

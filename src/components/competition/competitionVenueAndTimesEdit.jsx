@@ -473,7 +473,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-name"
-                        required="required-field pt-0 pb-0"
+                        required="required-field"
                         heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
@@ -498,7 +498,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     />
                 </Form.Item>
 
-                <Form.Item className="formLineHeight" name="venueAddress">
+                <Form.Item name="venueAddress">
                     <PlacesAutocomplete
                         defaultValue={defaultVenueAddress}
                         heading={AppConstants.venueSearch}
@@ -512,7 +512,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item name="addressOne">
                     <InputWithHead
                         auto_complete="new-addressOne"
-                        required="required-field pt-3 pb-0"
+                        required="required-field"
                         heading={AppConstants.addressOne}
                         placeholder={AppConstants.addressOne}
                         onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
@@ -533,7 +533,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item name="suburb">
                     <InputWithHead
                         auto_complete="new-suburb"
-                        required="required-field pt-3 pb-0"
+                        required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
                         onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
@@ -561,7 +561,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     </Select>
                 </Form.Item>
 
-                <Form.Item className="formLineHeight" name="postcode">
+                <Form.Item  name="postcode">
                     <InputWithHead
                         auto_complete="new-postcode"
                         required="required-field"

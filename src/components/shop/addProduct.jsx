@@ -330,6 +330,7 @@ class AddProduct extends Component {
             let isSuccess = isImageFormatValid(extension);
             if (!isSuccess) {
                 message.error(AppConstants.logo_Image_Format);
+                return
             }
             if (!imageSizeValid) {
                 message.error(AppConstants.logo_Image_Size);
