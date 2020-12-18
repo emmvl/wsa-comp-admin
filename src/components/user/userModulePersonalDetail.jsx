@@ -2786,7 +2786,7 @@ class UserModulePersonalDetail extends Component {
     };
 
     unlinkCheckParent = (record) => {
-        if(record.unlinkedBy){
+        if(record.unlinkedBy && record.status == "Unlinked"){
             if(record.unlinkedBy == record.userId){
                 this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
             }
@@ -2801,7 +2801,7 @@ class UserModulePersonalDetail extends Component {
         }
 
     unlinkCheckChild = (record) => {
-        if(record.unlinkedBy){
+        if(record.unlinkedBy && record.status == "Unlinked"){
             if(record.unlinkedBy == record.userId){
              this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
             }
