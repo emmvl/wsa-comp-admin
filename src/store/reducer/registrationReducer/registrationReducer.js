@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import { deepCopyFunction, isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const membershipCapListDefObj = {
   "membershipCapId": 0,
@@ -8,6 +8,7 @@ const membershipCapListDefObj = {
   "isAllMembershipProduct": 0,
   "productsInfo": [],
   "products": [],
+  "productsTemp": [],
   "feeCaps": [
       {
           "membershipFeeCapId": 0,
@@ -115,7 +116,9 @@ const initialState = {
   teamRegListAction: null,
   regMembershipListAction: null,
   canInviteSend: 0,
-  membershipFeeCapList: []
+  membershipFeeCapList: [],
+  membershipFeeCapListCopy: [],
+  updateMembershipFeeCapOnLoad: false
 };
 
 
@@ -1277,8 +1280,10 @@ function registration(state = initialState, action) {
       if(isArrayNotEmpty(action.result)){
         membershipCapListTemp = action.result;
         for(let item of membershipCapListTemp){
+          item["productsInfo"] = [];
+          item["productsTemp"] = deepCopyFunction(item.products);
           for(let product of item.products){
-            membershipCapListTemp["productsInfo"].push(product.membershipProductId);
+            item.productsInfo.push(product.membershipProductId);
           }
         }
       }else{
@@ -1288,17 +1293,18 @@ function registration(state = initialState, action) {
         ...state,
         status: action.status,
         membershipFeeCapList: membershipCapListTemp,
+        membershipFeeCapListCopy: deepCopyFunction(membershipCapListTemp),
         onLoad: false
       }  
     
     case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD:
-      return{...state,onLoad: true}  
+      return{...state,updateMembershipFeeCapOnLoad: true}  
     
     case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS:
       return{
         ...state,
         status: action.status,
-        onLoad: false
+        updateMembershipFeeCapOnLoad: false
       }  
 
     case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
@@ -1306,16 +1312,32 @@ function registration(state = initialState, action) {
         state.membershipFeeCapList = action.value;
       }else if(action.key == 'productsInfo'){
         let productList = action.value;
-        state.membershipProductCapList[action.index].products = [];
+        state.membershipFeeCapList[action.index].productsInfo = productList;
+        // console.log("state.membershipFeeCapList[action.index].productsTemp",state.membershipFeeCapList[action.index].productsTemp);
+        // console.log("state.membershipFeeCapList[action.index].productsInfo",state.membershipFeeCapList[action.index].productsInfo);
+        state.membershipFeeCapList[action.index].products = [];
         for(let product of productList){
+          let existingProductTemp = state.membershipFeeCapList[action.index].productsTemp.find(x => x.membershipProductId == product)
           let obj = {
-            "membershipCapProductId": 0,
-            "membershipProductId": product.membershipProductUniqueKey
+            "membershipCapProductId": existingProductTemp ? existingProductTemp.membershipCapProductId : 0,
+            "membershipProductId": product
           }
-          state.membershipProductCapList[action.index].products.push(obj);
+          state.membershipFeeCapList[action.index].products.push(obj);
+          state.membershipFeeCapList[action.index].productsTemp.push(obj);
         }
+        // console.log("state.membershipFeeCapList[action.index].products",state.membershipFeeCapList[action.index].products)
       }else if(action.key == 'feeCaps'){
         state.membershipFeeCapList[action.index][action.key][action.subIndex][action.subKey] = action.value;
+      }else if(action.key == "isAllMembershipProduct"){
+        if(action.value == 1){
+          state.membershipFeeCapList = [];
+          state.membershipFeeCapList[0] = deepCopyFunction(state.membershipFeeCapListCopy[action.index]);
+          state.membershipFeeCapList[0].products = [];
+          state.membershipFeeCapList[0].productsInfo = [];
+          state.membershipFeeCapList[0][action.key] = action.value;
+        }else{
+          state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
+        }
       }else{
         state.membershipFeeCapList[action.index][action.key] = action.value;
       }
