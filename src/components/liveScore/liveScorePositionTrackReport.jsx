@@ -10,7 +10,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { liveScorePositionTrackingAction } from '../../store/actions/LiveScoreAction/liveScorePositionTrackingAction'
-import { getLiveScoreCompetiton } from "../../util/sessionStorage"
+import { getLiveScoreCompetiton, getOrganisationData } from "../../util/sessionStorage"
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
 
@@ -56,7 +56,9 @@ function tableSort(key) {
         pagination: body,
         search: this_obj.state.searchText,
         sortBy,
-        sortOrder
+        sortOrder,
+        IsParent: this_obj.state.liveScoreCompIsParent,
+        compOrgId: this_obj.state.compOrgId
     })
 }
 
@@ -547,14 +549,20 @@ class LiveScorePositionTrackReport extends Component {
             searchText: "",
             reporting: 'PERIOD',
             aggregate: 'MATCH',
-            offset: 0
+            offset: 0,
+            liveScoreCompIsParent: false,
+            compOrgId: 0
         }
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const { id, organisationId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            const orgItem = await getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             const body = {
                 paging: {
                     limit: 10,
@@ -566,10 +574,12 @@ class LiveScorePositionTrackReport extends Component {
                 aggregate: this.state.aggregate,
                 reporting: this.state.reporting,
                 pagination: body,
-                search: this.state.searchText
+                search: this.state.searchText,
+                IsParent: liveScoreCompIsParent,
+                compOrgId: compOrgId
             })
 
-            this.setState({ competitionId: id })
+            this.setState({ competitionId: id, liveScoreCompIsParent, compOrgId })
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -628,7 +638,10 @@ class LiveScorePositionTrackReport extends Component {
             pagination: body,
             search: this.state.searchText,
             sortBy,
-            sortOrder
+            sortOrder,
+            IsParent: this.state.liveScoreCompIsParent,
+            compOrgId: this.state.compOrgId
+
         })
     }
 
@@ -676,7 +689,9 @@ class LiveScorePositionTrackReport extends Component {
             pagination: body,
             search: this.state.searchText,
             sortBy,
-            sortOrder
+            sortOrder,
+            IsParent: this.state.liveScoreCompIsParent,
+            compOrgId: this.state.compOrgId
         })
         this.setState({ reporting: reportId })
     }
@@ -696,7 +711,9 @@ class LiveScorePositionTrackReport extends Component {
             pagination: body,
             search: this.state.searchText,
             sortBy,
-            sortOrder
+            sortOrder,
+            IsParent: this.state.liveScoreCompIsParent,
+            compOrgId: this.state.compOrgId
         })
         this.setState({ aggregate: aggregateId })
     }
@@ -719,7 +736,9 @@ class LiveScorePositionTrackReport extends Component {
                 pagination: body,
                 search: e.target.value,
                 sortBy,
-                sortOrder
+                sortOrder,
+                IsParent: this.state.liveScoreCompIsParent,
+                compOrgId: this.state.compOrgId
             })
         }
     }
@@ -743,7 +762,9 @@ class LiveScorePositionTrackReport extends Component {
                 pagination: body,
                 search: this.state.searchText,
                 sortBy,
-                sortOrder
+                sortOrder,
+                IsParent: this.state.liveScoreCompIsParent,
+                compOrgId: this.state.compOrgId
             })
         }
     }
@@ -767,7 +788,9 @@ class LiveScorePositionTrackReport extends Component {
                 pagination: body,
                 search: this.state.searchText,
                 sortBy,
-                sortOrder
+                sortOrder,
+                IsParent: this.state.liveScoreCompIsParent,
+                compOrgId: this.state.compOrgId
             })
         }
     }

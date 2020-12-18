@@ -120,7 +120,7 @@ const columns = [
                     placeholder=" "
                     type={"number"}
                     min="0"
-                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : "", "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
                     value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
                 />
             )

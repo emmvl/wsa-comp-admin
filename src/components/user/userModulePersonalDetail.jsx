@@ -8,8 +8,13 @@ import {
     Button,
     Tabs,
     Menu,
-    Modal
+    Dropdown,
+    Modal,
+    message,
+    Space,
+    Tooltip
 } from "antd";
+import { DownOutlined } from '@ant-design/icons';
 import "./user.css";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -2095,7 +2100,6 @@ class UserModulePersonalDetail extends Component {
                                 + {AppConstants.addChild}
                             </span>
                         </NavLink>
-            
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
@@ -2449,10 +2453,23 @@ class UserModulePersonalDetail extends Component {
     };
 
     headerView = () => {
+
+        function handleMenuClick(e) {
+            history.push("/mergeUserMatches")
+        }
+
+        const menu = (
+            <Menu onClick={handleMenuClick}>
+              <Menu.Item key="merge">
+                Merge
+              </Menu.Item>
+            </Menu>
+        );
+
         return (
             <div className="row">
                 <div className="col-sm">
-                    <Header className="form-header-view bg-transparent d-flex pl-0 align-items-center">
+                    <Header className="form-header-view bg-transparent d-flex pl-0 justify-content-between mt-5">
                         <Breadcrumb separator=" > ">
                             {/* <NavLink to="/userGraphicalDashboard">
                                 <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
@@ -2461,6 +2478,11 @@ class UserModulePersonalDetail extends Component {
                                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
                             </NavLink>
                         </Breadcrumb>
+                        <Dropdown overlay={menu}>
+                            <Button type="primary">
+                                Actions <DownOutlined />
+                            </Button>
+                        </Dropdown>
                     </Header>
                 </div>
                 {this.state.screenKey && (
@@ -2769,7 +2791,7 @@ class UserModulePersonalDetail extends Component {
                 this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
             }
             else{
-                this.setState({showCannotUnlinkPopup: true})
+                this.setState({unlinkRecord: record,showCannotUnlinkPopup: true})
             }
         }
         else{
@@ -2795,7 +2817,6 @@ class UserModulePersonalDetail extends Component {
 
     cannotUninkPopup = () => {
         let data = this.state.unlinkRecord;
-        console.log("ulrec", data)
         return(
             <div>
                 
@@ -2811,9 +2832,9 @@ class UserModulePersonalDetail extends Component {
                     ]}
                     >   
                         {data?.childName ? 
-                        <p> {AppConstants.childUnlinkMessage}</p>
+                        <p> {AppConstants.parentUnlinkMessage}</p>
                         :
-                        <p>{AppConstants.parentUnlinkMessage}</p>
+                        <p>{AppConstants.childUnlinkMessage}</p>
                         }
 
                     </Modal>
