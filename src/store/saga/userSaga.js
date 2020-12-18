@@ -97,11 +97,20 @@ function* getAffiliatesListingSaga(action) {
     const result = yield call(UserAxiosApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
+      if (action.payload.paging.limit == -1) {
+        yield put({
+          type: ApiConstants.API_AFFILIATES_IMPERSONATION_LISTING_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      }
+      else {
+        yield put({
+          type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      }
     } else {
       yield call(failSaga, result);
     }
@@ -790,7 +799,7 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
-        impersonationAccess:action.payload.access
+        impersonationAccess: action.payload.access
       });
       if (action.payload.access == false) {
         history.push('/homeDashboard')
@@ -972,10 +981,10 @@ function* getSpectatorListSaga(action) {
   }
 }
 
-function* registrationResendEmailSaga(action){
+function* registrationResendEmailSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.registrationResendEmail, action.teamId,action.userId);
-    
+    const result = yield call(UserAxiosApi.registrationResendEmail, action.teamId, action.userId);
+
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS,

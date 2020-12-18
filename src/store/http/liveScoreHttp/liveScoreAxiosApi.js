@@ -1165,7 +1165,7 @@ const LiveScoreAxiosApi = {
         const { organisationId } = getOrganisationData();
         let compOrgId = compData ? compData.organisationId : 0
         let isCompParent = organisationId === compOrgId
-        let comp_Org_Id= compData ? compData.competitionOrganisation ? compData.competitionOrganisation.id : 0 : 0
+        let comp_Org_Id = compData ? compData.competitionOrganisation ? compData.competitionOrganisation.id : 0 : 0
         let url = ""
         if (!isCompParent) {
             //  url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
@@ -1416,12 +1416,20 @@ const LiveScoreAxiosApi = {
     liveScorePositionTrackList(data) {
         const body = data.pagination;
         let url;
-        if (data.reporting === 'PERCENT') {
-            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${'MINUTE'}&competitionId=${data.compId}&search=${data.search}`;
-        } else {
-            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}`;
-        }
+        if (!data.IsParent) {
+            if (data.reporting === 'PERCENT') {
+                url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${'MINUTE'}&competitionId=${data.compId}&search=${data.search}&competitionOrganisationId=${data.compOrgId}`;
+            } else {
+                url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}&competitionOrganisationId=${data.compOrgId}`;
+            }
 
+        } else {
+            if (data.reporting === 'PERCENT') {
+                url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${'MINUTE'}&competitionId=${data.compId}&search=${data.search}`;
+            } else {
+                url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}`;
+            }
+        }
         if (data.sortBy && data.sortOrder) {
             url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
         }
