@@ -345,7 +345,6 @@ export function* updateMembershipFeeCapSaga(action) {
   try {
     const result = yield call(AxiosApi.updateMembershipFeeCap,action.organisationUniqueKey,action.payload);
     if (result.status === 1) {
-      getMembershipFeeCapListSaga(action);
       yield put({
         type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS,
         result: result.result.data,

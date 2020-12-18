@@ -59,17 +59,18 @@ class RegistrationMembershipCap extends Component {
             yearRefId: null,
             organisationUniqueKey: getOrganisationData().organisationUniqueKey,
             getMembershipProductsOnLoad: false,
-            getMembershipCapListOnLoad: false
+            getMembershipCapListOnLoad: false,
+            updateMembershipFeeCapOnLoad: false
         };
         this_Obj = this;
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
-        this.apiCalls();
+        this.getYears();
     }
 
-    apiCalls = () => {
+    getYears = () => {
         try{
             this.props.getOnlyYearListAction(this.props.appState.yearList);
             this.setState({ onYearLoad: true });
@@ -95,7 +96,10 @@ class RegistrationMembershipCap extends Component {
             if(this.props.registrationState.onLoad == false && this.state.getMembershipCapListOnLoad == true){
                 this.setMembershipCapListFormFieldsValue();
                 this.setState({getMembershipCapListOnLoad: false});
-
+            }
+            if(this.props.registrationState.updateMembershipFeeCapOnLoad == false && this.state.updateMembershipFeeCapOnLoad == true){
+                this.props.getMembershipCapListAction(this.state.organisationUniqueKey)
+                this.setState({updateMembershipFeeCapOnLoad: false,getMembershipCapListOnLoad: true});
             }
         }catch(ex){
             console.log("Error in componentDidUpdate::"+ex)
@@ -111,8 +115,8 @@ class RegistrationMembershipCap extends Component {
                 });
                 for(let j in membershipFeeCapList[i].feeCaps){
                     this.formRef.current.setFieldsValue({
-                        [`dobFrom${i}${j}`]: membershipFeeCapList[i].feeCaps[j].dobFrom ? moment(membershipFeeCapList[i].feeCaps[j].dobFrom).format("MM-DD-YYYY") : null,
-                        [`dobTo${i}${j}`]: membershipFeeCapList[i].feeCaps[j].dobTo ? moment(membershipFeeCapList[i].feeCaps[j].dobTo).format("MM-DD-YYYY") : null,
+                        [`dobFrom${i}${j}`]: membershipFeeCapList[i].feeCaps[j].dobFrom ? moment(membershipFeeCapList[i].feeCaps[j].dobFrom) : null,
+                        [`dobTo${i}${j}`]: membershipFeeCapList[i].feeCaps[j].dobTo ? moment(membershipFeeCapList[i].feeCaps[j].dobTo) : null,
                         [`membershipFeeAmount${i}${j}`]: membershipFeeCapList[i].feeCaps[j].amount ? membershipFeeCapList[i].feeCaps[j].amount : null,
                     });
                 }
@@ -142,6 +146,7 @@ class RegistrationMembershipCap extends Component {
             "isAllMembershipProduct": 0,
             "productsInfo": [],
             "products": [],
+            "productsTemp": [],
             "feeCaps": [
                 {
                     "membershipFeeCapId": 0,
@@ -162,7 +167,10 @@ class RegistrationMembershipCap extends Component {
             }else if(key == 'remove'){
                 membershipFeeCapList.splice(index,1);
             }
-            this.props.updateMembershipFeeCapListAction(membershipFeeCapList,"membershipFeeCapList")
+            this.props.updateMembershipFeeCapListAction(membershipFeeCapList,"membershipFeeCapList");
+            setTimeout(() => {
+                   this.setMembershipCapListFormFieldsValue(); 
+            }, 100);
         }catch(ex){
             console.log("Error in addOrRemoveMembershipProductBox::"+ex);
         }
@@ -188,10 +196,54 @@ class RegistrationMembershipCap extends Component {
         }
     }
 
+    getEnabledMembershipProducts = (defProdctIndex,membershipFeeCapIndex) => {
+        try{
+            const { membershipFeeCapList } = this.props.registrationState;
+            const { defaultCompFeesMembershipProduct } = this.props.competitionFeesState;
+            let defMembershipProduct = defaultCompFeesMembershipProduct[defProdctIndex]; 
+            for(let i in membershipFeeCapList){
+                let exist = membershipFeeCapList[i].productsInfo.find(x => x == defMembershipProduct.membershipProductUniqueKey);
+                if(exist){
+                    if(i == membershipFeeCapIndex){
+                        return false;
+                    }else{
+                        return true;
+                    } 
+                }
+            }
+        }catch(ex){
+            console.log("Error in getEnabledMembershipProducts::"+ex);
+        }
+    }
+
+    getEnabledDates = (date,feeCapIndex,membershipFeeCapIndex) => {
+        try{
+            const { membershipFeeCapList } = this.props.registrationState;
+            for(let i in membershipFeeCapList){
+                for(let j in membershipFeeCapList[i].feeCaps){
+                    let dobFrom = moment(membershipFeeCapList[i].feeCaps[j].dobFrom);
+                    let dobTo = moment(membershipFeeCapList[i].feeCaps[j].dobTo);
+                    // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(date))
+                    // console.log("date",date.isSameOrAfter(dobFrom),date.isSameOrBefore(dobTo))
+                    if(date.isSameOrAfter(dobFrom) && date.isSameOrBefore(dobTo)){
+                        if(j == feeCapIndex){
+                            return false;
+                        }else{
+                            return true;
+                        } 
+                    }
+                }
+            } 
+        }catch(ex){
+            console.log("Error in getEnabledDates::"+ex);
+        }
+    }
+
     saveMembershipFeeCap = () => {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
-            this.props.updateMembershipFeeCapAction(this.state.organisationUniqueKey,membershipFeeCapList)
+            this.props.updateMembershipFeeCapAction(this.state.organisationUniqueKey,membershipFeeCapList);
+            this.setState({updateMembershipFeeCapOnLoad: true})
         }catch(ex){
             console.log("Error in saveMembershipFeeCap::"+ex)
         }
@@ -221,18 +273,21 @@ class RegistrationMembershipCap extends Component {
                                 <span className="year-select-heading required-field">
                                     {AppConstants.year}:
                                 </span>
-                                <Form.Item name="yearRefId" rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}>
-                                    <Select
-                                        className="year-select reg-filter-select1 ml-2"
-                                        style={{ maxWidth: 80 }}
-                                    >
-                                        {this.props.appState.yearList.map(item => (
-                                            <Option key={'year_' + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
+                                <Select
+                                    onChange={(e) => {
+                                        this.props.getDefaultCompFeesMembershipProductTabAction(1, e); 
+                                        this.setState({yearRefId: e,getMembershipProductsOnLoad: true})
+                                    }}
+                                    value={this.state.yearRefId}
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ maxWidth: 80 }}
+                                >
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
+                                </Select>
                             </div>
                         </div>
                     </div>
@@ -257,6 +312,7 @@ class RegistrationMembershipCap extends Component {
                     <Checkbox
                         className="membership-cap-check-box-lbl"
                         onChange={(e) => this.onChangeMembershipProductValue(e.target.checked ? 1 : 0,"isAllMembershipProduct",index)}
+                        checked={item.isAllMembershipProduct == 1 ? true : false}
                         style={{margin: "15px 0px"}}>
                         {AppConstants.allMembershipProducts}
                     </Checkbox>
@@ -274,7 +330,7 @@ class RegistrationMembershipCap extends Component {
                             setFieldsValue={item.productsInfo}
                             >
                                 {(defaultCompFeesMembershipProduct || []).map((defProduct,defProductIndex) => (
-                                    < Option key={defProduct.membershipProductUniqueKey} value={defProduct.membershipProductUniqueKey}> {defProduct.membershipProductName}</Option>
+                                    < Option disabled={this.getEnabledMembershipProducts(defProductIndex,index)} key={defProduct.membershipProductUniqueKey} value={defProduct.membershipProductUniqueKey}> {defProduct.membershipProductName}</Option>
                                 ))}
                         </Select>
                     </Form.Item>
@@ -288,6 +344,7 @@ class RegistrationMembershipCap extends Component {
                                         rules={[{ required: true, message: ValidationConstants.fromDateIsRequired }]}
                                     >
                                         <DatePicker
+                                            className="membership-cap-date-picker"
                                             setFieldsValue={feeCap.dateFrom ? moment(feeCap.dateFrom,"MM-DD-YYYY") : null}
                                             size="large"
                                             placeholder={"dd-mm-yyyy"}
@@ -295,6 +352,7 @@ class RegistrationMembershipCap extends Component {
                                             onChange={(e, f) => this.dateConversion(f, "feeCaps", index, "dobFrom",feeCapIndex)}
                                             format={"DD-MM-YYYY"}
                                             showTime={false}
+                                            disabledDate={(date) => this.getEnabledDates(date,feeCapIndex,index)}
                                         />
                                     </Form.Item>
                                 </div>
@@ -305,6 +363,7 @@ class RegistrationMembershipCap extends Component {
                                             rules={[{ required: true, message: ValidationConstants.toDateIsRequired }]}
                                         >
                                             <DatePicker
+                                                className="membership-cap-date-picker"
                                                 setFieldsValue={feeCap.dateTo ? moment(feeCap.dateTo,"MM-DD-YYYY") : null}
                                                 size="large"
                                                 placeholder={"dd-mm-yyyy"}
@@ -312,6 +371,7 @@ class RegistrationMembershipCap extends Component {
                                                 onChange={(e, f) => this.dateConversion(f,"feeCaps", index, "dobTo",feeCapIndex)}
                                                 format={"DD-MM-YYYY"}
                                                 showTime={false}
+                                                disabledDate={(date) => this.getEnabledDates(date,feeCapIndex,index)}
                                             />
                                     </Form.Item>
                                 </div>
@@ -338,12 +398,12 @@ class RegistrationMembershipCap extends Component {
                                 )}
                             </div>  
                         ))}
-                        <div 
+                        <span 
                         className="orange-action-txt" 
                         style={{ alignSelf: "center", marginTop: 10}}
                         onClick={() => this.addOrRemoveAnoterProduct("add",index)}>
                             +{AppConstants.addAnother}
-                        </div>
+                        </span>
                      </div>
                 </div>
             )
@@ -360,11 +420,13 @@ class RegistrationMembershipCap extends Component {
                     {(membershipFeeCapList || []).map((item,index) => (
                         <div className="mb-5">{this.membershipProductView(item,index)}</div>
                     ))}
-                    <div 
-                        className="orange-action-txt center-align" 
-                        style={{ alignSelf: "center"}}
-                        onClick={() => this.addOrRemoveMembershipProductBox("add")}>
-                        +{AppConstants.addAnotherMembershipProduct}
+                    <div className=" center-align-70">
+                        <span 
+                            className="orange-action-txt" 
+                            style={{ alignSelf: "center"}}
+                            onClick={() => this.addOrRemoveMembershipProductBox("add")}>
+                            +{AppConstants.addAnotherMembershipProduct}
+                        </span>
                     </div>
                 </div>
             )
@@ -408,7 +470,10 @@ class RegistrationMembershipCap extends Component {
                         {this.dropdownView()}
                         <Content>
                             {this.contentView()}
-                            <Loader visible={this.props.registrationState.onLoad} />
+                            <Loader visible={this.state.onYearLoad || 
+                                this.state.getMembershipProductsOnLoad || 
+                                this.state.getMembershipCapListOnLoad || 
+                                this.state.updateMembershipFeeCapOnLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

@@ -1096,6 +1096,15 @@ input[type="number"] {
   margin: auto;
 }
 
+.center-align-70{
+  width: 70%;
+  margin: auto;
+}
+
 .membership-cap-save{
   margin-left: auto;
+}
+
+.membership-cap-date-picker.ant-picker-large .ant-picker-input > input {
+  box-shadow: none;
 }
