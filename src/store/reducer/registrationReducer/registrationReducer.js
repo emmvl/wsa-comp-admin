@@ -118,7 +118,8 @@ const initialState = {
   canInviteSend: 0,
   membershipFeeCapList: [],
   membershipFeeCapListCopy: [],
-  updateMembershipFeeCapOnLoad: false
+  updateMembershipFeeCapOnLoad: false,
+  isAllMembershipProductChanged: false
 };
 
 
@@ -1310,6 +1311,8 @@ function registration(state = initialState, action) {
     case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
       if(action.key == 'membershipFeeCapList'){
         state.membershipFeeCapList = action.value;
+      }else if(action.key == 'isAllMembershipProductChanged'){
+        state.isAllMembershipProductChanged = action.value;
       }else if(action.key == 'productsInfo'){
         let productList = action.value;
         state.membershipFeeCapList[action.index].productsInfo = productList;
@@ -1338,6 +1341,7 @@ function registration(state = initialState, action) {
         }else{
           state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
         }
+        state.isAllMembershipProductChanged = true;
       }else{
         state.membershipFeeCapList[action.index][action.key] = action.value;
       }

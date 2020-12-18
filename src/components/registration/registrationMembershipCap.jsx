@@ -101,6 +101,10 @@ class RegistrationMembershipCap extends Component {
                 this.props.getMembershipCapListAction(this.state.organisationUniqueKey)
                 this.setState({updateMembershipFeeCapOnLoad: false,getMembershipCapListOnLoad: true});
             }
+            if(this.props.registrationState.isAllMembershipProductChanged == true){
+                this.setMembershipCapListFormFieldsValue();
+                this.props.updateMembershipFeeCapListAction(false,"isAllMembershipProductChanged");
+            }
         }catch(ex){
             console.log("Error in componentDidUpdate::"+ex)
         }
