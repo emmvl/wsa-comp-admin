@@ -25,7 +25,7 @@ import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/common
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader'
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import PlacesAutocomplete from '../competition/elements/PlaceAutoComplete';
 
 const { Header, Footer, Content } = Layout;
@@ -311,6 +311,18 @@ class UserOurOrganization extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             this.setState({ image: data.files[0] })
             this.props.updateOrgAffiliateAction(URL.createObjectURL(data.files[0]), "logoUrl");
             this.props.updateOrgAffiliateAction(data.files[0], "organisationLogo");
@@ -433,7 +445,6 @@ class UserOurOrganization extends Component {
             message.error(this.state.affiliateAddressError);
             return;
         }
-
         if (tabKey == "1") {
             let affiliate = this.props.userState.affiliateOurOrg;
 
@@ -620,23 +631,33 @@ class UserOurOrganization extends Component {
                         value={affiliate.name}
                     />
                 </Form.Item>
-                <InputWithHead required="required-field pb-0" heading={AppConstants.organisationLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.organisationLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div className="reg-competition-logo-view" onClick={this.selectImage}>
+                            <div className="reg-competition-logo-view"
+                                onClick={() => this.selectImage()}
+                            >
                                 <label>
-                                    <input
+                                    {/* <input
                                         src={affiliate.logoUrl == null ? AppImages.circleImage : affiliate.logoUrl}
                                         alt=""
                                         height="120"
                                         width="120"
                                         type="image"
                                         disabled={!this.state.isEditable}
-                                        style={{ borderRadius: 60 }}
+                                        style={{ borderRadius: 60, height: 120, widows: 120 }}
                                         name="image"
                                         onError={ev => {
                                             ev.target.src = AppImages.circleImage;
+                                        }}
+                                    /> */}
+                                    <img
+                                        src={affiliate.logoUrl == null ? AppImages.circleImage : affiliate.logoUrl}
+                                        height={'120'}
+                                        width={'120'}
+                                        style={{
+                                            borderRadius: 60
                                         }}
                                     />
                                 </label>
@@ -672,6 +693,9 @@ class UserOurOrganization extends Component {
                             </Checkbox>} */}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
                 <div className="row">
                     <div className="col-sm">
@@ -764,7 +788,7 @@ class UserOurOrganization extends Component {
                             value={item.middleName}
                             disabled={!this.state.isEditable}
                             auto_complete='new-middleName'
-                            // required="pt-0"
+                        // required="pt-0"
                         />
 
                         <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
@@ -1277,6 +1301,7 @@ class UserOurOrganization extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.saveAffiliate}
+
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
                             message.error(ValidationConstants.requiredMessage);

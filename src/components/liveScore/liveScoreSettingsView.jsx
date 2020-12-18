@@ -33,7 +33,7 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
@@ -165,6 +165,18 @@ class LiveScoreSettingsView extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
             const imgData = URL.createObjectURL(data.files[0])
             this.props.onChangeSettingForm({ key: 'competitionLogo', data: data.files[0] })
@@ -612,6 +624,9 @@ class LiveScoreSettingsView extends Component {
                             </Checkbox>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 {/* venue multi selection */}
