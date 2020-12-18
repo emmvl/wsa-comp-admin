@@ -1640,9 +1640,12 @@ const AppConstants = {
   becsSetupNotificationTitle: "BECS Debit setup done",
   becsSetupNotificationBody: "Congratulations, you have successfully completed BECS debit setup",
   becsAlreadyCompletedMessage: 'BECS setup already done',
+  logo_Image_Size: 'Selected file must be less then 1 MB',
+  logo_Image_Format: 'Only jpg, jpeg, png, webp formats are supported',
+  imageSizeFormatText: 'Selected file must be less then 1 MB and jpg, jpeg, png, webp formats are supported.',
   childUnlinkMessage: "Your Parent needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
   parentUnlinkMessage: "Your Child needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
-  ok: "OK"
+  ok: "OK",
 };
 
 export default AppConstants;

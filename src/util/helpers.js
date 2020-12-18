@@ -8,7 +8,7 @@ const getAge = (birthDate) => (Math.floor((new Date() - new Date(birthDate).getT
 
 
 const isNotNullAndUndefined = (value) => {
-    return  value !== undefined && value !== null
+    return value !== undefined && value !== null
 }
 
 const deepCopyFunction = inObject => {
@@ -85,7 +85,7 @@ const regexNumberExpression = (number) => {
 };
 
 const isImageFormatValid = value => {
-    let fileTypes = ['jpg', 'jpeg', 'png','webp'];
+    let fileTypes = ['jpg', 'jpeg', 'png', 'webp'];
     return (fileTypes.indexOf(value) > -1);
 };
 
@@ -101,6 +101,10 @@ function randomKeyGen(keyLength) {
     return key;
 }
 
+const isImageSizeValid = value => {
+    let maxImageSize = 1000000;
+    return value > maxImageSize ? false : true;
+};
 
 module.exports = {
     isArrayNotEmpty,
@@ -114,5 +118,6 @@ module.exports = {
     isImageFormatValid,
     isNotNullAndUndefined,
     randomKeyGen,
-    teamListDataCheck
+    teamListDataCheck,
+    isImageSizeValid,
 };

@@ -25,7 +25,7 @@ import {
     clearProductReducer,
 } from '../../store/actions/shopAction/productAction';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid, isImageSizeValid } from '../../util/helpers';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from '../../util/permissions';
@@ -326,7 +326,15 @@ class AddProduct extends Component {
     handleFiles = (file) => {
         if (file) {
             let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
             let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             if (isSuccess) {
                 let reader = new FileReader();
                 reader.onloadend = () => {
@@ -644,6 +652,9 @@ class AddProduct extends Component {
                                 )}
                         </>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                     {urls.length > 0 && (
                         <div className="d-flex justify-content-end w-100">
                             {this.getImage()}
