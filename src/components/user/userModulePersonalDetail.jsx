@@ -2786,12 +2786,12 @@ class UserModulePersonalDetail extends Component {
     };
 
     unlinkCheckParent = (record) => {
-        if(record.unlinkedBy){
+        if(record.unlinkedBy && record.status == "Unlinked"){
             if(record.unlinkedBy == record.userId){
                 this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
             }
             else{
-                this.setState({showCannotUnlinkPopup: true})
+                this.setState({unlinkRecord: record,showCannotUnlinkPopup: true})
             }
         }
         else{
@@ -2801,7 +2801,7 @@ class UserModulePersonalDetail extends Component {
         }
 
     unlinkCheckChild = (record) => {
-        if(record.unlinkedBy){
+        if(record.unlinkedBy && record.status == "Unlinked"){
             if(record.unlinkedBy == record.userId){
              this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
             }
@@ -2817,7 +2817,6 @@ class UserModulePersonalDetail extends Component {
 
     cannotUninkPopup = () => {
         let data = this.state.unlinkRecord;
-        console.log("ulrec", data)
         return(
             <div>
                 
@@ -2833,9 +2832,9 @@ class UserModulePersonalDetail extends Component {
                     ]}
                     >   
                         {data?.childName ? 
-                        <p> {AppConstants.childUnlinkMessage}</p>
+                        <p> {AppConstants.parentUnlinkMessage}</p>
                         :
-                        <p>{AppConstants.parentUnlinkMessage}</p>
+                        <p>{AppConstants.childUnlinkMessage}</p>
                         }
 
                     </Modal>
