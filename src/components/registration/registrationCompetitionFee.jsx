@@ -2242,12 +2242,12 @@ const playerSeasonalTeamTable = [
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
-        render: (membershipSeasonal,record) => (
+        render: (membershipSeasonal) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={record.teamRegChargeTypeRefId != 1 ? record.membershipCasual : membershipSeasonal}
+                value={membershipSeasonal}
             />
         ),
     },
@@ -2256,12 +2256,12 @@ const playerSeasonalTeamTable = [
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
-        render: (membershipGst,record) => (
+        render: (membershipGst) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={record.teamRegChargeTypeRefId != 1 ? record.membershipCasualGst : membershipGst}
+                value={membershipGst}
             />
         ),
     },
@@ -2434,29 +2434,29 @@ const playerCasualTableTeamAssociation = [
     },
     {
         title: 'Membership Fees (excl. GST)',
-        dataIndex: 'membershipSeasonal',
-        key: 'membershipSeasonal',
+        dataIndex: 'membershipCasual',
+        key: 'membershipCasual',
         width: 84,
-        render: (membershipSeasonal) => (
+        render: (membershipCasual) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipSeasonal}
+                value={membershipCasual}
             />
         ),
     },
     {
         title: 'GST',
-        dataIndex: 'membershipGst',
-        key: 'membershipGst',
+        dataIndex: 'membershipCasualGst',
+        key: 'membershipCasualGst',
         width: 84,
-        render: (membershipGst) => (
+        render: (membershipCasualGst) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipGst}
+                value={membershipCasualGst}
             />
         ),
     },
@@ -2739,29 +2739,29 @@ const playerCasualTableTeamClub = [
     },
     {
         title: 'Membership Fees (excl. GST)',
-        dataIndex: 'membershipSeasonal',
-        key: 'membershipSeasonal',
+        dataIndex: 'membershipCasual',
+        key: 'membershipCasual',
         width: 84,
-        render: (membershipSeasonal) => (
+        render: (membershipCasual) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipSeasonal}
+                value={membershipCasual}
             />
         ),
     },
     {
         title: 'GST',
-        dataIndex: 'membershipGst',
-        key: 'membershipGst',
+        dataIndex: 'membershipCasualGst',
+        key: 'membershipCasualGst',
         width: 84,
-        render: (membershipGst) => (
+        render: (membershipCasualGst) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipGst}
+                value={membershipCasualGst}
             />
         ),
     },
@@ -3045,29 +3045,29 @@ const playerCasualTeamTable = [
     },
     {
         title: 'Membership Fees (excl. GST)',
-        dataIndex: 'membershipSeasonal',
-        key: 'membershipSeasonal',
+        dataIndex: 'membershipCasual',
+        key: 'membershipCasual',
         width: 84,
-        render: (membershipSeasonal) => (
+        render: (membershipCasual) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipSeasonal}
+                value={membershipCasual}
             />
         ),
     },
     {
         title: 'GST',
-        dataIndex: 'membershipGst',
-        key: 'membershipGst',
+        dataIndex: 'membershipCasualGst',
+        key: 'membershipCasualGst',
         width: 84,
-        render: (membershipGst) => (
+        render: (membershipCasualGst) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipGst}
+                value={membershipCasualGst}
             />
         ),
     },
@@ -6289,8 +6289,7 @@ class RegistrationCompetitionFee extends Component {
                                                     <Table
                                                         // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
-                                                        // columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
-                                                        columns={this.seasonalFeesTeamOnOrgTLevel()}
+                                                        columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
                                                         dataSource={
                                                             item.isAllType !== 'allDivisions'
                                                                 ? item.seasonalTeam.perType
