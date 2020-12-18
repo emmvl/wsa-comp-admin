@@ -2074,7 +2074,7 @@ function competitionFees(state = initialState, action) {
                 competitionDiscountsData: allData.competitiondiscounts,
                 selectedCasualFee: selectedCasualFee.selectedCasualFee,
                 selectedCasualFeeKey: selectedCasualFee.selectedCasualFeeKey,
-                selectedSeasonalFee: selectedSeasonalFee.selectedSeasonalFee,
+                SelectedSeasonalFee: selectedSeasonalFee.selectedSeasonalFee,
                 SelectedSeasonalFeeKey: selectedSeasonalFee.selectedSeasonalFeeKey,
                 selectedSeasonalTeamFee: selectedSeasonalTeamFee.selectedSeasonalTeamFee,
                 selectedSeasonalTeamFeeKey: selectedSeasonalTeamFee.selectedSeasonalTeamFeeKey,
