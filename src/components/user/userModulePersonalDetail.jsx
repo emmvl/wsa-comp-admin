@@ -2811,9 +2811,9 @@ class UserModulePersonalDetail extends Component {
                     ]}
                     >   
                         {data?.childName ? 
-                        <p> {AppConstants.childUnlinkMessage}</p>
+                        <p> {AppConstants.parentUnlinkMessage}</p>
                         :
-                        <p>{AppConstants.parentUnlinkMessage}</p>
+                        <p>{AppConstants.childUnlinkMessage}</p>
                         }
 
                     </Modal>
