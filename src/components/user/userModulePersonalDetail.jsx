@@ -2791,7 +2791,7 @@ class UserModulePersonalDetail extends Component {
                 this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
             }
             else{
-                this.setState({showCannotUnlinkPopup: true})
+                this.setState({unlinkRecord: record,showCannotUnlinkPopup: true})
             }
         }
         else{
@@ -2817,7 +2817,6 @@ class UserModulePersonalDetail extends Component {
 
     cannotUninkPopup = () => {
         let data = this.state.unlinkRecord;
-        console.log("ulrec", data)
         return(
             <div>
                 
