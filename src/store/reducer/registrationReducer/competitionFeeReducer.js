@@ -1367,7 +1367,9 @@ function createProductFeeArr(data) {
                         "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal,
                         "teamRegChargeTypeRefId": statusteamSeasonal.result.teamRegChargeTypeRefId,
                         "isPlayer": memberShipProductType[j].isPlaying,
-                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId
+                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId,
+                        "membershipCasual": memberShipProductType[j].mCasualFee,
+                        "membershipCasualGst": memberShipProductType[j].mCasualGst,
                     }
                 } else {
                     type_object_team_seasonal = {
@@ -1392,7 +1394,9 @@ function createProductFeeArr(data) {
                         "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
                         "teamRegChargeTypeRefId": 1,
                         "isPlayer": memberShipProductType[j].isPlaying,
-                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId
+                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId,
+                        "membershipCasual": memberShipProductType[j].mCasualFee,
+                        "membershipCasualGst": memberShipProductType[j].mCasualGst,
                     }
                 }
 
@@ -1595,7 +1599,9 @@ function createProductFeeArr(data) {
                             "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal,
                             "teamRegChargeTypeRefId": statusTeamSeasonal.result.teamRegChargeTypeRefId,
                             "isPlayer": memberShipProductType[k].isPlaying,
-                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId
+                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId,
+                            "membershipCasual": memberShipProductType[k].mCasualFee,
+                            "membershipCasualGst": memberShipProductType[k].mCasualGst,
                         }
                     } else {
                         type_object_team_seasonal = {
@@ -1621,7 +1627,9 @@ function createProductFeeArr(data) {
                             "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
                             "teamRegChargeTypeRefId": 1,
                             "isPlayer": memberShipProductType[k].isPlaying,
-                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId
+                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId,
+                            "membershipCasual": memberShipProductType[k].mCasualFee,
+                            "membershipCasualGst": memberShipProductType[k].mCasualGst,
                         }
                     }
 

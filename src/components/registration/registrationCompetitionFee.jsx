@@ -2242,12 +2242,12 @@ const playerSeasonalTeamTable = [
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
-        render: (membershipSeasonal) => (
+        render: (membershipSeasonal,record) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipSeasonal}
+                value={record.teamRegChargeTypeRefId != 1 ? record.membershipCasual : membershipSeasonal}
             />
         ),
     },
@@ -2256,12 +2256,12 @@ const playerSeasonalTeamTable = [
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
-        render: (membershipGst) => (
+        render: (membershipGst,record) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipGst}
+                value={record.teamRegChargeTypeRefId != 1 ? record.membershipCasualGst : membershipGst}
             />
         ),
     },
@@ -5981,7 +5981,6 @@ class RegistrationCompetitionFee extends Component {
     casualFeesTeamOnOrgTLevel() {
         let isCreatorEdit = this.state.isCreatorEdit;
         let orgLevel = this.getOrgLevelForFeesTable();
-
         if (isCreatorEdit && orgLevel == AppConstants.association) {
             return playerCasualTableTeamAssociation;
         } else if (isCreatorEdit && orgLevel == AppConstants.club) {
@@ -6290,7 +6289,8 @@ class RegistrationCompetitionFee extends Component {
                                                     <Table
                                                         // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
-                                                        columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
+                                                        // columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
+                                                        columns={this.seasonalFeesTeamOnOrgTLevel()}
                                                         dataSource={
                                                             item.isAllType !== 'allDivisions'
                                                                 ? item.seasonalTeam.perType
