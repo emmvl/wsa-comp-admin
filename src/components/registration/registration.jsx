@@ -60,6 +60,10 @@ const payments = [
         paymentType: "Direct Debit",
         paymentTypeId: 2,
     },
+    {
+        paymentType: "Voucher",
+        paymentTypeId : 3,
+    }
 ];
 
 const columns = [
