@@ -179,7 +179,7 @@ class PaymentDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             deleteLoading: false,
             yearRefId: -1,
             competitionUniqueKey: "-1",
@@ -384,8 +384,8 @@ class PaymentDashboard extends Component {
 
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null,
             };
             uniqueValues.push(obj);
             let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
@@ -532,8 +532,8 @@ class PaymentDashboard extends Component {
 
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null,
             };
             uniqueValues.push(obj);
             let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
@@ -695,6 +695,7 @@ class PaymentDashboard extends Component {
                         current={paymentState.paymentListPage}
                         total={total}
                         onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

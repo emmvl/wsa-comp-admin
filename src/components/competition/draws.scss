@@ -982,11 +982,14 @@
 .main-canvas.Draws .unavailable-draws span {
     color: var(--app-9b9bad);
     font-size: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .white-bg-timeline {
     background-color: var(--app-white);
+}
+
+.text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

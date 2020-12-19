@@ -90,11 +90,11 @@ const columns = [
     {
         title: "Registration Lock",
         dataIndex: "registrationLock",
-        width: "25%",
+        width: 120,
         key: "registrationLock",
         filterDropdown: true,
         filterIcon: () => (
-            <div className="mt-5">
+            <div className="mt-2">
                 <CustomTooltip placement="top">
                     <span>{AppConstants.regLockMsg}</span>
                 </CustomTooltip>
@@ -107,6 +107,25 @@ const columns = [
                 onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
             />
         )
+    },
+
+    {
+        title: "Registration Cap",
+        dataIndex: "registrationType",
+        key: "registrationCap",
+        render: (registrationCap, record, index) => {
+            return (
+                <InputWithHead 
+                    style={{ width: "70%" }}
+                    placeholder=" "
+                    type={"number"}
+                    min="0"
+                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                    value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
+                />
+            )
+        }
+
     }
 ];
 
@@ -222,7 +241,7 @@ class RegistrationForm extends Component {
 
     // mail client details
     mailClientView = (code) => {
-        let affiliateName = getOrganisationData().name;
+        let affiliateName = getOrganisationData() ? getOrganisationData().name : null;
         let body = `${AppConstants.mailBodyText} \n${code}  \n \nRegards,  \n${affiliateName}`;
         return (
             <div>
@@ -548,6 +567,7 @@ class RegistrationForm extends Component {
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = false; // this.state.isPublished // CM-1513
+        let orgLogoUrl = getOrganisationData() ? getOrganisationData().orgLogoUrl : null
 
         return (
             <div className="content-view pt-4">
@@ -643,7 +663,7 @@ class RegistrationForm extends Component {
                         <span className="form-heading pt-2 pl-2">
                             {item.membershipProductName}
                         </span>
-                        <div className="table-responsive">
+                        <div className="table-responsive home-dash-table-view table-competition">
                             <Table
                                 rowKey={item => item.id}
                                 showHeader
@@ -664,7 +684,7 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.training}
                     </Checkbox>
-                    <div className="mt-8" style={{ marginLeft: -8 }}>
+                    <div className="mt-4" style={{ marginLeft: -8 }}>
                         <CustomTooltip>
                             <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
@@ -751,13 +771,13 @@ class RegistrationForm extends Component {
                     marginTop={0}
                 />
                 {((formDataValue.organisationPhotos == null || formDataValue.organisationPhotos.length === 0) &&
-                    (getOrganisationData().orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
+                    (orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
                     <div className="org-photos">
-                        {getOrganisationData().orgLogoUrl != null && (
+                        {orgLogoUrl != null && (
                             <div>
                                 <div>
                                     <img
-                                        src={getOrganisationData().orgLogoUrl}
+                                        src={orgLogoUrl}
                                         alt=""
                                         height={125}
                                         width={125}
@@ -840,7 +860,7 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.replyToContactDetails}
                     </Checkbox>
-                    <div style={{ marginTop: -15, marginLeft: -8 }}>
+                    <div style={{ marginTop: -8, marginLeft: -8 }}>
                         <CustomTooltip>
                             <span>{AppConstants.replyContactDetailMsg}</span>
                         </CustomTooltip>
@@ -1136,7 +1156,7 @@ class RegistrationForm extends Component {
             <div className="discount-view pt-5">
                 <div className="row ml-1">
                     <span className="form-heading">{AppConstants.additionalQuestions}</span>
-                    <div className="mt-0 ml-n2">
+                    <div className="mt-2">
                         <CustomTooltip>
                             <span>{AppConstants.additionQuesMsg}</span>
                         </CustomTooltip>

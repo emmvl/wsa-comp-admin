@@ -26,6 +26,7 @@ import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../..
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import Tooltip from 'react-png-tooltip'
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -44,23 +45,30 @@ class LiveScoreAddManager extends Component {
             showOption: false,
             competition_id: null,
             teamLoad: false,
-            exsitingValue: ''
+            exsitingValue: '',
+            compOrgId: 0,
+            liveScoreCompIsParent: false
         }
         this.formRef = createRef();
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.props.liveScoreManagerListAction(5, 1, id)
-            this.props.getliveScoreTeams(id)
-            if (this.state.isEdit === true) {
-                this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
-                this.setState({ loader: true })
-            } else {
-                this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
-            }
-            this.setState({ load: true, competition_id: id })
+            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+            checkLivScoreCompIsParent().then((value) => {
+                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, compOrgId)
+                this.props.getliveScoreTeams(id, null, compOrgId)
+                if (this.state.isEdit === true) {
+                    this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
+                    this.setState({ loader: true })
+                } else {
+                    this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
+                }
+                this.setState({ load: true, competition_id: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+
+            })
+
         } else {
             history.push('/matchDayCompetitions')
         }
@@ -180,7 +188,7 @@ class LiveScoreAddManager extends Component {
                                     //     ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                     //     : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
                                     value && value.length > 2
-                                        ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
+                                        ? this.props.liveScoreManagerSearch(value, this.state.compOrgId, 5)
                                         : this.props.clearListAction()
                                 }}
                             >
@@ -308,7 +316,7 @@ class LiveScoreAddManager extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                // value={managerData.mobileNumber}
+                            // value={managerData.mobileNumber}
                             />
                         </Form.Item>
                     </div>
@@ -355,6 +363,9 @@ class LiveScoreAddManager extends Component {
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}
                     value={managerRadioBtn}
+                    style={{
+                        overflowX: 'unset'
+                    }}
                 >
                     {/* <div className="row ml-2" style={{ marginTop: 18 }}>
                         <Radio value="new">{AppConstants.new}</Radio>
@@ -363,17 +374,17 @@ class LiveScoreAddManager extends Component {
                     <div className="row ml-2" style={{ marginTop: 18 }}>
                         <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div className="mt-n10 ml-n10 width-50">
+                            <div className="mt-n10 ml-n10 width-50 mt-1">
                                 <Tooltip>
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
                             </div>
                         </div>
-                        <div className="d-flex align-items-center ml-n10">
+                        <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div className="mt-n10 mt-n10">
+                            <div className="mt-n10 ml-n10 mt-1">
                                 <Tooltip>
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>
@@ -431,6 +442,7 @@ class LiveScoreAddManager extends Component {
 
     onSaveClick = values => {
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+        const { compOrgId } = this.state
         if (managerRadioBtn === 'new') {
             if (managerData.mobileNumber.length !== 10) {
                 this.setState({
@@ -457,13 +469,13 @@ class LiveScoreAddManager extends Component {
                             teams: managerData.teams
                         }
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
                 } else if (managerRadioBtn === 'existing') {
                     body = {
                         id: exsitingManagerId,
                         teams: managerData.teams
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
                 }
             }
         } else {
@@ -487,13 +499,13 @@ class LiveScoreAddManager extends Component {
                         teams: managerData.teams
                     }
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
             } else if (managerRadioBtn === 'existing') {
                 body = {
                     id: exsitingManagerId,
                     teams: managerData.teams
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
             }
         }
     };

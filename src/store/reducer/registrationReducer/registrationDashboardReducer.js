@@ -14,7 +14,9 @@ const initialState = {
     ownedRegistrations: [],////////ownedRegistrations main dashboard listing
     participatingInRegistrations: [], ////////participatingInRegistrations main dashboard listing
     regFormListAction: null,
-    regDashboardListAction: null
+    regDashboardListAction: null,
+    ownedLoad: false,
+    partLoad: false,
 };
 
 ///// Generate owned Registrations Array
@@ -120,17 +122,28 @@ function registrationDashboard(state = initialState, action) {
 
         /////////////////registration main dashboard listing owned and participate registration
         case ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD:
-            return { ...state, onLoad: true, error: null, regDashboardListAction: action };
+            return {
+                ...state, onLoad: true, error: null, regDashboardListAction: action,
+                ownedLoad: action.key === "own" || action.key === "all",
+                partLoad: action.key === "part" || action.key === "all",
+            };
 
         case ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_SUCCESS:
-            let ownRegArray = generateOwnedRegistrations(action.result)
-            let participatingReg = generateParticipatingInRegistrations(action.result)
-            state.ownedRegistrations = ownRegArray
-            state.participatingInRegistrations = participatingReg
+            let allData = action.result
+            if (action.key === "own" || action.key === "all") {
+                let ownRegArray = generateOwnedRegistrations(allData)
+                state.ownedRegistrations = ownRegArray
+            }
+            if (action.key === "part" || action.key === "all") {
+                let participatingReg = generateParticipatingInRegistrations(allData)
+                state.participatingInRegistrations = participatingReg
+            }
             state.onLoad = false
             return {
                 ...state,
                 status: action.status,
+                ownedLoad: false,
+                partLoad: false,
                 error: null
             };
 

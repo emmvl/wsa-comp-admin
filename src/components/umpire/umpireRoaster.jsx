@@ -12,13 +12,15 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store/actions/umpireAction/umpirRoasterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
+import { getUmpireCompetiton, getUmpireCompetitonData, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
 import { getOrganisationAction } from "store/actions/userAction/userAction";
 import { regCompetitionFeeListDeleteSaga } from "store/saga/registrationSaga/competitionFeeSaga";
+import { checkLivScoreCompIsParent } from 'util/permissions'
+
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -43,7 +45,13 @@ function tableSort(key) {
     }
     this_obj.setState({ sortBy, sortOrder });
     let rolIds = Array.isArray(this_obj.state.umpireRole) ? JSON.stringify(this_obj.state.umpireRole) : JSON.stringify([this_obj.state.umpireRole])
-    this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder)
+    if (!this_obj.state.compIsParent) {
+        this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder, 6)
+    }
+    else {
+        this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder, 1)
+    }
+
 }
 
 /////function to sort table column
@@ -183,7 +191,9 @@ class UmpireRoaster extends Component {
             offsetData: 0,
             umpireRole: 15,
             sortBy: null,
-            sortOrder: null
+            sortOrder: null,
+            compIsParent: false,
+            compOrgId: 0,
         }
         this_obj = this
     }
@@ -203,6 +213,17 @@ class UmpireRoaster extends Component {
 
         let { organisationId, } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
+
+        let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+        this.setState({
+            compOrgId: competitionOrganisation.id
+        })
+        checkLivScoreCompIsParent().then((value) => {
+            this.setState({
+                compIsParent: value
+            })
+        })
+
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
     }
 
@@ -244,7 +265,21 @@ class UmpireRoaster extends Component {
 
                     let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
 
-                    this.props.umpireRoasterListAction(firstComp, this.state.status, roleIds, body, sortBy, sortOrder)
+                    checkLivScoreCompIsParent().then((value) => {
+                        this.setState({
+                            compIsParent: value
+                        }, () => {
+                            if (this.state.compIsParent) {
+                                this.props.umpireRoasterListAction(firstComp, this.state.status, roleIds, body, sortBy, sortOrder, 1)
+                            }
+                            else {
+                                // this.props.umpireRoasterListAction(firstComp, this.state.status, roleIds, body, sortBy, sortOrder )
+                                this.props.umpireRoasterListAction(this.state.compOrgId, this.state.status, roleIds, body, sortBy, sortOrder, 6)
+                            }
+
+                        })
+                    })
+
                     this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
                 } else {
                     this.setState({ loading: false })
@@ -261,7 +296,13 @@ class UmpireRoaster extends Component {
                     }
                 }
                 let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-                this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+                if (this.state.compIsParent) {
+                    this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder, 1)
+                }
+                else {
+                    this.props.umpireRoasterListAction(this.state.compOrgId, this.state.status, roleIds, body, sortBy, sortOrder, 6)
+                }
+
                 this.setState({ roasterLoad: false })
             }
         }
@@ -332,7 +373,13 @@ class UmpireRoaster extends Component {
             },
         }
         let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+        if (this.state.compIsParent) {
+            this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder, 1)
+        }
+        else {
+            this.props.umpireRoasterListAction(this.state.compOrgId, this.state.status, roleIds, body, sortBy, sortOrder, 6)
+        }
+
     }
 
     contentView = () => {
@@ -357,6 +404,7 @@ class UmpireRoaster extends Component {
                             className="antd-pagination"
                             total={umpireTotalCount}
                             onChange={(page) => this.handlePageChnage(page)}
+                            showSizeChanger={false}
                         />
                     </div>
                 </div>
@@ -386,7 +434,13 @@ class UmpireRoaster extends Component {
             },
         }
         let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-        this.props.umpireRoasterListAction(selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+        if (this.state.compIsParent) {
+            this.props.umpireRoasterListAction(selectedComp, this.state.status, roleIds, body, sortBy, sortOrder, 1)
+        }
+        else {
+            this.props.umpireRoasterListAction(this.state.compOrgId, this.state.status, roleIds, body, sortBy, sortOrder, 6)
+        }
+
         this.setState({ selectedComp, competitionUniqueKey: compKey })
 
     }
@@ -402,7 +456,13 @@ class UmpireRoaster extends Component {
 
         if (this.state.selectedComp) {
             let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-            this.props.umpireRoasterListAction(this.state.selectedComp, status, roleIds, body, sortBy, sortOrder)
+            if (this.state.compIsParent) {
+                this.props.umpireRoasterListAction(this.state.selectedComp, status, roleIds, body, sortBy, sortOrder, 1)
+            }
+            else {
+                this.props.umpireRoasterListAction(this.state.compOrgId, status, roleIds, body, sortBy, sortOrder, 6)
+            }
+
 
         }
         this.setState({ status })
@@ -420,19 +480,33 @@ class UmpireRoaster extends Component {
         if (this.state.selectedComp) {
             // let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
             let roleIds = Array.isArray(umpireRole) ? JSON.stringify(umpireRole) : JSON.stringify([umpireRole])
-            this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+            if (this.state.compIsParent) {
+                this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder, 1)
+            }
+            else {
+                this.props.umpireRoasterListAction(this.state.compOrgId, this.state.status, roleIds, body, sortBy, sortOrder, 6)
+            }
+
         }
         this.setState({ umpireRole })
     }
 
     // on Export
     onExport() {
-        let url = AppConstants.rosterExport + `competitionId=${this.state.selectedComp}&roleId=${15}`
+        let url = '';
+        if (this.state.compIsParent) {
+            url = AppConstants.rosterExport + `entityId=${this.state.selectedComp}&entityTypeId=1&roleId=${15}`
+        }
+        else {
+            url = AppConstants.rosterExport + `entityId=${this.state.compOrgId}&entityTypeId=6&roleId=${15}`
+        }
+
         this.props.exportFilesAction(url)
     }
 
     headerView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -447,7 +521,7 @@ class UmpireRoaster extends Component {
                             <div className="row">
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
+                                        <Button disabled={isCompetitionAvailable} onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -522,7 +596,6 @@ class UmpireRoaster extends Component {
 
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">

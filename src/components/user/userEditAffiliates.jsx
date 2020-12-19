@@ -42,7 +42,7 @@ class UserEditAffiliates extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             affiliateOrgId: "",
             loggedInuserOrgTypeRefId: 0,
             loading: false,
@@ -174,7 +174,7 @@ class UserEditAffiliates extends Component {
                 )
             ) {
                 let orgVal = this.state.organisationId;
-                let name = getOrganisationData().name;
+                let name = getOrganisationData() ? getOrganisationData().name : null;
                 this.props.updateAffiliateAction(
                     orgVal,
                     AppConstants.affiliatedToOrgId
@@ -353,8 +353,8 @@ class UserEditAffiliates extends Component {
                 );
                 formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
                 formData.append(
-                    "organisationId",
-                    getOrganisationData().organisationUniqueKey
+                    "organisationId", getOrganisationData() ?
+                    getOrganisationData().organisationUniqueKey : null
                 );
                 formData.append("name", affiliate.name);
                 formData.append("street1", affiliate.street1);
@@ -475,13 +475,10 @@ class UserEditAffiliates extends Component {
             ? stateList.find((state) => state.id === affiliate.stateRefId).name
             : null;
 
-        let defaultAffiliateAddress = `${
-            affiliate.street1 ? `${affiliate.street1},` : ''
-        } ${
-            affiliate.suburb ? `${affiliate.suburb},` : ''
-        } ${
-            state ? `${state},` : ''
-        } Australia`;
+        let defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
+            } ${affiliate.suburb ? `${affiliate.suburb},` : ''
+            } ${state ? `${state},` : ''
+            } Australia`;
 
         return (
             <div className="content-view pt-4">
@@ -506,62 +503,62 @@ class UserEditAffiliates extends Component {
                     (this.state.loggedInuserOrgTypeRefId == 2 &&
                         affiliate.organisationTypeRefId == 4)
                 ) ? (
-                    <div className="row mt-3">
-                        <div className="col-sm">
-                            <InputWithHead heading={AppConstants.affiliatedTo} />
+                        <div className="row mt-3">
+                            <div className="col-sm">
+                                <InputWithHead heading={AppConstants.affiliatedTo} />
+                            </div>
+                            <div className="col-sm d-flex align-items-center">
+                                <InputWithHead
+                                    auto_complete="new-affilatedTo"
+                                    heading={affiliate.affiliatedToOrgName}
+                                    onChange={(e) =>
+                                        this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
+                                    }
+                                />
+                            </div>
                         </div>
-                        <div className="col-sm d-flex align-items-center">
+                    ) : (
+                        <div>
                             <InputWithHead
-                                auto_complete="new-affilatedTo"
-                                heading={affiliate.affiliatedToOrgName}
-                                onChange={(e) =>
-                                    this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
-                                }
+                                heading={AppConstants.affiliatedTo}
+                                required="required-field"
                             />
-                        </div>
-                    </div>
-                ) : (
-                    <div>
-                        <InputWithHead
-                            heading={AppConstants.affiliatedTo}
-                            required="required-field"
-                        />
-                        <Form.Item
-                            name='affiliatedToOrgId'
-                            rules={[{
-                                required: true,
-                                message: ValidationConstants.affiliateToRequired,
-                            }]}
-                        >
-                            <Select
-                                style={{ width: '100%', paddingRight: 1 }}
-                                value={affiliate.affiliatedToOrgId}
-                                onChange={(e) =>
-                                    this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
-                                }
+                            <Form.Item
+                                name='affiliatedToOrgId'
+                                rules={[{
+                                    required: true,
+                                    message: ValidationConstants.affiliateToRequired,
+                                }]}
                             >
-                                {(affiliateToData.affiliatedTo || [])
-                                    .filter(
-                                        (x) =>
-                                            x.organisationtypeRefId == organisationTypeRefId - 1 &&
-                                            x.organisationId != this.state.affiliateOrgId
-                                    )
-                                    .map((aff) => (
-                                        <Option key={'organization_' + aff.organisationId} value={aff.organisationId}>
-                                            {aff.name}
-                                        </Option>
-                                    ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                )}
+                                <Select
+                                    style={{ width: '100%', paddingRight: 1 }}
+                                    value={affiliate.affiliatedToOrgId}
+                                    onChange={(e) =>
+                                        this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
+                                    }
+                                >
+                                    {(affiliateToData.affiliatedTo || [])
+                                        .filter(
+                                            (x) =>
+                                                x.organisationtypeRefId == organisationTypeRefId - 1 &&
+                                                x.organisationId != this.state.affiliateOrgId
+                                        )
+                                        .map((aff) => (
+                                            <Option key={'organization_' + aff.organisationId} value={aff.organisationId}>
+                                                {aff.name}
+                                            </Option>
+                                        ))}
+                                </Select>
+                            </Form.Item>
+                        </div>
+                    )}
                 <Form.Item
                     name='name'
                     rules={[{ required: true, message: ValidationConstants.nameField[2] }]}
                 >
                     <InputWithHead
                         auto_complete="new-name"
-                        required="required-field pt-0 pb-0"
+                        required="required-field pt-0"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
@@ -637,7 +634,7 @@ class UserEditAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-firstName"
-                                required="required-field pt-0 pb-0"
+                                required="required-field pt-0"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(e) =>
@@ -672,7 +669,7 @@ class UserEditAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-lastName"
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 onChange={(e) =>
@@ -695,7 +692,7 @@ class UserEditAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-email"
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
                                 disabled={!item.isSameUser}

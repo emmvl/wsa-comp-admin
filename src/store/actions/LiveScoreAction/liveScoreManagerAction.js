@@ -1,17 +1,19 @@
 import ApiConstants from "themes/apiConstants";
-
 // Division action
-function liveScoreAddEditManager(data, teamId, existingManagerId) {
+function liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId, isParent) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD,
         data,
         teamId,
         existingManagerId,
+        compOrgId,
+        isParent
     };
 }
 
+
 // Manager list action
-function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, key) {
+function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, key, compOrgId, isParent) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD,
         roleId,
@@ -21,7 +23,9 @@ function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, 
         offset,
         sortBy,
         sortOrder,
-        key
+        key,
+        compOrgId,
+        isParent
     };
 }
 
@@ -47,11 +51,12 @@ function liveScoreClear() {
     };
 }
 
-function liveScoreManagerSearch(data, competitionId) {
+function liveScoreManagerSearch(data, competitionOrgId, roleId) {
     return {
         type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD,
         data,
-        competitionId,
+        competitionOrgId,
+        roleId
     };
 }
 

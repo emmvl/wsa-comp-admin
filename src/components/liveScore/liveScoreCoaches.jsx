@@ -23,7 +23,8 @@ import { liveScoreCoachListAction } from "../../store/actions/LiveScoreAction/li
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { getliveScoreTeams } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { userExportFilesAction } from "../../store/actions/appAction";
-import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from "util/permissions"
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -41,7 +42,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
+    _this.props.liveScoreCoachListAction(17, 6, _this.state.compOrgId, _this.state.searchText, _this.state.offset, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.competitionId);
 }
 
 const listeners = (key) => ({
@@ -100,7 +101,7 @@ const columns = [
         render: (linkedEntity) => (
             <div>
                 {linkedEntity.map((item, i) => (
-                    teamListData(item.entityId) ? (
+                    teamListDataCheck(item.entityId, _this.state.liveScoreCompIsParent, item, _this.state.compOrgId) ? (
                         <div key={`name${i}` + linkedEntity.entityId}>
                             <NavLink
                                 to={{
@@ -117,8 +118,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                        <span>{item.name}</span>
-                    )
+                            <span>{item.name}</span>
+                        )
                 ))}
             </div>
         ),
@@ -166,6 +167,8 @@ class LiveScoreCoaches extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            liveScoreCompIsParent: false,
+            compOrgId: 0
         };
 
         _this = this;
@@ -174,38 +177,48 @@ class LiveScoreCoaches extends Component {
     componentDidMount() {
         let { coachListActionObject } = this.props.liveScoreCoachState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
-            let offset = 0
-            if (coachListActionObject) {
-                offset = coachListActionObject.offset
-                let searchText = coachListActionObject.search
-                let sortBy = coachListActionObject.sortBy
-                let sortOrder = coachListActionObject.sortOrder
-                this.setState({ offset, searchText, sortBy, sortOrder })
-                this.props.liveScoreCoachListAction(17, 1, id, searchText, offset, sortBy, sortOrder);
-            } else {
-                this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, offset)
-            }
+            this.setLivScoreCompIsParent()
+            checkLivScoreCompIsParent().then((value) => {
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.setState({ competitionId: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+                let offset = 0
+                if (coachListActionObject) {
+                    offset = coachListActionObject.offset
+                    let searchText = coachListActionObject.search
+                    let sortBy = coachListActionObject.sortBy
+                    let sortOrder = coachListActionObject.sortOrder
+                    this.setState({ offset, searchText, sortBy, sortOrder })
+                    this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder, value, id);
+                } else {
+                    this.props.liveScoreCoachListAction(17, 6, compOrgId, this.state.searchText, offset, null, null, value, id)
+                }
 
-            if (id !== null) {
-                this.props.getliveScoreTeams(id)
-            } else {
-                history.push('/matchDayCompetitions')
-            }
+                if (id !== null) {
+                    this.props.getliveScoreTeams(id, null, compOrgId)
+                } else {
+                    history.push('/matchDayCompetitions')
+                }
+            })
         } else {
             history.push('/matchDayCompetitions')
         }
     }
 
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
+    }
+
     /// Handle Page change
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        let { sortBy, sortOrder, searchText, competitionId } = this.state
+        let { sortBy, sortOrder, searchText, competitionId, compOrgId } = this.state
         this.setState({
             offset
         })
-        this.props.liveScoreCoachListAction(17, 1, competitionId, searchText, offset, sortBy, sortOrder)
+        this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
     }
 
     contentView = () => {
@@ -230,6 +243,7 @@ class LiveScoreCoaches extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
+                            showSizeChanger={false}
                             total={totalCount}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
@@ -241,6 +255,7 @@ class LiveScoreCoaches extends Component {
     };
 
     headerView = () => {
+        const { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -279,20 +294,22 @@ class LiveScoreCoaches extends Component {
                             </div>
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/matchDayCoachImport">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.import}
+                                    {liveScoreCompIsParent == true &&
+                                        <NavLink to="/matchDayCoachImport">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Button>
-                                    </NavLink>
+                                            </Button>
+                                        </NavLink>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -321,7 +338,7 @@ class LiveScoreCoaches extends Component {
 
     // on Export
     onExport = () => {
-        let url = AppConstants.coachExport + this.state.competitionId
+        let url = AppConstants.coachExport + this.state.compOrgId
         this.props.userExportFilesAction(url)
     }
 
@@ -329,9 +346,9 @@ class LiveScoreCoaches extends Component {
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value, offset: 0 })
-        let { sortBy, sortOrder, offset } = this.state
+        let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
+            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
@@ -340,9 +357,9 @@ class LiveScoreCoaches extends Component {
         this.setState({ offset: 0 })
         const code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        let { sortBy, sortOrder, offset } = this.state
+        let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
+            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
@@ -353,7 +370,7 @@ class LiveScoreCoaches extends Component {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, this.state.offset)
+            this.props.liveScoreCoachListAction(17, 6, this.state.compOrgId, this.state.searchText, this.state.offset, null, null, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 

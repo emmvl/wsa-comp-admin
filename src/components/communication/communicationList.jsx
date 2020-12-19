@@ -141,11 +141,11 @@ class CommunicationList extends Component {
         };
     }
 
-    componentDidMount() {
-        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
-        // this.props.getCommunicationListAction(organisationUniqueKey)
-        // this.props.liveScoreNewsListAction(1)
-    }
+    // componentDidMount() {
+    //     // let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
+    //     // this.props.getCommunicationListAction(organisationUniqueKey)
+    //     // this.props.liveScoreNewsListAction(1)
+    // }
 
     ///////view for breadcrumb
     headerView = () => {

@@ -134,7 +134,7 @@ class UserAffiliatesList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             affiliatedToOrgId: -1,
             organisationTypeRefId: -1,
             statusRefId: -1,
@@ -331,7 +331,7 @@ class UserAffiliatesList extends Component {
                             </div>
                         </div>
                         <div className="col-lg-2 col-md-6 add-affiliate-btn">
-                            {affiliateToData.isEligibleToAddAffiliate && (
+                            {affiliateToData.isEligibleToAddAffiliate === 1 && (
                                 <div className="d-flex flex-row-reverse">
                                     <NavLink to="/userAddAffiliates">
                                         <Button className="primary-add-product" type="primary">+ {AppConstants.addAffiliate}</Button>
@@ -369,6 +369,7 @@ class UserAffiliatesList extends Component {
                         current={userState.affiliateListPage}
                         total={total}
                         onChange={(page) => this.handleAffiliateTableList(page, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, this.state.statusRefId)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

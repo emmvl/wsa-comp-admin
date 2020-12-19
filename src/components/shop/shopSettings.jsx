@@ -81,7 +81,7 @@ class ShopSettings extends Component {
     saveSettings = (values) => {
         let { settingDetailsData } = JSON.parse(JSON.stringify(this.props.shopSettingState));
         let payload = settingDetailsData;
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         payload.organisationUniqueKey = organisationUniqueKey;
         let key = 'update';
@@ -156,13 +156,13 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterAddress,
+                                ValidationConstants.enterAddress,
                         },
                     ]}
                 >
                     <InputWithHead
                         auto_complete="new-address"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.address}
                         placeholder={AppConstants.address}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'address')}
@@ -174,13 +174,13 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterSuburb,
+                                ValidationConstants.enterSuburb,
                         },
                     ]}
                 >
                     <InputWithHead
                         auto_complete="new-suburb"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
@@ -196,7 +196,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterState,
+                                ValidationConstants.enterState,
                         },
                     ]}
                 >
@@ -216,13 +216,13 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                            ValidationConstants.enterPostcode,
+                                ValidationConstants.enterPostcode,
                         },
                     ]}
                 >
                     <InputWithHead
                         auto_complete="new-postCode"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.postCode}
                         placeholder={AppConstants.postcode}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
@@ -230,14 +230,11 @@ class ShopSettings extends Component {
                         min={0}
                     />
                 </Form.Item>
-                <Form.Item 
+                <span className="input-heading">{AppConstants.pickupInstructions}</span>
+                <Form.Item
                     name="pickupInstruction"
                 >
-                    <div>
-                    <span className="input-heading">{AppConstants.pickupInstructions}</span>
                     <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>
-                    </div>
-
                 </Form.Item>
             </div>
         );

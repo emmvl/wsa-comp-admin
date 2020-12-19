@@ -61,6 +61,7 @@ import RegistrationList from 'components/registration/registrationList';
 import RegistrationMainDashboard from 'components/registration/registrationMainDashboard';
 import RegistrationMembershipFee from 'components/registration/registrationMembershipFee';
 import RegistrationMembershipList from 'components/registration/registrationMembershipList';
+import RegistrationMembershipCap from 'components/registration/registrationMembershipCap';
 import RegistrationPayments from 'components/registration/registrationPayments';
 import RegistrationPayoutTransaction from 'components/registration/registrationPayoutTransactions';
 import RegistrationSettlements from 'components/registration/registrationSettlements';
@@ -83,6 +84,7 @@ import UmpireSetting from 'components/umpire/umpireSetting';
 import AffiliateDirectory from 'components/user/affiliateDirectory';
 import PlayWithFriend from 'components/user/playWithFriend';
 import ReferFriend from 'components/user/referFriend';
+import Spectator from 'components/user/spectator';
 import UserAddAffiliates from 'components/user/userAddAffiliates';
 import UserAffiliateApproveRejectForm from 'components/user/userAffiliateApproveRejectForm';
 import UserAffiliatesList from 'components/user/userAffiliatesList';
@@ -152,7 +154,7 @@ import LiveScoreTeamView from 'components/liveScore/liveScoreTeamView';
 import LiveScoreUmpireImport from 'components/liveScore/liveScoreUmpireImport';
 import LiveScoreUmpireList from 'components/liveScore/liveScoreUmpireList';
 import LiveScoreVenueChange from 'components/liveScore/liveScoreVenueChange';
-
+import OrgBecsSetup from  'components/registration/orgBecsSetup';
 import Stripe from 'components/stripe/stripe';
 
 import AddProduct from 'components/shop/addProduct';
@@ -172,7 +174,7 @@ import NotFound from './404';
 import CommunicationList from 'components/communication/communicationList';
 import AddCommunication from 'components/communication/addCommunication';
 import CommunicationView from 'components/communication/communictionView';
-
+import MergeUserMatches from 'components/user/mergeUserComponentMatches'
 class Routes extends React.Component {
     constructor(props) {
         super(props);
@@ -420,6 +422,12 @@ class Routes extends React.Component {
                         : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
+                    path="/mergeUserMatches"
+                    component={this.haveAccess(userRoleId, '/userPersonal')
+                        ? lazyLoad(MergeUserMatches)
+                        : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
                     path="/userMedical"
                     component={this.haveAccess(userRoleId, '/userMedical') ? lazyLoad(userModuleMedical) : lazyLoad(NotFound)}
                 />
@@ -440,6 +448,10 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationPayments"
                     component={this.haveAccess(userRoleId, '/registrationPayments') ? lazyLoad(RegistrationPayments) : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/orgBecsSetup"
+                    component={this.haveAccess(userRoleId, '/registrationPayments') ? lazyLoad(OrgBecsSetup) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/umpireAllocation"
@@ -494,6 +506,10 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationMembershipList"
                     component={this.haveAccess(userRoleId, '/registrationMembershipList') ? lazyLoad(RegistrationMembershipList) : lazyLoad(NotFound)}
+                />
+                 <PrivateRoute
+                    path="/registrationMembershipCap"
+                    component={this.haveAccess(userRoleId, '/registrationMembershipCap') ? lazyLoad(RegistrationMembershipCap) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/registrationCompetitionList"
@@ -740,6 +756,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/referFriend"
                     component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(ReferFriend) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/spectator"
+                    component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

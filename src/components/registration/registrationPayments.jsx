@@ -129,8 +129,6 @@ class RegistrationPayments extends Component {
             this.props.saveStripeAccountAction(code)
             this.setState({ loadingSave: true })
         }
-
-
     }
 
     onChange = e => {
@@ -145,6 +143,8 @@ class RegistrationPayments extends Component {
     }
 
     headerView = () => {
+        const stripeConnected = this.stripeConnected()
+        const isBecsSetupDone = this.isBecsSetupDone();
         return (
             // <Header className="reg-payment-header-view mt-5">
             //     <div className="row">
@@ -168,22 +168,28 @@ class RegistrationPayments extends Component {
                         <div className="row">
                             <div className="col-sm pt-1">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button
-                                        onClick={() => this.onExport()}
-                                        className="primary-add-comp-form"
-                                        type="primary"
-                                    >
-                                        <div className="row">
-                                            <div className="col-sm">
+                                    <div className="comp-buttons-view">
+                                        { stripeConnected ? (
+                                            <Button type="primary mx-4" onClick={() => this.onExport()}>
                                                 <img
                                                     src={AppImages.export}
                                                     alt=""
                                                     className="export-image"
                                                 />
-                                                {AppConstants.export}
-                                            </div>
-                                        </div>
-                                    </Button>
+                                                {AppConstants.exportPayments}
+                                            </Button>
+                                        ) : ('')}
+                                        { isBecsSetupDone ? (
+                                            <Button type="primary">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.exportWithdrawals}
+                                            </Button>
+                                        ) : ('')}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -284,13 +290,19 @@ class RegistrationPayments extends Component {
     }
 
     stripeConnected = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
         return stripeAccountID
     }
 
+    isBecsSetupDone = () => {
+        const orgData = getOrganisationData();
+        const becsMandateId = orgData ? orgData.stripeBecsMandateId : null;
+        return becsMandateId;
+    }
+
     userEmail = () => {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
         return email
     }
@@ -302,6 +314,7 @@ class RegistrationPayments extends Component {
 
     stripeView = () => {
         let stripeConnected = this.stripeConnected()
+        const isBecsSetupDone = this.isBecsSetupDone();
         let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.pending : "N/A"
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
@@ -313,32 +326,53 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                         <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
                     </div>
-                    {isImpersonation !== "true" && (
-                        <div className="col-sm d-flex justify-content-end">
-                            {stripeConnected ? (
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                    onClick={() => this.stripeDashboardLoginUrl()}
-                                >
-                                    {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
-                                    {AppConstants.goToStripeDashboard}
-                                    {/* </a> */}
-                                </Button>
-                            ) : (
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                >
-                                    <a href={stripeConnectURL} className="stripe-connect">
-                                        <span>
-                                            {AppConstants.connectToStripe}
-                                        </span>
-                                    </a>
-                                </Button>
-                            )}
-                        </div>
-                    )}
+                    <div className="comp-buttons-view">
+                        {isImpersonation !== "true" && (
+                            <div className="col-sm d-flex justify-content-end">
+                                {stripeConnected ? (
+                                    <Button
+                                        className="open-reg-button mx-4"
+                                        type="primary"
+                                        onClick={() => this.stripeDashboardLoginUrl()}
+                                    >
+                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                        {AppConstants.stripePaymentDashboard}
+                                        {/* </a> */}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="open-reg-button"
+                                        type="primary"
+                                    >
+                                        <a href={stripeConnectURL} className="stripe-connect">
+                                            <span>
+                                                {AppConstants.connectToStripe}
+                                            </span>
+                                        </a>
+                                    </Button>
+                                )}
+                                {isBecsSetupDone ? (
+                                    <Button
+                                        className="open-reg-button mx-1"
+                                        type="primary"
+                                        onClick={() => this.stripeDashboardLoginUrl()}
+                                    >
+                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                        {AppConstants.stripeWithdrawalsDashboard}
+                                        {/* </a> */}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="open-reg-button mx-1"
+                                        type="primary"
+                                        onClick={() => this.props.history.push('/orgBecsSetup')}
+                                    >
+                                        {AppConstants.setupStripeForWithdrawals}
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div >
         )
@@ -393,7 +427,7 @@ class RegistrationPayments extends Component {
                         columns={columns}
                         dataSource={stripeTransferList}
                         pagination={false}
-                        // loading={this.props.stripeState.onLoad && true}
+                    // loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">

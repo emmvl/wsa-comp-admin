@@ -6,7 +6,7 @@ import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Select }
 import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
-import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
@@ -18,6 +18,7 @@ import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/li
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
+import { checkLivScoreCompIsParent } from "../../util/permissions";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -34,7 +35,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder);
+    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder, _this.state.competitionOrganisationId);
 }
 
 var _this = null
@@ -108,18 +109,21 @@ const columns = [
         key: 'team1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (team1, record) => teamListData(team1.id) ? (
-            <NavLink
-                to={{
-                    pathname: '/matchDayTeamView',
-                    state: { tableRecord: team1, screenName: 'fromMatchList' }
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{team1.name}</span>
-            </NavLink>
-        ) : (
-            <span>{team1.name}</span>
-        )
+        render: (team1, record) => teamListDataCheck(team1.id, _this.state.liveScoreCompIsParent, record, _this.state.competitionOrganisationId) ?
+            (
+                <NavLink
+                    to={{
+                        pathname: '/matchDayTeamView',
+                        state: { tableRecord: team1, screenName: 'fromMatchList' }
+                    }}
+                >
+                    <span className="input-heading-add-another pt-0">{team1.name}</span>
+                </NavLink>
+            ) : (
+
+
+                <span>{team1.name}</span>
+            )
     },
     {
         title: 'Away',
@@ -127,7 +131,7 @@ const columns = [
         key: 'team2',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (team2, record) => teamListData(team2.id) ? (
+        render: (team2, record) => teamListDataCheck(team2.id, _this.state.liveScoreCompIsParent, record, _this.state.competitionOrganisationId) ? (
             <NavLink
                 to={{
                     pathname: '/matchDayTeamView',
@@ -137,8 +141,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-            <span>{team2.name}</span>
-        )
+                <span>{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -215,11 +219,14 @@ class LiveScoreMatchesList extends Component {
             sortBy: null,
             sortOrder: null,
             sourceIdAvailable: false,
+            liveScoreCompIsParent: false,
+            competitionOrganisationId: 0
         }
         _this = this
     }
 
     async componentDidMount() {
+        this.setLivScoreCompIsParent()
         let matchListActionObject = this.props.liveScoreMatchListState.matchListActionObject
         let selectedDivision = this.state.selectedDivision
         let page = 1
@@ -238,23 +245,26 @@ class LiveScoreMatchesList extends Component {
 
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
-                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
-                this.handleMatchTableList(page, id)
+                const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData())
+                let compOrg = competitionOrganisation ? competitionOrganisation.id : 0;
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: compOrg })
+                this.handleMatchTableList(page, id, compOrg)
             } else {
                 history.push("/matchDayCompetitions")
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
-                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
-                this.handleMatchTableList(page, id, sortBy, sortOrder)
+                const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false, competitionOrganisationId: competitionOrganisation ? competitionOrganisation.id : 0 })
+                this.handleMatchTableList(page, id, sortBy, sortOrder, competitionOrganisation ? competitionOrganisation.id : 0)
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, selectedDivision === 'All' ? '' : selectedDivision)
             } else {
                 history.push("/matchDayCompetitions")
             }
         }
+
+
     }
 
     componentDidUpdate(nextProps) {
@@ -263,6 +273,12 @@ class LiveScoreMatchesList extends Component {
                 this.setState({ isBulkUpload: false, onScoreUpdate: false })
             }
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     onMatchClick(data, screenName) {
@@ -276,15 +292,37 @@ class LiveScoreMatchesList extends Component {
         )
     }
 
-    handleMatchTableList(page, competitionID, sortBy, sortOrder) {
+    handleMatchTableList(page, competitionID, sortBy, sortOrder, competitionOrganisationId) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder, competitionOrganisationId)
     }
 
     onExport() {
-        let url = AppConstants.matchExport + this.state.competitionId
+
+        let competition = null
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                competition = JSON.parse(getUmpireCompetitonData());
+            } else {
+                history.push('/matchDayCompetitions')
+            }
+        } else {
+            if (getLiveScoreCompetiton()) {
+                competition = JSON.parse(getLiveScoreCompetiton());
+            } else {
+                history.push('/matchDayCompetitions')
+            }
+        }
+
+        let competitionOrganisationId = competition.competitionOrganisation ? competition.competitionOrganisation.id : null
+        let url = null
+        if (competitionOrganisationId) {
+            url = AppConstants.matchExport + this.state.competitionId + `&competitionOrganisationId=${competitionOrganisationId}`
+        } else {
+            url = AppConstants.matchExport + this.state.competitionId + `&competitionOrganisationId=${0}`
+        }
         this.props.exportFilesAction(url)
     }
 
@@ -292,7 +330,7 @@ class LiveScoreMatchesList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -301,7 +339,7 @@ class LiveScoreMatchesList extends Component {
         var code = e.keyCode || e.which;
         this.setState({ offset: 0 })
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -310,7 +348,7 @@ class LiveScoreMatchesList extends Component {
         this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -351,8 +389,8 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                )}
+                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                    )}
             </div>
         )
     }
@@ -360,7 +398,7 @@ class LiveScoreMatchesList extends Component {
     headerView = () => {
         const { liveScoreMatchListData } = this.props.liveScoreMatchListState;
         let matchData = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
-        let { sourceIdAvailable } = this.state
+        let { sourceIdAvailable, liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -373,7 +411,7 @@ class LiveScoreMatchesList extends Component {
                     <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
                         <div className="row">
 
-                            {sourceIdAvailable && <div className="col-sm">
+                            {sourceIdAvailable && liveScoreCompIsParent && <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <Button
                                         type="primary"
@@ -385,32 +423,34 @@ class LiveScoreMatchesList extends Component {
                                 </div>
                             </div>}
 
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    {/* <NavLink to={{
-                                        pathname: '/matchDayAddMatch',
-                                    }}> */}
-                                    <Button
-                                        type="primary"
-                                        className="primary-add-comp-form"
-                                        disabled={this.state.isBulkUpload || matchData.length === 0}
-                                        onClick={() => this.setState({ isBulkUpload: true })}
-                                    >
-                                        {AppConstants.bulkScoreUpload}
-                                    </Button>
-                                    {/* </NavLink> */}
-                                </div>
-                            </div>
-
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to={{ pathname: '/matchDayAddMatch' }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.addMatches}
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <Button
+                                            type="primary"
+                                            className="primary-add-comp-form"
+                                            disabled={this.state.isBulkUpload || matchData.length === 0}
+                                            onClick={() => this.setState({ isBulkUpload: true })}
+                                        >
+                                            {AppConstants.bulkScoreUpload}
                                         </Button>
-                                    </NavLink>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to={{ pathname: '/matchDayAddMatch' }}>
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                + {AppConstants.addMatches}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            }
 
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
@@ -428,24 +468,27 @@ class LiveScoreMatchesList extends Component {
                                     </Button>
                                 </div>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/matchDayMatchImport">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.import}
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to="/matchDayMatchImport">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Button>
-                                    </NavLink>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -475,7 +518,7 @@ class LiveScoreMatchesList extends Component {
         if (checkScoreChanged === true) {
             message.info("Please save or cancel the current changes! ");
         } else {
-            this.handleMatchTableList(page, this.state.competitionId, this.state.sortBy, this.state.sortOrder)
+            this.handleMatchTableList(page, this.state.competitionId, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -501,6 +544,7 @@ class LiveScoreMatchesList extends Component {
                     <Pagination
                         className="antd-pagination"
                         current={liveScoreMatchListPage}
+                        showSizeChanger={false}
                         total={total}
                         onChange={(page) => this.onPageChange(page)}
                         defaultPageSize={10}
@@ -589,7 +633,7 @@ class LiveScoreMatchesList extends Component {
         const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
 
         setTimeout(() => {
-            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }, 200);
         this.props.liveScoreRoundListAction(competitionId, division === 'All' ? '' : division)
 
@@ -599,7 +643,7 @@ class LiveScoreMatchesList extends Component {
         let offset = 0;
         let start = 1
         const { competitionId, searchText, selectedDivision, sortBy, sortOrder } = this.state;
-        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder)
+        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         this.setState({ selectedRound: roundName })
     }
 
@@ -672,18 +716,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.matchDay}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.matchDay}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
+                        />
+                    )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
-                )}
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
+                    )}
 
                 <Layout>
                     {this.headerView()}

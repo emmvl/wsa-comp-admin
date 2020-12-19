@@ -44,7 +44,7 @@ class CompetitionFinals extends Component {
         this.state = {
             firstTimeCompId: '',
             yearRefId: null,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             getDataLoading: false,
             buttonPressed: "",
             loading: false,
@@ -309,7 +309,7 @@ class CompetitionFinals extends Component {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
@@ -526,7 +526,7 @@ class CompetitionFinals extends Component {
                                 placeholder={AppConstants.selectVenue}
                                 filterOption={false}
                                 onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
-                                // disabled={compDetailDisable}
+                            // disabled={compDetailDisable}
                             >
                                 {appState.venueList.map((item) => (
                                     <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
@@ -551,8 +551,8 @@ class CompetitionFinals extends Component {
                                             ))}
                                         </div>
                                     ) : (
-                                        <span>{AppConstants.allDivisions}</span>
-                                    )}
+                                            <span>{AppConstants.allDivisions}</span>
+                                        )}
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <InputWithHead heading={AppConstants.finalsStartDate} required="required-field" />
@@ -594,23 +594,23 @@ class CompetitionFinals extends Component {
                                             </Select>
                                         </Form.Item>
                                     ) : (
-                                        <Form.Item
-                                            name={`poolTopRefId${index}`}
-                                            rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}
-                                        >
-                                            <Select
-                                                disabled={disabledStatus}
-                                                value={data.poolTopRefId}
-                                                onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
+                                            <Form.Item
+                                                name={`poolTopRefId${index}`}
+                                                rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}
                                             >
-                                                {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
-                                                    <Option key={'poolTop_' + fix.id} value={fix.id}>
-                                                        {fix.description}
-                                                    </Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
-                                    )}
+                                                <Select
+                                                    disabled={disabledStatus}
+                                                    value={data.poolTopRefId}
+                                                    onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
+                                                >
+                                                    {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
+                                                        <Option key={'poolTop_' + fix.id} value={fix.id}>
+                                                            {fix.description}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                            </Form.Item>
+                                        )}
 
                                     {this.isShowPlayOff3rdPosition(data) && (
                                         <Checkbox

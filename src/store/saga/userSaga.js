@@ -97,11 +97,20 @@ function* getAffiliatesListingSaga(action) {
     const result = yield call(UserAxiosApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
+      if (action.payload.paging.limit == -1) {
+        yield put({
+          type: ApiConstants.API_AFFILIATES_IMPERSONATION_LISTING_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      }
+      else {
+        yield put({
+          type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      }
     } else {
       yield call(failSaga, result);
     }
@@ -790,10 +799,10 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
-        impersonationAccess:action.payload.access
+        impersonationAccess: action.payload.access
       });
       if (action.payload.access == false) {
-        history.push('/')
+        history.push('/homeDashboard')
       }
     } else {
       yield call(failSaga, result);
@@ -954,6 +963,42 @@ function* updateBannerCount(action) {
   }
 }
 
+function* getSpectatorListSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getSpectatorList, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_SPECTATOR_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* registrationResendEmailSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.registrationResendEmail, action.teamId, action.userId);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1002,4 +1047,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD, getUmpireActivityListSaga);
   yield takeEvery(ApiConstants.API_BANNER_COUNT_LOAD, getBannerCount);
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
+  yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
+  yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
 }

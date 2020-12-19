@@ -172,10 +172,11 @@ class LiveScoreTeamView extends Component {
     }
 
     async componentDidMount() {
-        this.setLivScoreCompIsParent()
+
         if (getLiveScoreCompetiton()) {
             const { sourceId } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ sourceIdAvailable: sourceId ? true : false })
+            this.setLivScoreCompIsParent()
         }
         let teamId = this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null
 

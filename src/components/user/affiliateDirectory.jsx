@@ -171,7 +171,7 @@ class AffiliateDirectory extends Component {
         super(props);
         this.state = {
             yearRefId: -1,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             organisationTypeRefId: -1,
             deleteLoading: false,
             searchText: "",
@@ -334,7 +334,7 @@ class AffiliateDirectory extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">
                     <div className="row user-filter-row">
-                        <div className="user-col">
+                        <div className="col-lg-2 col-md-6">
                             <div className="user-filter-col-cont">
                                 <div className="year-select-heading" style={{ width: "65px" }}>
                                     {AppConstants.year}
@@ -356,7 +356,7 @@ class AffiliateDirectory extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="user-col">
+                        <div className="col-lg-3 col-md-6">
                             <div className="user-filter-col-cont">
                                 <div className="year-select-heading" style={{ width: "150px" }}>
                                     {AppConstants.organisationType}
@@ -380,7 +380,7 @@ class AffiliateDirectory extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="user-col affiliate-dir-srch">
+                        <div className="affiliate-dir-srch">
                             <div>
                                 <button
                                     className="dashboard-lay-search-button"
@@ -443,6 +443,7 @@ class AffiliateDirectory extends Component {
                         current={userState.affiliateDirectoryPage}
                         total={total}
                         onChange={(page) => this.handleAffiliateTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

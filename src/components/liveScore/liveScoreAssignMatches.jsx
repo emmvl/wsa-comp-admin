@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { assignMatchesAction, changeAssignStatus, unAssignMatcheStatus } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -130,9 +130,13 @@ const columns2 = [
                     <div className="col-sm d-flex justify-content-start">
                         <span className="pt-0">{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
-                    <div className="col-sm d-flex justify-content-end">
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer1)}</span>
-                    </div>
+                    {
+                        this_obj.checkToShowAssignText(records.team1) &&
+                        <div className="col-sm d-flex justify-content-end">
+                            <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer1)}</span>
+                        </div>
+                    }
+
                 </div>
             )
         }
@@ -162,7 +166,7 @@ const columns2 = [
                             <span className="pt-0">{records.team2.name}</span>
                         }
                     </div>
-                    {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm d-flex justify-content-end">
+                    {this_obj.state.scoring_Type !== "SINGLE" && this_obj.checkToShowAssignText(records.team2) ? <div className="col-sm d-flex justify-content-end">
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer2)}</span>
                     </div> : null}
                 </div>
@@ -191,7 +195,8 @@ class LiveScoreAssignMatch extends Component {
                 // columns: scoringType === "SINGLE" ? columns1 : columns2,
                 columns: columns2,
                 lodding: false,
-                scoring_Type: scoringType
+                scoring_Type: scoringType,
+                liveScoreCompIsParent: false,
             };
         } else {
             history.push('/matchDayCompetitions')
@@ -200,13 +205,18 @@ class LiveScoreAssignMatch extends Component {
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ lodding: true })
+            const { id, competitionOrganisation, organisationId } = JSON.parse(getLiveScoreCompetiton())
+            const orgItem = await getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
+
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            this.setState({ lodding: true, liveScoreCompIsParent })
 
             if (id !== null) {
-                this.props.getliveScoreTeams(id)
+                this.props.getliveScoreTeams(id, null, compOrgId)
             } else {
                 history.push('/')
             }
@@ -231,6 +241,22 @@ class LiveScoreAssignMatch extends Component {
             }
         }
     }
+
+    checkToShowAssignText = (team) => {
+        if(!this.state.liveScoreCompIsParent){
+            const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            if (team.competitionOrganisationId === compOrgId) {
+                return true
+            } else {
+                return false
+            }
+        }else{
+            return true
+        }
+    }
+
+
 
     /// on status change
     onChangeStatus(index, data, scorerKey, teamKey, isScorer) {
@@ -335,9 +361,10 @@ class LiveScoreAssignMatch extends Component {
                             <Pagination
                                 className="antd-pagination"
                                 current={1}
+                                showSizeChanger={false}
                                 total={matcheList.assignMatchTotalCount}
                                 onChange={(page) => this.handlePaggination(page)}
-                                // defaultPageSize={10}
+                            // defaultPageSize={10}
                             />
                         </div>
                     </div>

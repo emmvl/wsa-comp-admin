@@ -25,7 +25,7 @@ import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/common
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader'
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import PlacesAutocomplete from '../competition/elements/PlaceAutoComplete';
 
 const { Header, Footer, Content } = Layout;
@@ -53,7 +53,7 @@ class UserOurOrganization extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             loggedInuserOrgTypeRefId: 0,
             loading: false,
             photoLoading: false,
@@ -116,7 +116,7 @@ class UserOurOrganization extends Component {
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 } else {
-                     // history.push('/userAffiliatesList');
+                    // history.push('/userAffiliatesList');
                 }
             }
         }
@@ -311,6 +311,18 @@ class UserOurOrganization extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             this.setState({ image: data.files[0] })
             this.props.updateOrgAffiliateAction(URL.createObjectURL(data.files[0]), "logoUrl");
             this.props.updateOrgAffiliateAction(data.files[0], "organisationLogo");
@@ -433,7 +445,6 @@ class UserOurOrganization extends Component {
             message.error(this.state.affiliateAddressError);
             return;
         }
-
         if (tabKey == "1") {
             let affiliate = this.props.userState.affiliateOurOrg;
 
@@ -467,7 +478,7 @@ class UserOurOrganization extends Component {
                     formData.append("affiliateOrgId", affiliate.affiliateOrgId)
                     formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
                     formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
-                    formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+                    formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
                     formData.append("name", affiliate.name);
                     formData.append("street1", affiliate.street1);
                     formData.append("street2", affiliate.street2);
@@ -490,7 +501,7 @@ class UserOurOrganization extends Component {
             formData.append("organisationPhotoId", tableRowData.id);
             formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
             formData.append("photoUrl", tableRowData.photoUrl);
-            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+            formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
 
             this.setState({ photoLoading: true });
             this.props.saveOrganisationPhotoAction(formData);
@@ -507,7 +518,7 @@ class UserOurOrganization extends Component {
         if (this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2) {
             termsAndConditionsValue = affiliate.termsAndConditionsFile;
         }
-        formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+        formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
         formData.append("termsAndConditions", termsAndConditionsValue ? termsAndConditionsValue : "");
         formData.append("termsAndCondition", this.state.termsAndCondititionFile ? this.state.termsAndCondititionFile : "");
@@ -522,7 +533,7 @@ class UserOurOrganization extends Component {
         let charityRoundUpArr = affiliate.charityRoundUp.filter(x => x.isSelected);
 
         let payload = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             charityRoundUp: charityRoundUpArr,
             charity: affiliate.charity
         }
@@ -620,23 +631,33 @@ class UserOurOrganization extends Component {
                         value={affiliate.name}
                     />
                 </Form.Item>
-                <InputWithHead required="required-field pb-0" heading={AppConstants.organisationLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.organisationLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div className="reg-competition-logo-view" onClick={this.selectImage}>
+                            <div className="reg-competition-logo-view"
+                                onClick={() => this.selectImage()}
+                            >
                                 <label>
-                                    <input
+                                    {/* <input
                                         src={affiliate.logoUrl == null ? AppImages.circleImage : affiliate.logoUrl}
                                         alt=""
                                         height="120"
                                         width="120"
                                         type="image"
                                         disabled={!this.state.isEditable}
-                                        style={{ borderRadius: 60 }}
+                                        style={{ borderRadius: 60, height: 120, widows: 120 }}
                                         name="image"
                                         onError={ev => {
                                             ev.target.src = AppImages.circleImage;
+                                        }}
+                                    /> */}
+                                    <img
+                                        src={affiliate.logoUrl == null ? AppImages.circleImage : affiliate.logoUrl}
+                                        height={'120'}
+                                        width={'120'}
+                                        style={{
+                                            borderRadius: 60
                                         }}
                                     />
                                 </label>
@@ -672,6 +693,9 @@ class UserOurOrganization extends Component {
                             </Checkbox>} */}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
                 <div className="row">
                     <div className="col-sm">
@@ -747,7 +771,7 @@ class UserOurOrganization extends Component {
                         <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
                             <InputWithHead
                                 auto_complete='new-firstName'
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index)}
@@ -764,11 +788,12 @@ class UserOurOrganization extends Component {
                             value={item.middleName}
                             disabled={!this.state.isEditable}
                             auto_complete='new-middleName'
+                        // required="pt-0"
                         />
 
                         <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
-                                required="required-field pt-0 pb-0"
+                                required="required-field "
                                 heading={AppConstants.lastName} placeholder={AppConstants.lastName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
                                 value={item.lastName}
@@ -790,7 +815,7 @@ class UserOurOrganization extends Component {
                         ]}>
                             <InputWithHead
                                 auto_complete='new-email'
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
                                 disabled={!item.isSameUser}
@@ -1276,6 +1301,7 @@ class UserOurOrganization extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.saveAffiliate}
+
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
                             message.error(ValidationConstants.requiredMessage);
@@ -1319,7 +1345,7 @@ class UserOurOrganization extends Component {
                                             {this.termsAndConditionsView()}
                                         </div>
                                     </TabPane>
-                                    {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
+                                    {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
                                         (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
                                             <TabPane tab={AppConstants.charity} key="4">
                                                 <div className="tab-formView mt-5">

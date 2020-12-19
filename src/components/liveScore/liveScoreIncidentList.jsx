@@ -16,6 +16,9 @@ import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sess
 import { isArrayNotEmpty } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 
+import { exportFilesAction } from "../../store/actions/appAction"
+import { checkLivScoreCompIsParent } from "util/permissions"
+
 const { Content } = Layout;
 let this_Obj = null;
 
@@ -37,7 +40,7 @@ function tableSort(key) {
     this_Obj.setState({ sortBy, sortOrder });
     const { id } = JSON.parse(getLiveScoreCompetiton())
     let { searchText, limit, offset } = this_Obj.state
-    this_Obj.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
+    this_Obj.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder, this_Obj.state.liveScoreCompIsParent, this_Obj.state.compOrgId);
 }
 
 const columns = [
@@ -121,6 +124,9 @@ class LiveScoreIncidentList extends Component {
             sortBy: null,
             sortOrder: null,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
+            competitionId: null,
+            compOrgId: null,
+            liveScoreCompIsParent: false
         };
         this_Obj = this
     }
@@ -132,40 +138,65 @@ class LiveScoreIncidentList extends Component {
 
         if (umpireKey) {
             if (getUmpireCompetitonData()) {
-                const { id } = JSON.parse(getUmpireCompetitonData())
-                if (incidentListActionObject) {
-                    let offset = incidentListActionObject.offset
-                    let searchText = incidentListActionObject.search
-                    sortBy = incidentListActionObject.sortBy
-                    sortOrder = incidentListActionObject.sortOrder
-                    this.setState({ sortBy, sortOrder, offset, searchText })
-                    this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder);
-                } else {
-                    let { searchText, limit, offset, sortBy, sortOrder } = this.state
-                    this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
-                }
+                checkLivScoreCompIsParent().then((value) => {
+
+                    const { id, competitionOrganisation } = JSON.parse(getUmpireCompetitonData())
+                    let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+                    this.setState({ compOrgId, liveScoreCompIsParent: value })
+                    if (incidentListActionObject) {
+                        let offset = incidentListActionObject.offset
+                        let searchText = incidentListActionObject.search
+                        sortBy = incidentListActionObject.sortBy
+                        sortOrder = incidentListActionObject.sortOrder
+                        this.setState({ sortBy, sortOrder, offset, searchText, })
+                        this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder, value, compOrgId);
+                    } else {
+                        let { searchText, limit, offset, sortBy, sortOrder } = this.state
+                        this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder, value, compOrgId);
+                    }
+
+                })
             } else {
                 history.push('/umpireDashboard')
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
-                if (incidentListActionObject) {
-                    let offset = incidentListActionObject.offset
-                    let searchText = incidentListActionObject.search
-                    sortBy = incidentListActionObject.sortBy
-                    sortOrder = incidentListActionObject.sortOrder
-                    this.setState({ sortBy, sortOrder, offset, searchText })
-                    this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder);
-                } else {
-                    let { searchText, limit, offset, sortBy, sortOrder } = this.state
-                    this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
-                }
+                checkLivScoreCompIsParent().then((value) => {
+                    const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+                    let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+                    this.setState({ competitionId: id, liveScoreCompIsParent: value, compOrgId })
+                    if (incidentListActionObject) {
+                        let offset = incidentListActionObject.offset
+                        let searchText = incidentListActionObject.search
+                        sortBy = incidentListActionObject.sortBy
+                        sortOrder = incidentListActionObject.sortOrder
+                        this.setState({ sortBy, sortOrder, offset, searchText, })
+                        this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder, value, compOrgId);
+                    } else {
+                        let { searchText, limit, offset, sortBy, sortOrder } = this.state
+                        this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder, value, compOrgId);
+                    }
+                })
             } else {
                 history.push('/matchDayCompetitions')
             }
         }
     }
+
+
+    onExport = () => {
+        let url = null
+        console.log("called", this.state.liveScoreCompIsParent)
+        if (this.state.liveScoreCompIsParent) {
+            url = AppConstants.incidentExport + this.state.competitionId + `&entityTypeId=1&search=`
+        }
+        else {
+            console.log("called", this.state.liveScoreCompIsParent)
+            url = AppConstants.incidentExport + this.state.compOrgId + `&entityTypeId=6&search=`
+        }
+        this.props.exportFilesAction(url)
+    }
+
 
     checkUserId = (record) => {
         if (record.player.userId == null) {
@@ -191,7 +222,7 @@ class LiveScoreIncidentList extends Component {
         let { limit, sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder);
+            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
         }
     }
 
@@ -212,7 +243,7 @@ class LiveScoreIncidentList extends Component {
         var code = e.keyCode || e.which;
         let { limit, sortBy, sortOrder } = this.state
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder);
+            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
         }
     }
 
@@ -232,7 +263,7 @@ class LiveScoreIncidentList extends Component {
         let { searchText, limit, sortBy, sortOrder } = this.state
         if (searchText === null || searchText === "") {
         } else {
-            this.props.liveScoreIncidentList(compId, searchText, limit, 0, sortBy, sortOrder);
+            this.props.liveScoreIncidentList(compId, searchText, limit, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
         }
     }
 
@@ -249,7 +280,7 @@ class LiveScoreIncidentList extends Component {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             compId = id
         }
-        this.props.liveScoreIncidentList(compId, searchText, limit, offset, sortBy, sortOrder);
+        this.props.liveScoreIncidentList(compId, searchText, limit, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
     }
 
     headerView = () => {
@@ -275,7 +306,7 @@ class LiveScoreIncidentList extends Component {
                             </div> */}
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.onExport()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -356,6 +387,7 @@ class LiveScoreIncidentList extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={liveScoreIncidentCurrentPage}
+                            showSizeChanger={false}
                             total={liveScoreIncidentTotalCount}
                             onChange={this.handleTableChange}
                         />
@@ -396,7 +428,7 @@ class LiveScoreIncidentList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreIncidentList }, dispatch)
+    return bindActionCreators({ liveScoreIncidentList, exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

@@ -93,14 +93,41 @@ class CompetitionVenueAndTimesAdd extends Component {
                         )
                     }
                 },
+
                 {
                     title: "Longitude",
+                    dataIndex: "lng",
+                    key: "lng",
+                    width: 100,
+                    filterDropdown: true,
+                    filterIcon: () => (
+                        <div className="mt-4">
+                            <Tooltip placement="bottom">
+                                <span>{AppConstants.LatitudeMsg}</span>
+                            </Tooltip>
+                        </div>
+                    ),
+                    render: (lng, record, index) => (
+                        <div className="d-flex flex-row align-items-center">
+                            <Form.Item name={`lng${index}`} rules={[{ required: true, message: ValidationConstants.courtField[2] }]}>
+                                <Input
+                                    className="input-inside-table-venue-court"
+                                    onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
+                                    value={lng}
+                                    placeholder="Longitude"
+                                />
+                            </Form.Item>
+                        </div>
+                    ),
+                }, {
+                    title: "Latitude",
                     dataIndex: "lat",
                     key: "lat",
+                    width: 100,
                     // Sorter: true,
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div className="mt-10">
+                        <div className="mt-4">
                             <Tooltip placement="bottom">
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
@@ -117,31 +144,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     className="input-inside-table-venue-court"
                                     onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
                                     value={lat}
-                                    placeholder="Longitude"
-                                />
-                            </Form.Item>
-                        </div>
-                    ),
-                },
-                {
-                    title: "Latitude",
-                    dataIndex: "lng",
-                    key: "lng",
-                    filterDropdown: true,
-                    filterIcon: () => (
-                        <div className="mt-10">
-                            <Tooltip placement="bottom">
-                                <span>{AppConstants.LatitudeMsg}</span>
-                            </Tooltip>
-                        </div>
-                    ),
-                    render: (lng, record, index) => (
-                        <div className="d-flex flex-row align-items-center">
-                            <Form.Item name={`lng${index}`} rules={[{ required: true, message: ValidationConstants.courtField[2] }]}>
-                                <Input
-                                    className="input-inside-table-venue-court"
-                                    onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
-                                    value={lng}
                                     placeholder="Latitude"
                                 />
                             </Form.Item>
@@ -153,10 +155,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                     title: <span >Override Venue Timeslots?</span>,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
-                    width: "22%",
+                    width: 150,
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div className="mt-10">
+                        <div className="mt-4">
                             <Tooltip placement="bottom">
                                 {AppConstants.overRideSlotMsg}
                             </Tooltip>
@@ -194,7 +196,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         };
         this.myRef = React.createRef();
         this.props.getCommonRefData();
-        const organisationData = getOrganisationData();
+        const organisationData = getOrganisationData() ? getOrganisationData() : null;
         this.props.getAffiliatesListingAction({
             organisationId: organisationData.organisationUniqueKey,
             affiliatedToOrgId: -1,
@@ -443,7 +445,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pt-0"
+                        required="required-field"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
                         onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(e.target.value), 'Venue', 'name')}

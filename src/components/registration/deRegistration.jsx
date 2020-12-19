@@ -221,7 +221,7 @@ class DeRegistration extends Component {
         } else if (subItem.id == 2 && selectedOption == 2) {
             return (
                 <div className="ml-5">
-                    <InputWithHead heading={AppConstants.organisationName} required="required-field" />
+                    <InputWithHead heading={AppConstants.newOrganisationName} required="required-field" />
                     <Form.Item
                         name="transferOrganisationId"
                         rules={[{ required: true, message: ValidationConstants.organisationName }]}
@@ -244,7 +244,7 @@ class DeRegistration extends Component {
                         </Select>
                     </Form.Item>
 
-                    <InputWithHead heading={AppConstants.competition_name} required="required-field" />
+                    <InputWithHead heading={AppConstants.newCompetition_name} required="required-field" />
                     <Form.Item
                         name="transferCompetitionId"
                         rules={[{ required: true, message: ValidationConstants.competitionRequired }]}
@@ -385,9 +385,9 @@ class DeRegistration extends Component {
                     >
                         {(registrationSelection || []).map((item) => (
                             <div key={`regChangeType_${item.id}`}>
-                                <div className="contextualHelp-RowDirection">
+                                <div className="contextualHelp-RowDirection" style={{alignItems:"center"}}>
                                     <Radio value={item.id}>{item.value}</Radio>
-                                    <div className="mt-5 ml-n20">
+                                    <div className="ml-n20">
                                         <Tooltip placement="bottom">
                                             <span>{item.helpMsg}</span>
                                         </Tooltip>

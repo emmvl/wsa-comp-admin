@@ -544,7 +544,15 @@ let AxiosApi = {
         let postData = data.postData
         var url = `/api/payments/umpireTransfer`;
         return Method.dataPost(url, token, postData);
-    }
+    },
+    getMembershipFeeCapList(organisationUniqueKey,yearRefId){
+        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
+        return Method.dataGet(url, token);
+    },
+    updateMembershipFeeCap(organisationUniqueKey,yearRefId,payload){
+        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
+        return Method.dataPost(url, token, payload);
+    },
 };
 
 const Method = {

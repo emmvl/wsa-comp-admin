@@ -54,7 +54,7 @@ class OrderDetails extends Component {
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view header-transaparent" style={{ backgroundColor: "transparent" }}>
+                <Header className="form-header-view ant-header-transaparent">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.orderDetails}

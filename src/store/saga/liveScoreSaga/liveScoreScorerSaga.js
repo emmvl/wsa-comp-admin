@@ -43,7 +43,7 @@ function* errorSaga(error) {
 //// get manager list
 export function* liveScoreScorerListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body, action.search, action.sortBy, action.sortOrder);
+        const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body, action.search, action.sortBy, action.sortOrder,action.liveScoreCompIsParent);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_SUCCESS,

@@ -1,7 +1,23 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import { deepCopyFunction, isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
+const membershipCapListDefObj = {
+  "membershipCapId": 0,
+  "organisationId": '',
+  "isAllMembershipProduct": 0,
+  "productsInfo": [],
+  "products": [],
+  "productsTemp": [],
+  "feeCaps": [
+      {
+          "membershipFeeCapId": 0,
+          "dobFrom": null,
+          "dobTo": null,
+          "amount": null
+      }
+  ]
+}
 
 const newObjvalue = {
   orgRegistrationId: 0,
@@ -99,7 +115,11 @@ const initialState = {
   },
   teamRegListAction: null,
   regMembershipListAction: null,
-  canInviteSend: 0
+  canInviteSend: 0,
+  membershipFeeCapList: [],
+  membershipFeeCapListCopy: [],
+  updateMembershipFeeCapOnLoad: false,
+  isAllMembershipProductChanged: false
 };
 
 
@@ -301,6 +321,9 @@ function makeProducrTypeArr(data, selected) {
         if (data[i].id == selected[j].id) {
           data[i]["isSelected"] = true;
           data[i].registrationLock = selected[j].registrationLock;
+
+          data[i].registrationCap = selected[j].registrationCap;
+          data[i].teamRegistrationCap = selected[j].teamRegistrationCap;
           break;
         } else {
           data[i]["isSelected"] = false;
@@ -494,6 +517,10 @@ function feesDataObject(allMembershipData, membershipProductName) {
       );
       if (mappedMembershipTypeIndex > -1) {
         feesApiData[mappedMembershipTypeIndex]["editableIndex"] = parseInt(i);
+
+        //developed by
+        feesApiData[mappedMembershipTypeIndex].validityDays = feesApiData[mappedMembershipTypeIndex].validityDays == 0 ? null : feesApiData[mappedMembershipTypeIndex].validityDays;
+        
         feesTableData.push(feesApiData[mappedMembershipTypeIndex]);
       } else {
         var feesTableObject = {
@@ -892,10 +919,21 @@ function registration(state = initialState, action) {
           state.registrationFormData[0].hardShipCodes = [];
           state.registrationFormData[0].hardShipCodes.push(action.updatedData);
         }
-      }
-      else if (action.key === "addHardshipCodeValueChange") {
+      }else if (action.key === "addHardshipCodeValueChange") {
         let {value,index} = action.updatedData;
         state.registrationFormData[0].hardShipCodes[index].code = value;
+      }else if (action.key === "membershipProductTypes") {
+          let index = -1;
+          for(let i in state.selectedMemberShipType){
+            let membershipProductType = state.selectedMemberShipType[i].membershipProductTypes.find(x => x.membershipProductTypeId == action.getMembershipproductItem.membershipProductTypeId && x.membershipProductTypeMappingId == action.getMembershipproductItem.membershipProductTypeMappingId);
+            if(membershipProductType){
+              index = i;
+            }
+            break;
+          }
+          state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
+          state.registrationFormData[0][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
+    
       }
       else {
         let oldData = state.registrationFormData;
@@ -1040,19 +1078,24 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
+      // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      if(action.key){
+        state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
+      }else{
+        state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;
+      }
       return {
         ...state,
         error: null
       };
 
     ///membership fees radip apply fees on change
-    case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
-      return {
-        ...state,
-        error: null
-      };
+    // case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
+    //   state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId
+    //   return {
+    //     ...state,
+    //     error: null
+    //   };
 
 
     ////age mandate and membershipTypes onchange selection checkbox
@@ -1233,6 +1276,82 @@ function registration(state = initialState, action) {
       state.teamRegListAction = null
       state.regMembershipListAction = null
       return { ...state, onLoad: false };
+    
+    case ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD:
+      return{...state,onLoad: true}  
+    
+    case ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_SUCCESS:
+      let membershipCapListTemp = [];
+      if(isArrayNotEmpty(action.result)){
+        membershipCapListTemp = action.result;
+        for(let item of membershipCapListTemp){
+          item["productsInfo"] = [];
+          item["productsTemp"] = deepCopyFunction(item.products);
+          for(let product of item.products){
+            item.productsInfo.push(product.membershipProductId);
+          }
+        }
+      }else{
+        membershipCapListTemp[0] = membershipCapListDefObj;
+      }
+      return{
+        ...state,
+        status: action.status,
+        membershipFeeCapList: membershipCapListTemp,
+        membershipFeeCapListCopy: deepCopyFunction(membershipCapListTemp),
+        onLoad: false
+      }  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD:
+      return{...state,updateMembershipFeeCapOnLoad: true}  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS:
+      return{
+        ...state,
+        status: action.status,
+        updateMembershipFeeCapOnLoad: false
+      }  
+
+    case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
+      if(action.key == 'membershipFeeCapList'){
+        state.membershipFeeCapList = action.value;
+      }else if(action.key == 'isAllMembershipProductChanged'){
+        state.isAllMembershipProductChanged = action.value;
+      }else if(action.key == 'productsInfo'){
+        let productList = action.value;
+        state.membershipFeeCapList[action.index].productsInfo = productList;
+        // console.log("state.membershipFeeCapList[action.index].productsTemp",state.membershipFeeCapList[action.index].productsTemp);
+        // console.log("state.membershipFeeCapList[action.index].productsInfo",state.membershipFeeCapList[action.index].productsInfo);
+        state.membershipFeeCapList[action.index].products = [];
+        for(let product of productList){
+          let existingProductTemp = state.membershipFeeCapList[action.index].productsTemp.find(x => x.membershipProductId == product)
+          let obj = {
+            "membershipCapProductId": existingProductTemp ? existingProductTemp.membershipCapProductId : 0,
+            "membershipProductId": product
+          }
+          state.membershipFeeCapList[action.index].products.push(obj);
+          state.membershipFeeCapList[action.index].productsTemp.push(obj);
+        }
+        // console.log("state.membershipFeeCapList[action.index].products",state.membershipFeeCapList[action.index].products)
+      }else if(action.key == 'feeCaps'){
+        state.membershipFeeCapList[action.index][action.key][action.subIndex][action.subKey] = action.value;
+      }else if(action.key == "isAllMembershipProduct"){
+        if(action.value == 1){
+          state.membershipFeeCapList = [];
+          state.membershipFeeCapList[0] = deepCopyFunction(state.membershipFeeCapListCopy[action.index]);
+          state.membershipFeeCapList[0].products = [];
+          state.membershipFeeCapList[0].productsInfo = [];
+          state.membershipFeeCapList[0][action.key] = action.value;
+        }else{
+          state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
+        }
+        state.isAllMembershipProductChanged = true;
+      }else{
+        state.membershipFeeCapList[action.index][action.key] = action.value;
+      }
+      return{
+        ...state
+      }
 
     default:
       return state;

@@ -69,11 +69,12 @@ class LiveScoreAddIncident extends Component {
     componentDidMount() {
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id } = JSON.parse(getUmpireCompetitonData())
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getUmpireCompetitonData())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
                 const { incidentData } = this.props.liveScoreIncidentState
                 this.props.liveScoreIncidentTypeAction();
                 if (id !== null) {
-                    this.props.getliveScoreTeams(id);
+                    this.props.getliveScoreTeams(id, null, compOrgId);
                 }
 
                 if (this.state.isEdit === true) {
@@ -91,11 +92,12 @@ class LiveScoreAddIncident extends Component {
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
                 const { incidentData } = this.props.liveScoreIncidentState
                 this.props.liveScoreIncidentTypeAction();
                 if (id !== null) {
-                    this.props.getliveScoreTeams(id);
+                    this.props.getliveScoreTeams(id, null, compOrgId);
                 }
 
                 if (this.state.isEdit === true) {
@@ -223,16 +225,16 @@ class LiveScoreAddIncident extends Component {
                 const { id } = JSON.parse(getUmpireCompetitonData())
                 this.props.liveScorePlayerListAction(id, teamId);
                 this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
-                this.setInitialFieldValue()
                 this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+                this.setInitialFieldValue()
             }
         } else {
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 this.props.liveScorePlayerListAction(id, teamId);
                 this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
-                this.setInitialFieldValue()
                 this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+                this.setInitialFieldValue()
             }
         }
     }
@@ -285,26 +287,15 @@ class LiveScoreAddIncident extends Component {
                 </div>
 
                 <div className="row">
-                    {/*
                     <div className="col-sm">
-                        <InputWithHead
-                            auto_complete="new-mnbId"
-                            // required="required-field"
-                            heading={AppConstants.matchID}
-                            placeholder={AppConstants.matchID}
-                            value={this.state.matchId ? this.state.matchId : incidentData.mnbMatchId}
-                            onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
-                        />
-                    </div>
-                    */}
-                    <div className="col-sm">
-                        <Form.Item
-                            name="incidentTeamName"
-                            rules={[{ required: true, message: ValidationConstants.teamName }]}
-                            className="slct-in-add-manager-livescore livefirst"
-                        >
-                            <InputWithHead required="required-field" heading={AppConstants.team} />
-                            {this.state.isEdit ? (
+                        <InputWithHead required="required-field" heading={AppConstants.team} />
+                        {this.state.isEdit ? (
+                            <Form.Item
+                                name="incidentTeamName"
+                                rules={[{ required: true, message: ValidationConstants.teamName }]}
+                                className="slct-in-add-manager-livescore livefirst"
+                            >
+
                                 <Select
                                     className="reg-form-multiple-select w-100"
                                     placeholder="Select Home Team"
@@ -318,19 +309,28 @@ class LiveScoreAddIncident extends Component {
                                     <Option key={team1Id} value={team1Id}>{team1_Name}</Option>
                                     <Option key={team2Id} value={team2Id}>{team2_Name}</Option>
                                 </Select>
-                            ) : (
-                                <Select
-                                    className="reg-form-multiple-select w-100"
-                                    placeholder="Select Home Team"
-                                    onChange={(teamId) => this.setTeamId(teamId)}
-                                    // value={incidentData.teamId ? incidentData.teamId : ''}
-                                    optionFilterProp="children"
+                            </Form.Item>
+                        ) :
+
+                            (
+                                <Form.Item
+                                    name="incidentTeamName"
+                                    rules={[{ required: true, message: ValidationConstants.teamName }]}
+                                    className="slct-in-add-manager-livescore livefirst"
                                 >
-                                    <Option key={team1_Id} value={team1_Id}>{team_1}</Option>
-                                    <Option key={team2_Id} value={team2_Id}>{team_2}</Option>
-                                </Select>
+                                    <Select
+                                        className="reg-form-multiple-select w-100"
+                                        placeholder="Select Home Team"
+                                        onChange={(teamId) => this.setTeamId(teamId)}
+                                        // value={incidentData.teamId ? incidentData.teamId : ''}
+                                        optionFilterProp="children"
+                                    >
+                                        <Option key={team1_Id} value={team1_Id}>{team_1}</Option>
+                                        <Option key={team2_Id} value={team2_Id}>{team_2}</Option>
+                                    </Select>
+
+                                </Form.Item>
                             )}
-                        </Form.Item>
                     </div>
                 </div>
                 <div className="row">
@@ -361,21 +361,22 @@ class LiveScoreAddIncident extends Component {
                         {/* </Form.Item> */}
                     </div>
                     <div className="col-sm">
+                        <InputWithHead
+                            required="required-field pb-0 pt-4.5"
+                            heading={AppConstants.incident}
+                        />
                         <Form.Item
                             name="incidentName"
                             rules={[{ required: true, message: ValidationConstants.incidentName }]}
                             className="slct-in-add-manager-livescore livefirst one"
                         >
-                            <InputWithHead
-                                required="required-field pb-0 pt-4.5"
-                                heading={AppConstants.incident}
-                            />
+
                             <Select
                                 showSearch
                                 placeholder={AppConstants.selectIncident}
                                 className="w-100"
                                 onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
-                                // value={incidentData.injury ? incidentData.injury : undefined}
+                            // value={incidentData.injury ? incidentData.injury : undefined}
                             >
                                 {isArrayNotEmpty(incidentTypeResult) && incidentTypeResult.map((item) => (
                                     <Option key={'incidentType_' + item.id} value={item.id}>{item.name}</Option>
@@ -498,7 +499,7 @@ class LiveScoreAddIncident extends Component {
                         <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 

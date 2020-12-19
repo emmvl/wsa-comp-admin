@@ -78,9 +78,10 @@ class CompetitionPlayerGrades extends Component {
     componentDidUpdate(nextProps) {
         const competitionList = this.props.appState.own_CompetitionArr;
         const { allDivisionsData } = this.props.registrationState;
+        let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
         if (nextProps.appState !== this.props.appState) {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
-                if (competitionList.length > 0) {
+                if (competitionList.length > 0 && !fromReplicate) {
                     const { competitionId } = competitionList[0];
                     const { statusRefId } = competitionList[0];
                     const { finalTypeRefId } = competitionList[0];
@@ -93,6 +94,8 @@ class CompetitionPlayerGrades extends Component {
                     this.setState({
                         firstTimeCompId: competitionId, competitionStatus: statusRefId, compLoad: false, yearRefId: JSON.parse(yearId),
                     });
+                }else{
+                    this.props.getDivisionsListAction(this.state.yearRefId, this.state.firstTimeCompId); 
                 }
             }
         }
@@ -127,23 +130,34 @@ class CompetitionPlayerGrades extends Component {
         const storedCompetitionStatus = getOwn_competitionStatus();
         const propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined;
         const compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined;
-        if (storedCompetitionId && yearId && propsData && compData) {
+        let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+        if(!fromReplicate){
+            if (storedCompetitionId && yearId && propsData && compData) {
+                this.setState({
+                    yearRefId: JSON.parse(yearId),
+                    firstTimeCompId: storedCompetitionId,
+                    competitionStatus: storedCompetitionStatus,
+                    // getDataLoading: true
+                });
+                this.props.getDivisionsListAction(yearId, storedCompetitionId);
+            } else if (yearId) {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
+                this.setState({
+                    yearRefId: JSON.parse(yearId),
+                    compLoad: true,
+                });
+            } else {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
+                // setOwnCompetitionYear(1)
+            }
+        }else{
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
-                // getDataLoading: true
-            });
-            this.props.getDivisionsListAction(yearId, storedCompetitionId);
-        } else if (yearId) {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
-            this.setState({
-                yearRefId: JSON.parse(yearId),
                 compLoad: true,
             });
-        } else {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
-            // setOwnCompetitionYear(1)
         }
     }
 
@@ -162,7 +176,7 @@ class CompetitionPlayerGrades extends Component {
                         <span>{AppConstants.playerGradingMsg}</span>
                     </Tooltip>
                 </div>
-                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100" style={{ marginRight: '2.8%' }}>
+                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100 mr-22">
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile">

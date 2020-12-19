@@ -53,9 +53,9 @@ class LiveScoreAddScorer extends Component {
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             if (id !== null) {
-                this.props.getliveScoreTeams(id)
+                // this.props.getliveScoreTeams(id);
             } else {
                 history.push('/')
             }
@@ -151,7 +151,8 @@ class LiveScoreAddScorer extends Component {
                                 style={{ width: '100%', height: '39.93px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
-                                    const ScorerId = JSON.parse(option.key)
+                                    let newKey = option.key.split('_');
+                                    const ScorerId = (parseInt(newKey[1]))
                                     this.props.liveScoreClear()
                                     this.props.liveScoreScorerUpdate(ScorerId, "scorerSearch")
                                 }}
@@ -340,6 +341,9 @@ class LiveScoreAddScorer extends Component {
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChange(e)}
                     value={scorerRadioBtn}
+                    style={{
+                        overflowX: 'unset'
+                    }}
                 >
                     <div className="row ml-4" style={{ marginTop: 18 }}>
                         {/* <Radio value="new">{AppConstants.new}</Radio>
@@ -347,18 +351,18 @@ class LiveScoreAddScorer extends Component {
 
                         <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div className="mt-n10 ml-n10 width-50">
+                            <div className="mt-n10 ml-n10 width-50 mt-1">
                                 <Tooltip>
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
                             </div>
                         </div>
 
-                        <div className="d-flex align-items-center ml-n10">
+                        <div className="d-flex align-items-center">
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div className="mt-n10 mt-n10">
+                            <div className="mt-n10 ml-n10 mt-1">
                                 <Tooltip>
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>

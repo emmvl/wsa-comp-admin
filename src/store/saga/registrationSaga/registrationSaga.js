@@ -323,3 +323,37 @@ export function* exportTeamRegistrationsSaga(action) {
     yield call(errorSaga, error)
   }
 }
+
+export function* getMembershipFeeCapListSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getMembershipFeeCapList,action.organisationUniqueKey,action.yearRefId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+export function* updateMembershipFeeCapSaga(action) {
+  try {
+    const result = yield call(AxiosApi.updateMembershipFeeCap,action.organisationUniqueKey,action.yearRefId,action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}

@@ -407,6 +407,24 @@ function clearListAction(payload) {
     };
 }
 
+function getSpectatorListAction(payload, sortBy, sortOrder) {
+    return {
+        type: ApiConstants.API_GET_SPECTATOR_LIST_LOAD,
+        payload,
+        sortBy,
+        sortOrder,
+    };
+}
+
+function registrationResendEmailAction(teamId,userId){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD,
+        teamId,
+        userId
+    } 
+    return action;
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -459,5 +477,7 @@ export {
     getUmpireActivityListAction,
     getBannerCnt,
     updateBannerAction,
-    clearListAction
+    clearListAction,
+    getSpectatorListAction,
+    registrationResendEmailAction
 };

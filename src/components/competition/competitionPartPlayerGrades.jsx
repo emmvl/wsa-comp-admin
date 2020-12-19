@@ -156,7 +156,7 @@ class CompetitionPartPlayerGrades extends Component {
                         <span>{AppConstants.playerGradingMsg}</span>
                     </Tooltip>
                 </div>
-                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100" style={{ marginRight: '2.8%' }}>
+                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100 mr-22">
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile">
@@ -639,10 +639,10 @@ class CompetitionPartPlayerGrades extends Component {
                                                                     </span>
                                                                 </NavLink>
                                                             ) : (
-                                                                <span className="player-grading-player-name-text pointer">
-                                                                    {playerItem.playerName}
-                                                                </span>
-                                                            )}
+                                                                    <span className="player-grading-player-name-text pointer">
+                                                                        {playerItem.playerName}
+                                                                    </span>
+                                                                )}
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-end flex-wrap">
                                                             {/* <div className="col-sm">
@@ -849,10 +849,10 @@ class CompetitionPartPlayerGrades extends Component {
                                                             </span>
                                                         </NavLink>
                                                     ) : (
-                                                        <span className="player-grading-player-name-text pointer">
-                                                            {playerItem.playerName}
-                                                        </span>
-                                                    )}
+                                                            <span className="player-grading-player-name-text pointer">
+                                                                {playerItem.playerName}
+                                                            </span>
+                                                        )}
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-end flex-wrap">
                                                     {/* <div className="col-sm">

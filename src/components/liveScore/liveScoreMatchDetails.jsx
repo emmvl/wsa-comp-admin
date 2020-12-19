@@ -34,7 +34,7 @@ import Loader from '../../customComponents/loader'
 import history from "../../util/history";
 import ValidationConstants from '../../themes/validationConstant';
 import InputWithHead from "../../customComponents/InputWithHead";
-import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
+import { getUserRoleId, checkLivScoreCompIsParent } from 'util/permissions';
 
 import './liveScore.css';
 
@@ -213,7 +213,10 @@ class LiveScoreMatchDetails extends Component {
             periodDuration: null,
             positionDuration: null,
             playedCheckBox: false,
-            userRoleId: getUserRoleId()
+            userRoleId: getUserRoleId(),
+            liveScoreCompIsParent: false,
+            userRole: null,
+            isCompetitionOrganisationId: false
         };
         this.umpireScore_View = this.umpireScore_View.bind(this);
         this.team_View = this.team_View.bind(this);
@@ -221,6 +224,7 @@ class LiveScoreMatchDetails extends Component {
     }
 
     componentDidMount() {
+        this.setLivScoreCompIsParent()
         let isMatchId = this.props.location.state ? this.props.location.state.matchId : null
         let isLineUpEnable = null;
         this.props.getLiveScoreGamePositionsList();
@@ -278,6 +282,39 @@ class LiveScoreMatchDetails extends Component {
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
             }
         }
+
+        // For case of check in toggle switch and borrow button
+
+        let competition = null
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                competition = JSON.parse(getUmpireCompetitonData());
+            } else {
+                history.push('/matchDayCompetitions')
+            }
+        } else {
+            if (getLiveScoreCompetiton()) {
+                competition = JSON.parse(getLiveScoreCompetiton());
+            } else {
+                history.push('/matchDayCompetitions')
+            }
+        }
+        let userRole = this.state.userRoleId === 11 ? true : false;
+        let isCompetitionOrganisationId = false;
+
+        let team1_CompetitionOrganisationId = match.length > 0 ? match[0].team1.competitionOrganisationId : null
+        let competitionOrganisationId = competition.competitionOrganisation ? competition.competitionOrganisation.id : null
+
+
+        if (team1_CompetitionOrganisationId === competitionOrganisationId) {
+            isCompetitionOrganisationId = false
+        } else {
+            isCompetitionOrganisationId = true
+        }
+        this.setState({
+            userRole,
+            isCompetitionOrganisationId
+        })
     }
 
     componentDidUpdate(nextProps) {
@@ -315,6 +352,12 @@ class LiveScoreMatchDetails extends Component {
                 this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
             }
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     getPlayerAttendance = (player, borrowed = false) => {
@@ -502,6 +545,7 @@ class LiveScoreMatchDetails extends Component {
 
         const length = match ? match.length : 0;
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
+        const { liveScoreCompIsParent, userRole, isCompetitionOrganisationId } = this.state
 
         return (
             <div className="p-4">
@@ -523,100 +567,119 @@ class LiveScoreMatchDetails extends Component {
                     <div className="col-sm-12 col-md-8 col-lg-8 pr-5 pl-5 d-flex flex-row justify-content-end w-100">
                         <div className="row align-items-center">
                             <div className="col-sm">
+
                                 <div className="d-flex align-items-center year-select-heading">
                                     <Switch
                                         className="mr-3"
                                         onChange={(checked) => this.handleAttendanceView(checked)}
-                                        disabled={this.state.userRoleId === 11 ? true : false}
+                                        disabled={liveScoreCompIsParent ? (userRole) : (userRole || isCompetitionOrganisationId)}
                                     />
                                     {AppConstants.attendance}
                                 </div>
+
                             </div>
 
-                            <div className="col-sm pt-2">
-                                <div className="w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to={{
-                                        pathname: '/matchDayAddIncident',
-                                        state: {
-                                            matchId: this.state.matchId,
-                                            matchDetails: matchDetails,
-                                            umpireKey: this.state.umpireKey,
-                                            screenName: this.state.screenName
-                                        }
-                                    }}>
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm pt-2">
+                                    <div className="w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to={{
+                                            pathname: '/matchDayAddIncident',
+                                            state: {
+                                                matchId: this.state.matchId,
+                                                matchDetails: matchDetails,
+                                                umpireKey: this.state.umpireKey,
+                                                screenName: this.state.screenName
+                                            }
+                                        }}>
+                                            <Button
+                                                disabled={userRole}
+                                                className="primary-add-comp-form"
+                                                type="primary"
+                                            >
+                                                + {AppConstants.addIncident}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
+
+                            }
+
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm pt-2">
+                                    <div className="w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
-                                            disabled={this.state.userRoleId === 11 ? true : false}
+                                            onClick={() => this.showModal(match[0].livestreamURL)}
                                             className="primary-add-comp-form"
                                             type="primary"
+                                            disabled={userRole}
                                         >
-                                            + {AppConstants.addIncident}
+                                            + {AppConstants.addLiveStream}
                                         </Button>
-                                    </NavLink>
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
-                            <div className="col-sm pt-2">
-                                <div className="w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button
-                                        onClick={() => this.showModal(match[0].livestreamURL)}
-                                        className="primary-add-comp-form"
-                                        type="primary"
-                                        disabled={this.state.userRoleId === 11 ? true : false}
-                                    >
-                                        + {AppConstants.addLiveStream}
-                                    </Button>
-                                </div>
-                            </div>
 
-                            <div className="col-sm pt-2">
-                                <div className="w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to={{
-                                        pathname: "/matchDayAddMatch",
-                                        state: {
-                                            isEdit: true,
-                                            matchId: this.state.matchId,
-                                            key: this.state.key,
-                                            umpireKey: this.state.umpireKey,
-                                            screenName: this.state.screenName
-                                        }
-                                    }}>
-                                        <Button
-                                            disabled={this.state.userRoleId === 11 ? true : false}
-                                            className="primary-add-comp-form"
-                                            type="primary"
-                                        >
-                                            + {AppConstants.edit}
-                                        </Button>
-                                    </NavLink>
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm pt-2">
+                                    <div className="w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink to={{
+                                            pathname: "/matchDayAddMatch",
+                                            state: {
+                                                isEdit: true,
+                                                matchId: this.state.matchId,
+                                                key: this.state.key,
+                                                umpireKey: this.state.umpireKey,
+                                                screenName: this.state.screenName
+                                            }
+                                        }}>
+                                            <Button
+                                                disabled={userRole}
+                                                className="primary-add-comp-form"
+                                                type="primary"
+                                            >
+                                                + {AppConstants.edit}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-sm pt-2">
-                                <div className="full-width d-flex flex-row align-items-center justify-content-end">
-                                    <Tooltip
-                                        className="h-100"
-                                        onMouseEnter={() =>
-                                            this.setState({
-                                                toolTipVisible: !!isMatchStatus,
-                                            })
-                                        }
-                                        onMouseLeave={() =>
-                                            this.setState({ toolTipVisible: false })
-                                        }
-                                        visible={this.state.toolTipVisible}
-                                        title={ValidationConstants.matchDeleteMsg}
-                                    >
-                                        <Button
-                                            className={isMatchStatus ? "disable-button-style" : "primary-add-comp-form"}
-                                            type="primary"
-                                            disabled={(isMatchStatus || this.state.userRoleId === 11 ? true : false)}
-                                            htmlType="submit"
-                                            onClick={() => this.showDeleteConfirm(this.state.matchId)}
+                            }
+
+
+                            {
+                                liveScoreCompIsParent &&
+                                <div className="col-sm pt-2">
+                                    <div className="full-width d-flex flex-row align-items-center justify-content-end">
+                                        <Tooltip
+                                            className="h-100"
+                                            onMouseEnter={() =>
+                                                this.setState({
+                                                    toolTipVisible: !!isMatchStatus,
+                                                })
+                                            }
+                                            onMouseLeave={() =>
+                                                this.setState({ toolTipVisible: false })
+                                            }
+                                            visible={this.state.toolTipVisible}
+                                            title={ValidationConstants.matchDeleteMsg}
                                         >
-                                            {AppConstants.delete}
-                                        </Button>
-                                    </Tooltip>
+                                            <Button
+                                                className={isMatchStatus ? "disable-button-style" : "primary-add-comp-form"}
+                                                type="primary"
+                                                disabled={(isMatchStatus || userRole)}
+                                                htmlType="submit"
+                                                onClick={() => this.showDeleteConfirm(this.state.matchId)}
+                                            >
+                                                {AppConstants.delete}
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -2459,6 +2522,8 @@ class LiveScoreMatchDetails extends Component {
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
         const length = match ? match.length : 0;
 
+        const { liveScoreCompIsParent, userRole, isCompetitionOrganisationId } = this.state
+
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">
                 <div className={`${this.state.teamAttendance ? 'col-12' : 'col-6 col-md-6 col-sm-12'} d-flex align-content-center flex-column`}>
@@ -2486,15 +2551,17 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                        // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
+                                    // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
                                 )}
+
                                 <Button
                                     className="primary-add-comp-form"
                                     type="primary"
                                     onClick={() => this.handleAddPlayerModal('team1')}
+                                    disabled={liveScoreCompIsParent ? (userRole) : (userRole || isCompetitionOrganisationId)}
                                 >
                                     + {AppConstants.borrowPlayer}
                                 </Button>
@@ -2546,7 +2613,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                        // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
+                                    // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2555,6 +2622,7 @@ class LiveScoreMatchDetails extends Component {
                                     className="primary-add-comp-form"
                                     type="primary"
                                     onClick={() => this.handleAddPlayerModal('team2')}
+                                    disabled={liveScoreCompIsParent ? (userRole) : (userRole || isCompetitionOrganisationId)}
                                 >
                                     + {AppConstants.borrowPlayer}
                                 </Button>
@@ -2566,16 +2634,16 @@ class LiveScoreMatchDetails extends Component {
                                     {this.teamPlayersStatus(team2PlayersData, 'team2', match[0] ?.team2 ?.id)}
                                 </div>
                             ) : (
-                                <div className="col-12">
-                                    <Table
-                                        className="home-dashboard-table pt-2"
-                                        columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                        dataSource={team2PlayersData}
-                                        pagination={false}
-                                        scroll={{ x: '100%' }}
-                                    />
-                                </div>
-                            )}
+                                    <div className="col-12">
+                                        <Table
+                                            className="home-dashboard-table pt-2"
+                                            columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                            dataSource={team2PlayersData}
+                                            pagination={false}
+                                            scroll={{ x: '100%' }}
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                     {this.footerView('team2', match[0] ?.team2 ?.id)}

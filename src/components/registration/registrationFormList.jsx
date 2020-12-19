@@ -89,6 +89,23 @@ const columns = [
 
     },
     {
+        title: 'Form',
+        dataIndex: 'userRegistrationUrl',
+        key: 'userRegistrationUrl',
+        render: (userRegistrationUrl, record) => {
+            return (
+                record.status == "Published" &&
+                <span className="d-flex justify-content-center w-50">
+                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank'>
+                        <img className="dot-image pointer"
+                            src={AppImages.docsIcon}
+                            alt="" width="25" height="25" />
+                    </a>
+                </span>)
+        }
+        ,
+    },
+    {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
@@ -286,6 +303,7 @@ class RegistrationFormList extends Component {
                         current={dashboardState.regDashboardListPage}
                         total={total}
                         onChange={(page) => this.handleMembershipTableList(page, this.state.yearRefId)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

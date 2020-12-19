@@ -43,7 +43,7 @@ import {
     liveScoreRoundListAction,
 } from '../../store/actions/LiveScoreAction/liveScoreRoundAction';
 import history from "../../util/history";
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getOrganisationData, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { getVenuesTypeAction } from "../../store/actions/appAction";
 import Loader from '../../customComponents/loader';
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
@@ -81,6 +81,8 @@ class LiveScoreAddMatch extends Component {
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             sourceIdAvailable: false,
             modalVisible: false,
+            compOrgId: 0,
+            isCompParent: false
         };
         this.props.clearMatchAction();
         this.formRef = React.createRef();
@@ -89,7 +91,7 @@ class LiveScoreAddMatch extends Component {
     openModel = (matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, umpireKey, umpireData, scorerData, recordUmpireType, screenName) => {
         const this_ = this;
         confirm({
-            title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend making any changes in the Draws screen. Proceed anyway?',
+            title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend you make all match changes in the Competition Management Draws screen. Do you want to Proceed anyway?',
             okText: 'OK',
             okType: 'primary',
             cancelText: 'Cancel',
@@ -102,12 +104,19 @@ class LiveScoreAddMatch extends Component {
         });
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.getRefBadgeData(this.props.appstate.accreditation)
         if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey === 'umpire') {
-                const { id, scoringType, sourceId } = JSON.parse(getUmpireCompetitonData());
-                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId });
+                let compData = JSON.parse(getUmpireCompetitonData())
+                let orgItem = await getOrganisationData();
+                let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+                let compOrg_Id = compData ? compData.organisationId : 0
+                let isCompParent = userOrganisationId === compOrg_Id
+                this.setState({ isCompParent });
+                const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId, compOrgId: compOrgId });
 
                 if (id !== null) {
                     this.props.getCompetitionVenuesList(id, "");
@@ -116,17 +125,26 @@ class LiveScoreAddMatch extends Component {
                     this.props.liveScoreClubListAction(id);
                     this.props.umpireListAction({
                         refRoleId: JSON.stringify([15, 20]),
-                        entityTypes: entityTypes('COMPETITION'),
+                        entityTypes: isCompParent ? 1 : 6,
                         compId: id,
                         offset: null,
+                        compOrgId: compOrgId
                     });
                     this.setState({ loadvalue: true, allDisabled: true });
                 } else {
                     history.push('/matchDayCompetitions');
                 }
             } else if (getLiveScoreCompetiton()) {
-                const { id, scoringType, sourceId } = JSON.parse(getLiveScoreCompetiton());
-                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId });
+                const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
+                let compData = JSON.parse(getLiveScoreCompetiton())
+                let orgItem = await getOrganisationData();
+                let userOrganisationId = orgItem ? orgItem.organisationId : 0;
+                let compOrg_Id = compData ? compData.organisationId : 0
+                let isCompParent = userOrganisationId === compOrg_Id
+                this.setState({ isCompParent });
+
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+                this.setState({ compId: id, scoringType, sourceIdAvailable: !!sourceId, compOrgId: compOrgId });
 
                 this.props.getCompetitionVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id);
@@ -134,9 +152,10 @@ class LiveScoreAddMatch extends Component {
                 this.props.liveScoreClubListAction(id);
                 this.props.umpireListAction({
                     refRoleId: JSON.stringify([15, 20]),
-                    entityTypes: entityTypes('COMPETITION'),
+                    entityTypes: isCompParent ? 1 : 6,
                     compId: id,
                     offset: null,
+                    compOrgId: compOrgId
                 });
                 this.setState({ loadvalue: true, allDisabled: false });
             } else {
@@ -186,7 +205,7 @@ class LiveScoreAddMatch extends Component {
                     // const { id } = JSON.parse(getLiveScoreCompetiton())
                     const division = this.props.liveScoreMatchState.matchData.divisionId;
                     this.setInitialFieldValue(addEditMatch, start_date, start_time, displayTime);
-                    this.props.getliveScoreTeams(this.state.compId, division);
+                    this.props.getliveScoreTeams(this.state.compId, division, this.state.compOrgId);
                     this.props.liveScoreRoundListAction(this.state.compId, division);
                     this.setState({ loadvalue: false });
                 }
@@ -548,7 +567,7 @@ class LiveScoreAddMatch extends Component {
         this.props.liveScoreUpdateMatchAction(divisionId, 'divisionId');
         this.setState({ selectedDivision: divisionId });
         // const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.getliveScoreTeams(this.state.compId, divisionId);
+        this.props.getliveScoreTeams(this.state.compId, divisionId, this.state.compOrgId);
         this.props.liveScoreRoundListAction(this.state.compId, divisionId);
     }
 
@@ -856,77 +875,77 @@ class LiveScoreAddMatch extends Component {
                             </div>
                         </div>
                     ) : (
-                        recordUmpireType === 'NAMES' && (
-                            <div>
-                                <div className="row">
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            type="text"
-                                            heading={AppConstants.umpire1Name}
-                                            // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
-                                            // value={addEditMatch.umpire1}
-                                            onChange={(e) => {
-                                                this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1TextField');
-                                            }}
-                                            value={umpire1TextField || undefined}
-                                            placeholder={AppConstants.enterUmpire1name}
-                                        />
+                            recordUmpireType === 'NAMES' && (
+                                <div>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                type="text"
+                                                heading={AppConstants.umpire1Name}
+                                                // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
+                                                // value={addEditMatch.umpire1}
+                                                onChange={(e) => {
+                                                    this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1TextField');
+                                                }}
+                                                value={umpire1TextField || undefined}
+                                                placeholder={AppConstants.enterUmpire1name}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                heading={AppConstants.umpire2Name}
+                                                // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
+                                                // value={addEditMatch.umpire2}
+                                                onChange={(e) => {
+                                                    this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2TextField');
+                                                }}
+                                                value={umpire2TextField}
+                                                placeholder={AppConstants.enterUmpire2name}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            heading={AppConstants.umpire2Name}
-                                            // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
-                                            // value={addEditMatch.umpire2}
-                                            onChange={(e) => {
-                                                this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2TextField');
-                                            }}
-                                            value={umpire2TextField}
-                                            placeholder={AppConstants.enterUmpire2name}
-                                        />
-                                    </div>
-                                </div>
 
-                                <div className="row">
-                                    <div className="col-sm">
-                                        <InputWithHead heading={AppConstants.umpire1Club} />
-                                        <Select
-                                            // mode='multiple'
-                                            className="w-100"
-                                            style={{ paddingRight: 1, minWidth: 182 }}
-                                            // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
-                                            onChange={(umpire1Orag) => {
-                                                this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag');
-                                            }}
-                                            value={umpire1Orag || undefined}
-                                            placeholder="Select Umpire 1 Organisation"
-                                        >
-                                            {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                <Option key={`umpire1Org_${item.id}`} value={item.id}>{item.name}</Option>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                    <div className="col-sm">
-                                        <InputWithHead heading={AppConstants.umpire2Club} />
-                                        <Select
-                                            // mode='multiple'
-                                            className="w-100"
-                                            style={{ paddingRight: 1, minWidth: 182 }}
-                                            // onChange={(umpire2Club) => this.setUmpireClub(umpire2Club)}
-                                            onChange={(umpire2Orag) => {
-                                                this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag');
-                                            }}
-                                            value={umpire2Orag || undefined}
-                                            placeholder="Select Umpire 2 Organisation"
-                                        >
-                                            {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                <option key={item.id} value={item.id}>{item.name}</option>
-                                            ))}
-                                        </Select>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <InputWithHead heading={AppConstants.umpire1Club} />
+                                            <Select
+                                                // mode='multiple'
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
+                                                // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
+                                                onChange={(umpire1Orag) => {
+                                                    this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag');
+                                                }}
+                                                value={umpire1Orag || undefined}
+                                                placeholder="Select Umpire 1 Organisation"
+                                            >
+                                                {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                                    <Option key={`umpire1Org_${item.id}`} value={item.id}>{item.name}</Option>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead heading={AppConstants.umpire2Club} />
+                                            <Select
+                                                // mode='multiple'
+                                                className="w-100"
+                                                style={{ paddingRight: 1, minWidth: 182 }}
+                                                // onChange={(umpire2Club) => this.setUmpireClub(umpire2Club)}
+                                                onChange={(umpire2Orag) => {
+                                                    this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag');
+                                                }}
+                                                value={umpire2Orag || undefined}
+                                                placeholder="Select Umpire 2 Organisation"
+                                            >
+                                                {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                                    <option key={item.id} value={item.id}>{item.name}</option>
+                                                ))}
+                                            </Select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    )}
+                            )
+                        )}
 
                 <div className="row">
                     <div className="col-sm-6">
@@ -1023,7 +1042,7 @@ class LiveScoreAddMatch extends Component {
         return (
             <div>
                 <Checkbox
-                    className="single-checkbox mt-5 d-flex flex-column justify-content-center"
+                    className="single-checkbox mt-5  justify-content-center"
                     onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.checked, 'isFinals')}
                     checked={addEditMatch.isFinals}
                     disabled={this.state.umpireKey === 'umpire'}

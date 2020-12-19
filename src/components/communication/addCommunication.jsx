@@ -82,7 +82,7 @@ class AddCommunication extends Component {
             screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
@@ -116,11 +116,11 @@ class AddCommunication extends Component {
             const { id, organisationId } = JSON.parse(getLiveScoreCompetiton())
             if (this.state.screenKey === 'stateWideMsg') {
                 this.props.getliveScoreScorerList(organisationId, 4)
-                this.props.liveScoreManagerListAction(3, 1, organisationId)
+                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, organisationId)
             } else {
 
                 this.props.getliveScoreScorerList(id, 4)
-                this.props.liveScoreManagerListAction(3, 1, 1)
+                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, 1)
             }
         } else {
             this.props.getliveScoreScorerList(1, 4)
@@ -485,7 +485,7 @@ class AddCommunication extends Component {
             <div className="content-view pt-4">
                 <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
                     <InputWithHead
-                        required="required-field pt-0 pb-1"
+                        required="required-field pt-0"
                         heading={AppConstants.newsTitle}
                         placeholder={AppConstants.enterNewsTitle}
                         name="newsTitle"
@@ -497,7 +497,7 @@ class AddCommunication extends Component {
                     />
                 </Form.Item>
                 <InputWithHead
-                    required="pb-0"
+                    // required=""
                     heading={AppConstants.newsBody}
                 // value={editData.body}
                 />
@@ -506,7 +506,7 @@ class AddCommunication extends Component {
 
                 <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
                     <InputWithHead
-                        required="required-field pb-1 pt-4"
+                        required="required-field pt-4"
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
@@ -516,23 +516,6 @@ class AddCommunication extends Component {
                         })}
                     />
                 </Form.Item>
-
-                <InputWithHead required="pb-1" heading={AppConstants.recipients} />
-                <div>
-                    <Select
-                        placeholder={AppConstants.recipientSelection}
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                        onChange={recipientSelection => this.setRecipientData(recipientSelection, 'recipients')}
-                        value={editData.recipients}
-                    >
-                        <Option value="All Managers">All Managers</Option>
-                        <Option value="All Scorers">All Scorers</Option>
-                        <Option value="All Managers and Scorers">All Managers and Scorers</Option>
-                        <Option value="All Users">All Users</Option>
-                        <Option value="Individual Manager">Individual Manager</Option>
-                        <Option value="Individual Scorer">Individual Scorer</Option>
-                    </Select>
-                </div>
                 {this.state.recipientSelection === "Individual Manager" && this.managerView()}
                 {this.state.recipientSelection === "Individual Scorer" && this.scorerView()}
                 <div className="row">
@@ -623,7 +606,7 @@ class AddCommunication extends Component {
                 {/* News expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryDate} />
+                        <InputWithHead heading={AppConstants.newsExpiryDate} />
                         <DatePicker
                             // size="large"
                             style={{ width: '100%' }}
@@ -636,7 +619,7 @@ class AddCommunication extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryTime} />
+                        <InputWithHead  heading={AppConstants.newsExpiryTime} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}
@@ -705,7 +688,7 @@ class AddCommunication extends Component {
             affiliateTo,
             onLoadSearch
         } = this.props.communicationModuleState;
-        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
+        let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         let affiliateToData = isArrayNotEmpty(affiliateTo.affiliatedTo) ? affiliateTo.affiliatedTo : [];
         let userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
         let uniqueValues = [];
@@ -909,7 +892,6 @@ class AddCommunication extends Component {
             let expiryTime = moment(data.expire_time).format("HH:mm")
             let postDate = moment(expiry__Date + " " + expiryTime);
 
-            // let postDate = experyDate + " " + expiryTime + " " + "UTC"
             let formatedDate = new Date(postDate).toISOString()
             liveScoreNewsState.addEditNews.news_expire_date = formatedDate
         }
@@ -921,13 +903,7 @@ class AddCommunication extends Component {
             }
 
             let bodyDetails = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-            // let bodyText = newstringArr.join("")
             liveScoreNewsState.addEditNews.body = bodyDetails
-
-            // let bodyText = newstringArr.join(`<br/>`)
-            // let bodyText = JSON.stringify(data.newsBody)
-            // let bodyText = newstringArr.join("")
-            // liveScoreNewsState.addEditNews.body = bodyText
         }
 
         let editData = liveScoreNewsState.addEditNews;
@@ -967,7 +943,6 @@ class AddCommunication extends Component {
                     <div className="row">
                         <div className="col-sm pl-3">
                             <div className="reg-add-save-button">
-                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/matchDayNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
                                     to={{
                                         pathname: "/CommunicationList",

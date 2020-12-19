@@ -177,7 +177,7 @@ class OrderSummary extends Component {
     }
 
     referenceCalls = () => {
-        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
+        let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
         this.props.getAffiliateToOrganisationAction(organisationUniqueKey);
         this.props.getOnlyYearListAction();
     }
@@ -231,7 +231,7 @@ class OrderSummary extends Component {
     // on change search text
     onChangeSearchText = async (e) => {
         let value = e.target.value;
-        await this.setState({ searchText: e.target.value,offset: 0 })
+        await this.setState({ searchText: e.target.value, offset: 0 })
         if (value == null || value == "") {
             this.handleTableList(1);
         }
@@ -333,8 +333,8 @@ class OrderSummary extends Component {
         let uniqueValues = [];
         if (affiliateToData.affiliatedTo != undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null
             }
             uniqueValues.push(obj);
             let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
@@ -469,6 +469,7 @@ class OrderSummary extends Component {
                         current={orderSummaryCurrentPage}
                         total={orderSummaryTotalCount}
                         onChange={(page) => this.handleTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

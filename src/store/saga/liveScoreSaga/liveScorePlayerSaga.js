@@ -99,7 +99,7 @@ function* liveScoreAddEditPlayerSaga(action) {
 // Match Import
 function* liveScorePlayerImportSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile);
+        const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile, action.key);
 
         if (result.status === 1) {
             yield put({
@@ -177,6 +177,8 @@ function* getPlayerListPaginationSaga(action) {
             action.search,
             action.sortBy,
             action.sortOrder,
+            action.isParent,
+            action.competitionOrganisationId
         );
 
         if (result.status === 1) {

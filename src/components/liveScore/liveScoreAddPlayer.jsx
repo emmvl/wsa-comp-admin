@@ -59,8 +59,9 @@ class LiveScoreAddPlayer extends Component {
 
         if (screenKey == 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id } = JSON.parse(getUmpireCompetitonData())
-                this.props.getliveScoreTeams(id)
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getUmpireCompetitonData())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.props.getliveScoreTeams(id, null, compOrgId)
 
                 if (this.state.isEdit) {
                     if (this.props.location.state.screen === 'editTeam') {
@@ -98,8 +99,9 @@ class LiveScoreAddPlayer extends Component {
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.props.getliveScoreTeams(id)
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.props.getliveScoreTeams(id, null, compOrgId)
 
                 if (this.state.isEdit) {
                     if (this.props.location.state.screen === 'editTeam') {
@@ -199,7 +201,7 @@ class LiveScoreAddPlayer extends Component {
                             <InputWithHead
                                 auto_complete='new-password'
                                 type='text'
-                                required="required-field pb-0"
+                                required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
                                 onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), 'firstName')}
@@ -213,7 +215,7 @@ class LiveScoreAddPlayer extends Component {
                         <Form.Item name='lastName' rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
                                 auto_complete="off"
-                                required="required-field pb-0"
+                                required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.enterLastName}
                                 onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), 'lastName')}

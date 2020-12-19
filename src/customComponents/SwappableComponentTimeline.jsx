@@ -1,4 +1,3 @@
-import { ConsoleSqlOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
 import "./swappable.css";
 
@@ -63,21 +62,7 @@ class Swappable extends Component {
     }
 
     render() {
-        const dropZoneStyle = {
-            width: '50px',
-            minHeight: '50px',
-            //   padding: '10px',
-            border: '1px solid #aaaaaa'
-        };
-
-        const draggableStyle = {
-            width: '50px',
-            height: '50px',
-            //   padding: '10px',
-            border: '1px solid red'
-        };
-
-        const { id, content, swappable, customFunc } = this.props;
+        const { id, swappable, customFunc } = this.props;
         const dropzoneId = 'drop' + id;
         // const dragableId = 'drag' + id;
         const dragableId = id;

@@ -11,10 +11,10 @@ function getPositionTrackListData(data, reporting) {
 //// For All Games Column
 function getPositionTrackListObject(data, reporting) {
     return {
-        teamName: data.team.name,
-        teamId: data.team.id,
-        firstName: data.player.firstName,
-        lastName: data.player.lastName,
+        teamName: data?.team?.name,
+        teamId: data?.team?.id,
+        firstName: data?.player?.firstName,
+        lastName: data?.player?.lastName,
         gs: getPointsValue(data.gs, data.play, reporting),
         ga: getPointsValue(data.ga, data.play, reporting),
         wa: getPointsValue(data.wa, data.play, reporting),
@@ -56,11 +56,11 @@ function getPositionTrackMatchListData(data, reporting) {
 function getPositionTrackMatchListObject(data, reporting) {
 
     return {
-        matchId: data.match.id,
-        teamName: data.team.name,
-        teamId: data.team.id,
-        firstName: data.player.firstName,
-        lastName: data.player.lastName,
+        matchId: data?.match?.id,
+        teamName: data?.team?.name,
+        teamId: data?.team?.id,
+        firstName: data?.player?.firstName,
+        lastName: data?.player?.lastName,
         // gs: reporting === 'PERCENT' ? getPointsValue(data.gs, data.play, reporting) : data.gs,
         // ga: reporting === 'PERCENT' ? getPointsValue(data.ga, data.play, reporting) : data.ga,
         // wa: reporting === 'PERCENT' ? getPointsValue(data.wa, data.play, reporting) : data.wa,

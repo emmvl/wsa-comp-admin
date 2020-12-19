@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal, Tag } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
 import moment from "moment";
@@ -60,6 +60,10 @@ const payments = [
         paymentType: "Direct Debit",
         paymentTypeId: 2,
     },
+    {
+        paymentType: "Voucher",
+        paymentTypeId : 3,
+    }
 ];
 
 const columns = [
@@ -176,6 +180,16 @@ const columns = [
         ),
     },
     {
+        title: "Due per Match",
+        dataIndex: "duePenMatch",
+        key: "duePenMatch"
+    },
+    {
+        title: "Due per Instalment",
+        dataIndex: "duePerInstalment",
+        key: "duePerInstalment"
+    },
+    {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
@@ -232,7 +246,7 @@ class Registration extends Component {
 
         this.state = {
             year: "2020",
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: "-1",
             dobFrom: "-1",
@@ -252,7 +266,9 @@ class Registration extends Component {
             cashTranferType: 1,
             amount: null,
             selectedRow: null,
-            loading: false
+            loading: false,
+            teamName: null,
+            teamId : -1
         }
 
         this_Obj = this;
@@ -311,7 +327,12 @@ class Registration extends Component {
 
                 this.handleRegTableList(page);
             } else {
+                let teamName = this.props.location.state ? this.props.location.state.teamName : null;
+                let teamId = this.props.location.state ? this.props.location.state.teamId : -1;
+                this.setState({teamName: teamName, teamId: teamId})
+                setTimeout(()=> {
                 this.handleRegTableList(1);
+                }, 300)
             }
         } else {
             history.push("/");
@@ -344,7 +365,8 @@ class Registration extends Component {
             regFrom,
             regTo,
             sortBy,
-            sortOrder
+            sortOrder,
+            teamId,
         } = this.state;
 
         let filter = {
@@ -363,6 +385,7 @@ class Registration extends Component {
             paymentId,
             paymentStatusRefId,
             searchText,
+            teamId,
             // regFrom: (regFrom !== "-1" && !isNaN(regFrom)) ? moment(regFrom).format("YYYY-MM-DD") : "-1",
             regFrom: (regFrom !== "-1") ? moment(regFrom).format("YYYY-MM-DD") : "-1",
             // regTo: (regTo !== "-1" && !isNaN(regTo)) ? moment(regTo).format("YYYY-MM-DD") : "-1",
@@ -483,6 +506,13 @@ class Registration extends Component {
         }
     }
 
+    clearFilterByTeamId = () => {
+        this.setState({teamName: null, teamId: -1})
+        setTimeout(() => {
+        this.handleRegTableList(1);   
+        }, 300)
+    }
+
     headerView = () => (
         <div className="comp-player-grades-header-view-design" style={{ marginBottom: -10 }}>
             <div className="row" style={{ marginRight: 42 }}>
@@ -517,6 +547,18 @@ class Registration extends Component {
                 <div className="row" style={{ marginRight: 42 }}>
                     <div className="col-sm-9 padding-right-reg-dropdown-zero">
                         <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2">
+                            {this.state.teamName && 
+                                <div className="col-sm pt-1 align-self-center">
+                                    <Tag
+                                        closable
+                                        color="volcano"
+                                        style={{ paddingTop: 3, height: 30 }}
+                                        onClose={() => { this.clearFilterByTeamId() }}
+                                    >
+                                        {this.state.teamName}
+                                    </Tag>
+                                </div>
+                            }
                             <div className="year-select-heading" style={{ width: 90 }}>
                                 {AppConstants.status}
                             </div>
@@ -562,8 +604,8 @@ class Registration extends Component {
         let uniqueValues = [];
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
-                organisationId: getOrganisationData().organisationUniqueKey,
-                name: getOrganisationData().name,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                name: getOrganisationData() ? getOrganisationData().name : null,
             };
 
             uniqueValues.push(obj);
@@ -863,6 +905,7 @@ class Registration extends Component {
                         current={userRegistrationState.userRegDashboardListPage}
                         total={total}
                         onChange={this.handleRegTableList}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -889,15 +932,15 @@ class Registration extends Component {
                     onChange={(e) => { this.setState({ cashTranferType: e.target.value }) }}
                 >
                     <Radio value={1}>{AppConstants.fullCashAmount}</Radio>
-                    <Radio value={2}>{AppConstants.partialCashAmount}</Radio>
+                    {/* <Radio value={2}>{AppConstants.partialCashAmount}</Radio> */}
 
-                    {this.state.cashTranferType == 2 && (
+                    {/* {this.state.cashTranferType == 2 && (
                         <InputWithHead
                             placeholder={AppConstants.amount}
                             value={this.state.amount}
                             onChange={(e) => this.setState({ amount: e.target.value })}
                         />
-                    )}
+                    )} */}
                 </Radio.Group>
             </Modal>
         )

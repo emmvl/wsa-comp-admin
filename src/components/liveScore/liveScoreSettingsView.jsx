@@ -33,7 +33,7 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
@@ -75,7 +75,7 @@ class LiveScoreSettingsView extends Component {
 
     componentDidMount() {
         localStorage.setItem("regInvitees", "true")
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.onInviteeSearch('', 3)
@@ -165,6 +165,18 @@ class LiveScoreSettingsView extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
             const imgData = URL.createObjectURL(data.files[0])
             this.props.onChangeSettingForm({ key: 'competitionLogo', data: data.files[0] })
@@ -345,7 +357,7 @@ class LiveScoreSettingsView extends Component {
         formData.append('gamesBorrowedThreshold', gamesBorrowedThreshold)
         formData.append('linkedCompetitionId', linkedCompetitionId)
         formData.append('yearRefId', yearRefId)
-        formData.append('isInvitorsChanged', selectionValue)
+        formData.append('isInvitorsChanged', selectionValue.toString())
         if (attendenceRecordingTime) {
             formData.append('attendanceSelectionTime', attendenceRecordingTime)
         }
@@ -523,7 +535,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name='competition_name' rules={[{ required: true, message: ValidationConstants.competitionField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field "
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => {
@@ -546,7 +558,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name="short_name" rules={[{ required: true, message: ValidationConstants.shortField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field "
                         heading={AppConstants.short_Name}
                         placeholder={AppConstants.short_Name}
                         name="shortName"
@@ -612,11 +624,14 @@ class LiveScoreSettingsView extends Component {
                             </Checkbox>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 {/* venue multi selection */}
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field "
                     heading={AppConstants.venues}
                 />
                 <div>
@@ -700,7 +715,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Record Umpire dropdown view */}
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field"
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.recordUmpireMsg}
                     marginTop={5}
@@ -733,7 +748,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            required="required-field pb-1"
+                            required="required-field"
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.recordMsg}
                             marginTop={5}
@@ -759,7 +774,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            required="required-field pb-1"
+                            required="required-field"
                             marginTop={5}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.reportMsg}
@@ -791,7 +806,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._days}
                             placeholder={AppConstants._days}
@@ -804,7 +819,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._hours}
                             placeholder={AppConstants._hours}
@@ -818,7 +833,7 @@ class LiveScoreSettingsView extends Component {
 
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._minutes}
                             placeholder={AppConstants._minutes}
@@ -833,7 +848,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Line up selection */}
                 <Checkbox
-                    className="single-checkbox pt-5 d-flex flex-column justify-content-center"
+                    className="single-checkbox pt-5 justify-content-center"
                     onChange={(e) => this.onChnageLineUpSelection(e.target.checked, record1)}
                     // onChange={(e) => this.props.onChangeSettingForm({ key: "lineupSelection", data: e.target.checked })}
                     checked={lineupSelection}
@@ -932,7 +947,7 @@ class LiveScoreSettingsView extends Component {
 
                 <div style={{ marginTop: 20 }}>
                     <Checkbox
-                        className="single-checkbox d-flex flex-column justify-content-center"
+                        className="single-checkbox  justify-content-center"
                         onChange={(e) => this.props.onChangeSettingForm({
                             key: "premierCompLink",
                             data: e.target.checked
@@ -969,12 +984,15 @@ class LiveScoreSettingsView extends Component {
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={e => this.competition_format(e)}
+                            style={{
+                                overflowX: 'unset'
+                            }}
                         // value={this.props.liveScoreSetting.form.scoring}
                         >
                             <div className="row ml-2 mt-0">
                                 <div className="d-flex align-items-center">
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="SINGLE">{AppConstants.single}</Radio>
-                                    <div className="mt-n10 ml-n10">
+                                    <div className="mt-n10 ml-n10 mt-1">
                                         <Tooltip>
                                             <span>{AppConstants.singleScoringMsg}</span>
                                         </Tooltip>
@@ -983,7 +1001,7 @@ class LiveScoreSettingsView extends Component {
 
                                 <div className="d-flex align-items-center" style={{ marginLeft: 10 }}>
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="50_50">50/50</Radio>
-                                    <div className="mt-n10 mt-n10">
+                                    <div className="mt-n10 ml-n10 mt-1">
                                         <Tooltip>
                                             <span>{AppConstants.fiftyScoringMsg}</span>
                                         </Tooltip>
@@ -999,7 +1017,7 @@ class LiveScoreSettingsView extends Component {
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.timerMsg}
                     marginTop={5}
-                    required="required-field pb-1"
+                    required="required-field"
                     heading={AppConstants.timer}
                 />
                 {/* <div className="contextualHelp-RowDirection">
@@ -1032,7 +1050,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={0} heading={AppConstants.buzzer} />
                 <div className="row mt-0 ml-1">
                     <Checkbox
-                        className="single-checkbox d-flex flex-column justify-content-center"
+                        className="single-checkbox d-flex justify-content-center"
                         onChange={(e) => this.props.onChangeSettingForm({
                             key: "buzzerEnabled",
                             data: e.target.checked

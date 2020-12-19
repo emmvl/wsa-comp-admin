@@ -347,24 +347,24 @@ const columnsInvite = [
                             <NavLink
                                 to={{
                                     pathname: "/matchDayAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
+                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
                                 }}
                             >
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
                     ) : (
-                        <Menu.Item key="2">
-                            <NavLink
-                                to={{
-                                    pathname: "/matchDayAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
-                                }}
-                            >
-                                <span>Edit</span>
-                            </NavLink>
-                        </Menu.Item>
-                    )}
+                            <Menu.Item key="2">
+                                <NavLink
+                                    to={{
+                                        pathname: "/matchDayAddMatch",
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
+                                    }}
+                                >
+                                    <span>Edit</span>
+                                </NavLink>
+                            </Menu.Item>
+                        )}
                 </Menu.SubMenu>
             </Menu>
         ),
@@ -579,23 +579,23 @@ const columns = [
                         <Menu.Item key="1">
                             <NavLink to={{
                                 pathname: "/matchDayAddMatch",
-                                state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
+                                state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" }
                             }}>
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
                     ) : (
-                        <Menu.Item key="2">
-                            <NavLink
-                                to={{
-                                    pathname: "/matchDayAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
-                                }}
-                            >
-                                <span>Edit</span>
-                            </NavLink>
-                        </Menu.Item>
-                    )}
+                            <Menu.Item key="2">
+                                <NavLink
+                                    to={{
+                                        pathname: "/matchDayAddMatch",
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" }
+                                    }}
+                                >
+                                    <span>Edit</span>
+                                </NavLink>
+                            </Menu.Item>
+                        )}
                 </Menu.SubMenu>
             </Menu>
         ),
@@ -618,12 +618,13 @@ class UmpireDashboard extends Component {
             compArray: [],
             competitionObj: null,
             liveScoreUmpire: (props.location && props.location.state && props.location.state.liveScoreUmpire) ? props.location.state.liveScoreUmpire : null,
+            isParticipateInCompetition: (props.location && props.location.state && props.location.state.isParticiapte) ? props.location.state.isParticiapte : false,
             round: "All",
             offsetData: 0,
             sortBy: null,
             sortOrder: null,
-        };
 
+        };
         this_obj = this;
     }
 
@@ -646,9 +647,9 @@ class UmpireDashboard extends Component {
 
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
-            let orgId = getOrganisationData().organisationId;
+            let orgId = getOrganisationData() ? getOrganisationData().organisationId : null;
             this.setState({ loading: true, orgId });
-            this.props.umpireCompetitionListAction(null, null, organisationId);
+            this.props.umpireCompetitionListAction(null, null, organisationId, null, null, null, true, this.state.isParticipateInCompetition);
         } else {
             history.push("/");
         }
@@ -753,12 +754,12 @@ class UmpireDashboard extends Component {
                 screenKey: "umpire",
                 screen: "/umpireDashboard",
             });
-        // } else if (record.matchUmpiresId) {
-        //     history.push("/userPersonal", {
-        //         userId: record.matchUmpiresId,
-        //         screenKey: "umpire",
-        //         screen: "/umpireDashboard",
-        //     });
+            // } else if (record.matchUmpiresId) {
+            //     history.push("/userPersonal", {
+            //         userId: record.matchUmpiresId,
+            //         screenKey: "umpire",
+            //         screen: "/umpireDashboard",
+            //     });
         } else {
             // message.config({ duration: 1.5, maxCount: 1 });
             // message.warn(ValidationConstants.umpireMessage);
@@ -818,6 +819,7 @@ class UmpireDashboard extends Component {
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
                             current={currentPage}
+                            showSizeChanger={false}
                         />
                     </div>
                 </div>
@@ -943,81 +945,87 @@ class UmpireDashboard extends Component {
         this.props.exportFilesAction(url);
     };
 
-    headerView = () => (
-        <div className="comp-player-grades-header-drop-down-view mt-4">
-            <div className="fluid-width">
-                <div className="row">
-                    <div className="col-sm pt-1 d-flex align-content-center">
-                        <span className="form-heading">
-                            {AppConstants.dashboard}
-                        </span>
-                    </div>
+    headerView = () => {
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-4">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm pt-1 d-flex align-content-center">
+                            <span className="form-heading">
+                                {AppConstants.dashboard}
+                            </span>
+                        </div>
 
-                    <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
-                        <div className="row">
-                            {/*
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/addUmpire" className="text-decoration-none">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.addUmpire}
-                                        </Button>
-                                    </NavLink>
-                                </div>
-                            </div>
-                            */}
-
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button
-                                        type="primary"
-                                        className="primary-add-comp-form"
-                                        onClick={this.onExport}
-                                    >
-                                        <div className="row">
-                                            <div className="col-sm">
-                                                <img
-                                                    className="export-image"
-                                                    src={AppImages.export}
-                                                    alt=""
-                                                />
-                                                {AppConstants.export}
-                                            </div>
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
+                            <div className="row">
+                                {/*
+                                    <div className="col-sm pt-1">
+                                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                            <NavLink to="/addUmpire" className="text-decoration-none">
+                                                <Button className="primary-add-comp-form" type="primary">
+                                                    + {AppConstants.addUmpire}
+                                                </Button>
+                                            </NavLink>
                                         </div>
-                                    </Button>
-                                </div>
-                            </div>
+                                    </div>
+                                    */}
 
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink
-                                        className="text-decoration-none"
-                                        to={{
-                                            pathname: "/umpireImport",
-                                            state: { screenName: "umpireDashboard" }
-                                        }}
-                                    >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                <div className="col-sm pt-1">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <Button
+                                            type="primary"
+                                            disabled={isCompetitionAvailable}
+                                            className="primary-add-comp-form"
+                                            onClick={this.onExport}
+                                        >
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
                                                         className="export-image"
-                                                        src={AppImages.import}
+                                                        src={AppImages.export}
                                                         alt=""
                                                     />
-                                                    {AppConstants.import}
+                                                    {AppConstants.export}
                                                 </div>
                                             </div>
                                         </Button>
-                                    </NavLink>
+                                    </div>
+                                </div>
+
+                                <div className="col-sm pt-1">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink
+                                            className="text-decoration-none"
+                                            to={{
+                                                pathname: "/umpireImport",
+                                                state: { screenName: "umpireDashboard" }
+                                            }}
+                                        >
+                                            <Button disabled={isCompetitionAvailable} className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            className="export-image"
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
+                                                </div>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        )
+
+    }
+
 
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
@@ -1028,7 +1036,6 @@ class UmpireDashboard extends Component {
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : [];
         let roundList = isArrayNotEmpty(umpireRoundList) ? umpireRoundList : [];
         let umpireType = this.state.competitionObj ? this.state.competitionObj.recordUmpireType : null;
-
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">

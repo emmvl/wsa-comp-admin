@@ -25,7 +25,7 @@ import {
     clearProductReducer,
 } from '../../store/actions/shopAction/productAction';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid, isImageSizeValid } from '../../util/helpers';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from '../../util/permissions';
@@ -88,7 +88,7 @@ class AddProduct extends Component {
         if (shopProductState.getDetailsLoad === false && this.state.getLoad === true) {
             let imageUrls = shopProductState.imageUrls
             let creatorId = shopProductState.productDetailData.organisationUniqueKey;
-            let orgData = getOrganisationData();
+            let orgData = getOrganisationData() ? getOrganisationData() : null;
             let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
             let allDisabled = creatorId == organisationUniqueKey ? false : true;
 
@@ -102,7 +102,7 @@ class AddProduct extends Component {
     addProductPostAPI = (values) => {
         let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
         let description = JSON.parse(JSON.stringify(productDetailData.description))
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
         // let descriptionText = ''
@@ -326,7 +326,16 @@ class AddProduct extends Component {
     handleFiles = (file) => {
         if (file) {
             let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
             let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             if (isSuccess) {
                 let reader = new FileReader();
                 reader.onloadend = () => {
@@ -532,7 +541,7 @@ class AddProduct extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-0 pt-3"
+                        required="required-field pt-3"
                         heading={AppConstants.title}
                         placeholder={AppConstants.enterTitle}
                         onChange={(e) =>
@@ -635,15 +644,18 @@ class AddProduct extends Component {
                             {urls.length > 0 ? (
                                 <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} />
                             ) : (
-                                <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
-                                    <InputWithHead heading={AppConstants.dragImageToUpload} />
-                                    <div className="d-flex justify-content-center w-100">
-                                        {this.getImage()}
+                                    <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
+                                        <InputWithHead heading={AppConstants.dragImageToUpload} />
+                                        <div className="d-flex justify-content-center w-100">
+                                            {this.getImage()}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
                         </>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                     {urls.length > 0 && (
                         <div className="d-flex justify-content-end w-100">
                             {this.getImage()}
@@ -689,6 +701,7 @@ class AddProduct extends Component {
                                 placeholder={AppConstants.price}
                                 prefix="$"
                                 onChange={(e) =>
+
                                     this.props.onChangeProductDetails(
                                         e.target.value,
                                         'price'
@@ -696,6 +709,8 @@ class AddProduct extends Component {
                                 }
                                 value={productDetailData.price}
                                 type="number"
+                                min={0}
+
                                 disabled={this.state.allDisabled}
                             />
                         </div>
@@ -712,6 +727,7 @@ class AddProduct extends Component {
                                         'cost'
                                     )
                                 }
+                                min={0}
                                 value={productDetailData.cost}
                                 type="number"
                                 disabled={this.state.allDisabled}
@@ -817,7 +833,7 @@ class AddProduct extends Component {
                                     {
                                         required: true,
                                         message:
-                                        ValidationConstants.pleaseEnterQuantity,
+                                            ValidationConstants.pleaseEnterQuantity,
                                     },
                                 ]}
                             >
@@ -887,7 +903,7 @@ class AddProduct extends Component {
                                             {
                                                 required: true,
                                                 message:
-                                                ValidationConstants.pleaseEnterVariantName,
+                                                    ValidationConstants.pleaseEnterVariantName,
                                             },
                                         ]}
                                     >
@@ -1052,7 +1068,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterLengthOfTheProduct,
+                                                ValidationConstants.enterLengthOfTheProduct,
                                         },
                                     ]}
                                 >
@@ -1089,7 +1105,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterWidthOfTheProduct,
+                                                ValidationConstants.enterWidthOfTheProduct,
                                         },
                                     ]}
                                 >
@@ -1126,7 +1142,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterHeightOfTheProduct,
+                                                ValidationConstants.enterHeightOfTheProduct,
                                         },
                                     ]}
                                 >
@@ -1156,7 +1172,7 @@ class AddProduct extends Component {
                                         {
                                             required: true,
                                             message:
-                                            ValidationConstants.enterWeightOfTheProduct,
+                                                ValidationConstants.enterWeightOfTheProduct,
                                         },
                                     ]}
                                 >

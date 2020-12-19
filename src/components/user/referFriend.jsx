@@ -116,7 +116,7 @@ class ReferFriend extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             pageNo: 1,
             sortBy: null,
@@ -243,6 +243,7 @@ class ReferFriend extends Component {
                         current={userState.referFriendPage}
                         total={total}
                         onChange={(page) => this.handleFriendTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

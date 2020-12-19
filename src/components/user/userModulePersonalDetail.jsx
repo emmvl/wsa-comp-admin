@@ -8,7 +8,13 @@ import {
     Button,
     Tabs,
     Menu,
+    Dropdown,
+    Modal,
+    message,
+    Space,
+    Tooltip
 } from "antd";
+import { DownOutlined } from '@ant-design/icons';
 import "./user.css";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -33,6 +39,8 @@ import {
     getUmpireData,
     getCoachData,
     getUmpireActivityListAction,
+    registrationResendEmailAction,
+    userProfileUpdateAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -91,7 +99,7 @@ const columns = [
         key: "competitionName",
     },
     {
-        title: "Valid Until",
+        title: "Membership Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
         render: (expiryDate) => (
@@ -99,6 +107,11 @@ const columns = [
                 {expiryDate != null ? (expiryDate !== 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
             </span>
         )
+    },
+    {
+        title:"Comp Fees Paid",
+        data: "compFeesPaid",
+        key:"compFeesPaid"
     },
     {
         title: "Membership Product",
@@ -129,20 +142,20 @@ const columns = [
                         this_Obj.state.userId == item.paidByUserId ? (
                             <div>Self</div>
                         ) : (
-                            <div>
-                                <NavLink
-                                    to={{
-                                        pathname: `/userPersonal`,
-                                        state: {
-                                            userId: item.paidByUserId,
-                                            tabKey: "registration"
-                                        },
-                                    }}
-                                >
-                                    <span className="input-heading-add-another pt-0">{item.paidBy}</span>
-                                </NavLink>
-                            </div>
-                        )
+                                <div>
+                                    <NavLink
+                                        to={{
+                                            pathname: `/userPersonal`,
+                                            state: {
+                                                userId: item.paidByUserId,
+                                                tabKey: "registration"
+                                            },
+                                        }}
+                                    >
+                                        <span className="input-heading-add-another pt-0">{item.paidBy}</span>
+                                    </NavLink>
+                                </div>
+                            )
                     ))}
                 </div>
             )
@@ -189,7 +202,7 @@ const columns = [
                     </Menu.Item>
                     {e.alreadyDeRegistered == 0 && (
                         <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
-                            <span>De-register</span>
+                            <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
                     <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
@@ -494,6 +507,7 @@ const columnsPersonalPrimaryContacts = [
         dataIndex: "parentName",
         key: "parentName",
         render: (parentName, record) => (
+            record.status == "Linked" ?
             <NavLink
                 to={{
                     pathname: `/userPersonal`,
@@ -502,6 +516,9 @@ const columnsPersonalPrimaryContacts = [
             >
                 <span className="input-heading-add-another pt-0">{parentName}</span>
             </NavLink>
+            :
+            <span>{parentName}</span>
+
         ),
     },
     {
@@ -533,6 +550,11 @@ const columnsPersonalPrimaryContacts = [
         title: "Email",
         dataIndex: "email",
         key: "email",
+    },
+    {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
     },
     {
         title: "Action",
@@ -568,6 +590,10 @@ const columnsPersonalPrimaryContacts = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
+
+                    <Menu.Item key="2">
+                        <span onClick={() => this_Obj.unlinkCheckParent(record)}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
+                    </Menu.Item>
                 </SubMenu>
             </Menu>
         ),
@@ -580,7 +606,9 @@ const columnsPersonalChildContacts = [
         dataIndex: "childName",
         key: "childName",
         render: (childName, record) => (
+            record.status == "Linked" ?
             <NavLink
+
                 to={{
                     pathname: `/userPersonal`,
                     state: { userId: record.childUserId },
@@ -588,6 +616,8 @@ const columnsPersonalChildContacts = [
             >
                 <span className="input-heading-add-another pt-0">{childName}</span>
             </NavLink>
+            :
+            <span >{childName}</span>
         ),
     },
     {
@@ -619,6 +649,11 @@ const columnsPersonalChildContacts = [
         title: "Email",
         dataIndex: "email",
         key: "email",
+    },
+    {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
     },
     {
         title: "Action",
@@ -653,6 +688,10 @@ const columnsPersonalChildContacts = [
                         >
                             <span>Edit</span>
                         </NavLink>
+                    </Menu.Item>
+
+                    <Menu.Item key="2">
+                        <span onClick={() => this_Obj.unlinkCheckChild(record)}>{record.status == "Linked" ? "Unlink" : "Link"}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -1202,7 +1241,12 @@ class UserModulePersonalDetail extends Component {
             UmpireActivityListSortOrder: null,
             purchasesOffset: 0,
             purchasesListSortBy: null,
-            purchasesListSortOrder: null
+            purchasesListSortOrder: null,
+            unlinkOnLoad: false,
+            unlinkRecord: null,
+            showChildUnlinkConfirmPopup: false,
+            showParentUnlinkConfirmPopup: false,
+            showCannotUnlinkPopup: false
         };
     }
 
@@ -1289,12 +1333,23 @@ class UserModulePersonalDetail extends Component {
                 window.open(stripeDashboardUrl, '_newtab');
             }
         }
+
+        if(this.props.userState.onUpUpdateLoad == false && this.state.unlinkOnLoad == true){
+            let personal = this.props.userState.personalData;
+            let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+            let payload = {
+                userId: personal.userId,
+                organisationId: organisationId
+            };
+            this.props.getUserModulePersonalByCompetitionAction(payload);
+            this.setState({unlinkOnLoad: false})
+        }
     }
 
     apiCalls = (userId) => {
         let payload = {
             userId: userId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         };
         this.props.getUserRole(userId)
         this.props.getUserModulePersonalDetailsAction(payload);
@@ -1324,6 +1379,28 @@ class UserModulePersonalDetail extends Component {
             return statusValue
         }
         return statusValue
+    }
+
+    parentUnLinkView = (data) => {
+        let userState = this.props.userState;
+        let personal = userState.personalData;
+        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        data["section"]  = data.status == "Linked" ? "unlink" : "link";
+        data["childUserId"] = personal.userId;
+        data["organisationId"] = organisationId;
+        this.props.userProfileUpdateAction(data);
+        this.setState({unlinkOnLoad: true});
+    }
+
+    childUnLinkView = (data) => {
+        let userState = this.props.userState;
+        let personal = userState.personalData;
+        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        data["section"]  = data.status == "Linked" ? "unlink" : "link";
+        data["parentUserId"] = personal.userId;
+        data["organisationId"] = organisationId;
+        this.props.userProfileUpdateAction(data);
+        this.setState({unlinkOnLoad: true});
     }
 
     onChangeYear = (value) => {
@@ -1522,7 +1599,7 @@ class UserModulePersonalDetail extends Component {
     hanleActivityTableList = (page, userId, competition, key, yearRefId) => {
         let filter = {
             competitionId: competition.competitionUniqueKey,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             userId: this.state.userId,
             yearRefId,
             paging: {
@@ -1542,7 +1619,7 @@ class UserModulePersonalDetail extends Component {
         let filter = {
             competitionId: competition.competitionUniqueKey,
             userId: userId,
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId,
             paging: {
                 limit: 10,
@@ -1615,10 +1692,10 @@ class UserModulePersonalDetail extends Component {
                         {personal.photoUrl ? (
                             <img src={personal.photoUrl} alt="" />
                         ) : (
-                            <span className="user-contact-heading">
-                                {AppConstants.noImage}
-                            </span>
-                        )}
+                                <span className="user-contact-heading">
+                                    {AppConstants.noImage}
+                                </span>
+                            )}
                     </div>
                     <span className="user-contact-heading">
                         {personal.firstName + " " + personal.lastName}
@@ -1812,6 +1889,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1849,6 +1927,7 @@ class UserModulePersonalDetail extends Component {
                                 "parent"
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1887,6 +1966,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1924,6 +2004,7 @@ class UserModulePersonalDetail extends Component {
                                 "manager"
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -1985,6 +2066,16 @@ class UserModulePersonalDetail extends Component {
                         >
                             {AppConstants.parentOrGuardianDetail}
                         </div>
+                        <NavLink
+                            to={{
+                                pathname: `/userProfileEdit`,
+                                state: { moduleFrom: "8", userData: userState.personalData },
+                            }}
+                        >
+                            <span className="input-heading-add-another" style={{paddingTop:"unset", marginBottom:"15px"}}>
+                                + {AppConstants.addParent_guardian}
+                            </span>
+                        </NavLink>
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
@@ -2004,6 +2095,16 @@ class UserModulePersonalDetail extends Component {
                         >
                             {AppConstants.childDetails}
                         </div>
+                        <NavLink
+                            to={{
+                                pathname: `/userProfileEdit`,
+                                state: { moduleFrom: "7", userData: userState.personalData },
+                            }}
+                        >
+                            <span className="input-heading-add-another" style={{paddingTop:"unset", marginBottom:"15px"}}>
+                                + {AppConstants.addChild}
+                            </span>
+                        </NavLink>
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
@@ -2244,6 +2345,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2273,15 +2375,15 @@ class UserModulePersonalDetail extends Component {
                                 {item.contentValue === "No" ? (
                                     <div className="applicable-to-text">{item.contentValue}</div>
                                 ) : (
-                                    <div className="table-responsive home-dash-table-view">
-                                        <Table
-                                            className="home-dashboard-table"
-                                            columns={columnsPlayedBefore}
-                                            dataSource={item.playedBefore}
-                                            pagination={false}
-                                        />
-                                    </div>
-                                )}
+                                        <div className="table-responsive home-dash-table-view">
+                                            <Table
+                                                className="home-dashboard-table"
+                                                columns={columnsPlayedBefore}
+                                                dataSource={item.playedBefore}
+                                                pagination={false}
+                                            />
+                                        </div>
+                                    )}
                             </div>
                         ) : null}
                         {item.registrationSettingsRefId == 8 ? (
@@ -2356,10 +2458,23 @@ class UserModulePersonalDetail extends Component {
     };
 
     headerView = () => {
+
+        function handleMenuClick(e) {
+            history.push("/mergeUserMatches")
+        }
+
+        const menu = (
+            <Menu onClick={handleMenuClick}>
+              <Menu.Item key="merge">
+                Merge
+              </Menu.Item>
+            </Menu>
+        );
+
         return (
             <div className="row">
                 <div className="col-sm">
-                    <Header className="form-header-view bg-transparent d-flex pl-0 align-items-center">
+                    <Header className="form-header-view bg-transparent d-flex pl-0 justify-content-between mt-5">
                         <Breadcrumb separator=" > ">
                             {/* <NavLink to="/userGraphicalDashboard">
                                 <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
@@ -2368,6 +2483,11 @@ class UserModulePersonalDetail extends Component {
                                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
                             </NavLink>
                         </Breadcrumb>
+                        <Dropdown overlay={menu}>
+                            <Button type="primary">
+                                Actions <DownOutlined />
+                            </Button>
+                        </Dropdown>
                     </Header>
                 </div>
                 {this.state.screenKey && (
@@ -2415,6 +2535,7 @@ class UserModulePersonalDetail extends Component {
                         onChange={(page) =>
                             this.handleHistoryTableList(page, this.state.userId)
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2463,6 +2584,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2501,6 +2623,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2539,6 +2662,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.yearRefId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2628,6 +2752,7 @@ class UserModulePersonalDetail extends Component {
                                 this.state.userId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
@@ -2658,11 +2783,123 @@ class UserModulePersonalDetail extends Component {
                                 this.state.userId
                             )
                         }
+                        showSizeChanger={false}
                     />
                 </div>
             </div>
         );
     };
+
+    unlinkCheckParent = (record) => {
+        if(record.unlinkedBy && record.status == "Unlinked"){
+            if(record.unlinkedBy == record.userId){
+                this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
+            }
+            else{
+                this.setState({unlinkRecord: record,showCannotUnlinkPopup: true})
+            }
+        }
+        else{
+            this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
+        }
+
+        }
+
+    unlinkCheckChild = (record) => {
+        if(record.unlinkedBy && record.status == "Unlinked"){
+            if(record.unlinkedBy == record.userId){
+             this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
+            }
+            else{
+                this.setState({unlinkRecord: record, showCannotUnlinkPopup: true})
+            }
+        }
+        else{
+            this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
+        }
+
+        }
+
+    cannotUninkPopup = () => {
+        let data = this.state.unlinkRecord;
+        return(
+            <div>
+                
+                <Modal
+                    className="add-membership-type-modal"
+                    title="Warning"
+                    visible={this.state.showCannotUnlinkPopup}
+                    onCancel={() => this.setState({ showCannotUnlinkPopup : false})}
+                    footer={[
+                        <Button onClick={() => this.setState({ showCannotUnlinkPopup: false })}>
+                            {AppConstants.ok}
+                        </Button>,
+                    ]}
+                    >   
+                        {data?.childName ? 
+                        <p> {AppConstants.parentUnlinkMessage}</p>
+                        :
+                        <p>{AppConstants.childUnlinkMessage}</p>
+                        }
+
+                    </Modal>
+            </div>
+        )
+    }
+
+    unlinkChildConfirmPopup = () => {
+        let status = this.state.unlinkRecord?.status == "Linked" ? "de-link" : "link";
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.confirm}
+                    visible={this.state.showChildUnlinkConfirmPopup}
+                    onCancel={() => this.setState({ showChildUnlinkConfirmPopup: false })}
+                    footer={[
+                        <Button onClick={() => this.setState({ showChildUnlinkConfirmPopup: false })}>
+                            {AppConstants.cancel}
+                        </Button>,
+                        <Button onClick={() => {
+                            this.childUnLinkView(this.state.unlinkRecord);
+                            this.setState({ showChildUnlinkConfirmPopup: false })
+                        }}>
+                            {AppConstants.confirm}
+                        </Button>
+                    ]}
+                >
+                   <p> {"Are you sure you want to " + status + " your account?"}</p>
+                </Modal>
+            </div>
+        )
+    }
+
+    unlinkParentConfirmPopup = () => {
+        let status = this.state.unlinkRecord?.status == "Linked" ? "de-link" : "link";
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.confirm}
+                    visible={this.state.showParentUnlinkConfirmPopup}
+                    onCancel={() => this.setState({ showParentUnlinkConfirmPopup: false })}
+                    footer={[
+                        <Button onClick={() => this.setState({ showParentUnlinkConfirmPopup: false })}>
+                            {AppConstants.cancel}
+                        </Button>,
+                        <Button onClick={() => {
+                            this.parentUnLinkView(this.state.unlinkRecord);
+                            this.setState({ showParentUnlinkConfirmPopup: false })
+                        }}>
+                            {AppConstants.confirm}
+                        </Button>
+                    ]}
+                >
+                   <p> {"Are you sure you want to " + status + " your account?"}</p>
+                </Modal>
+            </div>
+        )
+    }
 
     render() {
         let {
@@ -2715,11 +2952,11 @@ class UserModulePersonalDetail extends Component {
                                                 {scorerActivityRoster != null && scorerActivityRoster.length > 0 && this.scorerActivityView()}
                                                 {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                                                 {activityPlayerList.length === 0 &&
-                                                activityManagerList.length === 0 &&
-                                                scorerActivityRoster.length === 0 &&
-                                                coachActivityRoster.length === 0 &&
-                                                umpireActivityRoster.length === 0 &&
-                                                this.noDataAvailable()}
+                                                    activityManagerList.length === 0 &&
+                                                    scorerActivityRoster.length === 0 &&
+                                                    coachActivityRoster.length === 0 &&
+                                                    umpireActivityRoster.length === 0 &&
+                                                    this.noDataAvailable()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
                                                 {this.statisticsView()}
@@ -2756,6 +2993,9 @@ class UserModulePersonalDetail extends Component {
                             </div>
                         </div>
                         <Loader visible={this.props.userState.onMedicalLoad} />
+                        {this.unlinkChildConfirmPopup()}
+                        {this.unlinkParentConfirmPopup()}
+                        {this.cannotUninkPopup()}
                     </Content>
                 </Layout>
             </div>
@@ -2785,6 +3025,8 @@ function mapDispatchToProps(dispatch) {
             getUmpireActivityListAction,
             getPurchasesListingAction,
             getReferenceOrderStatus,
+            registrationResendEmailAction,
+            userProfileUpdateAction
         },
         dispatch
     );

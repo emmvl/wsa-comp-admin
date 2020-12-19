@@ -1037,3 +1037,74 @@ input[type="number"] {
 .fees-table .ant-table-tbody{
   background: white;
 }
+
+.membership-cap{
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(27, 27, 52, 0.06);
+  background-color: var(--app-white);
+  padding: 30px;
+  width: 70%;
+  margin: auto;
+}
+
+.membership-cap-heading-view{
+  width: 70%;
+  margin: auto;
+  padding-top: 20px
+}
+
+.membership-cap-heading{
+  font-family: inter-medium, sans-serif;
+  font-weight: 500;
+  color: var(--app-1b1b34);
+}
+
+.font-18{
+  font-size: 18px;
+}
+
+.membership-cap-check-box-lbl{
+  font-size: 13px;
+  color: var(--app-4c4c6d);
+  font-weight: 500;
+  font-family: inter-medium, sans-serif;
+}
+
+.membership-cap-border{
+  border: 1px solid #d9d9d9;
+  padding: 20px;
+}
+
+.orange-action-txt{
+  color: var(--app-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.membership-cap-cloase{
+  width: 20px;
+  height: 20px;
+  margin-left: auto
+}
+
+.center-align{
+  width: 75%;
+  margin: auto;
+}
+
+.center-align-70{
+  width: 70%;
+  margin: auto;
+}
+
+.membership-cap-save{
+  margin-left: auto;
+}
+
+.membership-cap-date-picker.ant-picker-large .ant-picker-input > input {
+  box-shadow: none;
+}

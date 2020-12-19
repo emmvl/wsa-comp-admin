@@ -12,7 +12,7 @@ const { SubMenu } = Menu;
 class ShopSingleProductComponent extends React.Component {
     /////check product is for parent or for affiliate
     isParentCreator = (creatorOrgKey) => {
-        let orgData = getOrganisationData();
+        let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         if (organisationUniqueKey == creatorOrgKey) {
             return true

@@ -214,8 +214,9 @@ class LiveScoreIncidentList extends Component {
                         <Pagination
                             className="antd-pagination"
                             defaultCurrent={1}
+                            showSizeChanger={false}
                             total={8}
-                            // onChange={this.handleTableChange}
+                        // onChange={this.handleTableChange}
                         />
                     </div>
                 </div>

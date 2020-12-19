@@ -295,7 +295,7 @@ class RegistrationCompetitionForm extends Component {
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
-                let orgData = getOrganisationData()
+                let orgData = getOrganisationData() ? getOrganisationData() : null
                 let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
                 let isCreatorEdit = creatorId != organisationUniqueKey;
 
@@ -340,10 +340,10 @@ class RegistrationCompetitionForm extends Component {
 
                 this.setState({
                     onYearLoad: false,
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 })
                 this.formRef.current.setFieldsValue({
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
             }
@@ -414,7 +414,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     componentDidMount() {
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData() : null
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(competitionId)
@@ -427,7 +427,7 @@ class RegistrationCompetitionForm extends Component {
 
     ////all the api calls
     apiCalls = (competitionId) => {
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.props.getOnlyYearListAction()
         this.props.getDefaultCompFeesLogoAction()
         this.props.competitionDiscountTypesAction()
         this.props.competitionFeeInit();
@@ -440,7 +440,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     setYear = (e) => {
-        this.setState({yearRefId: e})
+        this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
 
@@ -646,7 +646,7 @@ class RegistrationCompetitionForm extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}
                                 >
                                     <Select className="year-select reg-filter-select-year ml-2"
-                                    onChange = {(e) => this.setYear(e)}>
+                                        onChange={(e) => this.setYear(e)}>
                                         {this.props.appState.yearList.map(item => (
                                             <Option key={'year_' + item.id} value={item.id}>
                                                 {item.description}
@@ -846,7 +846,7 @@ class RegistrationCompetitionForm extends Component {
             <div className="content-view pt-4">
 
                 <InputWithHead
-                    required="required-field pb-0"
+                    required="required-field"
                     heading={AppConstants.year}
                 />
 
@@ -856,6 +856,7 @@ class RegistrationCompetitionForm extends Component {
                 >
                     <Select className="year-select reg-filter-select-year"
                         style={{ maxWidth: 80 }}
+                        disabled={compDetailDisable}
                         onChange={(e) => this.setYear(e)}>
                         {this.props.appState.yearList.map(item => (
                             <Option key={'year_' + item.id} value={item.id}>
@@ -871,7 +872,7 @@ class RegistrationCompetitionForm extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-compName"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
@@ -881,7 +882,7 @@ class RegistrationCompetitionForm extends Component {
                         })}
                     />
                 </Form.Item>
-                <InputWithHead required="required-field pb-0" heading={AppConstants.competitionLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.competitionLogo} />
 
                 <div className="fluid-width">
                     <div className="row">
@@ -951,7 +952,7 @@ class RegistrationCompetitionForm extends Component {
                 />
 
                 <div style={{ marginTop: 15 }}>
-                    <InputWithHead required="required-field pb-0" heading={AppConstants.venue} />
+                    <InputWithHead required="required-field" heading={AppConstants.venue} />
                     <Form.Item
                         name='selectedVenues'
                         rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
@@ -1112,7 +1113,7 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_days} className="col-sm">
                             <InputWithHead
                                 auto_complete="new-days"
                                 placeholder={AppConstants.days}
@@ -1121,7 +1122,7 @@ class RegistrationCompetitionForm extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-hours"
                                 placeholder={AppConstants.hours}
@@ -1130,7 +1131,7 @@ class RegistrationCompetitionForm extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-mins"
                                 placeholder={AppConstants.mins}
@@ -1155,7 +1156,7 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_min_players} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-minNumber"
                                 placeholder={AppConstants.minNumber}
@@ -1164,7 +1165,7 @@ class RegistrationCompetitionForm extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_max_players} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-maxNumber"
                                 placeholder={AppConstants.maxNumber}
@@ -1247,10 +1248,10 @@ class RegistrationCompetitionForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}

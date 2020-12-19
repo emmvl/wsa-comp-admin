@@ -19,7 +19,8 @@ import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { exportFilesAction } from "../../store/actions/appAction";
 import ValidationConstants from "../../themes/validationConstant";
-import { teamListData } from "../../util/helpers";
+import { teamListData, teamListDataCheck } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -40,7 +41,7 @@ function tableSort(key) {
     }
     _this.setState({ sortBy, sortOrder });
     if (_this.state.competitionId) {
-        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, 10, _this.state.searchText, sortBy, sortOrder);
+        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, 10, _this.state.searchText, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.compOrgId);
     }
 }
 
@@ -58,8 +59,8 @@ const columns = [
                 profilePicture ? (
                     <img className="user-image" src={profilePicture} alt="" height="70" width="70" />
                 ) : (
-                    <span>{AppConstants.noImage}</span>
-                )
+                        <span>{AppConstants.noImage}</span>
+                    )
             )
         }
     },
@@ -134,7 +135,7 @@ const columns = [
         key: 'team',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (team, record) => teamListData(team.id) ? (
+        render: (team, record) => teamListDataCheck(team.id, _this.state.liveScoreCompIsParent, record.team, _this.state.compOrgId) ? (
             <NavLink
                 to={{
                     pathname: "/matchDayTeamView",
@@ -144,8 +145,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team.name}</span>
             </NavLink>
         ) : (
-            <span>{team.name}</span>
-        )
+                <span>{team.name}</span>
+            )
     },
     {
         title: 'Contact No',
@@ -195,32 +196,48 @@ class LiveScorePlayerList extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            compOrgId: null,
+            liveScoreCompIsParent: false
         }
         _this = this;
     }
 
+
+
     componentDidMount() {
         let { playerListActionObject } = this.props.liveScorePlayerState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
+            this.setLivScoreCompIsParent()
+            const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
+            console.log(JSON.parse(getLiveScoreCompetiton()));
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            this.setState({ competitionId: id, compOrgId: compOrgId })
             if (id !== null) {
-                if (playerListActionObject) {
-                    let offset = playerListActionObject.offset
-                    let searchText = playerListActionObject.search
-                    let sortBy = playerListActionObject.sortBy
-                    let sortOrder = playerListActionObject.sortOrder
-                    this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.playerListWithPaginationAction(id, offset, 10, searchText, sortBy, sortOrder);
-                } else {
-                    this.props.playerListWithPaginationAction(id, 0, 10)
-                }
+                checkLivScoreCompIsParent().then((value) => {
+
+
+                    if (playerListActionObject) {
+                        let offset = playerListActionObject.offset
+                        let searchText = playerListActionObject.search
+                        let sortBy = playerListActionObject.sortBy
+                        let sortOrder = playerListActionObject.sortOrder
+                        this.setState({ offset, searchText, sortBy, sortOrder })
+                        this.props.playerListWithPaginationAction(id, offset, 10, searchText, sortBy, sortOrder, value, compOrgId);
+                    } else {
+                        this.props.playerListWithPaginationAction(id, 0, 10, null, null, null, value, compOrgId)
+                    }
+                })
             } else {
                 history.push('/matchDayCompetitions')
             }
         } else {
             history.push('/matchDayCompetitions')
         }
+    }
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     // Delete player
@@ -250,7 +267,7 @@ class LiveScorePlayerList extends Component {
         this.setState({
             offset
         })
-        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, this.state.searchText, sortBy, sortOrder)
+        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, this.state.searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
     }
 
     contentView = () => {
@@ -275,6 +292,7 @@ class LiveScorePlayerList extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
+                            showSizeChanger={false}
                             total={totalCount}
                             onChange={this.handlePageChange}
                         />
@@ -289,7 +307,7 @@ class LiveScorePlayerList extends Component {
         let { sortBy, sortOrder, competitionId } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
-            this.props.playerListWithPaginationAction(competitionId, 0, 10, e.target.value, sortBy, sortOrder)
+            this.props.playerListWithPaginationAction(competitionId, 0, 10, e.target.value, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
         }
     }
 
@@ -299,7 +317,7 @@ class LiveScorePlayerList extends Component {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder)
+            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
         }
     }
 
@@ -309,12 +327,17 @@ class LiveScorePlayerList extends Component {
         this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder)
+            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
         }
     }
 
     onExport = () => {
-        let url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`
+        let url = null
+        if (this.state.liveScoreCompIsParent) {
+            url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`
+        } else {
+            url = AppConstants.exportUrl + `competitionOrganisationId=${this.state.compOrgId}`
+        }
         this.props.exportFilesAction(url)
     }
 

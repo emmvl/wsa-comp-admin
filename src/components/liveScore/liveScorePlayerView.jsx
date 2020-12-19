@@ -258,6 +258,7 @@ class LiveScorePlayerView extends Component {
                     <Pagination
                         className="antd-pagination"
                         defaultCurrent={1}
+                        showSizeChanger={false}
                         total={8}
                     />
                 </div>
@@ -278,6 +279,7 @@ class LiveScorePlayerView extends Component {
                     <Pagination
                         className="antd-pagination"
                         defaultCurrent={1}
+                        showSizeChanger={false}
                         total={8}
                     />
                 </div>

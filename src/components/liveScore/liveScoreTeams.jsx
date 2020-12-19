@@ -38,7 +38,7 @@ function tableSort(key) {
 
     this_Obj.setState({ sortBy, sortOrder });
 
-    this_Obj.props.getTeamsWithPagination(this_Obj.state.competitionId, this_Obj.state.offset, 10, this_Obj.state.searchText, sortBy, sortOrder)
+    this_Obj.props.getTeamsWithPagination(this_Obj.state.competitionId, this_Obj.state.offset, 10, this_Obj.state.searchText, sortBy, sortOrder, this_Obj.state.compOrgId)
 }
 
 const columns = [
@@ -74,11 +74,11 @@ const columns = [
     },
     {
         title: 'Affiliate',
-        dataIndex: 'competitionOrganisation',
+        dataIndex: 'linkedCompetitionOrganisation',
         key: 'organisation',
         sorter: true,
         onHeaderCell: () => listeners('affiliate'),
-        render: (competitionOrganisation) => <span>{competitionOrganisation ? competitionOrganisation.name : ""}</span>
+        render: (linkedCompetitionOrganisation) => <span>{linkedCompetitionOrganisation ? linkedCompetitionOrganisation.name : ""}</span>
     },
     // Affiliate
     {
@@ -146,7 +146,8 @@ class LiveScoreTeam extends Component {
             sortBy: null,
             sortOrder: null,
             sourceIdAvailable: false,
-            liveScoreCompIsParent: false
+            liveScoreCompIsParent: false,
+            compOrgId: 0
         };
         this_Obj = this
     }
@@ -157,16 +158,17 @@ class LiveScoreTeam extends Component {
         if (getLiveScoreCompetiton()) {
             const { id, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             if (id !== null) {
                 if (livescoreTeamActionObject) {
                     let offset = livescoreTeamActionObject.offset
                     let searchText = livescoreTeamActionObject.search
                     let sortBy = livescoreTeamActionObject.sortBy
                     let sortOrder = livescoreTeamActionObject.sortOrder
-                    this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, competitionOrganisation.id)
+                    this.setState({ offset, searchText, sortBy, sortOrder, compOrgId })
+                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, compOrgId)
                 } else {
-                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, competitionOrganisation.id)
+                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, compOrgId)
                 }
             } else {
                 history.push("/matchDayCompetitions")
@@ -186,14 +188,14 @@ class LiveScoreTeam extends Component {
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
-        this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder)
+        this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
     }
 
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value == "") {
-            this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder)
+            this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
     }
 
@@ -202,7 +204,7 @@ class LiveScoreTeam extends Component {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
-            this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText)
+            this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
     }
 
@@ -211,14 +213,15 @@ class LiveScoreTeam extends Component {
         this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText == "") {
         } else {
-            this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText)
+            this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
     }
 
     // on Export
     onExport = () => {
         const { competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
-        let url = AppConstants.teamExport + this.state.competitionId + `&offset=${this.state.offset}&limit=${10}&organisationId=${competitionOrganisation.id} `
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+        let url = AppConstants.teamExport + `${this.state.competitionId}&competitionOrganisationId=${compOrgId}`
         this.props.exportFilesAction(url)
     }
 
@@ -361,6 +364,7 @@ class LiveScoreTeam extends Component {
                         current={teamCurrentPage}
                         total={total}
                         onChange={this.handlePageChange}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

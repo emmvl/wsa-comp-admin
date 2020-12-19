@@ -104,29 +104,9 @@ class CompetitionVenueAndTimesEdit extends Component {
                         )
                     }
                 },
+
                 {
                     title: "Longitude",
-                    dataIndex: "lat",
-                    key: "lat",
-                    render: (lat, record, index) => {
-                        return (
-                            <Form.Item
-                                name={`lat${index}`}
-                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
-                            >
-                                <Input
-                                    className="input-inside-table-venue-court"
-                                    // disabled={record.isDisabled}
-                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
-                                    value={lat}
-                                    placeholder="Longitude"
-                                />
-                            </Form.Item>
-                        )
-                    }
-                },
-                {
-                    title: "Latitude",
                     dataIndex: "lng",
                     key: "lng",
                     render: (lng, record, index) => {
@@ -140,6 +120,27 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     // disabled={record.isDisabled}
                                     onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
                                     value={lng}
+                                    placeholder="Longitude"
+                                />
+                            </Form.Item>
+                        )
+                    }
+                },
+                {
+                    title: "Latitude",
+                    dataIndex: "lat",
+                    key: "lat",
+                    render: (lat, record, index) => {
+                        return (
+                            <Form.Item
+                                name={`lat${index}`}
+                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
+                            >
+                                <Input
+                                    className="input-inside-table-venue-court"
+                                    // disabled={record.isDisabled}
+                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                    value={lat}
                                     placeholder="Latitude"
                                 />
                             </Form.Item>
@@ -186,7 +187,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         };
         this_Obj = this;
         this.props.getCommonRefData();
-        const organisationData = getOrganisationData();
+        const organisationData = getOrganisationData() ? getOrganisationData() : null;
         this.props.getAffiliatesListingAction({
             organisationId: organisationData.organisationUniqueKey,
             affiliatedToOrgId: -1,
@@ -311,7 +312,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let isVenueMapped = venueData.isVenueMapped;
         let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.affiliateList;
-        let organisationId = getOrganisationData().organisationUniqueKey;
+        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);
@@ -472,7 +473,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-name"
-                        required="required-field pt-0 pb-0"
+                        required="required-field"
                         heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
@@ -497,7 +498,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     />
                 </Form.Item>
 
-                <Form.Item className="formLineHeight" name="venueAddress">
+                <Form.Item name="venueAddress">
                     <PlacesAutocomplete
                         defaultValue={defaultVenueAddress}
                         heading={AppConstants.venueSearch}
@@ -511,7 +512,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item name="addressOne">
                     <InputWithHead
                         auto_complete="new-addressOne"
-                        required="required-field pt-3 pb-0"
+                        required="required-field"
                         heading={AppConstants.addressOne}
                         placeholder={AppConstants.addressOne}
                         onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
@@ -532,7 +533,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item name="suburb">
                     <InputWithHead
                         auto_complete="new-suburb"
-                        required="required-field pt-3 pb-0"
+                        required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
                         onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
@@ -560,7 +561,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     </Select>
                 </Form.Item>
 
-                <Form.Item className="formLineHeight" name="postcode">
+                <Form.Item  name="postcode">
                     <InputWithHead
                         auto_complete="new-postcode"
                         required="required-field"

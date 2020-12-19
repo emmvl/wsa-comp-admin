@@ -216,7 +216,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: '/registrationCompetitionFee',
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId },
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId , yearRefId: this_Obj.state.yearRefId },
                             }}
                         >
                             <span>Edit</span>
@@ -460,6 +460,7 @@ class RegistrationCompetitionList extends Component {
                         current={competitionFeesState.regCompetitonFeeListPage}
                         total={total}
                         onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

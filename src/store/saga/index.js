@@ -46,6 +46,8 @@ import {
     getDivisionsListSaga,
     getTeamRegistrationsSaga,
     exportTeamRegistrationsSaga,
+    getMembershipFeeCapListSaga,
+    updateMembershipFeeCapSaga
 } from './registrationSaga/registrationSaga';
 
 /// /**************************Live Score***************************Start
@@ -554,4 +556,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD, competitionQuickSaga.updateGrid_DivisionSaga);
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_VENUE_LOAD, competitionQuickSaga.updateGrid_VenueSaga);
     yield takeEvery(ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD, playerGradingExport)
+
+    yield takeEvery(ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD, getMembershipFeeCapListSaga)
+    yield takeEvery(ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD, updateMembershipFeeCapSaga)
 }

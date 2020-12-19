@@ -15,7 +15,8 @@ import { liveScoreManagerListAction } from "../../store/actions/LiveScoreAction/
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import history from "../../util/history";
 import { userExportFilesAction } from "../../store/actions/appAction";
-import { teamListData } from "../../util/helpers";
+import { teamListDataCheck } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
 let _this = null;
@@ -31,7 +32,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder, 'managerList');
+    _this.props.liveScoreManagerListAction(3, 6, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder, 'managerList', _this.state.compOrgId);
 }
 
 const listeners = (key) => ({
@@ -101,7 +102,7 @@ const columns = [
         render: (linkedEntity) => (
             <div>
                 {linkedEntity.map((item, i) => (
-                    teamListData(item.entityId) ? (
+                    teamListDataCheck(item.entityId, _this.state.liveScoreCompIsParent, item, _this.state.compOrgId) ? (
                         <div key={`managerName${i}` + item.entityId}>
                             <NavLink
                                 to={{
@@ -118,8 +119,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                        <span key={`managerName${i}` + item.entityId}>{item.name}</span>
-                    )
+                            <span key={`managerName${i}` + item.entityId}>{item.name}</span>
+                        )
                 ))}
             </div>
         ),
@@ -198,6 +199,7 @@ class LiveScoreManagerList extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            liveScoreCompIsParent: false
         }
 
         _this = this;
@@ -206,22 +208,32 @@ class LiveScoreManagerList extends Component {
     componentDidMount() {
         let { managerListActionObject } = this.props.liveScoreMangerState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
-            let offset = 0
-            if (managerListActionObject) {
-                offset = managerListActionObject.offset
-                let searchText = managerListActionObject.searchText
-                let sortBy = managerListActionObject.sortBy
-                let sortOrder = managerListActionObject.sortOrder
-                this.setState({ offset, searchText, sortBy, sortOrder })
-                this.props.liveScoreManagerListAction(3, 1, id, searchText, offset, sortBy, sortOrder, 'managerList');
-            } else {
-                this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset, 'managerList')
-            }
+            this.setLivScoreCompIsParent()
+            checkLivScoreCompIsParent().then((value) => {
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.setState({ competitionId: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
+                let offset = 0
+                if (managerListActionObject) {
+                    offset = managerListActionObject.offset
+                    let searchText = managerListActionObject.searchText
+                    let sortBy = managerListActionObject.sortBy
+                    let sortOrder = managerListActionObject.sortOrder
+                    this.setState({ offset, searchText, sortBy, sortOrder })
+                    this.props.liveScoreManagerListAction(3, 6, id, searchText, offset, sortBy, sortOrder, 'managerList', compOrgId, value);
+                } else {
+                    this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, offset, null, null, 'managerList', compOrgId, value)
+                }
+            })
         } else {
             history.push('/matchDayCompetitions')
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     /// Handle Page change
@@ -230,7 +242,7 @@ class LiveScoreManagerList extends Component {
         this.setState({
             offset
         })
-        this.props.liveScoreManagerListAction(3, 1, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder, 'managerList')
+        this.props.liveScoreManagerListAction(3, 6, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
     }
 
     contentView = () => {
@@ -252,6 +264,7 @@ class LiveScoreManagerList extends Component {
                         <Pagination
                             className="antd-pagination"
                             current={currentPage}
+                            showSizeChanger={false}
                             total={totalCount}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
@@ -262,14 +275,17 @@ class LiveScoreManagerList extends Component {
         )
     }
 
+
+
     // on Export
     onExport = () => {
         // let url = AppConstants.managerExport + this.state.competitionId
-        let url = AppConstants.managerExport + this.state.competitionId
+        let url = AppConstants.managerExport + this.state.compOrgId
         this.props.userExportFilesAction(url)
     }
 
     headerView = () => {
+        const { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -312,20 +328,22 @@ class LiveScoreManagerList extends Component {
                                 </div>
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <NavLink to={`/matchDayManagerImport`} className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary">
-                                                <div className="row">
-                                                    <div className="col-sm">
-                                                        <img
-                                                            src={AppImages.import}
-                                                            alt=""
-                                                            className="export-image"
-                                                        />
-                                                        {AppConstants.import}
+                                        {liveScoreCompIsParent == true &&
+                                            <NavLink to={`/matchDayManagerImport`} className="text-decoration-none">
+                                                <Button className="primary-add-comp-form" type="primary">
+                                                    <div className="row">
+                                                        <div className="col-sm">
+                                                            <img
+                                                                src={AppImages.import}
+                                                                alt=""
+                                                                className="export-image"
+                                                            />
+                                                            {AppConstants.import}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Button>
-                                        </NavLink>
+                                                </Button>
+                                            </NavLink>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -362,7 +380,7 @@ class LiveScoreManagerList extends Component {
         if (e.target.value == null || e.target.value === "") {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
-            this.props.liveScoreManagerListAction(3, 1, id, e.target.value, 0, this.state.sortBy, this.state.sortOrder, 'managerList')
+            this.props.liveScoreManagerListAction(3, 6, id, e.target.value, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
         }
     }
 
@@ -373,7 +391,7 @@ class LiveScoreManagerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { // 13 is the enter keycode
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList')
+            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
         }
     }
 
@@ -384,7 +402,7 @@ class LiveScoreManagerList extends Component {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList')
+            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
         }
     }
 

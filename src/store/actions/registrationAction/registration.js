@@ -68,11 +68,14 @@ function getRegistrationForm(yearId, competitionId) {
 }
 
 /// update registration object
-function updateRegistrationForm(updatedData, key) {
+function updateRegistrationForm(updatedData, key, subKey, membershipProductTypeIndex, getMembershipproductItem) {
     return {
         type: ApiConstants.API_UPDATE_REG_FORM_LOAD,
         updatedData,
-        key
+        key,
+        subKey,
+        membershipProductTypeIndex,
+        getMembershipproductItem
     };
 }
 
@@ -135,11 +138,12 @@ function updatedDiscountDataAction(discountData) {
 }
 
 ////membership fees radio apply fees on change
-function membershipFeesApplyRadioAction(radioApplyId, feesIndex) {
+function membershipFeesApplyRadioAction(radioApplyId, feesIndex, key) {
     return {
         type: ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES,
         radioApplyId,
         feesIndex,
+        key
     };
 }
 
@@ -259,6 +263,37 @@ function exportTeamRegistrationAction(payload) {
     };
 }
 
+function updateMembershipFeeCapListAction(value,key,index,subKey,subIndex){
+    const action = {
+        type: ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST,
+        value,
+        key,
+        index,
+        subKey,
+        subIndex
+    }
+    return action;
+}
+
+function getMembershipCapListAction(organisationUniqueKey,yearRefId){
+    const action = {
+        type: ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD,
+        organisationUniqueKey,
+        yearRefId
+    }
+    return action;
+}
+
+function updateMembershipFeeCapAction(organisationUniqueKey,yearRefId,payload){
+    const action = {
+        type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD,
+        organisationUniqueKey,
+        yearRefId,
+        payload
+    }
+    return action;
+}
+
 export {
     regMembershipListAction,
     regMembershipListDeleteAction,
@@ -289,5 +324,8 @@ export {
     isReplyCheckVisible,
     getDivisionsListAction,
     getTeamRegistrationsAction,
-    exportTeamRegistrationAction
+    exportTeamRegistrationAction,
+    updateMembershipFeeCapListAction,
+    getMembershipCapListAction,
+    updateMembershipFeeCapAction
 };

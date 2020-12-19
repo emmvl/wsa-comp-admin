@@ -27,6 +27,7 @@ import Loader from "customComponents/loader";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
 import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
+import { getUserId } from 'util/sessionStorage';
 
 const { Option } = Select;
 
@@ -84,15 +85,16 @@ class DashboardLayout extends React.Component {
                         )
                         : null;
 
-                    this.setState({
+                    await this.setState({
                         impersonationOrgData: impersonationAffiliate,
                         impersonationAffiliateOrgId: this.state.impersonationAffiliateOrgId,
                     });
 
-                    window.location.reload();
+
                     if (!this.props.userState.impersonationLoad) {
                         history.push("/");
                     }
+                    window.location.reload();
                 }
             }
 
@@ -357,6 +359,12 @@ class DashboardLayout extends React.Component {
                         </li>
                     </div>
 
+                    <li className="acc-help-support-list-view">
+                    <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
+                        {AppConstants.myProfile}
+                    </NavLink>
+                    </li>
+
                     <li className="log-out">
                         <a id={AppConstants.log_out} onClick={this.logout}>Log Out</a>
                     </li>
@@ -542,9 +550,9 @@ class DashboardLayout extends React.Component {
                             filterOption={(input, data) =>
                                 data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
-                            loading={this.props.userState.onLoad}
+                            loading={this.props.userState.onImpersonationLoad}
                         >
-                            {(this.props.userState.affiliateList || []).map((affiliate) => (
+                            {(this.props.userState.impersonationList || []).map((affiliate) => (
                                 <Option key={'organization_' + affiliate.affiliateOrgId}
                                     value={affiliate.affiliateOrgId}>
                                     {affiliate.affiliateName}

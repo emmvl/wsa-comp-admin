@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty } from "../../../util/helpers";
-import {setImpersonation} from 'util/sessionStorage'
+import { setImpersonation } from 'util/sessionStorage'
 
 let affiliate = {
   affiliateId: 0,
@@ -150,7 +150,13 @@ const initialState = {
   onDeleteOrgPhotoLoad: false,
   bannerCount: null,
   onLoadSearch: false,
-  impersonationAccess:false
+  impersonationAccess: false,
+  spectatorList: [],
+  spectatorPage: null,
+  spectatorTotalCount: null,
+  spectatorListAction: null,
+  impersonationList: [],
+  onImpersonationLoad: false
 };
 
 function userReducer(state = initialState, action) {
@@ -206,7 +212,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_AFFILIATES_LISTING_LOAD:
-      return { ...state, onLoad: true, userAffiliateListAction: action };
+      return { ...state, onLoad: action.payload.paging.limit == -1 ? false : true, onImpersonationLoad: action.payload.paging.limit == -1 ? true : false, userAffiliateListAction: action };
 
     case ApiConstants.API_AFFILIATES_LISTING_SUCCESS:
       let data = action.result;
@@ -214,11 +220,20 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         affiliateList: data.affiliates,
+        impersonationList: data.affiliates,
         affiliateListPage: data.page ? data.page.currentPage : 1,
         affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status
       };
 
+    case ApiConstants.API_AFFILIATES_IMPERSONATION_LISTING_SUCCESS:
+      let affiliate_Data = action.result;
+      return {
+        ...state,
+        onImpersonationLoad: false,
+        impersonationList: affiliate_Data.affiliates,
+        status: action.status
+      }
     case ApiConstants.API_SAVE_AFFILIATE_LOAD:
       return { ...state, onLoad: true };
 
@@ -766,7 +781,7 @@ function userReducer(state = initialState, action) {
         impersonationLoad: false,
         impersonation: action.result.success,
         status: action.status,
-        impersonationAccess:action.impersonationAccess
+        impersonationAccess: action.impersonationAccess
       };
     case ApiConstants.API_USER_DELETE_LOAD:
       return {
@@ -860,7 +875,32 @@ function userReducer(state = initialState, action) {
       state.userAffiliateListAction = null;
       state.userFriendListAction = null;
       state.userReferFriendListAction = null;
+      state.spectatorListAction = null;
       return { ...state, onLoad: false };
+
+    case ApiConstants.API_GET_SPECTATOR_LIST_LOAD:
+      return { ...state, onLoad: true, spectatorListAction: action };
+
+    case ApiConstants.API_GET_SPECTATOR_LIST_SUCCESS:
+      let spectatorData = action.result;
+      return {
+        ...state,
+        onLoad: false,
+        spectatorList: spectatorData ? spectatorData.spectator : [],
+        spectatorPage: (spectatorData && spectatorData.page) ? spectatorData.page.currentPage : 1,
+        spectatorTotalCount: (spectatorData && spectatorData.page) ? spectatorData.page.totalCount : 1,
+        status: action.status
+      };
+
+    case ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        status: action.status
+      }
 
     ////Coach
     case ApiConstants.API_CLEAR_LIST_DATA:

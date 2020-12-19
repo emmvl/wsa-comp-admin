@@ -59,6 +59,7 @@ function* liveScoreMatchListSaga(action) {
             action.teamIds,
             action.sortBy,
             action.sortOrder,
+            action.competitionOrganisationId
         );
 
         if (result.status === 1) {
@@ -123,7 +124,7 @@ function* liveScoreCreateMatchSaga(action) {
                 // history.push({ pathname: action.screenName == 'umpireList' ? "umpire" : "/umpireDashboard" });
                 history.push({ pathname: "/" + action.screenName });
             } else {
-                history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/matchDayMatches");
+                history.push(action.key === "dashboard" ? "matchDayDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/matchDayMatches");
             }
 
             message.success(action.data.id === 0 ? "Match has been created successfully." : "Match has been updated successfully.");

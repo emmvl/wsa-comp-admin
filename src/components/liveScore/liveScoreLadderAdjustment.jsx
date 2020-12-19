@@ -35,7 +35,8 @@ class LiveScoreLadderAdjustment extends Component {
             getLoad: false,
             modalVisible: false,
             resetOptionId: 1,
-            resetLoad: false
+            resetLoad: false,
+            compOrgId: 0
         }
         this.formRef = React.createRef();
     }
@@ -45,8 +46,10 @@ class LiveScoreLadderAdjustment extends Component {
         if (getLiveScoreCompetiton()) {
             this.props.updateLadderSetting({ key: 'refresh' })
 
-            const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id, compUniqueKey: uniqueKey })
+            const { id, uniqueKey, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+
+            this.setState({ competitionId: id, compUniqueKey: uniqueKey, compOrgId })
             if (id !== null) {
                 this.props.getLiveScoreDivisionList(id)
                 this.setState({ loadding: true, })
@@ -67,7 +70,7 @@ class LiveScoreLadderAdjustment extends Component {
         if (nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData) {
             if (this.state.loadding === true && this.props.liveScoreLadderState.onLoad === false) {
                 const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
-                this.props.getliveScoreTeams(id, this.state.divisionId)
+                this.props.getliveScoreTeams(id, this.state.divisionId, this.state.compOrgId)
 
                 let divisionId = this.props.location ? this.props.location.state ? this.props.location.state.divisionId : null : null
                 if (divisionId) {
@@ -123,7 +126,7 @@ class LiveScoreLadderAdjustment extends Component {
 
     changeDivision(divisionId) {
         this.props.updateLadderSetting({ data: divisionId, key: 'divisionId' })
-        this.props.getliveScoreTeams(this.state.competitionId, divisionId)
+        this.props.getliveScoreTeams(this.state.competitionId, divisionId, this.state.compOrgId)
         this.props.ladderAdjustmentGetData({ uniqueKey: this.state.compUniqueKey, divisionId })
         this.setState({ divisionId, getLoad: true })
     }
@@ -261,7 +264,7 @@ class LiveScoreLadderAdjustment extends Component {
                                             index,
                                             key: 'points'
                                         })}
-                                        // value={ladderData[index] && ladderData[index].points}
+                                    // value={ladderData[index] && ladderData[index].points}
                                     />
                                 </Form.Item>
                             </div>
@@ -281,7 +284,7 @@ class LiveScoreLadderAdjustment extends Component {
                                             index,
                                             key: 'adjustmentReason'
                                         })}
-                                        // value={ladderData[index] && ladderData[index].reasonforChange}
+                                    // value={ladderData[index] && ladderData[index].reasonforChange}
                                     />
                                 </Form.Item>
                             </div>

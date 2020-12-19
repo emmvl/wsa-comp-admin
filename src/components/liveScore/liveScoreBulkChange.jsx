@@ -202,7 +202,7 @@ class LiveScoreBulkChange extends Component {
             <div className="content-view pt-5">
                 <div className="d-flex align-items-center">
                     <span className="text-heading-large">{AppConstants.whatDoWantDO}</span>
-                    <div style={{ marginTop: -24 }}>
+                    <div className='mt-n10'>
                         <Tooltip placement="top">
                             <span>{AppConstants.bulkMatchMsg}</span>
                             {/* {AppConstants.LatitudeMsg} */}

@@ -654,7 +654,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             </Radio>
 
                             {item.helpMsg && (
-                                <div className="mt-5 ml-n22">
+                                <div className="mt-2 ml-n22">
                                     <CustomTooltip>
                                         <span>{item.helpMsg}</span>
                                     </CustomTooltip>
@@ -748,7 +748,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {item.description}
                                 </Radio>
                                 {item.helpMsg && (
-                                    <div className="mt-5 ml-n22">
+                                    <div className="mt-2 ml-n22">
                                         <CustomTooltip>
                                             <span>{item.helpMsg}</span>
                                         </CustomTooltip>

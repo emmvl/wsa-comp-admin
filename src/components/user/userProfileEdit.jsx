@@ -27,7 +27,7 @@ import {
 } from '../../store/actions/commonAction/commonAction';
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
-import { getOrganisationData,getUserId } from "../../util/sessionStorage";
+import { getOrganisationData, getUserId } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -43,7 +43,7 @@ class UserProfileEdit extends Component {
             loadValue: false,
             saveLoad: false,
             tabKey: "3",
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             userData: {
                 genderRefId: 0,
                 firstName: "",
@@ -51,7 +51,7 @@ class UserProfileEdit extends Component {
                 mobileNumber: "",
                 email: "",
                 middleName: "",
-                dateOfBirth: "",
+                dateOfBirth: null,
                 street1: "",
                 street2: "",
                 suburb: "",
@@ -70,7 +70,9 @@ class UserProfileEdit extends Component {
                 nationalityRefId: null,
                 languages: "",
                 childrenCheckNumber: "",
-                childrenCheckExpiryDate: ""
+                childrenCheckExpiryDate: "",
+                parentUserId: 0,
+                childUserId: 0
             },
             titleLabel: "",
             section: "",
@@ -117,10 +119,21 @@ class UserProfileEdit extends Component {
             } else if (moduleFrom === "6") {
                 titleLabel = AppConstants.edit + ' ' + AppConstants.child;
                 section = "child";
+            } else if (moduleFrom === "7") {
+                titleLabel = AppConstants.addChild;
+                section = "child";
+            }
+            else if (moduleFrom === "8") {
+                titleLabel = AppConstants.addParent_guardian;
+                section = "primary";
+            }
+            let userDataTemp = this.state.userData;
+            if(moduleFrom == 7 || moduleFrom == 8){
+                userDataTemp.userId = data.userId;
             }
             await this.setState({
                 displaySection: moduleFrom,
-                userData: data,
+                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
                 titleLabel: titleLabel, section: section, loadValue: true
             })
         }
@@ -150,7 +163,7 @@ class UserProfileEdit extends Component {
                 } else {
                     history.push({
                         pathname: '/userPersonal',
-                        state: { tabKey: this.state.tabKey, userId: this.state.userData.userId }
+                        state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId }
                     });
                 }
             } else if (userState.status === 4) {
@@ -170,12 +183,12 @@ class UserProfileEdit extends Component {
     };
 
     setAddressFormFields = () => {
-        let userData  = this.state.userData;
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
             mobileNumber: userData.mobileNumber,
-            dateOfBirth:  ((userData.dateOfBirth != null && userData.dateOfBirth != '') ?
+            dateOfBirth: ((userData.dateOfBirth != null && userData.dateOfBirth != '') ?
                 moment(userData.dateOfBirth, "YYYY-MM-DD") : null),
             street1: userData.street1,
             email: userData.email,
@@ -185,8 +198,8 @@ class UserProfileEdit extends Component {
         })
     }
 
-    setPrimaryContactFormFields = () =>{
-        let userData  = this.state.userData;
+    setPrimaryContactFormFields = () => {
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -200,7 +213,7 @@ class UserProfileEdit extends Component {
     }
 
     setEmergencyFormField = () => {
-        let userData  = this.state.userData;
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
             emergencyFirstName: userData.emergencyFirstName,
             emergencyLastName: userData.emergencyLastName,
@@ -209,9 +222,9 @@ class UserProfileEdit extends Component {
     }
 
     setOtherInfoFormField = () => {
-        let userData  = this.state.userData;
+        let userData = this.state.userData;
         this.formRef.current.setFieldsValue({
-            genderRefId: userData.genderRefId!= null ?  parseInt(userData.genderRefId) : 0
+            genderRefId: userData.genderRefId != null ? parseInt(userData.genderRefId) : 0
         })
     }
 
@@ -233,7 +246,7 @@ class UserProfileEdit extends Component {
         }
         data[key] = value;
 
-        this.setState({userData: data});
+        this.setState({ userData: data });
     }
 
     headerView = () => {
@@ -253,7 +266,7 @@ class UserProfileEdit extends Component {
     addressEdit = () => {
         let userData = this.state.userData
         const { stateList } = this.props.commonReducerState;
-
+        console.log("userData",userData)
         return (
             <div className="pt-0">
                 <div className="row">
@@ -265,7 +278,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 name={'firstName'}
-                                value={userData.firstName}
+                                value={userData?.firstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
                             />
                         </Form.Item>
@@ -278,34 +291,34 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 name={'lastName'}
-                                value={userData.lastName}
+                                value={userData?.lastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
                             />
                         </Form.Item>
                     </div>
                 </div>
-                <div className="row" style={{ paddingTop: 11 }}>
+                <div className="row" >
                     <div className="col-sm">
                         <InputWithHead
                             auto_complete='new-middleName'
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "middleName")}
-                            value={userData.middleName}
+                            value={userData?.middleName}
                         />
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%', marginTop: 9 }}
+                            style={{ width: '100%'}}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
                             name="dateOfBirth"
-                            value={userData.dateOfBirth!= null && moment(userData.dateOfBirth)}
+                            value={userData?.dateOfBirth != null && moment(userData.dateOfBirth)}
                         />
                     </div>
                 </div>
@@ -317,7 +330,7 @@ class UserProfileEdit extends Component {
                                 required="required-field"
                                 heading={AppConstants.contactMobile}
                                 placeholder={AppConstants.contactMobile}
-                                value={userData.mobileNumber}
+                                value={userData?.mobileNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
                                 maxLength={10}
                             />
@@ -343,7 +356,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.contactEmail}
                                 placeholder={AppConstants.contactEmail}
                                 name={'email'}
-                                value={userData.email}
+                                value={userData?.email}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             />
                         </Form.Item>
@@ -355,48 +368,48 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
                             auto_complete="new-addressOne"
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={'street1'}
-                            value={userData.street1}
+                            value={userData?.street1}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         />
                     </div>
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
                             auto_complete="new-addressTwo"
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
-                            value={userData.street2}
+                            value={userData?.street2}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                         />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             name={'suburb'}
-                            value={userData.suburb}
+                            value={userData?.suburb}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                         />
                     </div>
                     <div className="col-sm">
-                        <div style={{paddingTop: 10, paddingBottom: 10}}>
+                        <div >
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
                         <Select
                             style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.select}
-                            value={userData.stateRefId}
+                            value={userData?.stateRefId}
                             name="stateRefId"
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         >
@@ -412,7 +425,7 @@ class UserProfileEdit extends Component {
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.postCode}
                             name={'postalCode'}
-                            value={userData.postalCode}
+                            value={userData?.postalCode}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
                         />
                     </div>
@@ -456,9 +469,9 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={'street1'}
@@ -466,9 +479,9 @@ class UserProfileEdit extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         />
                     </div>
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
@@ -478,9 +491,9 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             name={'suburb'}
@@ -489,7 +502,7 @@ class UserProfileEdit extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                        <div >
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
 
@@ -511,9 +524,9 @@ class UserProfileEdit extends Component {
 
                 {/* PlayerId and Team Selection row */}
                 <div className="row">
-                    <div className="col-sm" style={{ paddingTop: 11 }}>
+                    <div className="col-sm" >
                         <InputWithHead
-                            style={{ marginTop: 9 }}
+                            // style={{ marginTop: 9 }}
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.enterPostCode}
                             name={'postalCode'}
@@ -778,15 +791,87 @@ class UserProfileEdit extends Component {
         )
     }
 
+    addParentOrChild = () => {
+        return(
+            <div className="content-view pt-0">
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.firstName }]}>
+                            <InputWithHead
+                                auto_complete="new-firstName"
+                                required="required-field"
+                                heading={AppConstants.firstName}
+                                placeholder={AppConstants.firstName}
+                                name={'firstName'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
+                            />
+                        </Form.Item>
+                    </div>
+                    <div className="col-sm">
+                        <Form.Item name='lastName' rules={[{ required: false }]}>
+                            <InputWithHead
+                                auto_complete="new-lastName"
+                                required="required-field"
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.lastName}
+                                name={'lastName'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
+                            />
+                        </Form.Item>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item name='email' rules={[{ required: true, message: ValidationConstants.emailField[0] }]}>
+                            <InputWithHead
+                                auto_complete="new-email"
+                                heading={AppConstants.emailAdd}
+                                placeholder={AppConstants.emailAdd}
+                                name={'email'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                            />
+                        </Form.Item>
+                    </div>
+                    <div className="col-sm">
+                        <InputWithHead heading={AppConstants.dob} />
+                        <DatePicker
+                            // size="large"
+                            style={{ width: '100%'}}
+                            onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
+                            format="DD-MM-YYYY"
+                            showTime={false}
+                            placeholder="dd-mm-yyyy"
+                            name={'dateOfBirth'}
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-6">
+                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}>
+                            <InputWithHead
+                                auto_complete="new-mobileNumber"
+                                heading={AppConstants.contactMobile}
+                                placeholder={AppConstants.contactMobile}
+                                name={'mobileNumber'}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
+                            />
+                        </Form.Item>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     contentView = () => {
         const { displaySection } = this.state;
         return (
             <div className="content-view pt-0">
-                {displaySection === "1" && <div>{this.addressEdit()}</div>}
-                {(displaySection === "2" || displaySection === "6") && <div>{this.primaryContactEdit()}</div>}
+                {(displaySection === "1" || displaySection === "2"  || displaySection === "6" || displaySection === "7" || displaySection === "8") && <div>{this.addressEdit()}</div>}
+                {/* {(displaySection === "2" ) && <div>{this.primaryContactEdit()}</div>} */}
                 {displaySection === "3" && <div>{this.emergencyContactEdit()}</div>}
                 {displaySection === "4" && <div>{this.otherInfoEdit()}</div>}
                 {displaySection === "5" && <div>{this.medicalEdit()}</div>}
+                {/* {(displaySection === "7" || displaySection === "8") && <div>{this.addParentOrChild()}</div>} */}
             </div>
         );
     };
@@ -795,6 +880,12 @@ class UserProfileEdit extends Component {
         let data = this.state.userData;
         data["section"] = this.state.section;
         data["organisationId"] = this.state.organisationId;
+        if(this.state.displaySection == 8 && !data.parentUserId){
+            data["parentUserId"] = 0;
+        }
+        else if(this.state.displaySection == 7 && !data.childUserId){
+            data["childUserId"] = 0;
+        }
         this.props.userProfileUpdateAction(data);
         this.setState({ saveLoad: true });
     }
@@ -806,7 +897,7 @@ class UserProfileEdit extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.state.userData.userId } }}>
+                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId} }}>
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>

@@ -89,7 +89,7 @@ const columns = [
                 render: (transferCompOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
-                            {record.tCompOrgApproved!= "-1" && <div>{transferCompOrgName}</div> }
+                            {record.tCompOrgApproved != "-1" && <div>{transferCompOrgName}</div>}
                             {transferCompOrgName && (
                                 <div className="transfer-status">
                                     {record.tCompOrgStatus == 0 ? "(" + record.tCompOrgApproved + ")" : (
@@ -98,8 +98,8 @@ const columns = [
                                                 <div
                                                     style={{ color: getColor(record, "tCompOrgApproved") }}>&#x2714;</div>
                                             ) : (
-                                                <div style={{ color: "red" }}>&#x2718;</div>
-                                            )}
+                                                    <div style={{ color: "red" }}>&#x2718;</div>
+                                                )}
                                         </div>
                                     )}
                                 </div>
@@ -116,8 +116,8 @@ const columns = [
                 render: (transferAffOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
-                            {transferAffOrgName!= "-1" &&
-                            <div> {transferAffOrgName} </div>
+                            {transferAffOrgName != "-1" &&
+                                <div> {transferAffOrgName} </div>
                             }
                             {transferAffOrgName && (
                                 <div className="transfer-status">
@@ -126,8 +126,8 @@ const columns = [
                                             {record.tAffStatus != 3 ? (
                                                 <div style={{ color: getColor(record, "tAffApproved") }}>&#x2714;</div>
                                             ) : (
-                                                <div style={{ color: "red" }}>&#x2718;</div>
-                                            )}
+                                                    <div style={{ color: "red" }}>&#x2718;</div>
+                                                )}
                                         </div>
                                     )}
                                 </div>
@@ -182,8 +182,8 @@ const columns = [
                                     {record.compOrgApprovedStatus != 3 ? (
                                         <div style={{ color: getColor(record, "compOrganiserApproved") }}>&#x2714;</div>
                                     ) : (
-                                        <div style={{ color: "red" }}>&#x2718;</div>
-                                    )}
+                                            <div style={{ color: "red" }}>&#x2718;</div>
+                                        )}
                                 </div>
                             )}
                         </div>
@@ -207,8 +207,8 @@ const columns = [
                                     {record.affiliateApprovedStatus != 3 ? (
                                         <div style={{ color: getColor(record, "affiliateApproved") }}>&#x2714;</div>
                                     ) : (
-                                        <div style={{ color: "red" }}>&#x2718;</div>
-                                    )}
+                                            <div style={{ color: "red" }}>&#x2718;</div>
+                                        )}
                                 </div>
                             )}
                         </div>
@@ -232,8 +232,8 @@ const columns = [
                                     {record.stateApprovedStatus != 3 ? (
                                         <div style={{ color: getColor(record, "stateApproved") }}>&#x2714;</div>
                                     ) : (
-                                        <div style={{ color: "red" }}>&#x2718;</div>
-                                    )}
+                                            <div style={{ color: "red" }}>&#x2718;</div>
+                                        )}
                                 </div>
                             )}
                         </div>
@@ -267,7 +267,7 @@ const columns = [
                             >
                                 <Menu.Item
                                     key="1"
-                                    onClick={() => history.push("/registrationChangeReview", {deRegisterId: record.id,deRegData: record})}
+                                    onClick={() => history.push("/registrationChangeReview", { deRegisterId: record.id, deRegData: record })}
                                 >
                                     <span>Review</span>
                                 </Menu.Item>
@@ -291,7 +291,7 @@ class RegistrationChange extends Component {
             type: 'All',
             yearRefId: -1,
             competitionId: "-1",
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             regChangeTypeRefId: -1,
 
         };
@@ -299,12 +299,12 @@ class RegistrationChange extends Component {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.registrationChangeType();
         this.handleRegChangeList(1);
     }
 
-    handleRegChangeList = (page) =>{
+    handleRegChangeList = (page) => {
         const {
             yearRefId,
             competitionId,
@@ -351,8 +351,8 @@ class RegistrationChange extends Component {
     };
 
     dropdownView = () => {
-        const {regChangeCompetitions} = this.props.regChangeState;
-        const {regChangeTypes} = this.props.commonReducerState;
+        const { regChangeCompetitions } = this.props.regChangeState;
+        const { regChangeTypes } = this.props.commonReducerState;
         let competitionList;
         if (this.state.yearRefId !== -1) {
             competitionList = regChangeCompetitions.filter(x => x.yearRefId === this.state.yearRefId);
@@ -424,8 +424,8 @@ class RegistrationChange extends Component {
 
                         <div className="d-flex align-items-center" style={{ marginRight: '1%' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3"
-                                // <div className="col-sm d-flex justify-content-end"
-                                // onClick={() => this.props.clearCompReducerDataAction("all")}
+                            // <div className="col-sm d-flex justify-content-end"
+                            // onClick={() => this.props.clearCompReducerDataAction("all")}
                             >
                                 {/* <NavLink
                                     to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
@@ -479,6 +479,7 @@ class RegistrationChange extends Component {
                         current={regChangeDashboardListPage}
                         total={regChangeDashboardListTotalCount}
                         onChange={(page) => this.handleRegChangeList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

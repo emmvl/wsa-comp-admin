@@ -493,6 +493,7 @@ class ShopOrderStatus extends Component {
                         current={orderStatusCurrentPage}
                         total={orderStatusTotalCount}
                         onChange={(page) => this.handleTableList(page)}
+                        showSizeChanger={false}
                     />
                 </div>
             </div>

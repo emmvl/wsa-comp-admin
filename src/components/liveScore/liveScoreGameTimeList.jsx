@@ -11,9 +11,9 @@ import AppConstants from "../../themes/appConstants";
 import { gameTimeStatisticsListAction } from '../../store/actions/LiveScoreAction/liveScoregameTimeStatisticsAction'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
-import { teamListData } from "../../util/helpers";
+import { teamListDataCheck } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 
 const { Content } = Layout;
@@ -148,7 +148,7 @@ const columns = [
         key: 'team',
         sorter: true,
         onHeaderCell: () => listeners('team'),
-        render: (team) => teamListData(team.id) ?
+        render: (team) => teamListDataCheck(team.id, this_obj.state.liveScoreCompIsParent, team, this_obj.state.compOrgId) ?
             <NavLink to={{
                 pathname: '/matchDayTeamView',
                 state: { tableRecord: team, screenName: 'fromGameTimeList' }
@@ -201,6 +201,8 @@ class LiveScoreGameTimeList extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            compOrgId: 0,
+            liveScoreCompIsParent: false
         };
         this_obj = this
     }
@@ -208,8 +210,13 @@ class LiveScoreGameTimeList extends Component {
     async componentDidMount() {
         let { gameTimeStatisticsActionObject } = this.props.liveScoreGameTimeStatisticsState
         if (getLiveScoreCompetiton()) {
-            const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
+            const { id, attendanceRecordingPeriod, organisationId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            const orgItem = await getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+
+            this.setState({ competitionId: id, filter: attendanceRecordingPeriod, liveScoreCompIsParent, compOrgId })
             if (id !== null) {
                 if (gameTimeStatisticsActionObject) {
                     let offset = gameTimeStatisticsActionObject.offset
@@ -392,8 +399,9 @@ class LiveScoreGameTimeList extends Component {
                             className="antd-pagination"
                             current={this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticsPage}
                             total={total}
+                            showSizeChanger={false}
                             onChange={(page) => this.handleGameTimeTableList(page, id, this.state.filter)}
-                            // defaultPageSize={10}
+                        // defaultPageSize={10}
                         />
                     </div>
                 </div>

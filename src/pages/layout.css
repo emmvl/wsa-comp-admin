@@ -60,7 +60,7 @@
 .dashboard-layout-menu-heading-view {
   display: flex;
   /* flex-direction: row; */
-  margin-left: 18px;
+  margin-left: 0px;
   align-self: center;
 }
 

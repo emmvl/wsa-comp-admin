@@ -287,7 +287,7 @@ class CompetitionOpenRegForm extends Component {
         this.formRef = createRef();
     }
 
-    componentDidUpdate(nextProps) {
+    async componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
             this.setState({ loading: false })
@@ -312,7 +312,7 @@ class CompetitionOpenRegForm extends Component {
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
-                let orgData = getOrganisationData()
+                let orgData = getOrganisationData() ? getOrganisationData() : null
                 let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
                 let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
 
@@ -393,8 +393,12 @@ class CompetitionOpenRegForm extends Component {
                     this.setState({
                         nextButtonClicked: false,
                         loading: false
-                    })
-                    history.push("/competitionPlayerGrades")
+                    });
+                    let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+                    await setOwnCompetitionYear(this.state.yearRefId)
+                    await setOwn_competition(this.props.competitionFeesState.competitionId);
+                    await setOwn_competitionStatus(this.state.statusRefId);
+                    history.push("/competitionPlayerGrades",{fromReplicate: fromReplicate});
                 } else {
                     this.setState({
                         loading: false
@@ -417,10 +421,10 @@ class CompetitionOpenRegForm extends Component {
 
                 this.setState({
                     onYearLoad: false,
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 })
                 this.formRef.current.setFieldsValue({
-                    yearRefId:mainYearRefId
+                    yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
             }
@@ -494,7 +498,7 @@ class CompetitionOpenRegForm extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0)
-        let orgData = getOrganisationData()
+        let orgData = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
         this.apiCalls(competitionId)
@@ -764,7 +768,7 @@ class CompetitionOpenRegForm extends Component {
             setOwn_CompetitionFinalRefId(finalTypeRefId)
         }
         this.props.clearCompReducerDataAction("all")
-        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
+        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule,null,this.state.yearRefId)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
@@ -971,7 +975,7 @@ class CompetitionOpenRegForm extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
@@ -982,7 +986,7 @@ class CompetitionOpenRegForm extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead required="required-field pb-0" heading={AppConstants.competitionLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.competitionLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -1039,7 +1043,7 @@ class CompetitionOpenRegForm extends Component {
                     </div>
                 </div>
 
-                <InputWithHead required="pb-1" heading={AppConstants.description} />
+                <InputWithHead heading={AppConstants.description} />
 
                 <TextArea
                     placeholder={AppConstants.addShortNotes_registering}
@@ -1050,7 +1054,7 @@ class CompetitionOpenRegForm extends Component {
                 />
 
                 <div>
-                    <InputWithHead required="required-field pb-1" heading={AppConstants.venue} />
+                    <InputWithHead required="required-field" heading={AppConstants.venue} />
                     <Form.Item
                         name="selectedVenues"
                         rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
@@ -1077,12 +1081,12 @@ class CompetitionOpenRegForm extends Component {
                 {this.state.competitionStatus == 1 ? (
                     <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
                 ) : (
-                    <NavLink
-                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
-                    >
-                        <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                    </NavLink>
-                )}
+                        <NavLink
+                            to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
+                        >
+                            <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                        </NavLink>
+                    )}
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item
                     name="competitionTypeRefId"
@@ -1114,7 +1118,7 @@ class CompetitionOpenRegForm extends Component {
                         {appState.competitionFormatTypes.map(item => (
                             <div className="contextualHelp-RowDirection" key={item.id}>
                                 <Radio key={item.id} value={item.id}>{item.description}</Radio>
-                                <div className="ml-5 mt-n20">
+                                <div className="ml-n20 mt-3">
                                     <CustomToolTip>
                                         <span>{item.helpMsg}</span>
                                     </CustomToolTip>
@@ -1142,7 +1146,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.compStartDate} required="required-field pb-1" />
+                            <InputWithHead heading={AppConstants.compStartDate} required="required-field" />
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
                                     size="default"
@@ -1156,7 +1160,7 @@ class CompetitionOpenRegForm extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.compCloseDate} required="required-field pb-1" />
+                            <InputWithHead heading={AppConstants.compCloseDate} required="required-field" />
                             <Form.Item
                                 name="endDate"
                                 rules={[{ required: true, message: ValidationConstants.endDateIsRequired }]}
@@ -1196,7 +1200,7 @@ class CompetitionOpenRegForm extends Component {
                         </Form.Item>
                     </div>
                 )}
-                <InputWithHead heading={AppConstants.timeBetweenRounds} required="pb-1" />
+                <InputWithHead heading={AppConstants.timeBetweenRounds}  />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.time_rounds_days} className="col-sm">
@@ -1229,7 +1233,7 @@ class CompetitionOpenRegForm extends Component {
                     </div>
                 </div>
                 <div className="inside-container-view pt-4">
-                    <InputWithHead heading={AppConstants.nonPlayingDates} required="pb-1" />
+                    <InputWithHead heading={AppConstants.nonPlayingDates} />
                     {detailsData.competitionDetailData.nonPlayingDates && detailsData.competitionDetailData.nonPlayingDates.map((item, index) =>
                         this.nonPlayingDateView(item, index))
                     }
@@ -1239,7 +1243,7 @@ class CompetitionOpenRegForm extends Component {
                         </span>
                     </a>
                 </div>
-                <InputWithHead heading={AppConstants.playerInEachTeam} required="pb-1" />
+                <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.team_min_players} className="col-sm">
@@ -1344,10 +1348,10 @@ class CompetitionOpenRegForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}
@@ -1432,7 +1436,8 @@ class CompetitionOpenRegForm extends Component {
                                     </Tooltip>
                                     {tabKey == "2" && (
                                         <Button
-                                            onClick={() => this.setState({ nextButtonClicked: true })}
+                                            onClick={() => this.setState({ nextButtonClicked: true,
+                                                statusRefId: tabKey == "2" ? 2 : 1 })}
                                             className="publish-button"
                                             type="primary"
                                             htmlType="submit"
@@ -1443,41 +1448,42 @@ class CompetitionOpenRegForm extends Component {
                                     )}
                                 </div>
                             ) : (
-                                <div className="comp-buttons-view">
-                                    <Tooltip
-                                        className="h-100"
-                                        onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
-                                        onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
-                                        visible={this.state.tooltipVisiblePublish}
-                                        title={ValidationConstants.compIsPublished}
-                                    >
-                                        <Button
-                                            id={AppUniqueId.compdiv_save_button}
-                                            className="publish-button save-draft-text"
-                                            type="primary"
-                                            disabled={tabKey === "1" || tabKey === "2" ? this.state.competitionStatus == 1 ? true : allDisable : isPublished}
-                                            htmlType="submit"
-                                            onClick={() => this.setState({
-                                                statusRefId: tabKey == "2" ? 2 : 1,
-                                                buttonPressed: tabKey == "2" ? "publish" : "next"
-                                            })}
-                                            style={{ width: 92.5 }}
+                                    <div className="comp-buttons-view">
+                                        <Tooltip
+                                            className="h-100"
+                                            onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
+                                            onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                            visible={this.state.tooltipVisiblePublish}
+                                            title={ValidationConstants.compIsPublished}
                                         >
-                                            {tabKey === "2" ? AppConstants.save : AppConstants.next}
-                                        </Button>
-                                    </Tooltip>
-                                    {tabKey == "2" && (
-                                        <Button
-                                            onClick={() => this.setState({ nextButtonClicked: true })}
-                                            htmlType="submit"
-                                            className="publish-button"
-                                            type="primary"
-                                        >
-                                            {AppConstants.next}
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
+                                            <Button
+                                                id={AppUniqueId.compdiv_save_button}
+                                                className="publish-button save-draft-text"
+                                                type="primary"
+                                                disabled={tabKey === "1" || tabKey === "2" ? this.state.competitionStatus == 1 ? true : allDisable : isPublished}
+                                                htmlType="submit"
+                                                onClick={() => this.setState({
+                                                    statusRefId: tabKey == "2" ? 2 : 1,
+                                                    buttonPressed: tabKey == "2" ? "publish" : "next"
+                                                })}
+                                                style={{ width: 92.5 }}
+                                            >
+                                                {tabKey === "2" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next}
+                                            </Button>
+                                        </Tooltip>
+                                        {tabKey == "2" && (
+                                            <Button
+                                                onClick={() => this.setState({ nextButtonClicked: true ,
+                                                    statusRefId: tabKey == "2" ? 2 : 1})}
+                                                htmlType="submit"
+                                                className="publish-button"
+                                                type="primary"
+                                            >
+                                                {AppConstants.next}
+                                            </Button>
+                                        )}
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>
