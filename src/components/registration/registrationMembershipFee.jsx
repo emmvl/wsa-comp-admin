@@ -1509,6 +1509,13 @@ class RegistrationMembershipFee extends Component {
         let productId = this.props.registrationState.membershipProductId
         // if (productId !== null && productId.length > 0) {
         this.setState({ membershipTabKey: key });
+        let data = this.props.registrationState.membershipProductFeesTableData
+        let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
+        if(key == "2"){
+            for(let i in feesData){
+                this.membershipFeeApplyRadio(feesData[i].validityDays == 0 ? null : feesData[i].validityDays, i, "validityDays")
+            } 
+        }
         // }
         this.setFieldDecoratorValues()
     };
