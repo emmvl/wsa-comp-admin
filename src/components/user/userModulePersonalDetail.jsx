@@ -99,7 +99,7 @@ const columns = [
         key: "competitionName",
     },
     {
-        title: "Valid Until",
+        title: "Membership Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
         render: (expiryDate) => (
@@ -107,6 +107,11 @@ const columns = [
                 {expiryDate != null ? (expiryDate !== 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
             </span>
         )
+    },
+    {
+        title:"Comp Fees Paid",
+        data: "compFeesPaid",
+        key:"compFeesPaid"
     },
     {
         title: "Membership Product",
