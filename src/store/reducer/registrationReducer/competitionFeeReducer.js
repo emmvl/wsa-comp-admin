@@ -2268,7 +2268,7 @@ function competitionFees(state = initialState, action) {
                 let selectedPaymentMethods = checkSelectedPaymentMethods(null, state.paymentMethodsDefault, state.selectedPaymentMethods)
 
                 state.selectedCasualFee = selectedCasualFee.selectedCasualFee;
-                state.selectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
+                state.SelectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
                 state.selectedSeasonalTeamFee = selectedSeasonalTeamFee.selectedSeasonalTeamFee;
                 state.selectedCasualTeamFee = selectedCasualTeamFee.selectedCasualTeamFee;
                 state.selectedPaymentMethods = selectedPaymentMethods.selectedPaymentMethods;
