@@ -90,7 +90,7 @@ class RegistrationMembershipCap extends Component {
                 }
             }
             if(this.props.competitionFeesState.onLoad == false && this.state.getMembershipProductsOnLoad == true){
-                this.props.getMembershipCapListAction(this.state.organisationUniqueKey)
+                this.props.getMembershipCapListAction(this.state.organisationUniqueKey,this.state.yearRefId)
                 this.setState({getMembershipProductsOnLoad: false,getMembershipCapListOnLoad: true});
             }
             if(this.props.registrationState.onLoad == false && this.state.getMembershipCapListOnLoad == true){
@@ -98,7 +98,7 @@ class RegistrationMembershipCap extends Component {
                 this.setState({getMembershipCapListOnLoad: false});
             }
             if(this.props.registrationState.updateMembershipFeeCapOnLoad == false && this.state.updateMembershipFeeCapOnLoad == true){
-                this.props.getMembershipCapListAction(this.state.organisationUniqueKey)
+                this.props.getMembershipCapListAction(this.state.organisationUniqueKey,this.state.yearRefId)
                 this.setState({updateMembershipFeeCapOnLoad: false,getMembershipCapListOnLoad: true});
             }
             if(this.props.registrationState.isAllMembershipProductChanged == true){
@@ -230,7 +230,7 @@ class RegistrationMembershipCap extends Component {
                     // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(date))
                     // console.log("date",date.isSameOrAfter(dobFrom),date.isSameOrBefore(dobTo))
                     if(date.isSameOrAfter(dobFrom) && date.isSameOrBefore(dobTo)){
-                        if(j == feeCapIndex){
+                        if(j == feeCapIndex && i == membershipFeeCapIndex){
                             return false;
                         }else{
                             return true;
@@ -246,7 +246,7 @@ class RegistrationMembershipCap extends Component {
     saveMembershipFeeCap = () => {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
-            this.props.updateMembershipFeeCapAction(this.state.organisationUniqueKey,membershipFeeCapList);
+            this.props.updateMembershipFeeCapAction(this.state.organisationUniqueKey,this.state.yearRefId,membershipFeeCapList);
             this.setState({updateMembershipFeeCapOnLoad: true})
         }catch(ex){
             console.log("Error in saveMembershipFeeCap::"+ex)
@@ -389,8 +389,14 @@ class RegistrationMembershipCap extends Component {
                                             setFieldsValue={feeCap.amount}
                                             style={{height: 46}}
                                             placeholder=" "
-                                            onChange={(e) => this.onChangeMembershipProductValue(e.target.value, "feeCaps", index, "amount", feeCapIndex )}
+                                            onChange={(e) => {
+                                                this.onChangeMembershipProductValue(e.target.value >= 0 ? e.target.value : null, "feeCaps", index, "amount", feeCapIndex );
+                                                this.formRef.current.setFieldsValue({
+                                                    [`membershipFeeAmount${index}${feeCapIndex}`]: e.target.value >= 0 ? e.target.value : null
+                                                })
+                                            }}
                                             type={"number"}
+                                            min={0}
                                         />
                                     </Form.Item>
                                 </div>
