@@ -2483,11 +2483,11 @@ class UserModulePersonalDetail extends Component {
                                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
                             </NavLink>
                         </Breadcrumb>
-                        <Dropdown overlay={menu}>
+                        {/* <Dropdown overlay={menu}>
                             <Button type="primary">
                                 Actions <DownOutlined />
                             </Button>
-                        </Dropdown>
+                        </Dropdown> */}
                     </Header>
                 </div>
                 {this.state.screenKey && (
