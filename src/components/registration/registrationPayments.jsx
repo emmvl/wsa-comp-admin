@@ -351,15 +351,13 @@ class RegistrationPayments extends Component {
                                         </a>
                                     </Button>
                                 )}
-                                {isBecsSetupDone ? (
+                                {/* {isBecsSetupDone ? (
                                     <Button
                                         className="open-reg-button mx-1"
                                         type="primary"
                                         onClick={() => this.stripeDashboardLoginUrl()}
                                     >
-                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
                                         {AppConstants.stripeWithdrawalsDashboard}
-                                        {/* </a> */}
                                     </Button>
                                 ) : (
                                     <Button
@@ -369,7 +367,7 @@ class RegistrationPayments extends Component {
                                     >
                                         {AppConstants.setupStripeForWithdrawals}
                                     </Button>
-                                )}
+                                )} */}
                             </div>
                         )}
                     </div>
