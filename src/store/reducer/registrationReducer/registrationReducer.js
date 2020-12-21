@@ -118,7 +118,8 @@ const initialState = {
   canInviteSend: 0,
   membershipFeeCapList: [],
   membershipFeeCapListCopy: [],
-  updateMembershipFeeCapOnLoad: false
+  updateMembershipFeeCapOnLoad: false,
+  isAllMembershipProductChanged: false
 };
 
 
@@ -516,6 +517,10 @@ function feesDataObject(allMembershipData, membershipProductName) {
       );
       if (mappedMembershipTypeIndex > -1) {
         feesApiData[mappedMembershipTypeIndex]["editableIndex"] = parseInt(i);
+
+        //developed by
+        feesApiData[mappedMembershipTypeIndex].validityDays = feesApiData[mappedMembershipTypeIndex].validityDays == 0 ? null : feesApiData[mappedMembershipTypeIndex].validityDays;
+        
         feesTableData.push(feesApiData[mappedMembershipTypeIndex]);
       } else {
         var feesTableObject = {
@@ -1073,7 +1078,7 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
       if(action.key){
         state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
       }else{
@@ -1310,6 +1315,8 @@ function registration(state = initialState, action) {
     case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
       if(action.key == 'membershipFeeCapList'){
         state.membershipFeeCapList = action.value;
+      }else if(action.key == 'isAllMembershipProductChanged'){
+        state.isAllMembershipProductChanged = action.value;
       }else if(action.key == 'productsInfo'){
         let productList = action.value;
         state.membershipFeeCapList[action.index].productsInfo = productList;
@@ -1338,6 +1345,7 @@ function registration(state = initialState, action) {
         }else{
           state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
         }
+        state.isAllMembershipProductChanged = true;
       }else{
         state.membershipFeeCapList[action.index][action.key] = action.value;
       }

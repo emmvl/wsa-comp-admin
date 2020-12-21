@@ -91,7 +91,7 @@ class LiveScoreAddMatch extends Component {
     openModel = (matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, umpireKey, umpireData, scorerData, recordUmpireType, screenName) => {
         const this_ = this;
         confirm({
-            title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend making any changes in the Draws screen. Proceed anyway?',
+            title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend you make all match changes in the Competition Management Draws screen. Do you want to Proceed anyway?',
             okText: 'OK',
             okType: 'primary',
             cancelText: 'Cancel',

@@ -1367,7 +1367,9 @@ function createProductFeeArr(data) {
                         "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal,
                         "teamRegChargeTypeRefId": statusteamSeasonal.result.teamRegChargeTypeRefId,
                         "isPlayer": memberShipProductType[j].isPlaying,
-                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId
+                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId,
+                        "membershipCasual": memberShipProductType[j].mCasualFee,
+                        "membershipCasualGst": memberShipProductType[j].mCasualGst,
                     }
                 } else {
                     type_object_team_seasonal = {
@@ -1392,7 +1394,9 @@ function createProductFeeArr(data) {
                         "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
                         "teamRegChargeTypeRefId": 1,
                         "isPlayer": memberShipProductType[j].isPlaying,
-                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId
+                        "allowTeamRegistrationTypeRefId": memberShipProductType[j].allowTeamRegistrationTypeRefId,
+                        "membershipCasual": memberShipProductType[j].mCasualFee,
+                        "membershipCasualGst": memberShipProductType[j].mCasualGst,
                     }
                 }
 
@@ -1595,7 +1599,9 @@ function createProductFeeArr(data) {
                             "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal,
                             "teamRegChargeTypeRefId": statusTeamSeasonal.result.teamRegChargeTypeRefId,
                             "isPlayer": memberShipProductType[k].isPlaying,
-                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId
+                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId,
+                            "membershipCasual": memberShipProductType[k].mCasualFee,
+                            "membershipCasualGst": memberShipProductType[k].mCasualGst,
                         }
                     } else {
                         type_object_team_seasonal = {
@@ -1621,7 +1627,9 @@ function createProductFeeArr(data) {
                             "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
                             "teamRegChargeTypeRefId": 1,
                             "isPlayer": memberShipProductType[k].isPlaying,
-                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId
+                            "allowTeamRegistrationTypeRefId": memberShipProductType[k].allowTeamRegistrationTypeRefId,
+                            "membershipCasual": memberShipProductType[k].mCasualFee,
+                            "membershipCasualGst": memberShipProductType[k].mCasualGst,
                         }
                     }
 
@@ -2074,7 +2082,7 @@ function competitionFees(state = initialState, action) {
                 competitionDiscountsData: allData.competitiondiscounts,
                 selectedCasualFee: selectedCasualFee.selectedCasualFee,
                 selectedCasualFeeKey: selectedCasualFee.selectedCasualFeeKey,
-                selectedSeasonalFee: selectedSeasonalFee.selectedSeasonalFee,
+                SelectedSeasonalFee: selectedSeasonalFee.selectedSeasonalFee,
                 SelectedSeasonalFeeKey: selectedSeasonalFee.selectedSeasonalFeeKey,
                 selectedSeasonalTeamFee: selectedSeasonalTeamFee.selectedSeasonalTeamFee,
                 selectedSeasonalTeamFeeKey: selectedSeasonalTeamFee.selectedSeasonalTeamFeeKey,
@@ -2260,7 +2268,7 @@ function competitionFees(state = initialState, action) {
                 let selectedPaymentMethods = checkSelectedPaymentMethods(null, state.paymentMethodsDefault, state.selectedPaymentMethods)
 
                 state.selectedCasualFee = selectedCasualFee.selectedCasualFee;
-                state.selectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
+                state.SelectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
                 state.selectedSeasonalTeamFee = selectedSeasonalTeamFee.selectedSeasonalTeamFee;
                 state.selectedCasualTeamFee = selectedCasualTeamFee.selectedCasualTeamFee;
                 state.selectedPaymentMethods = selectedPaymentMethods.selectedPaymentMethods;
