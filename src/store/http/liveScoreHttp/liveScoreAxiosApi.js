@@ -872,7 +872,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder) {
+    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder , isParent ,compOrgId) {
         const Body = {
             paging: {
                 limit: 10,
@@ -881,11 +881,22 @@ const LiveScoreAxiosApi = {
             search: searchText,
         };
         let url;
-        if (aggregate) {
-            url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
-        } else {
-            url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+        if(!isParent)
+        {
+            if (aggregate) {
+                url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}&competitionOrganisationId=${compOrgId}`;
+            } else {
+                url = `/stats/gametime?competitionId=${competitionId}&competitionOrganisationId=${compOrgId}&aggregate=""`;
+            }
         }
+        else{
+            if (aggregate) {
+                url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
+            } else {
+                url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+            }
+        }
+        
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;

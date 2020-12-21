@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function gameTimeStatisticsListAction(competitionId, aggregate, offset, searchText, sortBy, sortOrder) {
+function gameTimeStatisticsListAction(competitionId, aggregate, offset, searchText, sortBy, sortOrder, isParent ,compOrgId) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_LOAD,
         competitionId,
@@ -8,7 +8,9 @@ function gameTimeStatisticsListAction(competitionId, aggregate, offset, searchTe
         offset,
         searchText,
         sortBy,
-        sortOrder
+        sortOrder,
+        isParent : isParent,
+        compOrgId
     }
 
     return action
