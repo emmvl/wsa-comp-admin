@@ -34,7 +34,9 @@ export function* liveScoreGameTimeStatisticsSaga(action) {
             action.offset,
             action.searchText,
             action.sortBy,
-            action.sortOrder
+            action.sortOrder,
+            action.isParent,
+            action.compOrgId
         )
         if (result.status === 1) {
             yield put({
