@@ -18,7 +18,7 @@ import {
     Switch
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid  } from "../../util/helpers"
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
@@ -5004,17 +5004,65 @@ class RegistrationCompetitionFee extends Component {
         )
     };
 
+    // setImage = (data, key) => {
+    //     if (data.files[0] !== undefined) {
+    //         let files_ = data.files[0].type.split('image/');
+    //         let fileType = files_[1];
+
+    //         if (key === "competitionLogoUrl") {
+    //             if (data.files[0].size > AppConstants.logo_size) {
+    //                 message.error(AppConstants.logoImageSize);
+    //                 return;
+    //             }
+    //             if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //                 this.setState({
+    //                     image: data.files[0],
+    //                     profileImage: URL.createObjectURL(data.files[0]),
+    //                     isSetDefaul: true,
+    //                 });
+    //                 this.props.add_editcompetitionFeeDeatils(
+    //                     URL.createObjectURL(data.files[0]),
+    //                     'competitionLogoUrl'
+    //                 );
+    //                 this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
+    //             } else {
+    //                 message.error(AppConstants.logoType);
+    //                 return;
+    //             }
+    //         } else if (key === "heroImageUrl") {
+    //             if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //                 this.setState({
+    //                     heroImage: data.files[0]
+    //                 });
+    //                 this.props.add_editcompetitionFeeDeatils(
+    //                     URL.createObjectURL(data.files[0]),
+    //                     'heroImageUrl'
+    //                 );
+    //             } else {
+    //                 message.error(AppConstants.logoType);
+    //                 return;
+    //             }
+    //         }
+    //     }
+    // };
+
     setImage = (data, key) => {
         if (data.files[0] !== undefined) {
-            let files_ = data.files[0].type.split('image/');
-            let fileType = files_[1];
-
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            
+            
             if (key === "competitionLogoUrl") {
-                if (data.files[0].size > AppConstants.logo_size) {
-                    message.error(AppConstants.logoImageSize);
-                    return;
+                if (!isSuccess) {
+                    message.error(AppConstants.logo_Image_Format);
+                    return
                 }
-                if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+                if (!imageSizeValid) {
+                    message.error(AppConstants.logo_Image_Size);
+                    return
+                }
                     this.setState({
                         image: data.files[0],
                         profileImage: URL.createObjectURL(data.files[0]),
@@ -5025,11 +5073,9 @@ class RegistrationCompetitionFee extends Component {
                         'competitionLogoUrl'
                     );
                     this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
-                } else {
-                    message.error(AppConstants.logoType);
-                    return;
-                }
             } else if (key === "heroImageUrl") {
+                let files_ = data.files[0].type.split('image/');
+                let fileType = files_[1];
                 if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
                     this.setState({
                         heroImage: data.files[0]
@@ -5323,6 +5369,9 @@ class RegistrationCompetitionFee extends Component {
                             )}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <InputWithHead heading={AppConstants.heroImageForCompetition} />
