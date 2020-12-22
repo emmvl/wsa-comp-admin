@@ -172,6 +172,7 @@ function userReducer(state = initialState, action) {
         error: action.error,
         status: action.status,
         umpireActivityOnLoad: false,
+        onMedicalLoad: false
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -185,6 +186,7 @@ function userReducer(state = initialState, action) {
         error: action.error,
         status: action.status,
         umpireActivityOnLoad: false,
+        onMedicalLoad: false
       };
 
     // get Role Entity List for current user
@@ -906,6 +908,20 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_CLEAR_LIST_DATA:
       state.affiliateTo = []
       return { ...state };
+
+    case ApiConstants.Api_REST_TFA_LOAD:
+      return {
+        ...state,
+        onMedicalLoad: true,
+        status: null
+      }
+
+    case ApiConstants.Api_REST_TFA_SUCCESS:
+      console.log(action)
+      return {
+        ...state,
+        onMedicalLoad: false
+      }
 
 
     default:

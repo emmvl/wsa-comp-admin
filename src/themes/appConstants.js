@@ -1007,6 +1007,7 @@ const AppConstants = {
   coachExport: '/users/byRole/export?roleId=17&entityTypeId=6&entityId=',
   managerExport: '/users/byRole/export?roleId=3&entityTypeId=6&entityId=',
   scorerExport: '/roster/exportScorer?entityTypeId=',
+  positionExport: '/stats/positionTracking/export?',
   teamExport: '/teams/export?competitionId=',
   playersToPay: 'Players to Pay',
   exportTeams: 'Export Teams',
@@ -1646,6 +1647,8 @@ const AppConstants = {
   childUnlinkMessage: "Your Parent needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
   parentUnlinkMessage: "Your Child needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
   ok: "OK",
+  tfaSuccessfullyReset: "TFA was reset successfully",
+  errorInTFAReset: 'There was an issue with resetting TFA'
 };
 
 export default AppConstants;
