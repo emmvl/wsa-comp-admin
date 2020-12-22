@@ -7,6 +7,7 @@ import {
     Button,
     Radio,
     Form,
+    message
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -36,7 +37,7 @@ import Loader from '../../customComponents/loader'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
-import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
+import { isArrayNotEmpty, captializedString, regexNumberExpression, isImageFormatValid, isImageSizeValid } from '../../util/helpers';
 import Tooltip from 'react-png-tooltip'
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
@@ -156,12 +157,34 @@ class LiveScoreAddTeam extends Component {
         })
     }
 
-    setImage = (data) => {
+    setImage_1 = (data) => {
         if (data.files[0] !== undefined) {
             let profileImage = URL.createObjectURL(data.files[0])
             this.setState({ image: data.files[0], profileImage: profileImage })
             this.props.liveScoreAddTeamform({ key: 'logoUrl', data: profileImage })
-            // this.props.liveScoreAddTeamform({ key: 'teamLogo', data: data.files[0] })
+        }
+    };
+
+    setImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            let profileImage = URL.createObjectURL(data.files[0])
+            this.setState({ image: data.files[0], profileImage: profileImage, timeout: 2000 })
+            this.props.liveScoreAddTeamform({ key: 'logoUrl', data: profileImage })
+            setTimeout(() => {
+                this.setState({ timeout: null })
+            }, 2000);
         }
     };
 
@@ -254,13 +277,14 @@ class LiveScoreAddTeam extends Component {
                                 type="file"
                                 id="user-pic"
                                 className="d-none"
-                                onChange={(evt) => {
-                                    this.setImage(evt.target)
-                                    this.setState({ timeout: 2000 })
-                                    setTimeout(() => {
-                                        this.setState({ timeout: null })
-                                    }, 2000);
-                                }}
+                                // onChange={(evt) => {
+                                //     this.setImage(evt.target)
+                                //     this.setState({ timeout: 2000 })
+                                //     setTimeout(() => {
+                                //         this.setState({ timeout: null })
+                                //     }, 2000);
+                                // }}
+                                onChange={(evt) => this.setImage(evt.target)}
                             />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
@@ -278,6 +302,9 @@ class LiveScoreAddTeam extends Component {
                             </Checkbox>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <div className="row">

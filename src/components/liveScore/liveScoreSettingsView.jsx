@@ -177,7 +177,10 @@ class LiveScoreSettingsView extends Component {
                 message.error(AppConstants.logo_Image_Size);
                 return
             }
-            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]),timeout:2000 })
+            setTimeout(() => {
+                this.setState({ timeout: null })
+            }, 2000);
             const imgData = URL.createObjectURL(data.files[0])
             this.props.onChangeSettingForm({ key: 'competitionLogo', data: data.files[0] })
             this.props.onChangeSettingForm({ key: 'Logo', data: imgData })
@@ -607,10 +610,10 @@ class LiveScoreSettingsView extends Component {
                                 name="imageFile"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
-                                    this.setState({ timeout: 2000 })
-                                    setTimeout(() => {
-                                        this.setState({ timeout: null })
-                                    }, 2000);
+                                    // this.setState({ timeout: 2000 })
+                                    // setTimeout(() => {
+                                    //     this.setState({ timeout: null })
+                                    // }, 2000);
                                 }}
                             />
                         </div>

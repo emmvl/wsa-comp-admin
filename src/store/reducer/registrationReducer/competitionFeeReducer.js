@@ -1121,6 +1121,7 @@ function childFeesMapping(getFeeData) {
             childItem['GST'] = parentFeesList[childIndex].GST
             childItem['feeTypeRefId'] = parentFeesList[childIndex].feeTypeRefId
             childItem['competitionMembershipProductDivisionId'] = parentFeesList[childIndex].competitionMembershipProductDivisionId
+            childItem["teamRegChargeTypeRefId"] = parentFeesList[childIndex].teamRegChargeTypeRefId
 
         })
         mainFeeArray[i].fees = mainFeeArray[i].childFees

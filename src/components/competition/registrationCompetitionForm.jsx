@@ -16,7 +16,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid  } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -662,24 +662,44 @@ class RegistrationCompetitionForm extends Component {
         );
     };
 
+    // setImage = (data) => {
+    //     if (data.files[0] !== undefined) {
+    //         let files_ = data.files[0].type.split("image/")
+    //         let fileType = files_[1]
+
+    //         if (data.files[0].size > AppConstants.logo_size) {
+    //             message.error(AppConstants.logoImageSize);
+    //             return
+    //         }
+
+    //         if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+    //             this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+    //             this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+    //         } else {
+    //             message.error(AppConstants.logoType);
+    //             return
+    //         }
+    //     }
+    // };
+
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            let files_ = data.files[0].type.split("image/")
-            let fileType = files_[1]
-
-            if (data.files[0].size > AppConstants.logo_size) {
-                message.error(AppConstants.logoImageSize);
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
                 return
             }
-
-            if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
-                this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-                this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-                this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
-            } else {
-                message.error(AppConstants.logoType);
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
                 return
             }
+        this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+        this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+        this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
         }
     };
 
@@ -939,6 +959,9 @@ class RegistrationCompetitionForm extends Component {
                             )}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <InputWithHead heading={AppConstants.description} />

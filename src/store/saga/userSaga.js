@@ -2,12 +2,13 @@ import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 import history from "util/history";
 import ApiConstants from "themes/apiConstants";
+import AppConstants from 'themes/appConstants'
 import { setAuthToken } from "util/sessionStorage";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi";
 import CommonAxiosApi from "store/http/axiosApi";
 import livescoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 
-function* failSaga(result) {
+function* failSaga(result, key) {
   yield put({
     type: ApiConstants.API_USER_FAIL,
     error: result,
@@ -19,11 +20,14 @@ function* failSaga(result) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error(result.result.data.message);
+    key ?
+      message.error(AppConstants.errorInTFAReset)
+      :
+      message.error(result.result.data.message);
   }, 800);
 }
 
-function* errorSaga(error) {
+function* errorSaga(error, key) {
   yield put({
     type: ApiConstants.API_USER_ERROR,
     error: error,
@@ -35,7 +39,10 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error("Something went wrong.");
+    key ?
+      message.error(AppConstants.errorInTFAReset)
+      :
+      message.error("Something went wrong.");
   }, 800);
 }
 
@@ -999,6 +1006,25 @@ function* registrationResendEmailSaga(action) {
   }
 }
 
+function* userRestTFASaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.restTfaApi,);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.Api_REST_TFA_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+      message.success(AppConstants.tfaSuccessfullyReset)
+    } else {
+      yield call(failSaga, result, "TfaError");
+    }
+  } catch (error) {
+    yield call(errorSaga, error, "TfaError");
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1049,4 +1075,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
   yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
   yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
+  yield takeEvery(ApiConstants.Api_REST_TFA_LOAD, userRestTFASaga);
+
 }
