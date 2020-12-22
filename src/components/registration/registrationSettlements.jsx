@@ -236,7 +236,7 @@ class RegistrationSettlements extends Component {
                     <span className="reg-payment-paid-reg-text">{AppConstants.currentPage + " - " + currentPage}</span>
                     <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
                 </div>
-                <div className="d-flex justify-content-end " style={{ paddingBottom: 100 }}>
+                <div className="d-flex justify-content-end paddingBottom80px " >
                     <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripePayoutList("Previous")}>
                         <span style={!previousEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.previous}</span>

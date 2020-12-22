@@ -4,6 +4,10 @@
     padding-bottom: 56px;
 }
 
+.paddingBottom80px {
+    padding-bottom: 80px;
+}
+
 .formLineHeight .ant-form-item-control {
     line-height: 10px;
 }
