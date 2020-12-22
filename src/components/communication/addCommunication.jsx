@@ -37,7 +37,7 @@ import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import { NavLink } from "react-router-dom";
@@ -272,7 +272,7 @@ class AddCommunication extends Component {
     }
 
     ////method to setimage
-    setImage = (data) => {
+    setImage_1 = (data) => {
         this.setState({ imageSelection: null, image: null })
         this.props.liveScoreUpdateNewsAction(null, "newsImage")
 
@@ -291,6 +291,27 @@ class AddCommunication extends Component {
 
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
             // this.props.liveScoreUpdateNewsAction(data.files[0], "newsImage")
+        }
+    };
+
+    setImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]), imageTimeout: 2000, crossImageIcon: false })
+            setTimeout(() => {
+                this.setState({ imageTimeout: null, crossImageIcon: true })
+            }, 2000);
         }
     };
 
@@ -532,13 +553,14 @@ class AddCommunication extends Component {
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
-                                onChange={(event) => {
-                                    this.setImage(event.target, 'evt.target')
-                                    this.setState({ imageTimeout: 2000, crossImageIcon: false })
-                                    setTimeout(() => {
-                                        this.setState({ imageTimeout: null, crossImageIcon: true })
-                                    }, 2000);
-                                }}
+                                // onChange={(event) => {
+                                //     this.setImage(event.target, 'evt.target')
+                                //     this.setState({ imageTimeout: 2000, crossImageIcon: false })
+                                //     setTimeout(() => {
+                                //         this.setState({ imageTimeout: null, crossImageIcon: true })
+                                //     }, 2000);
+                                // }}
+                                onChange={(evt) => this.setImage(evt.target)}
                                 onClick={(event) => {
                                     event.target.value = null
                                 }}
@@ -559,6 +581,9 @@ class AddCommunication extends Component {
                                 )}
                             </div>
                         </div>
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.newsVideo} />
@@ -619,7 +644,7 @@ class AddCommunication extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <InputWithHead  heading={AppConstants.newsExpiryTime} />
+                        <InputWithHead heading={AppConstants.newsExpiryTime} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}

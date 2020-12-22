@@ -169,7 +169,7 @@ class RegistrationPayments extends Component {
                             <div className="col-sm pt-1">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                     <div className="comp-buttons-view">
-                                        { stripeConnected ? (
+                                        {stripeConnected ? (
                                             <Button type="primary mx-4" onClick={() => this.onExport()}>
                                                 <img
                                                     src={AppImages.export}
@@ -179,7 +179,7 @@ class RegistrationPayments extends Component {
                                                 {AppConstants.exportPayments}
                                             </Button>
                                         ) : ('')}
-                                        { isBecsSetupDone ? (
+                                        {isBecsSetupDone ? (
                                             <Button type="primary">
                                                 <img
                                                     src={AppImages.export}
@@ -211,39 +211,6 @@ class RegistrationPayments extends Component {
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
-                    </Select>
-                </div>
-                <div className="col-sm">
-                    <InputWithHead required="pt-0" heading={AppConstants.competition} />
-
-                    <Select
-                        className="reg-payment-select w-100"
-                        style={{ paddingRight: 1, minWidth: 160 }}
-                        onChange={(competition) => this.setState({ competition })}
-                        value={this.state.competition}
-                    >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
-                    </Select>
-                </div>
-                <div className="col-sm">
-                    <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
-                    <Select
-                        className="reg-payment-select w-100"
-                        style={{ paddingRight: 1, minWidth: 160 }}
-                        onChange={(paymentFor) => this.setState({ paymentFor })}
-                        value={this.state.paymentFor}
-                    >
-                        <Option value="all">{AppConstants.all}</Option>
                         <Option value="2020">{AppConstants.year2020}</Option>
                         <Option value="2019">{AppConstants.year2019}</Option>
                         <Option value="2018">{AppConstants.year2018}</Option>
@@ -340,17 +307,17 @@ class RegistrationPayments extends Component {
                                         {/* </a> */}
                                     </Button>
                                 ) : (
-                                    <Button
-                                        className="open-reg-button"
-                                        type="primary"
-                                    >
-                                        <a href={stripeConnectURL} className="stripe-connect">
-                                            <span>
-                                                {AppConstants.connectToStripe}
-                                            </span>
-                                        </a>
-                                    </Button>
-                                )}
+                                        <Button
+                                            className="open-reg-button"
+                                            type="primary"
+                                        >
+                                            <a href={stripeConnectURL} className="stripe-connect">
+                                                <span>
+                                                    {AppConstants.connectToStripe}
+                                                </span>
+                                            </a>
+                                        </Button>
+                                    )}
                                 {/* {isBecsSetupDone ? (
                                     <Button
                                         className="open-reg-button mx-1"

@@ -269,39 +269,6 @@ class RegistrationSettlements extends Component {
                     </Select>
                 </div>
                 <div className="col-sm">
-                    <InputWithHead required="pt-0" heading={AppConstants.competition} />
-
-                    <Select
-                        className="reg-payment-select w-100"
-                        style={{ paddingRight: 1, minWidth: 160 }}
-                        onChange={(competition) => this.setState({ competition })}
-                        value={this.state.competition}
-                    >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
-                    </Select>
-                </div>
-                <div className="col-sm">
-                    <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
-                    <Select
-                        className="reg-payment-select w-100"
-                        style={{ paddingRight: 1, minWidth: 160 }}
-                        onChange={(paymentFor) => this.setState({ paymentFor })}
-                        value={this.state.paymentFor}
-                    >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
-                    </Select>
-                </div>
-                <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
                         className="reg-payment-datepicker w-100"
