@@ -25,7 +25,8 @@ export default function PaymentSetupForm() {
         let secret
         const auBankAccount = elements.getElement(AuBankAccountElement);
         try {
-            const result = await userHttp.get(`${process.env.REACT_APP_USER_API_URL}/becs/secret`)
+            const orgDetail = await getOrganisationData()
+            const result = await userHttp.get(`${process.env.REACT_APP_USER_API_URL}/becs/secret/${orgDetail.organisationId}`)
             secret = result.data
         } catch(e) {
             console.log({e})
