@@ -11,7 +11,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { liveScoreGoalListAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty } from '../../util/helpers'
@@ -40,7 +40,7 @@ function tableSort(key) {
     this_obj.setState({ sortBy, sortOrder });
 
     let offset = 0
-    this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, sortBy, sortOrder)
+    this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent , this_obj.state.compOrgId)
 }
 
 const columns1 = [
@@ -219,6 +219,8 @@ class LiveScoreGoalList extends Component {
             searchText: "",
             sortBy: null,
             sortOrder: null,
+            liveScoreCompIsParent:false,
+            compOrgId:0
         }
         this_obj = this
     }
@@ -226,8 +228,12 @@ class LiveScoreGoalList extends Component {
     async componentDidMount() {
         let { livescoreGoalActionObject } = this.props.liveScoreGoalState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
+            const { id , competitionOrganisation , organisationId} = JSON.parse(getLiveScoreCompetiton())
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0;
+            const orgItem = await getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
+            this.setState({ competitionId: id , compOrgId , liveScoreCompIsParent })
             if (id !== null) {
                 let offset = 0
                 if (livescoreGoalActionObject) {
@@ -237,10 +243,10 @@ class LiveScoreGoalList extends Component {
                     let sortOrder = livescoreGoalActionObject.sortOrder
                     let goalType = livescoreGoalActionObject.goalType
                     await this.setState({ offset, searchText, sortBy, sortOrder, filter: goalType })
-                    this.props.liveScoreGoalListAction(id, goalType, searchText, offset, sortBy, sortOrder)
+                    this.props.liveScoreGoalListAction(id, goalType, searchText, offset, sortBy, sortOrder , liveScoreCompIsParent , compOrgId)
                 }
                 else {
-                    this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset)
+                    this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset , undefined , undefined , liveScoreCompIsParent , compOrgId)
                 }
             } else {
                 history.push('/matchDayCompetitions')
@@ -251,7 +257,15 @@ class LiveScoreGoalList extends Component {
     }
 
     onExport = () => {
-        let url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`
+        let url = '';
+        if(this.state.liveScoreCompIsParent !== true)
+        {
+            url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}` + `&competitionOrganisationId=${this.state.compOrgId}`
+        }
+        else{
+            url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`
+        }
+        
         this.props.exportFilesAction(url)
     }
 
@@ -261,7 +275,7 @@ class LiveScoreGoalList extends Component {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder)
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -272,7 +286,7 @@ class LiveScoreGoalList extends Component {
         let { sortBy, sortOrder } = this.state
         if (code === 13) { // 13 is the enter keycode
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder)
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -284,14 +298,14 @@ class LiveScoreGoalList extends Component {
         }
         else {
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder)
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
     onChangeFilter = (filter) => {
         let { sortBy, sortOrder } = this.state
         let offset = 0
-        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset, sortBy, sortOrder)
+        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         this.setState({ filter })
     }
 
@@ -364,7 +378,7 @@ class LiveScoreGoalList extends Component {
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
-        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder)
+        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
     }
 
     contentView = () => {
