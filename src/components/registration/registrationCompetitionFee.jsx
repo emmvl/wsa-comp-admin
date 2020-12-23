@@ -7460,13 +7460,8 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <InputWithHead
                                             auto_complete="new-child"
-<<<<<<< HEAD
                                             heading={`Family Participant ${childIndex + 1} (add % discount)`}
                                             placeholder={`Family Participant ${childIndex + 1} (add % discount)`}
-=======
-                                            heading={`Family Participant ${childIndex + 1}`}
-                                            placeholder={`Family Participant ${childIndex + 1}`}
->>>>>>> 5e2171ceea7a03c47c825475da940caaa2027346
                                             onChange={(e) =>
                                                 this.onChangeChildPercent(
                                                     e.target.value,
