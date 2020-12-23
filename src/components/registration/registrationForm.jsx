@@ -100,13 +100,19 @@ const columns = [
                 </CustomTooltip>
             </div>
         ),
-        render: (registrationLock, record, index) => (
-            <Checkbox
-                className="single-checkbox mt-1"
-                checked={record.registrationLock == null ? false : record.registrationLock}
-                onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
-            />
-        )
+        render: (registrationLock, record, index) => {
+            return (
+                <div>
+                    {(record.isPlaying == 1 || record.isIndividualRegistration == 1) &&
+                        <Checkbox
+                            className="single-checkbox mt-1"
+                            checked={record.registrationLock == null ? false : record.registrationLock}
+                            onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
+                        />
+                    }
+                </div>
+            )
+        }
     },
 
     {
@@ -115,17 +121,20 @@ const columns = [
         key: "registrationCap",
         render: (registrationCap, record, index) => {
             return (
-                <InputWithHead
-                    style={{ width: "70%" }}
-                    placeholder=" "
-                    type={"number"}
-                    min="0"
-                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
-                    value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
-                />
+                <div>
+                    {(record.isPlaying == 1 || record.isIndividualRegistration == 1) &&
+                        <InputWithHead
+                            style={{ width: "70%" }}
+                            placeholder=" "
+                            type={"number"}
+                            min="0"
+                            onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                            value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
+                        />
+                    }
+                </div>
             )
         }
-
     }
 ];
 
