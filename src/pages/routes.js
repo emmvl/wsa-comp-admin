@@ -174,7 +174,9 @@ import NotFound from './404';
 import CommunicationList from 'components/communication/communicationList';
 import AddCommunication from 'components/communication/addCommunication';
 import CommunicationView from 'components/communication/communictionView';
-import MergeUserMatches from 'components/user/mergeUserComponentMatches'
+import MergeUserMatches from 'components/user/mergeUserMatches'
+import MergeUserDetail from 'components/user/mergeUserDetail'
+
 class Routes extends React.Component {
     constructor(props) {
         super(props);
@@ -425,6 +427,12 @@ class Routes extends React.Component {
                     path="/mergeUserMatches"
                     component={this.haveAccess(userRoleId, '/userPersonal')
                         ? lazyLoad(MergeUserMatches)
+                        : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/mergeUserDetail"
+                    component={this.haveAccess(userRoleId, '/userPersonal')
+                        ? lazyLoad(MergeUserDetail)
                         : lazyLoad(NotFound)}
                 />
                 <PrivateRoute

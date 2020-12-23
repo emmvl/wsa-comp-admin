@@ -285,6 +285,9 @@ class LiveScoreAddTeam extends Component {
                                 //     }, 2000);
                                 // }}
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>

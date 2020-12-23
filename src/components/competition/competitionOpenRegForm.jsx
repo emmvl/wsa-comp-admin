@@ -1031,6 +1031,9 @@ class CompetitionOpenRegForm extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">

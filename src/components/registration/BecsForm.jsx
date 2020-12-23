@@ -40,7 +40,7 @@ export default function BecsForm({ onSubmit, disabled }) {
             <Card>
                 <div>
                     <label className="w-100">
-                        Bank Account
+                        {AppConstants.bankAccount}
                         <AuBankAccountElement
                             options={AU_BANK_ACCOUNT_ELEMENT_OPTIONS}
                         />
@@ -49,9 +49,9 @@ export default function BecsForm({ onSubmit, disabled }) {
                 </div>
             </Card>
                 <div className="d-flex justify-content-between mt-5">
-                    <Button onClick={() => history.push("/registrationPayments")}>Cancel</Button>
+                    <Button onClick={() => history.push("/registrationPayments")}>{AppConstants.cancel}</Button>
                     <Button type="primary" htmlType="submit" disabled={disabled}>
-                        Save
+                        {AppConstants.save}
                     </Button>
                 </div>
         </form>

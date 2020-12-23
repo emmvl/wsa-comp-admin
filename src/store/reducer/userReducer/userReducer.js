@@ -156,7 +156,8 @@ const initialState = {
   spectatorTotalCount: null,
   spectatorListAction: null,
   impersonationList: [],
-  onImpersonationLoad: false
+  onImpersonationLoad: false,
+  usersToBeMerged: []
 };
 
 function userReducer(state = initialState, action) {
@@ -896,7 +897,7 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD:
       return { ...state, onLoad: true };
-
+    
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS:
       return {
         ...state,
@@ -923,6 +924,11 @@ function userReducer(state = initialState, action) {
         onMedicalLoad: false
       }
 
+    case ApiConstants.ADD_USERS_TO_BE_MERGED:
+      state.usersToBeMerged = action.payload
+      return {
+        ...state
+      }
 
     default:
       return state;

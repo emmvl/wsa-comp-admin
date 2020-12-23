@@ -2,7 +2,7 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 //Goals action
-function liveScoreGoalListAction(competitionID, goalType, search, offset, sortBy, sortOrder) {
+function liveScoreGoalListAction(competitionID, goalType, search, offset, sortBy, sortOrder , isParent , compOrgId) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_GOAL_LIST_LOAD,
         competitionID: competitionID,
@@ -10,7 +10,9 @@ function liveScoreGoalListAction(competitionID, goalType, search, offset, sortBy
         search,
         offset,
         sortBy,
-        sortOrder
+        sortOrder,
+        isParent , 
+        compOrgId
     };
 
     return action;
