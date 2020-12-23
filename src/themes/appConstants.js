@@ -1648,7 +1648,20 @@ const AppConstants = {
   parentUnlinkMessage: "Your Child needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
   ok: "OK",
   tfaSuccessfullyReset: "TFA was reset successfully",
-  errorInTFAReset: 'There was an issue with resetting TFA'
+  errorInTFAReset: 'There was an issue with resetting TFA',
+  becsTnC: 'By providing your bank account details and confirming this payment, you agree to this Direct Debit Request and the Direct Debit Request service agreement, and authorise Stripe Payments Australia Pty Ltd ACN 160 180 343 Direct Debit User ID number 507156 (“Stripe”) to debit your account through the Bulk Electronic Clearing System (BECS) on behalf of Word Sport Action Pty Ltd (the “Merchant”) for any amounts separately communicated to you by the Merchant. You certify that you are either an account holder or an authorised signatory on the account listed above.',
+  mergeUser: 'Merge User',
+  userToMerge: 'User to Merge',
+  possibleMatches: 'Possible Matches',
+  possibleMatchesDescription: 'Select the user you want to merge with and press Next',
+  selectDetailsToKeep: 'Select which details to keep',
+  merge: 'Merge',
+  userMergedSuccessfully: 'User merged successfully',
+  selectAllFromThisUser :'Select all from this user',
+  userInformation :'User Information',
+  success: 'Success',
+  id: 'ID',
+  bankAccount: 'Bank Account',
 };
 
 export default AppConstants;
