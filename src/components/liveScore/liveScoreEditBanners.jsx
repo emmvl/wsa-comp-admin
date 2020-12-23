@@ -288,6 +288,9 @@ class LiveScoreEditBanners extends Component {
                                     //     }, 1000);
                                     // }}
                                     onChange={(evt) => this.setImage(evt.target)}
+                                    onClick={(event) => {
+                                        event.target.value = null
+                                    }}
                                 />
                             </Form.Item>
                             <span className="image-size-format-text">

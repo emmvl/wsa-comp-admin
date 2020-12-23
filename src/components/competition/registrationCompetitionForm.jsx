@@ -928,6 +928,9 @@ class RegistrationCompetitionForm extends Component {
                                 type="file"
                                 id="user-pic"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">

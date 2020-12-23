@@ -5052,17 +5052,15 @@ class RegistrationCompetitionFee extends Component {
             let extension = file.name.split('.').pop().toLowerCase();
             let imageSizeValid = isImageSizeValid(file.size)
             let isSuccess = isImageFormatValid(extension);
-            
-            
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             if (key === "competitionLogoUrl") {
-                if (!isSuccess) {
-                    message.error(AppConstants.logo_Image_Format);
-                    return
-                }
-                if (!imageSizeValid) {
-                    message.error(AppConstants.logo_Image_Size);
-                    return
-                }
                     this.setState({
                         image: data.files[0],
                         profileImage: URL.createObjectURL(data.files[0]),
@@ -5074,9 +5072,6 @@ class RegistrationCompetitionFee extends Component {
                     );
                     this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
             } else if (key === "heroImageUrl") {
-                let files_ = data.files[0].type.split('image/');
-                let fileType = files_[1];
-                if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
                     this.setState({
                         heroImage: data.files[0]
                     });
@@ -5084,10 +5079,6 @@ class RegistrationCompetitionFee extends Component {
                         URL.createObjectURL(data.files[0]),
                         'heroImageUrl'
                     );
-                } else {
-                    message.error(AppConstants.logoType);
-                    return;
-                }
             }
         }
     };
@@ -5332,6 +5323,9 @@ class RegistrationCompetitionFee extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target, "competitionLogoUrl")}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -5402,8 +5396,17 @@ class RegistrationCompetitionFee extends Component {
                             id="hero-pic"
                             className="d-none"
                             onChange={(evt) => this.setImage(evt.target, "heroImageUrl")}
+                            onClick={(event) => {
+                                event.target.value = null
+                            }}
                         />
+                        <div className="d-flex align-items-center justify-content-center">
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
+                    </div> 
                     </div>
+                    
                     <span
                         style={
                             detailsData.competitionDetailData.heroImageUrl == null

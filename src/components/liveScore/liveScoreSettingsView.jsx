@@ -615,6 +615,9 @@ class LiveScoreSettingsView extends Component {
                                     //     this.setState({ timeout: null })
                                     // }, 2000);
                                 }}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex align-items-center">
