@@ -1119,13 +1119,8 @@ class RegistrationMembershipFee extends Component {
                                 <div className="col-sm-10">
                                     <Form.Item name={`percentageValue${index} + ${childindex}`} rules={[{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }]}  >
                                         <InputWithHead
-<<<<<<< HEAD
                                             heading={`Family Participant ${childindex + 1} (add % discount)`}
                                             placeholder={`Family Participant ${childindex + 1} (add % discount)`}
-=======
-                                            heading={`Family Participant ${childindex + 1}`}
-                                            placeholder={`Family Participant ${childindex + 1}`}
->>>>>>> 5e2171ceea7a03c47c825475da940caaa2027346
                                             onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
                                             // value={childItem.percentageValue}
                                             disabled={this.state.membershipIsUsed}
