@@ -361,6 +361,9 @@ class AddProduct extends Component {
                 className="d-none"
                 onChange={(e) => this.onChange(e)}
                 accept="image/*"
+                onClick={(event) => {
+                    event.target.value = null
+                }}
             />
             <Button
                 onClick={(e) => { document.getElementById('getImage').click(); e.stopPropagation(); }}

@@ -545,12 +545,12 @@ let AxiosApi = {
         var url = `/api/payments/umpireTransfer`;
         return Method.dataPost(url, token, postData);
     },
-    getMembershipFeeCapList(organisationUniqueKey){
-        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}`
+    getMembershipFeeCapList(organisationUniqueKey,yearRefId){
+        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
         return Method.dataGet(url, token);
     },
-    updateMembershipFeeCap(organisationUniqueKey,payload){
-        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}`
+    updateMembershipFeeCap(organisationUniqueKey,yearRefId,payload){
+        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
         return Method.dataPost(url, token, payload);
     },
 };

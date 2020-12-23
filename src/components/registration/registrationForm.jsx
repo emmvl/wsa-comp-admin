@@ -115,7 +115,7 @@ const columns = [
         key: "registrationCap",
         render: (registrationCap, record, index) => {
             return (
-                <InputWithHead 
+                <InputWithHead
                     style={{ width: "70%" }}
                     placeholder=" "
                     type={"number"}
@@ -659,6 +659,7 @@ class RegistrationForm extends Component {
                 </Select>
 
                 {this.props.registrationState.selectedMemberShipType.map((item) => (
+                    item != undefined &&
                     <div className="inside-container-view">
                         <span className="form-heading pt-2 pl-2">
                             {item.membershipProductName}

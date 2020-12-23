@@ -121,7 +121,11 @@ function* forgotPasswordSaga(action) {
                 duration: 1.5,
                 maxCount: 1,
             });
-            message.error('Something went wrong.');
+            if (error?.error?.response?.data?.message) {
+                message.error(error?.error?.response?.data?.message);
+            } else {
+                message.error('Something went wrong.');
+            }
         }, 800);
     }
 }

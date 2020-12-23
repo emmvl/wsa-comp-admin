@@ -18,7 +18,7 @@ import {
     Switch
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid  } from "../../util/helpers"
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
@@ -5004,17 +5004,63 @@ class RegistrationCompetitionFee extends Component {
         )
     };
 
+    // setImage = (data, key) => {
+    //     if (data.files[0] !== undefined) {
+    //         let files_ = data.files[0].type.split('image/');
+    //         let fileType = files_[1];
+
+    //         if (key === "competitionLogoUrl") {
+    //             if (data.files[0].size > AppConstants.logo_size) {
+    //                 message.error(AppConstants.logoImageSize);
+    //                 return;
+    //             }
+    //             if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //                 this.setState({
+    //                     image: data.files[0],
+    //                     profileImage: URL.createObjectURL(data.files[0]),
+    //                     isSetDefaul: true,
+    //                 });
+    //                 this.props.add_editcompetitionFeeDeatils(
+    //                     URL.createObjectURL(data.files[0]),
+    //                     'competitionLogoUrl'
+    //                 );
+    //                 this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
+    //             } else {
+    //                 message.error(AppConstants.logoType);
+    //                 return;
+    //             }
+    //         } else if (key === "heroImageUrl") {
+    //             if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //                 this.setState({
+    //                     heroImage: data.files[0]
+    //                 });
+    //                 this.props.add_editcompetitionFeeDeatils(
+    //                     URL.createObjectURL(data.files[0]),
+    //                     'heroImageUrl'
+    //                 );
+    //             } else {
+    //                 message.error(AppConstants.logoType);
+    //                 return;
+    //             }
+    //         }
+    //     }
+    // };
+
     setImage = (data, key) => {
         if (data.files[0] !== undefined) {
-            let files_ = data.files[0].type.split('image/');
-            let fileType = files_[1];
-
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             if (key === "competitionLogoUrl") {
-                if (data.files[0].size > AppConstants.logo_size) {
-                    message.error(AppConstants.logoImageSize);
-                    return;
-                }
-                if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
                     this.setState({
                         image: data.files[0],
                         profileImage: URL.createObjectURL(data.files[0]),
@@ -5025,12 +5071,7 @@ class RegistrationCompetitionFee extends Component {
                         'competitionLogoUrl'
                     );
                     this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
-                } else {
-                    message.error(AppConstants.logoType);
-                    return;
-                }
             } else if (key === "heroImageUrl") {
-                if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
                     this.setState({
                         heroImage: data.files[0]
                     });
@@ -5038,10 +5079,6 @@ class RegistrationCompetitionFee extends Component {
                         URL.createObjectURL(data.files[0]),
                         'heroImageUrl'
                     );
-                } else {
-                    message.error(AppConstants.logoType);
-                    return;
-                }
             }
         }
     };
@@ -5286,6 +5323,9 @@ class RegistrationCompetitionFee extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target, "competitionLogoUrl")}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -5323,6 +5363,9 @@ class RegistrationCompetitionFee extends Component {
                             )}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <InputWithHead heading={AppConstants.heroImageForCompetition} />
@@ -5353,8 +5396,17 @@ class RegistrationCompetitionFee extends Component {
                             id="hero-pic"
                             className="d-none"
                             onChange={(evt) => this.setImage(evt.target, "heroImageUrl")}
+                            onClick={(event) => {
+                                event.target.value = null
+                            }}
                         />
+                        <div className="d-flex align-items-center justify-content-center">
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
+                    </div> 
                     </div>
+                    
                     <span
                         style={
                             detailsData.competitionDetailData.heroImageUrl == null
@@ -7380,6 +7432,21 @@ class RegistrationCompetitionFee extends Component {
             case 3:
                 return (
                     <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
+                            onChange={(discountType) => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.checkDiscountDisable(item.organisationId)}
+                        >
+                            {this.props.appState.commonDiscountTypes.map((item) => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
                         {childDiscounts.map((childItem, childIndex) => (
                             <div className="row">
                                 <div className="col-sm-10">
@@ -7393,8 +7460,13 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <InputWithHead
                                             auto_complete="new-child"
+<<<<<<< HEAD
                                             heading={`Family Participant ${childIndex + 1} (add % discount)`}
                                             placeholder={`Family Participant ${childIndex + 1} (add % discount)`}
+=======
+                                            heading={`Family Participant ${childIndex + 1}`}
+                                            placeholder={`Family Participant ${childIndex + 1}`}
+>>>>>>> 5e2171ceea7a03c47c825475da940caaa2027346
                                             onChange={(e) =>
                                                 this.onChangeChildPercent(
                                                     e.target.value,

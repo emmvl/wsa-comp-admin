@@ -68,13 +68,23 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, null);
     },
 
-    liveScoreGetDivision(data, compKey, sortBy, sortOrder) {
+    liveScoreGetDivision(data, compKey, sortBy, sortOrder, isParent, compOrgId) {
         let url = null;
-        if (compKey) {
-            url = `/division?competitionKey=${compKey}`;
-        } else {
-            url = `/division?competitionId=${data}`;
+        if (isParent !== true && compOrgId != undefined) {
+            if (compKey) {
+                url = `/division?competitionKey=${compKey}&competitionOrganisationIds=${compOrgId}`;
+            } else {
+                url = `/division?competitionId=${data}&competitionOrganisationIds=${compOrgId}`;
+            }
         }
+        else {
+            if (compKey) {
+                url = `/division?competitionKey=${compKey}`;
+            } else {
+                url = `/division?competitionId=${data}`;
+            }
+        }
+
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -225,13 +235,23 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreRound(competitionID, divisionId) {
+    liveScoreRound(competitionID, divisionId, isParent, compOrgId) {
         let url;
-        if (divisionId) {
-            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        if (isParent !== true && compOrgId != undefined) {
+            if (divisionId) {
+                url = `/round?competitionId=${competitionID}&divisionId=${divisionId}&competitionOrganisationIds=${compOrgId}`;
+            } else {
+                url = `/round?competitionId=${competitionID}&competitionOrganisationIds=${compOrgId}`;
+            }
+
         } else {
-            url = `/round?competitionId=${competitionID}`;
+            if (divisionId) {
+                url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+            } else {
+                url = `/round?competitionId=${competitionID}`;
+            }
         }
+
 
         return Method.dataGet(url, localStorage.token);
     },
@@ -643,13 +663,23 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreGoalList(compId, goalType, search, offset, sortBy, sortOrder) {
+    liveScoreGoalList(compId, goalType, search, offset, sortBy, sortOrder, isParent, compOrgId) {
         let url = null;
-        if (goalType === 'By Match') {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`;
-        } else if (goalType === 'Total') {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`;
+        if (isParent !== true) {
+            if (goalType === 'By Match') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}&competitionOrganisationId=${compOrgId}`;
+            } else if (goalType === 'Total') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}&competitionOrganisationId=${compOrgId}`;
+            }
         }
+        else {
+            if (goalType === 'By Match') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`;
+            } else if (goalType === 'Total') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`;
+            }
+        }
+
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -872,7 +902,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder) {
+    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder, isParent, compOrgId) {
         const Body = {
             paging: {
                 limit: 10,
@@ -881,11 +911,21 @@ const LiveScoreAxiosApi = {
             search: searchText,
         };
         let url;
-        if (aggregate) {
-            url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
-        } else {
-            url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+        if (!isParent) {
+            if (aggregate) {
+                url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}&competitionOrganisationId=${compOrgId}`;
+            } else {
+                url = `/stats/gametime?competitionId=${competitionId}&competitionOrganisationId=${compOrgId}&aggregate=""`;
+            }
         }
+        else {
+            if (aggregate) {
+                url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
+            } else {
+                url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+            }
+        }
+
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -951,7 +991,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAttendanceList(competitionId, payload, selectStatus, divisionId, roundId) {
+    liveScoreAttendanceList(competitionId, payload, selectStatus, divisionId, roundId, isParent, compOrgId) {
         const body = {
             paging: payload.paging,
             search: payload.search,
@@ -970,6 +1010,9 @@ const LiveScoreAxiosApi = {
         }
         if (roundId) {
             url += `&roundIds=${roundId}`;
+        }
+        if (isParent !== true) {
+            url += `&competitionOrganisationId=${compOrgId}`;
         }
         return Method.dataPost(url, token, body);
     },

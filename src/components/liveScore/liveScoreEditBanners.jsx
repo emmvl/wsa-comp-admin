@@ -29,6 +29,8 @@ import DashboardLayout from 'pages/dashboardLayout';
 import InputWithHead from 'customComponents/InputWithHead';
 import Loader from 'customComponents/loader';
 import ImageLoader from 'customComponents/ImageLoader';
+import { isImageFormatValid, isImageSizeValid } from '../../util/helpers';
+
 
 import './liveScore.css';
 
@@ -54,6 +56,8 @@ class LiveScoreEditBanners extends Component {
     }
 
     componentDidMount() {
+        let bannerImgSend = this.state.tableRecord ? this.state.tableRecord.bannerUrl : null
+        this.setState({ bannerImgSend })
         const { organisationId } = getOrganisationData() ? getOrganisationData() : null;
         if (organisationId !== null) {
             this.props.getBannerCnt(organisationId);
@@ -118,7 +122,7 @@ class LiveScoreEditBanners extends Component {
         }
     };
 
-    setImage = (data) => {
+    setImage_1 = (data) => {
         if (data.files[0] !== undefined) {
             if (this.state.isEdit === true) {
                 this.props.location.state.tableRecord.bannerUrl = null;
@@ -128,6 +132,35 @@ class LiveScoreEditBanners extends Component {
             this.setState({ bannerImgSend: data.files[0], bannerImg: URL.createObjectURL(data.files[0]) });
         }
     };
+
+    setImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            else if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            else {
+                if (this.state.isEdit === true) {
+                    this.props.location.state.tableRecord.bannerUrl = null;
+                }
+                this.setState({ bannerImgSend: data.files[0], bannerImg: URL.createObjectURL(data.files[0]), timeout: 2000 });
+                setTimeout(() => {
+                    this.setState({ timeout: null });
+                }, 1000);
+            }
+
+
+        }
+    };
+
 
     loaderView = () => (
         <div className="d-flex justify-content-center align-items-center">
@@ -173,20 +206,29 @@ class LiveScoreEditBanners extends Component {
         // const showOnnews = showOnNews === true ? 1 : 0;
         // const showOnchat = showOnChat === true ? 1 : 0;
         if (id !== null) {
-            const bannerId = this.state.isEdit === true ? editBannerId : 0;
-            this.props.liveScoreAddBanner(
-                organisationId,
-                id,
-                this.state.bannerImgSend,
-                // showOnhome,
-                // showOndraws,
-                // showOnladder,
-                // showOnnews,
-                // showOnchat,
-                format,
-                bannerLink,
-                bannerId,
-            );
+            if (this.state.bannerImgSend === null) {
+                message.error(ValidationConstants.bannerImage);
+                message.config({
+                    duration: 1.5,
+                    maxCount: 1,
+                });
+                return
+            } else {
+                const bannerId = this.state.isEdit === true ? editBannerId : 0;
+                this.props.liveScoreAddBanner(
+                    organisationId,
+                    id,
+                    this.state.bannerImgSend,
+                    // showOnhome,
+                    // showOndraws,
+                    // showOnladder,
+                    // showOnnews,
+                    // showOnchat,
+                    format,
+                    bannerLink,
+                    bannerId,
+                );
+            }
         }
 
         this.setState({ load: true });
@@ -236,17 +278,24 @@ class LiveScoreEditBanners extends Component {
                                     required="pb-0"
                                     type="file"
                                     id="user-pic"
+                                    accept="image/*"
                                     // style={{ display: 'none' }}
-                                    onChange={(evt) => {
-                                        this.setImage(evt.target);
-                                        this.setState({ timeout: 1000 });
-                                        setTimeout(() => {
-                                            this.setState({ timeout: null });
-                                        }, 1000);
+                                    // onChange={(evt) => {
+                                    //     this.setImage(evt.target);
+                                    //     this.setState({ timeout: 1000 });
+                                    //     setTimeout(() => {
+                                    //         this.setState({ timeout: null });
+                                    //     }, 1000);
+                                    // }}
+                                    onChange={(evt) => this.setImage(evt.target)}
+                                    onClick={(event) => {
+                                        event.target.value = null
                                     }}
                                 />
                             </Form.Item>
-                            <span className="form-err">{this.state.imageError}</span>
+                            <span className="image-size-format-text">
+                                {AppConstants.imageSizeFormatText}
+                            </span>
                         </div>
                         <div className="col-sm pt-1">
                             <InputWithHead

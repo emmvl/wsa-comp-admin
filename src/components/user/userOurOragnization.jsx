@@ -354,6 +354,18 @@ class UserOurOrganization extends Component {
 
     setPhotosImage = (data) => {
         if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             let tableRow = this.state.tableRecord;
             tableRow.photoUrl = null;
             this.setState({ tableRecord: tableRow, orgPhotosImgSend: data.files[0], orgPhotosImg: URL.createObjectURL(data.files[0]) })
@@ -497,6 +509,10 @@ class UserOurOrganization extends Component {
         } else if (tabKey == "2") {
             let tableRowData = this.state.tableRecord;
             let formData = new FormData();
+            if(this.state.orgPhotosImgSend===null && tableRowData.photoUrl===null){
+                message.error(ValidationConstants.organisationPhotoRequired)
+                return
+            }
             formData.append("organisationPhoto", this.state.orgPhotosImgSend);
             formData.append("organisationPhotoId", tableRowData.id);
             formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
@@ -641,7 +657,7 @@ class UserOurOrganization extends Component {
                                 <label>
                                     {/* <input
                                         src={affiliate.logoUrl == null ? AppImages.circleImage : affiliate.logoUrl}
-                                        alt=""
+                                        // alt=""
                                         height="120"
                                         width="120"
                                         type="image"
@@ -667,6 +683,9 @@ class UserOurOrganization extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -1063,6 +1082,7 @@ class UserOurOrganization extends Component {
                                     required="pb-0"
                                     type="file"
                                     id="photos-pic"
+                                    accept="image/*"
                                     onChange={(evt) => {
                                         this.setPhotosImage(evt.target)
                                         this.setState({ timeout: 1000 })
@@ -1092,6 +1112,9 @@ class UserOurOrganization extends Component {
                             </div>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
             );
         } catch (ex) {

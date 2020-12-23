@@ -1121,6 +1121,7 @@ function childFeesMapping(getFeeData) {
             childItem['GST'] = parentFeesList[childIndex].GST
             childItem['feeTypeRefId'] = parentFeesList[childIndex].feeTypeRefId
             childItem['competitionMembershipProductDivisionId'] = parentFeesList[childIndex].competitionMembershipProductDivisionId
+            childItem["teamRegChargeTypeRefId"] = parentFeesList[childIndex].teamRegChargeTypeRefId
 
         })
         mainFeeArray[i].fees = mainFeeArray[i].childFees
@@ -2268,7 +2269,7 @@ function competitionFees(state = initialState, action) {
                 let selectedPaymentMethods = checkSelectedPaymentMethods(null, state.paymentMethodsDefault, state.selectedPaymentMethods)
 
                 state.selectedCasualFee = selectedCasualFee.selectedCasualFee;
-                state.selectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
+                state.SelectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
                 state.selectedSeasonalTeamFee = selectedSeasonalTeamFee.selectedSeasonalTeamFee;
                 state.selectedCasualTeamFee = selectedCasualTeamFee.selectedCasualTeamFee;
                 state.selectedPaymentMethods = selectedPaymentMethods.selectedPaymentMethods;

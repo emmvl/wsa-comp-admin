@@ -72,7 +72,7 @@ function tableSort(key) {
         compId: this_obj.state.selectedComp,
         divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
         venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
-        orgId: this_obj.state.orgId,
+        orgId: this_obj.state.org_Id,
         roundId: this_obj.state.round === "All" ? "" : Array.isArray(this_obj.state.round) ? this_obj.state.round : [this_obj.state.round],
         pageData: body,
         sortBy,
@@ -623,6 +623,7 @@ class UmpireDashboard extends Component {
             offsetData: 0,
             sortBy: null,
             sortOrder: null,
+            org_Id: null
 
         };
         this_obj = this;
@@ -667,6 +668,9 @@ class UmpireDashboard extends Component {
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
+                        this.setState({
+                            org_Id: compData.organisationId
+                        })
                         firstComp = JSON.parse(getLiveScoreUmpireCompition());
                         compData = JSON.parse(getLiveScoreUmpireCompitionData());
                         setUmpireCompition(firstComp);
@@ -674,10 +678,16 @@ class UmpireDashboard extends Component {
                     } else {
                         firstComp = JSON.parse(getUmpireCompetiton());
                         compData = JSON.parse(getUmpireCompetitonData());
+                        this.setState({
+                            org_Id: compData.organisationId
+                        })
                     }
                 } else {
                     setUmpireCompition(firstComp);
                     setUmpireCompitionData(JSON.stringify(compData));
+                    this.setState({
+                        org_Id: compData.organisationId
+                    })
                 }
 
                 if (firstComp !== false) {
@@ -685,7 +695,7 @@ class UmpireDashboard extends Component {
                         let compId = JSON.parse(getLiveScoreUmpireCompition());
                         this.props.getUmpireDashboardVenueList(compId);
 
-                        const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData());
+                        const { uniqueKey, organisationId } = JSON.parse(getLiveScoreUmpireCompitionData());
                         let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
 
                         this.setState({
@@ -695,11 +705,11 @@ class UmpireDashboard extends Component {
                             compArray: compList,
                             venueLoad: true,
                             competitionObj: compObjData,
+                            org_Id: organisationId
                         });
                     } else {
                         this.props.getUmpireDashboardVenueList(firstComp);
                         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-
                         this.setState({
                             selectedComp: firstComp,
                             loading: false,
@@ -735,7 +745,7 @@ class UmpireDashboard extends Component {
                     compId: this.state.selectedComp,
                     divisionId: this.state.division === "All" ? "" : this.state.division,
                     venueId: this.state.venue === "All" ? "" : this.state.venue,
-                    orgId: this.state.orgId,
+                    orgId: this.state.org_Id,
                     roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
                     pageData: body,
                     sortBy,
@@ -782,7 +792,7 @@ class UmpireDashboard extends Component {
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: this.state.venue === "All" ? "" : this.state.venue,
-            orgId: this.state.orgId,
+            orgId: this.state.org_Id,
             roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
             pageData: body,
             sortBy,
@@ -876,7 +886,7 @@ class UmpireDashboard extends Component {
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: venueId === "All" ? "" : venueId,
-            orgId: this.state.orgId,
+            orgId: this.state.org_Id,
             roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
             pageData: body,
             sortBy,
@@ -901,7 +911,7 @@ class UmpireDashboard extends Component {
                 compId: this.state.selectedComp,
                 divisionId: divisionId === "All" ? "" : divisionId,
                 venueId: this.state.venue === "All" ? "" : this.state.venue,
-                orgId: this.state.orgId,
+                orgId: this.state.org_Id,
                 roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
                 pageData: body,
                 sortBy,
@@ -930,7 +940,7 @@ class UmpireDashboard extends Component {
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: this.state.venue === "All" ? "" : this.state.venue,
-            orgId: this.state.orgId,
+            orgId: this.state.org_Id,
             roundId: roundId === "All" ? "" : allRoundIds,
             pageData: body,
             sortBy,

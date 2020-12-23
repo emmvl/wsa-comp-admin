@@ -416,13 +416,27 @@ function getSpectatorListAction(payload, sortBy, sortOrder) {
     };
 }
 
-function registrationResendEmailAction(teamId,userId){
+function registrationResendEmailAction(teamId, userId) {
     const action = {
         type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD,
         teamId,
         userId
     } 
     return action;
+}
+function restTfaAction() {
+    const action = {
+        type: ApiConstants.Api_REST_TFA_LOAD,
+    }
+    return action
+}
+
+
+function addUsersToBeCompared(users) {
+    return {
+        type: ApiConstants.ADD_USERS_TO_BE_MERGED,
+        payload: users
+    }
 }
 
 export {
@@ -479,5 +493,7 @@ export {
     updateBannerAction,
     clearListAction,
     getSpectatorListAction,
-    registrationResendEmailAction
+    registrationResendEmailAction,
+    restTfaAction,
+    addUsersToBeCompared
 };

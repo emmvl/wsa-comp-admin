@@ -395,7 +395,7 @@ class RegistrationMembershipFee extends Component {
                     this.membershipFeeApplyRadio(true, i, "isNeedExtendedDate")
                 }
                 this.formRef.current.setFieldsValue({
-                    [`validityDays${i}`]: feesData[i].validityDays ? feesData[i].validityDays : null,
+                    // [`validityDays${i}`]: feesData[i].validityDays ? feesData[i].validityDays : null,
                     [`extendEndDate${i}`]: feesData[i].extendEndDate ? moment(feesData[i].extendEndDate,"YYYY-MM-DD") : null 
                 });
             }
@@ -849,23 +849,23 @@ class RegistrationMembershipFee extends Component {
                                                 <span className="applicable-to-heading required-field" style={{paddingTop: 0}}>{AppConstants.minNoDays}</span>
                                                 <div className="row" style={{marginTop: 10,alignItems: "center"}}>
                                                     <div className="col-md-6">
-                                                        <Form.Item
+                                                        {/* <Form.Item
                                                             name={`validityDays${index}`}
                                                             rules={[{ required: true, message: ValidationConstants.daysRequired }]}
-                                                        >
+                                                        > */}
                                                             <InputWithHead
-                                                                setFieldsValue={item.validityDays}
+                                                                value={item.validityDays}
                                                                 placeholder={AppConstants._days}
-                                                                onChange={(e) => this.membershipFeeApplyRadio(e.target.value > 0 ? e.target.value : "", index, "validityDays")}
-                                                                onBlur={(e) => {
-                                                                    this.formRef.current.setFieldsValue({
-                                                                        [`validityDays${index}`]: e.target.value > 0 ? e.target.value : ""
-                                                                    })
-                                                                }}
+                                                                onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays")}
+                                                                // onBlur={(e) => {
+                                                                //     this.formRef.current.setFieldsValue({
+                                                                //         [`validityDays${index}`]: e.target.value >= 0 ? e.target.value : ""
+                                                                //     })
+                                                                // }}
                                                                 type={"number"}
-                                                                min={1}
+                                                                min={0}
                                                             />
-                                                        </Form.Item>
+                                                        {/* </Form.Item> */}
                                                     </div>
                                                     <div className="col-md-6 applicable-to-heading" style={{paddingTop: 0}}>{AppConstants._days}</div>
                                                 </div>
@@ -1099,13 +1099,33 @@ class RegistrationMembershipFee extends Component {
             case 3:
                 return (
                     <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
+                            onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
                         {childDiscounts.map((childItem, childindex) => (
                             <div className="row">
                                 <div className="col-sm-10">
                                     <Form.Item name={`percentageValue${index} + ${childindex}`} rules={[{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }]}  >
                                         <InputWithHead
+<<<<<<< HEAD
                                             heading={`Family Participant ${childindex + 1} (add % discount)`}
                                             placeholder={`Family Participant ${childindex + 1} (add % discount)`}
+=======
+                                            heading={`Family Participant ${childindex + 1}`}
+                                            placeholder={`Family Participant ${childindex + 1}`}
+>>>>>>> 5e2171ceea7a03c47c825475da940caaa2027346
                                             onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
                                             // value={childItem.percentageValue}
                                             disabled={this.state.membershipIsUsed}
@@ -1509,6 +1529,13 @@ class RegistrationMembershipFee extends Component {
         let productId = this.props.registrationState.membershipProductId
         // if (productId !== null && productId.length > 0) {
         this.setState({ membershipTabKey: key });
+        let data = this.props.registrationState.membershipProductFeesTableData
+        let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
+        if(key == "2"){
+            for(let i in feesData){
+                this.membershipFeeApplyRadio(feesData[i].validityDays == 0 ? null : feesData[i].validityDays, i, "validityDays")
+            } 
+        }
         // }
         this.setFieldDecoratorValues()
     };

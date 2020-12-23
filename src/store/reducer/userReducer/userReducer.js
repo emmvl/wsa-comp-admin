@@ -156,7 +156,8 @@ const initialState = {
   spectatorTotalCount: null,
   spectatorListAction: null,
   impersonationList: [],
-  onImpersonationLoad: false
+  onImpersonationLoad: false,
+  usersToBeMerged: []
 };
 
 function userReducer(state = initialState, action) {
@@ -172,6 +173,7 @@ function userReducer(state = initialState, action) {
         error: action.error,
         status: action.status,
         umpireActivityOnLoad: false,
+        onMedicalLoad: false
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -185,6 +187,7 @@ function userReducer(state = initialState, action) {
         error: action.error,
         status: action.status,
         umpireActivityOnLoad: false,
+        onMedicalLoad: false
       };
 
     // get Role Entity List for current user
@@ -894,7 +897,7 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD:
       return { ...state, onLoad: true };
-
+    
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS:
       return {
         ...state,
@@ -907,6 +910,25 @@ function userReducer(state = initialState, action) {
       state.affiliateTo = []
       return { ...state };
 
+    case ApiConstants.Api_REST_TFA_LOAD:
+      return {
+        ...state,
+        onMedicalLoad: true,
+        status: null
+      }
+
+    case ApiConstants.Api_REST_TFA_SUCCESS:
+      console.log(action)
+      return {
+        ...state,
+        onMedicalLoad: false
+      }
+
+    case ApiConstants.ADD_USERS_TO_BE_MERGED:
+      state.usersToBeMerged = action.payload
+      return {
+        ...state
+      }
 
     default:
       return state;

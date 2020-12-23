@@ -40,7 +40,8 @@ import {
     getCoachData,
     getUmpireActivityListAction,
     registrationResendEmailAction,
-    userProfileUpdateAction
+    userProfileUpdateAction,
+    restTfaAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -99,7 +100,7 @@ const columns = [
         key: "competitionName",
     },
     {
-        title: "Valid Until",
+        title: "Membership Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
         render: (expiryDate) => (
@@ -107,6 +108,11 @@ const columns = [
                 {expiryDate != null ? (expiryDate !== 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
             </span>
         )
+    },
+    {
+        title: "Comp Fees Paid",
+        data: "compFeesPaid",
+        key: "compFeesPaid"
     },
     {
         title: "Membership Product",
@@ -503,16 +509,16 @@ const columnsPersonalPrimaryContacts = [
         key: "parentName",
         render: (parentName, record) => (
             record.status == "Linked" ?
-            <NavLink
-                to={{
-                    pathname: `/userPersonal`,
-                    state: { userId: record.parentUserId },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{parentName}</span>
-            </NavLink>
-            :
-            <span>{parentName}</span>
+                <NavLink
+                    to={{
+                        pathname: `/userPersonal`,
+                        state: { userId: record.parentUserId },
+                    }}
+                >
+                    <span className="input-heading-add-another pt-0">{parentName}</span>
+                </NavLink>
+                :
+                <span>{parentName}</span>
 
         ),
     },
@@ -602,17 +608,17 @@ const columnsPersonalChildContacts = [
         key: "childName",
         render: (childName, record) => (
             record.status == "Linked" ?
-            <NavLink
+                <NavLink
 
-                to={{
-                    pathname: `/userPersonal`,
-                    state: { userId: record.childUserId },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{childName}</span>
-            </NavLink>
-            :
-            <span >{childName}</span>
+                    to={{
+                        pathname: `/userPersonal`,
+                        state: { userId: record.childUserId },
+                    }}
+                >
+                    <span className="input-heading-add-another pt-0">{childName}</span>
+                </NavLink>
+                :
+                <span >{childName}</span>
         ),
     },
     {
@@ -1241,7 +1247,8 @@ class UserModulePersonalDetail extends Component {
             unlinkRecord: null,
             showChildUnlinkConfirmPopup: false,
             showParentUnlinkConfirmPopup: false,
-            showCannotUnlinkPopup: false
+            showCannotUnlinkPopup: false,
+            isAdmin: false
         };
     }
 
@@ -1252,6 +1259,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     async componentDidMount() {
+        let isAdmin = getOrganisationData() ? getOrganisationData().userRole == 'admin' ? true : false : false
         this.props.getReferenceOrderStatus()
         if (
             this.props.location.state != null &&
@@ -1280,6 +1288,9 @@ class UserModulePersonalDetail extends Component {
                 );
             }
         }
+        this.setState({
+            isAdmin
+        })
     }
 
     componentDidUpdate(nextProps) {
@@ -1329,7 +1340,7 @@ class UserModulePersonalDetail extends Component {
             }
         }
 
-        if(this.props.userState.onUpUpdateLoad == false && this.state.unlinkOnLoad == true){
+        if (this.props.userState.onUpUpdateLoad == false && this.state.unlinkOnLoad == true) {
             let personal = this.props.userState.personalData;
             let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
             let payload = {
@@ -1337,7 +1348,7 @@ class UserModulePersonalDetail extends Component {
                 organisationId: organisationId
             };
             this.props.getUserModulePersonalByCompetitionAction(payload);
-            this.setState({unlinkOnLoad: false})
+            this.setState({ unlinkOnLoad: false })
         }
     }
 
@@ -1380,22 +1391,22 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        data["section"]  = data.status == "Linked" ? "unlink" : "link";
+        data["section"] = data.status == "Linked" ? "unlink" : "link";
         data["childUserId"] = personal.userId;
         data["organisationId"] = organisationId;
         this.props.userProfileUpdateAction(data);
-        this.setState({unlinkOnLoad: true});
+        this.setState({ unlinkOnLoad: true });
     }
 
     childUnLinkView = (data) => {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        data["section"]  = data.status == "Linked" ? "unlink" : "link";
+        data["section"] = data.status == "Linked" ? "unlink" : "link";
         data["parentUserId"] = personal.userId;
         data["organisationId"] = organisationId;
         this.props.userProfileUpdateAction(data);
-        this.setState({unlinkOnLoad: true});
+        this.setState({ unlinkOnLoad: true });
     }
 
     onChangeYear = (value) => {
@@ -2067,7 +2078,7 @@ class UserModulePersonalDetail extends Component {
                                 state: { moduleFrom: "8", userData: userState.personalData },
                             }}
                         >
-                            <span className="input-heading-add-another" style={{paddingTop:"unset", marginBottom:"15px"}}>
+                            <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
                                 + {AppConstants.addParent_guardian}
                             </span>
                         </NavLink>
@@ -2096,7 +2107,7 @@ class UserModulePersonalDetail extends Component {
                                 state: { moduleFrom: "7", userData: userState.personalData },
                             }}
                         >
-                            <span className="input-heading-add-another" style={{paddingTop:"unset", marginBottom:"15px"}}>
+                            <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
                                 + {AppConstants.addChild}
                             </span>
                         </NavLink>
@@ -2314,6 +2325,7 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let userRegistrationList = userState.userRegistrationList;
         let total = userState.userRegistrationDataTotalCount;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -2451,6 +2463,9 @@ class UserModulePersonalDetail extends Component {
             </div>
         );
     };
+    restTfaAction = (e) => {
+        this.props.restTfaAction()
+    }
 
     headerView = () => {
 
@@ -2458,16 +2473,23 @@ class UserModulePersonalDetail extends Component {
             history.push("/mergeUserMatches")
         }
 
-        const menu = (
-            <Menu onClick={handleMenuClick}>
-              <Menu.Item key="merge">
-                Merge
-              </Menu.Item>
-            </Menu>
-        );
+        const menu =
+            (
+                <Menu >
+                    <Menu.Item onClick={handleMenuClick} key="merge">
+                        Merge
+                    </Menu.Item>
+                    {this.state.isAdmin ?
+                        <Menu.Item onClick={this.restTfaAction} key="merge">
+                            Rest TFA
+                        </Menu.Item>
+                        : null}
+                </Menu >
+
+            )
 
         return (
-            <div className="row">
+            <div className="row" >
                 <div className="col-sm">
                     <Header className="form-header-view bg-transparent d-flex pl-0 justify-content-between mt-5">
                         <Breadcrumb separator=" > ">
@@ -2485,7 +2507,7 @@ class UserModulePersonalDetail extends Component {
                         </Dropdown>
                     </Header>
                 </div>
-                {this.state.screenKey && (
+                { this.state.screenKey && (
                     <div className="col-sm">
                         <div className="comp-buttons-view mt-4 d-flex align-items-center justify-content-end">
                             <Button
@@ -2499,7 +2521,7 @@ class UserModulePersonalDetail extends Component {
                         </div>
                     </div>
                 )}
-            </div>
+            </div >
         );
     };
 
@@ -2786,58 +2808,58 @@ class UserModulePersonalDetail extends Component {
     };
 
     unlinkCheckParent = (record) => {
-        if(record.unlinkedBy && record.status == "Unlinked"){
-            if(record.unlinkedBy == record.userId){
-                this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
+        if (record.unlinkedBy && record.status == "Unlinked") {
+            if (record.unlinkedBy == record.userId) {
+                this.setState({ unlinkRecord: record, showParentUnlinkConfirmPopup: true })
             }
-            else{
-                this.setState({unlinkRecord: record,showCannotUnlinkPopup: true})
+            else {
+                this.setState({ unlinkRecord: record, showCannotUnlinkPopup: true })
             }
         }
-        else{
-            this.setState({unlinkRecord: record,showParentUnlinkConfirmPopup: true})
+        else {
+            this.setState({ unlinkRecord: record, showParentUnlinkConfirmPopup: true })
         }
 
-        }
+    }
 
     unlinkCheckChild = (record) => {
-        if(record.unlinkedBy && record.status == "Unlinked"){
-            if(record.unlinkedBy == record.userId){
-             this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
+        if (record.unlinkedBy && record.status == "Unlinked") {
+            if (record.unlinkedBy == record.userId) {
+                this.setState({ unlinkRecord: record, showChildUnlinkConfirmPopup: true })
             }
-            else{
-                this.setState({unlinkRecord: record, showCannotUnlinkPopup: true})
+            else {
+                this.setState({ unlinkRecord: record, showCannotUnlinkPopup: true })
             }
         }
-        else{
-            this.setState({unlinkRecord: record,showChildUnlinkConfirmPopup: true})    
+        else {
+            this.setState({ unlinkRecord: record, showChildUnlinkConfirmPopup: true })
         }
 
-        }
+    }
 
     cannotUninkPopup = () => {
         let data = this.state.unlinkRecord;
-        return(
+        return (
             <div>
-                
+
                 <Modal
                     className="add-membership-type-modal"
                     title="Warning"
                     visible={this.state.showCannotUnlinkPopup}
-                    onCancel={() => this.setState({ showCannotUnlinkPopup : false})}
+                    onCancel={() => this.setState({ showCannotUnlinkPopup: false })}
                     footer={[
                         <Button onClick={() => this.setState({ showCannotUnlinkPopup: false })}>
                             {AppConstants.ok}
                         </Button>,
                     ]}
-                    >   
-                        {data?.childName ? 
+                >
+                    {data?.childName ?
                         <p> {AppConstants.parentUnlinkMessage}</p>
                         :
                         <p>{AppConstants.childUnlinkMessage}</p>
-                        }
+                    }
 
-                    </Modal>
+                </Modal>
             </div>
         )
     }
@@ -2863,7 +2885,7 @@ class UserModulePersonalDetail extends Component {
                         </Button>
                     ]}
                 >
-                   <p> {"Are you sure you want to " + status + " your account?"}</p>
+                    <p> {"Are you sure you want to " + status + " your account?"}</p>
                 </Modal>
             </div>
         )
@@ -2890,7 +2912,7 @@ class UserModulePersonalDetail extends Component {
                         </Button>
                     ]}
                 >
-                   <p> {"Are you sure you want to " + status + " your account?"}</p>
+                    <p> {"Are you sure you want to " + status + " your account?"}</p>
                 </Modal>
             </div>
         )
@@ -3021,7 +3043,8 @@ function mapDispatchToProps(dispatch) {
             getPurchasesListingAction,
             getReferenceOrderStatus,
             registrationResendEmailAction,
-            userProfileUpdateAction
+            userProfileUpdateAction,
+            restTfaAction
         },
         dispatch
     );
