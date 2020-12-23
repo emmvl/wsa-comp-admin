@@ -2473,22 +2473,21 @@ class UserModulePersonalDetail extends Component {
             history.push("/mergeUserMatches")
         }
 
-
-
         const menu =
             (
                 <Menu >
-                    {/* <Menu.Item onClick={handleMenuClick} key="merge">
-                    Merge
-              </Menu.Item> */}
+                    <Menu.Item onClick={handleMenuClick} key="merge">
+                        Merge
+                    </Menu.Item>
                     {this.state.isAdmin ?
                         <Menu.Item onClick={this.restTfaAction} key="merge">
                             Rest TFA
-              </Menu.Item>
+                        </Menu.Item>
                         : null}
                 </Menu >
 
             )
+
         return (
             <div className="row" >
                 <div className="col-sm">
