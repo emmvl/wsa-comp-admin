@@ -7429,6 +7429,21 @@ class RegistrationCompetitionFee extends Component {
             case 3:
                 return (
                     <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
+                            onChange={(discountType) => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.checkDiscountDisable(item.organisationId)}
+                        >
+                            {this.props.appState.commonDiscountTypes.map((item) => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
                         {childDiscounts.map((childItem, childIndex) => (
                             <div className="row">
                                 <div className="col-sm-10">
@@ -7442,8 +7457,8 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <InputWithHead
                                             auto_complete="new-child"
-                                            heading={`Family Participant ${childIndex + 1}%`}
-                                            placeholder={`Family Participant ${childIndex + 1}%`}
+                                            heading={`Family Participant ${childIndex + 1}`}
+                                            placeholder={`Family Participant ${childIndex + 1}`}
                                             onChange={(e) =>
                                                 this.onChangeChildPercent(
                                                     e.target.value,
