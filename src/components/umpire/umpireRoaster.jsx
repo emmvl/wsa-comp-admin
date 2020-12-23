@@ -46,7 +46,7 @@ function tableSort(key) {
     this_obj.setState({ sortBy, sortOrder });
     let rolIds = Array.isArray(this_obj.state.umpireRole) ? JSON.stringify(this_obj.state.umpireRole) : JSON.stringify([this_obj.state.umpireRole])
     if (!this_obj.state.compIsParent) {
-        this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder, 6)
+        this_obj.props.umpireRoasterListAction(this_obj.state.compOrgId, this_obj.state.status, rolIds, body, sortBy, sortOrder, 6)
     }
     else {
         this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder, 1)
@@ -97,7 +97,7 @@ const columns = [
                 <div>
                     {organisationArray.map((item, index) => (
                         <span key={`organisationName` + index} className='multi-column-text-aligned'>
-                            {item.competitionOrganisation && item.competitionOrganisation.name}
+                            {item.linkedCompetitionOrganisation && item.linkedCompetitionOrganisation.name}
                         </span>
                     ))}
                 </div>
