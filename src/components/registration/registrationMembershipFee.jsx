@@ -738,6 +738,7 @@ class RegistrationMembershipFee extends Component {
                     <Select
                         className="year-select reg-filter-select1"
                         style={{ maxWidth: 80 }}
+                        disabled={this.state.membershipIsUsed}
                     >
                         {this.props.appState.yearList.map(item => (
                             <Option key={'year_' + item.id} value={item.id}>
