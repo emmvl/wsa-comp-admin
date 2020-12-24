@@ -58,7 +58,7 @@ class DashboardLayout extends React.Component {
                         .find((role) => role.roleId === 10);
                     const isImpersonation = !!impersonationRole;
 
-                    const entityId = impersonationRole ?.entityId;
+                    const entityId = impersonationRole?.entityId;
 
                     let presetOrganisation = organisationData
                         .find((org) => org.organisationId === entityId);
@@ -69,9 +69,9 @@ class DashboardLayout extends React.Component {
                     await setOrganisationData(organisationItem);
                     this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
                     setImpersonation(isImpersonation ? true : false)
-                    this.setState({
+                    await this.setState({
                         dataOnload: false,
-                        impersonationOrgData: isImpersonation ? orgData : null,
+                        // impersonationOrgData: isImpersonation ? orgData : null,
                         impersonationAffiliateOrgId: isImpersonation ? entityId : null,
                     });
                 }
@@ -151,7 +151,7 @@ class DashboardLayout extends React.Component {
                 access: false,
             });
 
-            this.setState({
+            await this.setState({
                 impersonationOrgData: null,
                 impersonationAffiliateOrgId: null,
                 impersonationLoad: true,
@@ -267,14 +267,14 @@ class DashboardLayout extends React.Component {
 
     handleImpersonationModal = (button) => {
         if (button === "ok") {
-            this.setState({ openImpersonationModal: false });
-            const orgData = this.props.userState.affiliateList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId);
+            const orgData = this.props.userState.impersonationList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId);
             if (orgData) {
                 this.props.impersonationAction({
                     orgId: orgData.affiliateOrgId,
                     access: true,
                 });
             }
+            this.setState({ openImpersonationModal: false });
         } else {
             this.setState({ openImpersonationModal: false });
         }
@@ -360,9 +360,9 @@ class DashboardLayout extends React.Component {
                     </div>
 
                     <li className="acc-help-support-list-view">
-                    <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
-                        {AppConstants.myProfile}
-                    </NavLink>
+                        <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
+                            {AppConstants.myProfile}
+                        </NavLink>
                     </li>
 
                     <li className="log-out">
@@ -374,6 +374,7 @@ class DashboardLayout extends React.Component {
     };
 
     render() {
+        console.log(this.state.impersonationOrgData)
         let menuName = this.props.menuName;
         const { userRoleId } = this.state
         return (
