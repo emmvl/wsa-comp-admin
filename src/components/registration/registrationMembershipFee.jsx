@@ -14,9 +14,10 @@ import {
     Tabs,
     Form,
     Modal,
-    message
+    message,
+    Tooltip,
 } from "antd";
-import Tooltip from 'react-png-tooltip'
+import CustomTooltip from 'react-png-tooltip'
 import moment from "moment";
 
 import "./product.scss";
@@ -80,9 +81,9 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-                <Tooltip placement="top">
+                <CustomTooltip placement="top">
                     <span>{AppConstants.membershipCasualFeeMsg}</span>
-                </Tooltip>
+                </CustomTooltip>
             );
         },
         render: (casualFee, record) => (
@@ -118,9 +119,9 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-                <Tooltip placement="top">
+                <CustomTooltip placement="top">
                     <span>{AppConstants.membershipSeasonalFeeMsg}</span>
-                </Tooltip>
+                </CustomTooltip>
             );
         },
         render: (seasonalFee, record) => (
@@ -170,7 +171,9 @@ class RegistrationMembershipFee extends Component {
             loading: false,
             buttonPressed: "next",
             membershipIsUsed: false,
-            confirmRePayFeesModalVisible: false
+            confirmRePayFeesModalVisible: false,
+            isPublished: false,
+            tooltipVisibleDraft: false
         };
         this_Obj = this;
         this.formRef = React.createRef();
@@ -191,10 +194,12 @@ class RegistrationMembershipFee extends Component {
             let discountMembershipTypeData = allData.membershipproduct.membershipProductTypes !== undefined ?
                 allData.membershipproduct.membershipProductTypes : []
             let membershipIsUsed = allData.membershipproduct.isUsed
+            let isPublished = allData.membershipproduct.statusRefId == 2 ? true : false;
             this.setFieldDecoratorValues()
             this.setState({
                 discountMembershipTypeData,
-                membershipIsUsed
+                membershipIsUsed,
+                isPublished
             })
         }
         if (registrationState.onLoad === false && this.state.loading === true) {
@@ -839,9 +844,9 @@ class RegistrationMembershipFee extends Component {
                                             <Radio key={'membershipFee_' + feeTypeItem.id} value={feeTypeItem.id}> {feeTypeItem.description}</Radio>
 
                                             <div style={{ marginLeft: -18 }}>
-                                                <Tooltip>
+                                                <CustomTooltip>
                                                     <span>{feeTypeItem.helpMsg}</span>
-                                                </Tooltip>
+                                                </CustomTooltip>
                                             </div>
                                         </div>
                                         {item.membershipProductFeesTypeRefId == 1 && feeTypeItem.id == 1 && (
@@ -1390,9 +1395,9 @@ class RegistrationMembershipFee extends Component {
             <div className="discount-view pt-5">
                 <div className="row">
                     <span className="form-heading">{AppConstants.discounts}</span>
-                    <Tooltip>
+                    <CustomTooltip>
                         <span>{AppConstants.membershipDiscountMsg}</span>
-                    </Tooltip>
+                    </CustomTooltip>
                 </div>
 
                 {discountData.map((item, index) => (
@@ -1492,14 +1497,29 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button
-                                    className="save-draft-text"
-                                    type="save-draft-text"
-                                    htmlType="submit"
-                                    onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
+                                <Tooltip
+                                    className="h-100"
+                                    onMouseEnter={() =>
+                                        this.setState({
+                                            tooltipVisibleDraft: this.state.isPublished,
+                                        })
+                                    }
+                                    onMouseLeave={() =>
+                                        this.setState({ tooltipVisibleDraft: false })
+                                    }
+                                    visible={this.state.tooltipVisibleDraft}
+                                    title={ValidationConstants.membershipIsPublished}
                                 >
-                                    {AppConstants.saveAsDraft}
-                                </Button>
+                                    <Button
+                                        className="save-draft-text"
+                                        type="save-draft-text"
+                                        htmlType="submit"
+                                        disabled={this.state.isPublished}
+                                        onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
+                                    >
+                                        {AppConstants.saveAsDraft}
+                                    </Button>
+                                </Tooltip>
                                 <Button
                                     className="publish-button"
                                     type="primary"
@@ -1509,7 +1529,7 @@ class RegistrationMembershipFee extends Component {
                                         buttonPressed: tabKey === "3" ? "publish" : "next"
                                     })}
                                 >
-                                    {tabKey === "3" ? AppConstants.publish : AppConstants.next}
+                                    {tabKey === "3" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next}
                                 </Button>
                             </div>
                         </div>
