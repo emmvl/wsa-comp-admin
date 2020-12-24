@@ -103,9 +103,9 @@ const columns = [
         title: "Membership Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
-        render: (expiryDate) => (
+        render: (expiryDate,record) => (
             <span>
-                {expiryDate != null ? (expiryDate !== 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
+                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Pay each Match' ? liveScore_formateDate(expiryDate) : expiryDate) : liveScore_formateDate(record.competitionEndDate)}
             </span>
         )
     },
