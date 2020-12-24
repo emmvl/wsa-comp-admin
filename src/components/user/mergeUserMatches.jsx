@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import AppConstants from "../../themes/appConstants";
-import { Button, Breadcrumb, Layout, Table, Typography } from "antd";
+import { Button, Breadcrumb, Layout, notification, Table, Typography } from "antd";
 import DashboardLayout from "../../pages/dashboardLayout";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { bindActionCreators } from "redux";
@@ -137,7 +137,7 @@ const MatchesDetailView = () => {
             dob: user.dateOfBirth,
             email: user.email,
             mobile: user.mobileNumber,
-            affiliate: "NSNA",
+            affiliate: user.affiliates && user.affiliates.length ? user.affiliates.join(', '): '',
         })
     )
 
@@ -175,6 +175,15 @@ const MatchesDetailView = () => {
     ];
 
     const openDecisionScreen = () => {
+        if (!userToBeMerged) {
+            const openNotificationWithIcon = type => {
+                notification[type]({
+                    message: AppConstants.unableToContinue,
+                    description: AppConstants.pleaseSelectUserToMerge
+                });
+            };
+            return openNotificationWithIcon('error')
+        }
         dispatch(addUsersToBeCompared([
             selectedUser,
             matches.find(match => match.id == userToBeMerged[0].id)
@@ -201,7 +210,7 @@ const MatchesDetailView = () => {
                 />
             </div>
             <div className="d-flex align-items-center justify-content-between mt-4">
-                <Button onClick={() => history.goBack}>{AppConstants.cancel}</Button>
+                <Button onClick={history.goBack}>{AppConstants.cancel}</Button>
                 <Button type="primary" onClick={() => {openDecisionScreen()}}>{AppConstants.next}</Button>
             </div>
         </div>
