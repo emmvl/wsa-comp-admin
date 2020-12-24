@@ -7,7 +7,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Layout, Button, Form } from 'antd';
 
-import { loginAction, qrSubmitAction } from 'store/actions/authentication';
+import { loginAction, qrSubmitAction, clearReducerAction } from 'store/actions/authentication';
 import history from 'util/history';
 import AppConstants from 'themes/appConstants';
 import AppImages from 'themes/appImages';
@@ -73,7 +73,7 @@ class Login extends Component {
                 <span className="form-err">{errors.password}</span>
             )}
 
-            <NavLink to={{ pathname: '/forgotPassword', state: { email: values.userName } }}>
+            <NavLink onClick={() => this.props.clearReducerAction("forgotPasswordSuccess")} to={{ pathname: '/forgotPassword', state: { email: values.userName } }}>
                 <span id={AppUniqueId.forgot_Password_Link} className="forgot-password-link-text">{AppConstants.forgotResetPassword}</span>
             </NavLink>
 
@@ -148,35 +148,35 @@ class Login extends Component {
                                 )}
                             </Formik>
                         ) : (
-                            <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
-                                {!loginState.result.tfaEnabled && loginState.result.qrCode && (
-                                    <>
-                                        <img src={loginState.result.qrCode} alt="" />
+                                <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
+                                    {!loginState.result.tfaEnabled && loginState.result.qrCode && (
+                                        <>
+                                            <img src={loginState.result.qrCode} alt="" />
 
-                                        <p>Scan QR code with your authenticator.</p>
-                                    </>
-                                )}
+                                            <p>Scan QR code with your authenticator.</p>
+                                        </>
+                                    )}
 
-                                <div className="qr-code-form">
-                                    <InputWithHead
-                                        type="number"
-                                        heading={AppConstants.qrCodeHeader}
-                                        placeholder={AppConstants.qrCodeHeader}
-                                        onChange={this.onChangeCode}
-                                        value={code}
-                                    />
+                                    <div className="qr-code-form">
+                                        <InputWithHead
+                                            type="number"
+                                            heading={AppConstants.qrCodeHeader}
+                                            placeholder={AppConstants.qrCodeHeader}
+                                            onChange={this.onChangeCode}
+                                            value={code}
+                                        />
 
-                                    <Button
-                                        className="open-reg-button"
-                                        type="primary"
-                                        disabled={code.length !== 6 || loginState.onLoad}
-                                        onClick={this.submitCode}
-                                    >
-                                        {AppConstants.submit}
-                                    </Button>
+                                        <Button
+                                            className="open-reg-button"
+                                            type="primary"
+                                            disabled={code.length !== 6 || loginState.onLoad}
+                                            onClick={this.submitCode}
+                                        >
+                                            {AppConstants.submit}
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
                         <Loader visible={loginState.onLoad} />
                     </Content>
@@ -193,7 +193,7 @@ Login.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ loginAction, qrSubmitAction }, dispatch);
+    return bindActionCreators({ loginAction, qrSubmitAction, clearReducerAction }, dispatch);
 }
 
 function mapStateToProps(state) {

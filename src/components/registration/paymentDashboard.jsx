@@ -364,11 +364,11 @@ class PaymentDashboard extends Component {
             if (value != -1) {
                 setGlobalYear(value)
             }
-            this.handlePaymentTableList(1, null, null, this.state.searchText);
+            this.handlePaymentTableList(1, -1, null, this.state.searchText);
 
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });
-            this.handlePaymentTableList(1, null, null, this.state.searchText);
+            this.handlePaymentTableList(1, -1, null, this.state.searchText);
         } else if (key === "filterOrganisation") {
             await this.setState({ filterOrganisation: value });
             this.handlePaymentTableList(1, -1, "-1", this.state.searchText);

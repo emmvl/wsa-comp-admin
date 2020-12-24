@@ -24,7 +24,7 @@ import {
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import Loader from "../../customComponents/loader";
 
 const { Content } = Layout;
@@ -170,7 +170,7 @@ class AffiliateDirectory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: -1,
+            yearRefId: null,
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             organisationTypeRefId: -1,
             deleteLoading: false,
@@ -186,6 +186,7 @@ class AffiliateDirectory extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear()
         const { affiliateDirListAction } = this.props.userState
         let page = 1
         let sortBy = this.state.sortBy
@@ -195,12 +196,13 @@ class AffiliateDirectory extends Component {
             sortBy = affiliateDirListAction.sortBy
             sortOrder = affiliateDirListAction.sortOrder
             let searchText = affiliateDirListAction.payload.searchText
-            let yearRefId = affiliateDirListAction.payload.yearRefId
+            let yearRefId = JSON.parse(yearId)
             let organisationTypeRefId = affiliateDirListAction.payload.organisationTypeRefId
 
             await this.setState({ offsetData, sortBy, sortOrder, searchText, yearRefId, organisationTypeRefId })
             page = Math.floor(offsetData / 10) + 1;
         }
+        this.setState({ yearRefId: JSON.parse(yearId) })
         this.handleAffiliateTableList(page);
     }
 
@@ -220,12 +222,13 @@ class AffiliateDirectory extends Component {
     };
 
     handleAffiliateTableList = (page) => {
+        let yearId = getGlobalYear()
         this.setState({
             pageNo: page,
         });
         let filter = {
             organisationUniqueKey: this.state.organisationId,
-            yearRefId: this.state.yearRefId,
+            yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             organisationTypeRefId: this.state.organisationTypeRefId,
             searchText: this.state.searchText,
             paging: {
@@ -246,6 +249,9 @@ class AffiliateDirectory extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
             this.handleAffiliateTableList(1);
         } else if (key === "organisationTypeRefId") {
             await this.setState({ organisationTypeRefId: value });

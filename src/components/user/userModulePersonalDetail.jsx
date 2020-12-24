@@ -44,7 +44,7 @@ import {
     restTfaAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import moment from "moment";
 import history from "../../util/history";
 import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../themes/dateformate";
@@ -1122,7 +1122,7 @@ function purchasesTableSort(key) {
         offset: this_Obj.state.purchasesOffset,
         order: sortOrder ? sortOrder : "",
         sorterBy: sortBy ? sortBy : "",
-        userId: this_Obj.state.userId
+        userId: this_Obj.state.userId,
     }
     this_Obj.props.getPurchasesListingAction(params)
     this_Obj.setState({ purchasesListSortBy: sortBy, purchasesListSortOrder: sortOrder });
@@ -1232,7 +1232,7 @@ class UserModulePersonalDetail extends Component {
             registrationForm: null,
             isRegistrationForm: false,
             screen: null,
-            yearRefId: -1,
+            yearRefId: null,
             competitions: [],
             teams: [],
             divisions: [],
@@ -1259,6 +1259,8 @@ class UserModulePersonalDetail extends Component {
     }
 
     async componentDidMount() {
+        let yearRefId = JSON.parse(getGlobalYear())
+        this.setState({ yearRefId })
         let isAdmin = getOrganisationData() ? getOrganisationData().userRole == 'admin' ? true : false : false
         this.props.getReferenceOrderStatus()
         if (
@@ -1278,6 +1280,12 @@ class UserModulePersonalDetail extends Component {
                 screen: screen,
                 tabKey: tabKey,
             });
+            this.tabApiCalls(
+                tabKey,
+                this.state.competition,
+                userId,
+                yearRefId
+            );
             this.apiCalls(userId);
             if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(
@@ -1288,6 +1296,7 @@ class UserModulePersonalDetail extends Component {
                 );
             }
         }
+
         this.setState({
             isAdmin
         })
@@ -1586,7 +1595,7 @@ class UserModulePersonalDetail extends Component {
             offset: (page ? (10 * (page - 1)) : 0),
             order: "",
             sorterBy: "",
-            userId: userId
+            userId: userId,
         }
         this.props.getPurchasesListingAction(params)
     }

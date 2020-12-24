@@ -9,7 +9,7 @@ import moment from 'moment';
 import AppConstants from 'themes/appConstants';
 import AppImages from 'themes/appImages';
 import history from 'util/history';
-import { getOrganisationData, getPrevUrl } from 'util/sessionStorage';
+import { getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear } from 'util/sessionStorage';
 import { getOnlyYearListAction } from 'store/actions/appAction';
 import { getGenderAction } from 'store/actions/commonAction/commonAction';
 import {
@@ -178,7 +178,7 @@ class UserTextualDashboard extends Component {
 
         this.state = {
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: null,
             competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
@@ -199,7 +199,7 @@ class UserTextualDashboard extends Component {
 
     async componentDidMount() {
         const prevUrl = getPrevUrl();
-
+        let yearId = getGlobalYear()
         const { userTextualDasboardListAction } = this.props.userState
         let page = 1
         let sortBy = this.state.sortBy
@@ -215,13 +215,14 @@ class UserTextualDashboard extends Component {
             let postalCode = userTextualDasboardListAction.payload.postCode == '-1' ? '' : userTextualDasboardListAction.payload.postCode
             let roleId = userTextualDasboardListAction.payload.roleId
             let searchText = userTextualDasboardListAction.payload.searchText
-            let yearRefId = userTextualDasboardListAction.payload.yearRefId
+            let yearRefId = JSON.parse(yearId)
             await this.setState({ offsetData, sortBy, sortOrder, dobFrom, dobTo, genderRefId, linkedEntityId, postalCode, roleId, searchText, yearRefId })
             page = Math.floor(offsetData / 10) + 1;
         }
 
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             this.referenceCalls();
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.handleTextualTableList(page);
         } else {
             history.push('/');
@@ -303,6 +304,12 @@ class UserTextualDashboard extends Component {
             } else if (value.length === 0) {
                 this.handleTextualTableList(1);
             }
+        } else if (key === 'yearRefId') {
+            if (value != -1) {
+                setGlobalYear(value)
+            }
+            await this.setState({ 'yearRefId': value, });
+            this.handleTextualTableList(1);
         } else {
             let newValue;
             if (key === 'dobFrom' || key === 'dobTo') {
@@ -341,6 +348,7 @@ class UserTextualDashboard extends Component {
     };
 
     handleTextualTableList = (page) => {
+
         const {
             organisationId,
             yearRefId,
@@ -353,10 +361,11 @@ class UserTextualDashboard extends Component {
             postalCode,
             searchText,
         } = this.state;
+        let yearId = yearRefId == -1 ? yearRefId : JSON.parse(getGlobalYear())
 
         const filter = {
             organisationId,
-            yearRefId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
@@ -465,12 +474,13 @@ class UserTextualDashboard extends Component {
     dropdownView = () => {
         const { genderData } = this.props.commonReducerState;
         const { competitions, organisations, roles } = this.props.userState;
-
         let competitionList;
-        if (this.state.yearRefId !== -1) {
-            competitionList = competitions.filter(x => x.yearRefId === this.state.yearRefId);
-        } else {
-            competitionList = competitions;
+        if (competitions) {
+            if (this.state.yearRefId !== -1) {
+                competitionList = competitions.filter(x => x.yearRefId === this.state.yearRefId);
+            } else {
+                competitionList = competitions;
+            }
         }
 
         return (
