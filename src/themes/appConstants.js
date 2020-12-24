@@ -1662,6 +1662,8 @@ const AppConstants = {
   success: 'Success',
   id: 'ID',
   bankAccount: 'Bank Account',
+  pleaseSelectUserToMerge: 'Please select user to merge',
+  unableToContinue: 'Unable to continue',
 };
 
 export default AppConstants;

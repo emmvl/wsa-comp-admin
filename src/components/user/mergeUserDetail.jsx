@@ -236,7 +236,7 @@ const MatchesDetailView = () => {
     
     const history = useHistory();
     if (!usersToBeMerged.length) {
-        return history.push("/userPersonal");
+        return history.replace("/userPersonal");
     }
 
     return (
