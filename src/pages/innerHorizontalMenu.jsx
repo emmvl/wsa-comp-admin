@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../util/helpers";
 import { innerHorizontalCompetitionListAction, updateInnerHorizontalData, initializeCompData } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData } from '../util/sessionStorage';
+import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
 import history from "../util/history";
 import { getOnlyYearListAction } from "../store/actions/appAction";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
@@ -45,7 +45,9 @@ class InnerHorizontalMenu extends React.Component {
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             let yearRefId = localStorage.getItem("yearId")
-            this.setState({ selectedComp: id, yearId: yearRefId })
+            let year = getGlobalYear()
+            // this.setState({ selectedComp: id, yearId: yearRefId })
+            this.setState({ selectedComp: id, yearId: year })
         }
 
         if (this.props.menu === "liveScore") {
@@ -82,7 +84,8 @@ class InnerHorizontalMenu extends React.Component {
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
                             let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
-                            let yearRefId = localStorage.getItem("yearId")
+                            // let yearRefId = localStorage.getItem("yearId")
+                            let yearRefId = getGlobalYear()
                             if (yearRefId) {
                                 if (!this.props.innerHorizontalState.error) {
                                     this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
@@ -116,8 +119,10 @@ class InnerHorizontalMenu extends React.Component {
                     }
 
                     let defaultYear = localStorage.getItem("defaultYearId")
+                    // let defaultYear = getGlobalYear()
                     this.setState({ yearId: defaultYear, loading: true })
                     localStorage.setItem("yearId", defaultYear)
+                    setGlobalYear(defaultYear)
                     if (!this.props.innerHorizontalState.error && this.state.count < 1) {
                         this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
                         this.setState({ count: this.state.count + 1 })
@@ -169,6 +174,7 @@ class InnerHorizontalMenu extends React.Component {
         this.setState({ yearId, loading: true });
         // localStorage.setItem("LiveScoreCompetition", undefined);
         localStorage.setItem("yearId", yearId);
+        setGlobalYear(yearId)
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.props.clearDataOnCompChangeAction()
         this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList);
@@ -357,10 +363,10 @@ class InnerHorizontalMenu extends React.Component {
                             //     </NavLink>
                             // </Menu.Item>
                             <SubMenu
-                            key="sub5"
-                            title={
-                                <span>Membership</span>
-                            }>
+                                key="sub5"
+                                title={
+                                    <span>Membership</span>
+                                }>
                                 <Menu.Item key="4">
                                     <NavLink to="/registrationMembershipList">
                                         <span>Membership Fees</span>
@@ -370,7 +376,7 @@ class InnerHorizontalMenu extends React.Component {
                                     <NavLink to="/registrationMembershipCap">
                                         <span>Membership Cap</span>
                                     </NavLink>
-                                </Menu.Item> 
+                                </Menu.Item>
                             </SubMenu>
                         )}
                         <SubMenu

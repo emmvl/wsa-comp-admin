@@ -12,7 +12,7 @@ import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getPaymentList, exportPaymentApi } from "../../store/actions/stripeAction/stripeAction"
 import InputWithHead from "../../customComponents/InputWithHead"
-import { getOrganisationData } from "util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
 import { isEmptyArray } from "formik";
 import moment from "moment";
@@ -181,7 +181,7 @@ class PaymentDashboard extends Component {
         this.state = {
             organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             deleteLoading: false,
-            yearRefId: -1,
+            yearRefId: null,
             competitionUniqueKey: "-1",
             filterOrganisation: -1,
             loadingSave: false,
@@ -201,6 +201,7 @@ class PaymentDashboard extends Component {
     }
 
     async componentDidMount() {
+
         const { paymentDashboardListAction } = this.props.paymentState
         this.referenceCalls(this.state.organisationUniqueKey);
         let page = 1
@@ -212,20 +213,22 @@ class PaymentDashboard extends Component {
             sortOrder = paymentDashboardListAction.sortOrder
             let registrationId = paymentDashboardListAction.registrationId == null ? '-1' : paymentDashboardListAction.registrationId
             let userId = paymentDashboardListAction.userId == null ? -1 : paymentDashboardListAction.userId
-            let yearRefId = paymentDashboardListAction.yearId
+            // let yearRefId = paymentDashboardListAction.yearId
+            let yearRefId = getGlobalYear()
             let competitionUniqueKey = paymentDashboardListAction.competitionKey
             let dateFrom = paymentDashboardListAction.dateFrom
             let dateTo = paymentDashboardListAction.dateTo
             let filterOrganisation = paymentDashboardListAction.paymentFor
 
-            await this.setState({ offset, sortBy, sortOrder, registrationId, userId, yearRefId, competitionUniqueKey, dateFrom, dateTo, filterOrganisation })
+            await this.setState({ offset, sortBy, sortOrder, registrationId, userId, yearRefId: JSON.parse(yearRefId), competitionUniqueKey, dateFrom, dateTo, filterOrganisation })
             page = Math.floor(offset / 10) + 1;
 
             this.handlePaymentTableList(page, userId, registrationId, this.state.searchText)
         } else {
+            let yearRefId = getGlobalYear()
             let userInfo = this.props.location.state ? this.props.location.state.personal : null;
             let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
-            this.setState({ userInfo: userInfo, registrationId: registrationId });
+            this.setState({ userInfo: userInfo, registrationId: registrationId, yearRefId: JSON.parse(yearRefId) });
             let userId = userInfo != null ? userInfo.userId : -1;
             let regId = registrationId != null ? registrationId : '-1';
 
@@ -345,19 +348,24 @@ class PaymentDashboard extends Component {
     handlePaymentTableList = (page, userId, regId, searchValue) => {
         let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchText } = this.state
         let offset = page ? 10 * (page - 1) : 0;
-
+        let year = getGlobalYear()
         this.setState({
             offset,
             userId: userId,
             registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
+        // this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(year), competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
     };
 
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
             this.handlePaymentTableList(1, null, null, this.state.searchText);
+
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });
             this.handlePaymentTableList(1, null, null, this.state.searchText);

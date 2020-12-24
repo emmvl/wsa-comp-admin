@@ -13,6 +13,7 @@ import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from '../../store/actions/appAction';
 import { getOrderStatusListingAction, updateOrderStatusAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 import { currencyFormat } from "../../util/currencyFormat";
+import { getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 
 const { Content } = Layout
 const { SubMenu } = Menu
@@ -179,7 +180,7 @@ class ShopOrderStatus extends Component {
         super(props)
 
         this.state = {
-            yearRefId: -1,
+            yearRefId: null,
             paymentStatus: -1,
             fulfilmentStatus: -1,
             product: -1,
@@ -192,6 +193,7 @@ class ShopOrderStatus extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear()
         let { orderStatusListActionObject } = this.props.shopOrderStatusState
         this.referenceCalls()
         let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this.state
@@ -199,7 +201,7 @@ class ShopOrderStatus extends Component {
             limit: 10,
             offset: 0,
             search: searchText,
-            year: yearRefId,
+            year: JSON.parse(yearId),
             paymentStatus: paymentStatus,
             fulfilmentStatus: fulfilmentStatus,
             product: product,
@@ -210,7 +212,7 @@ class ShopOrderStatus extends Component {
             params.limit = orderStatusListActionObject.params.limit
             params.offset = orderStatusListActionObject.params.offset
             params.search = orderStatusListActionObject.params.search
-            params.year = orderStatusListActionObject.params.year
+            params.year = JSON.parse(yearId)
             params.paymentStatus = orderStatusListActionObject.params.paymentStatus
             params.fulfilmentStatus = orderStatusListActionObject.params.fulfilmentStatus
             params.product = orderStatusListActionObject.params.product
@@ -228,6 +230,7 @@ class ShopOrderStatus extends Component {
                 sorterBy: params.sorterBy,
             })
         } else {
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.props.getOrderStatusListingAction(params)
         }
     }
@@ -266,6 +269,9 @@ class ShopOrderStatus extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
             this.handleTableList(1);
         } else if (key === "product") {
             await this.setState({ product: value });
