@@ -116,7 +116,7 @@ function* getStripeLoginLinkSaga(action) {
 // Stripe payments transfer list
 function* getStripeTransferListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getStripeTransferList, action.page, action.starting_after, action.ending_before);
+    const result = yield call(AxiosApi.getStripeTransferList, action.page, action.starting_after, action.ending_before, action.params);
 
     if (result.status === 1) {
       yield put({
@@ -136,7 +136,7 @@ function* getStripeTransferListSaga(action) {
 // Stripe payout list
 function* getStripePayoutListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getStripePayoutList, action.page, action.starting_after, action.ending_before);
+    const result = yield call(AxiosApi.getStripePayoutList, action.page, action.starting_after, action.ending_before, action.params);
 
     if (result.status === 1) {
       yield put({
