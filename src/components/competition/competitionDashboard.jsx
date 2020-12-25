@@ -320,7 +320,7 @@ class CompetitionDashboard extends Component {
     };
 
     onYearClick = (yearId) => {
-        localStorage.setItem('yearId', yearId);
+        setGlobalYear(yearId)
         this.setState({ year: yearId })
         this.props.competitionDashboardAction(yearId);
     };

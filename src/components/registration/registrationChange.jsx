@@ -300,7 +300,7 @@ class RegistrationChange extends Component {
     }
 
     componentDidMount() {
-        let yearRefId = JSON.parse(getGlobalYear())
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         this.setState({ yearRefId })
         this.props.registrationChangeType();
         this.handleRegChangeList(1);
@@ -313,7 +313,7 @@ class RegistrationChange extends Component {
             organisationId,
             regChangeTypeRefId
         } = this.state;
-        let yearRefId = this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(getGlobalYear())
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         let filter = {
             organisationId,
             yearRefId,

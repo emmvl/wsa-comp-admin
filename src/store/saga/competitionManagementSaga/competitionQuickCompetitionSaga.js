@@ -130,6 +130,16 @@ export function* getquickYearAndCompetitionListSaga(action) {
                 });
 
             }
+            else {
+                yield put({
+                    type: ApiConstants.API_YEAR_AND_QUICK_COMPETITION_SUCCESS,
+                    yearList: result.result.data,
+                    competetionListResult: [],
+                    status: result.status,
+                    yearId: JSON.parse(yearId)
+                });
+
+            }
         } else {
             yield call(failSaga, result)
         }

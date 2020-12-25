@@ -1422,9 +1422,10 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let competitions = [];
-
+        
         if (value != -1) {
             competitions = personal.competitions.filter((x) => x.yearRefId === value);
+            setGlobalYear(value)
         } else {
             competitions = personal.competitions;
         }

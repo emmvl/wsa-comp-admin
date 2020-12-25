@@ -3600,7 +3600,7 @@ class RegistrationCompetitionFee extends Component {
         }
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let main_YearRef__Id = getCurrentYear(this.props.appState.yearList)
+                let main_YearRef__Id = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList)
                 let mainYearRefId = this.props.location.state ? this.props.location.state.yearRefId ? this.props.location.state.yearRefId : main_YearRef__Id : main_YearRef__Id;
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
 

@@ -87,6 +87,10 @@ class CompetitionQuickCompetition extends Component {
                     this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: JSON.parse(yearId) });
                     this.props.getQuickCompetitionAction(competitionId)
                 }
+                if (this.props.quickCompetitionState.quick_CompetitionYearArr.length > 0) {
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
+                    this.setState({ yearRefId: JSON.parse(yearId) });
+                }
             }
             let selectedCompetition = this.props.quickCompetitionState.selectedCompetition
             if (nextProps.selectedCompetition != selectedCompetition) {

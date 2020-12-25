@@ -51,7 +51,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationData } from "../../util/sessionStorage"
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage"
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
 import { getCurrentYear } from "util/permissions";
@@ -79,7 +79,7 @@ class RegistrationCompetitionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: localStorage.year,
+            yearRefId:  getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -324,16 +324,17 @@ class RegistrationCompetitionForm extends Component {
         }
         if (nextProps.appState.yearList !== this.props.appState.yearList) {
             if (this.props.appState.yearList.length > 0) {
-                let yearRefId = getCurrentYear(this.props.appState.yearList)
+                let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) :  getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
                 this.getMembershipDetails(yearRefId)
                 this.setDetailsFieldValue()
+                setGlobalYear(yearRefId)
             }
         }
 
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let mainYearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
 
                 this.getMembershipDetails(mainYearRefId)
@@ -346,6 +347,7 @@ class RegistrationCompetitionForm extends Component {
                     yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
+                setGlobalYear(mainYearRefId)
             }
         }
     }
@@ -440,6 +442,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     setYear = (e) => {
+        setGlobalYear(e)
         this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
