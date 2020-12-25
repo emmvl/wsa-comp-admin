@@ -110,7 +110,9 @@ class RegistrationSettlements extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2020",
+            year: null,
+            dateFrom: null,
+            dateTo: null,
             competition: "all",
             paymentFor: "all",
         }
@@ -180,7 +182,7 @@ class RegistrationSettlements extends Component {
         )
     }
 
-    handleStripePayoutList = (key) => {
+    handleStripePayoutList = (key, params) => {
         let page = this.props.stripeState.stripePayoutListPage
         let stripePayoutList = this.props.stripeState.stripePayoutList
         let starting_after = null
@@ -191,15 +193,27 @@ class RegistrationSettlements extends Component {
             let id = (stripePayoutList[stripePayoutList.length - 1]['id']);
             starting_after = id
             ending_before = null
-        }
-        if (key == "Previous") {
+        } else if (key == "Previous") {
             //////move backward
             page = parseInt(page) - 1
             let id = (stripePayoutList[0]['id']);
             starting_after = null
             ending_before = id
+        } else {
+            page = 1
         }
-        this.props.getStripePayoutListAction(page, starting_after, ending_before)
+        if (!params) {
+            params = {}
+            if (this.state.year)
+                params.year = this.state.year
+            else if (this.state.dateFrom || this.state.dateTo) {
+                if (this.state.dateFrom)
+                    params.startDate = this.state.dateFrom
+                if (this.state.dateTo)
+                    params.endDate = this.state.dateTo
+            }
+        }
+        this.props.getStripePayoutListAction(page, starting_after, ending_before, params)
     }
 
     ////checking for enabling click on next button or not
@@ -212,6 +226,15 @@ class RegistrationSettlements extends Component {
         } else {
             return true
         }
+    }
+
+    getYearsForDropdown = () => {
+        const currentYear = moment().format('YYYY')
+        return [
+            currentYear,
+            currentYear -1,
+            currentYear -2,
+        ]
     }
 
     payoutListView = () => {
@@ -258,14 +281,12 @@ class RegistrationSettlements extends Component {
                     <Select
                         className="reg-payment-select w-100"
                         style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
-                        onChange={(year) => this.setState({ year })}
+                        onChange={(year) => this.onYearChange(year)}
                         value={this.state.year}
+                        placeholder={AppConstants.selectAYear}
+                        allowClear={true}
                     >
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
+                        {this.getYearsForDropdown().map((year) => <option value={year} key={year}>{year}</option>)}
                     </Select>
                 </div>
                 <div className="col-sm">
@@ -278,6 +299,7 @@ class RegistrationSettlements extends Component {
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        value={this.state.dateFrom ? moment(this.state.dateFrom) : null}
                     />
                 </div>
                 <div className="col-sm">
@@ -290,10 +312,53 @@ class RegistrationSettlements extends Component {
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        value={this.state.dateTo ? moment(this.state.dateTo) : null}
                     />
                 </div>
             </div>
         )
+    }
+
+    ///setting the available from date
+    dateOnChangeFrom = date => {
+        const dateFrom = moment(date).utc().toISOString()
+        this.setState({
+            dateFrom: dateFrom,
+            year: null
+        })
+        this.handleStripePayoutList(null, {
+            year: null,
+            startDate: dateFrom,
+            endDate: this.state.dateTo
+        })
+    }
+
+    ////setting the available to date
+    dateOnChangeTo = date => {
+        const dateTo = moment(date).utc().toISOString()
+        this.setState({
+            dateTo: dateTo,
+            year: null
+        })
+
+        this.handleStripePayoutList(null, {
+            year: null,
+            startDate: this.state.dateFrom,
+            endDate: dateTo
+        })
+    }
+
+    onYearChange = year => {
+        this.setState({
+            year,
+            dateFrom: null,
+            dateTo: null
+        })
+        this.handleStripePayoutList(null, {
+            year,
+            startDate: null,
+            endDate: null
+        })
     }
 
     contentView = () => {

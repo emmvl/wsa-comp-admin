@@ -34,25 +34,25 @@ function getStripeLoginLinkAction() {
 }
 
 ////stripe payments transfer list
-function getStripeTransferListAction(page, starting_after, ending_before) {
+function getStripeTransferListAction(page, starting_after, ending_before, params) {
     const action = {
         type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD,
         page,
         starting_after,
-        ending_before
-
+        ending_before,
+        params
     };
     return action;
 }
 
 ////stripe payout list
-function getStripePayoutListAction(page, starting_after, ending_before) {
+function getStripePayoutListAction(page, starting_after, ending_before, params) {
     const action = {
         type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD,
         page,
         starting_after,
-        ending_before
-
+        ending_before,
+        params
     };
     return action;
 }

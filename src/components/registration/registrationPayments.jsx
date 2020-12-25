@@ -17,7 +17,7 @@ import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
 import StripeKeys from "../stripe/stripeKeys";
-
+import moment from "moment";
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -94,7 +94,9 @@ class RegistrationPayments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2020",
+            year: null,
+            dateFrom: null,
+            dateTo: null,
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
@@ -202,6 +204,15 @@ class RegistrationPayments extends Component {
         )
     }
 
+    getYearsForDropdown = () => {
+        const currentYear = moment().format('YYYY')
+        return [
+            currentYear,
+            currentYear -1,
+            currentYear -2,
+        ]
+    }
+
     dropdownView = () => {
         return (
             <div className="row">
@@ -210,14 +221,12 @@ class RegistrationPayments extends Component {
                     <Select
                         className="reg-payment-select w-100"
                         style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
-                        onChange={(year) => this.setState({ year })}
+                        onChange={(year) => this.onYearChange(year)}
                         value={this.state.year}
+                        placeholder={AppConstants.selectAYear}
+                        allowClear={true}
                     >
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
+                        {this.getYearsForDropdown().map((year) => <option value={year} key={year}>{year}</option>)}
                     </Select>
                 </div>
                 <div className="col-sm">
@@ -229,6 +238,7 @@ class RegistrationPayments extends Component {
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        value={this.state.dateFrom ? moment(this.state.dateFrom) : null}
                     />
                 </div>
                 <div className="col-sm">
@@ -241,6 +251,7 @@ class RegistrationPayments extends Component {
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        value={this.state.dateTo ? moment(this.state.dateTo) : null}
                     />
                 </div>
             </div>
@@ -249,12 +260,44 @@ class RegistrationPayments extends Component {
 
     ///setting the available from date
     dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
+        const dateFrom = moment(date).utc().toISOString()
+        this.setState({
+            dateFrom: dateFrom,
+            year: null
+        })
+        this.handleStripeTransferList(null, {
+            year: null,
+            startDate: dateFrom,
+            endDate: this.state.dateTo
+        })
     }
 
     ////setting the available to date
     dateOnChangeTo = date => {
-        // console.log(date)
+        const dateTo = moment(date).utc().toISOString()
+        this.setState({
+            dateTo: dateTo,
+            year: null
+        })
+
+        this.handleStripeTransferList(null, {
+            year: null,
+            startDate: this.state.dateFrom,
+            endDate: dateTo
+        })
+    }
+
+    onYearChange = year => {
+        this.setState({
+            year,
+            dateFrom: null,
+            dateTo: null
+        })
+        this.handleStripeTransferList(null, {
+            year,
+            startDate: null,
+            endDate: null
+        })
     }
 
     stripeConnected = () => {
@@ -320,7 +363,7 @@ class RegistrationPayments extends Component {
                                                 </a>
                                             </Button>
                                         )}
-                                    {/* {isBecsSetupDone ? (
+                                    {isBecsSetupDone ? (
                                     <Button
                                         className="open-reg-button mx-1"
                                         type="primary"
@@ -336,7 +379,7 @@ class RegistrationPayments extends Component {
                                     >
                                         {AppConstants.setupStripeForWithdrawals}
                                     </Button>
-                                )} */}
+                                )}
                                 </div>
                             )}
                         </div>
@@ -346,7 +389,7 @@ class RegistrationPayments extends Component {
         )
     }
 
-    handleStripeTransferList = (key) => {
+    handleStripeTransferList = (key, params) => {
         let page = this.props.stripeState.stripeTransferListPage
         let stripeTransferList = this.props.stripeState.stripeTransferList
         let starting_after = null
@@ -357,15 +400,28 @@ class RegistrationPayments extends Component {
             let id = (stripeTransferList[stripeTransferList.length - 1]['id']);
             starting_after = id
             ending_before = null
-        }
-        if (key == "Previous") {
+        } else if (key == "Previous") {
             //////move backward
             page = parseInt(page) - 1
             let id = (stripeTransferList[0]['id']);
             starting_after = null
             ending_before = id
+        } else {
+            // Next or previous button didn't trigger it, change page no to 1 for new data
+            page = 1
         }
-        this.props.getStripeTransferListAction(page, starting_after, ending_before)
+        if (!params) {
+            params = {}
+            if (this.state.year)
+                params.year = this.state.year
+            else if (this.state.dateFrom || this.state.dateTo) {
+                if (this.state.dateFrom)
+                    params.startDate = this.state.dateFrom
+                if (this.state.dateTo)
+                    params.endDate = this.state.dateTo
+            }
+        }
+        this.props.getStripeTransferListAction(page, starting_after, ending_before, params)
     }
 
     ////checking for enabling click on next button or not

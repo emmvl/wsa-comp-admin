@@ -1664,6 +1664,7 @@ const AppConstants = {
   bankAccount: 'Bank Account',
   pleaseSelectUserToMerge: 'Please select user to merge',
   unableToContinue: 'Unable to continue',
+  selectAYear: 'Select a year',
 };
 
 export default AppConstants;
