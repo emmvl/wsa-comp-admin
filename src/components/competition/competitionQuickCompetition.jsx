@@ -12,7 +12,6 @@ import {
     searchVenueList,
     clearFilter,
 } from "../../store/actions/appAction";
-import InputWithHead from "../../customComponents/InputWithHead";
 import ValidationConstants from "../../themes/validationConstant";
 import TimeSlotModal from "../../customComponents/timeslotModal"
 import CompetitionModal from "../../customComponents/competitionModal"

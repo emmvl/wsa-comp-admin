@@ -3,7 +3,7 @@ import { Menu, Select, message } from "antd";
 import { NavLink } from "react-router-dom";
 
 import AppConstants from "../themes/appConstants";
-import { checkOrganisationLevel, checkLivScoreCompIsParent, getCurrentYear } from "../util/permissions";
+import { checkOrganisationLevel, checkLivScoreCompIsParent } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
 import AppUniqueId from "../themes/appUniqueId";
@@ -13,7 +13,7 @@ import { isArrayNotEmpty } from "../util/helpers";
 import { innerHorizontalCompetitionListAction, updateInnerHorizontalData, initializeCompData } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
 import history from "../util/history";
-import { getOnlyYearListAction } from "../store/actions/appAction";
+import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../store/actions/appAction";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import { getUserRoleId } from '../util/permissions'
 
@@ -82,9 +82,7 @@ class InnerHorizontalMenu extends React.Component {
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
                             let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
-                            // let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
-                            let yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
-                            setGlobalYear(yearRefId)
+                            let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
                             if (yearRefId) {
                                 if (!this.props.innerHorizontalState.error) {
                                     this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
@@ -203,7 +201,7 @@ class InnerHorizontalMenu extends React.Component {
                         onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
-                            <NavLink to="/competitionDashboard">
+                            <NavLink onClick={() => this.props.CLEAR_OWN_COMPETITION_DATA('all')} to="/competitionDashboard">
                                 Dashboard
                             </NavLink>
                         </Menu.Item>
@@ -217,7 +215,7 @@ class InnerHorizontalMenu extends React.Component {
                             <Menu.Item key="2">
                                 {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
                                 <NavLink to="/quickCompetition">
-                                    <span id={AppUniqueId.quick_comp_subtab}>Quick Competition</span>
+                                    <span onClick={() => this.props.CLEAR_OWN_COMPETITION_DATA('all')} id={AppUniqueId.quick_comp_subtab}>Quick Competition</span>
                                 </NavLink>
                             </Menu.Item>
                             <Menu.Item key="3">
@@ -326,7 +324,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.regSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/registrationDashboard">
@@ -409,7 +407,7 @@ class InnerHorizontalMenu extends React.Component {
                                 defaultSelectedKeys={['1']}
                                 style={{ lineHeight: '64px' }}
                                 selectedKeys={[this.props.liveScoreSelectedKey]}
-                                onClick={() => this.props.clearDataOnCompChangeAction()}
+                                onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                             >
                                 <Menu.Item key="1">
                                     <NavLink to="/matchDayDashboard">
@@ -626,7 +624,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.umpireSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/umpireDashboard">
@@ -704,7 +702,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.userSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
                             {/*
@@ -794,7 +792,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.userSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/homeDashboard">
@@ -821,7 +819,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.shopSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         {/* <Menu.Item key="1">
                             <NavLink to="/shopDashboard">
@@ -869,7 +867,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.finSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/paymentDashboard">
@@ -911,7 +909,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.liveScoreNewsSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="21">
                             <NavLink to="/matchDayNewsList">
@@ -928,7 +926,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.userSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                        onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/CommunicationList">
@@ -955,6 +953,7 @@ function mapDispatchToProps(dispatch) {
         updateInnerHorizontalData,
         initializeCompData,
         clearDataOnCompChangeAction,
+        CLEAR_OWN_COMPETITION_DATA
     }, dispatch)
 }
 

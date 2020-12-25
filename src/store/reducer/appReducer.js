@@ -3,6 +3,7 @@ import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
 // import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import AppConstants from "../../themes/appConstants";
 import { reverseArray } from 'util/permissions'
+import { clearCompetitionLocalStorage } from "util/sessionStorage";
 
 const initialState = {
   onLoad: false,
@@ -49,7 +50,7 @@ const initialState = {
   allCompetitionTypeList: [],
   badgeData: [],
   filterBadgeArr: [],
-  accreditation:[]
+  accreditation: []
 };
 
 function arraymove(arr, fromIndex, toIndex) {
@@ -519,6 +520,7 @@ function appState(state = initialState, action) {
         state.participate_CompetitionArr = []
       }
       else if (action.key === "all") {
+        clearCompetitionLocalStorage()
         state.participate_CompetitionArr = []
         state.own_CompetitionArr = []
         state.all_own_CompetitionArr = []
@@ -607,7 +609,7 @@ function appState(state = initialState, action) {
     case ApiConstants.API_GET_REF_BADGE_SUCCESS:
       let filterBadgeData = getFilterBadgeData(action.result)
       state.filterBadgeArr = filterBadgeData
-      state.accreditation=action.result
+      state.accreditation = action.result
       return {
         ...state,
         onLoad: false,

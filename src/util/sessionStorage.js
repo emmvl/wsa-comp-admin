@@ -163,6 +163,14 @@ const clearUmpireStorage = () => {
   }
 }
 
+const clearCompetitionLocalStorage = () => {
+  let competitionStorage = ["own_competition", 'Participating_competition',
+    'own_FinalRefId', "Participating_competitionStatus", "own_competitionStatus", 'Participating_competitionStaus']
+  for (let key of competitionStorage) {
+    localStorage.removeItem(key);
+  }
+}
+
 const getLiveScoreUmpireCompitionData = () => {
   return localStorage.liveScoreUmpireCompetitionData
 }
@@ -283,4 +291,5 @@ export {
   getImpersonation,
   setGlobalYear,
   getGlobalYear,
+  clearCompetitionLocalStorage
 }
