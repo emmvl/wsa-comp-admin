@@ -193,7 +193,7 @@ class ShopOrderStatus extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         let { orderStatusListActionObject } = this.props.shopOrderStatusState
         this.referenceCalls()
         let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this.state

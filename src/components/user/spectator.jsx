@@ -145,7 +145,7 @@ class Spectator extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { spectatorListAction } = this.props.userState
         this.referenceCalls();
         let pageNo = 1
@@ -167,7 +167,7 @@ class Spectator extends Component {
     }
 
     handleSpectatorTableList = (page) => {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page
         })

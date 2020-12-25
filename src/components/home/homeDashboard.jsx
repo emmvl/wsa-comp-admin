@@ -285,6 +285,9 @@ class HomeDashboard extends Component {
             let yearRefId = getGlobalYear()
             this.props.setHomeDashboardYear(JSON.parse(yearRefId));
         }
+        else if( this.props.homeDashboardState.yearRefId){
+            setGlobalYear(this.props.homeDashboardState.yearRefId)
+        }
         // this.props.getOnlyYearListAction(this.props.appState.yearList);
         // this.props.getUserCount(1);
     }

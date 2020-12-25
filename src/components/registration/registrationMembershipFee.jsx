@@ -352,13 +352,14 @@ class RegistrationMembershipFee extends Component {
     setFieldDecoratorValues = () => {
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : [];
+        let yearRefId =membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList):1
         this.formRef.current.setFieldsValue({
-            yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList) : null,
+            yearRefId: yearRefId,
             membershipProductName: membershipProductData.membershipProductName,
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
+        setGlobalYear(yearRefId)
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : [];
-
         if (typesData.length > 0) {
             typesData.forEach((item, index) => {
                 let dobFrom = `dobFrom${index}`
@@ -1600,7 +1601,7 @@ class RegistrationMembershipFee extends Component {
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
                 />
-                <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="4" />
                 <Layout>
                     <Form
                         ref={this.formRef}

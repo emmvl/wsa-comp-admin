@@ -3614,6 +3614,7 @@ class RegistrationCompetitionFee extends Component {
                     yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
+                setGlobalYear(mainYearRefId)
             }
         }
     }

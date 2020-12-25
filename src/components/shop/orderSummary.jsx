@@ -156,7 +156,7 @@ class OrderSummary extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         let { orderSummaryListingActionObject } = this.props.shopOrderSummaryState
         this.referenceCalls()
         if (orderSummaryListingActionObject) {
@@ -188,7 +188,7 @@ class OrderSummary extends Component {
 
     handleTableList = (page) => {
         let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod, sortOrder, sortBy } = this.state
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         let params = {
             limit: 10,
             offset: (page ? (10 * (page - 1)) : 0),

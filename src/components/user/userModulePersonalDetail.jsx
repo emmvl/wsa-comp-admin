@@ -1259,7 +1259,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     async componentDidMount() {
-        let yearRefId = JSON.parse(getGlobalYear())
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         this.setState({ yearRefId })
         let isAdmin = getOrganisationData() ? getOrganisationData().userRole == 'admin' ? true : false : false
         this.props.getReferenceOrderStatus()

@@ -129,7 +129,7 @@ class PlayWithFriend extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { userFriendListAction } = this.props.userState
         this.referenceCalls();
         let pageNo = 1
@@ -154,7 +154,7 @@ class PlayWithFriend extends Component {
     }
 
     handleFriendTableList = (page) => {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page
         })

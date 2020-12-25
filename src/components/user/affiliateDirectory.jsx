@@ -186,7 +186,7 @@ class AffiliateDirectory extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { affiliateDirListAction } = this.props.userState
         let page = 1
         let sortBy = this.state.sortBy
@@ -222,7 +222,7 @@ class AffiliateDirectory extends Component {
     };
 
     handleAffiliateTableList = (page) => {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page,
         });

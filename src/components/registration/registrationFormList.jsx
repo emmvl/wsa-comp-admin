@@ -188,6 +188,7 @@ class RegistrationFormList extends Component {
 
                 } else {
                     this.handleMembershipTableList(1, mainYearRefId)
+                    setGlobalYear(mainYearRefId)
                     await this.setState({
                         yearRefId: mainYearRefId, allyearload: false
                     })

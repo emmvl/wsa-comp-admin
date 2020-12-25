@@ -126,7 +126,7 @@ class ReferFriend extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { userReferFriendListAction } = this.props.userState
 
         this.referenceCalls();
@@ -154,7 +154,7 @@ class ReferFriend extends Component {
     }
 
     handleFriendTableList = (page) => {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page
         })

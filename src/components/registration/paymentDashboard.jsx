@@ -224,7 +224,7 @@ class PaymentDashboard extends Component {
 
             this.handlePaymentTableList(page, userId, registrationId, this.state.searchText)
         } else {
-            let yearRefId = getGlobalYear()
+            let yearRefId = getGlobalYear() ? getGlobalYear() : '-1'
             let userInfo = this.props.location.state ? this.props.location.state.personal : null;
             let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
             this.setState({ userInfo: userInfo, registrationId: registrationId, yearRefId: JSON.parse(yearRefId) });
@@ -347,7 +347,7 @@ class PaymentDashboard extends Component {
     handlePaymentTableList = (page, userId, regId, searchValue) => {
         let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchText } = this.state
         let offset = page ? 10 * (page - 1) : 0;
-        let year = getGlobalYear()
+        let year = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             offset,
             userId: userId,

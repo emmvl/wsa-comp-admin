@@ -199,7 +199,7 @@ class UserTextualDashboard extends Component {
 
     async componentDidMount() {
         const prevUrl = getPrevUrl();
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { userTextualDasboardListAction } = this.props.userState
         let page = 1
         let sortBy = this.state.sortBy
@@ -361,7 +361,7 @@ class UserTextualDashboard extends Component {
             postalCode,
             searchText,
         } = this.state;
-        let yearId = yearRefId == -1 ? yearRefId : JSON.parse(getGlobalYear())
+        let yearId = yearRefId == -1 ? yearRefId : getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
 
         const filter = {
             organisationId,

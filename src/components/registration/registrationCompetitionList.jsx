@@ -216,7 +216,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: '/registrationCompetitionFee',
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId , yearRefId: this_Obj.state.yearRefId },
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId, yearRefId: this_Obj.state.yearRefId },
                             }}
                         >
                             <span>Edit</span>
@@ -274,11 +274,11 @@ class RegistrationCompetitionList extends Component {
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                const mainYearRefId = getCurrentYear(this.props.appState.yearList);
                 let page = 1;
                 let { sortBy } = this.state;
                 let { sortOrder } = this.state;
-                let yearId = getGlobalYear()
+                let yearId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
+                setGlobalYear(yearId)
                 if (competitionListAction) {
                     const { offset } = competitionListAction;
                     sortBy = competitionListAction.sortBy;

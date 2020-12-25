@@ -86,6 +86,7 @@ class RegistrationMembershipCap extends Component {
                     let mainYearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList);
                     let hasRegistration = 1;
                     this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration, mainYearRefId);
+                    setGlobalYear(mainYearRefId)
                     this.setState({onYearLoad: false,yearRefId: mainYearRefId,getMembershipProductsOnLoad: true});
                 }
             }

@@ -216,10 +216,11 @@ class RegistrationMembershipList extends Component {
 
                     await this.setState({ offset, sortBy, sortOrder, yearRefId, allyearload: false })
                     page = Math.floor(offset / 10) + 1;
-
+                    setGlobalYear(yearRefId)
                     this.handleMembershipTableList(page, yearRefId)
                 } else {
                     this.handleMembershipTableList(1, mainYearRefId)
+                    setGlobalYear(mainYearRefId)
                     this.setState({
                         yearRefId: mainYearRefId, allyearload: false
                     })

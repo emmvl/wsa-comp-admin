@@ -3,7 +3,7 @@ import { Menu, Select, message } from "antd";
 import { NavLink } from "react-router-dom";
 
 import AppConstants from "../themes/appConstants";
-import { checkOrganisationLevel, checkLivScoreCompIsParent } from "../util/permissions";
+import { checkOrganisationLevel, checkLivScoreCompIsParent, getCurrentYear } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
 import AppUniqueId from "../themes/appUniqueId";
@@ -82,7 +82,9 @@ class InnerHorizontalMenu extends React.Component {
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
                             let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
-                            let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
+                            // let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
+                            let yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
+                            setGlobalYear(yearRefId)
                             if (yearRefId) {
                                 if (!this.props.innerHorizontalState.error) {
                                     this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
