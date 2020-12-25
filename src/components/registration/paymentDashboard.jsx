@@ -213,8 +213,7 @@ class PaymentDashboard extends Component {
             sortOrder = paymentDashboardListAction.sortOrder
             let registrationId = paymentDashboardListAction.registrationId == null ? '-1' : paymentDashboardListAction.registrationId
             let userId = paymentDashboardListAction.userId == null ? -1 : paymentDashboardListAction.userId
-            // let yearRefId = paymentDashboardListAction.yearId
-            let yearRefId = getGlobalYear()
+            let yearRefId = getGlobalYear() ? getGlobalYear() : paymentDashboardListAction.yearId
             let competitionUniqueKey = paymentDashboardListAction.competitionKey
             let dateFrom = paymentDashboardListAction.dateFrom
             let dateTo = paymentDashboardListAction.dateTo

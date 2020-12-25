@@ -8,7 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "./liveScore.css";
 import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import history from "../../util/history";
-import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition,setGlobalYear } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
@@ -360,7 +360,8 @@ class LiveScoreMatchesList extends Component {
             const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
             compKey = uniqueKey
         }
-        setOwnCompetitionYear(yearRefId);
+        // setOwnCompetitionYear(yearRefId);
+        setGlobalYear(yearRefId);
         setOwn_competition(compKey);
         history.push({ pathname: '/competitionDraws', state: { screenKey: "/matchDayMatches" } });
     }

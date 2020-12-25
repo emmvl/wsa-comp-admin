@@ -396,10 +396,8 @@ class LiveScoreCompetitions extends Component {
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                // const yearRefId = getCurrentYear(this.props.appState.yearList);
-                // localStorage.setItem('yearId', yearRefId);
-                let yearRefId = getGlobalYear();
-
+                const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
+                localStorage.setItem('yearId', yearRefId);
                 this.setState({ year: JSON.parse(yearRefId), allyearload: false });
                 this.competitionListApi(yearRefId);
             }

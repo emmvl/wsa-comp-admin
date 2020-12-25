@@ -10,7 +10,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { getTeamsWithPagination } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
-import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition, setGlobalYear } from '../../util/sessionStorage';
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
@@ -233,7 +233,8 @@ class LiveScoreTeam extends Component {
             const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
             compKey = uniqueKey
         }
-        setOwnCompetitionYear(yearRefId);
+        // setOwnCompetitionYear(yearRefId);
+        setGlobalYear(yearRefId);
         setOwn_competition(compKey);
         history.push('/competitionPartTeamGradeCalculate');
     }

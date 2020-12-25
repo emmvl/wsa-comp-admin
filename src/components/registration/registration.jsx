@@ -11,7 +11,7 @@ import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
 import history from "util/history";
-import { getOrganisationData, getPrevUrl } from "util/sessionStorage";
+import { getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import {
     getCommonRefData,
     getGenderAction,
@@ -247,7 +247,7 @@ class Registration extends Component {
         this.state = {
             year: "2020",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: null,
             competitionUniqueKey: "-1",
             dobFrom: "-1",
             dobTo: "-1",
@@ -277,6 +277,7 @@ class Registration extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear()
         const { registrationListAction } = this.props.userRegistrationState
         let page = 1
         let sortBy = this.state.sortBy
@@ -302,7 +303,7 @@ class Registration extends Component {
                 let regFrom = registrationListAction.payload.regFrom !== "-1" ? moment(registrationListAction.payload.regFrom).format("YYYY-MM-DD") : this.state.regFrom
                 let regTo = registrationListAction.payload.regTo !== "-1" ? moment(registrationListAction.payload.regTo).format("YYYY-MM-DD") : this.state.regTo
                 let searchText = registrationListAction.payload.searchText
-                let yearRefId = registrationListAction.payload.yearRefId
+                let yearRefId = JSON.parse(yearId)
 
                 await this.setState({
                     offset,
@@ -329,9 +330,9 @@ class Registration extends Component {
             } else {
                 let teamName = this.props.location.state ? this.props.location.state.teamName : null;
                 let teamId = this.props.location.state ? this.props.location.state.teamId : -1;
-                this.setState({teamName: teamName, teamId: teamId})
-                setTimeout(()=> {
-                this.handleRegTableList(1);
+                this.setState({ teamName: teamName, teamId: teamId, yearRefId: JSON.parse(yearId) })
+                setTimeout(() => {
+                    this.handleRegTableList(1);
                 }, 300)
             }
         } else {
@@ -350,7 +351,7 @@ class Registration extends Component {
     handleRegTableList = (page) => {
         const {
             organisationId,
-            yearRefId,
+            // yearRefId,
             competitionUniqueKey,
             dobFrom,
             dobTo,
@@ -368,7 +369,7 @@ class Registration extends Component {
             sortOrder,
             teamId,
         } = this.state;
-
+        let yearRefId = this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(getGlobalYear())
         let filter = {
             organisationUniqueKey: organisationId,
             yearRefId,
@@ -424,6 +425,14 @@ class Registration extends Component {
             } else if (value.length === 0) {
                 this.handleRegTableList(1);
             }
+        } else if (key === 'yearRefId') {
+            await this.setState({
+                'yearRefId': value,
+            });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
+            this.handleRegTableList(1)
         } else {
             let newValue;
             if (key === "dobFrom" || key === "dobTo" || key === "regFrom" || key === "regTo") {

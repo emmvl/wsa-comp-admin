@@ -21,8 +21,8 @@ import {
 } from 'store/actions/registrationAction/competitionFeeAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
-
 import './product.scss';
+import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -278,11 +278,13 @@ class RegistrationCompetitionList extends Component {
                 let page = 1;
                 let { sortBy } = this.state;
                 let { sortOrder } = this.state;
+                let yearId = getGlobalYear()
                 if (competitionListAction) {
                     const { offset } = competitionListAction;
                     sortBy = competitionListAction.sortBy;
                     sortOrder = competitionListAction.sortOrder;
-                    const { yearRefId } = competitionListAction;
+                    // const { yearRefId } = competitionListAction;
+                    let yearRefId = JSON.parse(yearId);
                     const { searchText } = competitionListAction;
 
                     this.setState({
@@ -293,8 +295,8 @@ class RegistrationCompetitionList extends Component {
                     this.handleCompetitionTableList(page, yearRefId, searchText);
                     this.setState({ yearRefId, allyearload: false });
                 } else {
-                    this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText);
-                    this.setState({ yearRefId: mainYearRefId, allyearload: false });
+                    this.handleCompetitionTableList(1, JSON.parse(yearId), this.state.searchText);
+                    this.setState({ yearRefId: JSON.parse(yearId), allyearload: false });
                 }
             }
         }
@@ -338,6 +340,7 @@ class RegistrationCompetitionList extends Component {
 
     yearChange = (yearRefId) => {
         this.setState({ yearRefId });
+        setGlobalYear(yearRefId)
         this.handleCompetitionTableList(1, yearRefId, this.state.searchText);
     };
 

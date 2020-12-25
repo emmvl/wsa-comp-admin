@@ -446,6 +446,7 @@ class DashboardLayout extends React.Component {
                                                         <li className={menuName === AppConstants.registration ? "active" : ""}
                                                             style={{ display: showRoleLevelPermission(userRoleId, 'registration') ? 'visible' : 'none' }}>
                                                             <div id={AppConstants.registration_icon}
+                                                                onClick={() => this.props.clearDataOnCompChangeAction()}
                                                                 className="registration-menu menu-wrap">
                                                                 <NavLink to={"/registrationDashboard"}>
                                                                     <span id={AppConstants.registrations_label}

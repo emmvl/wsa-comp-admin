@@ -9,7 +9,7 @@ import Tooltip from "react-png-tooltip";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
-import { getOrganisationData } from "util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from "store/actions/commonAction/commonAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
@@ -166,7 +166,7 @@ class TeamRegistrations extends Component {
 
         this.state = {
             organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: null,
             competitionUniqueKey: "-1",
             filterOrganisation: -1,
             competitionId: "",
@@ -181,6 +181,7 @@ class TeamRegistrations extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear()
         const { teamRegListAction } = this.props.registrationState
 
         this.referenceCalls(this.state.organisationUniqueKey);
@@ -199,13 +200,14 @@ class TeamRegistrations extends Component {
             let filterOrganisation = teamRegListAction.payload.filterOrganisation
             let searchText = teamRegListAction.payload.searchText
             let divisionId = teamRegListAction.payload.divisionId
-            let yearRefId = teamRegListAction.payload.yearRefId
+            let yearRefId = JSON.parse(yearId)
             let membershipProductUniqueKey = teamRegListAction.payload.membershipProductUniqueKey
             await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, divisionId, yearRefId, membershipProductUniqueKey })
             page = Math.floor(offset / 10) + 1;
 
             this.handleRegTableList(page);
         } else {
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.handleRegTableList(1);
         }
     }
@@ -213,7 +215,7 @@ class TeamRegistrations extends Component {
     handleRegTableList = (page) => {
         const {
             organisationUniqueKey,
-            yearRefId,
+            // yearRefId,
             competitionUniqueKey,
             filterOrganisation,
             searchText,
@@ -222,7 +224,7 @@ class TeamRegistrations extends Component {
             sortOrder,
             membershipProductUniqueKey
         } = this.state;
-
+        let yearRefId = this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(getGlobalYear())
         const filter = {
             organisationUniqueKey,
             yearRefId,
@@ -269,6 +271,9 @@ class TeamRegistrations extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
             this.handleRegTableList(1);
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });

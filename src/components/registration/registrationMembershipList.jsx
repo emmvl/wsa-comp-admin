@@ -16,7 +16,7 @@ import {
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import { currencyFormat } from "../../util/currencyFormat";
-
+import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -202,7 +202,7 @@ class RegistrationMembershipList extends Component {
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let mainYearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList)
                 const { regMembershipListAction } = this.props.registrationState
                 routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
                 let page = 1
@@ -275,6 +275,7 @@ class RegistrationMembershipList extends Component {
     }
 
     yearChange = (yearRefId) => {
+        setGlobalYear(yearRefId)
         this.setState({ yearRefId })
         this.handleMembershipTableList(1, yearRefId)
     }
@@ -350,7 +351,7 @@ class RegistrationMembershipList extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu="registration" regSelectedKey="5" />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
                     <Content>

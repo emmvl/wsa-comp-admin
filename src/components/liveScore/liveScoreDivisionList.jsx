@@ -13,7 +13,7 @@ import {
     getMainDivisionListAction,
     liveScoreDeleteDivision
 } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
-import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition, setGlobalYear } from "../../util/sessionStorage";
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
 import { checkLivScoreCompIsParent } from "../../util/permissions";
@@ -270,7 +270,8 @@ class LiveScoreDivisionList extends Component {
             const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
             compKey = uniqueKey
         }
-        setOwnCompetitionYear(yearRefId);
+        // setOwnCompetitionYear(yearRefId);
+        setGlobalYear(yearRefId);
         setOwn_competition(compKey);
         history.push('/competitionPartTeamGradeCalculate');
     }

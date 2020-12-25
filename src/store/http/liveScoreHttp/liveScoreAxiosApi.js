@@ -1290,8 +1290,8 @@ const LiveScoreAxiosApi = {
     },
 
     /// ////get all the assign umpire list on the basis of competitionId
-    getAssignUmpiresList(competitionId, body) {
-        const url = `/matches/admin?competitionId=${competitionId}&roleId=15`;
+    getAssignUmpiresList(competitionId, body , userId) {
+        const url = `/matches/admin?competitionId=${competitionId}&roleId=15&userId=${userId}`;
         return Method.dataPost(url, token, body);
     },
 

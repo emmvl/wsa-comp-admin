@@ -18,7 +18,7 @@ import {
     Switch
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { captializedString, isImageFormatValid, isImageSizeValid  } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
@@ -71,7 +71,7 @@ import { isArrayNotEmpty } from '../../util/helpers';
 import ValidationConstants from '../../themes/validationConstant';
 import { NavLink } from 'react-router-dom';
 import Loader from '../../customComponents/loader';
-import { /* getUserId, */ getOrganisationData } from '../../util/sessionStorage';
+import { /* getUserId, */ getOrganisationData, getGlobalYear, setGlobalYear } from '../../util/sessionStorage';
 import { getAffiliateToOrganisationAction } from '../../store/actions/userAction/userAction';
 import CustomToolTip from 'react-png-tooltip';
 import { registrationRestrictionTypeAction } from '../../store/actions/commonAction/commonAction';
@@ -3509,7 +3509,7 @@ class RegistrationCompetitionFee extends Component {
             divisionState: false,
             affiliateOrgId: null,
             heroImage: null,
-            yearRefId: null
+            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null
         };
 
         this_Obj = this;
@@ -3755,6 +3755,7 @@ class RegistrationCompetitionFee extends Component {
     };
 
     setYear = (e) => {
+        setGlobalYear(e)
         this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
@@ -4175,15 +4176,15 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
                                     feeSeasonalTeamData[k].competitionMembershipProductTypeId
                                 ) {
-                                    feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j]?.fee;
-                                    feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j]?.gst;
-                                    feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j]?.affiliateFee;
-                                    feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affiliateGst;
+                                    feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j] ?.fee;
+                                    feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j] ?.gst;
+                                    feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j] ?.affiliateFee;
+                                    feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j] ?.affiliateGst;
                                     // if (fee_data[i].teamRegChargeTypeRefId == 1) {
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affNominationGST;
+                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j] ?.nominationFees;
+                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j] ?.nominationGST;
+                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j] ?.affNominationFees;
+                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j] ?.affNominationGST;
                                     //}
                                     break;
                                 }
@@ -5061,24 +5062,24 @@ class RegistrationCompetitionFee extends Component {
                 return
             }
             if (key === "competitionLogoUrl") {
-                    this.setState({
-                        image: data.files[0],
-                        profileImage: URL.createObjectURL(data.files[0]),
-                        isSetDefaul: true,
-                    });
-                    this.props.add_editcompetitionFeeDeatils(
-                        URL.createObjectURL(data.files[0]),
-                        'competitionLogoUrl'
-                    );
-                    this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
+                this.setState({
+                    image: data.files[0],
+                    profileImage: URL.createObjectURL(data.files[0]),
+                    isSetDefaul: true,
+                });
+                this.props.add_editcompetitionFeeDeatils(
+                    URL.createObjectURL(data.files[0]),
+                    'competitionLogoUrl'
+                );
+                this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
             } else if (key === "heroImageUrl") {
-                    this.setState({
-                        heroImage: data.files[0]
-                    });
-                    this.props.add_editcompetitionFeeDeatils(
-                        URL.createObjectURL(data.files[0]),
-                        'heroImageUrl'
-                    );
+                this.setState({
+                    heroImage: data.files[0]
+                });
+                this.props.add_editcompetitionFeeDeatils(
+                    URL.createObjectURL(data.files[0]),
+                    'heroImageUrl'
+                );
             }
         }
     };
@@ -5401,12 +5402,12 @@ class RegistrationCompetitionFee extends Component {
                             }}
                         />
                         <div className="d-flex align-items-center justify-content-center">
-                        <span className="image-size-format-text">
-                            {AppConstants.imageSizeFormatText}
-                        </span>
-                    </div> 
+                            <span className="image-size-format-text">
+                                {AppConstants.imageSizeFormatText}
+                            </span>
+                        </div>
                     </div>
-                    
+
                     <span
                         style={
                             detailsData.competitionDetailData.heroImageUrl == null
@@ -6275,15 +6276,15 @@ class RegistrationCompetitionFee extends Component {
                                                                 {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
                                                                     <div className="d-flex">
                                                                         <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
-                                                                        <Radio className="team-reg-radio-custom-style" 
+                                                                        <Radio className="team-reg-radio-custom-style"
                                                                             disabled={item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2)}
-                                                                            style={{ width: "50%" }} 
+                                                                            style={{ width: "50%" }}
                                                                             value={3}><span>{AppConstants.feesPaidAtEachMatchByPlayer}
-                                                                                            {item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
-                                                                                                <CustomToolTip>{AppConstants.perMatchFeesCannotSet}</CustomToolTip>
-                                                                                            )} 
-                                                                                    </span>
-                                                                            </Radio>
+                                                                                {item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
+                                                                                    <CustomToolTip>{AppConstants.perMatchFeesCannotSet}</CustomToolTip>
+                                                                                )}
+                                                                            </span>
+                                                                        </Radio>
                                                                     </div>
                                                                 )}
                                                             </div>

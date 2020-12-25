@@ -34,7 +34,7 @@ import {
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import { captializedString } from "../../util/helpers";
@@ -83,7 +83,7 @@ class RegistrationMembershipCap extends Component {
         try{
             if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
                 if (this.props.appState.yearList.length > 0) {
-                    let mainYearRefId = getCurrentYear(this.props.appState.yearList);
+                    let mainYearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList);
                     let hasRegistration = 1;
                     this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration, mainYearRefId);
                     this.setState({onYearLoad: false,yearRefId: mainYearRefId,getMembershipProductsOnLoad: true});
@@ -281,6 +281,7 @@ class RegistrationMembershipCap extends Component {
                                     onChange={(e) => {
                                         this.props.getDefaultCompFeesMembershipProductTabAction(1, e); 
                                         this.setState({yearRefId: e,getMembershipProductsOnLoad: true})
+                                        setGlobalYear(e)
                                     }}
                                     value={this.state.yearRefId}
                                     className="year-select reg-filter-select1 ml-2"

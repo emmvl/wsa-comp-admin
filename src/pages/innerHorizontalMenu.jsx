@@ -44,10 +44,8 @@ class InnerHorizontalMenu extends React.Component {
 
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
-            let yearRefId = localStorage.getItem("yearId")
-            let year = getGlobalYear()
-            // this.setState({ selectedComp: id, yearId: yearRefId })
-            this.setState({ selectedComp: id, yearId: year })
+            let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
+            this.setState({ selectedComp: id, yearId: yearRefId })
         }
 
         if (this.props.menu === "liveScore") {
@@ -84,8 +82,7 @@ class InnerHorizontalMenu extends React.Component {
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
                             let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
-                            // let yearRefId = localStorage.getItem("yearId")
-                            let yearRefId = getGlobalYear()
+                            let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
                             if (yearRefId) {
                                 if (!this.props.innerHorizontalState.error) {
                                     this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
