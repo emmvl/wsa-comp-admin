@@ -320,7 +320,7 @@ class RegistrationPayments extends Component {
                                                 </a>
                                             </Button>
                                         )}
-                                    {/* {isBecsSetupDone ? (
+                                    {isBecsSetupDone ? (
                                     <Button
                                         className="open-reg-button mx-1"
                                         type="primary"
@@ -336,7 +336,7 @@ class RegistrationPayments extends Component {
                                     >
                                         {AppConstants.setupStripeForWithdrawals}
                                     </Button>
-                                )} */}
+                                )}
                                 </div>
                             )}
                         </div>
