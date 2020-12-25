@@ -16,9 +16,8 @@ import {
     getNewMembershipProductByYearAction
 } from "../../store/actions/competitionModuleAction/competitionDashboardAction"
 import {
-    setOwnCompetitionYear,
     setOwn_competition,
-    getOrganisationData
+    getOrganisationData, setGlobalYear
 } from "../../util/sessionStorage";
 import ValidationConstants from "../../themes/validationConstant";
 import Loader from '../../customComponents/loader';
@@ -50,7 +49,7 @@ class CompetitionReplicate extends Component {
                 } else {
 
                     await setOwn_competition(this.props.competitionDashboardState.competitionId);
-                    await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId);
+                    await setGlobalYear(this.props.competitionDashboardState.yearRefId);
 
                     if (this.state.hasRegistration != 1) {
                         history.push({ pathname: "/competitionOpenRegForm", state: { fromReplicate: 1 } })
@@ -68,7 +67,7 @@ class CompetitionReplicate extends Component {
     getRefernce = () => {
         try {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            // setOwnCompetitionYear(1)
+
         } catch (ex) {
             console.log("Error in referenceApiCalls::" + ex);
         }

@@ -24,12 +24,11 @@ import {
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus, setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    getGlobalYear, setGlobalYear
 } from "../../util/sessionStorage"
 import ValidationConstants from "../../themes/validationConstant";
 import moment from "moment"
@@ -210,8 +209,8 @@ const columns = [
                         ))}
                     </Select>
                 ) : (
-                    <span>{record.delIndicationMsg}</span>
-                )}
+                        <span>{record.delIndicationMsg}</span>
+                    )}
             </span>
         ),
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
@@ -418,7 +417,7 @@ class CompetitionProposedTeamGrading extends Component {
         let gradeRefId = this.props.location.state ? this.props.location.state.gradeRefId : null;
         this.setState({ divisionId, gradeRefId: gradeRefId })
         // this.props.gradesReferenceListAction()
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -444,7 +443,6 @@ class CompetitionProposedTeamGrading extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-                // setOwnCompetitionYear(1)
             }
         }
     }
@@ -463,7 +461,7 @@ class CompetitionProposedTeamGrading extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     this.props.getDivisionsListAction(yearId, competitionId, this.state.sourceModule)
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId, compLoad: false, yearRefId: JSON.parse(yearId) })
                 }
@@ -564,7 +562,7 @@ class CompetitionProposedTeamGrading extends Component {
     }
 
     onYearChange = (yearId) => {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
@@ -727,14 +725,14 @@ class CompetitionProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                    // owner={this.state.commentsCreatedBy}
-                    // OwnCreatedComment={this.state.commentsCreatedOn}
-                    // ownnerComment={this.state.comments}
-                    // affilate={this.state.responseCommentsCreatedBy}
-                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                    // affilateComment={this.state.responseComments}
-                    // finalGradeId={this.state.finalGradeId}
-                    // proposedGradeID={this.state.proposedGradeID}
+                // owner={this.state.commentsCreatedBy}
+                // OwnCreatedComment={this.state.commentsCreatedOn}
+                // ownnerComment={this.state.comments}
+                // affilate={this.state.responseCommentsCreatedBy}
+                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                // affilateComment={this.state.responseComments}
+                // finalGradeId={this.state.finalGradeId}
+                // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal

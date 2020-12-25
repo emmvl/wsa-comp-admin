@@ -5796,7 +5796,7 @@ class RegistrationCompetitionFee extends Component {
         let membershipDisable = this.state.permissionState.membershipDisable;
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.membershipProduct}</span>
+                <span className="form-heading required-field">{AppConstants.membershipProduct}</span>
                 {membershipProductArray.map((item, index) => (
                     <div className="d-flex flex-column justify-content-center">
                         <Checkbox

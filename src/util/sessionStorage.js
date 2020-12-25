@@ -157,7 +157,7 @@ const setUmpireCompId = umpireCompId => {
 
 const clearUmpireStorage = () => {
   let keysToRemove = ["umpireCompId", "umpireCompetitionData", "umpireCompetitionId",
-    "own_competition", 'Participating_competition', "Participate_year", 'own_year',"own_FinalRefId"];
+    "own_competition", 'Participating_competition', "Participate_year", 'own_year', "own_FinalRefId", 'global_year'];
   for (let key of keysToRemove) {
     localStorage.removeItem(key);
   }
@@ -196,27 +196,27 @@ const getPrevUrl = () => {
   return localStorage.prevUrl ? JSON.parse(localStorage.prevUrl) : null;
 };
 
-const getOwn_CompetitionFinalRefId=()=>{
+const getOwn_CompetitionFinalRefId = () => {
   return localStorage.own_FinalRefId
 }
-const setOwn_CompetitionFinalRefId=(own_FinalRefId)=>{
+const setOwn_CompetitionFinalRefId = (own_FinalRefId) => {
   localStorage.setItem("own_FinalRefId", own_FinalRefId)
 }
 
 const clearCompetitionStorage = () => {
   let keysToRemove = ["own_competition", 'Participating_competition',
-   "Participate_year", 'own_year',"own_FinalRefId",
-   "Participating_competitionStatus","own_competitionStatus"];
+    "Participate_year", 'own_year', "own_FinalRefId",
+    "Participating_competitionStatus", "own_competitionStatus", 'global_year'];
   for (let key of keysToRemove) {
     localStorage.removeItem(key);
   }
 }
 
-const setImpersonation=(Impersonation)=>{
-  localStorage.setItem('Impersonation',Impersonation)
+const setImpersonation = (Impersonation) => {
+  localStorage.setItem('Impersonation', Impersonation)
 }
 
-const getImpersonation=()=>{
+const getImpersonation = () => {
   return localStorage.Impersonation
 }
 

@@ -19,13 +19,12 @@ import {
     changeDivisionPlayerAction, commentListingAction, exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
     setOwn_CompetitionFinalRefId,
+    getGlobalYear, setGlobalYear
 } from "../../util/sessionStorage";
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
@@ -85,7 +84,7 @@ class CompetitionPlayerGrades extends Component {
                     const { competitionId } = competitionList[0];
                     const { statusRefId } = competitionList[0];
                     const { finalTypeRefId } = competitionList[0];
-                    const yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear();
+                    const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
                     setOwn_competition(competitionId);
                     setOwn_competitionStatus(statusRefId);
                     setOwn_CompetitionFinalRefId(finalTypeRefId);
@@ -94,8 +93,8 @@ class CompetitionPlayerGrades extends Component {
                     this.setState({
                         firstTimeCompId: competitionId, competitionStatus: statusRefId, compLoad: false, yearRefId: JSON.parse(yearId),
                     });
-                }else{
-                    this.props.getDivisionsListAction(this.state.yearRefId, this.state.firstTimeCompId); 
+                } else {
+                    this.props.getDivisionsListAction(this.state.yearRefId, this.state.firstTimeCompId);
                 }
             }
         }
@@ -125,13 +124,13 @@ class CompetitionPlayerGrades extends Component {
     }
 
     componentDidMount() {
-        const yearId = getOwnCompetitionYear();
+        const yearId = getGlobalYear();
         const storedCompetitionId = getOwn_competition();
         const storedCompetitionStatus = getOwn_competitionStatus();
         const propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined;
         const compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
-        if(!fromReplicate){
+        if (!fromReplicate) {
             if (storedCompetitionId && yearId && propsData && compData) {
                 this.setState({
                     yearRefId: JSON.parse(yearId),
@@ -148,9 +147,8 @@ class CompetitionPlayerGrades extends Component {
                 });
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
-                // setOwnCompetitionYear(1)
             }
-        }else{
+        } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -270,7 +268,7 @@ class CompetitionPlayerGrades extends Component {
     )
 
     onYearChange = (yearId) => {
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined);
         setOwn_CompetitionFinalRefId(undefined);
@@ -679,10 +677,10 @@ class CompetitionPlayerGrades extends Component {
                                                                     </span>
                                                                 </NavLink>
                                                             ) : (
-                                                                <span className="player-grading-player-name-text pointer">
-                                                                    {playerItem.playerName}
-                                                                </span>
-                                                            )}
+                                                                    <span className="player-grading-player-name-text pointer">
+                                                                        {playerItem.playerName}
+                                                                    </span>
+                                                                )}
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-end flex-wrap">
                                                             {/* <div className="col-sm">
@@ -891,10 +889,10 @@ class CompetitionPlayerGrades extends Component {
                                                             </span>
                                                         </NavLink>
                                                     ) : (
-                                                        <span className="player-grading-player-name-text pointer">
-                                                            {playerItem.playerName}
-                                                        </span>
-                                                    )}
+                                                            <span className="player-grading-player-name-text pointer">
+                                                                {playerItem.playerName}
+                                                            </span>
+                                                        )}
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-end flex-wrap">
                                                     {/* <div className="col-sm">

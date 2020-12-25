@@ -62,7 +62,7 @@ const payments = [
     },
     {
         paymentType: "Voucher",
-        paymentTypeId : 3,
+        paymentTypeId: 3,
     }
 ];
 
@@ -247,7 +247,7 @@ class Registration extends Component {
         this.state = {
             year: "2020",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: null,
+            yearRefId: "-1",
             competitionUniqueKey: "-1",
             dobFrom: "-1",
             dobTo: "-1",
@@ -268,7 +268,7 @@ class Registration extends Component {
             selectedRow: null,
             loading: false,
             teamName: null,
-            teamId : -1
+            teamId: -1
         }
 
         this_Obj = this;
@@ -277,7 +277,7 @@ class Registration extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : -1
         const { registrationListAction } = this.props.userRegistrationState
         let page = 1
         let sortBy = this.state.sortBy
@@ -369,7 +369,7 @@ class Registration extends Component {
             sortOrder,
             teamId,
         } = this.state;
-        let yearRefId = this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(getGlobalYear())
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         let filter = {
             organisationUniqueKey: organisationId,
             yearRefId,
@@ -516,9 +516,9 @@ class Registration extends Component {
     }
 
     clearFilterByTeamId = () => {
-        this.setState({teamName: null, teamId: -1})
+        this.setState({ teamName: null, teamId: -1 })
         setTimeout(() => {
-        this.handleRegTableList(1);   
+            this.handleRegTableList(1);
         }, 300)
     }
 
@@ -556,7 +556,7 @@ class Registration extends Component {
                 <div className="row" style={{ marginRight: 42 }}>
                     <div className="col-sm-9 padding-right-reg-dropdown-zero">
                         <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2">
-                            {this.state.teamName && 
+                            {this.state.teamName &&
                                 <div className="col-sm pt-1 align-self-center">
                                     <Tag
                                         closable

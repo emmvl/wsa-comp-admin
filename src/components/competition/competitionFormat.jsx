@@ -22,13 +22,13 @@ import {
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
 import {
-    getOrganisationData, setOwnCompetitionYear,
-    getOwnCompetitionYear,
+    getOrganisationData,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import moment from "moment";
@@ -66,7 +66,7 @@ class CompetitionFormat extends Component {
     }
 
     componentDidMount() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -88,7 +88,6 @@ class CompetitionFormat extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            // setOwnCompetitionYear(1)
         }
     }
 
@@ -115,7 +114,7 @@ class CompetitionFormat extends Component {
                         setOwn_competition(competitionId);
                         setOwn_competitionStatus(statusRefId)
                         setOwn_CompetitionFinalRefId(finalTypeRefId)
-                        let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                        let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                         this.apiCalls(competitionId, yearId);
                         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) })
                     }
@@ -224,7 +223,7 @@ class CompetitionFormat extends Component {
     }
 
     onYearChange(yearId) {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)

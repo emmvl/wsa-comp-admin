@@ -55,7 +55,7 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (teamName, record) => (
-            <NavLink to={{pathname:"/registration", state: {teamName: record.teamName, teamId :record.teamId}}}>
+            <NavLink to={{ pathname: "/registration", state: { teamName: record.teamName, teamId: record.teamId } }}>
                 <span className="input-heading-add-another pt-0">{teamName}</span>
             </NavLink>
         )
@@ -71,18 +71,18 @@ const columns = [
 
     {
         title: "Division",
-        key:"divisionName",
+        key: "divisionName",
         dataIndex: "divisionName",
         sorter: true,
-        onHeaderCell: ({dataIndex}) => listeners(dataIndex)
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
     },
 
     {
         title: "Product",
-        key:"productName",
+        key: "productName",
         dataIndex: "productName",
         sorter: true,
-        onHeaderCell: ({dataIndex}) => listeners(dataIndex)
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
     },
 
     {
@@ -100,10 +100,10 @@ const columns = [
 
     {
         title: "Registration Date",
-        key:"registrationDate",
+        key: "registrationDate",
         dataIndex: "registrationDate",
         sorter: true,
-        onHeaderCell : ({dataIndex}) => listeners(dataIndex),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (registrationDate) => (
             <div>
                 {registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}
@@ -129,34 +129,34 @@ const columns = [
 
     {
         title: "Action",
-        key:"action",
-        dataIndex:"status",
-        render:(status) => (
+        key: "action",
+        dataIndex: "status",
+        render: (status) => (
             status == "Registered" ?
-            <Menu
-            className="action-triple-dot-submenu"
-            theme="light"
-            mode="horizontal"
-            style={{ lineHeight: '25px' }}
-             >
-                <SubMenu
-                    key="sub"
-                    title={
-                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                    }
+                <Menu
+                    className="action-triple-dot-submenu"
+                    theme="light"
+                    mode="horizontal"
+                    style={{ lineHeight: '25px' }}
                 >
-                    <Menu.Item key="1">
+                    <SubMenu
+                        key="sub"
+                        title={
+                            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                        }
+                    >
+                        <Menu.Item key="1">
 
                             <span>Deregister</span>
-                        
-                    </Menu.Item>
-                </SubMenu>
-            </Menu> 
-            : 
-            null
-            
+
+                        </Menu.Item>
+                    </SubMenu>
+                </Menu>
+                :
+                null
+
         )
-        
+
     },
 ];
 
@@ -181,7 +181,7 @@ class TeamRegistrations extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear()
+        let yearId = getGlobalYear() ? getGlobalYear() : -1
         const { teamRegListAction } = this.props.registrationState
 
         this.referenceCalls(this.state.organisationUniqueKey);
@@ -224,7 +224,7 @@ class TeamRegistrations extends Component {
             sortOrder,
             membershipProductUniqueKey
         } = this.state;
-        let yearRefId = this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(getGlobalYear())
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         const filter = {
             organisationUniqueKey,
             yearRefId,

@@ -650,7 +650,7 @@ class RegistrationForm extends Component {
                     </div>
                 </div>
 
-                <InputWithHead heading={AppConstants.membershipProduct} />
+                <InputWithHead required={"required-field"} heading={AppConstants.membershipProduct} />
                 <Select
                     mode="multiple"
                     className="reg-form-multiple-select"

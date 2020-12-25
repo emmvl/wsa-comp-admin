@@ -27,8 +27,7 @@ import {
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Loader from '../../customComponents/loader'
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
+    setGlobalYear,
     setOwn_competition,
     getOwn_competition,
     setDraws_venue,
@@ -39,7 +38,8 @@ import {
     getDraws_roundTime,
     setDraws_division_grade,
     getDraws_division_grade,
-    getOrganisationData
+    getOrganisationData,
+    getGlobalYear
 } from "../../util/sessionStorage"
 import moment from "moment"
 import ValidationConstants from "../../themes/validationConstant"
@@ -75,7 +75,7 @@ class CompetitionDrawEditOld extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     this.props.getDrawsRoundsAction(yearId, competitionId);
                     setOwn_competition(competitionId)
                     this.setState({ firstTimeCompId: competitionId, venueLoad: true })
@@ -83,8 +83,8 @@ class CompetitionDrawEditOld extends Component {
             }
             if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
                 if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
+                    let yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.own_YearArr)
+                    setGlobalYear(yearRefId)
                     this.setState({ yearRefId: yearRefId })
                 }
             }
@@ -137,7 +137,7 @@ class CompetitionDrawEditOld extends Component {
 
     apiCalls() {
         this.props.clearDraws()
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
@@ -178,7 +178,7 @@ class CompetitionDrawEditOld extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            // setOwnCompetitionYear(1)
+
         }
     }
 
@@ -361,7 +361,7 @@ class CompetitionDrawEditOld extends Component {
 
     onYearChange = yearId => {
         this.props.clearDraws("rounds")
-        setOwnCompetitionYear(yearId)
+        getGlobalYear(yearId)
         setOwn_competition(undefined)
         this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null, competitionDivisionGradeId: null });
         this.props.getYearAndCompetitionOwnAction(

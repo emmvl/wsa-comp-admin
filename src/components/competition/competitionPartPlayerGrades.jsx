@@ -19,8 +19,7 @@ import {
     changeDivisionPlayerAction, commentListingAction, exportPlayerGrades,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
-    setParticipatingYear,
-    getParticipatingYear,
+    setGlobalYear, getGlobalYear,
     setParticipating_competition,
     getParticipating_competition,
     getParticipating_competitionStatus,
@@ -86,7 +85,7 @@ class CompetitionPartPlayerGrades extends Component {
                     const { statusRefId } = competitionList[0];
                     setParticipating_competition(competitionId);
                     setParticipating_competitionStatus(statusRefId);
-                    const yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear();
+                    const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
                     this.props.getDivisionsListAction(yearId, competitionId);
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) });
                 }
@@ -116,7 +115,7 @@ class CompetitionPartPlayerGrades extends Component {
     }
 
     componentDidMount() {
-        const yearId = getParticipatingYear();
+        const yearId = getGlobalYear();
         const storedCompetitionId = getParticipating_competition();
         const storedCompetitionStatus = getParticipating_competitionStatus();
         const propsData = this.props.appState.participate_YearArr.length > 0 ? this.props.appState.participate_YearArr : undefined;
@@ -136,7 +135,6 @@ class CompetitionPartPlayerGrades extends Component {
             });
         } else {
             this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition');
-            setParticipatingYear(1);
         }
     }
 
@@ -248,7 +246,7 @@ class CompetitionPartPlayerGrades extends Component {
     )
 
     onYearChange = (yearId) => {
-        setParticipatingYear(yearId);
+        setGlobalYear(yearId);
         setParticipating_competition(undefined);
         setParticipating_competitionStatus(undefined);
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData");

@@ -36,8 +36,8 @@ import {
 } from '../../store/actions/appAction';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
+    setGlobalYear,
+    getGlobalYear,
     setOwn_competition,
     getOwn_competition,
     setDraws_venue,
@@ -261,7 +261,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = (storedCompetitionStatus != undefined && storedCompetitionStatus !== "undefined") ? storedCompetitionStatus : competitionList[0].statusRefId;
                     let finalTypeRefId = (storedFinalTypeRefId != undefined && storedFinalTypeRefId !== "undefined") ? storedFinalTypeRefId : competitionList[0].finalTypeRefId
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     setOwn_competitionStatus(statusRefId)
                     this.props.getDrawsRoundsAction(yearId, competitionId);
                     setOwn_competition(competitionId);
@@ -323,7 +323,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     apiCalls() {
-        const yearId = getOwnCompetitionYear();
+        const yearId = getGlobalYear();
         const storedCompetitionId = getOwn_competition();
         const storedCompetitionStatus = getOwn_competitionStatus()
         const propsData = this.props.appState.own_YearArr.length > 0
@@ -414,7 +414,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
     onYearChange = (yearId) => {
         this.props.clearMultiDraws('rounds');
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
@@ -471,8 +471,8 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     onSwap(source, target, drawData, round_Id) {
-        this.setState({ 
-            isDragging: false, 
+        this.setState({
+            isDragging: false,
             tooltipSwappableTime: null
         });
         const sourceIndexArray = source.split(':');
@@ -620,7 +620,7 @@ class MultifieldDrawsNewTimeline extends Component {
             draws: [customSourceObject, customTargetObject],
         };
 
-        const yearId = getOwnCompetitionYear();
+        const yearId = getGlobalYear();
         const storedCompetitionId = getOwn_competition();
         const venueId = getDraws_venue();
         const roundId = getDraws_round();
@@ -911,7 +911,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 hoverTooltipFunc: setTimeout(() => {
                     tooltip.setAttribute(
                         "style",
-                        fullTooltipStyles 
+                        fullTooltipStyles
                     );
                 }, 500)
             });
@@ -983,7 +983,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const { draggableEventObject, dragDayTimeRestrictions } = this.state;
 
-        this.setState({ 
+        this.setState({
             isDragging: false,
         });
 
@@ -1058,7 +1058,7 @@ class MultifieldDrawsNewTimeline extends Component {
             }
 
             const roundId = getDraws_round();
-            const yearId = getOwnCompetitionYear();
+            const yearId = getGlobalYear();
             const storedCompetitionId = getOwn_competition();
 
             const apiData = {
@@ -1247,18 +1247,18 @@ class MultifieldDrawsNewTimeline extends Component {
 
         // unavailable time during the whole day
 
-        const dayTimeRestrictions = workingDayInTimeline 
-            ?   {
-                    startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
-                    endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime,
-                    isUnavailable: false
-                } 
-            :   !findSchedule
-            ?   {
+        const dayTimeRestrictions = workingDayInTimeline
+            ? {
+                startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
+                endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime,
+                isUnavailable: false
+            }
+            : !findSchedule
+                ? {
                     startTime: moment(fieldItemDate + '00:00'),
                     endTime: moment(fieldItemDate + '23:59'),
                     isUnavailable: true
-                } 
+                }
                 : null;
 
         return dayTimeRestrictions;
@@ -2115,8 +2115,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                     }
 
                                     const dayBg = timeRestrictionsSchedule.isUnavailable ? {
-                                            background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
-                                        } : {
+                                        background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
+                                    } : {
                                             backgroundSize,
                                             backgroundImage,
                                             backgroundPosition,
@@ -2141,7 +2141,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 onDragOver={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
                                                         this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
-                                                    } 
+                                                    }
                                                 }}
                                                 onDragEnd={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
@@ -2150,14 +2150,14 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 onTouchMove={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
                                                         this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
-                                                    } 
+                                                    }
                                                 }}
                                                 onTouchEnd={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
                                                         this.dayLineDragEnd(e)
                                                 }}
                                             >
-                                                {timeRestrictionsSchedule.isUnavailable && 
+                                                {timeRestrictionsSchedule.isUnavailable &&
                                                     <div
                                                         className="box unavailable-draws align-items-center"
                                                         style={{
@@ -2246,20 +2246,20 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 )
                                                                             }
                                                                             isCurrentSwappable={(source, target) =>
-                                                                                isDayInPast 
+                                                                                isDayInPast
                                                                                     ? false
                                                                                     : this.checkCurrentSwapObjects(
-                                                                                            source,
-                                                                                            target,
-                                                                                            dateItem.draws,
-                                                                                        )
+                                                                                        source,
+                                                                                        target,
+                                                                                        dateItem.draws,
+                                                                                    )
                                                                             }
                                                                         >
                                                                             {this.state.isDivisionNameShow ? (
-                                                                                    <span className="text-overflow">
-                                                                                        {slotObject.divisionName + "-" + slotObject.gradeName}
-                                                                                    </span>
-                                                                                ) : (
+                                                                                <span className="text-overflow">
+                                                                                    {slotObject.divisionName + "-" + slotObject.gradeName}
+                                                                                </span>
+                                                                            ) : (
                                                                                     <span className="text-overflow">
                                                                                         {slotObject.homeTeamName} <br />
                                                                                         {slotObject.awayTeamName}
@@ -2288,20 +2288,20 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     )
                                                                                 }
                                                                                 isCurrentSwappable={(source, target) =>
-                                                                                    isDayInPast 
+                                                                                    isDayInPast
                                                                                         ? false
                                                                                         : this.checkCurrentSwapObjects(
-                                                                                                source,
-                                                                                                target,
-                                                                                                dateItem.draws,
-                                                                                            )
+                                                                                            source,
+                                                                                            target,
+                                                                                            dateItem.draws,
+                                                                                        )
                                                                                 }
                                                                             >
                                                                                 {this.state.isDivisionNameShow ? (
-                                                                                        <span className="text-overflow">
-                                                                                            {slotObject.divisionName + "-" + slotObject.gradeName}
-                                                                                        </span>
-                                                                                    ) : (
+                                                                                    <span className="text-overflow">
+                                                                                        {slotObject.divisionName + "-" + slotObject.gradeName}
+                                                                                    </span>
+                                                                                ) : (
                                                                                         <span className="text-overflow">
                                                                                             {slotObject.homeTeamName} <br />
                                                                                             {slotObject.awayTeamName}

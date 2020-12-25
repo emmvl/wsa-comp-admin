@@ -5,7 +5,8 @@ import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
 import history from "../../../util/history";
 import { message } from "antd";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
-import {getCurrentYear} from 'util/permissions'
+import { getCurrentYear } from 'util/permissions'
+import { getGlobalYear } from "util/sessionStorage";
 
 
 function* failSaga(result) {
@@ -117,7 +118,7 @@ export function* getquickYearAndCompetitionListSaga(action) {
     try {
         const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
         if (result.status === 1) {
-            let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
+            let yearId = action.yearId == null ? getGlobalYear() ? getGlobalYear() : getCurrentYear(result.result.data) : action.yearId
             const resultCompetition = yield call(AxiosApi.getQuickCompetitionList, yearId);
             if (resultCompetition.status === 1) {
                 yield put({
@@ -125,7 +126,7 @@ export function* getquickYearAndCompetitionListSaga(action) {
                     yearList: result.result.data,
                     competetionListResult: resultCompetition.result.data,
                     status: result.status,
-                    yearId:yearId
+                    yearId: yearId
                 });
 
             }

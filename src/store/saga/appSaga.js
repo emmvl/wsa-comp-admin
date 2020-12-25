@@ -9,7 +9,7 @@ import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosA
 import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi.js";
 import { getCurrentYear } from "util/permissions";
-import { setOwnCompetitionYear, setParticipatingYear } from "util/sessionStorage";
+import { setGlobalYear, } from "util/sessionStorage";
 
 // Get the common year list reference
 function* getOnlyYearListSaga(action) {
@@ -470,7 +470,7 @@ function* getOwnYearAndCompetitionListSaga(action) {
 
     if (result.status === 1) {
       let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
-      setOwnCompetitionYear(yearId)
+      setGlobalYear(yearId)
       const resultCompetition = yield call(RegistrationAxiosApi.getOwnCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {
@@ -507,7 +507,7 @@ function* getParticipateYearAndCompetitionListSaga(action) {
 
     if (result.status === 1) {
       let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
-      setParticipatingYear(yearId)
+      setGlobalYear(yearId)
       const resultCompetition = yield call(RegistrationAxiosApi.getParticipateCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {

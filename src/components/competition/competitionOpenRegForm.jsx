@@ -16,7 +16,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString , isImageFormatValid, isImageSizeValid } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -51,14 +51,13 @@ import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom"
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
     getOwn_CompetitionFinalRefId,
-    setOwn_CompetitionFinalRefId
+    setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
@@ -361,7 +360,7 @@ class CompetitionOpenRegForm extends Component {
                         finalTypeRefId = competitionTypeList[0].finalTypeRefId
                     }
 
-                    let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
+                    let yearRefId = getGlobalYear() ? getGlobalYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
 
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, yearRefId)
                     if (competitionStatus == 2) {
@@ -395,10 +394,10 @@ class CompetitionOpenRegForm extends Component {
                         loading: false
                     });
                     let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
-                    await setOwnCompetitionYear(this.state.yearRefId)
+                    await setGlobalYear(this.state.yearRefId)
                     await setOwn_competition(this.props.competitionFeesState.competitionId);
                     await setOwn_competitionStatus(this.state.statusRefId);
-                    history.push("/competitionPlayerGrades",{fromReplicate: fromReplicate});
+                    history.push("/competitionPlayerGrades", { fromReplicate: fromReplicate });
                 } else {
                     this.setState({
                         loading: false
@@ -507,7 +506,7 @@ class CompetitionOpenRegForm extends Component {
     }
 
     getRefernce() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -531,7 +530,6 @@ class CompetitionOpenRegForm extends Component {
                 });
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-                // setOwnCompetitionYear(1)
             }
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
@@ -745,7 +743,7 @@ class CompetitionOpenRegForm extends Component {
 
     // year change and get competition lost
     onYearChange(yearId) {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
@@ -768,7 +766,7 @@ class CompetitionOpenRegForm extends Component {
             setOwn_CompetitionFinalRefId(finalTypeRefId)
         }
         this.props.clearCompReducerDataAction("all")
-        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule,null,this.state.yearRefId)
+        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, this.state.yearRefId)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
@@ -856,9 +854,9 @@ class CompetitionOpenRegForm extends Component {
                 message.error(AppConstants.logo_Image_Size);
                 return
             }
-                this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-                this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-                this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+            this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+            this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
         }
     };
 
@@ -1226,7 +1224,7 @@ class CompetitionOpenRegForm extends Component {
                         </Form.Item>
                     </div>
                 )}
-                <InputWithHead heading={AppConstants.timeBetweenRounds}  />
+                <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.time_rounds_days} className="col-sm">
@@ -1462,8 +1460,10 @@ class CompetitionOpenRegForm extends Component {
                                     </Tooltip>
                                     {tabKey == "2" && (
                                         <Button
-                                            onClick={() => this.setState({ nextButtonClicked: true,
-                                                statusRefId: tabKey == "2" ? 2 : 1 })}
+                                            onClick={() => this.setState({
+                                                nextButtonClicked: true,
+                                                statusRefId: tabKey == "2" ? 2 : 1
+                                            })}
                                             className="publish-button"
                                             type="primary"
                                             htmlType="submit"
@@ -1499,8 +1499,10 @@ class CompetitionOpenRegForm extends Component {
                                         </Tooltip>
                                         {tabKey == "2" && (
                                             <Button
-                                                onClick={() => this.setState({ nextButtonClicked: true ,
-                                                    statusRefId: tabKey == "2" ? 2 : 1})}
+                                                onClick={() => this.setState({
+                                                    nextButtonClicked: true,
+                                                    statusRefId: tabKey == "2" ? 2 : 1
+                                                })}
                                                 htmlType="submit"
                                                 className="publish-button"
                                                 type="primary"

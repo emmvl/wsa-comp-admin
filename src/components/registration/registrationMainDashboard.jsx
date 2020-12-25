@@ -199,16 +199,17 @@ class RegistrationMainDashboard extends Component {
         const { yearList } = this.props.appState
         if (this.state.loading && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
-                let storedYearID = getGlobalYear() ? JSON.parse(getGlobalYear()) : localStorage.getItem("yearId");
+                let storedYearID = getGlobalYear() && JSON.parse(getGlobalYear());
                 let yearRefId = null
                 if (storedYearID == null || storedYearID == "null") {
                     yearRefId = getCurrentYear(yearList)
                 } else {
                     yearRefId = storedYearID
                 }
+                setGlobalYear(yearRefId)
                 this.props.registrationMainDashboardListAction(yearRefId, this.state.sortBy, this.state.sortOrder, "all")
                 this.props.getAllCompetitionAction(yearRefId)
-                this.setState({ loading: false, year: yearRefId })
+                this.setState({ loading: false, year: JSON.parse(yearRefId) })
             }
         }
         let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
@@ -247,7 +248,6 @@ class RegistrationMainDashboard extends Component {
 
     onYearClick(yearId) {
         let { sortBy, sortOrder } = this.state
-        localStorage.setItem("yearId", yearId)
         setGlobalYear(yearId)
         this.setState({ year: yearId })
         this.props.registrationMainDashboardListAction(yearId, sortBy, sortOrder, "all")
@@ -299,7 +299,6 @@ class RegistrationMainDashboard extends Component {
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
         let registrationCompetition = this.props.registrationDashboardState.competitionTypeList
-        let yearId = getGlobalYear()
         return (
             <div
                 className="comp-player-grades-header-drop-down-view"
@@ -315,7 +314,7 @@ class RegistrationMainDashboard extends Component {
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
-                                    value={JSON.parse(yearId)}
+                                    value={JSON.parse(this.state.year)}
                                 >
                                     {yearList.map((item) => (
                                         <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>

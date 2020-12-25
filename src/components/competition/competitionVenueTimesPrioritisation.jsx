@@ -38,13 +38,12 @@ import history from '../../util/history'
 import { getCurrentYear } from 'util/permissions'
 import ValidationConstant from '../../themes/validationConstant'
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage"
 import Loader from '../../customComponents/loader'
 import CustomTooltip from 'react-png-tooltip'
@@ -82,7 +81,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     componentDidMount() {
         this.props.updateVenueConstraintsData(null, null, 'clearData', this.props.location.state)
         this.props.getVenuesTypeAction('all');
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -107,7 +106,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
-                // setOwnCompetitionYear(1)
             }
         }
         // this.setState({ loading: false })
@@ -116,7 +114,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
     componentDidUpdate(nextProps) {
         // const { yearList } = this.props.appState
         const { venueConstrainstData } = this.props.venueTimeState
-        // let storedYearID = getOwnCompetitionYear();        
         if (nextProps.commonReducerState !== this.props.commonReducerState) {
             this.setState({ filterDrop: this.props.commonReducerState.venueList })
         }
@@ -124,7 +121,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
             // let year_id = ""
             // if (yearList.length > 0) {
             //     year_id = storedYearID ? storedYearID : yearList[0].id
-            //     setOwnCompetitionYear(year_id)
             // }
             let competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
@@ -137,7 +133,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.venueConstraintListAction(yearId, competitionId, 1)
                     this.setState({
@@ -298,7 +294,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     );
 
     onYearClick(yearId) {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)

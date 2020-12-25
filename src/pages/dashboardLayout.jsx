@@ -374,7 +374,6 @@ class DashboardLayout extends React.Component {
     };
 
     render() {
-        console.log(this.state.impersonationOrgData)
         let menuName = this.props.menuName;
         const { userRoleId } = this.state
         return (
