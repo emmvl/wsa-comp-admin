@@ -102,6 +102,20 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
+        title: "Payment Type",
+        dataIndex: "paymentType",
+        key: "paymentType",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
+        title: "Membership Type",
+        dataIndex: "membershipTypeName",
+        key: "membershipTypeName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
         title: "Total Fee (inc GST)",
         dataIndex: "invoiceTotal",
         key: "invoiceTotal",
@@ -110,7 +124,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
-        title: "Our Portion",
+        title: "Portion",
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
         render: (affiliatePortion, record) => (
@@ -123,9 +137,9 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
     },
     {
-        title: "Payment",
-        dataIndex: "paymentType",
-        key: "paymentType",
+        title: "Payment Method",
+        dataIndex: "paymentMethod",
+        key: "paymentMethod",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("payment"),
     },
