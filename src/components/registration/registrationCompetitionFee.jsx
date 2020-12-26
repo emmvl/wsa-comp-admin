@@ -4678,24 +4678,23 @@ class RegistrationCompetitionFee extends Component {
                     formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                     formData.append('logoFileUrl', compFeesState.defaultCompFeesOrgLogo);
                     formData.append('competition_logo', compFeesState.defaultCompFeesOrgLogo);
-                } else {
-                    if (this.state.image !== null) {
-                        formData.append('competition_logo', this.state.image);
-                        formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
-                    } else {
-                        formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
-                        formData.append('logoFileUrl', postData.competitionLogoUrl);
-                        // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
-                    }
+                } else if (!this.state.image) {
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
+                    formData.append('logoFileUrl', postData.competitionLogoUrl);
                 }
 
-                if (this.state.image) {
+                if (this.state.image && !this.state.heroImage) {
                     formData.append("uploadFileType", 1);
-                } else if (this.state.heroImage) {
+                    formData.append("competition_logo", this.state.image);
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
+                } else if (this.state.heroImage && !this.state.image) {
                     formData.append("uploadFileType", 2);
                     formData.append("competition_logo", this.state.heroImage);
                 } else if (this.state.image && this.state.heroImage) {
                     formData.append("uploadFileType", 3);
+                    formData.append("competition_logo", this.state.image);
+                    formData.append("competition_logo", this.state.heroImage);
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                 }
 
                 formData.append('logoIsDefault', postData.logoIsDefault);
