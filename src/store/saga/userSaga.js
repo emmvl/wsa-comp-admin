@@ -378,6 +378,42 @@ function* getUserModuleRegistrationDataSaga(action) {
   }
 }
 
+function* getUserModuleTeamRegistrationDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleTeamRegistrationData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* getUserModuleOtherRegistrationDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleOtherRegistrationData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get the User Module Activity Player
 function* getUserModuleActivityPlayerSaga(action) {
   try {
@@ -1042,6 +1078,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD, getUserModulePersonalByCompDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, getUserModuleMedicalInfoSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_REGISTRATION_LOAD, getUserModuleRegistrationDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD, getUserModuleTeamRegistrationDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD, getUserModuleOtherRegistrationDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD, getUserModuleActivityPlayerSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD, getUserModuleActivityParentSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD, getUserModuleActivityScorerSaga);

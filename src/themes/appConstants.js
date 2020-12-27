@@ -1665,6 +1665,9 @@ const AppConstants = {
   pleaseSelectUserToMerge: 'Please select user to merge',
   unableToContinue: 'Unable to continue',
   selectAYear: 'Select a year',
+
+  ownRegistration: 'Own Registration',
+  otherRegistration: 'Other Registration'
 };
 
 export default AppConstants;

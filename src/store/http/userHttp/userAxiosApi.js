@@ -174,6 +174,17 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  getUserModuleTeamRegistrationData(payload) {
+    const url = `api/user/registration/teamdetails`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserModuleOtherRegistrationData(payload) {
+    const url = `api/user/registration/yourdetails`;
+    return Method.dataPost(url, token, payload);
+  },
+
+
   getUserModuleActivityPlayer(payload) {
     const url = `api/user/activity/player`;
     return Method.dataPost(url, token, payload);
