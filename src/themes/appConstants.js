@@ -1571,7 +1571,7 @@ const AppConstants = {
   reasonWhyYourAreDeclineFromTransfer: 'Reason why you are declining the request to transfer from your organisation',
   reasonWhyYourAreDeclineToTransfer: 'Reason why you are declining the request to transfer to you organisation',
   playerImport: 'Import Players',
-  teamSingleGameFee: 'Team Single Game Fee',
+  teamFeePerMatch: 'Team Fee Per Match',
   atPointOfRegistration: 'At point of Registration',
   nominationFee: 'Nomination Fee',
   nominationFeeTeam: 'Please note - The manager can choose to pay the nomination fee or can split it with the players at the time of registration',

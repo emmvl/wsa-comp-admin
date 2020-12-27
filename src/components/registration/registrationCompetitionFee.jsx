@@ -6342,7 +6342,7 @@ class RegistrationCompetitionFee extends Component {
                                                     <Table
                                                         // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
-                                                        columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
+                                                        columns={this.seasonalFeesTeamOnOrgTLevel()}
                                                         dataSource={
                                                             item.isAllType !== 'allDivisions'
                                                                 ? item.seasonalTeam.perType
@@ -7080,8 +7080,8 @@ class RegistrationCompetitionFee extends Component {
                         {isTeamCasual && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
-                                    <span className="form-heading">{AppConstants.teamSingleGameFee}</span>
-                                    <div className="mt-4">
+                                    <span className="form-heading">{AppConstants.teamFeePerMatch}</span>
+                                    <div className="mt-2">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>

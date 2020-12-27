@@ -75,7 +75,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Affiliate",
+        title: "Organisation",
         dataIndex: "affiliateName",
         key: "affiliateName",
         sorter: true,
