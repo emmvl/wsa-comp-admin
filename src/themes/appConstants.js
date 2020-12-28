@@ -180,7 +180,7 @@ const AppConstants = {
   membershipFees: 'Membership Fees',
   applyMembershipFee: 'Apply Seasonal Membership Fees to',
   casualFee: 'Single Game Fee (inc GST)',
-  singleGameFee: 'Single Game Fee',
+  singleGameFee: 'Individual User Single Game Fee',
   casualFeeExclGst: 'Single Game Fee (excl. GST)',
   gst: 'GST',
   seasonalFee: 'Individual User Seasonal Fee',
