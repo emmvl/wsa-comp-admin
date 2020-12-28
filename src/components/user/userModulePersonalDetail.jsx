@@ -27,6 +27,8 @@ import {
     getUserModulePersonalDetailsAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleRegistrationAction,
+    getUserModuleTeamRegistrationAction,
+    getUserModuleOtherRegistrationAction,
     getUserModuleMedicalInfoAction,
     getUserModuleActivityPlayerAction,
     getUserModuleActivityParentAction,
@@ -51,6 +53,7 @@ import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../th
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
+import { isArrayNotEmpty } from "../../util/helpers";
 
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key]);
@@ -211,6 +214,66 @@ const columns = [
             </Menu>
         ),
     },
+];
+
+const cloumnsRegistration = [
+    {
+        title: "Name",
+        dataIndex: "userName",
+        key: "userName"
+    },
+    {
+        title: "DOB",
+        dataIndex: "DOB",
+        key:"DOB",
+        render: (DOB , record) => (
+            liveScore_formateDate(DOB)
+        )
+    },
+    {
+        title: "Email",
+        dataIndex: "email",
+        key: "email"
+    },
+    {
+        title: "Phone",
+        dataIndex: "mobileNumber",
+        key:"mobileNumber"
+    },
+    {
+        title: "Affiliate",
+        dataIndex: "affiliate",
+        key: "affiliate"
+    },
+    {
+        title: "Competition",
+        dataIndex: "competitionName",
+        key: "competitionName"
+    },
+    {
+        title: "Comp Fees Paid",
+        dataIndex: "compFeesPaid",
+        key:"compFeesPaid"
+    },
+    {
+        title: "Membership Product",
+        dataIndex: "productName",
+        key: "productName"
+    },
+    {
+        title: "Division",
+        dataIndex: "divisionName",
+        key: "divisionName"
+    },
+    {
+        title: "Status",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus"
+    },
+    {
+        title: "Action",
+    }
+    
 ];
 
 const columnsPlayer = [
@@ -1570,6 +1633,8 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleMedicalInfoAction(payload);
         } else if (tabKey === "5") {
             this.handleRegistrationTableList(1, userId, competition, yearRefId);
+            this.handleTeamRegistrationTableList(1, userId, competition, yearRefId);
+            this.handleOtherRegistrationTableList(1, userId, competition, yearRefId);
         } else if (tabKey === "6") {
             this.handleHistoryTableList(1, userId);
         } else if (tabKey === "7") {
@@ -1641,6 +1706,34 @@ class UserModulePersonalDetail extends Component {
             },
         };
         this.props.getUserModuleRegistrationAction(filter);
+    };
+
+    handleTeamRegistrationTableList = (page, userId, competition, yearRefId) => {
+        let filter = {
+            competitionId: competition.competitionUniqueKey,
+            userId: userId,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            yearRefId,
+            paging: {
+                limit: 10,
+                offset: page ? 10 * (page - 1) : 0,
+            },
+        };
+        this.props.getUserModuleTeamRegistrationAction(filter);
+    };
+
+    handleOtherRegistrationTableList = (page, userId, competition, yearRefId) => {
+        let filter = {
+            competitionId: competition.competitionUniqueKey,
+            userId: userId,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            yearRefId,
+            paging: {
+                limit: 10,
+                offset: page ? 10 * (page - 1) : 0,
+            },
+        };
+        this.props.getUserModuleOtherRegistrationAction(filter);
     };
 
     handleHistoryTableList = (page, userId) => {
@@ -2332,10 +2425,16 @@ class UserModulePersonalDetail extends Component {
     registrationView = () => {
         let userState = this.props.userState;
         let userRegistrationList = userState.userRegistrationList;
-        let total = userState.userRegistrationDataTotalCount;
-
+        let registrationTotal = userState.userRegistrationDataTotalCount;
+        let userTeamRegistrationList = userState.userTeamRegistrationList;
+        let teamRegistrationTotal = userState.userTeamRegistrationDataTotalCount;
+        let userOtherRegistrationList = userState.userOtherRegistrationList;
+        let OtherRegistrationTotal = userState.userOtherRegistrationDataTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
+                <div className="user-module-row-heading">
+                    {AppConstants.ownRegistration}
+                </div>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
@@ -2351,7 +2450,7 @@ class UserModulePersonalDetail extends Component {
                     <Pagination
                         className="antd-pagination pb-3"
                         current={userState.userRegistrationDataPage}
-                        total={total}
+                        total={registrationTotal}
                         onChange={(page) =>
                             this.handleRegistrationTableList(
                                 page,
@@ -2363,6 +2462,79 @@ class UserModulePersonalDetail extends Component {
                         showSizeChanger={false}
                     />
                 </div>
+                {isArrayNotEmpty(userTeamRegistrationList) ? 
+                    <div>
+                        <div className="user-module-row-heading">
+                            {AppConstants.teamRegistration}
+                        </div>
+                        <div className="table-responsive home-dash-table-view">
+                            <Table
+                                className="home-dashboard-table"
+                                columns={cloumnsRegistration}
+                                dataSource={userTeamRegistrationList}
+                                pagination={false}
+                                loading={
+                                    this.props.userState.userTeamRegistrationOnLoad && true
+                                }
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination pb-3"
+                                current={userState.userTeamRegistrationDataPage}
+                                total={teamRegistrationTotal}
+                                onChange={(page) =>
+                                    this.handleTeamRegistrationTableList(
+                                        page,
+                                        this.state.userId,
+                                        this.state.competition,
+                                        this.state.yearRefId
+                                    )
+                                }
+                                showSizeChanger={false}
+                            />
+                        </div>
+                    </div>
+                    :
+                    null
+                }
+                
+                {isArrayNotEmpty(userOtherRegistrationList) ? 
+                    <div>
+                        <div className="user-module-row-heading">
+                            {AppConstants.otherRegistration}
+                        </div>
+                        <div className="table-responsive home-dash-table-view">
+                            <Table
+                                className="home-dashboard-table"
+                                columns={cloumnsRegistration}
+                                dataSource={userOtherRegistrationList}
+                                pagination={false}
+                                loading={
+                                    this.props.userState.userOtherRegistrationOnLoad && true
+                                }
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination pb-3"
+                                current={userState.userOtherRegistrationDataPage}
+                                total={OtherRegistrationTotal}
+                                onChange={(page) =>
+                                    this.handleOtherRegistrationTableList(
+                                        page,
+                                        this.state.userId,
+                                        this.state.competition,
+                                        this.state.yearRefId
+                                    )
+                                }
+                                showSizeChanger={false}
+                            />
+                        </div>
+                    </div>
+                    :
+                    null
+                }       
             </div>
         );
     };
@@ -2990,6 +3162,8 @@ function mapDispatchToProps(dispatch) {
             getUserModulePersonalDetailsAction,
             getUserModuleMedicalInfoAction,
             getUserModuleRegistrationAction,
+            getUserModuleTeamRegistrationAction,
+            getUserModuleOtherRegistrationAction,
             getUserModulePersonalByCompetitionAction,
             getUserModuleActivityPlayerAction,
             getUserModuleActivityParentAction,

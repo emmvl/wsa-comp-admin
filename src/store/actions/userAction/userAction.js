@@ -154,6 +154,22 @@ function getUserModuleRegistrationAction(payload) {
     };
 }
 
+function getUserModuleTeamRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD,
+        payload,
+    };
+    
+}
+
+function getUserModuleOtherRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD,
+        payload,
+    };
+    
+}
+
 function getUserModuleMedicalInfoAction(userId) {
     return {
         type: ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD,
@@ -458,6 +474,8 @@ export {
     getUserModulePersonalDetailsAction,
     getUserModuleMedicalInfoAction,
     getUserModuleRegistrationAction,
+    getUserModuleTeamRegistrationAction,
+    getUserModuleOtherRegistrationAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleActivityPlayerAction,
     getUserModuleActivityParentAction,

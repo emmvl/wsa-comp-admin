@@ -155,6 +155,12 @@ function paymentSeasonalFee() {
     };
 }
 
+function paymentPerMatch() {
+    return {
+        type: ApiConstants.GET_PER_MATCH_FEE_OPTIONS_API_LOAD,
+    };
+}
+
 function competitionPaymentApi(value, competitionId,affiliateOrgId) {
     return {
         type: ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD,
@@ -309,6 +315,7 @@ export {
     updatePaymentFeeOption,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     competitionPaymentApi,
     addRemoveCompFeeDiscountAction,
     add_editcompetitionFeeDeatils,

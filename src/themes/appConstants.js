@@ -180,7 +180,7 @@ const AppConstants = {
   membershipFees: 'Membership Fees',
   applyMembershipFee: 'Apply Seasonal Membership Fees to',
   casualFee: 'Single Game Fee (inc GST)',
-  singleGameFee: 'Single Game Fee',
+  singleGameFee: 'Individual User Single Game Fee',
   casualFeeExclGst: 'Single Game Fee (excl. GST)',
   gst: 'GST',
   seasonalFee: 'Individual User Seasonal Fee',
@@ -1571,7 +1571,7 @@ const AppConstants = {
   reasonWhyYourAreDeclineFromTransfer: 'Reason why you are declining the request to transfer from your organisation',
   reasonWhyYourAreDeclineToTransfer: 'Reason why you are declining the request to transfer to you organisation',
   playerImport: 'Import Players',
-  teamSingleGameFee: 'Team Single Game Fee',
+  teamFeePerMatch: 'Team Fee Per Match',
   atPointOfRegistration: 'At point of Registration',
   nominationFee: 'Nomination Fee',
   nominationFeeTeam: 'Please note - The manager can choose to pay the nomination fee or can split it with the players at the time of registration',
@@ -1666,7 +1666,9 @@ const AppConstants = {
   unableToContinue: 'Unable to continue',
   selectAYear: 'Select a year',
   resetTFA: "Reset TFA",
-  actions: "Actions"
+  actions: "Actions",
+  ownRegistration: 'Own Registration',
+  otherRegistration: 'Other Registration'
 };
 
 export default AppConstants;

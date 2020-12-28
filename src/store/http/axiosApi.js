@@ -243,6 +243,12 @@ let AxiosApi = {
     return Method.dataGet(url, token)
   },
 
+  //per match PaymentOption
+  getPerMatchOption() {
+    var url = "/common/reference/PerMatchPaymentOption";
+    return Method.dataGet(url, token)
+  },
+
   //post payment
   async postCompetitionPayment(payload, competitionId, organisationKey) {
     let orgItem = await getOrganisationData()

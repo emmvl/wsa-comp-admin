@@ -39,6 +39,7 @@ import {
     updatePaymentFeeOption,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     instalmentDateAction,
     competitionPaymentApi,
     addRemoveCompFeeDiscountAction,
@@ -3731,6 +3732,7 @@ class RegistrationCompetitionFee extends Component {
         this.props.competitionFeeInit();
         this.props.paymentFeeDeafault();
         this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
         this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction("all");
         this.props.registrationRestrictionTypeAction();
@@ -4678,24 +4680,23 @@ class RegistrationCompetitionFee extends Component {
                     formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                     formData.append('logoFileUrl', compFeesState.defaultCompFeesOrgLogo);
                     formData.append('competition_logo', compFeesState.defaultCompFeesOrgLogo);
-                } else {
-                    if (this.state.image !== null) {
-                        formData.append('competition_logo', this.state.image);
-                        formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
-                    } else {
-                        formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
-                        formData.append('logoFileUrl', postData.competitionLogoUrl);
-                        // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
-                    }
+                } else if (!this.state.image) {
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
+                    formData.append('logoFileUrl', postData.competitionLogoUrl);
                 }
 
-                if (this.state.image) {
+                if (this.state.image && !this.state.heroImage) {
                     formData.append("uploadFileType", 1);
-                } else if (this.state.heroImage) {
+                    formData.append("competition_logo", this.state.image);
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
+                } else if (this.state.heroImage && !this.state.image) {
                     formData.append("uploadFileType", 2);
                     formData.append("competition_logo", this.state.heroImage);
                 } else if (this.state.image && this.state.heroImage) {
                     formData.append("uploadFileType", 3);
+                    formData.append("competition_logo", this.state.image);
+                    formData.append("competition_logo", this.state.heroImage);
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                 }
 
                 formData.append('logoIsDefault', postData.logoIsDefault);
@@ -6343,7 +6344,7 @@ class RegistrationCompetitionFee extends Component {
                                                     <Table
                                                         // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
-                                                        columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
+                                                        columns={this.seasonalFeesTeamOnOrgTLevel()}
                                                         dataSource={
                                                             item.isAllType !== 'allDivisions'
                                                                 ? item.seasonalTeam.perType
@@ -7081,8 +7082,8 @@ class RegistrationCompetitionFee extends Component {
                         {isTeamCasual && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
-                                    <span className="form-heading">{AppConstants.teamSingleGameFee}</span>
-                                    <div className="mt-4">
+                                    <span className="form-heading">{AppConstants.teamFeePerMatch}</span>
+                                    <div className="mt-2">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7462,8 +7463,8 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <InputWithHead
                                             auto_complete="new-child"
-                                            heading={`Family Participant ${childIndex + 1} (add % discount)`}
-                                            placeholder={`Family Participant ${childIndex + 1} (add % discount)`}
+                                            heading={`Family Participant ${childIndex + 1} discount`}
+                                            placeholder={`Family Participant ${childIndex + 1} discount`}
                                             onChange={(e) =>
                                                 this.onChangeChildPercent(
                                                     e.target.value,
@@ -8205,6 +8206,7 @@ function mapDispatchToProps(dispatch) {
             updatePaymentFeeOption,
             paymentFeeDeafault,
             paymentSeasonalFee,
+            paymentPerMatch,
             competitionPaymentApi,
             addRemoveCompFeeDiscountAction,
             add_editcompetitionFeeDeatils,

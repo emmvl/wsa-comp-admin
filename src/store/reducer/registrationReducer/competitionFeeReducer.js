@@ -1,8 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
-import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
-import { getUserId, getOrganisationData } from "../../../util/sessionStorage";
+import { getOrganisationData } from "../../../util/sessionStorage";
+import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 
 // dummy object of competition detail
 const competitionDetailObject = {
@@ -62,6 +62,7 @@ const initialState = {
     casualPaymentDefault: [],
     seasonalPaymentDefault: [],
     seasonalTeamPaymentDefault: [],
+    perMatchPaymentDefault: [],
     SelectedSeasonalFee: [],
     selectedCasualFee: [],
     selectedCasualTeamFee: [],
@@ -1794,11 +1795,10 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
 // }
 
 // adding object to seasonal payemnt
-
-function getSeasonaltreeData(datalist) {
-    let seasonalPaymentDefaultTemp = datalist.filter(x => x.id != 8);
+function getSeasonalOptions(datalist) {
+    let paymentOptions = datalist.filter(x => x.id != 9);
     let instalmentDates = [];
-    seasonalPaymentDefaultTemp.map((item) => {
+    paymentOptions.map((item) => {
         let subReferences = item.subReferences
         if (subReferences.length > 0) {
             for (let i = 0; i < subReferences.length; i++) {
@@ -1806,7 +1806,11 @@ function getSeasonaltreeData(datalist) {
             }
         }
     })
-    return seasonalPaymentDefaultTemp;
+    return paymentOptions;
+}
+
+function getPerMatchPaymentOptions(datalist) {
+    return datalist.filter(x => x.id = 2);
 }
 
 function addInstalmentDate(selectedSeasonalInstalmentDatesArray) {
@@ -1938,14 +1942,27 @@ function competitionFees(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.GET_SEASONAL_FEE_DETAIL_API_SUCCESS:
-            const seasonalPayment = getRegistrationSetting(action.seasonalPaymentOptionResult)
-            const seasonalPaymentData = getSeasonaltreeData(seasonalPayment)
+            const seasonalPayment = getRegistrationSetting(action.seasonalPaymentOptionResult);
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
                 seasonalPaymentDefault: seasonalPayment,
                 seasonalTeamPaymentDefault: seasonalPayment,
+                error: null
+            };
+        
+        ////get per match payment options
+        case ApiConstants.GET_PER_MATCH_FEE_OPTIONS_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.GET_PER_MATCH_FEE_OPTIONS_API_SUCCESS:
+            const perMatchOptions = getRegistrationSetting(action.perMatchOptionResult);
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                perMatchPaymentDefault: perMatchOptions,
                 error: null
             };
 
@@ -2028,7 +2045,7 @@ function competitionFees(state = initialState, action) {
             let selectedCasualFee = checkSelectedCasualFee(allData.competitionpayments.paymentOptions, state.casualPaymentDefault, state.selectedCasualFee, state.selectedCasualFeeKey)
             let selectedSeasonalFee = checkSelectedSeasonalFee(allData.competitionpayments.paymentOptions, state.seasonalPaymentDefault, state.SelectedSeasonalFee, state.SelectedSeasonalFeeKey, allData.competitionpayments.instalmentDates, state.selectedSeasonalInstalmentDates)
             let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey, allData.competitionpayments.instalmentDates, state.selectedTeamSeasonalInstalmentDates)
-            let selectedCasualTeamFee = checkSelectedCasualTeamFee(allData.competitionpayments.paymentOptions, state.casualPaymentDefault, state.selectedCasualTeamFee)
+            let selectedCasualTeamFee = checkSelectedCasualTeamFee(allData.competitionpayments.paymentOptions, state.perMatchPaymentDefault, state.selectedCasualTeamFee)
             let selectedPaymentMethods = checkSelectedPaymentMethods(allData.competitionpayments.paymentMethods, state.paymentMethodsDefault, state.selectedPaymentMethods)
             let finalDiscountData = discountDataObject(allData.competitiondiscounts)
             state.competionDiscountValue.competitionDiscounts[0].discounts = finalDiscountData
@@ -2265,7 +2282,7 @@ function competitionFees(state = initialState, action) {
                 let selectedCasualFee = checkSelectedCasualFee(null, state.casualPaymentDefault, state.selectedCasualFee, null)
                 let selectedSeasonalFee = checkSelectedSeasonalFee(null, state.seasonalPaymentDefault, state.SelectedSeasonalFee, null, null, state.selectedSeasonalInstalmentDates)
                 let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(null, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, null, null, null)
-                let selectedCasualTeamFee = checkSelectedCasualTeamFee(null, state.casualPaymentDefault, state.selectedCasualTeamFee)
+                let selectedCasualTeamFee = checkSelectedCasualTeamFee(null, state.perMatchPaymentDefault, state.selectedCasualTeamFee)
                 let selectedPaymentMethods = checkSelectedPaymentMethods(null, state.paymentMethodsDefault, state.selectedPaymentMethods)
 
                 state.selectedCasualFee = selectedCasualFee.selectedCasualFee;
