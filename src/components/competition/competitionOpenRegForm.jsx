@@ -32,6 +32,7 @@ import {
     addRemoveDivisionAction,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     add_editcompetitionFeeDeatils,
     competitionDiscountTypesAction,
     regCompetitionListDeleteAction,
@@ -542,12 +543,13 @@ class CompetitionOpenRegForm extends Component {
 
     ////all the api calls
     apiCalls = (competitionId) => {
-        this.props.getDefaultCompFeesLogoAction()
-        this.props.competitionDiscountTypesAction()
+        this.props.getDefaultCompFeesLogoAction();
+        this.props.competitionDiscountTypesAction();
         this.props.competitionFeeInit();
-        this.props.paymentFeeDeafault()
-        this.props.paymentSeasonalFee()
-        this.props.getCommonDiscountTypeTypeAction()
+        this.props.paymentFeeDeafault();
+        this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
+        this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
@@ -1590,6 +1592,7 @@ function mapDispatchToProps(dispatch) {
         addRemoveDivisionAction,
         paymentFeeDeafault,
         paymentSeasonalFee,
+        paymentPerMatch,
         add_editcompetitionFeeDeatils,
         competitionDiscountTypesAction,
         getCommonDiscountTypeTypeAction,

@@ -39,6 +39,7 @@ import {
     updatePaymentFeeOption,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     instalmentDateAction,
     competitionPaymentApi,
     addRemoveCompFeeDiscountAction,
@@ -3731,6 +3732,7 @@ class RegistrationCompetitionFee extends Component {
         this.props.competitionFeeInit();
         this.props.paymentFeeDeafault();
         this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
         this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction("all");
         this.props.registrationRestrictionTypeAction();
@@ -8204,6 +8206,7 @@ function mapDispatchToProps(dispatch) {
             updatePaymentFeeOption,
             paymentFeeDeafault,
             paymentSeasonalFee,
+            paymentPerMatch,
             competitionPaymentApi,
             addRemoveCompFeeDiscountAction,
             add_editcompetitionFeeDeatils,
