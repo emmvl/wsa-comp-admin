@@ -231,7 +231,8 @@ class RegistrationMembershipCap extends Component {
                     // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(date))
                     // console.log("date",date.isSameOrAfter(dobFrom),date.isSameOrBefore(dobTo))
                     if(date.isSameOrAfter(dobFrom) && date.isSameOrBefore(dobTo)){
-                        if(j == feeCapIndex && i == membershipFeeCapIndex){
+                        // if(j == feeCapIndex && i == membershipFeeCapIndex){
+                        if(j == feeCapIndex){
                             return false;
                         }else{
                             return true;
