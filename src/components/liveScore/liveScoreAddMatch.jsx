@@ -52,7 +52,7 @@ import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/li
 import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction';
 import { entityTypes } from '../../util/entityTypes';
 import { refRoleTypes } from '../../util/refRoles';
-import { umpireListAction } from "../../store/actions/umpireAction/umpireAction";
+import { umpireListAction, newUmpireListAction } from "../../store/actions/umpireAction/umpireAction";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -123,12 +123,20 @@ class LiveScoreAddMatch extends Component {
                     this.props.getLiveScoreDivisionList(id);
                     this.props.getliveScoreScorerList(id, 4);
                     this.props.liveScoreClubListAction(id);
-                    this.props.umpireListAction({
+                    // this.props.umpireListAction({
+                    //     refRoleId: JSON.stringify([15, 20]),
+                    //     entityTypes: isCompParent ? 1 : 6,
+                    //     compId: id,
+                    //     offset: null,
+                    //     compOrgId: compOrgId
+                    // });
+                    this.props.newUmpireListAction({
                         refRoleId: JSON.stringify([15, 20]),
                         entityTypes: isCompParent ? 1 : 6,
                         compId: id,
                         offset: null,
-                        compOrgId: compOrgId
+                        compOrgId: compOrgId,
+                        isCompParent: isCompParent
                     });
                     this.setState({ loadvalue: true, allDisabled: true });
                 } else {
@@ -138,6 +146,7 @@ class LiveScoreAddMatch extends Component {
                 const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
                 let compData = JSON.parse(getLiveScoreCompetiton())
                 let orgItem = await getOrganisationData();
+                console.log('compData', compData)
                 let userOrganisationId = orgItem ? orgItem.organisationId : 0;
                 let compOrg_Id = compData ? compData.organisationId : 0
                 let isCompParent = userOrganisationId === compOrg_Id
@@ -150,12 +159,20 @@ class LiveScoreAddMatch extends Component {
                 this.props.getLiveScoreDivisionList(id);
                 this.props.getliveScoreScorerList(id, 4);
                 this.props.liveScoreClubListAction(id);
-                this.props.umpireListAction({
+                // this.props.umpireListAction({
+                //     refRoleId: JSON.stringify([15, 20]),
+                //     entityTypes: isCompParent ? 1 : 6,
+                //     compId: id,
+                //     offset: null,
+                //     compOrgId: compOrgId
+                // });
+                this.props.newUmpireListAction({
                     refRoleId: JSON.stringify([15, 20]),
                     entityTypes: isCompParent ? 1 : 6,
                     compId: id,
                     offset: null,
-                    compOrgId: compOrgId
+                    compOrgId: compOrgId,
+                    isCompParent: isCompParent
                 });
                 this.setState({ loadvalue: true, allDisabled: false });
             } else {
@@ -591,11 +608,12 @@ class LiveScoreAddMatch extends Component {
             addEditMatch, divisionList, roundList, teamResult, recordUmpireType, scorer1, scorer2, umpire1Name, umpire2Name, umpire1TextField, umpire2TextField, umpire1Orag, umpire2Orag, umpireReserve, umpireCoach, umpire1NameOrgId, umpireReserveId,
         } = this.props.liveScoreMatchState;
         const {
-            venueData, clubListData, coachList, umpireList, umpire1NameMainId, umpire2NameMainId,
+            venueData, clubListData, coachList, umpireList, newUmpireList, umpire1NameMainId, umpire2NameMainId,
         } = this.props.liveScoreMatchState;
         const { scorerListResult } = this.props.liveScoreState;
         // const { umpireList, coachList, } = this.props.umpireState
         const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
+        const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
 
@@ -817,7 +835,7 @@ class LiveScoreAddMatch extends Component {
                                             <option key={item.id} value={item.id}>{item.firstName + " " + item.lastName + " - " + item.linkedEntity[0].name}</option>
                                         ))} */}
 
-                                        {umpireListResult.map((item) => (
+                                        {newUmpireList.map((item) => (
                                             <option key={item.id} value={item.id}>{item.name}</option>
                                         ))}
                                     </Select>
@@ -831,7 +849,7 @@ class LiveScoreAddMatch extends Component {
                                         placeholder="Select Umpire 2 Name"
                                         value={umpire2NameMainId || undefined}
                                     >
-                                        {umpireListResult.map((item) => (
+                                        {newUmpireList.map((item) => (
                                             <option key={item.id} value={item.id}>{item.name}</option>
                                         ))}
                                     </Select>
@@ -849,7 +867,7 @@ class LiveScoreAddMatch extends Component {
                                         placeholder="Select Umpire Reserve"
                                         value={umpireReserve || undefined}
                                     >
-                                        {umpireListResult.map((item) => (
+                                        {newUmpireList.map((item) => (
                                             <option key={item.id} value={item.id}>{item.reserveName}</option>
                                         ))}
                                     </Select>
@@ -1711,6 +1729,7 @@ function mapDispatchToProps(dispatch) {
         searchFilterAction,
         ladderSettingGetMatchResultAction,
         umpireListAction,
+        newUmpireListAction,
         liveScoreGetMatchDetailInitiate,
         getRefBadgeData,
     }, dispatch);

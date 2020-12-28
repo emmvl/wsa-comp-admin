@@ -474,7 +474,7 @@ class CompetitionDashboard extends Component {
         if (key === "own") {
             history.push("/competitionOpenRegForm", { id: record.competitionId, screenKey: "compDashboard" });
             setOwn_competition(record.competitionId)
-            setGlobalYear(selectedYearId)
+            // setGlobalYear(selectedYearId)
         } else {
             history.push("/registrationCompetitionForm", { id: record.competitionId });
         }

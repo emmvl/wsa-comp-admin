@@ -41,7 +41,7 @@ import {
     getUmpireActivityListAction,
     registrationResendEmailAction,
     userProfileUpdateAction,
-    restTfaAction
+    resetTfaAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -50,8 +50,6 @@ import history from "../../util/history";
 import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../themes/dateformate";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
-import StripeKeys from "../stripe/stripeKeys";
-import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 
 function tableSort(a, b, key) {
@@ -103,7 +101,7 @@ const columns = [
         title: "Membership Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
-        render: (expiryDate,record) => (
+        render: (expiryDate, record) => (
             <span>
                 {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Pay each Match' ? liveScore_formateDate(expiryDate) : expiryDate) : liveScore_formateDate(record.competitionEndDate)}
             </span>
@@ -1422,7 +1420,7 @@ class UserModulePersonalDetail extends Component {
         let userState = this.props.userState;
         let personal = userState.personalData;
         let competitions = [];
-        
+
         if (value != -1) {
             competitions = personal.competitions.filter((x) => x.yearRefId === value);
             setGlobalYear(value)
@@ -2473,8 +2471,8 @@ class UserModulePersonalDetail extends Component {
             </div>
         );
     };
-    restTfaAction = (e) => {
-        this.props.restTfaAction()
+    resetTfaAction = (e) => {
+        this.props.resetTfaAction()
     }
 
     headerView = () => {
@@ -2487,11 +2485,11 @@ class UserModulePersonalDetail extends Component {
             (
                 <Menu >
                     <Menu.Item onClick={handleMenuClick} key="merge">
-                        Merge
+                        {AppConstants.merge}
                     </Menu.Item>
                     {this.state.isAdmin ?
-                        <Menu.Item onClick={this.restTfaAction} key="merge">
-                            Rest TFA
+                        <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
+                            {AppConstants.resetTFA}
                         </Menu.Item>
                         : null}
                 </Menu >
@@ -2503,16 +2501,13 @@ class UserModulePersonalDetail extends Component {
                 <div className="col-sm">
                     <Header className="form-header-view bg-transparent d-flex pl-0 justify-content-between mt-5">
                         <Breadcrumb separator=" > ">
-                            {/* <NavLink to="/userGraphicalDashboard">
-                                <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
-                            </NavLink> */}
                             <NavLink to="/userTextualDashboard">
                                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
                             </NavLink>
                         </Breadcrumb>
                         <Dropdown overlay={menu}>
                             <Button type="primary">
-                                Actions <DownOutlined />
+                                {AppConstants.actions} <DownOutlined />
                             </Button>
                         </Dropdown>
                     </Header>
@@ -2696,28 +2691,10 @@ class UserModulePersonalDetail extends Component {
         );
     }
 
-    stripeConnected = () => {
-        let orgData = getOrganisationData()
-        let stripeAccountID = orgData ? orgData.stripeAccountID : null
-        return stripeAccountID
-    }
 
-    userEmail = () => {
-        let orgData = getOrganisationData()
-        let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
-        return email
-    }
-
-    stripeDashboardLoginUrl = () => {
-
-        this.setState({ stripeDashBoardLoad: true })
-        this.props.getStripeLoginLinkAction()
-    }
 
     umpireActivityView = () => {
-        let stripeConnected = this.stripeConnected()
-        let userEmail = this.userEmail()
-        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
+
         let { umpireActivityOnLoad, umpireActivityList, umpireActivityCurrentPage, umpireActivityTotalCount } = this.props.userState;
         return (
             <div className="comp-dash-table-view mt-2 default-bg">
@@ -2735,29 +2712,6 @@ class UserModulePersonalDetail extends Component {
                         </div>
                     </Button>
                 </div>
-
-                {/* <div className="transfer-image-view mb-3">
-                    {stripeConnected ?
-                        <Button
-                            type="primary"
-                            className="open-reg-button"
-                            onClick={() => this.stripeDashboardLoginUrl()}
-                        >
-                            {AppConstants.editBankAccount}
-                        </Button>
-                        :
-                        <Button
-                            type="primary"
-                            className="open-reg-button"
-                        >
-                            <a href={stripeConnectURL} className="stripe-connect">
-                                <span>
-                                    {AppConstants.uploadBankAccount}
-                                </span>
-                            </a>
-                        </Button>
-                    }
-                </div> */}
 
                 <div className="table-responsive home-dash-table-view">
                     <Table
@@ -3048,13 +3002,12 @@ function mapDispatchToProps(dispatch) {
             getScorerData,
             getUmpireData,
             getCoachData,
-            getStripeLoginLinkAction,
             getUmpireActivityListAction,
             getPurchasesListingAction,
             getReferenceOrderStatus,
             registrationResendEmailAction,
             userProfileUpdateAction,
-            restTfaAction
+            resetTfaAction
         },
         dispatch
     );

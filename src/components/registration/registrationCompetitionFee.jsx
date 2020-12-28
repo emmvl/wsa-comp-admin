@@ -3608,7 +3608,7 @@ class RegistrationCompetitionFee extends Component {
 
                 this.setState({
                     onYearLoad: false,
-                    yearRefId: mainYearRefId
+                    yearRefId: JSON.parse(mainYearRefId)
                 })
                 this.formRef.current.setFieldsValue({
                     yearRefId: mainYearRefId

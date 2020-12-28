@@ -897,7 +897,7 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD:
       return { ...state, onLoad: true };
-    
+
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS:
       return {
         ...state,
@@ -910,15 +910,14 @@ function userReducer(state = initialState, action) {
       state.affiliateTo = []
       return { ...state };
 
-    case ApiConstants.Api_REST_TFA_LOAD:
+    case ApiConstants.Api_RESET_TFA_LOAD:
       return {
         ...state,
         onMedicalLoad: true,
         status: null
       }
 
-    case ApiConstants.Api_REST_TFA_SUCCESS:
-      console.log(action)
+    case ApiConstants.Api_RESET_TFA_SUCCESS:
       return {
         ...state,
         onMedicalLoad: false

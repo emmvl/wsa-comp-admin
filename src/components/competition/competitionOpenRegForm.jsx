@@ -57,11 +57,11 @@ import {
     setOwn_competitionStatus,
     getOwn_CompetitionFinalRefId,
     setOwn_CompetitionFinalRefId,
-    setGlobalYear, getGlobalYear
+    setGlobalYear, getGlobalYear,
+    getOrganisationData
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationData } from "../../util/sessionStorage"
 import CustomToolTip from 'react-png-tooltip'
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
@@ -359,7 +359,6 @@ class CompetitionOpenRegForm extends Component {
                         competitionStatus = competitionTypeList[0].competitionStatus
                         finalTypeRefId = competitionTypeList[0].finalTypeRefId
                     }
-
                     let yearRefId = getGlobalYear() ? getGlobalYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
 
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, yearRefId)

@@ -1006,13 +1006,13 @@ function* registrationResendEmailSaga(action) {
   }
 }
 
-function* userRestTFASaga(action) {
+function* userResetTFASaga(action) {
   try {
-    const result = yield call(UserAxiosApi.restTfaApi,);
+    const result = yield call(UserAxiosApi.resetTfaApi,);
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.Api_REST_TFA_SUCCESS,
+        type: ApiConstants.Api_RESET_TFA_SUCCESS,
         result: result.result.data,
         status: result.status,
       });
@@ -1075,6 +1075,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
   yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
   yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
-  yield takeEvery(ApiConstants.Api_REST_TFA_LOAD, userRestTFASaga);
+  yield takeEvery(ApiConstants.Api_RESET_TFA_LOAD, userResetTFASaga);
 
 }

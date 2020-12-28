@@ -7,7 +7,13 @@ function umpireListAction(data) {
     };
     return action;
 }
-
+function newUmpireListAction(data) {
+    const action = {
+        type: ApiConstants.API_NEW_UMPIRE_LIST_LOAD,
+        data
+    };
+    return action;
+}
 function addUmpireAction(data, affiliateId, exsitingUmpireId, extraData, isUmpire, isUmpireCoach) {
     const action = {
         type: ApiConstants.API_ADD_UMPIRE_LOAD,
@@ -68,5 +74,6 @@ export {
     getUmpireAffiliateList,
     umpireSearchAction,
     umpireClear,
-    umpireMainListAction
+    umpireMainListAction,
+    newUmpireListAction
 } 

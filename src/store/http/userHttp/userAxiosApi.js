@@ -331,6 +331,18 @@ let userHttpApi = {
     return Method.dataGet(url, localStorage.token);
   },
 
+  newUmpireList(data) {
+    let url = null;
+    console.log(data)
+    if (data.isCompParent == true) {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+    }
+    else {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+    }
+    return Method.dataGet(url, localStorage.token);
+  },
+
   updateUserProfile(payload) {
     const url = `api/userprofile/update?section=${payload.section}&organisationId=${payload.organisationId}`;
     return Method.dataPost(url, token, payload);
@@ -461,7 +473,7 @@ let userHttpApi = {
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
   },
-  async restTfaApi() {
+  async resetTfaApi() {
     let userId = await getUserId();
     const url = `/users/profile/reset/tfa?userId=${userId}`;
     return Method.dataPost(url, token)

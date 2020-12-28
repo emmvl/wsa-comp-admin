@@ -263,7 +263,7 @@ const AppConstants = {
 
   //* ****************Competition Format */
   competition_name: 'Competition Name',
-  newCompetition_name : 'Competition Name you are Transferring to?',
+  newCompetition_name: 'Competition Name you are Transferring to?',
   use_default_competitionFormat: 'Use default Competition Format Settings',
   standard_round_robin: 'Standard Round Robin',
   double_round_robin: 'Double Round Robin',
@@ -463,7 +463,7 @@ const AppConstants = {
   perDivision: 'Per Division',
   paymentOptions: 'Payment Options',
   organisationName: 'Organisation Name',
-  newOrganisationName : 'Organisation Name you are Transferring to?',
+  newOrganisationName: 'Organisation Name you are Transferring to?',
   organisationLogo: 'Organisation Logo',
   registrationOpen: 'Registration Open',
   registrationLock: 'Registration Lock',
@@ -888,7 +888,7 @@ const AppConstants = {
   venueChange: 'Venue Change',
   importIncident: 'Import Incident',
   endDate: 'End Date',
-  please_Sel_Fee: 'Please fill the fees First',
+  please_Sel_Fee: 'Please complete fees on the previous tab',
 
   short_Name: 'Short Name',
   backToScorer: 'Back to all Scorers',
@@ -908,7 +908,7 @@ const AppConstants = {
   selectOrganisation: 'Select Organisation',
 
   goalExport: '/stats/export/scoringByPlayer?competitionId=',
-  incidentExport : '/incident/export?entityId=',
+  incidentExport: '/incident/export?entityId=',
   gameTimeExport: '/stats/export/gametime?competitionId=',
   teamAttendanceExport: '/players/export/teamattendance?competitionId=',
   proceed: 'Skip and Proceed',
@@ -1626,7 +1626,7 @@ const AppConstants = {
   backToMatchDay: 'Back To Match Day',
   umpireAccreditation: "Umpire Accreditation",
   expiry: "Expiry",
-  incidentExport : '/incident/export?entityId=',
+  incidentExport: '/incident/export?entityId=',
   minNoDays: "Minimum number of days",
   _days: 'Days',
   extendEndDate: "Extend End Date",
@@ -1657,14 +1657,16 @@ const AppConstants = {
   selectDetailsToKeep: 'Select which details to keep',
   merge: 'Merge',
   userMergedSuccessfully: 'User merged successfully',
-  selectAllFromThisUser :'Select all from this user',
-  userInformation :'User Information',
+  selectAllFromThisUser: 'Select all from this user',
+  userInformation: 'User Information',
   success: 'Success',
   id: 'ID',
   bankAccount: 'Bank Account',
   pleaseSelectUserToMerge: 'Please select user to merge',
   unableToContinue: 'Unable to continue',
   selectAYear: 'Select a year',
+  resetTFA: "Reset TFA",
+  actions: "Actions"
 };
 
 export default AppConstants;

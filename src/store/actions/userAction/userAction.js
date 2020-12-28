@@ -421,12 +421,12 @@ function registrationResendEmailAction(teamId, userId) {
         type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD,
         teamId,
         userId
-    } 
+    }
     return action;
 }
-function restTfaAction() {
+function resetTfaAction() {
     const action = {
-        type: ApiConstants.Api_REST_TFA_LOAD,
+        type: ApiConstants.Api_RESET_TFA_LOAD,
     }
     return action
 }
@@ -494,6 +494,6 @@ export {
     clearListAction,
     getSpectatorListAction,
     registrationResendEmailAction,
-    restTfaAction,
+    resetTfaAction,
     addUsersToBeCompared
 };
