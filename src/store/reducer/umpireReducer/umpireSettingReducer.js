@@ -18,6 +18,11 @@ const initialState = {
     compOrgDiv: compOrgDivObj,
     selectAllDiv: true,
     compOrgDivisionSelected: [],
+
+    // TODO added - change
+    affiliateOrgDiv: compOrgDivObj,
+    selectAllDivAffiliate: true,
+    affiliateOrgDivisionSelected: [],
 };
 function umpireSettingState(state = initialState, action) {
 

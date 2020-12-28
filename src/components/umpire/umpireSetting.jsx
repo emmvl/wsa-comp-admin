@@ -18,6 +18,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { updateUmpireDataAction } from '../../store/actions/umpireAction/umpireSettingAction'
+import { liveScoreGetDivision } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import history from "util/history";
 
 const { Header, Footer, Content } = Layout;
@@ -34,9 +35,9 @@ class UmpireSetting extends Component {
     }
 
     componentDidMount() {
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-        this.setState({ loading: true })
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.setState({ loading: true });
+        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     }
 
     componentDidUpdate(nextProps) {
@@ -52,10 +53,17 @@ class UmpireSetting extends Component {
                     setUmpireCompId(firstComp)
                 }
 
+                if (!!compList.length) {
+                    this.props.liveScoreGetDivision(firstComp);
+                    
+                }
+
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
         }
+
+        console.log('this.props.liveScoreTeamState.divisionList', this.props.liveScoreTeamState.divisionList);
     }
 
     headerView = () => {
@@ -73,7 +81,8 @@ class UmpireSetting extends Component {
     };
 
     onChangeComp = (compID) => {
-        let selectedComp = compID.comp
+        let selectedComp = compID.comp;
+        this.props.liveScoreGetDivision(selectedComp);
         setUmpireCompId(selectedComp)
         let compKey = compID.competitionUniqueKey
         this.setState({ selectedComp, competitionUniqueKey: compKey })
@@ -175,58 +184,63 @@ class UmpireSetting extends Component {
 
     ////////top or say first view
     topView = () => {
-        const { compOrganiser, affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv } = this.props.umpireSettingState
+        const { compOrganiser, affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv } = this.props.umpireSettingState;
+
         return (
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
                 <div className="d-flex flex-column">
-                    <Checkbox
-                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "compOrganiser" })}
-                        checked={compOrganiser}
-                    >
-                        {AppConstants.competitionOrganiser}
-                    </Checkbox>
-                    {compOrganiser && (
-                        <div className="inside-container-view mb-4 mt-4">
-                            <Checkbox
-                                onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: 'selectAllDiv' })}
-                                checked={selectAllDiv}
-                            >
-                                {AppConstants.allDivisions}
-                            </Checkbox>
-                            {selectAllDiv === false && (
-                                <Select
-                                    mode="multiple"
-                                    placeholder="Select"
-                                    style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                                    onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
-                                    value={compOrgDivisionSelected}
-                                >
-                                    {compOrgDiv.map((item) => (
-                                        <Option
-                                            key={'compOrgDivision_' + item.id}
-                                            disabled={item.disabled}
-                                            value={item.id}
-                                        >
-                                            {item.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            )}
-                            {this.contentView()}
-                        </div>
-                    )}
-                    <Checkbox
-                        className="pt-3 ml-0"
-                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "affiliateOrg" })}
-                        checked={affiliateOrg}
-                    >
-                        {AppConstants.affiliateOrganisations}
-                    </Checkbox>
+                    {this.umpireSettingsContentView(compOrganiser, compOrgDivisionSelected, selectAllDiv, compOrgDiv, "compOrganiser", AppConstants.competitionOrganiser, true)}
+                    {this.umpireSettingsContentView(affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv, "affiliateOrg", AppConstants.affiliateOrganisations, true)}
+                    {this.umpireSettingsContentView(affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv, "affiliateOrg", AppConstants.noUmpires, false)}
                 </div>
             </div>
         );
     };
+
+    umpireSettingsContentView = (organiser, compOrgDivisionSelected, selectAllDiv, compOrgDiv, key, title, isAdditionalSettings) => {
+        return (
+            <>
+                <Checkbox
+                    onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key })}
+                    checked={organiser}
+                    className="mx-0 mb-2"
+                >
+                    {title}
+                </Checkbox>
+                {organiser && (
+                    <div className="inside-container-view mb-4 mt-4">
+                        <Checkbox
+                            onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: 'selectAllDiv' })}
+                            checked={selectAllDiv}
+                        >
+                            {AppConstants.allDivisions}
+                        </Checkbox>
+                        {!selectAllDiv && (
+                            <Select
+                                mode="multiple"
+                                placeholder="Select"
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                                onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
+                                value={compOrgDivisionSelected}
+                            >
+                                {compOrgDiv.map((item) => (
+                                    <Option
+                                        key={'compOrgDivision_' + item.id}
+                                        disabled={item.disabled}
+                                        value={item.id}
+                                    >
+                                        {item.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        )}
+                        {isAdditionalSettings && this.contentView()}
+                    </div>
+                )}
+            </>
+        )
+    }
 
     checkScreenNavigation = (key) => {
         const { allocateViaPool, manuallyAllocate, affiliateOrg } = this.props.umpireSettingState
@@ -302,14 +316,16 @@ class UmpireSetting extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        updateUmpireDataAction
+        updateUmpireDataAction,
+        liveScoreGetDivision,
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
-        umpireSettingState: state.UmpireSettingState
+        umpireSettingState: state.UmpireSettingState,
+        liveScoreTeamState: state.LiveScoreTeamState,
     }
 }
 
