@@ -45,6 +45,8 @@ import {
 } from "../../store/actions/registrationAction/registration";
 import { getDefaultCompFeesMembershipProductTabAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import AppImages from "../../themes/appImages";
+import { deepCopyFunction } from "../../util/helpers";
+
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -168,7 +170,7 @@ class RegistrationMembershipCap extends Component {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
             if(key == 'add'){
-                membershipFeeCapList.push(this.getMembershipProductObj());
+                membershipFeeCapList.push(deepCopyFunction(this.getMembershipProductObj()));
             }else if(key == 'remove'){
                 membershipFeeCapList.splice(index,1);
             }
@@ -224,21 +226,25 @@ class RegistrationMembershipCap extends Component {
     getEnabledDates = (date,feeCapIndex,membershipFeeCapIndex) => {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
-            for(let i in membershipFeeCapList){
-                for(let j in membershipFeeCapList[i].feeCaps){
-                    let dobFrom = moment(membershipFeeCapList[i].feeCaps[j].dobFrom);
-                    let dobTo = moment(membershipFeeCapList[i].feeCaps[j].dobTo);
-                    // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(date))
+            let dateFormat = moment(date);
+            // for(let i in membershipFeeCapList){
+                for(let j in membershipFeeCapList[membershipFeeCapIndex].feeCaps){
+                    let dobFrom = moment(membershipFeeCapList[membershipFeeCapIndex].feeCaps[j].dobFrom);
+                    let dobTo = moment(membershipFeeCapList[membershipFeeCapIndex].feeCaps[j].dobTo);
+                    // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(dateFormat))
                     // console.log("date",date.isSameOrAfter(dobFrom),date.isSameOrBefore(dobTo))
-                    if(date.isSameOrAfter(dobFrom) && date.isSameOrBefore(dobTo)){
-                        if(j == feeCapIndex && i == membershipFeeCapIndex){
-                            return false;
-                        }else{
+                    if(dateFormat.isSameOrAfter(dobFrom) && dateFormat.isSameOrBefore(dobTo)){
+                        if(j != feeCapIndex){
+                            // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(dateFormat))
                             return true;
-                        } 
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
                     }
                 }
-            } 
+            // } 
         }catch(ex){
             console.log("Error in getEnabledDates::"+ex);
         }
