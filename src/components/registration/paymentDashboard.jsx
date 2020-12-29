@@ -150,7 +150,8 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("status"),
         render: paymentStatus => (
-            <span>{paymentStatus === "pending" ? "Not Paid" : "Paid"}</span>
+            // <span>{paymentStatus === "pending" ? "Not Paid" : "Paid"}</span>
+            <span>{paymentStatus}</span>
         ),
     },
     {
