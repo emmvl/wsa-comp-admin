@@ -28,7 +28,7 @@ import {
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { getOrganisationData, getUserId } from "../../util/sessionStorage";
-
+import { regexNumberExpression } from '../../util/helpers'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -76,7 +76,11 @@ class UserProfileEdit extends Component {
             },
             titleLabel: "",
             section: "",
-            isSameUserEmailChanged: false
+            isSameUserEmailChanged: false,
+            hasErrorParticipitant: false,
+            hasErrorParent: [],
+            hasErrorEmergency: false,
+            hasErrorAddressNumber: false
         }
         this.props.getCommonRefData();
         this.props.countryReferenceAction();
@@ -128,7 +132,7 @@ class UserProfileEdit extends Component {
                 section = "primary";
             }
             let userDataTemp = this.state.userData;
-            if(moduleFrom == 7 || moduleFrom == 8){
+            if (moduleFrom == 7 || moduleFrom == 8) {
                 userDataTemp.userId = data.userId;
             }
             await this.setState({
@@ -244,6 +248,51 @@ class UserProfileEdit extends Component {
                 this.setState({ isSameUserEmailChanged: false });
             }
         }
+        else if (key === "mobileNumber") {
+            if (value.length === 10) {
+                this.setState({
+                    hasErrorAddressNumber: false
+                })
+                value = regexNumberExpression(value);
+            } else if (value.length < 10) {
+                this.setState({
+                    hasErrorAddressNumber: true
+                })
+                value = regexNumberExpression(value);
+            }
+            console.log(regexNumberExpression(value))
+            if (regexNumberExpression(value) == undefined) {
+                setTimeout(() => {
+                    this.formRef.current.setFieldsValue({
+                        mobileNumber: this.state.userData.mobileNumber,
+                    })
+                }, 300);
+            }
+
+        }
+        else if (key === "emergencyContactNumber") {
+            if (value.length === 10) {
+                this.setState({
+                    hasErrorEmergency: false
+                })
+                value = regexNumberExpression(value);
+            } else if (value.length < 10) {
+                this.setState({
+                    hasErrorEmergency: true
+                })
+                value = regexNumberExpression(value);
+            }
+            console.log(regexNumberExpression(value))
+            if (regexNumberExpression(value) == undefined) {
+                setTimeout(() => {
+                    this.formRef.current.setFieldsValue({
+                        emergencyContactNumber: this.state.userData.emergencyContactNumber,
+                    })
+                }, 300);
+            }
+
+        }
+
         data[key] = value;
 
         this.setState({ userData: data });
@@ -266,7 +315,7 @@ class UserProfileEdit extends Component {
     addressEdit = () => {
         let userData = this.state.userData
         const { stateList } = this.props.commonReducerState;
-        console.log("userData",userData)
+        let hasErrorAddressNumber = this.state.hasErrorAddressNumber;
         return (
             <div className="pt-0">
                 <div className="row">
@@ -312,7 +361,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%'}}
+                            style={{ width: '100%' }}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -324,7 +373,10 @@ class UserProfileEdit extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}>
+                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}
+                            help={hasErrorAddressNumber && ValidationConstants.mobileLength}
+                            validateStatus={hasErrorAddressNumber ? "error" : 'validating'}
+                        >
                             <InputWithHead
                                 auto_complete="new-mobileNumber"
                                 required="required-field"
@@ -569,7 +621,7 @@ class UserProfileEdit extends Component {
 
     emergencyContactEdit = () => {
         let userData = this.state.userData
-
+        let hasErrorEmergency = this.state.hasErrorEmergency;
         return (
             <div className="content-view pt-0">
                 {/* First and Last name row */}
@@ -601,7 +653,10 @@ class UserProfileEdit extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm-12 col-md-6">
-                        <Form.Item name='emergencyContactNumber' rules={[{ required: true, message: ValidationConstants.emergencyContactNumber[0] }]}>
+                        <Form.Item name='emergencyContactNumber' rules={[{ required: true, message: ValidationConstants.emergencyContactNumber[0] }]}
+                            help={hasErrorEmergency && ValidationConstants.mobileLength}
+                            validateStatus={hasErrorEmergency ? "error" : 'validating'}
+                        >
                             <InputWithHead
                                 auto_complete="new-emergencyContactName"
                                 required="required-field"
@@ -792,7 +847,7 @@ class UserProfileEdit extends Component {
     }
 
     addParentOrChild = () => {
-        return(
+        return (
             <div className="content-view pt-0">
                 <div className="row">
                     <div className="col-sm">
@@ -836,7 +891,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%'}}
+                            style={{ width: '100%' }}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -866,7 +921,7 @@ class UserProfileEdit extends Component {
         const { displaySection } = this.state;
         return (
             <div className="content-view pt-0">
-                {(displaySection === "1" || displaySection === "2"  || displaySection === "6" || displaySection === "7" || displaySection === "8") && <div>{this.addressEdit()}</div>}
+                {(displaySection === "1" || displaySection === "2" || displaySection === "6" || displaySection === "7" || displaySection === "8") && <div>{this.addressEdit()}</div>}
                 {/* {(displaySection === "2" ) && <div>{this.primaryContactEdit()}</div>} */}
                 {displaySection === "3" && <div>{this.emergencyContactEdit()}</div>}
                 {displaySection === "4" && <div>{this.otherInfoEdit()}</div>}
@@ -880,11 +935,14 @@ class UserProfileEdit extends Component {
         let data = this.state.userData;
         data["section"] = this.state.section;
         data["organisationId"] = this.state.organisationId;
-        if(this.state.displaySection == 8 && !data.parentUserId){
+        if (this.state.displaySection == 8 && !data.parentUserId) {
             data["parentUserId"] = 0;
         }
-        else if(this.state.displaySection == 7 && !data.childUserId){
+        else if (this.state.displaySection == 7 && !data.childUserId) {
             data["childUserId"] = 0;
+        }
+        if (this.state.hasErrorAddressNumber == true || this.state.hasErrorEmergency == true) {
+            return false;
         }
         this.props.userProfileUpdateAction(data);
         this.setState({ saveLoad: true });
@@ -897,7 +955,7 @@ class UserProfileEdit extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId} }}>
+                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId } }}>
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>

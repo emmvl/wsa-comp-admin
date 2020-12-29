@@ -4959,7 +4959,7 @@ class RegistrationCompetitionFee extends Component {
 
     headerView = () => (
         <div className="header-view">
-            <Header className="form-header-view bg-transparent d-flex align-items-center">
+            <Header className="form-header-view bg-transparent d-flex align-items-center pl-4">
                 <Breadcrumb separator=" > ">
                     <Breadcrumb.Item className="breadcrumb-add">
                         {AppConstants.competitionFees}
@@ -6989,7 +6989,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.seasonalFee}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7024,7 +7024,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.singleGameFee}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7048,7 +7048,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7083,7 +7083,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.teamFeePerMatch}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>

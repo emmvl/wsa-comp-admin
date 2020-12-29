@@ -454,7 +454,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-4 d-flex flex-row align-items-center">
+                        <div className="col-sm-6 d-flex flex-row align-items-center">
                             <span className="form-heading">
                                 {AppConstants.participateInCompReg}
 

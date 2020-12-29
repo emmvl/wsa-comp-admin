@@ -2154,8 +2154,17 @@ class UserModulePersonalDetail extends Component {
         }
 
         return (
-            <div className="comp-dash-table-view mt-2">
-                <div className="user-module-row-heading">{AppConstants.address}</div>
+            <div className="comp-dash-table-view pt-0">
+                <div className="row">
+                    <div className="col-sm user-module-row-heading d-flex align-items-center mb-0">{AppConstants.address}</div>
+                    <div className="col-sm justify-content-end d-flex align-items-center">
+                        <NavLink to={{ pathname: `https://netball-registration-dev.worldsportaction.com/` }} target="_blank">
+                            <Button type="primary">
+                                {AppConstants.yourProfile}
+                            </Button>
+                        </NavLink>
+                    </div>
+                </div>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
