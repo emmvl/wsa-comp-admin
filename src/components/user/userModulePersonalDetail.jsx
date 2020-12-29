@@ -106,7 +106,7 @@ const columns = [
         key: "expiryDate",
         render: (expiryDate, record) => (
             <span>
-                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Pay each Match' ? moment(expiryDate,"YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate,"YYYY-MM-DD").format("DD/MM/YYYY")}
+                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate!== 'Single Game' && expiryDate !== 'Pay each Match' ? moment(expiryDate,"YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate,"YYYY-MM-DD").format("DD/MM/YYYY")}
             </span>
         )
     },
