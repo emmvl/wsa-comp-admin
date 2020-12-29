@@ -8,7 +8,8 @@ import {
     Button,
     Radio,
     Form,
-    Checkbox
+    Checkbox,
+    Modal
 } from "antd";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -30,7 +31,20 @@ class UmpireSetting extends Component {
         this.state = {
             selectedComp: null,
             loading: false,
-            competitionUniqueKey: null
+            competitionUniqueKey: null,
+
+            isAllDivisionChecked: false,
+
+            selectedDivisionList: [],
+            compOrgDivisionSelected: [],
+            affiliateOrgDivisionSelected: [],
+
+            compOrgBoxNumber: 1,
+            affiliateOrgBoxNumber: 1,
+
+            selectAllDivCompOrg: false,
+            selectAllDivAffiliate: false,
+            selectAllDivNoUmpire: false,
         };
     }
 
@@ -62,8 +76,36 @@ class UmpireSetting extends Component {
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
         }
+    }
 
-        console.log('this.props.liveScoreTeamState.divisionList', this.props.liveScoreTeamState.divisionList);
+    // handleDeleteModal = (key) => {
+    //     if (key === "ok") {
+    //         this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
+    //     }
+    //     this.setState({ deleteModalVisible: false, ladderIndex: null });
+    // }
+
+    // handleAllDivisionModal = (key) => {
+    //     if (key === "ok") {
+    //         this.props.updateLadderSetting(true, this.state.ladderIndex, "isAllDivision");
+    //     }
+    //     this.setState({ allDivisionVisible: false, ladderIndex: null });
+    // }
+
+
+    divisionSelect = (divisions, selectedDivisionsKey) => {
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { selectedDivisionList } = this.state;
+
+        const filteredDivisionList = divisionList.filter(divisionItem => 
+            divisions.some(division => division === divisionItem.id) ||
+            selectedDivisionList.some(division => division.id === divisionItem.id)
+        );
+
+        this.setState({ 
+            selectedDivisionList: filteredDivisionList,
+            [selectedDivisionsKey]: divisions,
+         });
     }
 
     headerView = () => {
@@ -182,23 +224,62 @@ class UmpireSetting extends Component {
         );
     };
 
+    deleteConfirmModalView = () => {
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.ladderFormat}
+                    visible={this.state.deleteModalVisible}
+                    // onOk={() => this.handleDeleteModal("ok")}
+                    // onCancel={() => this.handleDeleteModal("cancel")}
+                >
+                    <p>{AppConstants.ladderRemoveMsg}</p>
+                </Modal>
+            </div>
+        );
+    }
+
+    allDivisionModalView = () => {
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal add-membership-type-modalLadder"
+                    title={AppConstants.ladderFormat}
+                    visible={this.state.allDivisionVisible}
+                    // onOk={() => this.handleAllDivisionModal("ok")}
+                    // onCancel={() => this.handleAllDivisionModal("cancel")}
+                >
+                    <p>{AppConstants.ladderAllDivisionRmvMsg}</p>
+                </Modal>
+            </div>
+        );
+    }
+
     ////////top or say first view
     topView = () => {
-        const { compOrganiser, affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv } = this.props.umpireSettingState;
+        const { compOrganiser, affiliateOrg, noUmpire } = this.props.umpireSettingState;
 
         return (
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
                 <div className="d-flex flex-column">
-                    {this.umpireSettingsContentView(compOrganiser, compOrgDivisionSelected, selectAllDiv, compOrgDiv, "compOrganiser", AppConstants.competitionOrganiser, true)}
-                    {this.umpireSettingsContentView(affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv, "affiliateOrg", AppConstants.affiliateOrganisations, true)}
-                    {this.umpireSettingsContentView(affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv, "affiliateOrg", AppConstants.noUmpires, false)}
+                    {this.umpireSettingsContentView(compOrganiser, 'selectAllDivCompOrg', "compOrganiser", "compOrgDivisionSelected", "compOrgBoxNumber", AppConstants.competitionOrganiser, true)}
+                    {this.umpireSettingsContentView(affiliateOrg, 'selectAllDivAffiliate', "affiliateOrg", "affiliateOrgDivisionSelected", "affiliateOrgBoxNumber", AppConstants.affiliateOrganisations, true)}
+                    {this.umpireSettingsContentView(noUmpire, 'selectAllDivNoUmpire', "noUmpire", '', '', AppConstants.noUmpires, false)}
                 </div>
+
+                {this.deleteConfirmModalView()}
+                {this.allDivisionModalView()}
             </div>
         );
     };
 
-    umpireSettingsContentView = (organiser, compOrgDivisionSelected, selectAllDiv, compOrgDiv, key, title, isAdditionalSettings) => {
+    umpireSettingsContentView = (organiser, selectedAllKey, key, selectedDivisionsKey, boxNumberKey, title, isAdditionalSettings) => {
+        const { divisionList } = this.props.liveScoreTeamState;
+
+        const organiserBoxMapper = new Array(!!boxNumberKey ? this.state[boxNumberKey] : 1).fill(null);
+
         return (
             <>
                 <Checkbox
@@ -209,22 +290,30 @@ class UmpireSetting extends Component {
                     {title}
                 </Checkbox>
                 {organiser && (
-                    <div className="inside-container-view mb-4 mt-4">
-                        <Checkbox
-                            onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: 'selectAllDiv' })}
-                            checked={selectAllDiv}
-                        >
-                            {AppConstants.allDivisions}
-                        </Checkbox>
-                        {!selectAllDiv && (
+                    <>
+                        {organiserBoxMapper.map(() => (
+                        <div className="inside-container-view mb-4 mt-4">
+                            <Checkbox
+                                onChange={(e) => {
+                                    this.setState({ 
+                                        [selectedAllKey]: e.target.checked,
+                                        selectedDivisionList: e.target.checked ? [ ...divisionList ] : [],
+                                        [selectedDivisionsKey]: e.target.checked ? divisionList.map(division => division.id) : [],
+                                    })
+                                }}
+                                checked={this.state[selectedAllKey]}
+                            >
+                                {AppConstants.allDivisions}
+                            </Checkbox>
+                            
                             <Select
                                 mode="multiple"
                                 placeholder="Select"
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                                onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
-                                value={compOrgDivisionSelected}
+                                onChange={divisions => this.divisionSelect(divisions, selectedDivisionsKey)}
+                                value={this.state[selectedDivisionsKey]}
                             >
-                                {compOrgDiv.map((item) => (
+                                {(divisionList || []).map((item) => (
                                     <Option
                                         key={'compOrgDivision_' + item.id}
                                         disabled={item.disabled}
@@ -234,9 +323,20 @@ class UmpireSetting extends Component {
                                     </Option>
                                 ))}
                             </Select>
+                            {isAdditionalSettings && this.contentView()}
+                        </div>
+                        ))}
+                        {this.state.selectedDivisionList.length !==  this.props.liveScoreTeamState.divisionList.length && (
+                            <div className="row mb-5">
+                                <div 
+                                    className="col-sm"
+                                    onClick={() => this.setState({ [boxNumberKey]: this.state[boxNumberKey] + 1 })}
+                                >
+                                    <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
+                                </div>
+                            </div>
                         )}
-                        {isAdditionalSettings && this.contentView()}
-                    </div>
+                    </>
                 )}
             </>
         )
@@ -326,6 +426,7 @@ function mapStateToProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpireSettingState: state.UmpireSettingState,
         liveScoreTeamState: state.LiveScoreTeamState,
+        ladderSettingState: state.LadderSettingState
     }
 }
 

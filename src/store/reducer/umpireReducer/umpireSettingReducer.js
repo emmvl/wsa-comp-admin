@@ -4,7 +4,6 @@ const settingsChecked = {
     coachChecked: true,
     reserveChecked: true,
 }
-var compOrgDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
 const initialState = {
     onLoad: false,
     error: null,
@@ -15,14 +14,16 @@ const initialState = {
     manuallyAllocate: false,
     compOrganiser: true,
     affiliateOrg: false,
-    compOrgDiv: compOrgDivObj,
-    selectAllDiv: true,
-    compOrgDivisionSelected: [],
+    noUmpire: false,
 
-    // TODO added - change
-    affiliateOrgDiv: compOrgDivObj,
-    selectAllDivAffiliate: true,
-    affiliateOrgDivisionSelected: [],
+    // compOrgDiv: compOrgDivObj,
+    // selectAllDiv: true,
+    // compOrgDivisionSelected: [],
+
+    // // TODO added - change
+    // affiliateOrgDiv: compOrgDivObj,
+    // selectAllDivAffiliate: true,
+    // affiliateOrgDivisionSelected: [],
 };
 function umpireSettingState(state = initialState, action) {
 
@@ -51,12 +52,16 @@ function umpireSettingState(state = initialState, action) {
                 state[key] = data
                 // state['compOrganiser'] = false
             }
-            else if (key === 'selectAllDiv') {
+            else if (key === 'noUmpire') {
                 state[key] = data
             }
-            else if (key === 'compOrgDivisionSelected') {
-                state[key] = data
-            }
+
+            // else if (key === 'selectAllDiv') {
+            //     state[key] = data
+            // }
+            // else if (key === 'compOrgDivisionSelected') {
+            //     state[key] = data
+            // }
             else {
                 state.defaultChecked[key] = data
             }
