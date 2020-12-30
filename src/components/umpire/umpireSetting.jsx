@@ -28,6 +28,23 @@ import history from "util/history";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
+const initialUmpireAllocationGetData = {
+    allDivisions: false,
+    // competitionId: 165,
+    umpireAllocationTypeRefId: 242,
+    // umpireAllocatorTypeRefId: 246,
+    activateReserves: false,
+    activateCoaches: false,
+    timeBetweenMatches: null,
+    maxNumberOfMatches: null,
+    divisions: []
+};
+
+const initialNoUmpireAllocationGetData = {
+    allDivisions: false,
+    divisions: []
+};
+
 class UmpireSetting extends Component {
     constructor(props) {
         super(props);
@@ -85,9 +102,13 @@ class UmpireSetting extends Component {
             this.props.getUmpireAllocationSettings(this.state.selectedComp);
         }
 
-        if (this.props.umpireSettingState !== prevProps.umpireSettingState) {
-            const { allocationSettingsData } = this.props.umpireSettingState;
-            this.setState({ allocationSettingsData });
+        if (this.props.umpireSettingState !== prevProps.umpireSettingState && !!this.props.umpireSettingState.allocationSettingsData) {
+            const { umpireAllocationSettings, noUmpiresUmpireAllocationSetting } = this.props.umpireSettingState.allocationSettingsData;
+
+            this.setState({ allocationSettingsData: {
+                umpireAllocationSettings,
+                noUmpiresUmpireAllocationSetting: [noUmpiresUmpireAllocationSetting]
+            } });
         }
 
         // if (this.state.allocationSettingsData !== prevProps.allocationSettingsData) {
@@ -296,18 +317,42 @@ class UmpireSetting extends Component {
     umpireSettingsSectionView = (sectionTitle, umpireAllocatorTypeRefId) => {
         const { divisionList } = this.props.liveScoreTeamState;
         const { allocationSettingsData } = this.state;
-
-        console.log('allocationSettingsData', allocationSettingsData);
+        // console.log('allocationSettingsData', allocationSettingsData);
 
         const sectionData = allocationSettingsData && umpireAllocatorTypeRefId ?
             allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId === umpireAllocatorTypeRefId)
-            : allocationSettingsData ? [allocationSettingsData.noUmpiresUmpireAllocationSetting] : null;
+            : allocationSettingsData ? allocationSettingsData.noUmpiresUmpireAllocationSetting : null;
+
+        // console.log('sectionData', sectionData)
 
         return (
             <>
                 <Checkbox
-                    // onChange={(e) => this.setState({ allocationSettingsData: e.target.checked })}
-                    checked={!!sectionData}
+                    onChange={(e) => {
+                        if (umpireAllocatorTypeRefId) {
+                            const filteredAllocationSettingsData = allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId)
+                            const initialBoxData = JSON.parse(JSON.stringify(initialUmpireAllocationGetData));
+                            initialBoxData.umpireAllocatorTypeRefId = umpireAllocatorTypeRefId;
+
+                            if (e.target.checked) {
+                                this.setState({ allocationSettingsData: {
+                                    ...allocationSettingsData,
+                                    umpireAllocationSettings: [ ...filteredAllocationSettingsData, initialBoxData]
+                                }})
+                            } else {
+                                this.setState({ allocationSettingsData: {
+                                    ...allocationSettingsData,
+                                    umpireAllocationSettings: [ ...filteredAllocationSettingsData]
+                                }})
+                            }  
+                        } else {
+                            this.setState({ allocationSettingsData: {
+                                ...allocationSettingsData,
+                                noUmpiresUmpireAllocationSetting: e.target.checked ? [initialNoUmpireAllocationGetData] : []
+                            }})
+                        }
+                    }}
+                    checked={!!sectionData?.length}
                     className="mx-0 mb-2"
                 >
                     {sectionTitle}
@@ -316,7 +361,6 @@ class UmpireSetting extends Component {
                     <>
                         {sectionData.map((boxData, index) => (
                         <div className="inside-container-view mb-4 mt-4">
-
                             {sectionData.length > 1 && (
                                 <div className="d-flex float-right">
                                     <div
@@ -346,9 +390,9 @@ class UmpireSetting extends Component {
                                 placeholder="Select"
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                                 // onChange={divisions => this.divisionSelect(divisions, selectedDivisionsKey)}
-                                // value={this.state[selectedDivisionsKey]}
+                                value={(boxData.divisions || []).map(division => division.id)}
                             >
-                                {(boxData.divisions || []).map((item) => (
+                                {(divisionList || []).map((item) => (
                                     <Option
                                         key={'compOrgDivision_' + item.id}
                                         disabled={item.disabled}
