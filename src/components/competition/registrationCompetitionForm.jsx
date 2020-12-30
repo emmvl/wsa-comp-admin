@@ -1414,6 +1414,11 @@ class RegistrationCompetitionForm extends Component {
         this.setDetailsFieldValue()
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         return (
@@ -1428,9 +1433,11 @@ class RegistrationCompetitionForm extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
-                        onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name);
-                        }}
+                        // onFinishFailed={(err) => {
+                        //     this.formRef.current.scrollToField(err.errorFields[0].name)
+                        //     this.onFinishFailed()
+                        // }}
+                        onFinishFailed={this.onFinishFailed}
                         initialValues={{ yearRefId: this.state.yearRefId, competitionTypeRefId: 1, competitionFormatId: 1 }}
                         noValidate="noValidate"
                     >

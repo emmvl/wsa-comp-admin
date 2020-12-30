@@ -967,6 +967,12 @@ class CompetitionVenueAndTimesEdit extends Component {
     //     history.push('/competitionVenueTimesPrioritisation')
     // };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -982,7 +988,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         autoComplete="off"
                         onFinish={this.onAddVenue}
                         onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name);
+                            this.formRef.current.scrollToField(err.errorFields[0].name)
+                            this.onFinishFailed()
                         }}
                         noValidate="noValidate"
                     >

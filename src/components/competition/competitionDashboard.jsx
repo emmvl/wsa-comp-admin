@@ -442,7 +442,7 @@ class CompetitionDashboard extends Component {
 
     onRegistrationCompScreen = () => {
         this.props.clearCompReducerDataAction("all");
-        history.push("/registrationCompetitionFee", { id: null });
+        history.push("/registrationCompetitionFee", { id: null, isEdit: false });
     };
 
     dropdownButtonView = () => {

@@ -1232,6 +1232,12 @@ class AddProduct extends Component {
         </div>
     );
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         return (
             <div className="fluid-width">
@@ -1242,6 +1248,7 @@ class AddProduct extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.addProductPostAPI}
+                        onFinishFailed={this.onFinishFailed}
                         noValidate="noValidate"
                     >
                         <Content >

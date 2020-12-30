@@ -216,7 +216,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: '/registrationCompetitionFee',
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId, yearRefId: this_Obj.state.yearRefId },
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId, yearRefId: this_Obj.state.yearRefId,isEdit:true },
                             }}
                         >
                             <span>Edit</span>
@@ -419,7 +419,7 @@ class RegistrationCompetitionList extends Component {
                             onClick={() => this.props.clearCompReducerDataAction('all')}
                         >
                             <NavLink
-                                to={{ pathname: '/registrationCompetitionFee', state: { id: null } }}
+                                to={{ pathname: '/registrationCompetitionFee', state: { id: null,isEdit:false } }}
                                 className="text-decoration-none"
                             >
                                 <Button className="primary-add-product" type="primary">
