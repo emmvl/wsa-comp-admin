@@ -181,72 +181,6 @@ class UmpireSetting extends Component {
         );
     };
 
-    umpireAllocationRadioView = () => {
-        const { allocateViaPool, manuallyAllocate } = this.props.umpireSettingState
-
-        const allocateViaPoolArr = [
-            { id: 1, name: 'Random Allocation' },
-            { id: 2, name: 'Link to same Team each Round' },
-        ]
-
-        return (
-            <div>
-                <span className='text-heading-large pt-4 pb-2'>{AppConstants.howUmpiresAllocated}</span>
-                <div className="d-flex flex-column">
-                    <Radio
-                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "manuallyAllocate" })}
-                        checked={manuallyAllocate}
-                    >
-                        Manually Allocate
-                    </Radio>
-
-                    <Radio
-                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
-                        checked={allocateViaPool}
-                    >
-                        Allocate via pools
-                    </Radio>
-
-                    {allocateViaPool && (
-                        <Radio.Group className="reg-competition-radio ml-5">
-                            {allocateViaPoolArr.map((item) => (
-                                <Radio key={'allocateViaPool_' + item.id} value={item.id}>{item.name}</Radio>
-                            ))}
-                        </Radio.Group>
-                    )}
-                </div>
-            </div>
-        )
-    }
-
-    contentView = () => {
-        const { compOrganiser, defaultChecked } = this.props.umpireSettingState;
-
-        return (
-            <div className="pt-0 mt-4">
-                {this.umpireAllocationRadioView()}
-
-                <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
-                <Checkbox
-                    className="single-checkbox pt-2"
-                    checked={defaultChecked.reserveChecked}
-                    onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "reserveChecked" })}
-                >
-                    {AppConstants.activeUmpireReserves}
-                </Checkbox>
-
-                <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
-                <Checkbox
-                    className="single-checkbox pt-2"
-                    checked={defaultChecked.coachChecked}
-                    onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "coachChecked" })}
-                >
-                    {AppConstants.activeUmpireCoach}
-                </Checkbox>
-            </div>
-        );
-    };
-
     boxSettingsView = boxData => {
         return (
             <div className="pt-0 mt-4">
@@ -351,9 +285,6 @@ class UmpireSetting extends Component {
                     {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, 246)}
                     {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, 247)}
                     {this.umpireSettingsSectionView(AppConstants.noUmpires)}
-                    {/* {this.umpireSettingsContentView(compOrganiser, 'selectAllDivCompOrg', "compOrganiser", "compOrgDivisionSelected", "compOrgBoxNumber", AppConstants.competitionOrganiser, true)}
-                    {this.umpireSettingsContentView(affiliateOrg, 'selectAllDivAffiliate', "affiliateOrg", "affiliateOrgDivisionSelected", "affiliateOrgBoxNumber", AppConstants.affiliateOrganisations, true)}
-                    {this.umpireSettingsContentView(noUmpire, 'selectAllDivNoUmpire', "noUmpire", '', '', AppConstants.noUmpires, false)} */}
                 </div>
 
                 {this.deleteConfirmModalView()}
@@ -440,85 +371,6 @@ class UmpireSetting extends Component {
                                 </div>
                             </div>
                         )} */}
-                    </>
-                )}
-            </>
-        )
-    }
-
-    umpireSettingsContentView = (organiser, selectedAllKey, key, selectedDivisionsKey, boxNumberKey, title, isAdditionalSettings) => {
-        const { divisionList } = this.props.liveScoreTeamState;
-
-        const organiserBoxMapper = new Array(!!boxNumberKey ? this.state[boxNumberKey] : 1).fill(null);
-
-        return (
-            <>
-                <Checkbox
-                    onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key })}
-                    checked={organiser}
-                    className="mx-0 mb-2"
-                >
-                    {title}
-                </Checkbox>
-                {organiser && (
-                    <>
-                        {organiserBoxMapper.map((item, index) => (
-                        <div className="inside-container-view mb-4 mt-4">
-
-                            {organiserBoxMapper.length > 1 && (
-                                <div className="d-flex float-right">
-                                    <div
-                                        className="transfer-image-view pt-0 pointer ml-auto"
-                                            onClick={() => this.deleteModal(index)}
-                                    >
-                                        <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
-                                        <span className="user-remove-text">{AppConstants.remove}</span>
-                                    </div>
-                                </div>
-                            )}
-                            <Checkbox
-                                onChange={(e) => {
-                                    this.setState({ 
-                                        [selectedAllKey]: e.target.checked,
-                                        selectedDivisionList: e.target.checked ? [ ...divisionList ] : [],
-                                        [selectedDivisionsKey]: e.target.checked ? divisionList.map(division => division.id) : [],
-                                    })
-                                }}
-                                checked={this.state[selectedAllKey]}
-                            >
-                                {AppConstants.allDivisions}
-                            </Checkbox>
-                            
-                            <Select
-                                mode="multiple"
-                                placeholder="Select"
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                                onChange={divisions => this.divisionSelect(divisions, selectedDivisionsKey)}
-                                value={this.state[selectedDivisionsKey]}
-                            >
-                                {(divisionList || []).map((item) => (
-                                    <Option
-                                        key={'compOrgDivision_' + item.id}
-                                        disabled={item.disabled}
-                                        value={item.id}
-                                    >
-                                        {item.name}
-                                    </Option>
-                                ))}
-                            </Select>
-                            {isAdditionalSettings && this.contentView()}
-                        </div>
-                        ))}
-                        {this.state.selectedDivisionList.length !==  this.props.liveScoreTeamState.divisionList.length && (
-                            <div className="row mb-5">
-                                <div 
-                                    className="col-sm"
-                                    onClick={() => this.setState({ [boxNumberKey]: this.state[boxNumberKey] + 1 })}
-                                >
-                                    <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
-                                </div>
-                            </div>
-                        )}
                     </>
                 )}
             </>
