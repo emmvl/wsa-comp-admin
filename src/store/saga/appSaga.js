@@ -641,6 +641,87 @@ function* getRefBadgeSaga(action) {
   }
 }
 
+// Get the common fee type
+function* getFeeTypeSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getFeeList, action);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_FEE_TYPE_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+// Get the common payment options
+function* getPaymentOptionsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getPaymentOptionsList, action);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_OPTIONS_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+// Get the common payment methods
+function* getPaymentMethodsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getPaymentMethodsList, action);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_METHODS_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
 export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_YEAR_LIST_LOAD, getYearListSaga);
   yield takeEvery(ApiConstants.API_ONLY_YEAR_LIST_LOAD, getOnlyYearListSaga);
@@ -662,4 +743,7 @@ export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga);
   yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga);
   yield takeEvery(ApiConstants.API_GET_REF_BADGE_LOAD, getRefBadgeSaga);
+  yield takeEvery(ApiConstants.API_FEE_TYPE_LIST_LOAD, getFeeTypeSaga);
+  yield takeEvery(ApiConstants.API_PAYMENT_OPTIONS_LIST_LOAD, getPaymentOptionsSaga);
+  yield takeEvery(ApiConstants.API_PAYMENT_METHODS_LIST_LOAD, getPaymentMethodsSaga);
 }

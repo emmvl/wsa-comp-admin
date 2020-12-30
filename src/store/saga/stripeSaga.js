@@ -195,8 +195,24 @@ function* getInvoiceSaga(action) {
 // Get payment list saga
 function* getPaymentListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getPaymentList, action.offset, action.sortBy, action.sortOrder, action.userId,
-      action.registrationId, action.yearId, action.competitionKey, action.paymentFor, action.dateFrom, action.dateTo,action.searchValue);
+    const result = yield call(
+      AxiosApi.getPaymentList,
+      action.offset,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType
+    );
 
     if (result.status === 1) {
       yield put({

@@ -146,7 +146,22 @@ let AxiosApi = {
     },
 
     //get payment list
-    async getPaymentList(offset, sortBy, sortOrder, userId, registrationId, yearId, competitionKey, paymentFor, dateFrom, dateTo, searchValue) {
+    async getPaymentList(offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentOption,
+        paymentMethod,
+        membershipType
+    ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -161,13 +176,16 @@ let AxiosApi = {
             competitionKey: competitionKey,
             paymentFor: paymentFor,
             dateFrom: dateFrom,
-            dateTo: dateTo
+            dateTo: dateTo,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType
         }
         var url = `/api/payments/transactions?search=${searchValue}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-
 
         return Method.dataPost(url, token, body);
     },

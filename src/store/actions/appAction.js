@@ -7,6 +7,24 @@ function getYearListAction() {
   };
 }
 
+function getFeeTypeAction() {
+  return {
+    type: ApiConstants.API_FEE_TYPE_LIST_LOAD
+  }
+}
+
+function getPaymentOptionsListAction() {
+  return {
+    type: ApiConstants.API_PAYMENT_OPTIONS_LIST_LOAD
+  }
+}
+
+function getPaymentMethodsListAction() {
+  return {
+    type: ApiConstants.API_PAYMENT_METHODS_LIST_LOAD
+  }
+}
+
 // Get the common year list reference
 function getOnlyYearListAction(yearsArray) {
   return {
@@ -197,5 +215,8 @@ export {
   exportFilesAction,
   CLEAR_OWN_COMPETITION_DATA,
   userExportFilesAction,
-  getRefBadgeData
+  getRefBadgeData,
+  getFeeTypeAction,
+  getPaymentOptionsListAction,
+  getPaymentMethodsListAction
 };
