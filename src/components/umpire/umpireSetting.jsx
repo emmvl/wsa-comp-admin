@@ -18,7 +18,10 @@ import AppConstants from "../../themes/appConstants";
 import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
-import { updateUmpireDataAction } from '../../store/actions/umpireAction/umpireSettingAction'
+import { 
+    updateUmpireDataAction, 
+    getUmpireAllocationSettings 
+} from '../../store/actions/umpireAction/umpireSettingAction'
 import { liveScoreGetDivision } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import history from "util/history";
 
@@ -32,6 +35,8 @@ class UmpireSetting extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
+            deleteModalVisible: false,
+            allocationSettingsData: null,
 
             isAllDivisionChecked: false,
 
@@ -54,8 +59,8 @@ class UmpireSetting extends Component {
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     }
 
-    componentDidUpdate(nextProps) {
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
@@ -69,21 +74,38 @@ class UmpireSetting extends Component {
 
                 if (!!compList.length) {
                     this.props.liveScoreGetDivision(firstComp);
-                    
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
         }
+
+        if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
+            this.props.getUmpireAllocationSettings(this.state.selectedComp);
+        }
+
+        if (this.props.umpireSettingState !== prevProps.umpireSettingState) {
+            const { allocationSettingsData } = this.props.umpireSettingState;
+            this.setState({ allocationSettingsData });
+        }
+
+        // if (this.state.allocationSettingsData !== prevProps.allocationSettingsData) {
+        //     const { allocationSettingsData } = this.props.umpireSettingState;
+        //     this.setState({ allocationSettingsData });
+        // }
     }
 
-    // handleDeleteModal = (key) => {
-    //     if (key === "ok") {
-    //         this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
-    //     }
-    //     this.setState({ deleteModalVisible: false, ladderIndex: null });
-    // }
+    deleteModal = (index) => {
+        this.setState({ deleteModalVisible: true, ladderIndex: index });
+    }
+
+    handleDeleteModal = (key) => {
+        if (key === "ok") {
+            // this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
+        }
+        this.setState({ deleteModalVisible: false, ladderIndex: null });
+    }
 
     // handleAllDivisionModal = (key) => {
     //     if (key === "ok") {
@@ -198,7 +220,8 @@ class UmpireSetting extends Component {
     }
 
     contentView = () => {
-        const { compOrganiser, defaultChecked } = this.props.umpireSettingState
+        const { compOrganiser, defaultChecked } = this.props.umpireSettingState;
+
         return (
             <div className="pt-0 mt-4">
                 {this.umpireAllocationRadioView()}
@@ -224,17 +247,78 @@ class UmpireSetting extends Component {
         );
     };
 
+    boxSettingsView = boxData => {
+        return (
+            <div className="pt-0 mt-4">
+                {this.boxSettingsRadioView(boxData)}
+
+                <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
+                <Checkbox
+                    className="single-checkbox pt-2"
+                    checked={boxData.activateReserves}
+                    // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "reserveChecked" })}
+                >
+                    {AppConstants.activeUmpireReserves}
+                </Checkbox>
+
+                <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
+                <Checkbox
+                    className="single-checkbox pt-2"
+                    checked={boxData.activateCoaches}
+                    // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "coachChecked" })}
+                >
+                    {AppConstants.activeUmpireCoach}
+                </Checkbox>
+            </div>
+        );
+    };
+
+    boxSettingsRadioView = boxData => {
+        return (
+            <div>
+                <span className='text-heading-large pt-4 pb-2'>{AppConstants.howUmpiresAllocated}</span>
+                <div className="d-flex flex-column">
+                    <Radio
+                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "manuallyAllocate" })}
+                        checked={boxData.umpireAllocationTypeRefId === 242}
+                    >
+                        {AppConstants.manuallyAllocate}
+                    </Radio>
+
+                    <Radio
+                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        checked={boxData.umpireAllocationTypeRefId === 243}
+                    >
+                        {AppConstants.allocateViaPools}
+                    </Radio>
+                    <Radio
+                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        checked={boxData.umpireAllocationTypeRefId === 244}
+                    >
+                        {AppConstants.umpireYourOwnTeam}
+                    </Radio>
+                    <Radio
+                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        checked={boxData.umpireAllocationTypeRefId === 245}
+                    >
+                        {AppConstants.umpireYourOwnOrganisation}
+                    </Radio>
+                </div>
+            </div>
+        )
+    }
+
     deleteConfirmModalView = () => {
         return (
             <div>
                 <Modal
                     className="add-membership-type-modal"
-                    title={AppConstants.ladderFormat}
+                    title={AppConstants.divisionSettings}
                     visible={this.state.deleteModalVisible}
-                    // onOk={() => this.handleDeleteModal("ok")}
-                    // onCancel={() => this.handleDeleteModal("cancel")}
+                    onOk={() => this.handleDeleteModal("ok")}
+                    onCancel={() => this.handleDeleteModal("cancel")}
                 >
-                    <p>{AppConstants.ladderRemoveMsg}</p>
+                    <p>{AppConstants.divisionRemoveMsg}</p>
                 </Modal>
             </div>
         );
@@ -264,9 +348,12 @@ class UmpireSetting extends Component {
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
                 <div className="d-flex flex-column">
-                    {this.umpireSettingsContentView(compOrganiser, 'selectAllDivCompOrg', "compOrganiser", "compOrgDivisionSelected", "compOrgBoxNumber", AppConstants.competitionOrganiser, true)}
+                    {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, 246)}
+                    {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, 247)}
+                    {this.umpireSettingsSectionView(AppConstants.noUmpires)}
+                    {/* {this.umpireSettingsContentView(compOrganiser, 'selectAllDivCompOrg', "compOrganiser", "compOrgDivisionSelected", "compOrgBoxNumber", AppConstants.competitionOrganiser, true)}
                     {this.umpireSettingsContentView(affiliateOrg, 'selectAllDivAffiliate', "affiliateOrg", "affiliateOrgDivisionSelected", "affiliateOrgBoxNumber", AppConstants.affiliateOrganisations, true)}
-                    {this.umpireSettingsContentView(noUmpire, 'selectAllDivNoUmpire', "noUmpire", '', '', AppConstants.noUmpires, false)}
+                    {this.umpireSettingsContentView(noUmpire, 'selectAllDivNoUmpire', "noUmpire", '', '', AppConstants.noUmpires, false)} */}
                 </div>
 
                 {this.deleteConfirmModalView()}
@@ -274,6 +361,90 @@ class UmpireSetting extends Component {
             </div>
         );
     };
+
+    umpireSettingsSectionView = (sectionTitle, umpireAllocatorTypeRefId) => {
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { allocationSettingsData } = this.state;
+
+        console.log('allocationSettingsData', allocationSettingsData);
+
+        const sectionData = allocationSettingsData && umpireAllocatorTypeRefId ?
+            allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId === umpireAllocatorTypeRefId)
+            : allocationSettingsData ? [allocationSettingsData.noUmpiresUmpireAllocationSetting] : null;
+
+        return (
+            <>
+                <Checkbox
+                    // onChange={(e) => this.setState({ allocationSettingsData: e.target.checked })}
+                    checked={!!sectionData}
+                    className="mx-0 mb-2"
+                >
+                    {sectionTitle}
+                </Checkbox>
+                {sectionData && !!sectionData.length && (
+                    <>
+                        {sectionData.map((boxData, index) => (
+                        <div className="inside-container-view mb-4 mt-4">
+
+                            {sectionData.length > 1 && (
+                                <div className="d-flex float-right">
+                                    <div
+                                        className="transfer-image-view pt-0 pointer ml-auto"
+                                            onClick={() => this.deleteModal(index)}
+                                    >
+                                        <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                                        <span className="user-remove-text">{AppConstants.remove}</span>
+                                    </div>
+                                </div>
+                            )}
+                            <Checkbox
+                                // onChange={(e) => {
+                                //     this.setState({ 
+                                //         [selectedAllKey]: e.target.checked,
+                                //         selectedDivisionList: e.target.checked ? [ ...divisionList ] : [],
+                                //         [selectedDivisionsKey]: e.target.checked ? divisionList.map(division => division.id) : [],
+                                //     })
+                                // }}
+                                checked={boxData.allDivisions}
+                            >
+                                {AppConstants.allDivisions}
+                            </Checkbox>
+                            
+                            <Select
+                                mode="multiple"
+                                placeholder="Select"
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                                // onChange={divisions => this.divisionSelect(divisions, selectedDivisionsKey)}
+                                // value={this.state[selectedDivisionsKey]}
+                            >
+                                {(boxData.divisions || []).map((item) => (
+                                    <Option
+                                        key={'compOrgDivision_' + item.id}
+                                        disabled={item.disabled}
+                                        value={item.id}
+                                    >
+                                        {item.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                            {umpireAllocatorTypeRefId && this.boxSettingsView(boxData)}
+                        </div>
+                        ))}
+                        {/* {this.state.selectedDivisionList.length !==  this.props.liveScoreTeamState.divisionList.length && (
+                            <div className="row mb-5">
+                                <div 
+                                    className="col-sm"
+                                    // onClick={() => this.setState({ [boxNumberKey]: this.state[boxNumberKey] + 1 })}
+                                >
+                                    <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
+                                </div>
+                            </div>
+                        )} */}
+                    </>
+                )}
+            </>
+        )
+    }
 
     umpireSettingsContentView = (organiser, selectedAllKey, key, selectedDivisionsKey, boxNumberKey, title, isAdditionalSettings) => {
         const { divisionList } = this.props.liveScoreTeamState;
@@ -291,8 +462,20 @@ class UmpireSetting extends Component {
                 </Checkbox>
                 {organiser && (
                     <>
-                        {organiserBoxMapper.map(() => (
+                        {organiserBoxMapper.map((item, index) => (
                         <div className="inside-container-view mb-4 mt-4">
+
+                            {organiserBoxMapper.length > 1 && (
+                                <div className="d-flex float-right">
+                                    <div
+                                        className="transfer-image-view pt-0 pointer ml-auto"
+                                            onClick={() => this.deleteModal(index)}
+                                    >
+                                        <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                                        <span className="user-remove-text">{AppConstants.remove}</span>
+                                    </div>
+                                </div>
+                            )}
                             <Checkbox
                                 onChange={(e) => {
                                     this.setState({ 
@@ -417,6 +600,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
         updateUmpireDataAction,
+        getUmpireAllocationSettings,
         liveScoreGetDivision,
     }, dispatch)
 }

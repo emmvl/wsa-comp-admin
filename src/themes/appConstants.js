@@ -1671,6 +1671,12 @@ const AppConstants = {
   ownRegistration: 'Own Registration',
   otherRegistration: 'Other Registration',
   yourProfile: 'Your Profile',
+  divisionSettings: 'Division settings',
+  divisionRemoveMsg: 'Are you sure you want to remove division settings?',
+  manuallyAllocate: 'Manually Allocate',
+  allocateViaPools: 'Allocate Via Pools',
+  umpireYourOwnTeam: 'Umpire Your Own - Team',
+  umpireYourOwnOrganisation: 'Umpire Your Own - Organisation',
 };
 
 export default AppConstants;

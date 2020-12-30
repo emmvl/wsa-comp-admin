@@ -31,6 +31,8 @@ import shopSettingSaga from './shopSaga/shopSettingSaga';
 
 import umpireDashboardSaga from './umpireSaga/umpireDashboardSaga';
 
+import umpireSettingsSaga from './umpireSaga/umpireSettingsSaga';
+
 import {
     getRegistrationFormSaga,
     regMembershipFeeListSaga,
@@ -222,6 +224,7 @@ export default function* rootSaga() {
 
         // Umpire
         fork(umpireDashboardSaga),
+        fork(umpireSettingsSaga),
 
         // User
         fork(userSaga),

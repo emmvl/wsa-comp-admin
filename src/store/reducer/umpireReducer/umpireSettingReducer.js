@@ -9,6 +9,9 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
+    allocationSettingsData: null,
+
+
     defaultChecked: settingsChecked,
     allocateViaPool: false,
     manuallyAllocate: false,
@@ -67,6 +70,19 @@ function umpireSettingState(state = initialState, action) {
             }
             return {
                 ...state,
+                onLoad: false,
+            };
+
+        case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_LOAD:
+            return {
+                ...state,
+                onLoad: false,
+            };
+            
+        case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                allocationSettingsData: action.result,
                 onLoad: false,
             };
 
