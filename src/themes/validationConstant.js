@@ -250,7 +250,10 @@ const ValidationConstants = {
     membershipIsPublished: "Membership is published",
     paymentMandatory: 'A payment method needs to be chosen to Publish Competition Fees',
     plzReviewPage: 'Please review this page and correct any errors before submitting again',
-    nameisrequired: 'Name is required.'
+    nameisrequired: 'Name is required.',
+    suburbRequired: 'Subrub is required.',
+    stateRequired: 'State is required.',
+    postcodeRequired: 'Postcode is required.',
 };
 
 export default ValidationConstants;

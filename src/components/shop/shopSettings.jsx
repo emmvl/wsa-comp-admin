@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Select, Breadcrumb, Button, Form, Modal } from 'antd';
+import { Layout, Select, Breadcrumb, Button, Form, Modal, message } from 'antd';
 
 import './shop.css';
 
@@ -11,17 +11,18 @@ import ValidationConstants from 'themes/validationConstant';
 import { isArrayNotEmpty, isNotNullOrEmptyString } from 'util/helpers';
 import { checkOrganisationLevel } from 'util/permissions';
 import { getOrganisationData } from 'util/sessionStorage';
-import { getStateReferenceAction } from 'store/actions/commonAction/commonAction';
+import { getStateReferenceAction, checkVenueDuplication, getCommonRefData } from 'store/actions/commonAction/commonAction';
 import {
     getShopSettingAction,
     createAddressAction,
-    onChangeSettingsData,
+    onChangeSettingsData
 } from 'store/actions/shopAction/shopSettingAction';
 import Loader from 'customComponents/loader';
 import InputWithHead from 'customComponents/InputWithHead';
 import DashboardLayout from 'pages/dashboardLayout';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import TextArea from 'antd/lib/input/TextArea';
+import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -33,8 +34,10 @@ class ShopSettings extends Component {
         this.state = {
             getLoad: false,
             orgLevel: AppConstants.state,
+            venueAddressError: '',
         };
         this.formRef = React.createRef();
+        this.props.getCommonRefData();
     }
 
     componentDidMount() {
@@ -85,6 +88,12 @@ class ShopSettings extends Component {
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         payload.organisationUniqueKey = organisationUniqueKey;
         let key = 'update';
+
+        if (this.state.venueAddressError) {
+            message.error(this.state.venueAddressError);
+            return;
+        }
+
         if (payload.id == 0) {
             delete payload.id;
             key = 'add';
@@ -145,8 +154,57 @@ class ShopSettings extends Component {
         );
     };
 
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonState;
+        const address = data;
+        this.props.checkVenueDuplication(address);
+
+        if (!address || !address.suburb) {
+            this.setState({
+                venueAddressError: ValidationConstants.venueAddressDetailsError,
+            })
+        } else {
+            this.setState({
+                venueAddressError: ''
+            })
+        }
+
+        this.setState({
+            venueAddress: address,
+        });
+
+        const stateRefId = stateList.length > 0 && address.state
+            ? stateList.find((state) => state.name === address.state).name
+            : null;
+
+        this.formRef.current.setFieldsValue({
+            state: address.state,
+            address: address.addressOne || null,
+            suburb: address.suburb || null,
+            postcode: address.postcode || null,
+        });
+        if (address) {
+            this.props.onChangeSettingsData(address.addressOne, 'address')
+            this.props.onChangeSettingsData(address.state, 'state')
+            this.props.onChangeSettingsData(address.suburb, 'suburb')
+            this.props.onChangeSettingsData(address.postcode, 'postcode')
+        }
+    };
+
     contentView = () => {
         let stateList = this.props.commonState.stateData;
+        const { settingDetailsData } = this.props.shopSettingState
+        let state = (stateList.length > 0 && settingDetailsData.state)
+            ? stateList.find((state) => state.name == settingDetailsData.state).name
+            : null;
+
+        let defaultVenueAddress = null
+        if (settingDetailsData.address) {
+            defaultVenueAddress = `${settingDetailsData.address && `${settingDetailsData.address},`
+                } ${settingDetailsData.suburb && `${settingDetailsData.suburb},`
+                } ${state && `${state},`
+                } `;
+        }
         return (
             <div className="content-view pt-4">
                 <span className="form-heading">{AppConstants.pickUpAddress}</span>
@@ -160,12 +218,20 @@ class ShopSettings extends Component {
                         },
                     ]}
                 >
-                    <InputWithHead
+                    {/* <Form.Item name="address"> */}
+                    {/* <InputWithHead
                         auto_complete="new-address"
                         required="required-field"
                         heading={AppConstants.address}
                         placeholder={AppConstants.address}
                         onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'address')}
+                    /> */}
+                    <PlacesAutocomplete
+                        defaultValue={defaultVenueAddress && `${defaultVenueAddress}Australia`}
+                        heading={AppConstants.address}
+                        required
+                        error={this.state.venueAddressError}
+                        onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
                 <Form.Item
@@ -174,7 +240,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                                ValidationConstants.enterSuburb,
+                                ValidationConstants.suburbRequired,
                         },
                     ]}
                 >
@@ -183,7 +249,8 @@ class ShopSettings extends Component {
                         required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
-                        onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
+                        // onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
+                        readOnly
                     />
                 </Form.Item>
                 <InputWithHead
@@ -196,17 +263,19 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                                ValidationConstants.enterState,
+                                ValidationConstants.stateRequired,
                         },
                     ]}
                 >
                     <Select
                         className="w-100"
                         placeholder={AppConstants.select}
-                        onChange={(value) => this.props.onChangeSettingsData(value, 'state')}
+                        // onChange={(value) => this.props.onChangeSettingsData(value, 'state')}
+                        disabled
                     >
                         {stateList.map((item) => (
                             <Option key={`state_${item.name}`} value={item.name}>{item.name}</Option>
+                            // <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -216,7 +285,7 @@ class ShopSettings extends Component {
                         {
                             required: true,
                             message:
-                                ValidationConstants.enterPostcode,
+                                ValidationConstants.postcodeRequired,
                         },
                     ]}
                 >
@@ -225,9 +294,11 @@ class ShopSettings extends Component {
                         required="required-field"
                         heading={AppConstants.postCode}
                         placeholder={AppConstants.postcode}
-                        onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
+                        // onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
                         type="number"
                         min={0}
+                        maxLength={4}
+                        readOnly
                     />
                 </Form.Item>
                 <span className="input-heading">{AppConstants.pickupInstructions}</span>
@@ -236,7 +307,7 @@ class ShopSettings extends Component {
                 >
                     <TextArea onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'pickupInstruction')}></TextArea>
                 </Form.Item>
-            </div>
+            </div >
         );
     };
 
@@ -342,6 +413,8 @@ function mapDispatchToProps(dispatch) {
         getShopSettingAction,
         createAddressAction,
         onChangeSettingsData,
+        checkVenueDuplication,
+        getCommonRefData
     }, dispatch);
 }
 
