@@ -921,6 +921,11 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -941,6 +946,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         onFinish={this.onAddVenue}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
+                            this.onFinishFailed()
                         }}
                         noValidate="noValidate"
                     >

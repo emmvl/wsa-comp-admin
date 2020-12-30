@@ -3510,7 +3510,8 @@ class RegistrationCompetitionFee extends Component {
             divisionState: false,
             affiliateOrgId: null,
             heroImage: null,
-            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null
+            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
+            isEdit: props.location.state ? props.location.state.isEdit : false
         };
 
         this_Obj = this;
@@ -3773,7 +3774,8 @@ class RegistrationCompetitionFee extends Component {
                 hasRegistration,
                 "REG",
                 affiliateOrgId,
-                yearRefId
+                yearRefId,
+                this.state.isEdit
             );
             this.setState({ getDataLoading: true });
         } else {
@@ -3905,6 +3907,14 @@ class RegistrationCompetitionFee extends Component {
         // let govtVoucherData= this.props.competitionFeesState.competitionDiscountsData.govermentVouchers
         let govtVoucher = this.props.competitionFeesState.competitionDiscountsData.govermentVouchers;
         let discountDataArr = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts;
+        let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
+        selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
+
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.paymentMandatory);
+            return;
+        }
 
         discountDataArr.map((item) => {
             if (item.childDiscounts) {
@@ -4704,7 +4714,8 @@ class RegistrationCompetitionFee extends Component {
                     formData,
                     compFeesState.defaultCompFeesOrgLogoData.id,
                     AppConstants.Reg,
-                    this.state.affiliateOrgId
+                    this.state.affiliateOrgId,
+                    this.state.isEdit
                 );
                 this.setState({ loading: true });
             } else {
@@ -6962,7 +6973,7 @@ class RegistrationCompetitionFee extends Component {
                     <div className="inside-container-view pt-5">
                         <span className="form-heading">{AppConstants.paymentOptions}</span>
                         {isSeasonal == false && isCasual == false && isTeamSeasonal == false && isTeamCasual == false && (
-                            <span className="applicable-to-heading pt-0">
+                            <span className="applicable-to-heading pt-0 text-with-red-color">
                                 {AppConstants.please_Sel_Fee}
                             </span>
                         )}
@@ -8105,6 +8116,11 @@ class RegistrationCompetitionFee extends Component {
         this.setDetailsFieldValue();
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -8121,6 +8137,8 @@ class RegistrationCompetitionFee extends Component {
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
                         noValidate="noValidate"
+                        onFinishFailed={ this.onFinishFailed}
+                           
                     >
                         {this.headerView()}
                         {/* {this.dropdownView()} */}

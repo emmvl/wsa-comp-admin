@@ -120,6 +120,7 @@ function* getAllCompetitionFeesDetailsSaga(action) {
                         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_SUCCESS,
                         result: result.result.data,
                         status: result.status,
+                        isEdit:action.isEdit
                     });
                 } else {
                     yield call(failSaga, result);
@@ -167,6 +168,7 @@ function* saveCompetitionFeesDetailsSaga(action) {
                 type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
+                isEdit:action.isEdit
             });
             message.success(result.result.data.message);
         } else {

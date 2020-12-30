@@ -1980,6 +1980,8 @@ const ApiConstants = {
     Api_RESET_TFA_SUCCESS: "Api_RESET_TFA_SUCCESS",
     // Merge user pages
     ADD_USERS_TO_BE_MERGED: "ADD_USERS_TO_BE_MERGED",
+    // Umpire list bool method for livescore
+    RESET_UMPIRE_LIST_BOOL: "RESET_UMPIRE_LIST_BOOL"
 };
 
 export default ApiConstants;
