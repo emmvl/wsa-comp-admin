@@ -78,7 +78,7 @@ import UmpirePayment from 'components/umpire/umpirePayments';
 import UmpirePaymentSetting from 'components/umpire/umpirePaymentSettings';
 import UmpirePayout from 'components/umpire/umpirePayout';
 import UmpirePoolAllocation from 'components/umpire/umpirePoolAllocation';
-import UmpireRoaster from 'components/umpire/umpireRoaster';
+import UmpireRoster from 'components/umpire/umpireRoster';
 import UmpireSetting from 'components/umpire/umpireSetting';
 
 import AffiliateDirectory from 'components/user/affiliateDirectory';
@@ -830,7 +830,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/umpireRoster"
-                    component={this.haveAccess(userRoleId, '/umpireRoster') ? lazyLoad(UmpireRoaster) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/umpireRoster') ? lazyLoad(UmpireRoster) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

@@ -213,7 +213,7 @@ class UmpireImport extends Component {
             <div className="col-sm" style={{ marginTop: 10 }}>
                 <div className="row">
                     <div className="reg-add-save-button" style={{ marginRight: 10 }}>
-                        {this.state.screenName === "umpireRoaster" ? (
+                        {this.state.screenName === "umpireRoster" ? (
                             <Button className="primary-add-comp-form" type="primary">
                                 {AppConstants.upload}
                             </Button>
@@ -259,7 +259,7 @@ class UmpireImport extends Component {
                     umpireSelectedKey={
                         screenName === "umpire"
                             ? "2"
-                            : screenName === "umpireRoaster" ? "3" : "1"
+                            : screenName === "umpireRoster" ? "3" : "1"
                     }
                 />
 

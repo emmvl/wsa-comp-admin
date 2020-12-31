@@ -118,7 +118,7 @@ const routeAdminRole = [
     "/addUmpire",
     "/matchDayMatchSheet",
     "/shopDashboard",
-    "/umpireRoaster",
+    "/umpireRoster",
     "/umpireImport",
     "/umpire",
     "/listProducts",
