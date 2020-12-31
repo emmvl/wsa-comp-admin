@@ -159,7 +159,7 @@ function getUserModuleTeamRegistrationAction(payload) {
         type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD,
         payload,
     };
-    
+
 }
 
 function getUserModuleOtherRegistrationAction(payload) {
@@ -167,7 +167,7 @@ function getUserModuleOtherRegistrationAction(payload) {
         type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD,
         payload,
     };
-    
+
 }
 
 function getUserModuleMedicalInfoAction(userId) {
@@ -440,9 +440,10 @@ function registrationResendEmailAction(teamId, userId) {
     }
     return action;
 }
-function resetTfaAction() {
+function resetTfaAction(Id) {
     const action = {
         type: ApiConstants.Api_RESET_TFA_LOAD,
+        Id
     }
     return action
 }

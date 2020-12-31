@@ -360,7 +360,7 @@ class DashboardLayout extends React.Component {
                     </div>
 
                     <li className="acc-help-support-list-view">
-                        <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
+                        <NavLink to={{ pathname: `https://netball-registration-dev.worldsportaction.com/` }} target="_blank">
                             {AppConstants.myProfile}
                         </NavLink>
                     </li>

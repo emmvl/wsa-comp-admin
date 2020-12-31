@@ -617,6 +617,8 @@ class QuickCompetitionMatchFormat extends Component {
                                 placeholder={AppConstants.days}
                                 value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -625,6 +627,8 @@ class QuickCompetitionMatchFormat extends Component {
                                 placeholder={AppConstants.hours}
                                 value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -633,6 +637,8 @@ class QuickCompetitionMatchFormat extends Component {
                                 placeholder={AppConstants.mins}
                                 value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>

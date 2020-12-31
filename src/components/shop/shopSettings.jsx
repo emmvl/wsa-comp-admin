@@ -204,6 +204,10 @@ class ShopSettings extends Component {
                 } ${settingDetailsData.suburb && `${settingDetailsData.suburb},`
                 } ${state && `${state},`
                 } `;
+        } else {
+            defaultVenueAddress = `${settingDetailsData.suburb && `${settingDetailsData.suburb},`
+                } ${state && `${state},`
+                } `;
         }
         return (
             <div className="content-view pt-4">

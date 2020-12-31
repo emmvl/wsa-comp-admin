@@ -16,7 +16,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString, isImageFormatValid, isImageSizeValid  } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -80,7 +80,7 @@ class RegistrationCompetitionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId:  getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
+            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -325,7 +325,7 @@ class RegistrationCompetitionForm extends Component {
         }
         if (nextProps.appState.yearList !== this.props.appState.yearList) {
             if (this.props.appState.yearList.length > 0) {
-                let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) :  getCurrentYear(this.props.appState.yearList)
+                let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
                 this.getMembershipDetails(yearRefId)
                 this.setDetailsFieldValue()
@@ -702,9 +702,9 @@ class RegistrationCompetitionForm extends Component {
                 message.error(AppConstants.logo_Image_Size);
                 return
             }
-        this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-        this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-        this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+            this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+            this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
         }
     };
 
@@ -1151,6 +1151,8 @@ class RegistrationCompetitionForm extends Component {
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_hrs} className="col-sm" >
@@ -1160,6 +1162,8 @@ class RegistrationCompetitionForm extends Component {
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_mins} className="col-sm" >
@@ -1169,6 +1173,8 @@ class RegistrationCompetitionForm extends Component {
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>

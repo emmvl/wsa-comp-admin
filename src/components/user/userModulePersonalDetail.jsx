@@ -106,7 +106,7 @@ const columns = [
         key: "expiryDate",
         render: (expiryDate, record) => (
             <span>
-                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate!== 'Single Game' && expiryDate !== 'Pay each Match' ? moment(expiryDate,"YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate,"YYYY-MM-DD").format("DD/MM/YYYY")}
+                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Single Game' && expiryDate !== 'Pay each Match' ? moment(expiryDate, "YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate, "YYYY-MM-DD").format("DD/MM/YYYY")}
             </span>
         )
     },
@@ -225,8 +225,8 @@ const cloumnsRegistration = [
     {
         title: "DOB",
         dataIndex: "DOB",
-        key:"DOB",
-        render: (DOB , record) => (
+        key: "DOB",
+        render: (DOB, record) => (
             liveScore_formateDate(DOB)
         )
     },
@@ -238,7 +238,7 @@ const cloumnsRegistration = [
     {
         title: "Phone",
         dataIndex: "mobileNumber",
-        key:"mobileNumber"
+        key: "mobileNumber"
     },
     {
         title: "Affiliate",
@@ -253,7 +253,7 @@ const cloumnsRegistration = [
     {
         title: "Comp Fees Paid",
         dataIndex: "compFeesPaid",
-        key:"compFeesPaid"
+        key: "compFeesPaid"
     },
     {
         title: "Membership Product",
@@ -273,7 +273,7 @@ const cloumnsRegistration = [
     {
         title: "Action",
     }
-    
+
 ];
 
 const columnsPlayer = [
@@ -2155,16 +2155,16 @@ class UserModulePersonalDetail extends Component {
 
         return (
             <div className="comp-dash-table-view pt-0">
-                <div className="row">
-                    <div className="col-sm user-module-row-heading d-flex align-items-center mb-0">{AppConstants.address}</div>
-                    <div className="col-sm justify-content-end d-flex align-items-center">
+
+                <div className=" user-module-row-heading d-flex align-items-center mb-0">{AppConstants.address}</div>
+                {/* <div className="col-sm justify-content-end d-flex align-items-center">
                         <NavLink to={{ pathname: `https://netball-registration-dev.worldsportaction.com/` }} target="_blank">
                             <Button type="primary">
                                 {AppConstants.yourProfile}
                             </Button>
                         </NavLink>
-                    </div>
-                </div>
+                    </div> */}
+
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
@@ -2471,7 +2471,7 @@ class UserModulePersonalDetail extends Component {
                         showSizeChanger={false}
                     />
                 </div>
-                {isArrayNotEmpty(userTeamRegistrationList) ? 
+                {isArrayNotEmpty(userTeamRegistrationList) ?
                     <div>
                         <div className="user-module-row-heading">
                             {AppConstants.teamRegistration}
@@ -2507,8 +2507,8 @@ class UserModulePersonalDetail extends Component {
                     :
                     null
                 }
-                
-                {isArrayNotEmpty(userOtherRegistrationList) ? 
+
+                {isArrayNotEmpty(userOtherRegistrationList) ?
                     <div>
                         <div className="user-module-row-heading">
                             {AppConstants.otherRegistration}
@@ -2543,7 +2543,7 @@ class UserModulePersonalDetail extends Component {
                     </div>
                     :
                     null
-                }       
+                }
             </div>
         );
     };
@@ -2653,7 +2653,7 @@ class UserModulePersonalDetail extends Component {
         );
     };
     resetTfaAction = (e) => {
-        this.props.resetTfaAction()
+        this.props.resetTfaAction(this.state.userId)
     }
 
     headerView = () => {

@@ -8,7 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "./liveScore.css";
 import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import history from "../../util/history";
-import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition,setGlobalYear } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition, setGlobalYear } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";

@@ -4189,15 +4189,15 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
                                     feeSeasonalTeamData[k].competitionMembershipProductTypeId
                                 ) {
-                                    feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j] ?.fee;
-                                    feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j] ?.gst;
-                                    feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j] ?.affiliateFee;
-                                    feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j] ?.affiliateGst;
+                                    feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j]?.fee;
+                                    feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j]?.gst;
+                                    feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j]?.affiliateFee;
+                                    feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affiliateGst;
                                     // if (fee_data[i].teamRegChargeTypeRefId == 1) {
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j] ?.nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j] ?.nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j] ?.affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j] ?.affNominationGST;
+                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
+                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
+                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
+                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affNominationGST;
                                     //}
                                     break;
                                 }
@@ -5674,6 +5674,8 @@ class RegistrationCompetitionFee extends Component {
                                     )
                                 }
                                 disabled={compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" >
@@ -5688,6 +5690,8 @@ class RegistrationCompetitionFee extends Component {
                                     )
                                 }
                                 disabled={compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" >
@@ -5702,6 +5706,8 @@ class RegistrationCompetitionFee extends Component {
                                     )
                                 }
                                 disabled={compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
@@ -8137,8 +8143,8 @@ class RegistrationCompetitionFee extends Component {
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
                         noValidate="noValidate"
-                        onFinishFailed={ this.onFinishFailed}
-                           
+                        onFinishFailed={this.onFinishFailed}
+
                     >
                         {this.headerView()}
                         {/* {this.dropdownView()} */}

@@ -484,8 +484,7 @@ let userHttpApi = {
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
   },
-  async resetTfaApi() {
-    let userId = await getUserId();
+  async resetTfaApi(userId) {
     const url = `/users/profile/reset/tfa?userId=${userId}`;
     return Method.dataPost(url, token)
   },
