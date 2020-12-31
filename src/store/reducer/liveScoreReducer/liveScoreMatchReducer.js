@@ -286,15 +286,15 @@ function checkUmpireType(umpireArray, key) {
     return object;
 }
 
-function checkUmpireRole(roasterArray, key) {
-    let roasterkey = null;
-    for (let i in roasterArray) {
-        if (roasterArray[i].roleId == key) {
-            roasterkey = roasterArray[i].userId
+function checkUmpireRole(rosterArray, key) {
+    let rosterkey = null;
+    for (let i in rosterArray) {
+        if (rosterArray[i].roleId == key) {
+            rosterkey = rosterArray[i].userId
             break
         }
     }
-    return roasterkey
+    return rosterkey
 }
 // Remove duplicate rounds names
 function removeDuplicateValues(array) {

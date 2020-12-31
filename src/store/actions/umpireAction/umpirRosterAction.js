@@ -1,9 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function umpireRoasterListAction(competitionID, status, refRoleId, paginationBody, sortBy,
+function umpireRosterListAction(competitionID, status, refRoleId, paginationBody, sortBy,
     sortOrder , entityType) {
     const action = {
-        type: ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD,
+        type: ApiConstants.API_UMPIRE_ROSTER_LIST_LOAD,
         competitionID,
         status,
         refRoleId,
@@ -16,9 +16,9 @@ function umpireRoasterListAction(competitionID, status, refRoleId, paginationBod
     return action;
 }
 
-function umpireRoasterOnActionClick(data) {
+function umpireRosterOnActionClick(data) {
     const action = {
-        type: ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD,
+        type: ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_LOAD,
         data
 
     };
@@ -26,6 +26,6 @@ function umpireRoasterOnActionClick(data) {
 }
 
 export {
-    umpireRoasterListAction,
-    umpireRoasterOnActionClick
+    umpireRosterListAction,
+    umpireRosterOnActionClick
 } 

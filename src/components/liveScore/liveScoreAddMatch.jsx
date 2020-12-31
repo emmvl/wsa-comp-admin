@@ -1620,7 +1620,7 @@ class LiveScoreAddMatch extends Component {
                             <div className="reg-add-save-button p-0">
                                 <Button
                                     className="cancelBtnWidth mr-2 mb-3"
-                                    onClick={() => history.push(this.state.key === 'dashboard' ? 'matchDayDashboard' : this.state.key === 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey === 'umpire' ? 'umpireDashboard' : '/matchDayMatches')}
+                                    onClick={() => history.push(this.state.key === 'dashboard' ? 'matchDayDashboard' : this.state.key === 'umpireRoster' ? 'umpireRoster' : this.state.umpireKey === 'umpire' ? 'umpireDashboard' : '/matchDayMatches')}
                                     type="cancel-button"
                                 >
                                     {AppConstants.cancel}

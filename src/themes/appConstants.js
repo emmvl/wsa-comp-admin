@@ -1228,6 +1228,7 @@ const AppConstants = {
     orderId: 'Order Id',
     netProfit: 'Net Profit',
     paid: 'Paid',
+    notPaid: 'Not Paid',
     addOrder: 'Add Order',
     paymentStatus: 'Payment Status',
 
@@ -1576,6 +1577,7 @@ const AppConstants = {
     nominationFee: 'Nomination Fee',
     nominationFeeTeam: 'Please note - The manager can choose to pay the nomination fee or can split it with the players at the time of registration',
     paymentMethods: 'Payment Methods',
+    paymentMethod: 'Payment Method',
     singleGamePerTeamMember: 'Single Game Fee per Team Member(inc GST)',
     setMembershipProducts: 'Set Membership Product(s)',
     chargedForFullSeason: 'Charge All Fees at Registration',
@@ -1669,7 +1671,24 @@ const AppConstants = {
     actions: "Actions",
     ownRegistration: 'Own Registration',
     otherRegistration: 'Other Registration',
-    yourProfile: 'Your Profile'
+    yourProfile: 'Your Profile',
+
+    paidBy: 'Paid by',
+    feeType: 'Fee Type',
+    paymentType: 'Payment Type',
+    membershipType: 'Membership type',
+    totalFeeIncGst: 'Total Fee (inc GST)',
+    portion: 'Portion',
+    redeemVoucher : 'Redeem Voucher',
+    cashPaymentReceived:'Cash Payment received',
+    pendingMembership: 'Pending Membership',
+    pendingRegistrationFee: 'Pending Registration Fee',
+    registered: 'Registered',
+    playerRegistration:'Player Registration',
+    coachRegistration:'Coach Registration',
+    teamRegistration:'Team Registration',
+    pending: 'Pending',
+    declined: 'Declined',
 };
 
 export default AppConstants;

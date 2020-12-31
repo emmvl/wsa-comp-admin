@@ -795,14 +795,20 @@ function registration(state = initialState, action) {
       let onChangeIndex = data.findIndex(
         data => data.editableIndex == recordId
       );
-      data[onChangeIndex][key] = action.value;
+      if(key === "casualGst" || key === "seasonalGst"){
+        let gst = Number(action.value);
+        data[onChangeIndex][key] = gst > 0 ? gst : 0;
+      }
+      else{
+        data[onChangeIndex][key] = Number(action.value);
+      }
       if (key === "casualFee") {
         let casualGst = Number((action.value) / 10).toFixed(2)
-        data[onChangeIndex]["casualGst"] = casualGst
+        data[onChangeIndex]["casualGst"] = casualGst > 0 ? casualGst : 0;
       }
       if (key === "seasonalFee") {
         let seasonalGst = Number((action.value) / 10).toFixed(2)
-        data[onChangeIndex]["seasonalGst"] = seasonalGst
+        data[onChangeIndex]["seasonalGst"] = seasonalGst > 0 ? seasonalGst : 0;
       }
       return {
         ...state,

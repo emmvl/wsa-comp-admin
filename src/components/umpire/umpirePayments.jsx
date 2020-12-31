@@ -208,7 +208,7 @@ class UmpirePayments extends Component {
             loading: false,
             competitionUniqueKey: null,
             year: "2019",
-            roasterLoad: false,
+            rosterLoad: false,
             compArray: [],
             sortBy: null,
             sortOrder: null,

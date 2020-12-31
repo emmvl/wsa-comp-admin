@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker, Tag, Input } from "antd";
+import { Layout, Table, Select, Menu, Pagination, Button, DatePicker, Tag, Input } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -8,9 +8,15 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import AppImages from "../../themes/appImages";
-import { getOnlyYearListAction } from "../../store/actions/appAction";
+import {
+    getOnlyYearListAction, 
+    getFeeTypeAction,
+    getPaymentOptionsListAction,
+    getPaymentMethodsListAction,
+} from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getPaymentList, exportPaymentApi } from "../../store/actions/stripeAction/stripeAction"
+import { endUserRegDashboardListAction } from "../../store/actions/registrationAction/endUserRegistrationAction";
 import InputWithHead from "../../customComponents/InputWithHead"
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
@@ -18,7 +24,6 @@ import { isEmptyArray } from "formik";
 import moment from "moment";
 import { SearchOutlined } from "@ant-design/icons";
 
-const { confirm } = Modal;
 const { Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -47,7 +52,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "userFirstName",
         key: "userFirstName",
         sorter: true,
@@ -68,14 +73,14 @@ const columns = [
         ),
     },
     {
-        title: "Paid By",
+        title: AppConstants.paidBy,
         dataIndex: "paidBy",
         key: "paidBy",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: "affiliateName",
         key: "affiliateName",
         sorter: true,
@@ -85,7 +90,7 @@ const columns = [
         ),
     },
     {
-        title: "Competition",
+        title: AppConstants.competition,
         dataIndex: "competitionName",
         key: "competitionName",
         sorter: true,
@@ -95,28 +100,28 @@ const columns = [
         ),
     },
     {
-        title: "Fee Type",
+        title: AppConstants.feeType,
         dataIndex: "feeType",
         key: "feeType",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Payment Type",
+        title: AppConstants.paymentType,
         dataIndex: "paymentType",
         key: "paymentType",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipTypeName",
         key: "membershipTypeName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Total Fee (inc GST)",
+        title: AppConstants.totalFeeIncGst,
         dataIndex: "invoiceTotal",
         key: "invoiceTotal",
         render: (invoiceTotal, record) => currencyFormat(invoiceTotal),
@@ -124,7 +129,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
-        title: "Portion",
+        title: AppConstants.portion,
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
         render: (affiliatePortion, record) => (
@@ -137,14 +142,14 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
     },
     {
-        title: "Payment Method",
+        title: AppConstants.paymentMethod,
         dataIndex: "paymentMethod",
         key: "paymentMethod",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("payment"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
         sorter: true,
@@ -155,7 +160,7 @@ const columns = [
         ),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record) => (
@@ -179,10 +184,10 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <span>Redeem Voucher</span>
+                        <span>{AppConstants.redeemVoucher}</span>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <span>Cash Payment received</span>
+                        <span>{AppConstants.cashPaymentReceived}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -209,8 +214,12 @@ class PaymentDashboard extends Component {
             dateFrom: null,
             dateTo: null,
             type: -1,
+            feeType: -1,
+            paymentOption: -1,
+            paymentMethod: -1,
             status: -1,
-            searchText: ''
+            searchText: '',
+            membershipType: -1,
         };
         this_Obj = this;
     }
@@ -253,6 +262,31 @@ class PaymentDashboard extends Component {
     referenceCalls = (organisationId) => {
         this.props.getAffiliateToOrganisationAction(organisationId);
         this.props.getOnlyYearListAction();
+        this.props.getFeeTypeAction();
+        this.props.getPaymentOptionsListAction();
+        this.props.getPaymentMethodsListAction();
+        this.props.endUserRegDashboardListAction({
+            organisationUniqueKey: this.state.organisationUniqueKey,
+            yearRefId: 1,
+            competitionUniqueKey: '-1',
+            dobFrom: '-1',
+            dobTo: '-1',
+            membershipProductTypeId: -1,
+            genderRefId: -1,
+            postalCode: '-1',
+            affiliate: -1,
+            membershipProductId: -1,
+            paymentId: -1,
+            paymentStatusRefId: -1,
+            searchText: '',
+            teamId: -1,
+            regFrom: '-1',
+            regTo: '-1',
+            paging: {
+              limit: 10,
+              offset: 0
+            }
+        }, null, null);
     };
 
     onExport() {
@@ -268,20 +302,45 @@ class PaymentDashboard extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.handlePaymentTableList(1, this.state.userId !== null ? this.state.userId : -1, this.state.registrationId !== null ? this.state.registrationId : "-1", e.target.value)
+            this.handlePaymentTableList(
+                1,
+                this.state.userId !== null ? this.state.userId : -1,
+                this.state.registrationId !== null ? this.state.registrationId : "-1",
+                e.target.value,
+                this.state.feeType,
+                this.state.paymentOption,
+                this.state.paymentMethod,
+                this.state.membershipType
+            )
         }
     }
 
     onKeyEnterSearchText = (e) => {
         const code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
-            this.handlePaymentTableList(1, this.state.userId !== null ? this.state.userId : -1, this.state.registrationId !== null ? this.state.registrationId : "-1", this.state.searchText)
+            this.handlePaymentTableList(
+                1,
+                this.state.userId !== null ? this.state.userId : -1,
+                this.state.registrationId !== null ? this.state.registrationId : "-1",
+                this.state.searchText,
+                this.state.feeType,
+                this.state.paymentType,
+                this.state.paymentMethod
+            )
         }
     };
 
     onClickSearchIcon = () => {
         if (this.state.searchText) {
-            this.handlePaymentTableList(1, this.state.userId !== null ? this.state.userId : -1, this.state.registrationId !== null ? this.state.registrationId : "-1", this.state.searchText)
+            this.handlePaymentTableList(
+                1,
+                this.state.userId !== null ? this.state.userId : -1,
+                this.state.registrationId !== null ? this.state.registrationId : "-1",
+                this.state.searchText,
+                this.state.feeType,
+                this.state.paymentType,
+                this.state.paymentMethod
+            )
 
         }
     };
@@ -360,7 +419,20 @@ class PaymentDashboard extends Component {
     };
 
     handlePaymentTableList = (page, userId, regId, searchValue) => {
-        let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchText } = this.state
+        let {
+            sortBy,
+            sortOrder,
+            yearRefId,
+            competitionUniqueKey,
+            filterOrganisation,
+            dateFrom,
+            dateTo,
+            searchText,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType,
+        } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         let year = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
@@ -369,7 +441,23 @@ class PaymentDashboard extends Component {
             registrationId: regId
         })
         // this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
-        this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(year), competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
+        this.props.getPaymentList(
+            offset,
+            sortBy,
+            sortOrder,
+            userId,
+            "-1",
+            this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(year),
+            competitionUniqueKey,
+            filterOrganisation,
+            dateFrom,
+            dateTo,
+            searchValue,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType
+        );
     };
 
     onChangeDropDownValue = async (value, key) => {
@@ -378,20 +466,76 @@ class PaymentDashboard extends Component {
             if (value != -1) {
                 setGlobalYear(value)
             }
-            this.handlePaymentTableList(1, -1, null, this.state.searchText);
-
+            this.handlePaymentTableList(
+                1,
+                -1,
+                null,
+                this.state.searchText
+            );
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });
-            this.handlePaymentTableList(1, -1, null, this.state.searchText);
+            this.handlePaymentTableList(
+                1,
+                -1,
+                null,
+                this.state.searchText
+            );
         } else if (key === "filterOrganisation") {
             await this.setState({ filterOrganisation: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
         } else if (key === "dateFrom") {
             await this.setState({ dateFrom: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
         } else if (key === "dateTo") {
             await this.setState({ dateTo: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
+        } else if (key === "feeType") {
+            await this.setState({ feeType: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
+        } else if (key === "paymentOption") {
+            await this.setState({ paymentOption: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
+        } else if (key === "paymentMethod") {
+            await this.setState({ paymentMethod: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
+        } else if (key === "membershipType") {
+            await this.setState({ membershipType: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
         }
     };
 
@@ -399,9 +543,9 @@ class PaymentDashboard extends Component {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         let paymentStatus = [
-            { id: 1, description: "Pending Membership" },
-            { id: 2, description: "Pending Registration Fee" },
-            { id: 3, description: "Registered" },
+            { id: 1, description: AppConstants.pendingMembership },
+            { id: 2, description: AppConstants.pendingRegistrationFee },
+            { id: 3, description: AppConstants.registered },
         ];
 
         if (affiliateToData.affiliatedTo !== undefined) {
@@ -501,7 +645,6 @@ class PaymentDashboard extends Component {
                             value={this.state.dateTo !== null && moment(this.state.dateTo, "YYYY-MM-DD")}
                         />
                     </div>
-
                 </div>
                 <div className='row pb-5'>
                     <div className="col-sm-3">
@@ -515,11 +658,11 @@ class PaymentDashboard extends Component {
                             value={this.state.type}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key={"playerRegistration"} value={"playerRegistration"}>{"Player Registration"}</Option>
-                            <Option key={"coachRegistration"} value={"coachRegistration"}>{"Coach Registration"}</Option>
-                            <Option key={"teamRegistration"} value={"teamRegistration"}>{"Team Registration"}</Option>
-                            <Option key={"shop"} value={"shop"}>{"Shop"}</Option>
-                            <Option key={"umpire"} value={"umpire"}>{"Umpire"}</Option>
+                            <Option key={"playerRegistration"} value={"playerRegistration"}>{AppConstants.playerRegistration}</Option>
+                            <Option key={"coachRegistration"} value={"coachRegistration"}>{AppConstants.coachRegistration}</Option>
+                            <Option key={"teamRegistration"} value={"teamRegistration"}>{AppConstants.teamRegistration}</Option>
+                            <Option key={"shop"} value={"shop"}>{AppConstants.shop}</Option>
+                            <Option key={"umpire"} value={"umpire"}>{AppConstants.umpire}</Option>
                         </Select>
                     </div>
                     <div className="col-sm-3">
@@ -533,9 +676,9 @@ class PaymentDashboard extends Component {
                             value={this.state.status}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key={"paid"} value={"paid"}>{"Paid"}</Option>
-                            <Option key={"pending"} value={"pending"}>{"Pending"}</Option>
-                            <Option key={"declined"} value={"declined"}>{"Declined"}</Option>
+                            <Option key={"paid"} value={"paid"}>{AppConstants.paid}</Option>
+                            <Option key={"pending"} value={"pending"}>{AppConstants.pending}</Option>
+                            <Option key={"declined"} value={"declined"}>{AppConstants.declined}</Option>
                         </Select>
                     </div>
                 </div>
@@ -547,9 +690,9 @@ class PaymentDashboard extends Component {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         let paymentStatus = [
-            { id: 1, description: "Pending Membership" },
-            { id: 2, description: "Pending Registration Fee" },
-            { id: 3, description: "Registered" },
+            { id: 1, description: AppConstants.pendingMembership },
+            { id: 2, description: AppConstants.pendingRegistrationFee },
+            { id: 3, description: AppConstants.registered },
         ];
 
         if (affiliateToData.affiliatedTo !== undefined) {
@@ -566,7 +709,7 @@ class PaymentDashboard extends Component {
         const { paymentCompetitionList } = this.props.paymentState;
         return (
             <div>
-                <div className="row">
+                <div className="row pb-2">
                     <div className="col-sm-3">
                         <InputWithHead required="pt-0" heading={AppConstants.year} />
                         <Select
@@ -623,28 +766,6 @@ class PaymentDashboard extends Component {
                             ))}
                         </Select>
                     </div>
-
-                    <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.type} />
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            className="reg-payment-select w-100"
-                            style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(type) => this.setState({ type })}
-                            value={this.state.type}
-                        >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key={"playerRegistration"} value={"playerRegistration"}>{"Player Registration"}</Option>
-                            <Option key={"coachRegistration"} value={"coachRegistration"}>{"Coach Registration"}</Option>
-                            <Option key={"teamRegistration"} value={"teamRegistration"}>{"Team Registration"}</Option>
-                            <Option key={"shop"} value={"shop"}>{"Shop"}</Option>
-                            <Option key={"umpire"} value={"umpire"}>{"Umpire"}</Option>
-                        </Select>
-                    </div>
-                </div>
-
-                <div className='row pb-5'>
                     <div className="col-sm-3 pt-2">
                         <InputWithHead required="pt-0" heading={AppConstants.status} />
                         <Select
@@ -656,12 +777,89 @@ class PaymentDashboard extends Component {
                             value={this.state.status}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key={"paid"} value={"paid"}>{"Paid"}</Option>
-                            <Option key={"pending"} value={"pending"}>{"Pending"}</Option>
-                            <Option key={"declined"} value={"declined"}>{"Declined"}</Option>
+                            <Option key={"paid"} value={"paid"}>{AppConstants.paid}</Option>
+                            <Option key={"pending"} value={"pending"}>{AppConstants.pending}</Option>
+                            <Option key={"declined"} value={"declined"}>{AppConstants.declined}</Option>
                         </Select>
                     </div>
+                </div>
 
+                <div className="row pb-2">
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.feeType} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
+                            onChange={feeType => this.onChangeDropDownValue(feeType, "feeType")}
+                            value={this.state.feeType}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {this.props.appState.feeTypes.map(feeType => (
+                                <Option key={'feeType_' + feeType.id} value={feeType.name}>
+                                    {feeType.description}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.paymentType} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
+                            onChange={paymentOption => this.onChangeDropDownValue(paymentOption, "paymentOption")}
+                            value={this.state.paymentOption}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {this.props.appState.paymentOptions.map(paymentOption => (
+                                <Option key={'paymentOption_' + paymentOption.id} value={paymentOption.name}>
+                                    {paymentOption.description}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.paymentMethod} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
+                            onChange={paymentMethod => this.onChangeDropDownValue(paymentMethod, "paymentMethod")}
+                            value={this.state.paymentMethod}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {this.props.appState.paymentMethods.map(paymentMethod => (
+                                <Option key={'paymentMethod_' + paymentMethod.id} value={paymentMethod.name}>
+                                    {paymentMethod.description}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.membershipTYpe} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
+                            onChange={membershipType => this.onChangeDropDownValue(membershipType, "membershipType")}
+                            value={this.state.membershipType}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {this.props.userRegistrationState.membershipProductTypes.map(mt => (
+                                <Option key={'mt_' + mt.id} value={mt.membershipProductTypeId}>
+                                    {mt.membershipProductTypeName}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                </div>
+
+                <div className='row pb-5'>
                     <div className="col-sm-3 pt-2">
                         <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                         <DatePicker
@@ -675,7 +873,6 @@ class PaymentDashboard extends Component {
                             value={this.state.dateFrom !== null && moment(this.state.dateFrom, "YYYY-MM-DD")}
                         />
                     </div>
-
                     <div className="col-sm-3 pt-2">
                         <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                         <DatePicker
@@ -746,9 +943,13 @@ class PaymentDashboard extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
+        getFeeTypeAction,
+        getPaymentOptionsListAction,
+        getPaymentMethodsListAction,
         getPaymentList,
         exportPaymentApi,
         getAffiliateToOrganisationAction,
+        endUserRegDashboardListAction,
     }, dispatch)
 }
 
