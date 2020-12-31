@@ -83,7 +83,8 @@ class UserProfileEdit extends Component {
             hasErrorParent: [],
             hasErrorEmergency: false,
             hasErrorAddressNumber: false,
-            venueAddressError: ''
+            venueAddressError: '',
+            manualAddress: false
         }
         this.props.getCommonRefData();
         this.props.countryReferenceAction();
@@ -474,87 +475,107 @@ class UserProfileEdit extends Component {
                 </div>
 
 
-                <PlacesAutocomplete
-                    defaultValue={defaultVenueAddress && `${defaultVenueAddress}Australia`}
-                    heading={AppConstants.venueSearch}
-                    // required
-                    error={this.state.venueAddressError}
-                    onSetData={this.handlePlacesAutocomplete}
-                />
+                {
+                    !this.state.manualAddress &&
+                    <PlacesAutocomplete
+                        defaultValue={defaultVenueAddress && `${defaultVenueAddress}Australia`}
+                        heading={AppConstants.addressSearch}
+                        // required
+                        error={this.state.venueAddressError}
+                        onSetData={this.handlePlacesAutocomplete}
+                    />
+                }
 
-                <div className="row">
-                    <div className="col-sm" >
-                        <InputWithHead
-                            auto_complete="new-addressOne"
-                            // required="required-field"
-                            heading={AppConstants.addressOne}
-                            placeholder={AppConstants.addressOne}
-                            name={'street1'}
-                            value={userData ?.street1}
-                            // onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                            readOnly
-                        />
+                <div
+                    className="orange-action-txt" style={{ marginTop: "10px" }}
+                    onClick={() => this.setState({ manualAddress: !this.state.manualAddress })}
 
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead
-                            auto_complete="new-addressTwo"
-                            // style={{ marginTop: 9 }}
-                            heading={AppConstants.addressTwo}
-                            placeholder={AppConstants.addressTwo}
-                            name={'street2'}
-                            value={userData ?.street2}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
-                        />
-                    </div>
+                >{this.state.manualAddress ? AppConstants.returnAddressSearch : AppConstants.enterAddressManually}
                 </div>
-                <div className="row">
-                    <div className="col-sm" >
-                        <InputWithHead
-                            // style={{ marginTop: 9 }}
-                            heading={AppConstants.suburb}
-                            placeholder={AppConstants.suburb}
-                            // required="required-field"
-                            name={'suburb'}
-                            value={userData ?.suburb}
-                            // onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                            readOnly
-                        />
-                    </div>
-                    <div className="col-sm">
-                        <div >
-                            <InputWithHead heading={AppConstants.stateHeading} />
+
+                {
+                    this.state.manualAddress &&
+                    <div className="row">
+                        <div className="col-sm" >
+                            <InputWithHead
+                                auto_complete="new-addressOne"
+                                // required="required-field"
+                                heading={AppConstants.addressOne}
+                                placeholder={AppConstants.addressOne}
+                                name={'street1'}
+                                value={userData ?.street1}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
+                            // readOnly
+                            />
+
                         </div>
-                        <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                            placeholder={AppConstants.select}
-                            // required="required-field"
-                            value={userData ?.stateRefId}
-                            name="stateRefId"
-                            // onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                            readOnly
-                            disabled
-                        >
-                            {stateList.map((item) => (
-                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-                            ))}
-                        </Select>
+                        <div className="col-sm" >
+                            <InputWithHead
+                                auto_complete="new-addressTwo"
+                                // style={{ marginTop: 9 }}
+                                heading={AppConstants.addressTwo}
+                                placeholder={AppConstants.addressTwo}
+                                name={'street2'}
+                                value={userData ?.street2}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col-sm">
-                        <InputWithHead
-                            heading={AppConstants.postCode}
-                            placeholder={AppConstants.postCode}
-                            name={'postalCode'}
-                            value={userData ?.postalCode}
-                            // onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                            readOnly
-                        />
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <div className="row">
+                        <div className="col-sm" >
+                            <InputWithHead
+                                // style={{ marginTop: 9 }}
+                                heading={AppConstants.suburb}
+                                placeholder={AppConstants.suburb}
+                                // required="required-field"
+                                name={'suburb'}
+                                value={userData ?.suburb}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
+                            // readOnly
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <div >
+                                <InputWithHead heading={AppConstants.stateHeading} />
+                            </div>
+                            <Select
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                placeholder={AppConstants.select}
+                                // required="required-field"
+                                value={userData ?.stateRefId}
+                                name="stateRefId"
+                                onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
+                            // readOnly
+                            // disabled
+                            >
+                                {stateList.map((item) => (
+                                    <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                                ))}
+                            </Select>
+                        </div>
                     </div>
-                    <div className="col-sm" />
-                </div>
-            </div>
+                }
+                {
+                    this.state.manualAddress &&
+                    <div className="row">
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.postCode}
+                                placeholder={AppConstants.postCode}
+                                name={'postalCode'}
+                                value={userData ?.postalCode}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
+                            // readOnly
+                            />
+                        </div>
+                        <div className="col-sm" />
+                    </div>
+                }
+            </div >
         );
     };
 

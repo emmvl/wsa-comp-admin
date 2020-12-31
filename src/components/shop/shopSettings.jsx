@@ -35,6 +35,7 @@ class ShopSettings extends Component {
             getLoad: false,
             orgLevel: AppConstants.state,
             venueAddressError: '',
+            manualAddress: false
         };
         this.formRef = React.createRef();
         this.props.getCommonRefData();
@@ -73,6 +74,7 @@ class ShopSettings extends Component {
         let { settingDetailsData } = this.props.shopSettingState;
         this.formRef.current.setFieldsValue({
             address: settingDetailsData.address,
+            addressSearch: settingDetailsData.address,
             suburb: settingDetailsData.suburb,
             state: isNotNullOrEmptyString(settingDetailsData.state) ? settingDetailsData.state : [],
             postcode: settingDetailsData.postcode,
@@ -180,6 +182,7 @@ class ShopSettings extends Component {
         this.formRef.current.setFieldsValue({
             state: address.state,
             address: address.addressOne || null,
+            addressSearch: address.addressOne || null,
             suburb: address.suburb || null,
             postcode: address.postcode || null,
         });
@@ -212,99 +215,146 @@ class ShopSettings extends Component {
         return (
             <div className="content-view pt-4">
                 <span className="form-heading">{AppConstants.pickUpAddress}</span>
-                <Form.Item
-                    name="address"
-                    rules={[
-                        {
-                            required: true,
-                            message:
-                                ValidationConstants.enterAddress,
-                        },
-                    ]}
-                >
-                    {/* <Form.Item name="address"> */}
-                    {/* <InputWithHead
-                        auto_complete="new-address"
-                        required="required-field"
-                        heading={AppConstants.address}
-                        placeholder={AppConstants.address}
-                        onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'address')}
-                    /> */}
-                    <PlacesAutocomplete
-                        defaultValue={defaultVenueAddress && `${defaultVenueAddress}Australia`}
-                        heading={AppConstants.address}
-                        required
-                        error={this.state.venueAddressError}
-                        onSetData={this.handlePlacesAutocomplete}
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="suburb"
-                    rules={[
-                        {
-                            required: true,
-                            message:
-                                ValidationConstants.suburbRequired,
-                        },
-                    ]}
-                >
-                    <InputWithHead
-                        auto_complete="new-suburb"
-                        required="required-field"
-                        heading={AppConstants.suburb}
-                        placeholder={AppConstants.suburb}
-                        // onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
-                        readOnly
-                    />
-                </Form.Item>
-                <InputWithHead
-                    heading={AppConstants.stateHeading}
-                    required="required-field"
-                />
-                <Form.Item
-                    name="state"
-                    rules={[
-                        {
-                            required: true,
-                            message:
-                                ValidationConstants.stateRequired,
-                        },
-                    ]}
-                >
-                    <Select
-                        className="w-100"
-                        placeholder={AppConstants.select}
-                        // onChange={(value) => this.props.onChangeSettingsData(value, 'state')}
-                        disabled
+                <div
+                    className="orange-action-txt" style={{ marginTop: "10px" }}
+                    onClick={() => this.setState({ manualAddress: !this.state.manualAddress })}
+
+                >{this.state.manualAddress && AppConstants.returnAddressSearch}
+                </div>
+                {
+                    this.state.manualAddress
+                        ?
+                        <Form.Item
+                            name="address"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterAddress,
+                                },
+                            ]}
+                        >
+                            <InputWithHead
+                                auto_complete="new-address"
+                                required="required-field"
+                                heading={AppConstants.address}
+                                placeholder={AppConstants.address}
+                                onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'address')}
+                            />
+                        </Form.Item>
+
+                        :
+
+                        <Form.Item
+                            name="addressSearch"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Address Search',
+                                },
+                            ]}
+                        >
+                            <PlacesAutocomplete
+                                defaultValue={defaultVenueAddress && `${defaultVenueAddress}Australia`}
+                                heading={AppConstants.addressSearch}
+                                required
+                                error={this.state.venueAddressError}
+                                onSetData={this.handlePlacesAutocomplete}
+                            />
+                        </Form.Item>
+                }
+
+                <div
+                    className="orange-action-txt" style={{ marginTop: "10px" }}
+                    onClick={() => this.setState({ manualAddress: !this.state.manualAddress })}
+
+                >{!this.state.manualAddress && AppConstants.enterAddressManually}
+                </div>
+
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item
+                        name="suburb"
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    ValidationConstants.suburbRequired,
+                            },
+                        ]}
                     >
-                        {stateList.map((item) => (
-                            <Option key={`state_${item.name}`} value={item.name}>{item.name}</Option>
-                            // <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    name="postcode"
-                    rules={[
-                        {
-                            required: true,
-                            message:
-                                ValidationConstants.postcodeRequired,
-                        },
-                    ]}
-                >
+                        <InputWithHead
+                            auto_complete="new-suburb"
+                            required="required-field"
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
+                        // readOnly
+                        />
+                    </Form.Item>
+                }
+                {
+                    this.state.manualAddress &&
                     <InputWithHead
-                        auto_complete="new-postCode"
+                        heading={AppConstants.stateHeading}
                         required="required-field"
-                        heading={AppConstants.postCode}
-                        placeholder={AppConstants.postcode}
-                        // onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
-                        type="number"
-                        min={0}
-                        maxLength={4}
-                        readOnly
                     />
-                </Form.Item>
+                }
+                {
+                    this.state.manualAddress &&
+
+                    <Form.Item
+                        name="state"
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    ValidationConstants.stateRequired,
+                            },
+                        ]}
+                    >
+                        <Select
+                            className="w-100"
+                            placeholder={AppConstants.select}
+                            onChange={(value) => this.props.onChangeSettingsData(value, 'state')}
+                        // disabled
+                        >
+                            {stateList.map((item) => (
+                                <Option key={`state_${item.name}`} value={item.name}>{item.name}</Option>
+                                // <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item
+                        name="postcode"
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    ValidationConstants.postcodeRequired,
+                            },
+                        ]}
+                    >
+                        <InputWithHead
+                            auto_complete="new-postCode"
+                            required="required-field"
+                            heading={AppConstants.postCode}
+                            placeholder={AppConstants.postcode}
+                            onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
+                            type="number"
+                            min={0}
+                            maxLength={4}
+                        // readOnly
+                        />
+                    </Form.Item>
+                }
+
                 <span className="input-heading">{AppConstants.pickupInstructions}</span>
                 <Form.Item
                     name="pickupInstruction"

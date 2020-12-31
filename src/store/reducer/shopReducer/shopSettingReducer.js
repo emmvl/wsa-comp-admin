@@ -23,7 +23,8 @@ const initialState = {
 
 ////modify the setting data for the screen
 function modifySettingData(data) {
-    let singleAddress = isArrayNotEmpty(data.address) ? data.address[0] : null
+    let checkIsArray = Array.isArray(data.address)
+    let singleAddress = checkIsArray ? isArrayNotEmpty(data.address) ? data.address[0] : data.address : data.address
     let newObject = {
         address: singleAddress ? singleAddress.address : "",
         id: singleAddress ? singleAddress.id : 0,
