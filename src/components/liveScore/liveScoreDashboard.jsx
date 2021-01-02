@@ -833,7 +833,7 @@ class LiveScoreDashboard extends Component {
 
     ////////ownedView view for competition
     playersToPayView = () => {
-        const { dashboardMatchList } = this.props.liveScoreDashboardState
+        const { playerTopay } = this.props.liveScoreDashboardState
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
@@ -881,7 +881,7 @@ class LiveScoreDashboard extends Component {
                     <Content>
                         {this.addNewsView()}
                         {this.matchView()}
-                        {/* {this.playersToPayView()} */}
+                        {this.playersToPayView()}
                         {this.incidenceView()}
                     </Content>
                 </Layout>
