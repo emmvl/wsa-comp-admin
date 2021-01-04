@@ -63,7 +63,7 @@ import ShopProductState from './shopReducer/productReducer';
 /// / Umpire Module
 import UmpireDashboardState from './umpireReducer/umpireDashboardReducer';
 import UmpireCompetitionState from './umpireReducer/umpireCompetitionReducer';
-import UmpireRoasterState from './umpireReducer/umpireRoasterReducer';
+import UmpireRosterState from './umpireReducer/umpireRosterReducer';
 import UmpireState from './umpireReducer/umpireReducer';
 import AssignUmpireState from './umpireReducer/assignUmpireReducer';
 import UmpireSettingState from './umpireReducer/umpireSettingReducer';
@@ -135,7 +135,7 @@ const rootReducer = combineReducers({
     ShopProductState,
     UmpireDashboardState,
     UmpireCompetitionState,
-    UmpireRoasterState,
+    UmpireRosterState,
     UmpireState,
     AssignUmpireState,
     UmpireSettingState,

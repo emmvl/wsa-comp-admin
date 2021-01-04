@@ -85,7 +85,7 @@ import {
     liveScoreDoubleHeaderSaga,
     liveScoreAbandonMatchSaga,
 } from './liveScoreSaga/liveScoreBulkMatchSaga';
-import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
+import { liveScoreDashboardSaga, liveScoreSingleGameListSaga, liveScoreSingleGameRedeemPaySaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreGamePositionSaga } from './liveScoreSaga/liveScoreGamePositionSaga';
 
 /// /*******************Live Score********************************************End
@@ -173,7 +173,7 @@ import { liveScoreChangeVenueSaga } from './liveScoreSaga/liveScoreVenueChangeSa
 import { getLiveScoreFixtureCompSaga } from './liveScoreSaga/liveScoreFixtureCompSaga';
 
 import * as umpireCompSaga from './umpireSaga/umpireCompetitionSaga';
-import * as umpireRoasterSaga from './umpireSaga/umpireRoasterSaga';
+import * as umpireRosterSaga from './umpireSaga/umpireRosterSaga';
 import * as umpireSaga from './umpireSaga/umpireSaga';
 import * as assignUmpireSaga from './umpireSaga/assignUmpireSaga';
 import * as competitionQuickSaga from './competitionManagementSaga/competitionQuickCompetitionSaga';
@@ -464,8 +464,8 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga);
     yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga);
     yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga);
-    yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga);
-    yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD, umpireRoasterSaga.umpireActionPerofomSaga);
+    yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_LIST_LOAD, umpireRosterSaga.umpireRosterListSaga);
+    yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_LOAD, umpireRosterSaga.umpireActionPerofomSaga);
 
     /// ///assign umpire get list
     yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga);
@@ -563,4 +563,8 @@ export default function* rootSaga() {
 
     yield takeEvery(ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD, getMembershipFeeCapListSaga)
     yield takeEvery(ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD, updateMembershipFeeCapSaga)
+
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_LIST_LOAD, liveScoreSingleGameListSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_REDEEM_PAY_LOAD, liveScoreSingleGameRedeemPaySaga);
+
 }

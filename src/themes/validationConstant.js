@@ -240,14 +240,20 @@ const ValidationConstants = {
 
     daysRequired: "Days is required",
     extendEndDateRequired: "Extend end date is required",
-    pleaseFillDivisionBeforePublishing : "Please fill division before publishing.",
-    pleaseFillFeesBeforePublishing : "Please fill fees before publishing.",
+    pleaseFillDivisionBeforePublishing: "Please fill division before publishing.",
+    pleaseFillFeesBeforePublishing: "Please fill fees before publishing.",
 
     membershipProductsRequired: "Membership products is required",
     membershipFeeRequired: "Membership Fee is required",
     fromDateIsRequired: "From date is required",
     toDateIsRequired: "To date is required",
-    membershipIsPublished: "Membership is published"
+    membershipIsPublished: "Membership is published",
+    paymentMandatory: 'A payment method needs to be chosen to Publish Competition Fees',
+    plzReviewPage: 'Please review this page and correct any errors before submitting again',
+    nameisrequired: 'Name is required.',
+    suburbRequired: 'Subrub is required.',
+    stateRequired: 'State is required.',
+    postcodeRequired: 'Postcode is required.',
 };
 
 export default ValidationConstants;

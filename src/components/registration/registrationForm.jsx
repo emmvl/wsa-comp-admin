@@ -1606,6 +1606,11 @@ class RegistrationForm extends Component {
         )
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         const { isHardshipEnabled } = this.props.registrationState.registrationFormData[0];
         return (
@@ -1624,6 +1629,7 @@ class RegistrationForm extends Component {
                         autoComplete="off"
                         onFinish={this.registrationSubmit}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
                     >
                         {/* {this.dropdownView()} */}
                         <Content>

@@ -1229,7 +1229,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder, entityType) {
+    umpireRosterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder, entityType) {
         let url = null;
         const body = paginationBody;
 
@@ -1247,13 +1247,13 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterActionPerform(data) {
-        const url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}&callViaWeb=true`;
+    umpireRosterActionPerform(data) {
+        const url = `/roster?rosterId=${data.rosterId}&status=${data.status}&category=${data.category}&callViaWeb=true`;
         return Method.dataPatch(url, token);
     },
 
-    umpireRoasterDeleteAction(data) {
-        const url = `/roster?id=${data.roasterId}&category=${data.category}`;
+    umpireRosterDeleteAction(data) {
+        const url = `/roster?id=${data.rosterId}&category=${data.category}`;
         return Method.dataDelete(url, localStorage.token);
     },
 

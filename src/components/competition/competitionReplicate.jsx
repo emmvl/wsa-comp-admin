@@ -575,6 +575,11 @@ class CompetitionReplicate extends Component {
         )
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -587,9 +592,10 @@ class CompetitionReplicate extends Component {
                     <Form
                         ref={this.formRef}
                         autoComplete="off"
-                        scrollToFirstError
+                        // scrollToFirstError
                         onFinish={this.saveRelicate}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
                     >
                         <Content>
                             <div className="formView">

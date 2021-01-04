@@ -1099,6 +1099,11 @@ class CompetitionFinals extends Component {
         )
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1118,6 +1123,7 @@ class CompetitionFinals extends Component {
                         onFinish={this.saveCompetitionFinals}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name)
+                            this.onFinishFailed()
                         }}
                         noValidate="noValidate"
                     >

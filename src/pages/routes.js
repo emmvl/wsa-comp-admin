@@ -78,7 +78,7 @@ import UmpirePayment from 'components/umpire/umpirePayments';
 import UmpirePaymentSetting from 'components/umpire/umpirePaymentSettings';
 import UmpirePayout from 'components/umpire/umpirePayout';
 import UmpirePoolAllocation from 'components/umpire/umpirePoolAllocation';
-import UmpireRoaster from 'components/umpire/umpireRoaster';
+import UmpireRoster from 'components/umpire/umpireRoster';
 import UmpireSetting from 'components/umpire/umpireSetting';
 
 import AffiliateDirectory from 'components/user/affiliateDirectory';
@@ -154,6 +154,7 @@ import LiveScoreTeamView from 'components/liveScore/liveScoreTeamView';
 import LiveScoreUmpireImport from 'components/liveScore/liveScoreUmpireImport';
 import LiveScoreUmpireList from 'components/liveScore/liveScoreUmpireList';
 import LiveScoreVenueChange from 'components/liveScore/liveScoreVenueChange';
+import LiveScoreSingleGameFee from 'components/liveScore/liveScoreSingleGameFee';
 import OrgBecsSetup from  'components/registration/orgBecsSetup';
 import Stripe from 'components/stripe/stripe';
 
@@ -830,7 +831,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/umpireRoster"
-                    component={this.haveAccess(userRoleId, '/umpireRoster') ? lazyLoad(UmpireRoaster) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/umpireRoster') ? lazyLoad(UmpireRoster) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -967,6 +968,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/deregistration"
                     component={this.haveAccess(userRoleId, '/multifieldDraws') ? lazyLoad(deRegistration) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/matchDaySingleGameFee"
+                    component={this.haveAccess(userRoleId, '/matchDaySingleGameFee') ? lazyLoad(LiveScoreSingleGameFee) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute path="/communication" component={lazyLoad(CommunicationBanner)} />

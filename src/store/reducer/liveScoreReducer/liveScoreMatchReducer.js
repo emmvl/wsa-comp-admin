@@ -231,7 +231,8 @@ const initialState = {
     staticMatchData: JSON.parse(JSON.stringify(object)),
     umpireReserveId: null,
     umpireCoachId: null,
-    accreditation: []
+    accreditation: [],
+    updateUmpireFetchCall: false
 };
 
 function setMatchData(data) {
@@ -285,15 +286,15 @@ function checkUmpireType(umpireArray, key) {
     return object;
 }
 
-function checkUmpireRole(roasterArray, key) {
-    let roasterkey = null;
-    for (let i in roasterArray) {
-        if (roasterArray[i].roleId == key) {
-            roasterkey = roasterArray[i].userId
+function checkUmpireRole(rosterArray, key) {
+    let rosterkey = null;
+    for (let i in rosterArray) {
+        if (rosterArray[i].roleId == key) {
+            rosterkey = rosterArray[i].userId
             break
         }
     }
-    return roasterkey
+    return rosterkey
 }
 // Remove duplicate rounds names
 function removeDuplicateValues(array) {
@@ -462,6 +463,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 error: null,
                 status: action.status,
                 recordUmpireType: data.competition.recordUmpireType,
+                updateUmpireFetchCall: true
             };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_FAIL:
@@ -509,10 +511,6 @@ function liveScoreMatchReducer(state = initialState, action) {
             };
         case ApiConstants.API_NEW_UMPIRE_LIST_SUCCESS:
             let new_user_Data = action.result.userData ? action.result.userData : action.result
-            if (action.key === "data") {
-                let coachData = createCoachArray(JSON.parse(JSON.stringify(new_user_Data)))
-                state.coachList = coachData
-            }
             let newCheckUserData = createUmpireArray(JSON.parse(JSON.stringify(new_user_Data)), state.accreditation)
             return {
                 ...state,
@@ -530,9 +528,29 @@ function liveScoreMatchReducer(state = initialState, action) {
             if (action.key === "start_date") {
                 state.start_date = action.data;
                 state.start_post_date = action.data;
+                if (action.data != null) {
+                    let d_date = moment(action.data).format('YYYY-MM-DD').split('-');
+                    let d_oldTime = moment(state.start_time).format('HH:mm').split(':')
+                    let d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2], d_oldTime[0], d_oldTime[1]]).utc().format();
+                    console.log(d_newTime, d_date, d_oldTime)
+                    state.matchData.startTime = d_newTime;
+                    if (d_newTime != 'Invalid date') {
+                        state.updateUmpireFetchCall = true;
+                    }
+                }
             } else if (action.key === "start_time") {
                 state.start_time = action.data;
                 state.displayTime = action.data;
+                if (action.data != null) {
+                    let t_date = moment(state.matchData.startTime).format('YYYY-MM-DD').split('-');
+                    let t_time = moment(action.data).format('HH:mm').split(':');
+                    let t_newTime = moment([t_date[0], t_date[1] - 1, t_date[2], t_time[0], t_time[1]]).utc().format();
+                    state.matchData.startTime = t_newTime;
+                    console.log(t_newTime, t_date, t_time)
+                    if (t_newTime != 'Invalid date') {
+                        state.updateUmpireFetchCall = true;
+                    }
+                }
             } else if (action.key === "forfietedTeam") {
                 state.forfietedTeam = action.data;
             } else if (action.key === "abandoneReason") {
@@ -717,6 +735,12 @@ function liveScoreMatchReducer(state = initialState, action) {
                     state.matchData["extraTimeqtrBreak"] = null;
                     state.matchData["extraTimeWinByGoals"] = null;
                 }
+            }
+            else if (action.key == 'matchDuration' || action.key == 'mainBreakDuration') {
+                state[action.key] = action.data;
+                state.addEditMatch[action.key] = action.data;
+                state.matchData[action.key] = action.data;
+                state.updateUmpireFetchCall = true;
             }
             else {
                 state[action.key] = action.data;
@@ -1045,6 +1069,11 @@ function liveScoreMatchReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false
+            }
+        case ApiConstants.RESET_UMPIRE_LIST_BOOL:
+            return {
+                ...state,
+                updateUmpireFetchCall: false
             }
 
         default:

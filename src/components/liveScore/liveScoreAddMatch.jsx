@@ -35,6 +35,7 @@ import {
     liveScoreClubListAction,
     searchFilterAction,
     liveScoreGetMatchDetailInitiate,
+    resetUmpireListBoolAction
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -123,21 +124,21 @@ class LiveScoreAddMatch extends Component {
                     this.props.getLiveScoreDivisionList(id);
                     this.props.getliveScoreScorerList(id, 4);
                     this.props.liveScoreClubListAction(id);
-                    // this.props.umpireListAction({
-                    //     refRoleId: JSON.stringify([15, 20]),
-                    //     entityTypes: isCompParent ? 1 : 6,
-                    //     compId: id,
-                    //     offset: null,
-                    //     compOrgId: compOrgId
-                    // });
-                    this.props.newUmpireListAction({
+                    this.props.umpireListAction({
                         refRoleId: JSON.stringify([15, 20]),
                         entityTypes: isCompParent ? 1 : 6,
                         compId: id,
                         offset: null,
-                        compOrgId: compOrgId,
-                        isCompParent: isCompParent
+                        compOrgId: compOrgId
                     });
+                    // this.props.newUmpireListAction({
+                    //     refRoleId: JSON.stringify([15, 20]),
+                    //     entityTypes: isCompParent ? 1 : 6,
+                    //     compId: id,
+                    //     offset: null,
+                    //     compOrgId: compOrgId,
+                    //     isCompParent: isCompParent
+                    // });
                     this.setState({ loadvalue: true, allDisabled: true });
                 } else {
                     history.push('/matchDayCompetitions');
@@ -159,21 +160,21 @@ class LiveScoreAddMatch extends Component {
                 this.props.getLiveScoreDivisionList(id);
                 this.props.getliveScoreScorerList(id, 4);
                 this.props.liveScoreClubListAction(id);
-                // this.props.umpireListAction({
-                //     refRoleId: JSON.stringify([15, 20]),
-                //     entityTypes: isCompParent ? 1 : 6,
-                //     compId: id,
-                //     offset: null,
-                //     compOrgId: compOrgId
-                // });
-                this.props.newUmpireListAction({
+                this.props.umpireListAction({
                     refRoleId: JSON.stringify([15, 20]),
                     entityTypes: isCompParent ? 1 : 6,
                     compId: id,
                     offset: null,
-                    compOrgId: compOrgId,
-                    isCompParent: isCompParent
+                    compOrgId: compOrgId
                 });
+                // this.props.newUmpireListAction({
+                //     refRoleId: JSON.stringify([15, 20]),
+                //     entityTypes: isCompParent ? 1 : 6,
+                //     compId: id,
+                //     offset: null,
+                //     compOrgId: compOrgId,
+                //     isCompParent: isCompParent
+                // });
                 this.setState({ loadvalue: true, allDisabled: false });
             } else {
                 history.push('/matchDayCompetitions');
@@ -236,6 +237,21 @@ class LiveScoreAddMatch extends Component {
                 this.formRef.current.setFieldsValue({
                     round: addedRound,
                 });
+            }
+            if (this.props.liveScoreMatchState.updateUmpireFetchCall) {
+                console.log('coming in did update', this.props.liveScoreMatchState.matchData);
+                let matchData = this.props.liveScoreMatchState.matchData;
+                let startTime = moment(matchData.startTime);
+                let endTime = moment(startTime).add(matchData.matchDuration, 'minutes').add(matchData.mainBreakDuration, 'minutes');
+                this.props.newUmpireListAction({
+                    entityTypes: this.state.isCompParent ? 1 : 6,
+                    compId: this.state.compId,
+                    compOrgId: this.state.compOrgId,
+                    isCompParent: this.state.isCompParent,
+                    matchStartTime: matchData.startTime,
+                    matchEndTime: moment(endTime).utc().format()
+                });
+                this.props.resetUmpireListBoolAction()
             }
         }
     }
@@ -616,7 +632,6 @@ class LiveScoreAddMatch extends Component {
         const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -638,7 +653,7 @@ class LiveScoreAddMatch extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.startTime} />
-                        <Form.Item name="time" rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                        <Form.Item name="time" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
                                 onChange={(time) => this.props.liveScoreUpdateMatchAction(time, 'start_time')}
@@ -1605,7 +1620,7 @@ class LiveScoreAddMatch extends Component {
                             <div className="reg-add-save-button p-0">
                                 <Button
                                     className="cancelBtnWidth mr-2 mb-3"
-                                    onClick={() => history.push(this.state.key === 'dashboard' ? 'matchDayDashboard' : this.state.key === 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey === 'umpire' ? 'umpireDashboard' : '/matchDayMatches')}
+                                    onClick={() => history.push(this.state.key === 'dashboard' ? 'matchDayDashboard' : this.state.key === 'umpireRoster' ? 'umpireRoster' : this.state.umpireKey === 'umpire' ? 'umpireDashboard' : '/matchDayMatches')}
                                     type="cancel-button"
                                 >
                                     {AppConstants.cancel}
@@ -1657,6 +1672,12 @@ class LiveScoreAddMatch extends Component {
         </div>
     );
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         const screen = (this.props.location.state && this.props.location.state.screenName) ? this.props.location.state.screenName : null;
         return (
@@ -1689,6 +1710,7 @@ class LiveScoreAddMatch extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.addMatchDetails}
+                        onFinishFailed={this.onFinishFailed}
                         className="login-form"
                     >
                         <Content>
@@ -1732,6 +1754,7 @@ function mapDispatchToProps(dispatch) {
         newUmpireListAction,
         liveScoreGetMatchDetailInitiate,
         getRefBadgeData,
+        resetUmpireListBoolAction
     }, dispatch);
 }
 

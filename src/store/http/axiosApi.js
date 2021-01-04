@@ -103,6 +103,24 @@ let AxiosApi = {
     return Method.dataGet(url, token);
   },
 
+  /////get fee types
+  getFeeList() {
+    var url = `/common/reference/FinanceFeeType`;
+    return Method.dataGet(url, token);
+  },
+
+  /////get payment options
+  getPaymentOptionsList() {
+    var url = `/common/reference/PaymentOptions`;
+    return Method.dataGet(url, token);
+  },
+
+  /////get payment methods
+  getPaymentMethodsList() {
+    var url = `/common/reference/PaymentMethod`;
+    return Method.dataGet(url, token);
+  },
+
   /////get the common membership product validity type list reference
   getProductValidityList() {
     var url = `/common/reference/MembershipProductValidity`;

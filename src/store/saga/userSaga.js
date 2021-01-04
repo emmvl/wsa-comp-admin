@@ -1044,7 +1044,7 @@ function* registrationResendEmailSaga(action) {
 
 function* userResetTFASaga(action) {
   try {
-    const result = yield call(UserAxiosApi.resetTfaApi,);
+    const result = yield call(UserAxiosApi.resetTfaApi, action.Id);
 
     if (result.status === 1) {
       yield put({

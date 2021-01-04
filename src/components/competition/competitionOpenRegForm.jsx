@@ -1235,6 +1235,8 @@ class CompetitionOpenRegForm extends Component {
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
                                 disabled={disabledStatus || compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_hrs} className="col-sm">
@@ -1244,6 +1246,8 @@ class CompetitionOpenRegForm extends Component {
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
                                 disabled={disabledStatus || compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_mins} className="col-sm">
@@ -1253,6 +1257,8 @@ class CompetitionOpenRegForm extends Component {
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
                                 disabled={disabledStatus || compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
@@ -1528,6 +1534,11 @@ class CompetitionOpenRegForm extends Component {
         this.setDetailsFieldValue()
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1540,6 +1551,7 @@ class CompetitionOpenRegForm extends Component {
                         onFinish={this.saveAPIsActionCall}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name)
+                            this.onFinishFailed()
                         }}
                         initialValues={{
                             competitionTypeRefId: 1,

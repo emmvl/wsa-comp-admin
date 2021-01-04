@@ -343,13 +343,13 @@ let userHttpApi = {
   },
 
   newUmpireList(data) {
-    let url = null;
     console.log(data)
-    if (data.isCompParent == true) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+    let url = null;
+    if (data.isCompParent !== true) {
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`;
     }
     else {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`
     }
     return Method.dataGet(url, localStorage.token);
   },
@@ -484,8 +484,7 @@ let userHttpApi = {
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
   },
-  async resetTfaApi() {
-    let userId = await getUserId();
+  async resetTfaApi(userId) {
     const url = `/users/profile/reset/tfa?userId=${userId}`;
     return Method.dataPost(url, token)
   },

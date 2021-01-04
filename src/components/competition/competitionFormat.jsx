@@ -798,6 +798,8 @@ class CompetitionFormat extends Component {
                                 placeholder={AppConstants.days}
                                 value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -808,6 +810,8 @@ class CompetitionFormat extends Component {
                                 placeholder={AppConstants.hours}
                                 value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -818,6 +822,8 @@ class CompetitionFormat extends Component {
                                 placeholder={AppConstants.mins}
                                 value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
@@ -1200,6 +1206,12 @@ class CompetitionFormat extends Component {
         }
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1218,6 +1230,7 @@ class CompetitionFormat extends Component {
                         onFinish={this.saveCompetitionFormats}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name)
+                            this.onFinishFailed()
                         }}
                         noValidate="noValidate"
                     >

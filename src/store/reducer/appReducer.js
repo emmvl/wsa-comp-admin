@@ -11,6 +11,9 @@ const initialState = {
   result: null,
   status: 0,
   yearList: [],
+  feeTypes: [],
+  paymentOptions: [],
+  paymentMethods: [],
   productValidityList: [],
   competitionTypeList: [],
   membershipProductFeesTypes: [],
@@ -190,6 +193,30 @@ function appState(state = initialState, action) {
         status: action.status
       };
 
+    case ApiConstants.API_FEE_TYPE_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        feeTypes: action.result,
+        status: action.status
+      };
+
+    case ApiConstants.API_PAYMENT_OPTIONS_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        paymentOptions: action.result,
+        status: action.status
+      };
+
+    case ApiConstants.API_PAYMENT_METHODS_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        paymentMethods: action.result,
+        status: action.status
+      };
+  
     /////get the common membership product validity type list reference
     case ApiConstants.API_PRODUCT_VALIDITY_LIST_LOAD:
       return { ...state, onLoad: true };

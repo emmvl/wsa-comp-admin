@@ -841,6 +841,11 @@ class LiveScoreAddNews extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
@@ -865,6 +870,7 @@ class LiveScoreAddNews extends Component {
                         autoComplete="off"
                         onFinish={this.onSaveButton}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
                     >
                         <Content>
                             <div className="formView">{this.contentView()}</div>

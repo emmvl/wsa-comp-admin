@@ -1341,18 +1341,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                     ))}
                                 </Select>
                             </div>
-                            <div className="col-sm mt-2">
-                                <div className="w-100 d-flex flex-row align-items-center" style={{ minWidth: 250 }}>
-                                    <RangePicker
-                                        disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
-                                        onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
-                                        format="DD-MM-YYYY"
-                                        style={{ width: '100%', minWidth: 180 }}
-                                        value={[moment(this.state.startDate), moment(this.state.endDate)]}
-                                    />
-                                </div>
-                            </div>
-
                             <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
                                 <Checkbox
                                     className="single-checkbox-radio-style"
@@ -1364,6 +1352,19 @@ class MultifieldDrawsNewTimeline extends Component {
                                     {AppConstants.filterDates}
                                 </Checkbox>
                             </div>
+                            <div className="col-sm mt-2">
+                                <div className="w-100 d-flex flex-row align-items-center" style={{ minWidth: 255 }}>
+                                    <RangePicker
+                                        disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
+                                        onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                                        format="DD-MM-YYYY"
+                                        style={{ width: '100%', minWidth: 200 }}
+                                        value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                                    />
+                                </div>
+                            </div>
+
+
                             <div className="col-sm d-flex justify-content-end align-items-center pr-1">
                                 <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
                                     {AppConstants.go}

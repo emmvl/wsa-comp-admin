@@ -191,7 +191,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         </span>
                     )
                 }
-            ]
+            ],
+            manualAddress: false
 
         };
         this.myRef = React.createRef();
@@ -474,72 +475,102 @@ class CompetitionVenueAndTimesAdd extends Component {
                         })}
                     />
                 </Form.Item>
-                <Form.Item className="formLineHeight" name="venueAddress">
-                    <PlacesAutocomplete
-                        heading={AppConstants.venueSearch}
-                        required
-                        error={this.state.venueAddressError}
-                        onSetData={this.handlePlacesAutocomplete}
-                    />
-                </Form.Item>
 
-                <Form.Item className="formLineHeight" name="addressOne">
-                    <InputWithHead
-                        auto_complete="new-addressOne"
-                        required="required-field"
-                        heading={AppConstants.addressOne}
-                        placeholder={AppConstants.addressOne}
-                        value={venuData.street1}
-                        readOnly
-                    />
-                </Form.Item>
+                {
+                    !this.state.manualAddress &&
+                    <Form.Item className="formLineHeight" name="venueAddress">
+                        <PlacesAutocomplete
+                            heading={AppConstants.venueSearch}
+                            required
+                            error={this.state.venueAddressError}
+                            onSetData={this.handlePlacesAutocomplete}
+                        />
+                    </Form.Item>
+                }
 
-                <Form.Item className="formLineHeight" name="addressTwo">
-                    <InputWithHead
-                        auto_complete="new-addressTwo"
-                        heading={AppConstants.addressTwo}
-                        placeholder={AppConstants.addressTwo}
-                        onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
-                        value={venuData.street2}
-                    />
-                </Form.Item>
+                <div
+                    className="orange-action-txt" style={{ marginTop: "10px" }}
+                    onClick={() => this.setState({ manualAddress: !this.state.manualAddress })}
 
-                <Form.Item className="formLineHeight" name="suburb">
-                    <InputWithHead
-                        auto_complete="new-suburb"
-                        required="required-field"
-                        heading={AppConstants.suburb}
-                        placeholder={AppConstants.suburb}
-                        value={venuData.suburb}
-                        readOnly
-                    />
-                </Form.Item>
+                >{this.state.manualAddress ? AppConstants.returnAddressSearch : AppConstants.enterAddressManually}
+                </div>
 
-                <Form.Item className="formLineHeight" name="stateRefId">
-                    <InputWithHead required="required-field" heading={AppConstants.stateHeading} />
-                    <Select
-                        style={{ width: '100%' }}
-                        placeholder={AppConstants.select}
-                        value={venuData.stateRefId}
-                        disabled
-                    >
-                        {stateList.map((item) => (
-                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
+                {
+                    this.state.manualAddress &&
+                    <Form.Item className="formLineHeight" name="addressOne">
+                        <InputWithHead
+                            auto_complete="new-addressOne"
+                            required="required-field"
+                            heading={AppConstants.addressOne}
+                            placeholder={AppConstants.addressOne}
+                            value={venuData.street1}
+                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                        // readOnly
+                        />
+                    </Form.Item>
+                }
 
-                <Form.Item className="formLineHeight" name="postcode">
-                    <InputWithHead
-                        auto_complete="new-postcode"
-                        required="required-field"
-                        heading={AppConstants.postcode}
-                        placeholder={AppConstants.postcode}
-                        value={venuData.postalCode}
-                        maxLength={4}
-                        readOnly
-                    />
-                </Form.Item>
+                {
+                    this.state.manualAddress &&
+                    <Form.Item className="formLineHeight" name="addressTwo">
+                        <InputWithHead
+                            auto_complete="new-addressTwo"
+                            heading={AppConstants.addressTwo}
+                            placeholder={AppConstants.addressTwo}
+                            onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
+                            value={venuData.street2}
+                        />
+                    </Form.Item>
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item className="formLineHeight" name="suburb">
+                        <InputWithHead
+                            auto_complete="new-suburb"
+                            required="required-field"
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            value={venuData.suburb}
+                            onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, 'Venue', 'suburb')}
+                        // readOnly
+                        />
+                    </Form.Item>
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item className="formLineHeight" name="stateRefId">
+                        <InputWithHead required="required-field" heading={AppConstants.stateHeading} />
+                        <Select
+                            style={{ width: '100%' }}
+                            placeholder={AppConstants.select}
+                            value={venuData.stateRefId}
+                            onChange={(value) => this.props.updateVenuAndTimeDataAction(value, 'Venue', 'stateRefId')}
+                        // disabled
+                        >
+                            {stateList.map((item) => (
+                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item className="formLineHeight" name="postcode">
+                        <InputWithHead
+                            auto_complete="new-postcode"
+                            required="required-field"
+                            heading={AppConstants.postcode}
+                            placeholder={AppConstants.postcode}
+                            value={venuData.postalCode}
+                            maxLength={4}
+                            onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, 'Venue', 'postalCode')}
+                        // readOnly
+                        />
+                    </Form.Item>
+                }
 
                 <Form.Item className="formLineHeight" name="contact">
                     <InputWithHead
@@ -834,7 +865,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     onAddVenue = (e) => {
         let hasError = false;
 
-        if (this.props.commonReducerState.venueAddressDuplication) {
+        if (this.props.commonReducerState.venueAddressDuplication && !this.state.manualAddress) {
             message.error(ValidationConstants.duplicatedVenueAddressError);
             return;
         }
@@ -921,6 +952,11 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -941,6 +977,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         onFinish={this.onAddVenue}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
+                            this.onFinishFailed()
                         }}
                         noValidate="noValidate"
                     >
