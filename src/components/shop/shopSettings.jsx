@@ -35,7 +35,8 @@ class ShopSettings extends Component {
             getLoad: false,
             orgLevel: AppConstants.state,
             venueAddressError: '',
-            manualAddress: false
+            manualAddress: false,
+            validation: true
         };
         this.formRef = React.createRef();
         this.props.getCommonRefData();
@@ -91,10 +92,12 @@ class ShopSettings extends Component {
         payload.organisationUniqueKey = organisationUniqueKey;
         let key = 'update';
 
-        if (this.state.venueAddressError) {
-            message.error(this.state.venueAddressError);
-            return;
-        }
+        // if (this.state.venueAddressError) {
+        //     message.config({ duration: 1.5, maxCount: 1, });
+        //     message.error(this.state.venueAddressError);
+        //     return;
+        // }
+
 
         if (payload.id == 0) {
             delete payload.id;
@@ -173,6 +176,7 @@ class ShopSettings extends Component {
 
         this.setState({
             venueAddress: address,
+            validation: false
         });
 
         const stateRefId = stateList.length > 0 && address.state
@@ -181,7 +185,7 @@ class ShopSettings extends Component {
 
         this.formRef.current.setFieldsValue({
             state: address.state,
-            address: address.addressOne || null,
+            // address: address.addressOne || null,
             addressSearch: address.addressOne || null,
             suburb: address.suburb || null,
             postcode: address.postcode || null,
@@ -207,11 +211,15 @@ class ShopSettings extends Component {
                 } ${settingDetailsData.suburb && `${settingDetailsData.suburb},`
                 } ${state && `${state},`
                 } `;
-        } else {
+        } else if (settingDetailsData.suburb) {
             defaultVenueAddress = `${settingDetailsData.suburb && `${settingDetailsData.suburb},`
                 } ${state && `${state},`
                 } `;
         }
+
+        let isValidate = settingDetailsData.suburb ? false : true
+
+
         return (
             <div className="content-view pt-4">
                 <span className="form-heading">{AppConstants.pickUpAddress}</span>
@@ -249,9 +257,8 @@ class ShopSettings extends Component {
                             name="addressSearch"
                             rules={[
                                 {
-                                    required: true,
-                                    message:
-                                        'Address Search',
+                                    required: isValidate,
+                                    message: AppConstants.addressSearch,
                                 },
                             ]}
                         >

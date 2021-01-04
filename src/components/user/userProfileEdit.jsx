@@ -322,7 +322,7 @@ class UserProfileEdit extends Component {
         let userData = this.state.userData;
         this.props.checkVenueDuplication(address);
 
-        if (!address || !address.suburb) {
+        if (!address || !address.addressOne || !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
@@ -1027,6 +1027,14 @@ class UserProfileEdit extends Component {
         let data = this.state.userData;
         data["section"] = this.state.section;
         data["organisationId"] = this.state.organisationId;
+
+        if (this.state.venueAddressError) {
+            message.config({ duration: 1.5, maxCount: 1, });
+            message.error(this.state.venueAddressError);
+            return;
+        }
+
+
         if (this.state.displaySection == 8 && !data.parentUserId) {
             data["parentUserId"] = 0;
         }
