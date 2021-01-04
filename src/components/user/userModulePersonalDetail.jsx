@@ -43,7 +43,7 @@ import {
     getUmpireActivityListAction,
     registrationResendEmailAction,
     userProfileUpdateAction,
-    resetTfaAction
+    // resetTfaAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -2652,9 +2652,9 @@ class UserModulePersonalDetail extends Component {
             </div>
         );
     };
-    resetTfaAction = (e) => {
-        this.props.resetTfaAction(this.state.userId)
-    }
+    // resetTfaAction = (e) => {
+    //     this.props.resetTfaAction(this.state.userId)
+    // }
 
     headerView = () => {
 
@@ -2668,11 +2668,11 @@ class UserModulePersonalDetail extends Component {
                     <Menu.Item onClick={handleMenuClick} key="merge">
                         {AppConstants.merge}
                     </Menu.Item>
-                    {this.state.isAdmin ?
+                    {/* {this.state.isAdmin ?
                         <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
                             {AppConstants.resetTFA}
                         </Menu.Item>
-                        : null}
+                        : null} */}
                 </Menu >
 
             )
@@ -3190,7 +3190,7 @@ function mapDispatchToProps(dispatch) {
             getReferenceOrderStatus,
             registrationResendEmailAction,
             userProfileUpdateAction,
-            resetTfaAction
+            // resetTfaAction
         },
         dispatch
     );

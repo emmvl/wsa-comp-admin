@@ -440,13 +440,13 @@ function registrationResendEmailAction(teamId, userId) {
     }
     return action;
 }
-function resetTfaAction(Id) {
-    const action = {
-        type: ApiConstants.Api_RESET_TFA_LOAD,
-        Id
-    }
-    return action
-}
+// function resetTfaAction(Id) {
+//     const action = {
+//         type: ApiConstants.Api_RESET_TFA_LOAD,
+//         Id
+//     }
+//     return action
+// }
 
 
 function addUsersToBeCompared(users) {
@@ -513,6 +513,6 @@ export {
     clearListAction,
     getSpectatorListAction,
     registrationResendEmailAction,
-    resetTfaAction,
+    // resetTfaAction,
     addUsersToBeCompared
 };
