@@ -1692,11 +1692,12 @@ const AppConstants = {
   enterAddressManually: "Enter Address Manually",
   addressSearch: 'Address Search',
   returnAddressSearch: 'Return to Address Search',
+  games: "Games",
   singleGameFees: "Single Game Fees",
   gamesPaid: "Games Paid",
   gamesRedeemed: "Games Redeemed",
   gamesToRedeem: "Games to redeem",
-  howManyGames: "How many games?"
+  howManyGames: "How many games?",
 };
 
 export default AppConstants;

@@ -486,33 +486,33 @@ function userReducer(state = initialState, action) {
         status: action.status
       };
 
-      case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD:
-        return { ...state, userRegistrationOnLoad: true };
-  
-      case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_SUCCESS:
-        let userTeamRegistrationData = action.result;
-        return {
-          ...state,
-          userTeamRegistrationOnLoad: false,
-          userTeamRegistrationList: userTeamRegistrationData.registrationTeamDetails,
-          userTeamRegistrationDataPage: userTeamRegistrationData.page ? userTeamRegistrationData.page.currentPage : 1,
-          userTeamRegistrationDataTotalCount: userTeamRegistrationData.page.totalCount,
-          status: action.status
-        };
+    case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD:
+      return { ...state, userRegistrationOnLoad: true };
 
-        case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD:
-          return { ...state, userRegistrationOnLoad: true };
-    
-        case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_SUCCESS:
-          let userOtherRegistrationData = action.result;
-          return {
-            ...state,
-            userOtherRegistrationOnLoad: false,
-            userOtherRegistrationList: userOtherRegistrationData.registrationYourDetails,
-            userOtherRegistrationDataPage: userOtherRegistrationData.page ? userOtherRegistrationData.page.currentPage : 1,
-            userOtherRegistrationDataTotalCount: userOtherRegistrationData.page.totalCount,
-            status: action.status
-          };
+    case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_SUCCESS:
+      let userTeamRegistrationData = action.result;
+      return {
+        ...state,
+        userTeamRegistrationOnLoad: false,
+        userTeamRegistrationList: userTeamRegistrationData.registrationTeamDetails,
+        userTeamRegistrationDataPage: userTeamRegistrationData.page ? userTeamRegistrationData.page.currentPage : 1,
+        userTeamRegistrationDataTotalCount: userTeamRegistrationData.page.totalCount,
+        status: action.status
+      };
+
+    case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD:
+      return { ...state, userRegistrationOnLoad: true };
+
+    case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_SUCCESS:
+      let userOtherRegistrationData = action.result;
+      return {
+        ...state,
+        userOtherRegistrationOnLoad: false,
+        userOtherRegistrationList: userOtherRegistrationData.registrationYourDetails,
+        userOtherRegistrationDataPage: userOtherRegistrationData.page ? userOtherRegistrationData.page.currentPage : 1,
+        userOtherRegistrationDataTotalCount: userOtherRegistrationData.page.totalCount,
+        status: action.status
+      };
 
     case ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD:
       return { ...state, activityPlayerOnLoad: true };
