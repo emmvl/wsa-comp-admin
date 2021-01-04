@@ -1,17 +1,6 @@
 import React, { Component } from "react";
 import {
-    Layout,
-    Breadcrumb,
-    Select,
-    Input,
-    Button,
-    DatePicker,
-    TimePicker,
-    Form,
-    Modal,
-    Spin,
-    Checkbox,
-    message
+    Layout, Breadcrumb, Button, Modal, Table,Menu, Pagination,
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -22,219 +11,241 @@ import moment from "moment";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    liveScoreAddNewsDetailsAction,
-    liveScoreAddNewsAction,
-    liveScoreUpdateNewsAction,
-    liveScoreRefreshNewsAction,
-    setDefaultImageVideoNewAction
-} from "../../store/actions/LiveScoreAction/liveScoreNewsAction";
-import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
+    liveScoreSingleGameListAction,
+    liveScoreSingleGameRedeemPayAction
+} from "../../store/actions/LiveScoreAction/liveScoreDashboardAction";
 import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
-import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
-import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-import ImageLoader from '../../customComponents/ImageLoader'
+import { getLiveScoreCompetiton, getKeyForStateWideMessage, getOrganisationData } from '../../util/sessionStorage';
+
 import { NavLink } from "react-router-dom";
-import htmlToDraft from 'html-to-draftjs';
-import draftToHtml from 'draftjs-to-html';
 
 const { Header, Footer, Content } = Layout;
-const { Option } = Select;
+let this_Obj = null;
+
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+function checkSorting(a, b, key) {
+    if (a[key] && b[key]) {
+        return a[key].length - b[key].length
+    }
+}
+
+const columns = [
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: (a, b) => tableSort(a, b, "firstName"),
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: (a, b) => checkSorting(a, b, "lastName"),
+    },
+    {
+        title: "Linked",
+        dataIndex: 'linked',
+        key: 'linked',
+        sorter: (a, b) => checkSorting(a, b, "linked"),
+    },
+    {
+        title: "Division",
+        dataIndex: 'division',
+        key: 'division',
+        sorter: (a, b) => checkSorting(a, b, "division"),
+    },
+    {
+        title: "Grade",
+        dataIndex: 'grade',
+        key: 'grade',
+        sorter: (a, b) => checkSorting(a, b, "grade"),
+    },
+    {
+        title: "Team",
+        dataIndex: 'team',
+        key: 'team',
+        sorter: (a, b) => checkSorting(a, b, "team"),
+    },
+    {
+        title: "Status",
+        dataIndex: 'status',
+        key: 'status',
+        render: (status, record) => (
+            <span className="input-heading-add-another pt-0" >
+                {Number(record.matchesCount) - Number(record.redeemCount)}</span>
+        )
+
+    },
+    {
+        title: "Action",
+        dataIndex: 'action',
+        key: 'action',
+        render: (data, record) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
+            >
+                <Menu.SubMenu key="sub1" style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                    title={<img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />}
+                >
+                    {(Number(record.matchesCount ? record.matchesCount : 0) > Number(record.redeemCount ? record.redeemCount : 0)) && (
+                    <Menu.Item key="1"
+                        onClick={() => this_Obj.showRedeemModal("show", record)}>
+                        <span>Redeem</span>
+                    </Menu.Item>
+                    )}
+                     {(Number(record.redeemCount ? record.redeemCount : 0) >= Number(record.matchesCount ? record.matchesCount : 0)) && (
+                    <Menu.Item key="2"
+                        onClick={() => this_Obj.showPayModal("show", record)}>
+                        <span>Pay</span>
+                    </Menu.Item>
+                    )}
+                </Menu.SubMenu>
+                
+            </Menu>
+        )
+    }
+];
 
 class LiveScoreSingleGameFee extends Component {
     constructor(props) {
         super(props);
         this.state = {
             load: false,
-            visible: false,
+            redeemModalVisible: false,
+            payModalVisible: false,
+            gamesToRedeem: 0,
+            gamesToPay: 0,
+            singleGameRecord: null
         };
         this.formRef = React.createRef();
+        this_Obj = this;
     }
 
     componentDidMount() {
-        let name
-        if (getLiveScoreCompetiton()) {
-            const AuthorData = JSON.parse(getLiveScoreCompetiton())
-            name = AuthorData.longName
-        } else {
-            name = 'World sport actioa'
-        }
-
-        if (getLiveScoreCompetiton()) {
-            const { id, organisationId } = JSON.parse(getLiveScoreCompetiton())
-            if (this.state.screenKey === 'stateWideMsg') {
-                this.props.getliveScoreScorerList(organisationId, 4)
-                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, organisationId)
-            } else {
-
-                this.props.getliveScoreScorerList(id, 4)
-                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, 1)
-            }
-        } else {
-            history.push('/matchDayCompetitions')
-            this.props.getliveScoreScorerList(1, 4)
-            this.props.liveScoreManagerListAction(3, 1, 1)
-        }
-
-        this.setState({ getDataLoading: false, authorName: name })
-        const { addEditNews } = this.props.liveScoreNewsState;
-        this.formRef.current.setFieldsValue({
-            'author': addEditNews.author ? addEditNews.author : name
-        })
-
-        if (this.state.isEdit === true) {
-            this.props.setDefaultImageVideoNewAction({
-                newsImage: this.props.location.state.item.newsImage,
-                newsVideo: this.props.location.state.item.newsVideo,
-                author: name
-            })
-            this.props.liveScoreAddNewsDetailsAction(this.props.location.state.item)
-            this.setInitalFiledValue(this.props.location.state.item, name)
-        } else {
-            this.props.liveScoreRefreshNewsAction()
-        }
+        this.getLivescoreGameList(1);
     }
 
-    onChangeEditorData = (event) => {
-        this.props.liveScoreUpdateNewsAction(event, "body")
-        // this.setState({ editorState: event })
-    }
-
-    EditorView = () => {
-        const { liveScoreNewsState } = this.props;
-        const { editorState } = this.state;
-        return (
-            <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
-                <div className="livescore-editor-news col-sm">
-                    <Editor
-                        editorState={editorState}
-                        editorClassName="newsDetailEditor"
-                        placeholder="News body"
-                        onChange={(e) => this.onChangeEditorData(e.blocks)}
-                        onEditorStateChange={this.onEditorStateChange}
-                        toolbar={{
-                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
-                            inline: { inDropdown: true },
-                            list: { inDropdown: true },
-                            textAlign: { inDropdown: true },
-                            link: { inDropdown: true },
-                            history: { inDropdown: true },
-                        }}
-                    />
-                </div>
-            </div>
-        )
-    }
-
-    onEditorStateChange = (editorState) => {
-        this.setState({
-            editorState,
-        });
-    };
-
-    setInitalFiledValue(data, author) {
-        let authorData = null
-        if (getLiveScoreCompetiton()) {
-            authorData = JSON.parse(getLiveScoreCompetiton())
+    getLivescoreGameList(page){
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+        const {organisationUniqueKey} = getOrganisationData();
+        let payload = {
+            competitionId: uniqueKey,
+            organisationId: organisationUniqueKey,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0),
+            },
         }
-        this.formRef.current.setFieldsValue({
-            'news_Title': data.title,
-            'author': data.author ? data.author : author ? author : authorData ? authorData.longName : 'World sport actioa'
-        })
-        // let finalBody = data ? data.body ? data.body : "" : ""
-        // let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
-        // this.setState({ editorState: body })
 
-        let finalBody = data ? data.body ? data.body : "" : ""
-        // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
-        // const editorState = EditorState.createWithContent(contentState);
-        // this.setState({
-        //     editorState
-        // })
-
-        const html = finalBody;
-        const contentBlock = htmlToDraft(html);
-        if (contentBlock) {
-            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-            const editorState = EditorState.createWithContent(contentState);
-            this.setState({
-                editorState
-            })
-        }
+        this.props.liveScoreSingleGameListAction(payload);
     }
 
     componentDidUpdate(nextProps) {
-        let newsState = this.props.liveScoreNewsState.addNewsResult
-        let onLoad_2Data = this.props.liveScoreNewsState
-        if (nextProps.newsState !== newsState) {
-            if (onLoad_2Data.onLoad_2 === false && this.state.getDataLoading === true) {
-                // debugger
-                const appendData = this.props.liveScoreNewsState.addNewsResult
-                if (this.state.isEdit === true) {
-                    if (!appendData.hasOwnProperty('newsVideo')) {
-                        appendData['newsVideo'] = this.props.location.state.item.newsVideo
-                    }
-                    if (!appendData.hasOwnProperty('newsImage')) {
-                        appendData['newsImage'] = this.props.location.state.item.newsImage
-                    }
-                }
-
-                const { success } = this.props.liveScoreNewsState;
-
-                if (success) {
-                    history.push({
-                        pathname: '/matchDayNewsView',
-                        state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
-                    })
-                }
-            }
-        }
+       
     }
 
-    ////method to show modal view after click
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
+    showRedeemModal = (key, record) => {
+        if(key == "show"){
+            this.setState({redeemModalVisible: true, singleGameRecord: record});
+        }
+        else if(key == "ok"){
+            let record = this.state.singleGameRecord;
+            let payload = {
+                userId: record.userId,
+                organisationId: record.organisationId,
+                competitionId: record.competitionId,
+                membershipProductMappingId: record.membershipProductMappingId,
+                divisionId: record.divisionId,
+                registrationId: record.registrationId,
+                gamesToRedeem: this.state.gamesToRedeem,
+                processType: "redeem"
+            }
+
+            this.props.liveScoreSingleGameRedeemPayAction(payload);
+        }
+        else{
+            this.setState({redeemModalVisible: false});
+        }
     };
 
-    ////method to hide modal view after ok click
-    handleOk = e => {
-        this.setState({
-            visible: false,
-        });
+    showPayModal = (key, record) => {
+        if(key == "show"){
+            this.setState({payModalVisible: true,  singleGameRecord: record});
+        }
+        else if(key == "ok"){
+            let record = this.state.singleGameRecord;
+            let payload = {
+                userId: record.userId,
+                organisationId: record.organisationId,
+                competitionId: record.competitionId,
+                membershipProductMappingId: record.membershipProductMappingId,
+                divisionId: record.divisionId,
+                registrationId: record.registrationId,
+                gamesToPay: this.state.gamesToPay,
+                processType: "pay"
+            }
+
+            this.props.liveScoreSingleGameRedeemPayAction(payload);
+        }
+        else{
+            this.setState({payModalVisible: false});
+        }
     };
 
-    ////method to hide modal view after click on cancle button
-    handleCancel = e => {
-        this.setState({
-            visible: false,
-        });
-    };
 
-    
-    ////modal view
-    ModalView() {
+    redeemModalView() {
+        let record = this.state.singleGameRecord;
+        let matchesCount = (record.matchesCount ? record.matchesCount : 0)
+        let redeemCount = (record.redeemCount ? record.redeemCount : 0);
+
         return (
             <Modal
-                // title="WSA 1"
-                visible={this.state.visible}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-                cancelButtonProps={{ style: { display: 'none' } }}
-                okButtonProps={{ style: { display: 'none' } }}
+                title="Redeem"
+                visible={this.state.redeemModalVisible}
+                onCancel={() => this.showRedeemModal("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText="Save"
+                onOk={() => this.showRedeemModal("ok")}
                 centered
-                width={0}
-                height={0}
-                closable={false}
             >
-                {/* <div style={{ backgroundColor: 'red', height: 100, width: 100 }}> */}
-                <Spin size="large" />
-                {/* </div> */}
+                <div> {AppConstants.gamesPaid} : {matchesCount}</div>
+                <div> {AppConstants.gamesRedeemed} : {redeemCount}</div>
+                <InputWithHead
+                        placeholder={AppConstants.gamesToRedeem}
+                        value={this.state.gamesToRedeem}
+                        onChange={(e) => this.setState({ gamesToRedeem: e.target.value })}
+                    />
+            </Modal>
+        )
+    }
+
+    payModalView() {
+        return (
+            <Modal
+                title="Redeem"
+                visible={this.state.payModalVisible}
+                onCancel={() => this.showPayModal("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText="Save"
+                onOk={() => this.showPayModal("ok")}
+                centered
+            >
+                <div> {AppConstants.howManyGames}</div>
+                <InputWithHead
+                        placeholder={AppConstants.totalGames}
+                        value={this.state.gamesToPay}
+                        onChange={(e) => this.setState({ gamesToPay: e.target.value })}
+                    />
             </Modal>
         )
     }
@@ -255,17 +266,34 @@ class LiveScoreSingleGameFee extends Component {
     };
 
     contentView = () => {
+        const {singleGameDataList, liveScoreSingleGameListPage, liveScoreSingleGameListTotalCount} = this.props.liveScoreDashboardState;
         return (
-            <div className="comp-dash-table-view mt-4">
-               
+            <div className="comp-dash-table-view mt-2">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={singleGameDataList}
+                        pagination={false}
+                        loading={this.props.liveScoreDashboardState.onSingleGameLoad && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={liveScoreSingleGameListPage}
+                        total={liveScoreSingleGameListTotalCount}
+                        onChange={(page) => this.handleRegChangeList(page)}
+                        showSizeChanger={false}
+                    />
+                </div>
             </div>
         );
     };
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
+
 
         return (
             <div className="fluid-width">
@@ -299,16 +327,11 @@ class LiveScoreSingleGameFee extends Component {
         );
     };
 
-    onFinishFailed = (errorInfo) => {
-        message.config({ maxCount: 1, duration: 1.5 })
-        message.error(ValidationConstants.plzReviewPage)
-    };
-
     render() {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
-                <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
+                <Loader visible={this.props.liveScoreDashboardState.onSingleGameLoad} />
                 <DashboardLayout
                     menuHeading={AppConstants.matchDay}
                     menuName={AppConstants.liveScores}
@@ -323,18 +346,10 @@ class LiveScoreSingleGameFee extends Component {
 
                 <Layout>
                     {this.headerView()}
-                    <Form
-                        ref={this.formRef}
-                        autoComplete="off"
-                        onFinish={this.onSaveButton}
-                        noValidate="noValidate"
-                        onFinishFailed={this.onFinishFailed}
-                    >
-                        <Content>
-                            {this.contentView()}
-                        </Content>
-                        <Footer>{this.footerView()}</Footer>
-                    </Form>
+                    <Content>
+                        {this.contentView()}
+                    </Content>
+                    {/* <Footer>{this.footerView()}</Footer> */}
                 </Layout>
             </div>
         );
@@ -343,23 +358,15 @@ class LiveScoreSingleGameFee extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        liveScoreAddNewsDetailsAction,
-        liveScoreAddNewsAction,
-        liveScoreUpdateNewsAction,
-        liveScoreRefreshNewsAction,
-        getliveScoreScorerList,
-        liveScoreManagerListAction,
-        setDefaultImageVideoNewAction
+        liveScoreSingleGameListAction,
+        liveScoreSingleGameRedeemPayAction
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreNewsState: state.LiveScoreNewsState,
-        liveScoreScorerState: state.LiveScoreScorerState,
-        liveScoreMangerState: state.LiveScoreMangerState,
-        liveScoreState: state.LiveScoreState
+        liveScoreDashboardState: state.LiveScoreDashboardState,
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreAddNews);
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreSingleGameFee);

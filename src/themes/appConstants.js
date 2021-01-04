@@ -1691,7 +1691,12 @@ const AppConstants = {
   declined: 'Declined',
   enterAddressManually: "Enter Address Manually",
   addressSearch: 'Address Search',
-  returnAddressSearch: 'Return to Address Search'
+  returnAddressSearch: 'Return to Address Search',
+  singleGameFees: "Single Game Fees",
+  gamesPaid: "Games Paid",
+  gamesRedeemed: "Games Redeemed",
+  gamesToRedeem: "Games to redeem",
+  howManyGames: "How many games?"
 };
 
 export default AppConstants;

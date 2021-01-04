@@ -819,7 +819,7 @@ class LiveScoreDashboard extends Component {
     playersToPayHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3 d-flex align-items-center">
+               <div className="col-sm d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.playersToPay}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -827,6 +827,21 @@ class LiveScoreDashboard extends Component {
                         </Tooltip>
                     </div>
                 </div>
+                {this.state.liveScoreCompIsParent &&
+                    <div className="col-sm text-right">
+                        <NavLink
+                            to={{
+                                pathname: '/matchDaySingleGameFee',
+                                state: { key: 'dashboard', item: null }
+                            }}
+                            className="text-decoration-none"
+                        >
+                            <Button className="primary-add-comp-form" type="primary">
+                                {AppConstants.singleGameFees}
+                            </Button>
+                        </NavLink>
+                    </div>
+                }
             </div>
         )
     }
