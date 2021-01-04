@@ -23,17 +23,33 @@ const initialState = {
 
 ////modify the setting data for the screen
 function modifySettingData(data) {
+
     let checkIsArray = Array.isArray(data.address)
     let singleAddress = checkIsArray ? isArrayNotEmpty(data.address) ? data.address[0] : data.address : data.address
-    let newObject = {
-        address: singleAddress ? singleAddress.address : "",
-        id: singleAddress ? singleAddress.id : 0,
-        postcode: singleAddress ? singleAddress.postcode : "",
-        state: singleAddress ? singleAddress.state : "",
-        suburb: singleAddress ? singleAddress.suburb : "",
-        organisationUniqueKey: singleAddress ? singleAddress.organisationUniqueKey : 0,
-        types: isArrayNotEmpty(data.types) ? data.types : [],
-        pickupInstruction: singleAddress ? singleAddress.pickupInstruction : ""
+    let isArray = Array.isArray(singleAddress)
+    let newObject
+    if (isArray) {
+        newObject = {
+            address: isArrayNotEmpty(singleAddress) ? singleAddress.address : "",
+            id: isArrayNotEmpty(singleAddress) ? singleAddress.id : 0,
+            postcode: isArrayNotEmpty(singleAddress) ? singleAddress.postcode : "",
+            state: isArrayNotEmpty(singleAddress) ? singleAddress.state : "",
+            suburb: isArrayNotEmpty(singleAddress) ? singleAddress.suburb : "",
+            organisationUniqueKey: isArrayNotEmpty(singleAddress) ? singleAddress.organisationUniqueKey : 0,
+            types: isArrayNotEmpty(data.types) ? data.types : [],
+            pickupInstruction: isArrayNotEmpty(singleAddress) ? singleAddress.pickupInstruction : ""
+        }
+    } else {
+        newObject = {
+            address: singleAddress ? singleAddress.address : "",
+            id: singleAddress ? singleAddress.id : 0,
+            postcode: singleAddress ? singleAddress.postcode : "",
+            state: singleAddress ? singleAddress.state : "",
+            suburb: singleAddress ? singleAddress.suburb : "",
+            organisationUniqueKey: singleAddress ? singleAddress.organisationUniqueKey : 0,
+            types: isArrayNotEmpty(data.types) ? data.types : [],
+            pickupInstruction: singleAddress ? singleAddress.pickupInstruction : ""
+        }
     }
     return newObject
 }
