@@ -99,6 +99,7 @@ const routeAdminRole = [
     "/matchDayAddIncident",
     "/matchDayLadderSettings",
     "/matchDayDivisionImport",
+    "/matchDaySingleGameFee",
     "/userMedical",
     "/matchDayAssignMatch",
     "/matchDayVenueChange",

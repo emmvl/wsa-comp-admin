@@ -553,6 +553,14 @@ let AxiosApi = {
         var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
         return Method.dataPost(url, token, payload);
     },
+    getSingleGameList(payload){
+        var url = `/api/singlegame/list`
+        return Method.dataPost(url, token, payload);
+    },
+    singleGameRedeemPay(payload){
+        var url = `/api/singlegame/redeempay`
+        return Method.dataPost(url, token, payload);
+    },
 };
 
 const Method = {

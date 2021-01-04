@@ -2,6 +2,7 @@ import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
 import { message } from "antd";
 
 function* failSaga(result) {
@@ -36,6 +37,42 @@ export function* liveScoreDashboardSaga(action) {
 
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_DASHBOARD_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* liveScoreSingleGameListSaga(action) {
+    try {
+        const result = yield call(RegistrationAxiosApi.getSingleGameList, action.payload);
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_SINGLE_GAME_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* liveScoreSingleGameRedeemPaySaga(action) {
+    try {
+        const result = yield call(RegistrationAxiosApi.singleGameRedeemPay, action.payload);
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_SINGLE_GAME_REDEEM_PAY_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

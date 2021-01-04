@@ -154,6 +154,7 @@ import LiveScoreTeamView from 'components/liveScore/liveScoreTeamView';
 import LiveScoreUmpireImport from 'components/liveScore/liveScoreUmpireImport';
 import LiveScoreUmpireList from 'components/liveScore/liveScoreUmpireList';
 import LiveScoreVenueChange from 'components/liveScore/liveScoreVenueChange';
+import LiveScoreSingleGameFee from 'components/liveScore/liveScoreSingleGameFee';
 import OrgBecsSetup from  'components/registration/orgBecsSetup';
 import Stripe from 'components/stripe/stripe';
 
@@ -967,6 +968,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/deregistration"
                     component={this.haveAccess(userRoleId, '/multifieldDraws') ? lazyLoad(deRegistration) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/matchDaySingleGameFee"
+                    component={this.haveAccess(userRoleId, '/matchDaySingleGameFee') ? lazyLoad(LiveScoreSingleGameFee) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute path="/communication" component={lazyLoad(CommunicationBanner)} />
