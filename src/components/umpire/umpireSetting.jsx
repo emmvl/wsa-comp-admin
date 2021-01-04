@@ -54,6 +54,10 @@ class UmpireSetting extends Component {
             competitionUniqueKey: null,
             deleteModalVisible: false,
             allocationSettingsData: null,
+            allDivisionVisible: false,
+            sectionDataSelected: null,
+            sectionDataIndexSelectedAll: null,
+            selectedDivisions: null,
 
             isAllDivisionChecked: false,
 
@@ -105,10 +109,20 @@ class UmpireSetting extends Component {
         if (this.props.umpireSettingState !== prevProps.umpireSettingState && !!this.props.umpireSettingState.allocationSettingsData) {
             const { umpireAllocationSettings, noUmpiresUmpireAllocationSetting } = this.props.umpireSettingState.allocationSettingsData;
 
-            this.setState({ allocationSettingsData: {
+            const allocationSettingsData = {
                 umpireAllocationSettings,
                 noUmpiresUmpireAllocationSetting: [noUmpiresUmpireAllocationSetting]
-            } });
+            }
+    
+            const selectedDivisions = [];
+    
+            selectedDivisions.push(...noUmpiresUmpireAllocationSetting.divisions);
+    
+            umpireAllocationSettings.forEach(item => {
+                selectedDivisions.push(...item.divisions);
+            });
+
+            this.setState({ allocationSettingsData, selectedDivisions });
         }
 
         // if (this.state.allocationSettingsData !== prevProps.allocationSettingsData) {
@@ -117,38 +131,127 @@ class UmpireSetting extends Component {
         // }
     }
 
-    deleteModal = (index) => {
-        this.setState({ deleteModalVisible: true, ladderIndex: index });
-    }
+    handleChangeWhoAssignsUmpires = (e, umpireAllocatorTypeRefId) => {
+        const { allocationSettingsData } = this.state;
+        
+        if (umpireAllocatorTypeRefId) {
+            const filteredAllocationSettingsData = allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId)
+            const initialBoxData = JSON.parse(JSON.stringify(initialUmpireAllocationGetData));
+            initialBoxData.umpireAllocatorTypeRefId = umpireAllocatorTypeRefId;
 
-    handleDeleteModal = (key) => {
-        if (key === "ok") {
-            // this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
+            if (e.target.checked) {
+                this.setState({ allocationSettingsData: {
+                    ...allocationSettingsData,
+                    umpireAllocationSettings: [ ...filteredAllocationSettingsData, initialBoxData]
+                }})
+            } else {
+                this.setState({ allocationSettingsData: {
+                    ...allocationSettingsData,
+                    umpireAllocationSettings: [ ...filteredAllocationSettingsData]
+                }})
+            }  
+        } else {
+            this.setState({ allocationSettingsData: {
+                ...allocationSettingsData,
+                noUmpiresUmpireAllocationSetting: e.target.checked ? [initialNoUmpireAllocationGetData] : []
+            }})
         }
-        this.setState({ deleteModalVisible: false, ladderIndex: null });
     }
 
-    // handleAllDivisionModal = (key) => {
-    //     if (key === "ok") {
-    //         this.props.updateLadderSetting(true, this.state.ladderIndex, "isAllDivision");
-    //     }
-    //     this.setState({ allDivisionVisible: false, ladderIndex: null });
-    // }
+    handleChangeSettingsState = (sectionDataIndex, key, value, sectionData) => {
+        const { allocationSettingsData, selectedDivisions } = this.state;
+        const allocationSettingsDataCopy = { ...allocationSettingsData };
 
+        const targetBoxData = allocationSettingsDataCopy.umpireAllocationSettings
+            .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId);
 
-    divisionSelect = (divisions, selectedDivisionsKey) => {
-        const { divisionList } = this.props.liveScoreTeamState;
-        const { selectedDivisionList } = this.state;
+        const otherBoxData = allocationSettingsDataCopy.umpireAllocationSettings
+            .filter(item => item.umpireAllocatorTypeRefId !== sectionData[0].umpireAllocatorTypeRefId);
 
-        const filteredDivisionList = divisionList.filter(divisionItem => 
-            divisions.some(division => division === divisionItem.id) ||
-            selectedDivisionList.some(division => division.id === divisionItem.id)
-        );
+        targetBoxData[sectionDataIndex][key] = value;
 
+        const newAllocationSettingsData = { 
+            umpireAllocationSettings: [...otherBoxData, ...targetBoxData ], 
+            noUmpiresUmpireAllocationSetting: allocationSettingsData.noUmpiresUmpireAllocationSetting,
+        };
+
+        if (key === 'allDivisions' && !!value) {
+            this.setState({ 
+                allDivisionVisible: true, 
+                sectionDataSelected: sectionData, 
+                sectionDataIndexSelectedAll: sectionDataIndex 
+            });
+        } else {
+            const newSelectedDivisions = [];
+
+            if (key === 'divisions') {
+                selectedDivisions.push(...allocationSettingsData.noUmpiresUmpireAllocationSetting[0].divisions);
+        
+                newAllocationSettingsData.umpireAllocationSettings.forEach(item => {
+                    selectedDivisions.push(...item.divisions);
+                });
+            }
+
+            const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : selectedDivisions;
+
+            console.log('updatedSelectedDivisions', updatedSelectedDivisions);
+
+            this.setState({ allocationSettingsData: newAllocationSettingsData, selectedDivisions: updatedSelectedDivisions });
+        }
+
+        
+    }
+
+    handleClickDeleteModal = (sectionDataIndex, sectionDataSelected) => {
         this.setState({ 
-            selectedDivisionList: filteredDivisionList,
-            [selectedDivisionsKey]: divisions,
-         });
+            deleteModalVisible: true, 
+            sectionDataSelected,
+            sectionDataIndexSelectedAll: sectionDataIndex 
+        });
+    }
+
+    handleDeleteModal = key => {
+
+        if (key === "ok") {
+            const { allocationSettingsData, sectionDataSelected, sectionDataIndexSelectedAll } = this.state;
+            const allocationSettingsDataCopy = { ...allocationSettingsData };
+            const sectionDataSelectedCopy = [ ...sectionDataSelected ];
+
+
+            const { umpireAllocatorTypeRefId } = sectionDataSelected[0];
+
+            const otherUmpireData = allocationSettingsDataCopy.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId);
+            sectionDataSelectedCopy.splice(sectionDataIndexSelectedAll, 1);
+
+            const newAllocationSettingsData = { 
+                umpireAllocationSettings: [...otherUmpireData, ...sectionDataSelectedCopy ], 
+                noUmpiresUmpireAllocationSetting: allocationSettingsData.noUmpiresUmpireAllocationSetting,
+            };
+
+            this.setState({ allocationSettingsData: newAllocationSettingsData });
+        }
+
+        this.setState({ deleteModalVisible: false, sectionDataSelected: null, sectionDataIndexSelectedAll: null });
+    }
+
+    handleAllDivisionModal = key => {
+
+        if (key === "ok") {
+            const { sectionDataSelected, sectionDataIndexSelectedAll } = this.state;
+
+            const targetData = !!sectionDataSelected ? 
+                sectionDataSelected
+                : null;
+
+            targetData[sectionDataIndexSelectedAll].allDivisions = true;
+            const newAllocationSettingsData = !!sectionDataSelected ? 
+                { umpireAllocationSettings: [targetData[sectionDataIndexSelectedAll]], noUmpiresUmpireAllocationSetting: [] }
+                : { umpireAllocationSettings: [], noUmpiresUmpireAllocationSetting: [initialNoUmpireAllocationGetData] };
+
+            this.setState({ allocationSettingsData: newAllocationSettingsData });
+        }
+
+        this.setState({ allDivisionVisible: false, sectionDataSelected: null, sectionDataIndexSelectedAll: null });
     }
 
     headerView = () => {
@@ -202,16 +305,16 @@ class UmpireSetting extends Component {
         );
     };
 
-    boxSettingsView = boxData => {
+    boxSettingsView = (boxData, sectionDataIndex, sectionData) => {
         return (
             <div className="pt-0 mt-4">
-                {this.boxSettingsRadioView(boxData)}
+                {this.boxSettingsRadioView(boxData, sectionDataIndex, sectionData)}
 
                 <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={boxData.activateReserves}
-                    // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "reserveChecked" })}
+                    onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
@@ -220,7 +323,7 @@ class UmpireSetting extends Component {
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={boxData.activateCoaches}
-                    // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "coachChecked" })}
+                    onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
@@ -228,32 +331,32 @@ class UmpireSetting extends Component {
         );
     };
 
-    boxSettingsRadioView = boxData => {
+    boxSettingsRadioView = (boxData, sectionDataIndex, sectionData) => {
         return (
             <div>
                 <span className='text-heading-large pt-4 pb-2'>{AppConstants.howUmpiresAllocated}</span>
                 <div className="d-flex flex-column">
                     <Radio
-                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "manuallyAllocate" })}
+                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 242, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 242}
                     >
                         {AppConstants.manuallyAllocate}
                     </Radio>
 
                     <Radio
-                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 243, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 243}
                     >
                         {AppConstants.allocateViaPools}
                     </Radio>
                     <Radio
-                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 244, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 244}
                     >
                         {AppConstants.umpireYourOwnTeam}
                     </Radio>
                     <Radio
-                        // onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 245, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 245}
                     >
                         {AppConstants.umpireYourOwnOrganisation}
@@ -284,12 +387,12 @@ class UmpireSetting extends Component {
             <div>
                 <Modal
                     className="add-membership-type-modal add-membership-type-modalLadder"
-                    title={AppConstants.ladderFormat}
+                    title={AppConstants.divisionSettings}
                     visible={this.state.allDivisionVisible}
-                    // onOk={() => this.handleAllDivisionModal("ok")}
-                    // onCancel={() => this.handleAllDivisionModal("cancel")}
+                    onOk={() => this.handleAllDivisionModal("ok")}
+                    onCancel={() => this.handleAllDivisionModal("cancel")}
                 >
-                    <p>{AppConstants.ladderAllDivisionRmvMsg}</p>
+                    <p>{AppConstants.divisionAllDivisionMsg}</p>
                 </Modal>
             </div>
         );
@@ -297,8 +400,6 @@ class UmpireSetting extends Component {
 
     ////////top or say first view
     topView = () => {
-        const { compOrganiser, affiliateOrg, noUmpire } = this.props.umpireSettingState;
-
         return (
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
@@ -316,42 +417,18 @@ class UmpireSetting extends Component {
 
     umpireSettingsSectionView = (sectionTitle, umpireAllocatorTypeRefId) => {
         const { divisionList } = this.props.liveScoreTeamState;
-        const { allocationSettingsData } = this.state;
-        // console.log('allocationSettingsData', allocationSettingsData);
+        const { allocationSettingsData, selectedDivisions } = this.state;
 
         const sectionData = allocationSettingsData && umpireAllocatorTypeRefId ?
             allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId === umpireAllocatorTypeRefId)
             : allocationSettingsData ? allocationSettingsData.noUmpiresUmpireAllocationSetting : null;
 
-        // console.log('sectionData', sectionData)
+        // console.log('umpireAllocatorTypeRefId innside umpireSettingsSectionView', umpireAllocatorTypeRefId)
 
         return (
             <>
                 <Checkbox
-                    onChange={(e) => {
-                        if (umpireAllocatorTypeRefId) {
-                            const filteredAllocationSettingsData = allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId)
-                            const initialBoxData = JSON.parse(JSON.stringify(initialUmpireAllocationGetData));
-                            initialBoxData.umpireAllocatorTypeRefId = umpireAllocatorTypeRefId;
-
-                            if (e.target.checked) {
-                                this.setState({ allocationSettingsData: {
-                                    ...allocationSettingsData,
-                                    umpireAllocationSettings: [ ...filteredAllocationSettingsData, initialBoxData]
-                                }})
-                            } else {
-                                this.setState({ allocationSettingsData: {
-                                    ...allocationSettingsData,
-                                    umpireAllocationSettings: [ ...filteredAllocationSettingsData]
-                                }})
-                            }  
-                        } else {
-                            this.setState({ allocationSettingsData: {
-                                ...allocationSettingsData,
-                                noUmpiresUmpireAllocationSetting: e.target.checked ? [initialNoUmpireAllocationGetData] : []
-                            }})
-                        }
-                    }}
+                    onChange={(e) => this.handleChangeWhoAssignsUmpires(e, umpireAllocatorTypeRefId)}
                     checked={!!sectionData?.length}
                     className="mx-0 mb-2"
                 >
@@ -359,13 +436,13 @@ class UmpireSetting extends Component {
                 </Checkbox>
                 {sectionData && !!sectionData.length && (
                     <>
-                        {sectionData.map((boxData, index) => (
+                        {sectionData.map((boxData, sectionDataIndex) => (
                         <div className="inside-container-view mb-4 mt-4">
                             {sectionData.length > 1 && (
                                 <div className="d-flex float-right">
                                     <div
                                         className="transfer-image-view pt-0 pointer ml-auto"
-                                            onClick={() => this.deleteModal(index)}
+                                            onClick={() => this.handleClickDeleteModal(sectionDataIndex, sectionData)}
                                     >
                                         <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                                         <span className="user-remove-text">{AppConstants.remove}</span>
@@ -373,13 +450,7 @@ class UmpireSetting extends Component {
                                 </div>
                             )}
                             <Checkbox
-                                // onChange={(e) => {
-                                //     this.setState({ 
-                                //         [selectedAllKey]: e.target.checked,
-                                //         selectedDivisionList: e.target.checked ? [ ...divisionList ] : [],
-                                //         [selectedDivisionsKey]: e.target.checked ? divisionList.map(division => division.id) : [],
-                                //     })
-                                // }}
+                                onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
                                 checked={boxData.allDivisions}
                             >
                                 {AppConstants.allDivisions}
@@ -389,20 +460,23 @@ class UmpireSetting extends Component {
                                 mode="multiple"
                                 placeholder="Select"
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                                // onChange={divisions => this.divisionSelect(divisions, selectedDivisionsKey)}
-                                value={(boxData.divisions || []).map(division => division.id)}
+                                onChange={divisions => this.handleChangeSettingsState(sectionDataIndex, 'divisions', divisions, sectionData)}
+                                value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
                             >
                                 {(divisionList || []).map((item) => (
                                     <Option
                                         key={'compOrgDivision_' + item.id}
-                                        disabled={item.disabled}
+                                        disabled={
+                                            (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id 
+                                            && !boxData.divisions.find(division => division.id === item.id)))
+                                        }
                                         value={item.id}
                                     >
                                         {item.name}
                                     </Option>
                                 ))}
                             </Select>
-                            {umpireAllocatorTypeRefId && this.boxSettingsView(boxData)}
+                            {umpireAllocatorTypeRefId && this.boxSettingsView(boxData, sectionDataIndex, sectionData)}
                         </div>
                         ))}
                         {/* {this.state.selectedDivisionList.length !==  this.props.liveScoreTeamState.divisionList.length && (
@@ -506,7 +580,6 @@ function mapStateToProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpireSettingState: state.UmpireSettingState,
         liveScoreTeamState: state.LiveScoreTeamState,
-        ladderSettingState: state.LadderSettingState
     }
 }
 

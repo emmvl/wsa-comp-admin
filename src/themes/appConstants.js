@@ -1701,6 +1701,7 @@ const AppConstants = {
 
   divisionSettings: 'Division settings',
   divisionRemoveMsg: 'Are you sure you want to remove division settings?',
+  divisionAllDivisionMsg: "Would you like to set these settings for 'All Divisions'?",
   manuallyAllocate: 'Manually Allocate',
   allocateViaPools: 'Allocate Via Pools',
   umpireYourOwnTeam: 'Umpire Your Own - Team',
