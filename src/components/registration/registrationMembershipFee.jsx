@@ -1529,11 +1529,14 @@ class RegistrationMembershipFee extends Component {
                                     type="primary"
                                     htmlType="submit"
                                     onClick={() => this.setState({
-                                        statusRefId: tabKey === "3" ? 2 : 1,
-                                        buttonPressed: tabKey === "3" ? "publish" : "next"
+                                        // statusRefId: tabKey === "3" ? 2 : 1,
+                                        // buttonPressed: tabKey === "3" ? "publish" : "next"
+                                        statusRefId: tabKey === "2" ? 2 : 1,
+                                        buttonPressed: tabKey === "2" ? "publish" : "next"
                                     })}
                                 >
-                                    {tabKey === "3" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next}
+                                    {/* {tabKey === "3" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next} */}
+                                    {tabKey === "2" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next}
                                 </Button>
                             </div>
                         </div>
@@ -1623,9 +1626,9 @@ class RegistrationMembershipFee extends Component {
                                     <TabPane tab={AppConstants.fees} key="2">
                                         <div>{this.feesView()}</div>
                                     </TabPane>
-                                    <TabPane tab={AppConstants.discount} key="3">
+                                    {/* <TabPane tab={AppConstants.discount} key="3">
                                         <div className="tab-formView">{this.discountView()}</div>
-                                    </TabPane>
+                                    </TabPane> */}
                                 </Tabs>
                             </div>
                             <Loader visible={this.props.registrationState.onLoad} />

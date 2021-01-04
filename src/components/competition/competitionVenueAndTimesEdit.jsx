@@ -561,7 +561,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     </Select>
                 </Form.Item>
 
-                <Form.Item  name="postcode">
+                <Form.Item name="postcode">
                     <InputWithHead
                         auto_complete="new-postcode"
                         required="required-field"
@@ -821,7 +821,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         <span className="required-field" style={{ fontSize: 14, paddingTop: 5 }} />
                     </span>
                     {/* {!this.state.isUsed && ( */}
-                    <Button className="primary-add-comp-form ml-auto" type="primary">
+                    {/* <Button className="primary-add-comp-form ml-auto" type="primary">
                         <div className="row">
                             <div className="col-sm">
                                 <label htmlFor="venueCourtUpload" className="csv-reader">
@@ -836,7 +836,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 />
                             </div>
                         </div>
-                    </Button>
+                    </Button> */}
                     {/* )} */}
                 </div>
 

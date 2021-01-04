@@ -11,8 +11,9 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AppImages from "../../themes/appImages";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { checkLivScoreCompIsParent } from "util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -44,7 +45,9 @@ class UmpirePoolAllocation extends Component {
             ],
             unassignedData: [
                 { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
-            ]
+            ],
+            compOrgId : 0,
+            compIsParent : false
         }
         this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -55,6 +58,16 @@ class UmpirePoolAllocation extends Component {
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
 
+        let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+        this.setState({
+            compOrgId: competitionOrganisation.id
+        })
+
+        checkLivScoreCompIsParent().then((value) => {
+            this.setState({
+                compIsParent: value
+            })
+        })
     }
 
     componentDidUpdate(nextProps) {
@@ -257,11 +270,11 @@ class UmpirePoolAllocation extends Component {
                             >
                                 <div className="player-grading-droppable-heading-view">
                                     <div className="row">
-                                        <Checkbox
+                                        {/* <Checkbox
                                             className="single-checkbox mt-1 check-box-player"
                                             checked={this.state.assignedcheckbox}
                                             onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
-                                        />
+                                        /> */}
                                         <div className="col-sm d-flex align-items-center">
                                             <span className="player-grading-haeding-team-name-text">{teamItem.teamName}</span>
                                             <span className="player-grading-haeding-player-count-text ml-2">
@@ -298,15 +311,15 @@ class UmpirePoolAllocation extends Component {
                                                     className="player-grading-draggable-view"
                                                 >
                                                     <div className="row">
-                                                        <Checkbox
+                                                        {/* <Checkbox
                                                             checked={this.state.assignedcheckbox}
                                                             className="single-checkbox mt-0 check-box-player"
                                                             onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
                                                         >
-                                                        </Checkbox>
+                                                        </Checkbox> */}
                                                         <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {playerItem.rank}{" "}{playerItem.playerName}
+                                                                {playerItem.rank}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{playerItem.playerName}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
@@ -321,7 +334,7 @@ class UmpirePoolAllocation extends Component {
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {playerItem.matches}
+                                                                {playerItem.matches} {AppConstants.games}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -372,12 +385,12 @@ class UmpirePoolAllocation extends Component {
                         <div ref={provided.innerRef} className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">
                                 <div className="row">
-                                    <Checkbox
+                                    {/* <Checkbox
                                         className="single-checkbox mt-1 check-box-player"
                                         checked={this.state.unassignedcheckbox}
                                         onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
                                     >
-                                    </Checkbox>
+                                    </Checkbox> */}
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-2">
@@ -385,7 +398,7 @@ class UmpirePoolAllocation extends Component {
                                         </span>
                                     </div>
                                     <div className="col-sm d-flex justify-content-end">
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button className="primary-add-comp-form" type="primary" disabled={this.state.compIsParent}>
                                             + {AppConstants.umpirePools}
                                         </Button>
                                     </div>
@@ -405,15 +418,15 @@ class UmpirePoolAllocation extends Component {
                                             className="player-grading-draggable-view"
                                         >
                                             <div className="row">
-                                                <Checkbox
+                                                {/* <Checkbox
                                                     checked={this.state.unassignedcheckbox}
                                                     onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
                                                     className="single-checkbox mt-0 check-box-player"
                                                 >
-                                                </Checkbox>
+                                                </Checkbox> */}
                                                 <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.rank}{" "}{playerItem.playerName}
+                                                        {playerItem.rank}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{playerItem.playerName}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
@@ -428,7 +441,7 @@ class UmpirePoolAllocation extends Component {
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.matches}
+                                                        {playerItem.matches} {AppConstants.games}
                                                     </span>
                                                 </div>
                                             </div>
