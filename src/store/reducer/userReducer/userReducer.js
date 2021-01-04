@@ -938,18 +938,18 @@ function userReducer(state = initialState, action) {
       state.affiliateTo = []
       return { ...state };
 
-    // case ApiConstants.Api_RESET_TFA_LOAD:
-    //   return {
-    //     ...state,
-    //     onMedicalLoad: true,
-    //     status: null
-    //   }
+    case ApiConstants.Api_RESET_TFA_LOAD:
+      return {
+        ...state,
+        onMedicalLoad: true,
+        status: null
+      }
 
-    // case ApiConstants.Api_RESET_TFA_SUCCESS:
-    //   return {
-    //     ...state,
-    //     onMedicalLoad: false
-    //   }
+    case ApiConstants.Api_RESET_TFA_SUCCESS:
+      return {
+        ...state,
+        onMedicalLoad: false
+      }
 
     case ApiConstants.ADD_USERS_TO_BE_MERGED:
       state.usersToBeMerged = action.payload
