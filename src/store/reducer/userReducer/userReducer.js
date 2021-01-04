@@ -70,7 +70,7 @@ const initialState = {
   personalEmergency: [],
   medicalData: [],
   personalByCompData: [],
-  userRegistrationList: [],
+  userRegistrationList: null,
   userRegistrationPage: 1,
   userRegistrationTotalCount: 1,
   userRegistrationOnLoad: false,
@@ -157,7 +157,9 @@ const initialState = {
   spectatorListAction: null,
   impersonationList: [],
   onImpersonationLoad: false,
-  usersToBeMerged: []
+  usersToBeMerged: [],
+  teamMembersDetails: null,
+  getTeamMembersOnLoad: false 
 };
 
 function userReducer(state = initialState, action) {
@@ -480,9 +482,21 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         userRegistrationOnLoad: false,
-        userRegistrationList: userRegistrationData.registrationDetails,
-        userRegistrationDataPage: userRegistrationData.page ? userRegistrationData.page.currentPage : 1,
-        userRegistrationDataTotalCount: userRegistrationData.page.totalCount,
+        userRegistrationList: userRegistrationData,
+        // userRegistrationDataPage: userRegistrationData.page ? userRegistrationData.page.currentPage : 1,
+        // userRegistrationDataTotalCount: userRegistrationData.page.totalCount,
+        status: action.status
+      };
+
+    case ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD:
+      return { ...state, getTeamMembersOnLoad: true };
+
+    case ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_SUCCESS:
+      let teamMembersDetailsData = action.result;
+      return {
+        ...state,
+        getTeamMembersOnLoad: false,
+        teamMembersDetails: teamMembersDetailsData,
         status: action.status
       };
 

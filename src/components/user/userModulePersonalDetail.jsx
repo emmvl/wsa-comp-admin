@@ -27,6 +27,7 @@ import {
     getUserModulePersonalDetailsAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleRegistrationAction,
+    getUserModuleTeamMembersAction,
     getUserModuleTeamRegistrationAction,
     getUserModuleOtherRegistrationAction,
     getUserModuleMedicalInfoAction,
@@ -275,6 +276,127 @@ const cloumnsRegistration = [
     }
 
 ];
+
+const teamRegistrationColumns = [
+    {
+        title: "Team Name",
+        dataIndex: "teamName",
+        key: "teamName",
+        render: (teamName, record) => (
+            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.showTeamMembers(record,1)}>{teamName}</span>
+        )
+    },
+
+    {
+        title: "Organisation",
+        dataIndex: "organisationName",
+        key: "organisationName",
+    },
+
+    {
+        title: "Division",
+        key: "divisionName",
+        dataIndex: "divisionName",
+    },
+
+    {
+        title: "Product",
+        key: "productName",
+        dataIndex: "productName",
+    },
+
+    {
+        title: "Registered By",
+        dataIndex: "registeredBy",
+        key: "registeredBy",
+        render: (registeredBy, record) => (
+            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0">{registeredBy}</span>
+            </NavLink>
+        ),
+    },
+
+    {
+        title: "Registration Date",
+        key: "registrationDate",
+        dataIndex: "registrationDate",
+        render: (registrationDate) => (
+            <div>{registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}</div>
+        ),
+    },
+
+    {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+    },
+
+    {
+        title: "Action",
+        key: "action",
+    },
+]
+
+const childOtherRegistrationColumns = [
+    {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+    },
+
+    {
+        title: "DOB",
+        dataIndex: "dateOfBirth",
+        key: "dateOfBirth",
+        render: (dateOfBirth) => (
+            <div>{dateOfBirth != null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}</div>
+        ),
+    },
+
+    {
+        title: "Email",
+        key: "email",
+        dataIndex: "email",
+    },
+
+    {
+        title: "Phone",
+        key: "mobileNumber",
+        dataIndex: "mobileNumber",
+    },
+    {
+        title: "Fee Paid",
+        key: "feePaid",
+        dataIndex: "feePaid",
+    },
+]
+
+const teamMembersColumns = [
+    {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: "Status",
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: "Paid Fee",
+        dataIndex: "paidFee",
+        key: "paidFee",
+    },
+    {
+        title: "Pending Fee",
+        dataIndex: "pendingFee",
+        key: "pendingFee",
+    },
+    {
+        title: "Action",
+        key: "action",
+    },
+]
 
 const columnsPlayer = [
     {
@@ -1309,7 +1431,13 @@ class UserModulePersonalDetail extends Component {
             showChildUnlinkConfirmPopup: false,
             showParentUnlinkConfirmPopup: false,
             showCannotUnlinkPopup: false,
-            isAdmin: false
+            isAdmin: false,
+            myRegCurrentPage: 1,
+            otherRegCurrentPage: 1,
+            childRegCurrentPage: 1,
+            teamRegCurrentPage: 1,
+            isShowRegistrationTeamMembers: false,
+            registrationTeam: null
         };
     }
 
@@ -1633,8 +1761,8 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleMedicalInfoAction(payload);
         } else if (tabKey === "5") {
             this.handleRegistrationTableList(1, userId, competition, yearRefId);
-            this.handleTeamRegistrationTableList(1, userId, competition, yearRefId);
-            this.handleOtherRegistrationTableList(1, userId, competition, yearRefId);
+            // this.handleTeamRegistrationTableList(1, userId, competition, yearRefId);
+            // this.handleOtherRegistrationTableList(1, userId, competition, yearRefId);
         } else if (tabKey === "6") {
             this.handleHistoryTableList(1, userId);
         } else if (tabKey === "7") {
@@ -1694,19 +1822,60 @@ class UserModulePersonalDetail extends Component {
         if (key === "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
     };
 
-    handleRegistrationTableList = (page, userId, competition, yearRefId) => {
-        let filter = {
-            competitionId: competition.competitionUniqueKey,
-            userId: userId,
-            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId,
-            paging: {
-                limit: 10,
-                offset: page ? 10 * (page - 1) : 0,
-            },
-        };
-        this.props.getUserModuleRegistrationAction(filter);
+    handleRegistrationTableList = (page, userId, competition, yearRefId , key) => {
+        if(key == 'myRegistrations'){
+            this.setState({myRegCurrentPage: page})
+        }else if(key == 'otherRegistrations'){
+            this.setState({otherRegCurrentPage: page})
+        }else if(key == 'teamRegistrations'){
+            this.setState({teamRegCurrentPage: page})
+        }else if(key == 'childRegistrations'){
+            this.setState({childRegCurrentPage: page})
+        }
+        setTimeout(() => {
+            let filter = {
+                competitionId: competition.competitionUniqueKey,
+                userId: userId,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                yearRefId,
+                myRegPaging:{
+                    limit: 10,
+                    offset: this.state.myRegCurrentPage ? 10 * (this.state.myRegCurrentPage - 1) : 0,
+                },
+                otherRegPaging:{
+                    limit: 10,
+                    offset: this.state.otherRegCurrentPage ? 10 * (this.state.otherRegCurrentPage - 1) : 0,
+                },
+                teamRegPaging:{
+                    limit: 10,
+                    offset: this.state.teamRegCurrentPage ? 10 * (this.state.teamRegCurrentPage - 1) : 0,
+                },
+                childRegPaging:{
+                    limit: 10,
+                    offset: this.state.childRegCurrentPage ? 10 * (this.state.childRegCurrentPage - 1) : 0,
+                }
+            };
+            this.props.getUserModuleRegistrationAction(filter);
+        }, 300);
+        
     };
+
+    showTeamMembers = (record,page) => {
+        try{
+            this.setState({isShowRegistrationTeamMembers: true,registrationTeam: record})
+            let payload = {
+                userId: record.userId,
+                teamId: record.teamId,
+                teamMemberPaging: {
+                    limit:10,
+                    offset: page ? 10 * (page - 1) : 0,
+                }
+            }
+            this.props.getUserModuleTeamMembersAction(payload);
+        }catch(ex){
+            console.log("Error in showTeamMember::"+ex);
+        }
+    }
 
     handleTeamRegistrationTableList = (page, userId, competition, yearRefId) => {
         let filter = {
@@ -2434,117 +2603,204 @@ class UserModulePersonalDetail extends Component {
     registrationView = () => {
         let userState = this.props.userState;
         let userRegistrationList = userState.userRegistrationList;
-        let registrationTotal = userState.userRegistrationDataTotalCount;
-        let userTeamRegistrationList = userState.userTeamRegistrationList;
-        let teamRegistrationTotal = userState.userTeamRegistrationDataTotalCount;
-        let userOtherRegistrationList = userState.userOtherRegistrationList;
-        let OtherRegistrationTotal = userState.userOtherRegistrationDataTotalCount;
+        // let registrationTotal = userState.userRegistrationDataTotalCount;
+        // let userTeamRegistrationList = userState.userTeamRegistrationList;
+        // let teamRegistrationTotal = userState.userTeamRegistrationDataTotalCount;
+        // let userOtherRegistrationList = userState.userOtherRegistrationList;
+        // let OtherRegistrationTotal = userState.userOtherRegistrationDataTotalCount;
+        let myRegistrations = userRegistrationList?.myRegistrations.registrationDetails ? userRegistrationList?.myRegistrations.registrationDetails : [];
+        let myRegistrationsCurrentPage = userRegistrationList?.myRegistrations.page ? userRegistrationList?.myRegistrations.page.currentPage : 1; 
+        let myRegistrationsTotalCount = userRegistrationList?.myRegistrations.page.totalCount; 
+        let otherRegistrations = userRegistrationList?.otherRegistrations.registrationYourDetails ? userRegistrationList?.otherRegistrations.registrationYourDetails : [];
+        let otherRegistrationsCurrentPage = userRegistrationList?.otherRegistrations.page ? userRegistrationList?.otherRegistrations.page.currentPage : 1; 
+        let otherRegistrationsTotalCount = userRegistrationList?.otherRegistrations.page.totalCount; 
+        let teamRegistrations = userRegistrationList?.teamRegistrations.registrationTeamDetails ? userRegistrationList?.teamRegistrations.registrationTeamDetails : [];
+        let teamRegistrationsCurrentPage = userRegistrationList?.teamRegistrations.page ? userRegistrationList?.teamRegistrations.page.currentPage : 1; 
+        let teamRegistrationsTotalCount = userRegistrationList?.teamRegistrations.page.totalCount;
+        let childRegistrations = userRegistrationList?.childRegistrations.childRegistrationDetails ? userRegistrationList?.childRegistrations.childRegistrationDetails : [];
+        let childRegistrationsCurrentPage = userRegistrationList?.childRegistrations.page ? userRegistrationList?.childRegistrations.page.currentPage : 1; 
+        let childRegistrationsTotalCount = userRegistrationList?.childRegistrations.page.totalCount;  
+        let teamMembers = userState.teamMembersDetails ? userState.teamMembersDetails.teamMembers : [];
+        let teamMembersCurrentPage = userState.teamMembersDetails?.page ? userState.teamMembersDetails?.page.currentPage : 1; 
+        let teamMembersTotalCount = userState.teamMembersDetails?.page.totalCount;
         return (
-            <div className="comp-dash-table-view mt-2">
-                <div className="user-module-row-heading">
-                    {AppConstants.ownRegistration}
-                </div>
-                <div className="table-responsive home-dash-table-view">
-                    <Table
-                        className="home-dashboard-table"
-                        columns={columns}
-                        dataSource={userRegistrationList}
-                        pagination={false}
-                        loading={
-                            this.props.userState.userRegistrationOnLoad && true
-                        }
-                    />
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination pb-3"
-                        current={userState.userRegistrationDataPage}
-                        total={registrationTotal}
-                        onChange={(page) =>
-                            this.handleRegistrationTableList(
-                                page,
-                                this.state.userId,
-                                this.state.competition,
-                                this.state.yearRefId
-                            )
-                        }
-                        showSizeChanger={false}
-                    />
-                </div>
-                {isArrayNotEmpty(userTeamRegistrationList) ?
-                    <div>
+            <div>
+                {this.state.isShowRegistrationTeamMembers == false ? (
+                    <div className="comp-dash-table-view mt-2">
                         <div className="user-module-row-heading">
-                            {AppConstants.teamRegistration}
+                            {AppConstants.ownRegistration}
                         </div>
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
-                                columns={cloumnsRegistration}
-                                dataSource={userTeamRegistrationList}
+                                columns={columns}
+                                dataSource={myRegistrations}
                                 pagination={false}
                                 loading={
-                                    this.props.userState.userTeamRegistrationOnLoad && true
+                                    this.props.userState.userRegistrationOnLoad
                                 }
                             />
                         </div>
                         <div className="d-flex justify-content-end">
                             <Pagination
                                 className="antd-pagination pb-3"
-                                current={userState.userTeamRegistrationDataPage}
-                                total={teamRegistrationTotal}
+                                current={myRegistrationsCurrentPage}
+                                total={myRegistrationsTotalCount}
                                 onChange={(page) =>
-                                    this.handleTeamRegistrationTableList(
+                                    this.handleRegistrationTableList(
                                         page,
                                         this.state.userId,
                                         this.state.competition,
-                                        this.state.yearRefId
+                                        this.state.yearRefId,
+                                        "myRegistrations"
                                     )
                                 }
                                 showSizeChanger={false}
                             />
                         </div>
-                    </div>
-                    :
-                    null
-                }
-
-                {isArrayNotEmpty(userOtherRegistrationList) ?
-                    <div>
                         <div className="user-module-row-heading">
                             {AppConstants.otherRegistration}
                         </div>
                         <div className="table-responsive home-dash-table-view">
                             <Table
                                 className="home-dashboard-table"
-                                columns={cloumnsRegistration}
-                                dataSource={userOtherRegistrationList}
+                                columns={childOtherRegistrationColumns}
+                                dataSource={otherRegistrations}
                                 pagination={false}
                                 loading={
-                                    this.props.userState.userOtherRegistrationOnLoad && true
+                                    this.props.userState.userRegistrationOnLoad
                                 }
                             />
                         </div>
                         <div className="d-flex justify-content-end">
                             <Pagination
                                 className="antd-pagination pb-3"
-                                current={userState.userOtherRegistrationDataPage}
-                                total={OtherRegistrationTotal}
+                                current={otherRegistrationsCurrentPage}
+                                total={otherRegistrationsTotalCount}
                                 onChange={(page) =>
-                                    this.handleOtherRegistrationTableList(
+                                    this.handleRegistrationTableList(
                                         page,
                                         this.state.userId,
                                         this.state.competition,
-                                        this.state.yearRefId
+                                        this.state.yearRefId,
+                                        "otherRegistrations"
+                                    )
+                                }
+                                showSizeChanger={false}
+                            />
+                        </div>
+                        <div className="user-module-row-heading">
+                            {AppConstants.childRegistration}
+                        </div>
+                        <div className="table-responsive home-dash-table-view">
+                            <Table
+                                className="home-dashboard-table"
+                                columns={childOtherRegistrationColumns}
+                                dataSource={childRegistrations}
+                                pagination={false}
+                                loading={
+                                    this.props.userState.userRegistrationOnLoad
+                                }
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination pb-3"
+                                current={childRegistrationsCurrentPage}
+                                total={childRegistrationsTotalCount}
+                                onChange={(page) =>
+                                    this.handleRegistrationTableList(
+                                        page,
+                                        this.state.userId,
+                                        this.state.competition,
+                                        this.state.yearRefId,
+                                        "childRegistrations"
+                                    )
+                                }
+                                showSizeChanger={false}
+                            />
+                        </div>
+                        <div className="user-module-row-heading">
+                            {AppConstants.teamRegistration}
+                        </div>
+                        <div className="table-responsive home-dash-table-view">
+                            <Table
+                                className="home-dashboard-table"
+                                columns={teamRegistrationColumns}
+                                dataSource={teamRegistrations}
+                                pagination={false}
+                                loading={
+                                    this.props.userState.userRegistrationOnLoad
+                                }
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination pb-3"
+                                current={teamRegistrationsCurrentPage}
+                                total={teamRegistrationsTotalCount}
+                                onChange={(page) =>
+                                    this.handleRegistrationTableList(
+                                        page,
+                                        this.state.userId,
+                                        this.state.competition,
+                                        this.state.yearRefId,
+                                        "teamRegistrations"
                                     )
                                 }
                                 showSizeChanger={false}
                             />
                         </div>
                     </div>
-                    :
-                    null
-                }
+                ) : (
+                   <div className="comp-dash-table-view mt-2">
+                       <div className="row">
+                            <div className="col-sm d-flex align-content-center">
+                                <Breadcrumb separator=" > ">
+                                    <Breadcrumb.Item className="breadcrumb-add font-18 pointer" onClick={() => this.setState({isShowRegistrationTeamMembers: false})}>
+                                        {AppConstants.Registrations}
+                                    </Breadcrumb.Item>
+                                    <Breadcrumb.Item className="breadcrumb-add font-18">
+                                        {AppConstants.teamMembers}
+                                    </Breadcrumb.Item>
+                                </Breadcrumb>
+                            </div>
+                            <div className="add-team-member-action-txt">
+                                + {AppConstants.addTeamMembers}
+                            </div>
+                        </div>
+                        <div className="user-module-row-heading font-18 mt-2">
+                            {AppConstants.team + ": " + this.state.registrationTeam.teamName}
+                        </div>
+                        <div className="table-responsive home-dash-table-view">
+                            <Table
+                                className="home-dashboard-table"
+                                columns={teamMembersColumns}
+                                dataSource={teamMembers}
+                                pagination={false}
+                                loading={
+                                    this.props.userState.getTeamMembersOnLoad
+                                }
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination pb-3"
+                                current={teamMembersCurrentPage}
+                                total={teamMembersTotalCount}
+                                onChange={(page) =>
+                                    this.showTeamMembers(
+                                        this.state.registrationTeam,
+                                        page
+                                    )
+                                }
+                                showSizeChanger={false}
+                            />
+                        </div>
+                   </div> 
+                )}
             </div>
+            
         );
     };
 
@@ -3171,6 +3427,7 @@ function mapDispatchToProps(dispatch) {
             getUserModulePersonalDetailsAction,
             getUserModuleMedicalInfoAction,
             getUserModuleRegistrationAction,
+            getUserModuleTeamMembersAction,
             getUserModuleTeamRegistrationAction,
             getUserModuleOtherRegistrationAction,
             getUserModulePersonalByCompetitionAction,

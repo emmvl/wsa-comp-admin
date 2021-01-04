@@ -1687,6 +1687,7 @@ const AppConstants = {
   playerRegistration: 'Player Registration',
   coachRegistration: 'Coach Registration',
   teamRegistration: 'Team Registration',
+  childRegistration : 'Child Registration',
   pending: 'Pending',
   declined: 'Declined',
   enterAddressManually: "Enter Address Manually",
@@ -1696,7 +1697,9 @@ const AppConstants = {
   gamesPaid: "Games Paid",
   gamesRedeemed: "Games Redeemed",
   gamesToRedeem: "Games to redeem",
-  howManyGames: "How many games?"
+  howManyGames: "How many games?",
+  teamMembers: "Team Members",
+  addTeamMembers: "Add Team Members"
 };
 
 export default AppConstants;

@@ -378,6 +378,24 @@ function* getUserModuleRegistrationDataSaga(action) {
   }
 }
 
+function* getUserModuleTeamMembersDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleTeamMembersData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 function* getUserModuleTeamRegistrationDataSaga(action) {
   try {
     const result = yield call(UserAxiosApi.getUserModuleTeamRegistrationData, action.payload);
@@ -1114,5 +1132,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
   yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
   yield takeEvery(ApiConstants.Api_RESET_TFA_LOAD, userResetTFASaga);
+  yield takeEvery(ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD, getUserModuleTeamMembersDataSaga);
 
 }
