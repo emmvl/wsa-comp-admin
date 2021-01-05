@@ -54,9 +54,10 @@ class UmpireSetting extends Component {
             competitionUniqueKey: null,
             deleteModalVisible: false,
             allocationSettingsData: null,
+            tempAllocationSettingsData: null,
             allDivisionVisible: false,
             sectionDataSelected: null,
-            sectionDataIndexSelectedAll: null,
+            sectionDataToDeleteIndex: null,
             selectedDivisions: null,
 
             isAllDivisionChecked: false,
@@ -159,69 +160,132 @@ class UmpireSetting extends Component {
     }
 
     handleChangeSettingsState = (sectionDataIndex, key, value, sectionData) => {
+        const { divisionList } = this.props.liveScoreTeamState;
         const { allocationSettingsData, selectedDivisions } = this.state;
-        const allocationSettingsDataCopy = { ...allocationSettingsData };
+        const allocationSettingsDataCopy = JSON.parse(JSON.stringify(allocationSettingsData));
 
-        const targetBoxData = allocationSettingsDataCopy.umpireAllocationSettings
-            .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId);
+        const isTargetWithUmpire = !!sectionData[0]?.umpireAllocatorTypeRefId;
 
-        const otherBoxData = allocationSettingsDataCopy.umpireAllocationSettings
-            .filter(item => item.umpireAllocatorTypeRefId !== sectionData[0].umpireAllocatorTypeRefId);
+        let newAllocationSettingsData;
+        const newSelectedDivisions = [];
 
-        targetBoxData[sectionDataIndex][key] = value;
+        if (isTargetWithUmpire && key !== 'allDivisions') {
+            const targetBoxData = allocationSettingsDataCopy.umpireAllocationSettings
+                .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId);
 
-        const newAllocationSettingsData = { 
-            umpireAllocationSettings: [...otherBoxData, ...targetBoxData ], 
-            noUmpiresUmpireAllocationSetting: allocationSettingsData.noUmpiresUmpireAllocationSetting,
-        };
-
-        if (key === 'allDivisions' && !!value) {
-            this.setState({ 
-                allDivisionVisible: true, 
-                sectionDataSelected: sectionData, 
-                sectionDataIndexSelectedAll: sectionDataIndex 
-            });
-        } else {
-            const newSelectedDivisions = [];
+            const otherBoxData = allocationSettingsDataCopy.umpireAllocationSettings
+                .filter(item => item.umpireAllocatorTypeRefId !== sectionData[0].umpireAllocatorTypeRefId);
 
             if (key === 'divisions') {
-                selectedDivisions.push(...allocationSettingsData.noUmpiresUmpireAllocationSetting[0].divisions);
+                targetBoxData[sectionDataIndex].divisions = value.map(item =>
+                    divisionList.find(divisionListItem => divisionListItem.id === item)
+                )
+            } else {
+                targetBoxData[sectionDataIndex].divisions = value;
+            }
+
+            newAllocationSettingsData = { 
+                umpireAllocationSettings: [...otherBoxData, ...targetBoxData ], 
+                noUmpiresUmpireAllocationSetting: allocationSettingsData.noUmpiresUmpireAllocationSetting,
+            };
+        } else if (key !== 'allDivisions') {
+            newAllocationSettingsData = { ...allocationSettingsDataCopy };
+        }
+
+
+        if (key === 'allDivisions') {
+            allocationSettingsDataCopy.umpireAllocationSettings.forEach(item => {
+                item.divisions = [];
+                item.allDivisions = false;
+            });
+            allocationSettingsData.noUmpiresUmpireAllocationSetting.forEach(item => {
+                item.divisions = [];
+                item.allDivisions = false;
+            });
+
+            if (!!value) {
+                newSelectedDivisions.push( ...divisionList);
+            }
+
+            if (isTargetWithUmpire) {
+                const targetBoxData = allocationSettingsDataCopy.umpireAllocationSettings
+                    .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId)[sectionDataIndex];
+    
+                targetBoxData.divisions = !!value ? selectedDivisions : [];
+                targetBoxData.allDivisions = value;
+    
+                newAllocationSettingsData = { 
+                    umpireAllocationSettings: [targetBoxData], 
+                    noUmpiresUmpireAllocationSetting: [],
+                };
+            } else {
+                allocationSettingsDataCopy.noUmpiresUmpireAllocationSetting[0].divisions = !!value ? selectedDivisions : [];
+                allocationSettingsDataCopy.noUmpiresUmpireAllocationSetting[0].allDivisions = value;
+
+                newAllocationSettingsData = { 
+                    ...allocationSettingsDataCopy,
+                    umpireAllocationSettings: []
+                };
+            }
+
+            console.log('newAllocationSettingsData', newAllocationSettingsData)
+
+            this.setState({ 
+                allDivisionVisible: !!value,
+                tempAllocationSettingsData: !!value ? newAllocationSettingsData : null,
+            });
+        } 
+
         
+        if (key === 'divisions' || (key === 'allDivisions' && !value)) {
+            if (!!newAllocationSettingsData.noUmpiresUmpireAllocationSetting[0]?.divisions) {
+                newSelectedDivisions.push(...newAllocationSettingsData.noUmpiresUmpireAllocationSetting[0].divisions);
+            }
+
+            if (!!newAllocationSettingsData.umpireAllocationSettings[0]?.divisions) {
                 newAllocationSettingsData.umpireAllocationSettings.forEach(item => {
-                    selectedDivisions.push(...item.divisions);
+                    newSelectedDivisions.push(...item.divisions);
                 });
             }
 
-            const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : selectedDivisions;
+            allocationSettingsDataCopy.umpireAllocationSettings.forEach(item => {
+                item.allDivisions = false;
+            });
 
-            console.log('updatedSelectedDivisions', updatedSelectedDivisions);
+            allocationSettingsData.noUmpiresUmpireAllocationSetting.forEach(item => {
+                item.allDivisions = false;
+            });
+        }
+
+        if (key !== 'allDivisions' || (key === 'allDivisions' && !value)) {
+            // console.log('newSelectedDivisions', newSelectedDivisions);
+            // console.log('newAllocationSettingsData', newAllocationSettingsData);
+
+            const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : selectedDivisions;
 
             this.setState({ allocationSettingsData: newAllocationSettingsData, selectedDivisions: updatedSelectedDivisions });
         }
-
-        
     }
 
     handleClickDeleteModal = (sectionDataIndex, sectionDataSelected) => {
         this.setState({ 
             deleteModalVisible: true, 
             sectionDataSelected,
-            sectionDataIndexSelectedAll: sectionDataIndex 
+            sectionDataToDeleteIndex: sectionDataIndex 
         });
     }
 
     handleDeleteModal = key => {
-
         if (key === "ok") {
-            const { allocationSettingsData, sectionDataSelected, sectionDataIndexSelectedAll } = this.state;
-            const allocationSettingsDataCopy = { ...allocationSettingsData };
+            const { allocationSettingsData, sectionDataSelected, sectionDataToDeleteIndex } = this.state;
+            const allocationSettingsDataCopy = JSON.parse(JSON.stringify(allocationSettingsData));;
             const sectionDataSelectedCopy = [ ...sectionDataSelected ];
 
 
             const { umpireAllocatorTypeRefId } = sectionDataSelected[0];
 
             const otherUmpireData = allocationSettingsDataCopy.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId);
-            sectionDataSelectedCopy.splice(sectionDataIndexSelectedAll, 1);
+            sectionDataSelectedCopy.splice(sectionDataToDeleteIndex, 1);
 
             const newAllocationSettingsData = { 
                 umpireAllocationSettings: [...otherUmpireData, ...sectionDataSelectedCopy ], 
@@ -231,27 +295,18 @@ class UmpireSetting extends Component {
             this.setState({ allocationSettingsData: newAllocationSettingsData });
         }
 
-        this.setState({ deleteModalVisible: false, sectionDataSelected: null, sectionDataIndexSelectedAll: null });
+        this.setState({ deleteModalVisible: false, sectionDataSelected: null, sectionDataToDeleteIndex: null });
     }
 
     handleAllDivisionModal = key => {
-
         if (key === "ok") {
-            const { sectionDataSelected, sectionDataIndexSelectedAll } = this.state;
-
-            const targetData = !!sectionDataSelected ? 
-                sectionDataSelected
-                : null;
-
-            targetData[sectionDataIndexSelectedAll].allDivisions = true;
-            const newAllocationSettingsData = !!sectionDataSelected ? 
-                { umpireAllocationSettings: [targetData[sectionDataIndexSelectedAll]], noUmpiresUmpireAllocationSetting: [] }
-                : { umpireAllocationSettings: [], noUmpiresUmpireAllocationSetting: [initialNoUmpireAllocationGetData] };
-
-            this.setState({ allocationSettingsData: newAllocationSettingsData });
+            this.setState({ allocationSettingsData: this.state.tempAllocationSettingsData });
         }
 
-        this.setState({ allDivisionVisible: false, sectionDataSelected: null, sectionDataIndexSelectedAll: null });
+        this.setState({ 
+            allDivisionVisible: false, 
+            tempAllocationSettingsData: null 
+        });
     }
 
     headerView = () => {
@@ -419,11 +474,11 @@ class UmpireSetting extends Component {
         const { divisionList } = this.props.liveScoreTeamState;
         const { allocationSettingsData, selectedDivisions } = this.state;
 
+        // console.log('selectedDivisions',selectedDivisions)
+
         const sectionData = allocationSettingsData && umpireAllocatorTypeRefId ?
             allocationSettingsData.umpireAllocationSettings.filter(item => item.umpireAllocatorTypeRefId === umpireAllocatorTypeRefId)
             : allocationSettingsData ? allocationSettingsData.noUmpiresUmpireAllocationSetting : null;
-
-        // console.log('umpireAllocatorTypeRefId innside umpireSettingsSectionView', umpireAllocatorTypeRefId)
 
         return (
             <>
@@ -437,7 +492,7 @@ class UmpireSetting extends Component {
                 {sectionData && !!sectionData.length && (
                     <>
                         {sectionData.map((boxData, sectionDataIndex) => (
-                        <div className="inside-container-view mb-4 mt-4">
+                        <div key={'settingsBox_' + sectionDataIndex} className="inside-container-view mb-4 mt-4">
                             {sectionData.length > 1 && (
                                 <div className="d-flex float-right">
                                     <div
