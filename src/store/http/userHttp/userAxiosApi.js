@@ -174,6 +174,11 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  getUserModuleTeamMembersData(payload) {
+    const url = `/api/user/registration/team`;
+    return Method.dataPost(url, token, payload);
+  },
+
   getUserModuleTeamRegistrationData(payload) {
     const url = `api/user/registration/teamdetails`;
     return Method.dataPost(url, token, payload);

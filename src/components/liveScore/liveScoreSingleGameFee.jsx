@@ -69,7 +69,7 @@ const columns = [
     },
     {
         title: "Team",
-        dataIndex: 'team',
+        dataIndex: 'teamName',
         key: 'team',
         sorter: (a, b) => checkSorting(a, b, "team"),
     },
@@ -150,8 +150,11 @@ class LiveScoreSingleGameFee extends Component {
         this.props.liveScoreSingleGameListAction(payload);
     }
 
-    componentDidUpdate(nextProps) {
-       
+    componentDidUpdate(nextProps) { 
+        if(this.state.load === true && this.props.liveScoreDashboardState.onSingleGameRedeemPayLoad === false){
+            this.getLivescoreGameList(1);
+            this.setState({load : false})
+        }
     }
 
     showRedeemModal = (key, record) => {
@@ -172,6 +175,7 @@ class LiveScoreSingleGameFee extends Component {
             }
 
             this.props.liveScoreSingleGameRedeemPayAction(payload);
+            this.setState({redeemModalVisible: false, load: true});
         }
         else{
             this.setState({redeemModalVisible: false});
@@ -196,6 +200,7 @@ class LiveScoreSingleGameFee extends Component {
             }
 
             this.props.liveScoreSingleGameRedeemPayAction(payload);
+            this.setState({payModalVisible: false, load: true});
         }
         else{
             this.setState({payModalVisible: false});
@@ -205,8 +210,8 @@ class LiveScoreSingleGameFee extends Component {
 
     redeemModalView() {
         let record = this.state.singleGameRecord;
-        let matchesCount = (record.matchesCount ? record.matchesCount : 0)
-        let redeemCount = (record.redeemCount ? record.redeemCount : 0);
+        let matchesCount = (record?.matchesCount ? record.matchesCount : 0)
+        let redeemCount = (record?.redeemCount ? record.redeemCount : 0);
 
         return (
             <Modal
@@ -253,11 +258,12 @@ class LiveScoreSingleGameFee extends Component {
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
-            <div className="header-view">
+            <div>
                 <Header className="form-header-view bg-transparent d-flex align-items-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {isEdit ? AppConstants.editNews : AppConstants.addNews}
+                            {/* {isEdit ? AppConstants.editNews : AppConstants.addNews} */}
+                            {AppConstants.singleGameFees}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -338,16 +344,24 @@ class LiveScoreSingleGameFee extends Component {
                     onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
 
-                {stateWideMsg ? (
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey = "1"/>
+
+                {/* {stateWideMsg ? 
+                <div>
                     <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />
-                ) : (
-                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : "21"} />
-                    )}
+                </div>
+                 : 
+                <div>
+                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : "21"} />
+                </div>
+                    } */}
 
                 <Layout>
                     {this.headerView()}
                     <Content>
                         {this.contentView()}
+                        {this.redeemModalView()}
+                        {this.payModalView()}
                     </Content>
                     {/* <Footer>{this.footerView()}</Footer> */}
                 </Layout>

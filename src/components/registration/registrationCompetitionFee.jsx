@@ -678,7 +678,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -962,7 +962,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1246,7 +1246,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1531,7 +1531,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Affiliate fees (excl. GST)',
+        title: 'Affiliate Competition fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1825,7 +1825,7 @@ const playerSeasonalTableTeamAssociation = [
                 ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2131,7 +2131,7 @@ const playerSeasonalTableTeamClub = [
                 ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2635,7 +2635,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2941,7 +2941,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Affiliate fees (excl. GST)',
+        title: 'Affiliate Competition fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,

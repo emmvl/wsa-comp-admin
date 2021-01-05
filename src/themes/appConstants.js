@@ -1688,11 +1688,13 @@ const AppConstants = {
   playerRegistration: 'Player Registration',
   coachRegistration: 'Coach Registration',
   teamRegistration: 'Team Registration',
+  childRegistration : 'Child Registration',
   pending: 'Pending',
   declined: 'Declined',
   enterAddressManually: "Enter Address Manually",
   addressSearch: 'Address Search',
   returnAddressSearch: 'Return to Address Search',
+  games: "Games",
   singleGameFees: "Single Game Fees",
   gamesPaid: "Games Paid",
   gamesRedeemed: "Games Redeemed",
@@ -1706,6 +1708,14 @@ const AppConstants = {
   allocateViaPools: 'Allocate Via Pools',
   umpireYourOwnTeam: 'Umpire Your Own - Team',
   umpireYourOwnOrganisation: 'Umpire Your Own - Organisation',
+  
+  teamMembers: "Team Members",
+  addTeamMembers: "Add Team Members",
+  refunds: 'Refunds',
+  transferId: 'Transfer Id',
+  transactionId :'Transaction Id',
+  payoutId :'Payout Id',
+  refundId :'Refund Id',
 };
 
 export default AppConstants;

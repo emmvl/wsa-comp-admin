@@ -456,6 +456,13 @@ function addUsersToBeCompared(users) {
     }
 }
 
+function getUserModuleTeamMembersAction(payload){
+    return {
+        type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD,
+        payload: payload
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -514,5 +521,6 @@ export {
     getSpectatorListAction,
     registrationResendEmailAction,
     resetTfaAction,
-    addUsersToBeCompared
+    addUsersToBeCompared,
+    getUserModuleTeamMembersAction
 };

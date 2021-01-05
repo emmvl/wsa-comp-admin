@@ -26,13 +26,19 @@ let this_obj = null;
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.transferId,
+        dataIndex: 'id',
+        key: 'id',
+        sorter: false,
+    },
+    {
+        title: AppConstants.transactionId,
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
         sorter: false,
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: false,
@@ -41,7 +47,7 @@ const columns = [
         )
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: false,
@@ -54,7 +60,7 @@ const columns = [
         },
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         sorter: false,

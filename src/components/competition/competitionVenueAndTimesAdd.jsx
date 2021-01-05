@@ -817,7 +817,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             </Tooltip>
                         </div>
                     </div>
-                    <Button className="primary-add-comp-form ml-auto" type="primary">
+                    {/* <Button className="primary-add-comp-form ml-auto" type="primary">
                         <div className="row">
                             <div className="col-sm">
                                 <label htmlFor="venueCourtUpload" className="csv-reader">
@@ -832,7 +832,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                                 />
                             </div>
                         </div>
-                    </Button>
+                    </Button> */}
                 </div>
 
                 <div className="inside-container-view">
