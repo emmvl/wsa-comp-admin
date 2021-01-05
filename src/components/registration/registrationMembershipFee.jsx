@@ -174,7 +174,8 @@ class RegistrationMembershipFee extends Component {
             membershipIsUsed: false,
             confirmRePayFeesModalVisible: false,
             isPublished: false,
-            tooltipVisibleDraft: false
+            tooltipVisibleDraft: false,
+            isActivatedDiscountService: false
         };
         this_Obj = this;
         this.formRef = React.createRef();
@@ -208,12 +209,21 @@ class RegistrationMembershipFee extends Component {
             if (!registrationState.error) {
                 this.setState({
                     // loading: false,
-                    membershipTabKey: this.state.buttonPressed === "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
+                    //membershipTabKey: this.state.buttonPressed === "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
+                    membershipTabKey: JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
                 })
             }
-            if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
-                history.push('/registrationMembershipList');
-            }
+            setTimeout(() => {
+                if(this.state.isActivatedDiscountService == true){
+                    if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
+                        history.push('/registrationMembershipList');
+                    }
+                }else{
+                    if(this.state.membershipTabKey == '3'){
+                        this.saveMembershipProductDetails();
+                    }
+                }
+            },300)
         }
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
@@ -344,7 +354,7 @@ class RegistrationMembershipFee extends Component {
                 message.error(errMsg);
             } else {
                 this.props.regSaveMembershipProductDiscountAction(discountBody)
-                this.setState({ loading: true })
+                this.setState({ loading: true,isActivatedDiscountService: true })
             }
         }
     }
