@@ -463,6 +463,15 @@ function getUserModuleTeamMembersAction(payload){
     }
 }
 
+function getNetSetGoActionList(payload, sortBy, sortOrder) {
+    return {
+        type: ApiConstants.API_GET_NETSETGO_LIST_LOAD,
+        payload,
+        sortBy,
+        sortOrder,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -522,5 +531,6 @@ export {
     registrationResendEmailAction,
     resetTfaAction,
     addUsersToBeCompared,
-    getUserModuleTeamMembersAction
+    getUserModuleTeamMembersAction,
+    getNetSetGoActionList
 };

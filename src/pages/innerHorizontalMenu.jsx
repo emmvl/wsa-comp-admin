@@ -352,6 +352,11 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>Registration Change</span>
                                 </NavLink>
                             </Menu.Item>
+                            <Menu.Item key="8">
+                                <NavLink to="/netSetGo">
+                                    <span>{AppConstants.netSetGo}</span>
+                                </NavLink>
+                            </Menu.Item>
                         </SubMenu>
                         {(orgLevel === AppConstants.national || orgLevel === AppConstants.state) && (
                             // <Menu.Item key="6">

@@ -351,7 +351,7 @@ class Registration extends Component {
     handleRegTableList = (page) => {
         const {
             organisationId,
-            // yearRefId,
+            //yearRefId,
             competitionUniqueKey,
             dobFrom,
             dobTo,
@@ -369,7 +369,8 @@ class Registration extends Component {
             sortOrder,
             teamId,
         } = this.state;
-        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        console.log("yearRegId",this.state.yearRefId,getGlobalYear())
+        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : this.state.yearRefId
         let filter = {
             organisationUniqueKey: organisationId,
             yearRefId,

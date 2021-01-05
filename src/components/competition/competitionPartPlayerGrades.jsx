@@ -923,7 +923,8 @@ class CompetitionPartPlayerGrades extends Component {
                 <PlayerCommentModal
                     visible={this.state.modalVisible}
                     modalTitle={AppConstants.add_edit_comment}
-                    onOK={this.handleModalOk}
+                    onOk={() => this.handleModalOk()}
+                    // onOK={this.handleModalOk}
                     onCancel={this.handleModalCancel}
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
