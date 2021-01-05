@@ -178,6 +178,7 @@ import AddCommunication from 'components/communication/addCommunication';
 import CommunicationView from 'components/communication/communictionView';
 import MergeUserMatches from 'components/user/mergeUserMatches'
 import MergeUserDetail from 'components/user/mergeUserDetail'
+import AddTeamMember from 'components/user/addTeamMember';
 
 class Routes extends React.Component {
     constructor(props) {
@@ -994,7 +995,16 @@ class Routes extends React.Component {
 
                 <PrivateRoute path="/communicationView" component={lazyLoad(CommunicationView)} />
 
+                <PrivateRoute
+                    path="/addTeamMember"
+                    component={this.haveAccess(userRoleId, '/addTeamMember')
+                        ? lazyLoad(AddTeamMember)
+                        : lazyLoad(NotFound)}
+                />
+
                 <Route path="/" component={lazyLoad(NotFound)} />
+
+               
 
                 <Redirect from="*" to="/404" />
             </Switch>

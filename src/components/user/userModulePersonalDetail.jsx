@@ -2600,6 +2600,10 @@ class UserModulePersonalDetail extends Component {
         );
     };
 
+    gotoAddTeamMember = () => {
+        history.push("/addTeamMember");
+    }
+
     registrationView = () => {
         let userState = this.props.userState;
         let userRegistrationList = userState.userRegistrationList;
@@ -2627,130 +2631,146 @@ class UserModulePersonalDetail extends Component {
             <div>
                 {this.state.isShowRegistrationTeamMembers == false ? (
                     <div className="comp-dash-table-view mt-2">
-                        <div className="user-module-row-heading">
-                            {AppConstants.ownRegistration}
-                        </div>
-                        <div className="table-responsive home-dash-table-view">
-                            <Table
-                                className="home-dashboard-table"
-                                columns={columns}
-                                dataSource={myRegistrations}
-                                pagination={false}
-                                loading={
-                                    this.props.userState.userRegistrationOnLoad
-                                }
-                            />
-                        </div>
-                        <div className="d-flex justify-content-end">
-                            <Pagination
-                                className="antd-pagination pb-3"
-                                current={myRegistrationsCurrentPage}
-                                total={myRegistrationsTotalCount}
-                                onChange={(page) =>
-                                    this.handleRegistrationTableList(
-                                        page,
-                                        this.state.userId,
-                                        this.state.competition,
-                                        this.state.yearRefId,
-                                        "myRegistrations"
-                                    )
-                                }
-                                showSizeChanger={false}
-                            />
-                        </div>
-                        <div className="user-module-row-heading">
-                            {AppConstants.otherRegistration}
-                        </div>
-                        <div className="table-responsive home-dash-table-view">
-                            <Table
-                                className="home-dashboard-table"
-                                columns={childOtherRegistrationColumns}
-                                dataSource={otherRegistrations}
-                                pagination={false}
-                                loading={
-                                    this.props.userState.userRegistrationOnLoad
-                                }
-                            />
-                        </div>
-                        <div className="d-flex justify-content-end">
-                            <Pagination
-                                className="antd-pagination pb-3"
-                                current={otherRegistrationsCurrentPage}
-                                total={otherRegistrationsTotalCount}
-                                onChange={(page) =>
-                                    this.handleRegistrationTableList(
-                                        page,
-                                        this.state.userId,
-                                        this.state.competition,
-                                        this.state.yearRefId,
-                                        "otherRegistrations"
-                                    )
-                                }
-                                showSizeChanger={false}
-                            />
-                        </div>
-                        <div className="user-module-row-heading">
-                            {AppConstants.childRegistration}
-                        </div>
-                        <div className="table-responsive home-dash-table-view">
-                            <Table
-                                className="home-dashboard-table"
-                                columns={childOtherRegistrationColumns}
-                                dataSource={childRegistrations}
-                                pagination={false}
-                                loading={
-                                    this.props.userState.userRegistrationOnLoad
-                                }
-                            />
-                        </div>
-                        <div className="d-flex justify-content-end">
-                            <Pagination
-                                className="antd-pagination pb-3"
-                                current={childRegistrationsCurrentPage}
-                                total={childRegistrationsTotalCount}
-                                onChange={(page) =>
-                                    this.handleRegistrationTableList(
-                                        page,
-                                        this.state.userId,
-                                        this.state.competition,
-                                        this.state.yearRefId,
-                                        "childRegistrations"
-                                    )
-                                }
-                                showSizeChanger={false}
-                            />
-                        </div>
-                        <div className="user-module-row-heading">
-                            {AppConstants.teamRegistration}
-                        </div>
-                        <div className="table-responsive home-dash-table-view">
-                            <Table
-                                className="home-dashboard-table"
-                                columns={teamRegistrationColumns}
-                                dataSource={teamRegistrations}
-                                pagination={false}
-                                loading={
-                                    this.props.userState.userRegistrationOnLoad
-                                }
-                            />
-                        </div>
-                        <div className="d-flex justify-content-end">
-                            <Pagination
-                                className="antd-pagination pb-3"
-                                current={teamRegistrationsCurrentPage}
-                                total={teamRegistrationsTotalCount}
-                                onChange={(page) =>
-                                    this.handleRegistrationTableList(
-                                        page,
-                                        this.state.userId,
-                                        this.state.competition,
-                                        this.state.yearRefId,
-                                        "teamRegistrations"
-                                    )
-                                }
-                                showSizeChanger={false}
-                            />
-                        </div>
+                        {isArrayNotEmpty(myRegistrations) && (
+                            <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.ownRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={columns}
+                                        dataSource={myRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={myRegistrationsCurrentPage}
+                                        total={myRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "myRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                       {isArrayNotEmpty(otherRegistrations) && (
+                           <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.otherRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={childOtherRegistrationColumns}
+                                        dataSource={otherRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={otherRegistrationsCurrentPage}
+                                        total={otherRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "otherRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                           </div>
+                       )}
+                       {isArrayNotEmpty(childRegistrations) && (
+                           <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.childRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={childOtherRegistrationColumns}
+                                        dataSource={childRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={childRegistrationsCurrentPage}
+                                        total={childRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "childRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                           </div>
+                       )}
+                       {isArrayNotEmpty(teamRegistrations) && (
+                           <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.teamRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={teamRegistrationColumns}
+                                        dataSource={teamRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={teamRegistrationsCurrentPage}
+                                        total={teamRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "teamRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                           </div>
+                       )} 
                     </div>
                 ) : (
                    <div className="comp-dash-table-view mt-2">
@@ -2765,7 +2785,7 @@ class UserModulePersonalDetail extends Component {
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            <div className="add-team-member-action-txt">
+                            <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
                                 + {AppConstants.addTeamMembers}
                             </div>
                         </div>

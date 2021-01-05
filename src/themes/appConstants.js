@@ -1706,6 +1706,8 @@ const AppConstants = {
   transactionId :'Transaction Id',
   payoutId :'Payout Id',
   refundId :'Refund Id',
+  teamMember: "Team Member",
+  addTeamMember: "Add Team Member"
 };
 
 export default AppConstants;
