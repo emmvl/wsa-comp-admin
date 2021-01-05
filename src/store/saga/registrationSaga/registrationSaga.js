@@ -204,7 +204,7 @@ export function* regSaveMembershipProductDiscountSaga(action) {
         result: result.result.data,
         status: result.status
       });
-      message.success(result.result.data.message);
+      // message.success(result.result.data.message);
     } else {
       yield call(failSaga, result)
     }

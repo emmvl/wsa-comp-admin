@@ -65,6 +65,7 @@ import RegistrationMembershipCap from 'components/registration/registrationMembe
 import RegistrationPayments from 'components/registration/registrationPayments';
 import RegistrationPayoutTransaction from 'components/registration/registrationPayoutTransactions';
 import RegistrationSettlements from 'components/registration/registrationSettlements';
+import RegistrationRefunds from 'components/registration/registrationRefunds';
 import TeamRegistrations from 'components/registration/teamRegistrations';
 
 import AddUmpire from 'components/umpire/addUmpire';
@@ -785,6 +786,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationSettlements"
                     component={this.haveAccess(userRoleId, '/registrationSettlements') ? lazyLoad(RegistrationSettlements) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/registrationRefunds"
+                    component={this.haveAccess(userRoleId, '/registrationSettlements') ? lazyLoad(RegistrationRefunds) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

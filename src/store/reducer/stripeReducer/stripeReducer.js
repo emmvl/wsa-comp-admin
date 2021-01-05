@@ -16,6 +16,9 @@ const initialState = {
     stripePayoutList: [],
     stripePayoutListTotalCount: 1,
     stripePayoutListPage: 1,
+    stripeRefundList: [],
+    stripeRefundListTotalCount: 1,
+    stripeRefundListPage: 1,
     stripeTransactionPayoutList: [],
     stripeTransactionPayoutListTotalCount: 1,
     stripeTransactionPayoutListPage: 1,
@@ -191,6 +194,21 @@ function stripe(state = initialState, action) {
                 stripePayoutList: isArrayNotEmpty(payoutListData.payouts) ? payoutListData.payouts : [],
                 stripePayoutListTotalCount: payoutListData.totalCount,
                 stripePayoutListPage: action.page,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        case ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+        
+        case ApiConstants.API_GET_STRIPE_REFUND_LIST_API_SUCCESS:
+            let refundListData = action.result
+            return {
+                ...state,
+                stripeRefundList: isArrayNotEmpty(refundListData.refunds) ? refundListData.refunds : [],
+                stripeRefundListTotalCount: refundListData.totalCount,
+                stripeRefundListPage: action.page,
                 onLoad: false,
                 status: action.status,
                 error: null

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
+import { Layout, Select, DatePicker, Button, Table } from 'antd';
 import './product.scss';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -13,14 +13,10 @@ import {
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
-import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
 import moment from 'moment'
-import { NavLink } from 'react-router-dom';
 
-const { Header, Content } = Layout;
-const { Option } = Select;
-const { SubMenu } = Menu;
+const { Content } = Layout;
 /////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
@@ -30,18 +26,19 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.payoutId,
         dataIndex: 'id',
         key: 'id',
         sorter: false,
-        render: (id, record) => (
-            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }}>
-                <span style={{ color: "#ff8237" }}>{id}</span>
-            </NavLink>
-        )
     },
     {
-        title: "Description",
+        title: AppConstants.transactionId,
+        dataIndex: 'balance_transaction',
+        key: 'balance_transaction',
+        sorter: false,
+    },
+    {
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: false,
@@ -50,7 +47,7 @@ const columns = [
         )
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: false,
@@ -63,7 +60,7 @@ const columns = [
         },
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         sorter: false,
@@ -72,7 +69,7 @@ const columns = [
         ),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: false,

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
+import { Layout, Select, DatePicker, Button, Table } from 'antd';
 import './product.scss';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -9,18 +9,15 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    getStripePayoutListAction, exportPaymentApi
+    getStripeRefundsListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
-import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
-import moment from 'moment'
-import { NavLink } from 'react-router-dom';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 const { Option } = Select;
-const { SubMenu } = Menu;
+
 /////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
@@ -30,18 +27,20 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.refundId,
+        dataIndex: 'id',
+        key: 'id',
+        sorter: false,
+    },
+    {
+        title: AppConstants.transactionId,
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
         sorter: false,
-        render: (balance_transaction, record) => (
-            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }}>
-                <span style={{ color: "#ff8237" }}>{balance_transaction}</span>
-            </NavLink>
-        )
+
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: false,
@@ -50,7 +49,7 @@ const columns = [
         )
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: false,
@@ -63,7 +62,7 @@ const columns = [
         },
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         sorter: false,
@@ -73,7 +72,7 @@ const columns = [
 
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: false,
@@ -119,7 +118,7 @@ class RegistrationRefunds extends Component {
 
     componentDidMount() {
         if (this.stripeConnected()) {
-            this.props.getStripePayoutListAction(1, null, null)
+            this.props.getStripeRefundsListAction(1, null, null)
         }
     }
 
@@ -131,26 +130,17 @@ class RegistrationRefunds extends Component {
 
     //on export button click
     onExport() {
-        this.props.exportPaymentApi("payout")
+        this.props.exportPaymentApi("refund")
     }
 
     headerView = () => {
         return (
-            // <div className="comp-player-grades-header-view-design">
-            //     <div className="row">
-            //         <div className="col-sm d-flex align-content-center">
-            //             <Breadcrumb separator=" > ">
-            //                 <Breadcrumb.Item className="breadcrumb-add">{AppConstants.payouts}</Breadcrumb.Item>
-            //             </Breadcrumb>
-            //         </div>
-            //     </div>
-            // </div>
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm d-flex align-content-center">
                             <span className="form-heading">
-                                {AppConstants.payouts}
+                                {AppConstants.refunds}
                             </span>
                         </div>
                         <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
@@ -183,32 +173,32 @@ class RegistrationRefunds extends Component {
         )
     }
 
-    handleStripePayoutList = (key) => {
-        let page = this.props.stripeState.stripePayoutListPage
-        let stripePayoutList = this.props.stripeState.stripePayoutList
+    handleStripeRefundList = (key) => {
+        let page = this.props.stripeState.stripeRefundListPage
+        let stripeRefundList = this.props.stripeState.stripeRefundList
         let starting_after = null
         let ending_before = null
         if (key === "next") {
             ///move forward
             page = parseInt(page) + 1
-            let id = (stripePayoutList[stripePayoutList.length - 1]['id']);
+            let id = (stripeRefundList[stripeRefundList.length - 1]['id']);
             starting_after = id
             ending_before = null
         }
         if (key === "Previous") {
             //////move backward
             page = parseInt(page) - 1
-            let id = (stripePayoutList[0]['id']);
+            let id = (stripeRefundList[0]['id']);
             starting_after = null
             ending_before = id
         }
-        this.props.getStripePayoutListAction(page, starting_after, ending_before)
+        this.props.getStripeRefundsListAction(page, starting_after, ending_before)
     }
 
     ////checking for enabling click on next button or not
     checkNextEnabled = () => {
-        let currentPage = this.props.stripeState.stripePayoutListPage
-        let totalCount = this.props.stripeState.stripePayoutListTotalCount ? this.props.stripeState.stripePayoutListTotalCount : 1
+        let currentPage = this.props.stripeState.stripeRefundListPage
+        let totalCount = this.props.stripeState.stripeRefundListTotalCount ? this.props.stripeState.stripeRefundListTotalCount : 1
         let lastPage = Math.ceil(parseInt(totalCount) / 10)
         if (lastPage == currentPage) {
             return false
@@ -217,12 +207,12 @@ class RegistrationRefunds extends Component {
         }
     }
 
-    payoutListView = () => {
-        let stripePayoutList = this.props.stripeState.stripePayoutList
-        let previousEnabled = this.props.stripeState.stripePayoutListPage == 1 ? false : true
+    refundListView = () => {
+        let stripeRefundList = this.props.stripeState.stripeRefundList
+        let previousEnabled = this.props.stripeState.stripeRefundListPage == 1 ? false : true
         let nextEnabled = this.checkNextEnabled()
-        let currentPage = this.props.stripeState.stripePayoutListPage
-        let totalCount = this.props.stripeState.stripePayoutListTotalCount ? this.props.stripeState.stripePayoutListTotalCount : 1
+        let currentPage = this.props.stripeState.stripeRefundListPage
+        let totalCount = this.props.stripeState.stripeRefundListTotalCount ? this.props.stripeState.stripeRefundListTotalCount : 1
         let totalPageCount = Math.ceil(parseInt(totalCount) / 10)
         return (
             <div>
@@ -230,7 +220,7 @@ class RegistrationRefunds extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={stripePayoutList}
+                        dataSource={stripeRefundList}
                         pagination={false}
                         loading={this.props.stripeState.onLoad && true}
                     />
@@ -240,11 +230,11 @@ class RegistrationRefunds extends Component {
                     <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
                 </div>
                 <div className="d-flex justify-content-end " style={{ paddingBottom: 100 }}>
-                    <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripePayoutList("Previous")}>
+                    <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripeRefundList("Previous")}>
                         <span style={!previousEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.previous}</span>
                     </div>
-                    <div className="pagination-button-div" onClick={() => nextEnabled && this.handleStripePayoutList("next")}>
+                    <div className="pagination-button-div" onClick={() => nextEnabled && this.handleStripeRefundList("next")}>
                         <span style={!nextEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.next}</span>
                     </div>
@@ -336,7 +326,7 @@ class RegistrationRefunds extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
-                {this.payoutListView()}
+                {this.refundListView()}
             </div>
         )
     }
@@ -345,7 +335,7 @@ class RegistrationRefunds extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
-                <InnerHorizontalMenu menu="finance" finSelectedKey="3" />
+                <InnerHorizontalMenu menu="finance" finSelectedKey="4" />
                 <Layout >
                     {this.headerView()}
                     <Content>
@@ -360,7 +350,7 @@ class RegistrationRefunds extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getStripePayoutListAction,
+        getStripeRefundsListAction,
         exportPaymentApi
     }, dispatch)
 }
