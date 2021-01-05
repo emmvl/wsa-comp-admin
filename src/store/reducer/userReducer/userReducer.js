@@ -970,6 +970,20 @@ function userReducer(state = initialState, action) {
       return {
         ...state
       }
+    
+    case ApiConstants.API_GET_NETSETGO_LIST_LOAD:
+      return { ...state, onLoad: true, netSetGoListAction: action };
+
+    case ApiConstants.API_GET_NETSETGO_LIST_SUCCESS:
+      let netSetGoData = action.result;
+      return {
+        ...state,
+        onLoad: false,
+        netSetGoList: netSetGoData ? netSetGoData.netSetGo : [],
+        netSetGoPage: (netSetGoData && netSetGoData.page) ? netSetGoData.page.currentPage : 1,
+        netSetGoTotalCount: (netSetGoData && netSetGoData.page) ? netSetGoData.page.totalCount : 1,
+        status: action.status
+      };
 
     default:
       return state;

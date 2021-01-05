@@ -83,6 +83,7 @@ import UmpireRoster from 'components/umpire/umpireRoster';
 import UmpireSetting from 'components/umpire/umpireSetting';
 
 import AffiliateDirectory from 'components/user/affiliateDirectory';
+import NetSetGo from 'components/user/netSetGo';
 import PlayWithFriend from 'components/user/playWithFriend';
 import ReferFriend from 'components/user/referFriend';
 import Spectator from 'components/user/spectator';
@@ -760,6 +761,11 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
+                    path="/netSetGo"
+                    component={this.haveAccess(userRoleId, '/netSetGo') ? lazyLoad(NetSetGo) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
                     path="/playWithFriend"
                     component={this.haveAccess(userRoleId, '/playWithFriend') ? lazyLoad(PlayWithFriend) : lazyLoad(NotFound)}
                 />
@@ -771,7 +777,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/spectator"
-                    component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/spectator') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

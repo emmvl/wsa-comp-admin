@@ -1699,6 +1699,7 @@ const AppConstants = {
   gamesRedeemed: "Games Redeemed",
   gamesToRedeem: "Games to redeem",
   howManyGames: "How many games?",
+  coachAccreditation: "Coach Accreditation",
   teamMembers: "Team Members",
   addTeamMembers: "Add Team Members",
   refunds: 'Refunds',

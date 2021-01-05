@@ -254,6 +254,8 @@ const ValidationConstants = {
     suburbRequired: 'Subrub is required.',
     stateRequired: 'State is required.',
     postcodeRequired: 'Postcode is required.',
+    please_SelectMembership_Types: 'Please choose a Membership Type.',
+    please_SelectMembership_Product: 'Please choose a Membership Product.',
 };
 
 export default ValidationConstants;

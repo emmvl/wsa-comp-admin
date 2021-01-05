@@ -9,9 +9,11 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
-import { getSpectatorListAction } from "../../store/actions/userAction/userAction";
-import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { getOrganisationData } from "../../util/sessionStorage";
+import { getUserFriendAction } from "../../store/actions/userAction/userAction";
+import { getOnlyYearListAction } from '../../store/actions/appAction';
+import { getNetSetGoActionList } from "../../store/actions/userAction/userAction";
+
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -46,97 +48,78 @@ function tableSort(key) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getSpectatorListAction(filterData, sortBy, sortOrder);
+    this_Obj.props.getNetSetGoActionList(filterData, sortBy, sortOrder);
 }
-
 const columns = [
+
     {
         title: 'Name',
         dataIndex: 'firstName',
-        key: 'firstName',
+        key: 'name',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (firstName, record) => (
-            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.id } }}>
-                <span className="input-heading-add-another pt-0">{firstName}</span>
-            </NavLink>
+        onHeaderCell: ({ dataIndex }) => listeners("name"),
+        render: (name, record) => (
+            <span>{record.firstName} {record.lastName}</span>
+            // <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
+            //     <span className="input-heading-add-another pt-0">{name}</span>
+            // </NavLink>
         ),
     },
     {
-        title: 'Role',
-        dataIndex: 'role',
-        key: 'role',
+        title: 'Registration date',
+        dataIndex: 'registrationDate',
+        key: 'registrationDate',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (regDate) => (
+            <span>{moment(regDate).format("DD-MM-YYYY")}</span>
+        )
     },
     {
-        title: 'Linked',
-        dataIndex: 'organisationName',
-        key: 'organisationName',
+        title: 'Affiliate',
+        dataIndex: 'affiliateName',
+        key: 'affiliate',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
-    {
-        title: 'Competition',
-        dataIndex: 'competitionName',
-        key: 'competitionName',
     },
     {
         title: 'DOB',
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (dateOfBirth) => (
-            <div>
-                {dateOfBirth != null ? moment(dateOfBirth).format('DD/MM/YYYY') : ''}
-            </div>
-        ),
+        onHeaderCell: ({ dataIndex }) => listeners("division"),
+        render: (dob) => {
+            return(
+                <span>{moment(dob).format("DD-MM-YYYY")}</span>
+            )
+        }
     },
     {
-        title: 'Action',
-        render: (id, e) => (
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: '25px' }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            width="16"
-                            height="16"
-                            alt=""
-                        />
-                    }
-                >
-                    <Menu.Item key="1">
-                        <NavLink to={{ pathname: '/userPersonal', state: { userId: e.id } }}>
-                            <span>Edit</span>
-                        </NavLink>
-                    </Menu.Item>
-                    {/* {!e.role.find(x => x.role === 'Admin') && (
-                        <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e)}>
-                            <span>Delete</span>
-                        </Menu.Item>
-                    )} */}
-                </SubMenu>
-            </Menu>
-        ),
+        title: 'Address',
+        dataIndex: 'street1',
+        key: 'address',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (address, record) => (
+            <span>{record.street1} {record.street2} {record.suburb}</span>
+        )
+    },
+    {
+        title: "T'Shirt Size",
+        dataIndex: 'tShirtSize',
+        key: 'tShirtSize',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
 
 ];
 
-class Spectator extends Component {
+class NetSetGo extends Component {
     constructor(props) {
         super(props);
         this.state = {
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: null,
+            yearRefId: -1,
             pageNo: 1,
             sortBy: null,
             sortOrder: null
@@ -145,60 +128,54 @@ class Spectator extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
-        const { spectatorListAction } = this.props.userState
+
+        const { netSetGoListAction } = this.props.userState
         this.referenceCalls();
         let pageNo = 1
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
-        if (spectatorListAction) {
-            let offset = spectatorListAction.payload.paging.offset
-            sortBy = spectatorListAction.sortBy
-            sortOrder = spectatorListAction.sortOrder
-            let yearRefId = JSON.parse(yearId)
+        if (netSetGoListAction) {
+            let offset = netSetGoListAction.payload.paging.offset
+            sortBy = netSetGoListAction.sortBy
+            sortOrder = netSetGoListAction.sortOrder
+            let yearRefId = netSetGoListAction.payload.yearRefId
             pageNo = Math.floor(offset / 10) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
-            this.handleSpectatorTableList(pageNo);
+            this.handleNetSetGoTableList(pageNo);
         } else {
-            this.setState({ yearRefId: JSON.parse(yearId) })
-            this.handleSpectatorTableList(1);
+            this.handleNetSetGoTableList(1);
         }
     }
+    componentDidUpdate(nextProps) {
 
-    handleSpectatorTableList = (page) => {
-        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
+    }
+
+    handleNetSetGoTableList = (page) => {
         this.setState({
             pageNo: page
         })
         let filter =
         {
-            organisationUniqueKey: this.state.organisationId,
-            yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
+            organisationId: this.state.organisationId,
+            yearRefId: this.state.yearRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getSpectatorListAction(filter, this.state.sortBy, this.state.sortOrder);
+        this.props.getNetSetGoActionList(filter, this.state.sortBy, this.state.sortOrder);
     }
 
     referenceCalls = () => {
         this.props.getOnlyYearListAction();
     }
 
-    componentDidUpdate(nextProps) {
-
-    }
-
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId")
             await this.setState({ yearRefId: value });
-        if (value != -1) {
-            setGlobalYear(value)
-        }
 
-        this.handleSpectatorTableList(1);
+        this.handleNetSetGoTableList(1);
     }
 
     headerView = () => {
@@ -207,7 +184,7 @@ class Spectator extends Component {
                 <div className="row">
                     <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants._spectator}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.netSetGo}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -247,15 +224,14 @@ class Spectator extends Component {
 
     contentView = () => {
         let userState = this.props.userState;
-        let spectatorList = userState.spectatorList;
-        let total = userState.spectatorTotalCount;
-        console.log(spectatorList)
+        let netSetGoList = userState.netSetGoList;
+        let total = userState.netSetGoTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columns}
-                        dataSource={spectatorList}
+                        dataSource={netSetGoList}
                         pagination={false}
                         loading={this.props.userState.onLoad}
                     />
@@ -263,9 +239,9 @@ class Spectator extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.spectatorPage}
+                        current={userState.netSetGoPage}
                         total={total}
-                        onChange={(page) => this.handleSpectatorTableList(page)}
+                        onChange={(page) => this.handleNetSetGoTableList(page)}
                         showSizeChanger={false}
                     />
                 </div>
@@ -276,8 +252,8 @@ class Spectator extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu="user" userSelectedKey="67" />
+                <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="8" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -293,8 +269,9 @@ class Spectator extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        getUserFriendAction,
         getOnlyYearListAction,
-        getSpectatorListAction
+        getNetSetGoActionList
     }, dispatch);
 }
 
@@ -304,4 +281,4 @@ function mapStateToProps(state) {
         appState: state.AppState
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)((Spectator));
+export default connect(mapStateToProps, mapDispatchToProps)((NetSetGo));
