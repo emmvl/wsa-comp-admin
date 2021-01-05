@@ -74,13 +74,15 @@ const columns = [
         key: 'name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (name, record) =>
-            // <NavLink to={{
-            //     pathname: `/userPersonal`,
-            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
-            // }}>
-            <span className="input-heading-add-another pt-0">{name}</span>
-        // </NavLink>
+        render: (name, record) => (
+            <NavLink to={{
+                pathname: `/userPersonal`,
+                state: { userId: record.userId, screenKey: 'orderSummary', screen: "/orderSummary" },
+            }}
+            >
+                <span className="input-heading-add-another pt-0">{name}</span>
+            </NavLink>
+        ),
     },
     {
         title: 'Affiliate',
