@@ -1341,7 +1341,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     ))}
                                 </Select>
                             </div>
-                            <div className='col-sm-1 mt-2' style={{ minWidth: 160,marginRight:-27 }}>
+                            <div className='col-sm-1 mt-2 mr-n27' style={{ minWidth: 160}}>
                                 <Checkbox
                                     className="single-checkbox-radio-style"
                                     style={{ paddingTop: 8 }}

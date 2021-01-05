@@ -2152,7 +2152,7 @@ class UserModulePersonalDetail extends Component {
 
                             <div className='col-sm d-flex justify-content-end'>
                                 <span className="desc-text-style  side-bar-profile-data">
-                                    {personal.accreditationUmpireExpiryDate && moment(personal.accreditationUmpireExpiryDate).format("DD-MM-YYYY")}
+                                    {personal.accreditationCoachExpiryDate && moment(personal.accreditationCoachExpiryDate).format("DD-MM-YYYY")}
                                 </span>
                             </div>
                         </div>
