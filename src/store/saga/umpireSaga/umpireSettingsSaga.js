@@ -58,6 +58,25 @@ function* umpireAllocationSettingsGetSaga(action) {
     }
 }
 
+function* umpireAllocationSettingsPostSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.umpireAllocationSettingsPost, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 export default function* rootUmpireSettingsSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_LOAD, umpireAllocationSettingsGetSaga);
+    yield takeEvery(ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_LOAD, umpireAllocationSettingsPostSaga);
 }

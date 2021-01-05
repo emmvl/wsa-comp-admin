@@ -76,10 +76,23 @@ function umpireSettingState(state = initialState, action) {
         case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_LOAD:
             return {
                 ...state,
-                onLoad: false,
+                onLoad: true,
             };
             
         case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                allocationSettingsData: action.result,
+                onLoad: false,
+            };
+
+        case ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+                
+        case ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
             return {
                 ...state,
                 allocationSettingsData: action.result,
