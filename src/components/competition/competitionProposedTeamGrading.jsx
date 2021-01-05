@@ -718,7 +718,7 @@ class CompetitionProposedTeamGrading extends Component {
                 <CommentModal
                     visible={this.state.visible}
                     modalTitle={AppConstants.add_edit_comment}
-                    onOK={this.handleOk}
+                    onOk={() => this.handleOk()}
                     onCancel={this.handleCancel}
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}

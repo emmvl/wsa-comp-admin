@@ -30,9 +30,10 @@ class CommentModal extends React.Component {
         return (
             <div className="bg-danger">
                 <Modal
-                    {...this.props}
                     className="add-membership-type-modal"
                     title={modalTitle}
+                    {...this.props}
+
                 >
                     <div
                         className="over"

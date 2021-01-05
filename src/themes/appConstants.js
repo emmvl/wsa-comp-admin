@@ -1699,8 +1699,14 @@ const AppConstants = {
   gamesRedeemed: "Games Redeemed",
   gamesToRedeem: "Games to redeem",
   howManyGames: "How many games?",
+  coachAccreditation: "Coach Accreditation",
   teamMembers: "Team Members",
-  addTeamMembers: "Add Team Members"
+  addTeamMembers: "Add Team Members",
+  refunds: 'Refunds',
+  transferId: 'Transfer Id',
+  transactionId :'Transaction Id',
+  payoutId :'Payout Id',
+  refundId :'Refund Id',
 };
 
 export default AppConstants;

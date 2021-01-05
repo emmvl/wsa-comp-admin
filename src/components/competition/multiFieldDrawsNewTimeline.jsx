@@ -1341,7 +1341,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     ))}
                                 </Select>
                             </div>
-                            <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
+                            <div className='col-sm-1 mt-2 mr-n27' style={{ minWidth: 160}}>
                                 <Checkbox
                                     className="single-checkbox-radio-style"
                                     style={{ paddingTop: 8 }}
@@ -1365,7 +1365,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             </div>
 
 
-                            <div className="col-sm d-flex justify-content-end align-items-center pr-1">
+                            <div className="col-sm-0 d-flex justify-content-end align-items-center pr-1">
                                 <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
                                     {AppConstants.go}
                                 </Button>
