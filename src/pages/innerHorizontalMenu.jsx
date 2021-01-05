@@ -885,6 +885,11 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Payouts</span>
                             </NavLink>
                         </Menu.Item>
+                        <Menu.Item key="4">
+                            <NavLink to="/registrationRefunds">
+                                <span>Refunds</span>
+                            </NavLink>
+                        </Menu.Item>
                         {/* <SubMenu
                             key="sub2"
                             title={
