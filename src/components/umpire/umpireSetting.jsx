@@ -366,7 +366,7 @@ class UmpireSetting extends Component {
 
                 <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
                 <Checkbox
-                    className="single-checkbox pt-2"
+                    // className="single-checkbox pt-2"
                     checked={boxData.activateReserves}
                     onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
                 >
@@ -375,7 +375,7 @@ class UmpireSetting extends Component {
 
                 <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
                 <Checkbox
-                    className="single-checkbox pt-2"
+                    // className="single-checkbox pt-2"
                     checked={boxData.activateCoaches}
                     onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
                 >
@@ -388,7 +388,7 @@ class UmpireSetting extends Component {
     boxSettingsRadioView = (boxData, sectionDataIndex, sectionData) => {
         return (
             <div>
-                <span className='text-heading-large pt-4 pb-2'>{AppConstants.howUmpiresAllocated}</span>
+                <span className='text-heading-large pt-4'>{AppConstants.howUmpiresAllocated}</span>
                 <div className="d-flex flex-column">
                     <Radio
                         onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 242, sectionData)}
