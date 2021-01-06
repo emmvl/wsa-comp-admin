@@ -83,6 +83,7 @@ import UmpireRoster from 'components/umpire/umpireRoster';
 import UmpireSetting from 'components/umpire/umpireSetting';
 
 import AffiliateDirectory from 'components/user/affiliateDirectory';
+import NetSetGo from 'components/user/netSetGo';
 import PlayWithFriend from 'components/user/playWithFriend';
 import ReferFriend from 'components/user/referFriend';
 import Spectator from 'components/user/spectator';
@@ -178,6 +179,7 @@ import AddCommunication from 'components/communication/addCommunication';
 import CommunicationView from 'components/communication/communictionView';
 import MergeUserMatches from 'components/user/mergeUserMatches'
 import MergeUserDetail from 'components/user/mergeUserDetail'
+import AddTeamMember from 'components/user/addTeamMember';
 
 class Routes extends React.Component {
     constructor(props) {
@@ -759,6 +761,11 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
+                    path="/netSetGo"
+                    component={this.haveAccess(userRoleId, '/netSetGo') ? lazyLoad(NetSetGo) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
                     path="/playWithFriend"
                     component={this.haveAccess(userRoleId, '/playWithFriend') ? lazyLoad(PlayWithFriend) : lazyLoad(NotFound)}
                 />
@@ -770,7 +777,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/spectator"
-                    component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/spectator') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -994,7 +1001,16 @@ class Routes extends React.Component {
 
                 <PrivateRoute path="/communicationView" component={lazyLoad(CommunicationView)} />
 
+                <PrivateRoute
+                    path="/addTeamMember"
+                    component={this.haveAccess(userRoleId, '/addTeamMember')
+                        ? lazyLoad(AddTeamMember)
+                        : lazyLoad(NotFound)}
+                />
+
                 <Route path="/" component={lazyLoad(NotFound)} />
+
+               
 
                 <Redirect from="*" to="/404" />
             </Switch>

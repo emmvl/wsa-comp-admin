@@ -30,9 +30,10 @@ class CommentModal extends React.Component {
         return (
             <div className="bg-danger">
                 <Modal
-                    {...this.props}
                     className="add-membership-type-modal"
                     title={modalTitle}
+                    {...this.props}
+
                 >
                     <div
                         className="over"
@@ -46,7 +47,7 @@ class CommentModal extends React.Component {
                         <Loader visible={commentLoad} />
                         {commentList.map((commentItem) => (
                             <div className="col-sm pl-0 pb-2">
-                                <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">
+                                <span className="comment-heading font-weight-bold pr-2">
                                     {commentItem.createdByName}
                                     {" "}
                                     {"("}
@@ -54,7 +55,7 @@ class CommentModal extends React.Component {
                                     {")"}
                                     {" "}
                                 </span>
-                                <span style={{ fontSize: 18 }} className="comment-heading font-weight-bold pr-2">
+                                <span className="comment-heading font-weight-bold pr-2">
                                     {"("}
                                     {moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}
                                     {")"}

@@ -4748,16 +4748,27 @@ class RegistrationCompetitionFee extends Component {
                 //     finalmembershipProductTypes.splice(i, 1);
                 // }
             }
-            let arrayList = finalmembershipProductTypes.filter(x => x.membershipProductTypes.length > 0);
-            let payload = {
-                membershipProducts: arrayList,
-            };
-            this.props.saveCompetitionFeesMembershipTabAction(
-                payload,
-                competitionId,
-                this.state.affiliateOrgId
-            );
-            this.setState({ loading: true, divisionState: true });
+
+            if (!isArrayNotEmpty(finalmembershipProductTypes)) {
+                message.error(ValidationConstants.please_SelectMembership_Product);
+            }
+            else if (isArrayNotEmpty(finalmembershipProductTypes)) {
+                if (!isArrayNotEmpty(finalmembershipProductTypes[0].membershipProductTypes)) {
+                    message.error(ValidationConstants.please_SelectMembership_Types);
+                } else {
+                    let arrayList = finalmembershipProductTypes.filter(x => x.membershipProductTypes.length > 0);
+                    let payload = {
+                        membershipProducts: arrayList,
+                    };
+                    this.props.saveCompetitionFeesMembershipTabAction(
+                        payload,
+                        competitionId,
+                        this.state.affiliateOrgId
+                    );
+                    this.setState({ loading: true, divisionState: true });
+                }
+            }
+
         } else if (tabKey == '3') {
             let divisionArrayData = compFeesState.competitionDivisionsData;
             let finalDivisionArray = [];

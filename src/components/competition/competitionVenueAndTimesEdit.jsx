@@ -182,7 +182,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         </span>
                     )
                 }
-            ]
+            ],
+            manualAddress: false,
 
         };
         this_Obj = this;
@@ -448,7 +449,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     };
 
-    contentView = () => {
+    enabledContentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
         // const { venueOrganisation } = this.props.userState
@@ -498,16 +499,215 @@ class CompetitionVenueAndTimesEdit extends Component {
                     />
                 </Form.Item>
 
-                <Form.Item name="venueAddress">
-                    <PlacesAutocomplete
-                        defaultValue={defaultVenueAddress}
-                        heading={AppConstants.venueSearch}
-                        required
-                        error={this.state.venueAddressError}
+                {
+                    !this.state.manualAddress &&
+                    <Form.Item name="venueAddress">
+                        <PlacesAutocomplete
+                            defaultValue={defaultVenueAddress}
+                            heading={AppConstants.venueSearch}
+                            required
+                            error={this.state.venueAddressError}
+                            onSetData={this.handlePlacesAutocomplete}
+                        />
+                    </Form.Item>
+
+                }
+
+                <div
+                    className="orange-action-txt" style={{ marginTop: "10px" }}
+                    onClick={() => this.setState({ manualAddress: !this.state.manualAddress })}
+
+                >{this.state.manualAddress ? AppConstants.returnAddressSearch : AppConstants.enterAddressManually}
+                </div>
+
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item name="addressOne">
+                        <InputWithHead
+                            auto_complete="new-addressOne"
+                            required="required-field"
+                            heading={AppConstants.addressOne}
+                            placeholder={AppConstants.addressOne}
+                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                            value={venuData.street1}
+                        />
+                    </Form.Item>
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <InputWithHead
+                        auto_complete="new-addressTwo"
+                        heading={AppConstants.addressTwo}
+                        placeholder={AppConstants.addressTwo}
+                        onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
+                        value={venuData.street2}
+                    />
+                }
+
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item name="suburb">
+                        <InputWithHead
+                            auto_complete="new-suburb"
+                            required="required-field"
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
+                            value={venuData.suburb}
+                        />
+                    </Form.Item>
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <InputWithHead
+                        required="required-field"
+                        heading={AppConstants.stateHeading}
+                    />
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item name="stateRefId">
+                        <Select
+                            className="w-100"
+                            placeholder={AppConstants.select}
+                            onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
+                            value={venuData.stateRefId}
+                        >
+                            {stateList.map((item) => (
+                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                }
+
+
+                {
+                    this.state.manualAddress &&
+                    <Form.Item name="postcode">
+                        <InputWithHead
+                            auto_complete="new-postcode"
+                            required="required-field"
+                            heading={AppConstants.postcode}
+                            placeholder={AppConstants.postcode}
+                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
+                            value={venuData.postalCode}
+                            maxLength={4}
+                        />
+                    </Form.Item>
+                }
+
+                <InputWithHead
+                    auto_complete="new-contactNumber"
+                    heading={AppConstants.contactNumber}
+                    placeholder={AppConstants.contactNumber}
+                    onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
+                    value={venuData.contactNumber}
+                />
+
+                <div className="fluid-width" style={{ marginTop: 25 }}>
+                    <div className="row">
+                        <div className="col-sm">
+                            <Checkbox
+                                // disabled={this.state.isUsed}
+                                className="single-checkbox"
+                                checked={venuData.affiliate}
+                                onChange={e => this.props.updateVenuAndTimeDataAction(e.target.checked, 'Venue', 'affiliate')}
+                            >
+                                {AppConstants.linkToHomeAffiliate}
+                            </Checkbox>
+                        </div>
+                        {venuData.affiliate && (
+                            <div className="col-sm">
+                                <Select
+                                    // disabled={this.state.isUsed}
+                                    mode="multiple"
+                                    className="w-100"
+                                    value={venuData.affiliateData}
+                                    onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'editOrganisations', "editOrganisations")}
+                                    placeholder="Select"
+                                >
+                                    {this.state.venueOrganisation.map((item) => (
+                                        <Option
+                                            key={'venueOrganisation_' + item.id}
+                                            value={item.id}
+                                            disabled={item.isDisabled}
+                                        >
+                                            {item.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    diabledContentView = () => {
+        const { venuData } = this.props.venueTimeState
+        const { stateList } = this.props.commonReducerState
+        // const { venueOrganisation } = this.props.userState
+
+        const state = stateList.length > 0 && venuData.stateRefId
+            ? stateList.find((state) => state.id === venuData.stateRefId).name
+            : null;
+
+        let defaultVenueAddress = `${venuData.street1 ? `${venuData.street1},` : ''
+            } ${venuData.suburb ? `${venuData.suburb},` : ''
+            } ${state ? `${state},` : ''
+            } Australia`;
+
+        return (
+            <div className="content-view">
+                <span className="form-heading">
+                    {AppConstants.venue}
+                </span>
+                <Form.Item
+                    name="name"
+                    rules={[{ required: true, message: ValidationConstants.nameField[2] }]}
+                >
+                    <InputWithHead
+                        auto_complete="new-name"
+                        required="required-field"
+                        heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
-                        onSetData={this.handlePlacesAutocomplete}
+                        placeholder={AppConstants.name}
+                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
+                        value={venuData.name}
                     />
                 </Form.Item>
+
+                <Form.Item
+                    className="formLineHeight"
+                    name="shortName"
+                    rules={[{ required: true, message: ValidationConstants.nameField[3] }]}
+                >
+                    <InputWithHead
+                        auto_complete="new-shortName"
+                        required="required-field"
+                        heading={AppConstants.short_Name}
+                        disabled={this.state.isUsed || !this.state.isCreator}
+                        placeholder={AppConstants.short_Name}
+                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                        value={venuData.shortName}
+                    />
+                </Form.Item>
+
+
+                <InputWithHead
+                    value={defaultVenueAddress}
+                    placeholder={AppConstants.short_Name}
+                    heading={AppConstants.venueSearch}
+                    required="required-field"
+                    disabled={true}
+                />
+
 
                 <Form.Item name="addressOne">
                     <InputWithHead
@@ -994,7 +1194,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         noValidate="noValidate"
                     >
                         <Content>
-                            <div className="formView">{this.contentView()}</div>
+                            <div className="formView">{(this.state.isUsed || !this.state.isCreator) ? this.diabledContentView() : this.enabledContentView()}</div>
                             <div className="formView">{this.gameDayView()}</div>
                             <div className="formView">{this.courtView()}</div>
                             <Loader

@@ -71,30 +71,40 @@ code {
     width: 50px;
 }
 
-.Tooltip_Wrapper__3AlJ0 >  svg > path:first-child {
+.Tooltip_Wrapper__3AlJ0>svg>path:first-child {
     fill: #ff8237;
 }
 
 .pointer {
     cursor: pointer;
 }
+
 .ml-n95 {
     margin-left: -95px;
 }
+
 .ml-n80 {
     margin-left: -80px;
 }
+
 .ml-n25 {
     margin-left: -25px;
 }
+
 .ml-n40 {
     margin-left: -40px;
 }
+
 .ml-n35 {
     margin-left: -35px;
 }
-.mr-22{
+
+.mr-22 {
     margin-right: 22px;
+}
+
+.mr-n27 {
+    margin-right: -27px;
 }
 
 @media (max-width: 767px) {

@@ -140,7 +140,7 @@ const columns = [
         key: 'comments',
         width: 110,
         render: (comments, record) => (
-            <div className="d-flex justify-content-center pointer" onClick={() => this_obj.state.competitionStatus !== 0 && this_obj.onClickComment(record)}>
+            <div className="d-flex justify-content-center pointer" onClick={() => this_obj.state.competitionStatus != 1 && this_obj.onClickComment(record)}>
                 <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>
         ),
@@ -287,6 +287,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     onClickComment(record) {
+        console.log("called")
         this.props.commentListingAction(this.state.firstTimeCompId, record.teamId, "2")
         this.setState({
             visible: true, comment: "",
@@ -297,6 +298,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     handleOk = e => {
+        console.log(this.state.comment)
         if (this.state.comment.length > 0) {
             this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
         }
@@ -532,7 +534,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                 <CommentModal
                     visible={this.state.visible}
                     modalTitle={AppConstants.add_edit_comment}
-                    onOK={this.handleOk}
+                    onOk={() => this.handleOk()}
                     onCancel={this.handleCancel}
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}

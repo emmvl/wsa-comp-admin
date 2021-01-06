@@ -1079,6 +1079,23 @@ function* userResetTFASaga(action) {
   }
 }
 
+function* getNetSetGoListSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getNetSetGoList, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_NETSETGO_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1133,5 +1150,7 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
   yield takeEvery(ApiConstants.Api_RESET_TFA_LOAD, userResetTFASaga);
   yield takeEvery(ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD, getUserModuleTeamMembersDataSaga);
+  yield takeEvery(ApiConstants.API_GET_NETSETGO_LIST_LOAD, getNetSetGoListSaga);
+
 
 }
