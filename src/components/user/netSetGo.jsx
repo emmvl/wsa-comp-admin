@@ -98,7 +98,7 @@ const columns = [
         dataIndex: 'street1',
         key: 'address',
         render: (address, record) => (
-            <span>{record.street1} {record.street2} {record.suburb}</span>
+            <span>{record.street1 + ","} {record.street2 && (record.street2 + ",")} {record.suburb + ","} {record.state + ","} {record.country}</span>
         )
     },
     {
