@@ -265,7 +265,13 @@ class UmpireSetting extends Component {
 
             const newAllocationSettingsData = [...otherUmpireData, ...sectionDataSelectedCopy ];
 
-            this.setState({ allocationSettingsData: newAllocationSettingsData });
+            const newSelectedDivisions = [];
+
+            newAllocationSettingsData.forEach(item => {
+                newSelectedDivisions.push(...item.divisions);
+            });
+
+            this.setState({ allocationSettingsData: newAllocationSettingsData, selectedDivisions: newSelectedDivisions });
         }
 
         this.setState({ deleteModalVisible: false, sectionDataSelected: null, sectionDataToDeleteIndex: null });
@@ -366,7 +372,6 @@ class UmpireSetting extends Component {
 
                 <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
                 <Checkbox
-                    // className="single-checkbox pt-2"
                     checked={boxData.activateReserves}
                     onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
                 >
@@ -375,7 +380,6 @@ class UmpireSetting extends Component {
 
                 <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
                 <Checkbox
-                    // className="single-checkbox pt-2"
                     checked={boxData.activateCoaches}
                     onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
                 >
