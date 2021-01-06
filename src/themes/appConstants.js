@@ -1625,7 +1625,6 @@ const AppConstants = {
   backToMatchDay: 'Back To Match Day',
   umpireAccreditation: "Umpire Accreditation",
   expiry: "Expiry",
-  incidentExport : '/incident/export?entityId=',
   minNoDays: "Minimum number of days",
   _days: 'Days',
   extendEndDate: "Extend End Date",
@@ -1646,6 +1645,15 @@ const AppConstants = {
   childUnlinkMessage: "Your Parent needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
   parentUnlinkMessage: "Your Child needs to re-link your Accounts. Please ask them to press link next to you name in their User Profile.",
   ok: "OK",
+
+  // Communication
+  communicationTitle: 'Communication Title',
+  enterCommunicationTitle: 'Enter Communication Title',
+  communicationBody: 'Communication Body',
+  communicationImage: 'Communication Image',
+  communicationVideo: 'Communication Video',
+  communicationExpiryDate: 'Communication Expiry Date',
+  communicationExpiryTime: 'Communication Expiry Time'
 };
 
 export default AppConstants;

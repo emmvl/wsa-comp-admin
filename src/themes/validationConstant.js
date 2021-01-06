@@ -246,7 +246,10 @@ const ValidationConstants = {
     membershipProductsRequired: "Membership products is required",
     membershipFeeRequired: "Membership Fee is required",
     fromDateIsRequired: "From date is required",
-    toDateIsRequired: "To date is required"
+    toDateIsRequired: "To date is required",
+
+    // Communication validation
+    communicationValidation: ['Communication title is required.', 'Author is required'],
 };
 
 export default ValidationConstants;

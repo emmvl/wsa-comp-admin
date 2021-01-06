@@ -24,8 +24,6 @@ function communicationModuleState(state = initialState, action) {
 
     switch (action.type) {
         case ApiConstants.API_COMMUNICATION_LIST_LOAD:
-
-
             return { ...state, onLoad: true };
 
         case ApiConstants.API_COMMUNICATION_LIST_SUCCESS:
@@ -35,17 +33,6 @@ function communicationModuleState(state = initialState, action) {
                 onLoad: false,
                 umpireComptitionList: result,
                 status: action.status
-            };
-
-        case ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD:
-            return { ...state, onTextualLoad: true };
-
-        case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
-            let textualData = action.result;
-            return {
-                ...state,
-                onTextualLoad: false,
-                userDashboardTextualList: textualData.users,
             };
 
         case ApiConstants.API_UPDATE_COMMUNICATION_DATA:
@@ -93,25 +80,6 @@ function communicationModuleState(state = initialState, action) {
             return {
                 ...state,
             };
-
-        case ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD:
-            return { ...state, onLoad: true, affiliateToOnLoad: true, onLoadSearch: true };
-
-        case ApiConstants.API_AFFILIATE_TO_ORGANISATION_SUCCESS:
-            let affiliateToData = action.result;
-            return {
-                ...state,
-                onLoad: false,
-                affiliateTo: affiliateToData,
-                affiliateToOnLoad: false,
-                status: action.status,
-                onLoadSearch: false
-            };
-
-        case ApiConstants.API_CLEAR_LIST_DATA:
-            state.userDashboardTextualList = []
-            state.onTextualLoad = false
-            return { ...state };
 
         case ApiConstants.API_COMMUNICATION_LIST_FAIL:
             return {
