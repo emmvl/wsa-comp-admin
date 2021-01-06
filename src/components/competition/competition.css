@@ -4,6 +4,10 @@
     padding-bottom: 56px;
 }
 
+.goBtn{
+    margin-bottom: 2px;
+}
+
 .paddingBottom80px {
     padding-bottom: 80px;
 }
@@ -695,11 +699,18 @@ a.collapsed i {
     .comp-buttons-view .save-draft-text {
         margin-right: 20px;
     }
+
+    .goBtn{
+        margin-top: 2px;
+    }
 }
 
 @media (max-width: 767px) {
     .paddingBottom56px {
         padding-bottom: 5px;
+    }
+    .goBtn{
+        margin-top: 2px;
     }
 
     .multiDrawRow {

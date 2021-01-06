@@ -1365,7 +1365,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             </div>
 
 
-                            <div className="col-sm-0 d-flex justify-content-end align-items-center pr-1">
+                            <div className="col-sm-0 d-flex justify-content-end align-items-center pr-1 goBtn">
                                 <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
                                     {AppConstants.go}
                                 </Button>
