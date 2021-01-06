@@ -599,7 +599,7 @@ class UmpireSetting extends Component {
             .filter(item => !item.hasUmpires && !!item.divisions.length)
             .map(item => ({
                 allDivisions: item.allDivisions,
-                divisions: item.divisions.map(division => division.id),
+                divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
             }));
         
         const umpireAllocationSettingsArray = allocationSettingsData
@@ -608,14 +608,14 @@ class UmpireSetting extends Component {
                 activateCoaches: item.activateCoaches,
                 activateReserves: item.activateReserves,
                 allDivisions: item.allDivisions,
-                divisions: item.divisions.map(division => division.id),
+                divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
                 maxNumberOfMatches: item.maxNumberOfMatches,
                 timeBetweenMatches: item.timeBetweenMatches,
                 umpireAllocationTypeRefId: item.umpireAllocationTypeRefId,
                 umpireAllocatorTypeRefId: item.umpireAllocatorTypeRefId,
             }));
 
-        const noUmpiresSetting = !!noUmpiresSettingArray[0]?.divisions.length ? noUmpiresSettingArray[0] : null;
+        const noUmpiresSetting = !!noUmpiresSettingArray[0]?.divisions.length || !!noUmpiresSettingArray[0]?.allDivisions ? noUmpiresSettingArray[0] : null;
         const umpireAllocationSettings = !!umpireAllocationSettingsArray.length ? umpireAllocationSettingsArray : [];
 
         const bodyData = { noUmpiresSetting, umpireAllocationSettings }
