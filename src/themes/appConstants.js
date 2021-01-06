@@ -1708,6 +1708,8 @@ const AppConstants = {
   allocateViaPools: 'Allocate Via Pools',
   umpireYourOwnTeam: 'Umpire Your Own - Team',
   umpireYourOwnOrganisation: 'Umpire Your Own - Organisation',
+  timeBetweenMatches: 'Time between matches',
+  maxNumberOfMatches: 'Maximum number of matches',
   
   coachAccreditation: "Coach Accreditation",
   teamMembers: "Team Members",

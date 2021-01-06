@@ -9,21 +9,24 @@ import {
     Radio,
     Form,
     Checkbox,
-    Modal
+    Modal,
+    InputNumber
 } from "antd";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import Loader from '../../customComponents/loader';
 import DashboardLayout from "../../pages/dashboardLayout";
+
 import AppConstants from "../../themes/appConstants";
 import { isArrayNotEmpty } from "../../util/helpers";
-import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
+import { getUmpireCompId, setUmpireCompId } from "../../util/sessionStorage";
 import { 
     updateUmpireDataAction, 
     getUmpireAllocationSettings,
     saveUmpireAllocationSettings,
-} from '../../store/actions/umpireAction/umpireSettingAction'
-import { liveScoreGetDivision } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+} from "../../store/actions/umpireAction/umpireSettingAction";
+import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import history from "util/history";
 
 const { Header, Footer, Content } = Layout;
@@ -61,46 +64,35 @@ class UmpireSetting extends Component {
             sectionDataToDeleteIndex: null,
             selectedDivisions: null,
 
-            isAllDivisionChecked: false,
-
-            selectedDivisionList: [],
-            compOrgDivisionSelected: [],
-            affiliateOrgDivisionSelected: [],
-
-            compOrgBoxNumber: 1,
-            affiliateOrgBoxNumber: 1,
-
-            selectAllDivCompOrg: false,
-            selectAllDivAffiliate: false,
-            selectAllDivNoUmpire: false,
         };
     }
 
     componentDidMount() {
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        // this.props.umpireCompetitionListAction(null, null, null, 'USERS');
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && !this.props.umpireCompetitionState.onLoad) {
-                let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = compList.length > 0 && compList[0].id
+                const compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : [];
+                let firstComp = compList.length > 0 && compList[0].id;
 
                 if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
+                    const compId = JSON.parse(getUmpireCompId());
+                    firstComp = compId;
                 } else {
-                    setUmpireCompId(firstComp)
+                    setUmpireCompId(firstComp);
                 }
 
                 if (!!compList.length) {
                     this.props.liveScoreGetDivision(firstComp);
                 }
 
-                let compKey = compList.length > 0 && compList[0].competitionUniqueKey
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                const compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey });
             }
         }
 
@@ -165,6 +157,17 @@ class UmpireSetting extends Component {
         }
     }
 
+    handleAddBox = umpireAllocatorTypeRefId => {
+        const { allocationSettingsData } = this.state;
+        
+        const initialUmpireBoxData = JSON.parse(JSON.stringify(initialUmpireAllocationGetData));
+        initialUmpireBoxData.umpireAllocatorTypeRefId = umpireAllocatorTypeRefId;
+
+        this.setState({ allocationSettingsData: 
+            [ ...allocationSettingsData, initialUmpireBoxData ]
+        });
+    }
+
     handleChangeSettingsState = (sectionDataIndex, key, value, sectionData) => {
         const { divisionList } = this.props.liveScoreTeamState;
         const { allocationSettingsData, selectedDivisions } = this.state;
@@ -179,6 +182,10 @@ class UmpireSetting extends Component {
         const otherBoxData = allocationSettingsDataCopy
             .filter(item => item.umpireAllocatorTypeRefId !== sectionData[0].umpireAllocatorTypeRefId);
 
+        if (key === 'umpireAllocationTypeRefId' && (value !== 243 ||  value !== 245)) {
+            targetBoxData[sectionDataIndex].timeBetweenMatches = null;
+            targetBoxData[sectionDataIndex].maxNumberOfMatches = null;
+        }
 
         if (key !== 'allDivisions') {
             if (key === 'divisions') {
@@ -219,7 +226,7 @@ class UmpireSetting extends Component {
             });
         }
 
-        console.log('newAllocationSettingsData', newAllocationSettingsData)
+        // console.log('newAllocationSettingsData', newAllocationSettingsData)
 
         if (key === 'allDivisions' && !!value) {
             this.setState({ 
@@ -290,15 +297,15 @@ class UmpireSetting extends Component {
     };
 
     onChangeComp = (compID) => {
-        let selectedComp = compID.comp;
-        this.props.liveScoreGetDivision(selectedComp);
-        setUmpireCompId(selectedComp)
-        let compKey = compID.competitionUniqueKey
-        this.setState({ selectedComp, competitionUniqueKey: compKey })
+        this.props.liveScoreGetDivision(compID);
+        setUmpireCompId(compID);
+
+        this.setState({ selectedComp: compID });
     }
 
     dropdownView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        const competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -311,7 +318,7 @@ class UmpireSetting extends Component {
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 200 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
+                                    onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
                                 >
                                     {competition.map((item) => (
@@ -330,6 +337,32 @@ class UmpireSetting extends Component {
         return (
             <div className="pt-0 mt-4">
                 {this.boxSettingsRadioView(boxData, sectionDataIndex, sectionData)}
+
+                {(boxData.umpireAllocationTypeRefId === 243 || boxData.umpireAllocationTypeRefId === 245) && 
+                    <>
+                        <span className='text-heading-large pt-5'>{AppConstants.timeBetweenMatches}</span>
+                        <div className="d-flex align-items-center">
+                            <InputNumber
+                                value={+boxData.timeBetweenMatches}
+                                onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'timeBetweenMatches', e, sectionData)}
+                                min={0}
+                                precision={0}
+                                style={{ width: 100 }}
+                            />
+                            <span className="ml-4">{AppConstants.minutes}</span>
+                        </div>
+
+                        <span className='text-heading-large pt-5'>{AppConstants.maxNumberOfMatches}</span>
+                        <InputNumber 
+                            value={+boxData.maxNumberOfMatches}
+                            onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'maxNumberOfMatches', e, sectionData)}
+                            min={0}
+                            precision={0}
+                            style={{ width: 100 }}
+                        />
+                            
+                    </>
+                }
 
                 <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
                 <Checkbox
@@ -376,12 +409,14 @@ class UmpireSetting extends Component {
                     >
                         {AppConstants.umpireYourOwnTeam}
                     </Radio>
-                    <Radio
-                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 245, sectionData)}
-                        checked={boxData.umpireAllocationTypeRefId === 245}
-                    >
-                        {AppConstants.umpireYourOwnOrganisation}
-                    </Radio>
+                    {boxData.umpireAllocatorTypeRefId === 247 && 
+                        <Radio
+                            onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 245, sectionData)}
+                            checked={boxData.umpireAllocationTypeRefId === 245}
+                        >
+                            {AppConstants.umpireYourOwnOrganisation}
+                        </Radio>
+                    }
                 </div>
             </div>
         )
@@ -421,8 +456,6 @@ class UmpireSetting extends Component {
 
     ////////top or say first view
     topView = () => {
-        // console.log('this.state.allocationSettingsData', this.state.allocationSettingsData);
-
         return (
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
@@ -501,16 +534,19 @@ class UmpireSetting extends Component {
                             {umpireAllocatorTypeRefId && this.boxSettingsView(boxData, sectionDataIndex, sectionData)}
                         </div>
                         ))}
-                        {/* {this.state.selectedDivisionList.length !==  this.props.liveScoreTeamState.divisionList.length && (
-                            <div className="row mb-5">
-                                <div 
-                                    className="col-sm"
-                                    // onClick={() => this.setState({ [boxNumberKey]: this.state[boxNumberKey] + 1 })}
-                                >
-                                    <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
+                        {this.state.selectedDivisions.length !==  this.props.liveScoreTeamState.divisionList.length
+                            && umpireAllocatorTypeRefId 
+                            && (
+                                <div className="row mb-5">
+                                    <div 
+                                        className="col-sm"
+                                        onClick={() => this.handleAddBox(umpireAllocatorTypeRefId)}
+                                    >
+                                        <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        )} */}
+                            )
+                        }
                     </>
                 )}
             </>
@@ -533,14 +569,14 @@ class UmpireSetting extends Component {
         const { selectedComp, allocationSettingsData } = this.state;
 
         const noUmpiresSettingArray = allocationSettingsData
-            .filter(item => !item.hasUmpires)
+            .filter(item => !item.hasUmpires && !!item.divisions.length)
             .map(item => ({
                 allDivisions: item.allDivisions,
                 divisions: item.divisions.map(division => division.id),
             }));
         
         const umpireAllocationSettingsArray = allocationSettingsData
-            .filter(item => !!item.hasUmpires)
+            .filter(item => !!item.hasUmpires && !!item.divisions.length)
             .map(item => ({
                 activateCoaches: item.activateCoaches,
                 activateReserves: item.activateReserves,
@@ -631,6 +667,9 @@ class UmpireSetting extends Component {
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
+                    <Loader visible={this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
+                            || this.props.liveScoreTeamState.onLoad || this.props.umpireSettingState.onLoad} 
+                    />
                 </Layout>
             </div>
         );
@@ -651,6 +690,7 @@ function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpireSettingState: state.UmpireSettingState,
+        umpirePaymentSettingState: state.UmpirePaymentSettingState,
         liveScoreTeamState: state.LiveScoreTeamState,
     }
 }
