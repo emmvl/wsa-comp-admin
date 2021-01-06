@@ -490,9 +490,9 @@ class UmpireSetting extends Component {
                     {sectionTitle}
                 </Checkbox>
                 {sectionData && !!sectionData.length && (
-                    <>
+                    <div className="position-relative" style={{ paddingBottom: 35 }}>
                         {sectionData.map((boxData, sectionDataIndex) => (
-                        <div key={'settingsBox_' + sectionDataIndex} className="inside-container-view mb-4 mt-4">
+                        <div key={'settingsBox_' + sectionDataIndex} className="inside-container-view mb-2 mt-4">
                             {sectionData.length > 1 && (
                                 <div className="d-flex float-right">
                                     <div
@@ -537,7 +537,7 @@ class UmpireSetting extends Component {
                         {this.state.selectedDivisions.length !==  this.props.liveScoreTeamState.divisionList.length
                             && umpireAllocatorTypeRefId 
                             && (
-                                <div className="row mb-5">
+                                <div className="row mb-5 position-absolute">
                                     <div 
                                         className="col-sm"
                                         onClick={() => this.handleAddBox(umpireAllocatorTypeRefId)}
@@ -547,7 +547,7 @@ class UmpireSetting extends Component {
                                 </div>
                             )
                         }
-                    </>
+                    </div>
                 )}
             </>
         )
