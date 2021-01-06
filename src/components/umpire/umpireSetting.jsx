@@ -63,7 +63,7 @@ class UmpireSetting extends Component {
             sectionDataSelected: null,
             sectionDataToDeleteIndex: null,
             selectedDivisions: null,
-
+            tempSelectedDivisions: null,
         };
     }
 
@@ -133,6 +133,8 @@ class UmpireSetting extends Component {
 
     handleChangeWhoAssignsUmpires = (e, umpireAllocatorTypeRefId) => {
         const { allocationSettingsData } = this.state;
+        const newSelectedDivisions = [];
+        let newAllocationSettingsData;
         
         if (umpireAllocatorTypeRefId) {
             const filteredAllocationSettingsData = allocationSettingsData.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId)
@@ -140,21 +142,23 @@ class UmpireSetting extends Component {
             initialUmpireBoxData.umpireAllocatorTypeRefId = umpireAllocatorTypeRefId;
 
             if (e.target.checked) {
-                this.setState({ allocationSettingsData: 
-                    [ ...filteredAllocationSettingsData, initialUmpireBoxData ]
-                })
+                newAllocationSettingsData = [ ...filteredAllocationSettingsData, initialUmpireBoxData ];
             } else {
-                this.setState({ allocationSettingsData: [ ...filteredAllocationSettingsData ]})
+                newAllocationSettingsData = [ ...filteredAllocationSettingsData ];
             }  
         } else {
             if (e.target.checked) {
-                this.setState({ allocationSettingsData: 
-                    [ ...this.state.allocationSettingsData, initialNoUmpireAllocationGetData ]
-                })
+                newAllocationSettingsData = [ ...this.state.allocationSettingsData, initialNoUmpireAllocationGetData ];
             } else {
-                this.setState({ allocationSettingsData: [ ...this.state.allocationSettingsData.filter(item => !!item.umpireAllocatorTypeRefId) ]})
+                newAllocationSettingsData = [ ...this.state.allocationSettingsData.filter(item => !!item.umpireAllocatorTypeRefId) ];
             }  
         }
+
+        newAllocationSettingsData.forEach(item => {
+            newSelectedDivisions.push(...item.divisions);
+        });
+
+        this.setState({ allocationSettingsData: newAllocationSettingsData, selectedDivisions: newSelectedDivisions });
     }
 
     handleAddBox = umpireAllocatorTypeRefId => {
@@ -223,19 +227,34 @@ class UmpireSetting extends Component {
         if (key === 'allDivisions' && !value) {
             newAllocationSettingsData.forEach(item => {
                 item.allDivisions = newSelectedDivisions.length === divisionList.length;
+                item.divisions = [];
             });
         }
 
-        // console.log('newAllocationSettingsData', newAllocationSettingsData)
-
-        if (key === 'allDivisions' && !!value) {
+        if (key === 'allDivisions') {
             this.setState({ 
                 allDivisionVisible: !!value,
                 tempAllocationSettingsData: !!value ? newAllocationSettingsData : null,
-                selectedDivisions: !!value ? newSelectedDivisions : selectedDivisions,
+                allocationSettingsData: !value ? newAllocationSettingsData : allocationSettingsData,
+                tempSelectedDivisions: !!value ? newSelectedDivisions : [],
             });
         } else {
-            const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : selectedDivisions;
+            const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
+
+            if (key === 'divisions' && updatedSelectedDivisions.length < divisionList.length) {
+                newAllocationSettingsData.forEach(item => {
+                    item.allDivisions = false;
+                });
+            }
+
+            if (key === 'divisions' && updatedSelectedDivisions.length === divisionList.length && value.length === divisionList.length) {
+                newAllocationSettingsData
+                    .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId)[sectionDataIndex]
+                    .allDivisions = true;
+            }
+
+            // console.log('newAllocationSettingsData', newAllocationSettingsData);
+            // console.log('updatedSelectedDivisions', updatedSelectedDivisions);
 
             this.setState({ 
                 allocationSettingsData: newAllocationSettingsData, 
@@ -279,12 +298,16 @@ class UmpireSetting extends Component {
 
     handleAllDivisionModal = key => {
         if (key === "ok") {
-            this.setState({ allocationSettingsData: this.state.tempAllocationSettingsData });
+            this.setState({ 
+                allocationSettingsData: this.state.tempAllocationSettingsData,
+                selectedDivisions: this.state.tempSelectedDivisions,
+            });
         }
 
         this.setState({ 
             allDivisionVisible: false, 
-            tempAllocationSettingsData: null 
+            tempAllocationSettingsData: null,
+            tempSelectedDivisions: null,
         });
     }
 
@@ -671,7 +694,7 @@ class UmpireSetting extends Component {
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
-                    <Loader visible={this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
+                    <Loader visible={this.props.umpireCompetitionState.onLoad
                             || this.props.liveScoreTeamState.onLoad || this.props.umpireSettingState.onLoad} 
                     />
                 </Layout>
@@ -694,7 +717,6 @@ function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpireSettingState: state.UmpireSettingState,
-        umpirePaymentSettingState: state.UmpirePaymentSettingState,
         liveScoreTeamState: state.LiveScoreTeamState,
     }
 }
