@@ -177,12 +177,8 @@ class UmpireSetting extends Component {
     }
 
     handleChangeSettings = (sectionDataIndex, key, value, sectionData) => {
-        const { divisionList } = this.props.liveScoreTeamState;
-        const { allocationSettingsData, selectedDivisions } = this.state;
+        const { allocationSettingsData } = this.state;
         const allocationSettingsDataCopy = JSON.parse(JSON.stringify(allocationSettingsData));
-
-        let newAllocationSettingsData;
-        const newSelectedDivisions = [];
 
         const targetBoxData = allocationSettingsDataCopy
             .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId);
@@ -195,65 +191,82 @@ class UmpireSetting extends Component {
             targetBoxData[sectionDataIndex].maxNumberOfMatches = null;
         }
 
-        if (key !== 'allDivisions') {
-            newAllocationSettingsData = [...otherBoxData, ...targetBoxData ];
-
-            if (key === 'divisions') {
-                targetBoxData[sectionDataIndex].divisions = value.map(item =>
-                    divisionList.find(divisionListItem => divisionListItem.id === item)
-                );
-
-                newAllocationSettingsData.forEach(item => {
-                    newSelectedDivisions.push(...item.divisions);
-                });
-            } else {
-                targetBoxData[sectionDataIndex][key] = value;
-
-                newSelectedDivisions.push(...selectedDivisions);
-            }
-
-            const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
-
-            if (key === 'divisions' && updatedSelectedDivisions.length < divisionList.length) {
-                newAllocationSettingsData.forEach(item => {
-                    item.allDivisions = false;
-                });
-            }
-
-            if (key === 'divisions' && updatedSelectedDivisions.length === divisionList.length && value.length === divisionList.length) {
-                newAllocationSettingsData
-                    .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId)[sectionDataIndex]
-                    .allDivisions = true;
-            }
-
-            this.setState({ 
-                allocationSettingsData: newAllocationSettingsData, 
-                selectedDivisions: updatedSelectedDivisions
-            });
-
+        if (key === 'allDivisions') {
+            this.handleAllDivisionsChange(targetBoxData, sectionDataIndex, allocationSettingsDataCopy, value);
         } else {
-            allocationSettingsDataCopy.forEach(item => {
-                item.divisions = [];
+            this.handleNonAllDivisionsChange(sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value);
+        }
+    }
+
+    handleNonAllDivisionsChange = (sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value) => {
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { selectedDivisions } = this.state;
+
+        const newSelectedDivisions = [];
+
+        const newAllocationSettingsData = [...otherBoxData, ...targetBoxData ];
+
+        if (key === 'divisions') {
+            targetBoxData[sectionDataIndex].divisions = value.map(item =>
+                divisionList.find(divisionListItem => divisionListItem.id === item)
+            );
+
+            newAllocationSettingsData.forEach(item => {
+                newSelectedDivisions.push(...item.divisions);
+            });
+        } else {
+            targetBoxData[sectionDataIndex][key] = value;
+
+            newSelectedDivisions.push(...selectedDivisions);
+        }
+
+        const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
+
+        if (key === 'divisions' && updatedSelectedDivisions.length < divisionList.length) {
+            newAllocationSettingsData.forEach(item => {
                 item.allDivisions = false;
             });
-
-            if (!!value) {
-                newSelectedDivisions.push( ...divisionList);
-            }
-    
-            targetBoxData[sectionDataIndex].divisions = !!value ? divisionList : [];
-            targetBoxData[sectionDataIndex].allDivisions = value;
-    
-            newAllocationSettingsData = [ targetBoxData[sectionDataIndex] ];
-
-            this.setState({ 
-                allDivisionVisible: !!value,
-                tempAllocationSettingsData: !!value ? newAllocationSettingsData : null,
-                allocationSettingsData: !value ? newAllocationSettingsData : allocationSettingsData,
-                tempSelectedDivisions: !!value ? newSelectedDivisions : [],
-                selectedDivisions: !value ? [] : selectedDivisions,
-            });
         }
+
+        if (key === 'divisions' && updatedSelectedDivisions.length === divisionList.length && value.length === divisionList.length) {
+            newAllocationSettingsData
+                .filter(item => item.umpireAllocatorTypeRefId === sectionData[0].umpireAllocatorTypeRefId)[sectionDataIndex]
+                .allDivisions = true;
+        }
+
+        this.setState({ 
+            allocationSettingsData: newAllocationSettingsData, 
+            selectedDivisions: updatedSelectedDivisions
+        });
+    }
+
+    handleAllDivisionsChange = (targetBoxData, sectionDataIndex, allocationSettingsDataCopy, value) => {
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { allocationSettingsData, selectedDivisions } = this.state;
+
+        const newSelectedDivisions = [];
+
+        allocationSettingsDataCopy.forEach(item => {
+            item.divisions = [];
+            item.allDivisions = false;
+        });
+
+        if (!!value) {
+            newSelectedDivisions.push( ...divisionList);
+        }
+
+        targetBoxData[sectionDataIndex].divisions = !!value ? divisionList : [];
+        targetBoxData[sectionDataIndex].allDivisions = value;
+
+        const newAllocationSettingsData = [ targetBoxData[sectionDataIndex] ];
+
+        this.setState({ 
+            allDivisionVisible: !!value,
+            tempAllocationSettingsData: !!value ? newAllocationSettingsData : null,
+            allocationSettingsData: !value ? newAllocationSettingsData : allocationSettingsData,
+            tempSelectedDivisions: !!value ? newSelectedDivisions : [],
+            selectedDivisions: !value ? [] : selectedDivisions,
+        });
     }
 
     handleClickDeleteModal = (sectionDataIndex, sectionDataSelected) => {
