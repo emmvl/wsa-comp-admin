@@ -102,7 +102,9 @@ class UmpireSetting extends Component {
 
         if (this.props.umpireSettingState !== prevProps.umpireSettingState && !!this.props.umpireSettingState.allocationSettingsData
             && !this.props.umpireSettingState.onLoad) {
+
             const { umpireAllocationSettings, noUmpiresUmpireAllocationSetting } = this.props.umpireSettingState.allocationSettingsData;
+            const { divisionList } = this.props.liveScoreTeamState;
 
             umpireAllocationSettings.forEach(item => {
                 item.hasUmpires = true;
@@ -113,15 +115,15 @@ class UmpireSetting extends Component {
             }
 
             const allocationSettingsData = !!noUmpiresUmpireAllocationSetting 
-                ? [ ...umpireAllocationSettings, noUmpiresUmpireAllocationSetting]
+                ? [ ...umpireAllocationSettings, noUmpiresUmpireAllocationSetting ]
                 : [ ...umpireAllocationSettings ];
 
             const selectedDivisions = [];
     
             allocationSettingsData.forEach(item => {
-                selectedDivisions.push(...item.divisions);
+                item.allDivisions ? selectedDivisions.push(...divisionList) : selectedDivisions.push(...item.divisions);
             });
-
+            
             this.setState({ allocationSettingsData, selectedDivisions });
         }
 
@@ -133,6 +135,8 @@ class UmpireSetting extends Component {
 
     handleChangeWhoAssignsUmpires = (e, umpireAllocatorTypeRefId) => {
         const { allocationSettingsData } = this.state;
+        const { divisionList } = this.props.liveScoreTeamState;
+
         const newSelectedDivisions = [];
         let newAllocationSettingsData;
         
@@ -155,7 +159,7 @@ class UmpireSetting extends Component {
         }
 
         newAllocationSettingsData.forEach(item => {
-            newSelectedDivisions.push(...item.divisions);
+            item.allDivisions ? newSelectedDivisions.push(...divisionList) : newSelectedDivisions.push(...item.divisions);
         });
 
         this.setState({ allocationSettingsData: newAllocationSettingsData, selectedDivisions: newSelectedDivisions });
@@ -172,7 +176,7 @@ class UmpireSetting extends Component {
         });
     }
 
-    handleChangeSettingsState = (sectionDataIndex, key, value, sectionData) => {
+    handleChangeSettings = (sectionDataIndex, key, value, sectionData) => {
         const { divisionList } = this.props.liveScoreTeamState;
         const { allocationSettingsData, selectedDivisions } = this.state;
         const allocationSettingsDataCopy = JSON.parse(JSON.stringify(allocationSettingsData));
@@ -192,53 +196,22 @@ class UmpireSetting extends Component {
         }
 
         if (key !== 'allDivisions') {
+            newAllocationSettingsData = [...otherBoxData, ...targetBoxData ];
+
             if (key === 'divisions') {
                 targetBoxData[sectionDataIndex].divisions = value.map(item =>
                     divisionList.find(divisionListItem => divisionListItem.id === item)
                 );
+
+                newAllocationSettingsData.forEach(item => {
+                    newSelectedDivisions.push(...item.divisions);
+                });
             } else {
                 targetBoxData[sectionDataIndex][key] = value;
+
+                newSelectedDivisions.push(...selectedDivisions);
             }
 
-            newAllocationSettingsData = [...otherBoxData, ...targetBoxData ];
-        } else {
-            allocationSettingsDataCopy.forEach(item => {
-                item.divisions = [];
-                item.allDivisions = false;
-            });
-
-            if (!!value) {
-                newSelectedDivisions.push( ...divisionList);
-            }
-    
-            targetBoxData[sectionDataIndex].divisions = !!value ? divisionList : [];
-            targetBoxData[sectionDataIndex].allDivisions = value;
-    
-            newAllocationSettingsData = [ targetBoxData[sectionDataIndex] ];
-        } 
-
-        
-        if (key === 'divisions') {
-            newAllocationSettingsData.forEach(item => {
-                newSelectedDivisions.push(...item.divisions);
-            });
-        }
-
-        if (key === 'allDivisions' && !value) {
-            newAllocationSettingsData.forEach(item => {
-                item.allDivisions = newSelectedDivisions.length === divisionList.length;
-                item.divisions = [];
-            });
-        }
-
-        if (key === 'allDivisions') {
-            this.setState({ 
-                allDivisionVisible: !!value,
-                tempAllocationSettingsData: !!value ? newAllocationSettingsData : null,
-                allocationSettingsData: !value ? newAllocationSettingsData : allocationSettingsData,
-                tempSelectedDivisions: !!value ? newSelectedDivisions : [],
-            });
-        } else {
             const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
 
             if (key === 'divisions' && updatedSelectedDivisions.length < divisionList.length) {
@@ -253,12 +226,32 @@ class UmpireSetting extends Component {
                     .allDivisions = true;
             }
 
-            // console.log('newAllocationSettingsData', newAllocationSettingsData);
-            // console.log('updatedSelectedDivisions', updatedSelectedDivisions);
-
             this.setState({ 
                 allocationSettingsData: newAllocationSettingsData, 
                 selectedDivisions: updatedSelectedDivisions
+            });
+
+        } else {
+            allocationSettingsDataCopy.forEach(item => {
+                item.divisions = [];
+                item.allDivisions = false;
+            });
+
+            if (!!value) {
+                newSelectedDivisions.push( ...divisionList);
+            }
+    
+            targetBoxData[sectionDataIndex].divisions = !!value ? divisionList : [];
+            targetBoxData[sectionDataIndex].allDivisions = value;
+    
+            newAllocationSettingsData = [ targetBoxData[sectionDataIndex] ];
+
+            this.setState({ 
+                allDivisionVisible: !!value,
+                tempAllocationSettingsData: !!value ? newAllocationSettingsData : null,
+                allocationSettingsData: !value ? newAllocationSettingsData : allocationSettingsData,
+                tempSelectedDivisions: !!value ? newSelectedDivisions : [],
+                selectedDivisions: !value ? [] : selectedDivisions,
             });
         }
     }
@@ -373,7 +366,7 @@ class UmpireSetting extends Component {
                         <div className="d-flex align-items-center">
                             <InputNumber
                                 value={+boxData.timeBetweenMatches}
-                                onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'timeBetweenMatches', e, sectionData)}
+                                onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'timeBetweenMatches', e, sectionData)}
                                 min={0}
                                 precision={0}
                                 style={{ width: 100 }}
@@ -384,7 +377,7 @@ class UmpireSetting extends Component {
                         <span className='text-heading-large pt-5'>{AppConstants.maxNumberOfMatches}</span>
                         <InputNumber 
                             value={+boxData.maxNumberOfMatches}
-                            onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'maxNumberOfMatches', e, sectionData)}
+                            onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'maxNumberOfMatches', e, sectionData)}
                             min={0}
                             precision={0}
                             style={{ width: 100 }}
@@ -396,7 +389,7 @@ class UmpireSetting extends Component {
                 <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
                 <Checkbox
                     checked={boxData.activateReserves}
-                    onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
+                    onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
@@ -404,7 +397,7 @@ class UmpireSetting extends Component {
                 <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
                 <Checkbox
                     checked={boxData.activateCoaches}
-                    onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
+                    onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
@@ -418,27 +411,27 @@ class UmpireSetting extends Component {
                 <span className='text-heading-large pt-4'>{AppConstants.howUmpiresAllocated}</span>
                 <div className="d-flex flex-column">
                     <Radio
-                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 242, sectionData)}
+                        onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 242, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 242}
                     >
                         {AppConstants.manuallyAllocate}
                     </Radio>
 
                     <Radio
-                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 243, sectionData)}
+                        onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 243, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 243}
                     >
                         {AppConstants.allocateViaPools}
                     </Radio>
                     <Radio
-                        onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 244, sectionData)}
+                        onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 244, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 244}
                     >
                         {AppConstants.umpireYourOwnTeam}
                     </Radio>
                     {boxData.umpireAllocatorTypeRefId === 247 && 
                         <Radio
-                            onChange={() => this.handleChangeSettingsState(sectionDataIndex, 'umpireAllocationTypeRefId', 245, sectionData)}
+                            onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 245, sectionData)}
                             checked={boxData.umpireAllocationTypeRefId === 245}
                         >
                             {AppConstants.umpireYourOwnOrganisation}
@@ -532,7 +525,7 @@ class UmpireSetting extends Component {
                                 </div>
                             )}
                             <Checkbox
-                                onChange={(e) => this.handleChangeSettingsState(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
+                                onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
                                 checked={boxData.allDivisions}
                             >
                                 {AppConstants.allDivisions}
@@ -542,7 +535,7 @@ class UmpireSetting extends Component {
                                 mode="multiple"
                                 placeholder="Select"
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                                onChange={divisions => this.handleChangeSettingsState(sectionDataIndex, 'divisions', divisions, sectionData)}
+                                onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
                                 value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
                             >
                                 {(divisionList || []).map((item) => (
@@ -550,7 +543,7 @@ class UmpireSetting extends Component {
                                         key={'compOrgDivision_' + item.id}
                                         disabled={
                                             (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id 
-                                            && !boxData.divisions.find(division => division.id === item.id)))
+                                            && !boxData.allDivisions && !boxData.divisions.find(division => division.id === item.id)))
                                         }
                                         value={item.id}
                                     >
@@ -561,7 +554,7 @@ class UmpireSetting extends Component {
                             {umpireAllocatorTypeRefId && this.boxSettingsView(boxData, sectionDataIndex, sectionData)}
                         </div>
                         ))}
-                        {this.state.selectedDivisions.length !==  this.props.liveScoreTeamState.divisionList.length
+                        {selectedDivisions.length < this.props.liveScoreTeamState.divisionList.length
                             && umpireAllocatorTypeRefId 
                             && (
                                 <div className="row mb-5 position-absolute">
