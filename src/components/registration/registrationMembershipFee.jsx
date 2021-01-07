@@ -175,7 +175,8 @@ class RegistrationMembershipFee extends Component {
             confirmRePayFeesModalVisible: false,
             isPublished: false,
             tooltipVisibleDraft: false,
-            isActivatedDiscountService: false
+            isActivatedDiscountService: false,
+            addNew: this.props.location.state ? this.props.location.state.addNew ? this.props.location.state.addNew : null : null
         };
         this_Obj = this;
         this.formRef = React.createRef();
@@ -650,18 +651,20 @@ class RegistrationMembershipFee extends Component {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className="fluid-width">
-                                            <Checkbox
-                                                className="single-checkbox ml-0"
-                                                checked={item.isAllow}
-                                                onChange={e =>
-                                                    this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                                }
-                                                disabled={this.state.membershipIsUsed}
-                                            >
-                                                {AppConstants.allowTeamRegistration}
-                                            </Checkbox>
-                                        </div>
+                                        {item.membershipProductTypeRefName != "Player - NetSetGo" && (
+                                            <div className="fluid-width">
+                                                <Checkbox
+                                                    className="single-checkbox ml-0"
+                                                    checked={item.isAllow}
+                                                    onChange={e =>
+                                                        this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+                                                    }
+                                                    disabled={this.state.membershipIsUsed}
+                                                >
+                                                    {AppConstants.allowTeamRegistration}
+                                                </Checkbox>
+                                            </div>
+                                        )}
                                         {item.isPlaying != 1 && (
                                             <Checkbox
                                                 className="single-checkbox ml-0"
@@ -811,7 +814,10 @@ class RegistrationMembershipFee extends Component {
     };
 
     ///membershipFees apply radio onchange
-    membershipFeeApplyRadio = (radioApplyId, feesIndex, key) => {
+    membershipFeeApplyRadio = (radioApplyId, feesIndex, key, subKey) => {
+        if(subKey == "Validity"){
+            this.setState({ addNew : false})
+        }
         this.props.membershipFeesApplyRadioAction(radioApplyId, feesIndex, key)
     }
 
@@ -828,6 +834,7 @@ class RegistrationMembershipFee extends Component {
     feesView = () => {
         let data = this.props.registrationState.membershipProductFeesTableData
         let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
+        let addNew = this.state.addNew;
         return (
             <div>
                 <div className="tab-formView fees-view pt-5">
@@ -865,7 +872,7 @@ class RegistrationMembershipFee extends Component {
                                         </div>
                                         {item.membershipProductFeesTypeRefId == 1 && feeTypeItem.id == 1 && (
                                             <div className="validity-period-bg">
-                                                <span className="applicable-to-heading required-field" style={{ paddingTop: 0 }}>{AppConstants.minNoDays}</span>
+                                                <span className="applicable-to-heading" style={{ paddingTop: 0 }}>{AppConstants.minNoDays}</span>
                                                 <div className="row" style={{ marginTop: 10, alignItems: "center" }}>
                                                     <div className="col-md-6">
                                                         {/* <Form.Item
@@ -873,9 +880,9 @@ class RegistrationMembershipFee extends Component {
                                                             rules={[{ required: true, message: ValidationConstants.daysRequired }]}
                                                         > */}
                                                         <InputWithHead
-                                                            value={item.validityDays}
+                                                            value={addNew ? 365 : item.validityDays}
                                                             placeholder={AppConstants._days}
-                                                            onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays")}
+                                                            onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays", "Validity")}
                                                             // onBlur={(e) => {
                                                             //     this.formRef.current.setFieldsValue({
                                                             //         [`validityDays${index}`]: e.target.value >= 0 ? e.target.value : ""
