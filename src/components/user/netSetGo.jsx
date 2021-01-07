@@ -39,7 +39,7 @@ function tableSort(key) {
     }
 
     let filterData = {
-        organisationUniqueKey: this_Obj.state.organisationId,
+        organisationId: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         paging: {
             limit: 10,
@@ -54,15 +54,14 @@ const columns = [
 
     {
         title: 'Name',
-        dataIndex: 'firstName',
+        dataIndex: 'name',
         key: 'name',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("name"),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (name, record) => (
-            <span>{record.firstName} {record.lastName}</span>
-            // <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
-            //     <span className="input-heading-add-another pt-0">{name}</span>
-            // </NavLink>
+            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0">{name}</span>
+            </NavLink>
         ),
     },
     {
@@ -72,7 +71,7 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (regDate) => (
-            <span>{moment(regDate).format("DD-MM-YYYY")}</span>
+            <span>{moment(regDate).format("DD/MM/YYYY")}</span>
         )
     },
     {
@@ -87,10 +86,10 @@ const columns = [
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("division"),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (dob) => {
             return(
-                <span>{moment(dob).format("DD-MM-YYYY")}</span>
+                <span>{moment(dob).format("DD/MM/YYYY")}</span>
             )
         }
     },
@@ -98,10 +97,8 @@ const columns = [
         title: 'Address',
         dataIndex: 'street1',
         key: 'address',
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (address, record) => (
-            <span>{record.street1} {record.street2} {record.suburb}</span>
+            <span>{record.street1 + ","} {record.street2 && (record.street2 + ",")} {record.suburb + ","} {record.postalCode + ","} {record.state + ","} {record.country}</span>
         )
     },
     {
