@@ -177,11 +177,16 @@ import * as assignUmpireSaga from './umpireSaga/assignUmpireSaga';
 import * as competitionQuickSaga from './competitionManagementSaga/competitionQuickCompetitionSaga';
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 
-import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga';
+import {
+    getInnerHorizontalCompSaga
+} from './liveScoreSaga/liveScoreInnerHorizontalSaga';
 
-import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga';
+import {
+    liveScorePositionTrackSaga
+} from './liveScoreSaga/liveScorePositionTrackSaga';
 import rootCompetitionMultiDrawSaga from './competitionManagementSaga/competitionMultiDrawsSaga';
 import umpirePaymentSaga from './umpireSaga/umpirePaymentSaga';
+import umpirePoolAllocationSaga from './umpireSaga/umpirePoolAllocationSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -231,6 +236,9 @@ export default function* rootSaga() {
 
         // Umpire Payment Saga
         fork(umpirePaymentSaga),
+
+        //Umpire Pool Allocation Saga
+        fork(umpirePoolAllocationSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
