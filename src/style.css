@@ -1,6 +1,6 @@
-@import "~antd/dist/antd.less";
-@import (inline) "~bootstrap/dist/css/bootstrap.min.css";
-@import (less) "./customStyles/customStyles.css";
+@import "~antd/dist/antd.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "./customStyles/customStyles.css";
 
 body {
     margin: 0;
