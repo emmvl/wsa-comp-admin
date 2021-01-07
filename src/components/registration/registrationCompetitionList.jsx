@@ -21,8 +21,8 @@ import {
 } from 'store/actions/registrationAction/competitionFeeAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
-
 import './product.scss';
+import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -216,7 +216,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: '/registrationCompetitionFee',
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId , yearRefId: this_Obj.state.yearRefId },
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId, yearRefId: this_Obj.state.yearRefId,isEdit:true },
                             }}
                         >
                             <span>Edit</span>
@@ -274,15 +274,17 @@ class RegistrationCompetitionList extends Component {
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                const mainYearRefId = getCurrentYear(this.props.appState.yearList);
                 let page = 1;
                 let { sortBy } = this.state;
                 let { sortOrder } = this.state;
+                let yearId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
+                setGlobalYear(yearId)
                 if (competitionListAction) {
                     const { offset } = competitionListAction;
                     sortBy = competitionListAction.sortBy;
                     sortOrder = competitionListAction.sortOrder;
-                    const { yearRefId } = competitionListAction;
+                    // const { yearRefId } = competitionListAction;
+                    let yearRefId = JSON.parse(yearId);
                     const { searchText } = competitionListAction;
 
                     this.setState({
@@ -293,8 +295,8 @@ class RegistrationCompetitionList extends Component {
                     this.handleCompetitionTableList(page, yearRefId, searchText);
                     this.setState({ yearRefId, allyearload: false });
                 } else {
-                    this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText);
-                    this.setState({ yearRefId: mainYearRefId, allyearload: false });
+                    this.handleCompetitionTableList(1, JSON.parse(yearId), this.state.searchText);
+                    this.setState({ yearRefId: JSON.parse(yearId), allyearload: false });
                 }
             }
         }
@@ -338,6 +340,7 @@ class RegistrationCompetitionList extends Component {
 
     yearChange = (yearRefId) => {
         this.setState({ yearRefId });
+        setGlobalYear(yearRefId)
         this.handleCompetitionTableList(1, yearRefId, this.state.searchText);
     };
 
@@ -416,7 +419,7 @@ class RegistrationCompetitionList extends Component {
                             onClick={() => this.props.clearCompReducerDataAction('all')}
                         >
                             <NavLink
-                                to={{ pathname: '/registrationCompetitionFee', state: { id: null } }}
+                                to={{ pathname: '/registrationCompetitionFee', state: { id: null,isEdit:false } }}
                                 className="text-decoration-none"
                             >
                                 <Button className="primary-add-product" type="primary">

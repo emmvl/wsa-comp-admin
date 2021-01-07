@@ -35,6 +35,7 @@ import {
     liveScoreClubListAction,
     searchFilterAction,
     liveScoreGetMatchDetailInitiate,
+    resetUmpireListBoolAction
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -52,7 +53,7 @@ import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/li
 import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction';
 import { entityTypes } from '../../util/entityTypes';
 import { refRoleTypes } from '../../util/refRoles';
-import { umpireListAction } from "../../store/actions/umpireAction/umpireAction";
+import { umpireListAction, newUmpireListAction } from "../../store/actions/umpireAction/umpireAction";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -130,6 +131,14 @@ class LiveScoreAddMatch extends Component {
                         offset: null,
                         compOrgId: compOrgId
                     });
+                    // this.props.newUmpireListAction({
+                    //     refRoleId: JSON.stringify([15, 20]),
+                    //     entityTypes: isCompParent ? 1 : 6,
+                    //     compId: id,
+                    //     offset: null,
+                    //     compOrgId: compOrgId,
+                    //     isCompParent: isCompParent
+                    // });
                     this.setState({ loadvalue: true, allDisabled: true });
                 } else {
                     history.push('/matchDayCompetitions');
@@ -138,6 +147,7 @@ class LiveScoreAddMatch extends Component {
                 const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
                 let compData = JSON.parse(getLiveScoreCompetiton())
                 let orgItem = await getOrganisationData();
+                console.log('compData', compData)
                 let userOrganisationId = orgItem ? orgItem.organisationId : 0;
                 let compOrg_Id = compData ? compData.organisationId : 0
                 let isCompParent = userOrganisationId === compOrg_Id
@@ -157,6 +167,14 @@ class LiveScoreAddMatch extends Component {
                     offset: null,
                     compOrgId: compOrgId
                 });
+                // this.props.newUmpireListAction({
+                //     refRoleId: JSON.stringify([15, 20]),
+                //     entityTypes: isCompParent ? 1 : 6,
+                //     compId: id,
+                //     offset: null,
+                //     compOrgId: compOrgId,
+                //     isCompParent: isCompParent
+                // });
                 this.setState({ loadvalue: true, allDisabled: false });
             } else {
                 history.push('/matchDayCompetitions');
@@ -219,6 +237,21 @@ class LiveScoreAddMatch extends Component {
                 this.formRef.current.setFieldsValue({
                     round: addedRound,
                 });
+            }
+            if (this.props.liveScoreMatchState.updateUmpireFetchCall) {
+                console.log('coming in did update', this.props.liveScoreMatchState.matchData);
+                let matchData = this.props.liveScoreMatchState.matchData;
+                let startTime = moment(matchData.startTime);
+                let endTime = moment(startTime).add(matchData.matchDuration, 'minutes').add(matchData.mainBreakDuration, 'minutes');
+                this.props.newUmpireListAction({
+                    entityTypes: this.state.isCompParent ? 1 : 6,
+                    compId: this.state.compId,
+                    compOrgId: this.state.compOrgId,
+                    isCompParent: this.state.isCompParent,
+                    matchStartTime: matchData.startTime,
+                    matchEndTime: moment(endTime).utc().format()
+                });
+                this.props.resetUmpireListBoolAction()
             }
         }
     }
@@ -591,14 +624,14 @@ class LiveScoreAddMatch extends Component {
             addEditMatch, divisionList, roundList, teamResult, recordUmpireType, scorer1, scorer2, umpire1Name, umpire2Name, umpire1TextField, umpire2TextField, umpire1Orag, umpire2Orag, umpireReserve, umpireCoach, umpire1NameOrgId, umpireReserveId,
         } = this.props.liveScoreMatchState;
         const {
-            venueData, clubListData, coachList, umpireList, umpire1NameMainId, umpire2NameMainId,
+            venueData, clubListData, coachList, umpireList, newUmpireList, umpire1NameMainId, umpire2NameMainId,
         } = this.props.liveScoreMatchState;
         const { scorerListResult } = this.props.liveScoreState;
         // const { umpireList, coachList, } = this.props.umpireState
         const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
+        const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -620,7 +653,7 @@ class LiveScoreAddMatch extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.startTime} />
-                        <Form.Item name="time" rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                        <Form.Item name="time" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
                                 onChange={(time) => this.props.liveScoreUpdateMatchAction(time, 'start_time')}
@@ -817,7 +850,7 @@ class LiveScoreAddMatch extends Component {
                                             <option key={item.id} value={item.id}>{item.firstName + " " + item.lastName + " - " + item.linkedEntity[0].name}</option>
                                         ))} */}
 
-                                        {umpireListResult.map((item) => (
+                                        {newUmpireList.map((item) => (
                                             <option key={item.id} value={item.id}>{item.name}</option>
                                         ))}
                                     </Select>
@@ -831,7 +864,7 @@ class LiveScoreAddMatch extends Component {
                                         placeholder="Select Umpire 2 Name"
                                         value={umpire2NameMainId || undefined}
                                     >
-                                        {umpireListResult.map((item) => (
+                                        {newUmpireList.map((item) => (
                                             <option key={item.id} value={item.id}>{item.name}</option>
                                         ))}
                                     </Select>
@@ -849,7 +882,7 @@ class LiveScoreAddMatch extends Component {
                                         placeholder="Select Umpire Reserve"
                                         value={umpireReserve || undefined}
                                     >
-                                        {umpireListResult.map((item) => (
+                                        {newUmpireList.map((item) => (
                                             <option key={item.id} value={item.id}>{item.reserveName}</option>
                                         ))}
                                     </Select>
@@ -1587,7 +1620,7 @@ class LiveScoreAddMatch extends Component {
                             <div className="reg-add-save-button p-0">
                                 <Button
                                     className="cancelBtnWidth mr-2 mb-3"
-                                    onClick={() => history.push(this.state.key === 'dashboard' ? 'matchDayDashboard' : this.state.key === 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey === 'umpire' ? 'umpireDashboard' : '/matchDayMatches')}
+                                    onClick={() => history.push(this.state.key === 'dashboard' ? 'matchDayDashboard' : this.state.key === 'umpireRoster' ? 'umpireRoster' : this.state.umpireKey === 'umpire' ? 'umpireDashboard' : '/matchDayMatches')}
                                     type="cancel-button"
                                 >
                                     {AppConstants.cancel}
@@ -1639,6 +1672,12 @@ class LiveScoreAddMatch extends Component {
         </div>
     );
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         const screen = (this.props.location.state && this.props.location.state.screenName) ? this.props.location.state.screenName : null;
         return (
@@ -1671,6 +1710,7 @@ class LiveScoreAddMatch extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.addMatchDetails}
+                        onFinishFailed={this.onFinishFailed}
                         className="login-form"
                     >
                         <Content>
@@ -1711,8 +1751,10 @@ function mapDispatchToProps(dispatch) {
         searchFilterAction,
         ladderSettingGetMatchResultAction,
         umpireListAction,
+        newUmpireListAction,
         liveScoreGetMatchDetailInitiate,
         getRefBadgeData,
+        resetUmpireListBoolAction
     }, dispatch);
 }
 

@@ -215,7 +215,9 @@ const initialState = {
     matchListActionObject: null,
     umpire1NameOrgId: null,
     umpireList: [],
+    newUmpireList: [],
     umpireListResult: [],
+    newUmpireListResult: [],
     umpire1NameMainId: null,
     umpire2NameOrgId: null,
     umpire2NameMainId: null,
@@ -229,7 +231,8 @@ const initialState = {
     staticMatchData: JSON.parse(JSON.stringify(object)),
     umpireReserveId: null,
     umpireCoachId: null,
-    accreditation:[]
+    accreditation: [],
+    updateUmpireFetchCall: false
 };
 
 function setMatchData(data) {
@@ -283,15 +286,15 @@ function checkUmpireType(umpireArray, key) {
     return object;
 }
 
-function checkUmpireRole(roasterArray, key) {
-    let roasterkey = null;
-    for (let i in roasterArray) {
-        if (roasterArray[i].roleId == key) {
-            roasterkey = roasterArray[i].userId
+function checkUmpireRole(rosterArray, key) {
+    let rosterkey = null;
+    for (let i in rosterArray) {
+        if (rosterArray[i].roleId == key) {
+            rosterkey = rosterArray[i].userId
             break
         }
     }
-    return roasterkey
+    return rosterkey
 }
 // Remove duplicate rounds names
 function removeDuplicateValues(array) {
@@ -324,7 +327,7 @@ function createCoachArray(result) {
     return coachArray
 }
 
-function getAccreditationValue(accreditationArray,accreditationValue){
+function getAccreditationValue(accreditationArray, accreditationValue) {
     if (accreditationArray) {
         for (let i in accreditationArray) {
             if (accreditationArray[i].id == accreditationValue) {
@@ -335,7 +338,7 @@ function getAccreditationValue(accreditationArray,accreditationValue){
     return "N/A"
 }
 
-function createUmpireArray(result,accreditationArr) {
+function createUmpireArray(result, accreditationArr) {
     let umpireArray = []
     for (let i in result) {
         let userRoleCheck = result[i].userRoleEntities
@@ -344,10 +347,10 @@ function createUmpireArray(result,accreditationArr) {
             if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
 
                 for (let k in linkedEntity) {
-                 let accreditationBadge =    getAccreditationValue(accreditationArr,result[i].accreditationLevelUmpireRefId)
+                    let accreditationBadge = getAccreditationValue(accreditationArr, result[i].accreditationLevelUmpireRefId)
                     let obj = {
-                        name: (result[i].firstName + " " + result[i].lastName) +  " - " +accreditationBadge+ " - " + linkedEntity[k].name,
-                        reserveName:(result[i].firstName + " " + result[i].lastName) +" - " + linkedEntity[k].name,
+                        name: (result[i].firstName + " " + result[i].lastName) + " - " + accreditationBadge + " - " + linkedEntity[k].name,
+                        reserveName: (result[i].firstName + " " + result[i].lastName) + " - " + linkedEntity[k].name,
                         id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
                         umpireId: result[i].id,
                         entityId: linkedEntity[k].entityId
@@ -461,6 +464,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 error: null,
                 status: action.status,
                 recordUmpireType: data.competition.recordUmpireType,
+                updateUmpireFetchCall: true
             };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_FAIL:
@@ -496,12 +500,24 @@ function liveScoreMatchReducer(state = initialState, action) {
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
                 state.coachList = coachData
             }
-            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)),state.accreditation)
+            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)), state.accreditation)
             return {
                 ...state,
                 onLoad: false,
                 umpireList: [...checkUserData],
                 umpireListResult: checkUserData,
+                // umpireList: user_Data,
+                // umpireListResult: user_Data,
+                status: action.status
+            };
+        case ApiConstants.API_NEW_UMPIRE_LIST_SUCCESS:
+            let new_user_Data = action.result.userData ? action.result.userData : action.result
+            let newCheckUserData = createUmpireArray(JSON.parse(JSON.stringify(new_user_Data)), state.accreditation)
+            return {
+                ...state,
+                onLoad: false,
+                newUmpireList: [...newCheckUserData],
+                newUmpireListResult: newCheckUserData,
                 // umpireList: user_Data,
                 // umpireListResult: user_Data,
                 status: action.status
@@ -513,9 +529,29 @@ function liveScoreMatchReducer(state = initialState, action) {
             if (action.key === "start_date") {
                 state.start_date = action.data;
                 state.start_post_date = action.data;
+                if (action.data != null) {
+                    let d_date = moment(action.data).format('YYYY-MM-DD').split('-');
+                    let d_oldTime = moment(state.start_time).format('HH:mm').split(':')
+                    let d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2], d_oldTime[0], d_oldTime[1]]).utc().format();
+                    console.log(d_newTime, d_date, d_oldTime)
+                    state.matchData.startTime = d_newTime;
+                    if (d_newTime != 'Invalid date') {
+                        state.updateUmpireFetchCall = true;
+                    }
+                }
             } else if (action.key === "start_time") {
                 state.start_time = action.data;
                 state.displayTime = action.data;
+                if (action.data != null) {
+                    let t_date = moment(state.matchData.startTime).format('YYYY-MM-DD').split('-');
+                    let t_time = moment(action.data).format('HH:mm').split(':');
+                    let t_newTime = moment([t_date[0], t_date[1] - 1, t_date[2], t_time[0], t_time[1]]).utc().format();
+                    state.matchData.startTime = t_newTime;
+                    console.log(t_newTime, t_date, t_time)
+                    if (t_newTime != 'Invalid date') {
+                        state.updateUmpireFetchCall = true;
+                    }
+                }
             } else if (action.key === "forfietedTeam") {
                 state.forfietedTeam = action.data;
             } else if (action.key === "abandoneReason") {
@@ -700,6 +736,12 @@ function liveScoreMatchReducer(state = initialState, action) {
                     state.matchData["extraTimeqtrBreak"] = null;
                     state.matchData["extraTimeWinByGoals"] = null;
                 }
+            }
+            else if (action.key == 'matchDuration' || action.key == 'mainBreakDuration') {
+                state[action.key] = action.data;
+                state.addEditMatch[action.key] = action.data;
+                state.matchData[action.key] = action.data;
+                state.updateUmpireFetchCall = true;
             }
             else {
                 state[action.key] = action.data;
@@ -1023,12 +1065,17 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.matchListActionObject = null
             return { ...state, onLoad: false };
 
-            case ApiConstants.API_GET_REF_BADGE_SUCCESS:
-                state.accreditation=action.result
-                return{
-                    ...state,
-                    onLoad:false
-                }
+        case ApiConstants.API_GET_REF_BADGE_SUCCESS:
+            state.accreditation = action.result
+            return {
+                ...state,
+                onLoad: false
+            }
+        case ApiConstants.RESET_UMPIRE_LIST_BOOL:
+            return {
+                ...state,
+                updateUmpireFetchCall: false
+            }
 
         default:
             return state;

@@ -14,9 +14,10 @@ import {
     Tabs,
     Form,
     Modal,
-    message
+    message,
+    Tooltip,
 } from "antd";
-import Tooltip from 'react-png-tooltip'
+import CustomTooltip from 'react-png-tooltip'
 import moment from "moment";
 
 import "./product.scss";
@@ -54,6 +55,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import { captializedString } from "../../util/helpers"
+import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -80,9 +82,9 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-                <Tooltip placement="top">
+                <CustomTooltip placement="top">
                     <span>{AppConstants.membershipCasualFeeMsg}</span>
-                </Tooltip>
+                </CustomTooltip>
             );
         },
         render: (casualFee, record) => (
@@ -118,9 +120,9 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-                <Tooltip placement="top">
+                <CustomTooltip placement="top">
                     <span>{AppConstants.membershipSeasonalFeeMsg}</span>
-                </Tooltip>
+                </CustomTooltip>
             );
         },
         render: (seasonalFee, record) => (
@@ -170,7 +172,11 @@ class RegistrationMembershipFee extends Component {
             loading: false,
             buttonPressed: "next",
             membershipIsUsed: false,
-            confirmRePayFeesModalVisible: false
+            confirmRePayFeesModalVisible: false,
+            isPublished: false,
+            tooltipVisibleDraft: false,
+            isActivatedDiscountService: false,
+            addNew: this.props.location.state ? this.props.location.state.addNew ? this.props.location.state.addNew : null : null
         };
         this_Obj = this;
         this.formRef = React.createRef();
@@ -191,10 +197,12 @@ class RegistrationMembershipFee extends Component {
             let discountMembershipTypeData = allData.membershipproduct.membershipProductTypes !== undefined ?
                 allData.membershipproduct.membershipProductTypes : []
             let membershipIsUsed = allData.membershipproduct.isUsed
+            let isPublished = allData.membershipproduct.statusRefId == 2 ? true : false;
             this.setFieldDecoratorValues()
             this.setState({
                 discountMembershipTypeData,
-                membershipIsUsed
+                membershipIsUsed,
+                isPublished
             })
         }
         if (registrationState.onLoad === false && this.state.loading === true) {
@@ -202,12 +210,21 @@ class RegistrationMembershipFee extends Component {
             if (!registrationState.error) {
                 this.setState({
                     // loading: false,
-                    membershipTabKey: this.state.buttonPressed === "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
+                    //membershipTabKey: this.state.buttonPressed === "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
+                    membershipTabKey: JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
                 })
             }
-            if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
-                history.push('/registrationMembershipList');
-            }
+            setTimeout(() => {
+                if(this.state.isActivatedDiscountService == true){
+                    if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
+                        history.push('/registrationMembershipList');
+                    }
+                }else{
+                    if(this.state.membershipTabKey == '3'){
+                        this.saveMembershipProductDetails();
+                    }
+                }
+            },300)
         }
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
@@ -338,7 +355,7 @@ class RegistrationMembershipFee extends Component {
                 message.error(errMsg);
             } else {
                 this.props.regSaveMembershipProductDiscountAction(discountBody)
-                this.setState({ loading: true })
+                this.setState({ loading: true,isActivatedDiscountService: true })
             }
         }
     }
@@ -346,13 +363,14 @@ class RegistrationMembershipFee extends Component {
     setFieldDecoratorValues = () => {
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : [];
+        let yearRefId =membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList):1
         this.formRef.current.setFieldsValue({
-            yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getCurrentYear(this.props.appState.yearList) : null,
+            yearRefId: yearRefId,
             membershipProductName: membershipProductData.membershipProductName,
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
+        setGlobalYear(yearRefId)
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : [];
-
         if (typesData.length > 0) {
             typesData.forEach((item, index) => {
                 let dobFrom = `dobFrom${index}`
@@ -366,7 +384,7 @@ class RegistrationMembershipFee extends Component {
                 }
                 this.formRef.current.setFieldsValue({
                     [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
-                }) 
+                })
             })
         }
         let data = this.props.registrationState.membershipProductDiscountData
@@ -389,14 +407,14 @@ class RegistrationMembershipFee extends Component {
 
         let membershipProductFeesTableData = this.props.registrationState.membershipProductFeesTableData;
         let feesData = membershipProductFeesTableData ? membershipProductFeesTableData.membershipFees.length > 0 ? membershipProductFeesTableData.membershipFees : [] : []
-        for(let i in feesData){
-            if(feesData[i].membershipProductFeesTypeRefId == 1){
-                if(feesData[i].extendEndDate){
+        for (let i in feesData) {
+            if (feesData[i].membershipProductFeesTypeRefId == 1) {
+                if (feesData[i].extendEndDate) {
                     this.membershipFeeApplyRadio(true, i, "isNeedExtendedDate")
                 }
                 this.formRef.current.setFieldsValue({
                     // [`validityDays${i}`]: feesData[i].validityDays ? feesData[i].validityDays : null,
-                    [`extendEndDate${i}`]: feesData[i].extendEndDate ? moment(feesData[i].extendEndDate,"YYYY-MM-DD") : null 
+                    [`extendEndDate${i}`]: feesData[i].extendEndDate ? moment(feesData[i].extendEndDate, "YYYY-MM-DD") : null
                 });
             }
         }
@@ -633,18 +651,20 @@ class RegistrationMembershipFee extends Component {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className="fluid-width">
-                                            <Checkbox
-                                                className="single-checkbox ml-0"
-                                                checked={item.isAllow}
-                                                onChange={e =>
-                                                    this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                                }
-                                                disabled={this.state.membershipIsUsed}
-                                            >
-                                                {AppConstants.allowTeamRegistration}
-                                            </Checkbox>
-                                        </div>
+                                        {item.membershipProductTypeRefName != "Player - NetSetGo" && (
+                                            <div className="fluid-width">
+                                                <Checkbox
+                                                    className="single-checkbox ml-0"
+                                                    checked={item.isAllow}
+                                                    onChange={e =>
+                                                        this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+                                                    }
+                                                    disabled={this.state.membershipIsUsed}
+                                                >
+                                                    {AppConstants.allowTeamRegistration}
+                                                </Checkbox>
+                                            </div>
+                                        )}
                                         {item.isPlaying != 1 && (
                                             <Checkbox
                                                 className="single-checkbox ml-0"
@@ -733,6 +753,8 @@ class RegistrationMembershipFee extends Component {
                     <Select
                         className="year-select reg-filter-select1"
                         style={{ maxWidth: 80 }}
+                        onChange={(e) => setGlobalYear(e)}
+                        disabled={this.state.membershipIsUsed}
                     >
                         {this.props.appState.yearList.map(item => (
                             <Option key={'year_' + item.id} value={item.id}>
@@ -792,16 +814,19 @@ class RegistrationMembershipFee extends Component {
     };
 
     ///membershipFees apply radio onchange
-    membershipFeeApplyRadio = (radioApplyId, feesIndex, key) => {
+    membershipFeeApplyRadio = (radioApplyId, feesIndex, key, subKey) => {
+        if(subKey == "Validity"){
+            this.setState({ addNew : false})
+        }
         this.props.membershipFeesApplyRadioAction(radioApplyId, feesIndex, key)
     }
 
-    dateConversion = (f,key,index) => {
-        try{
+    dateConversion = (f, key, index) => {
+        try {
             let date = moment(f, "DD-MM-YYYY").format("MM-DD-YYYY");
             this.membershipFeeApplyRadio(date, index, key)
-        }catch(ex){
-            console.log("Error in dateConversion::"+ex)
+        } catch (ex) {
+            console.log("Error in dateConversion::" + ex)
         }
     }
 
@@ -809,6 +834,7 @@ class RegistrationMembershipFee extends Component {
     feesView = () => {
         let data = this.props.registrationState.membershipProductFeesTableData
         let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
+        let addNew = this.state.addNew;
         return (
             <div>
                 <div className="tab-formView fees-view pt-5">
@@ -835,59 +861,59 @@ class RegistrationMembershipFee extends Component {
                             >
                                 {this.props.appState.membershipProductFeesTypes.map((feeTypeItem) => (
                                     <div>
-                                         <div className="row" key={'membershipProductFeesType_' + feeTypeItem.id}>
+                                        <div className="row" key={'membershipProductFeesType_' + feeTypeItem.id}>
                                             <Radio key={'membershipFee_' + feeTypeItem.id} value={feeTypeItem.id}> {feeTypeItem.description}</Radio>
 
                                             <div style={{ marginLeft: -18 }}>
-                                                <Tooltip>
+                                                <CustomTooltip>
                                                     <span>{feeTypeItem.helpMsg}</span>
-                                                </Tooltip>
+                                                </CustomTooltip>
                                             </div>
                                         </div>
                                         {item.membershipProductFeesTypeRefId == 1 && feeTypeItem.id == 1 && (
                                             <div className="validity-period-bg">
-                                                <span className="applicable-to-heading required-field" style={{paddingTop: 0}}>{AppConstants.minNoDays}</span>
-                                                <div className="row" style={{marginTop: 10,alignItems: "center"}}>
+                                                <span className="applicable-to-heading" style={{ paddingTop: 0 }}>{AppConstants.minNoDays}</span>
+                                                <div className="row" style={{ marginTop: 10, alignItems: "center" }}>
                                                     <div className="col-md-6">
                                                         {/* <Form.Item
                                                             name={`validityDays${index}`}
                                                             rules={[{ required: true, message: ValidationConstants.daysRequired }]}
                                                         > */}
-                                                            <InputWithHead
-                                                                value={item.validityDays}
-                                                                placeholder={AppConstants._days}
-                                                                onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays")}
-                                                                // onBlur={(e) => {
-                                                                //     this.formRef.current.setFieldsValue({
-                                                                //         [`validityDays${index}`]: e.target.value >= 0 ? e.target.value : ""
-                                                                //     })
-                                                                // }}
-                                                                type={"number"}
-                                                                min={0}
-                                                            />
+                                                        <InputWithHead
+                                                            value={addNew ? 365 : item.validityDays}
+                                                            placeholder={AppConstants._days}
+                                                            onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays", "Validity")}
+                                                            // onBlur={(e) => {
+                                                            //     this.formRef.current.setFieldsValue({
+                                                            //         [`validityDays${index}`]: e.target.value >= 0 ? e.target.value : ""
+                                                            //     })
+                                                            // }}
+                                                            type={"number"}
+                                                            min={0}
+                                                        />
                                                         {/* </Form.Item> */}
                                                     </div>
-                                                    <div className="col-md-6 applicable-to-heading" style={{paddingTop: 0}}>{AppConstants._days}</div>
+                                                    <div className="col-md-6 applicable-to-heading" style={{ paddingTop: 0 }}>{AppConstants._days}</div>
                                                 </div>
                                                 <Checkbox
                                                     onChange={(e) => this.membershipFeeApplyRadio(e.target.checked, index, "isNeedExtendedDate")}
                                                     checked={item.isNeedExtendedDate ? true : false}
-                                                    style={{marginTop: 10}}
+                                                    style={{ marginTop: 10 }}
                                                     className="single-checkbox pt-3">
                                                     {AppConstants.extendEndDate}
                                                 </Checkbox>
                                                 {item.isNeedExtendedDate && (
-                                                    <div style={{marginLeft: 35,marginTop: 12}}>
+                                                    <div style={{ marginLeft: 35, marginTop: 12 }}>
                                                         <Form.Item
                                                             name={`extendEndDate${index}`}
                                                             rules={[{ required: true, message: ValidationConstants.extendEndDateRequired }]}
                                                         >
                                                             <DatePicker
-                                                                setFieldsValue={item.extendEndDate ? moment(item.extendEndDate,"MM-DD-YYYY") : null}
+                                                                setFieldsValue={item.extendEndDate ? moment(item.extendEndDate, "MM-DD-YYYY") : null}
                                                                 size="large"
                                                                 placeholder={"dd-mm-yyyy"}
                                                                 style={{ width: "100%" }}
-                                                                onChange={(e, f) => this.dateConversion(f,"extendEndDate",index)}
+                                                                onChange={(e, f) => this.dateConversion(f, "extendEndDate", index)}
                                                                 format={"DD-MM-YYYY"}
                                                                 showTime={false}
                                                             />
@@ -917,7 +943,7 @@ class RegistrationMembershipFee extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         //onChange={e => this.membershipFeeApplyRadio(e.target.value)}
-                        defaultValue={data?.paymentOptionRefId}
+                        defaultValue={data ?.paymentOptionRefId}
                     //disabled={this.state.membershipIsUsed}
                     >
                         {this.props.commonReducerState.membershipPaymentOptions.map((item) => (
@@ -1099,13 +1125,28 @@ class RegistrationMembershipFee extends Component {
             case 3:
                 return (
                     <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
+                            onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
                         {childDiscounts.map((childItem, childindex) => (
                             <div className="row">
                                 <div className="col-sm-10">
                                     <Form.Item name={`percentageValue${index} + ${childindex}`} rules={[{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }]}  >
                                         <InputWithHead
-                                            heading={`Family Participant ${childindex + 1}%`}
-                                            placeholder={`Family Participant ${childindex + 1}%`}
+                                            heading={`Family Participant ${childindex + 1} discount`}
+                                            placeholder={`Family Participant ${childindex + 1} discount`}
                                             onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
                                             // value={childItem.percentageValue}
                                             disabled={this.state.membershipIsUsed}
@@ -1375,9 +1416,9 @@ class RegistrationMembershipFee extends Component {
             <div className="discount-view pt-5">
                 <div className="row">
                     <span className="form-heading">{AppConstants.discounts}</span>
-                    <Tooltip>
+                    <CustomTooltip>
                         <span>{AppConstants.membershipDiscountMsg}</span>
-                    </Tooltip>
+                    </CustomTooltip>
                 </div>
 
                 {discountData.map((item, index) => (
@@ -1477,24 +1518,42 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button
-                                    className="save-draft-text"
-                                    type="save-draft-text"
-                                    htmlType="submit"
-                                    onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
+                                <Tooltip
+                                    className="h-100"
+                                    onMouseEnter={() =>
+                                        this.setState({
+                                            tooltipVisibleDraft: this.state.isPublished,
+                                        })
+                                    }
+                                    onMouseLeave={() =>
+                                        this.setState({ tooltipVisibleDraft: false })
+                                    }
+                                    visible={this.state.tooltipVisibleDraft}
+                                    title={ValidationConstants.membershipIsPublished}
                                 >
-                                    {AppConstants.saveAsDraft}
-                                </Button>
+                                    <Button
+                                        className="save-draft-text"
+                                        type="save-draft-text"
+                                        htmlType="submit"
+                                        disabled={this.state.isPublished}
+                                        onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
+                                    >
+                                        {AppConstants.saveAsDraft}
+                                    </Button>
+                                </Tooltip>
                                 <Button
                                     className="publish-button"
                                     type="primary"
                                     htmlType="submit"
                                     onClick={() => this.setState({
-                                        statusRefId: tabKey === "3" ? 2 : 1,
-                                        buttonPressed: tabKey === "3" ? "publish" : "next"
+                                        // statusRefId: tabKey === "3" ? 2 : 1,
+                                        // buttonPressed: tabKey === "3" ? "publish" : "next"
+                                        statusRefId: tabKey === "2" ? 2 : 1,
+                                        buttonPressed: tabKey === "2" ? "publish" : "next"
                                     })}
                                 >
-                                    {tabKey === "3" ? AppConstants.publish : AppConstants.next}
+                                    {/* {tabKey === "3" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next} */}
+                                    {tabKey === "2" ? this.state.isPublished ? AppConstants.save : AppConstants.publish : AppConstants.next}
                                 </Button>
                             </div>
                         </div>
@@ -1511,10 +1570,10 @@ class RegistrationMembershipFee extends Component {
         this.setState({ membershipTabKey: key });
         let data = this.props.registrationState.membershipProductFeesTableData
         let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
-        if(key == "2"){
-            for(let i in feesData){
+        if (key == "2") {
+            for (let i in feesData) {
                 this.membershipFeeApplyRadio(feesData[i].validityDays == 0 ? null : feesData[i].validityDays, i, "validityDays")
-            } 
+            }
         }
         // }
         this.setFieldDecoratorValues()
@@ -1562,7 +1621,7 @@ class RegistrationMembershipFee extends Component {
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
                 />
-                <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="4" />
                 <Layout>
                     <Form
                         ref={this.formRef}
@@ -1584,9 +1643,9 @@ class RegistrationMembershipFee extends Component {
                                     <TabPane tab={AppConstants.fees} key="2">
                                         <div>{this.feesView()}</div>
                                     </TabPane>
-                                    <TabPane tab={AppConstants.discount} key="3">
+                                    {/* <TabPane tab={AppConstants.discount} key="3">
                                         <div className="tab-formView">{this.discountView()}</div>
-                                    </TabPane>
+                                    </TabPane> */}
                                 </Tabs>
                             </div>
                             <Loader visible={this.props.registrationState.onLoad} />

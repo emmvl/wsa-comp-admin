@@ -28,7 +28,7 @@ import {
 import { getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction";
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
-import { getOrganisationData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
+import { getOrganisationData, setOwn_competition, setGlobalYear, getGlobalYear } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -90,8 +90,8 @@ class QuickCompetitionMatchFormat extends Component {
                 if (nextProps.quickCompetitionState.quick_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
                         const { competitionId } = competitionList[0];
-                        const yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId;
-                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true, yearRefId: yearId });
+                        const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
+                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true, yearRefId: JSON.parse(yearId) });
                         this.apiCalls(competitionId, yearId);
                     }
                 }
@@ -165,6 +165,7 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     onYearChange(yearId) {
+        setGlobalYear(yearId)
         this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionYearArr, yearId);
         this.setState({ firstTimeCompId: null, yearRefId: yearId });
     }
@@ -407,7 +408,7 @@ class QuickCompetitionMatchFormat extends Component {
 
         this.props.saveCompetitionFormatAction(formatList);
         this.setState({ loading: true });
-        setOwnCompetitionYear(this.state.yearRefId);
+        setGlobalYear(this.state.yearRefId);
         setOwn_competition(this.state.firstTimeCompId);
     }
 
@@ -616,6 +617,8 @@ class QuickCompetitionMatchFormat extends Component {
                                 placeholder={AppConstants.days}
                                 value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -624,6 +627,8 @@ class QuickCompetitionMatchFormat extends Component {
                                 placeholder={AppConstants.hours}
                                 value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -632,6 +637,8 @@ class QuickCompetitionMatchFormat extends Component {
                                 placeholder={AppConstants.mins}
                                 value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>

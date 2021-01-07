@@ -378,6 +378,60 @@ function* getUserModuleRegistrationDataSaga(action) {
   }
 }
 
+function* getUserModuleTeamMembersDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleTeamMembersData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* getUserModuleTeamRegistrationDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleTeamRegistrationData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* getUserModuleOtherRegistrationDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleOtherRegistrationData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get the User Module Activity Player
 function* getUserModuleActivityPlayerSaga(action) {
   try {
@@ -1006,13 +1060,13 @@ function* registrationResendEmailSaga(action) {
   }
 }
 
-function* userRestTFASaga(action) {
+function* userResetTFASaga(action) {
   try {
-    const result = yield call(UserAxiosApi.restTfaApi,);
+    const result = yield call(UserAxiosApi.resetTfaApi, action.Id);
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.Api_REST_TFA_SUCCESS,
+        type: ApiConstants.Api_RESET_TFA_SUCCESS,
         result: result.result.data,
         status: result.status,
       });
@@ -1025,6 +1079,23 @@ function* userRestTFASaga(action) {
   }
 }
 
+function* getNetSetGoListSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getNetSetGoList, action.payload, action.sortBy, action.sortOrder);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_NETSETGO_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1042,6 +1113,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD, getUserModulePersonalByCompDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, getUserModuleMedicalInfoSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_REGISTRATION_LOAD, getUserModuleRegistrationDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD, getUserModuleTeamRegistrationDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD, getUserModuleOtherRegistrationDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD, getUserModuleActivityPlayerSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD, getUserModuleActivityParentSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD, getUserModuleActivityScorerSaga);
@@ -1075,6 +1148,9 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
   yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
   yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
-  yield takeEvery(ApiConstants.Api_REST_TFA_LOAD, userRestTFASaga);
+  yield takeEvery(ApiConstants.Api_RESET_TFA_LOAD, userResetTFASaga);
+  yield takeEvery(ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD, getUserModuleTeamMembersDataSaga);
+  yield takeEvery(ApiConstants.API_GET_NETSETGO_LIST_LOAD, getNetSetGoListSaga);
+
 
 }

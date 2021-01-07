@@ -174,6 +174,22 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  getUserModuleTeamMembersData(payload) {
+    const url = `/api/user/registration/team`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserModuleTeamRegistrationData(payload) {
+    const url = `api/user/registration/teamdetails`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserModuleOtherRegistrationData(payload) {
+    const url = `api/user/registration/yourdetails`;
+    return Method.dataPost(url, token, payload);
+  },
+
+
   getUserModuleActivityPlayer(payload) {
     const url = `api/user/activity/player`;
     return Method.dataPost(url, token, payload);
@@ -331,6 +347,18 @@ let userHttpApi = {
     return Method.dataGet(url, localStorage.token);
   },
 
+  newUmpireList(data) {
+    console.log(data)
+    let url = null;
+    if (data.isCompParent !== true) {
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`;
+    }
+    else {
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`
+    }
+    return Method.dataGet(url, localStorage.token);
+  },
+
   updateUserProfile(payload) {
     const url = `api/userprofile/update?section=${payload.section}&organisationId=${payload.organisationId}`;
     return Method.dataPost(url, token, payload);
@@ -453,6 +481,17 @@ let userHttpApi = {
     const url = `users/dashboard/spectator`;
     return Method.dataPost(url, token, payload);
   },
+  getNetSetGoList(payload, sortBy, sortOrder) {
+    let url;
+    if (sortBy && sortOrder) {
+      url = `api/user/dashboard/netsetgo?sortBy=${sortBy}&sortOrder=${sortOrder}`
+    }
+    else{
+       url = `api/user/dashboard/netsetgo`;
+
+    }
+    return Method.dataPost(url, token, payload);
+  },
   registrationResendEmail(teamId, userId) {
     let payload = {
       teamId: teamId,
@@ -461,8 +500,7 @@ let userHttpApi = {
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
   },
-  async restTfaApi() {
-    let userId = await getUserId();
+  async resetTfaApi(userId) {
     const url = `/users/profile/reset/tfa?userId=${userId}`;
     return Method.dataPost(url, token)
   },

@@ -368,7 +368,10 @@ class UserOurOrganization extends Component {
             }
             let tableRow = this.state.tableRecord;
             tableRow.photoUrl = null;
-            this.setState({ tableRecord: tableRow, orgPhotosImgSend: data.files[0], orgPhotosImg: URL.createObjectURL(data.files[0]) })
+            this.setState({ tableRecord: tableRow, orgPhotosImgSend: data.files[0], orgPhotosImg: URL.createObjectURL(data.files[0]), timeout: 2000 })
+            setTimeout(() => {
+                this.setState({ timeout: null })
+            }, 1000);
         }
     };
 
@@ -509,7 +512,7 @@ class UserOurOrganization extends Component {
         } else if (tabKey == "2") {
             let tableRowData = this.state.tableRecord;
             let formData = new FormData();
-            if(this.state.orgPhotosImgSend===null && tableRowData.photoUrl===null){
+            if (this.state.orgPhotosImgSend === null && tableRowData.photoUrl === null) {
                 message.error(ValidationConstants.organisationPhotoRequired)
                 return
             }
@@ -683,6 +686,9 @@ class UserOurOrganization extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -1082,11 +1088,12 @@ class UserOurOrganization extends Component {
                                     accept="image/*"
                                     onChange={(evt) => {
                                         this.setPhotosImage(evt.target)
-                                        this.setState({ timeout: 1000 })
-                                        setTimeout(() => {
-                                            this.setState({ timeout: null })
-                                        }, 1000);
+                                        // this.setState({ timeout: 1000 })
+                                        // setTimeout(() => {
+                                        //     this.setState({ timeout: null })
+                                        // }, 1000);
                                     }}
+                                    onClick={(event) => event.target.value = null}
                                 />
                                 {/* </Form.Item> */}
                                 <span className="form-err">{this.state.imageError}</span>

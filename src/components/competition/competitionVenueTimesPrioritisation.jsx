@@ -38,13 +38,12 @@ import history from '../../util/history'
 import { getCurrentYear } from 'util/permissions'
 import ValidationConstant from '../../themes/validationConstant'
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage"
 import Loader from '../../customComponents/loader'
 import CustomTooltip from 'react-png-tooltip'
@@ -82,7 +81,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     componentDidMount() {
         this.props.updateVenueConstraintsData(null, null, 'clearData', this.props.location.state)
         this.props.getVenuesTypeAction('all');
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -107,7 +106,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
-                // setOwnCompetitionYear(1)
             }
         }
         // this.setState({ loading: false })
@@ -116,7 +114,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
     componentDidUpdate(nextProps) {
         // const { yearList } = this.props.appState
         const { venueConstrainstData } = this.props.venueTimeState
-        // let storedYearID = getOwnCompetitionYear();
         if (nextProps.commonReducerState !== this.props.commonReducerState) {
             this.setState({ filterDrop: this.props.commonReducerState.venueList })
         }
@@ -124,7 +121,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
             // let year_id = ""
             // if (yearList.length > 0) {
             //     year_id = storedYearID ? storedYearID : yearList[0].id
-            //     setOwnCompetitionYear(year_id)
             // }
             let competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
@@ -137,7 +133,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.venueConstraintListAction(yearId, competitionId, 1)
                     this.setState({
@@ -298,7 +294,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     );
 
     onYearClick(yearId) {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
@@ -473,7 +469,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 style={{ minWidth: 182 }}
                                 placeholder="Select Court"
                                 onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
-                                // value={item.venueCourtId}
+                            // value={item.venueCourtId}
                             >
                                 {courtList.map((item) => (
                                     <Option key={'venue_' + item.venueId} value={item.venueId}>
@@ -500,7 +496,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     style={{ minWidth: 182 }}
                                     placeholder="Select Division"
                                     onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
-                                    // value={item.entitiesDivisionId}
+                                // value={item.entitiesDivisionId}
                                 >
                                     {divisionsList.map((item) => (
                                         <Option
@@ -514,33 +510,33 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             </Form.Item>
                         </div>
                     ) : (
-                        <div className="col-sm">
-                            <InputWithHead heading="Grade" />
-                            <Form.Item
-                                name={`entitiesGradeId${index}`}
-                                rules={[{ required: true, message: ValidationConstant.courtField[5] }]}
-                            >
-                                <Select
-                                    disabled={disabledStatus}
-                                    mode="multiple"
-                                    className="w-100 d-grid align-items-center"
-                                    style={{ minWidth: 182 }}
-                                    placeholder="Select Grade"
-                                    // value={item.entitiesGradeId}
-                                    onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
+                            <div className="col-sm">
+                                <InputWithHead heading="Grade" />
+                                <Form.Item
+                                    name={`entitiesGradeId${index}`}
+                                    rules={[{ required: true, message: ValidationConstant.courtField[5] }]}
                                 >
-                                    {gradesList.map((item) => (
-                                        <Option
-                                            key={'compDivGrade_' + item.competitionDivisionGradeId}
-                                            value={item.competitionDivisionGradeId}
-                                        >
-                                            {item.gradeName}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </div>
-                    )}
+                                    <Select
+                                        disabled={disabledStatus}
+                                        mode="multiple"
+                                        className="w-100 d-grid align-items-center"
+                                        style={{ minWidth: 182 }}
+                                        placeholder="Select Grade"
+                                        // value={item.entitiesGradeId}
+                                        onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
+                                    >
+                                        {gradesList.map((item) => (
+                                            <Option
+                                                key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                                value={item.competitionDivisionGradeId}
+                                            >
+                                                {item.gradeName}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </div>
+                        )}
 
                     <div className="col-sm-2 delete-image-view pb-4">
                         <span className="user-remove-btn" onClick={() => disabledStatus == false && this.removePreferencesObjectAction(index, item)}>
@@ -610,7 +606,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         </div>
                     ))}
 
-                    <span id={AppUniqueId.CourtPreferences_AddAnotherCourtPreference_btn} style={{ cursor: 'pointer' }} onClick={() => disabledStatus == false && this.props.updateVenueConstraintsData(null, courtRotationId, "courtPreferences", "addCourtPreferences")} className="input-heading-add-another">
+                    <span id={AppUniqueId.CourtPreferences_AddAnotherCourtPreference_btn} style={{ cursor: 'pointer' }} onClick={disabledStatus == false ? () => { this.props.updateVenueConstraintsData(null, courtRotationId, "courtPreferences", "addCourtPreferences"); this.setDetailsFieldValue() } : () => { }} className="input-heading-add-another">
                         + {AppConstants.addAnother}
                     </span>
                 </div>
@@ -644,8 +640,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     className="reg-competition-radio"
                     onChange={(e) => { this.setState({ homeTeamRotationFlag: false }); this.props.updateVenueConstraintsData(e.target.value, null, "", "homeRotationValue") }}
                     value={venueConstrainstData && venueConstrainstData.homeTeamRotationRefId}
-                    // value={homeRotation}
-                    // defaultValue={homeRotation}
+                // value={homeRotation}
+                // defaultValue={homeRotation}
                 >
                     {homeTeamRotationList.map((item) => (
                         <div key={item.id} className="contextualHelp-RowDirection">
@@ -861,8 +857,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
                                 </NavLink>
                             ) : (
-                                <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                            )}
+                                    <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                                )}
                         </div>
                     </div>
                 </div>

@@ -615,6 +615,9 @@ class LiveScoreSettingsView extends Component {
                                     //     this.setState({ timeout: null })
                                     // }, 2000);
                                 }}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex align-items-center">
@@ -1433,6 +1436,11 @@ class LiveScoreSettingsView extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let local_Id = this.state.screenName === 'umpireDashboard' ? null : getLiveScoreCompetiton()
         return (
@@ -1458,7 +1466,8 @@ class LiveScoreSettingsView extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.handleSubmit}
-                        onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
+                        // onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
+                        onFinishFailed={this.onFinishFailed}
                         className="login-form"
                         noValidate="noValidate"
                     >

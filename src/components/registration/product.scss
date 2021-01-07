@@ -1108,3 +1108,23 @@ input[type="number"] {
 .membership-cap-date-picker.ant-picker-large .ant-picker-input > input {
   box-shadow: none;
 }
+
+.light-grey-border-box{
+  background: var(--app-fdfdfe);
+  border: 1px solid var(--app-f0f0f2);
+  border-radius: 10px;
+  padding: 0px 30px 30px 30px;
+  margin-top: 30px;
+}
+
+.add-another-button-border{
+  border: 1px solid var(--app-color);
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-team-member-head-center-align{
+  width: 75%;
+  margin: auto;
+}

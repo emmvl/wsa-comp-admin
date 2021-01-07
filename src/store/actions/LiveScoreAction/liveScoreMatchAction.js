@@ -156,6 +156,11 @@ function clearDataOnCompChangeAction() {
         type: ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE,
     };
 }
+function resetUmpireListBoolAction() {
+    return {
+        type: ApiConstants.RESET_UMPIRE_LIST_BOOL,
+    };
+}
 
 export {
     liveScoreMatchListAction,
@@ -177,4 +182,5 @@ export {
     onCancelBulkScoreUpdate,
     liveScoreAddLiveStreamAction,
     clearDataOnCompChangeAction,
+    resetUmpireListBoolAction
 };

@@ -360,7 +360,7 @@ class DashboardLayout extends React.Component {
                     </div>
 
                     <li className="acc-help-support-list-view">
-                        <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
+                        <NavLink to={{ pathname: `https://netball-registration-dev.worldsportaction.com/` }} target="_blank">
                             {AppConstants.myProfile}
                         </NavLink>
                     </li>
@@ -374,7 +374,6 @@ class DashboardLayout extends React.Component {
     };
 
     render() {
-        console.log(this.state.impersonationOrgData)
         let menuName = this.props.menuName;
         const { userRoleId } = this.state
         return (
@@ -446,6 +445,7 @@ class DashboardLayout extends React.Component {
                                                         <li className={menuName === AppConstants.registration ? "active" : ""}
                                                             style={{ display: showRoleLevelPermission(userRoleId, 'registration') ? 'visible' : 'none' }}>
                                                             <div id={AppConstants.registration_icon}
+                                                                onClick={() => this.props.clearDataOnCompChangeAction()}
                                                                 className="registration-menu menu-wrap">
                                                                 <NavLink to={"/registrationDashboard"}>
                                                                     <span id={AppConstants.registrations_label}

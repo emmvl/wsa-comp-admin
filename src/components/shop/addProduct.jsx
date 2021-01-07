@@ -361,6 +361,9 @@ class AddProduct extends Component {
                 className="d-none"
                 onChange={(e) => this.onChange(e)}
                 accept="image/*"
+                onClick={(event) => {
+                    event.target.value = null
+                }}
             />
             <Button
                 onClick={(e) => { document.getElementById('getImage').click(); e.stopPropagation(); }}
@@ -1026,7 +1029,7 @@ class AddProduct extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.shipping}</span>
                 <div className="row pt-1">
-                    <div className="col-sm-4">
+                    {/* <div className="col-sm-4">
                         <Checkbox
                             className="single-checkbox mt-3"
                             checked={productDetailData.deliveryType === "shipping"}
@@ -1035,7 +1038,7 @@ class AddProduct extends Component {
                         >
                             {AppConstants.shipping}
                         </Checkbox>
-                    </div>
+                    </div> */}
                     <div className="col-sm-8">
                         <Checkbox
                             className="single-checkbox mt-3"
@@ -1229,6 +1232,12 @@ class AddProduct extends Component {
         </div>
     );
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         return (
             <div className="fluid-width">
@@ -1239,6 +1248,7 @@ class AddProduct extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.addProductPostAPI}
+                        onFinishFailed={this.onFinishFailed}
                         noValidate="noValidate"
                     >
                         <Content >

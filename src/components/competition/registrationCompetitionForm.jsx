@@ -16,7 +16,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString, isImageFormatValid, isImageSizeValid  } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -32,6 +32,7 @@ import {
     addRemoveDivisionAction,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     add_editcompetitionFeeDeatils,
     competitionDiscountTypesAction,
     regCompetitionListDeleteAction,
@@ -51,7 +52,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationData } from "../../util/sessionStorage"
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage"
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
 import { getCurrentYear } from "util/permissions";
@@ -79,7 +80,7 @@ class RegistrationCompetitionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: localStorage.year,
+            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -324,16 +325,17 @@ class RegistrationCompetitionForm extends Component {
         }
         if (nextProps.appState.yearList !== this.props.appState.yearList) {
             if (this.props.appState.yearList.length > 0) {
-                let yearRefId = getCurrentYear(this.props.appState.yearList)
+                let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
                 this.getMembershipDetails(yearRefId)
                 this.setDetailsFieldValue()
+                setGlobalYear(yearRefId)
             }
         }
 
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let mainYearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
 
                 this.getMembershipDetails(mainYearRefId)
@@ -346,6 +348,7 @@ class RegistrationCompetitionForm extends Component {
                     yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
+                setGlobalYear(mainYearRefId)
             }
         }
     }
@@ -427,19 +430,21 @@ class RegistrationCompetitionForm extends Component {
 
     ////all the api calls
     apiCalls = (competitionId) => {
-        this.props.getOnlyYearListAction()
-        this.props.getDefaultCompFeesLogoAction()
-        this.props.competitionDiscountTypesAction()
+        this.props.getOnlyYearListAction();
+        this.props.getDefaultCompFeesLogoAction();
+        this.props.competitionDiscountTypesAction();
         this.props.competitionFeeInit();
-        this.props.paymentFeeDeafault()
-        this.props.paymentSeasonalFee()
-        this.props.getCommonDiscountTypeTypeAction()
+        this.props.paymentFeeDeafault();
+        this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
+        this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
     }
 
     setYear = (e) => {
+        setGlobalYear(e)
         this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
@@ -697,9 +702,9 @@ class RegistrationCompetitionForm extends Component {
                 message.error(AppConstants.logo_Image_Size);
                 return
             }
-        this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-        this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-        this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+            this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+            this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
         }
     };
 
@@ -928,6 +933,9 @@ class RegistrationCompetitionForm extends Component {
                                 type="file"
                                 id="user-pic"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -1143,6 +1151,8 @@ class RegistrationCompetitionForm extends Component {
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_hrs} className="col-sm" >
@@ -1152,6 +1162,8 @@ class RegistrationCompetitionForm extends Component {
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_mins} className="col-sm" >
@@ -1161,6 +1173,8 @@ class RegistrationCompetitionForm extends Component {
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
@@ -1406,6 +1420,11 @@ class RegistrationCompetitionForm extends Component {
         this.setDetailsFieldValue()
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         return (
@@ -1420,9 +1439,11 @@ class RegistrationCompetitionForm extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
-                        onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name);
-                        }}
+                        // onFinishFailed={(err) => {
+                        //     this.formRef.current.scrollToField(err.errorFields[0].name)
+                        //     this.onFinishFailed()
+                        // }}
+                        onFinishFailed={this.onFinishFailed}
                         initialValues={{ yearRefId: this.state.yearRefId, competitionTypeRefId: 1, competitionFormatId: 1 }}
                         noValidate="noValidate"
                     >
@@ -1468,6 +1489,7 @@ function mapDispatchToProps(dispatch) {
         addRemoveDivisionAction,
         paymentFeeDeafault,
         paymentSeasonalFee,
+        paymentPerMatch,
         add_editcompetitionFeeDeatils,
         competitionDiscountTypesAction,
         getCommonDiscountTypeTypeAction,

@@ -68,13 +68,23 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, null);
     },
 
-    liveScoreGetDivision(data, compKey, sortBy, sortOrder) {
+    liveScoreGetDivision(data, compKey, sortBy, sortOrder, isParent, compOrgId) {
         let url = null;
-        if (compKey) {
-            url = `/division?competitionKey=${compKey}`;
-        } else {
-            url = `/division?competitionId=${data}`;
+        if (isParent !== true && compOrgId != undefined) {
+            if (compKey) {
+                url = `/division?competitionKey=${compKey}&competitionOrganisationIds=${compOrgId}`;
+            } else {
+                url = `/division?competitionId=${data}&competitionOrganisationIds=${compOrgId}`;
+            }
         }
+        else {
+            if (compKey) {
+                url = `/division?competitionKey=${compKey}`;
+            } else {
+                url = `/division?competitionId=${data}`;
+            }
+        }
+
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -225,13 +235,23 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreRound(competitionID, divisionId) {
+    liveScoreRound(competitionID, divisionId, isParent, compOrgId) {
         let url;
-        if (divisionId) {
-            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        if (isParent !== true && compOrgId != undefined) {
+            if (divisionId) {
+                url = `/round?competitionId=${competitionID}&divisionId=${divisionId}&competitionOrganisationIds=${compOrgId}`;
+            } else {
+                url = `/round?competitionId=${competitionID}&competitionOrganisationIds=${compOrgId}`;
+            }
+
         } else {
-            url = `/round?competitionId=${competitionID}`;
+            if (divisionId) {
+                url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+            } else {
+                url = `/round?competitionId=${competitionID}`;
+            }
         }
+
 
         return Method.dataGet(url, localStorage.token);
     },
@@ -643,13 +663,23 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreGoalList(compId, goalType, search, offset, sortBy, sortOrder) {
+    liveScoreGoalList(compId, goalType, search, offset, sortBy, sortOrder, isParent, compOrgId) {
         let url = null;
-        if (goalType === 'By Match') {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`;
-        } else if (goalType === 'Total') {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`;
+        if (isParent !== true) {
+            if (goalType === 'By Match') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}&competitionOrganisationId=${compOrgId}`;
+            } else if (goalType === 'Total') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}&competitionOrganisationId=${compOrgId}`;
+            }
         }
+        else {
+            if (goalType === 'By Match') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`;
+            } else if (goalType === 'Total') {
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`;
+            }
+        }
+
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -872,7 +902,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder , isParent ,compOrgId) {
+    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder, isParent, compOrgId) {
         const Body = {
             paging: {
                 limit: 10,
@@ -881,22 +911,21 @@ const LiveScoreAxiosApi = {
             search: searchText,
         };
         let url;
-        if(!isParent)
-        {
+        if (!isParent) {
             if (aggregate) {
                 url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}&competitionOrganisationId=${compOrgId}`;
             } else {
                 url = `/stats/gametime?competitionId=${competitionId}&competitionOrganisationId=${compOrgId}&aggregate=""`;
             }
         }
-        else{
+        else {
             if (aggregate) {
                 url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
             } else {
                 url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
             }
         }
-        
+
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -962,7 +991,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAttendanceList(competitionId, payload, selectStatus, divisionId, roundId) {
+    liveScoreAttendanceList(competitionId, payload, selectStatus, divisionId, roundId, isParent, compOrgId) {
         const body = {
             paging: payload.paging,
             search: payload.search,
@@ -981,6 +1010,9 @@ const LiveScoreAxiosApi = {
         }
         if (roundId) {
             url += `&roundIds=${roundId}`;
+        }
+        if (isParent !== true) {
+            url += `&competitionOrganisationId=${compOrgId}`;
         }
         return Method.dataPost(url, token, body);
     },
@@ -1197,7 +1229,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder, entityType) {
+    umpireRosterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder, entityType) {
         let url = null;
         const body = paginationBody;
 
@@ -1215,13 +1247,13 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterActionPerform(data) {
-        const url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}&callViaWeb=true`;
+    umpireRosterActionPerform(data) {
+        const url = `/roster?rosterId=${data.rosterId}&status=${data.status}&category=${data.category}&callViaWeb=true`;
         return Method.dataPatch(url, token);
     },
 
-    umpireRoasterDeleteAction(data) {
-        const url = `/roster?id=${data.roasterId}&category=${data.category}`;
+    umpireRosterDeleteAction(data) {
+        const url = `/roster?id=${data.rosterId}&category=${data.category}`;
         return Method.dataDelete(url, localStorage.token);
     },
 
@@ -1258,8 +1290,8 @@ const LiveScoreAxiosApi = {
     },
 
     /// ////get all the assign umpire list on the basis of competitionId
-    getAssignUmpiresList(competitionId, body) {
-        const url = `/matches/admin?competitionId=${competitionId}&roleId=15`;
+    getAssignUmpiresList(competitionId, body , userId) {
+        const url = `/matches/admin?competitionId=${competitionId}&roleId=15&userId=${userId}`;
         return Method.dataPost(url, token, body);
     },
 
@@ -1556,6 +1588,19 @@ const LiveScoreAxiosApi = {
         return Method.dataGetDownload(url, localStorage.token);
     },
 
+    getUmpirePoolAllocation(poolData) {
+
+        let url = `/competitions/` + poolData.compId + `/umpires/pools?organisationId=${poolData.orgId}`;
+
+        return Method.dataGet(url, token);
+    },
+
+    saveUmpirePoolAllocation(payload) {
+        let url = `competitions/` + payload.compId + `/umpires/pools?competitionId=${payload.compId}&organisationId=${payload.orgId}`;
+
+        return Method.dataPost(url, token, payload.poolObj);
+    },
+
 
 };
 
@@ -1573,17 +1618,19 @@ const Method = {
                     },
                 })
                 .then((result) => {
-                    if (result.status === 200) {
+                    if (result.status === 200 || result.status === 201) {
                         return resolve({
                             status: 1,
                             result,
                         });
-                    } if (result.status === 212) {
+                    }
+                    if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result,
                         });
-                    } if (result) {
+                    }
+                    if (result) {
                         return reject({
                             status: 3,
                             error: result.data.message,

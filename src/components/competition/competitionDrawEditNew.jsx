@@ -8,13 +8,12 @@ import FixtureSwappable from '../../customComponents/fixtureSwappableComponent';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOrganisationData,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
+    getGlobalYear, setGlobalYear
 } from "../../util/sessionStorage"
 import { getYearAndCompetitionOwnAction } from '../../store/actions/appAction';
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
@@ -70,8 +69,8 @@ class CompetitionDrawEdit extends Component {
             }
             if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
                 if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
+                    let yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.own_YearArr)
+                    setGlobalYear(yearRefId)
                     this.setState({ yearRefId: yearRefId })
                 }
             }
@@ -124,7 +123,7 @@ class CompetitionDrawEdit extends Component {
 
     apiCalls() {
         this.props.clearFixtureData()
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
@@ -145,7 +144,6 @@ class CompetitionDrawEdit extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            // setOwnCompetitionYear(1)
         }
     }
 
@@ -209,7 +207,7 @@ class CompetitionDrawEdit extends Component {
 
     onYearChange = yearId => {
         this.props.clearFixtureData("grades")
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         this.setState({

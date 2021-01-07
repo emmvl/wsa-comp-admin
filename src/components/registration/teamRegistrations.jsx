@@ -9,7 +9,7 @@ import Tooltip from "react-png-tooltip";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
-import { getOrganisationData } from "util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from "store/actions/commonAction/commonAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
@@ -55,7 +55,7 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (teamName, record) => (
-            <NavLink to={{pathname:"/registration", state: {teamName: record.teamName, teamId :record.teamId}}}>
+            <NavLink to={{ pathname: "/registration", state: { teamName: record.teamName, teamId: record.teamId } }}>
                 <span className="input-heading-add-another pt-0">{teamName}</span>
             </NavLink>
         )
@@ -71,18 +71,18 @@ const columns = [
 
     {
         title: "Division",
-        key:"divisionName",
+        key: "divisionName",
         dataIndex: "divisionName",
         sorter: true,
-        onHeaderCell: ({dataIndex}) => listeners(dataIndex)
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
     },
 
     {
         title: "Product",
-        key:"productName",
+        key: "productName",
         dataIndex: "productName",
         sorter: true,
-        onHeaderCell: ({dataIndex}) => listeners(dataIndex)
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
     },
 
     {
@@ -100,10 +100,10 @@ const columns = [
 
     {
         title: "Registration Date",
-        key:"registrationDate",
+        key: "registrationDate",
         dataIndex: "registrationDate",
         sorter: true,
-        onHeaderCell : ({dataIndex}) => listeners(dataIndex),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (registrationDate) => (
             <div>
                 {registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}
@@ -129,34 +129,34 @@ const columns = [
 
     {
         title: "Action",
-        key:"action",
-        dataIndex:"status",
-        render:(status) => (
+        key: "action",
+        dataIndex: "status",
+        render: (status) => (
             status == "Registered" ?
-            <Menu
-            className="action-triple-dot-submenu"
-            theme="light"
-            mode="horizontal"
-            style={{ lineHeight: '25px' }}
-             >
-                <SubMenu
-                    key="sub"
-                    title={
-                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                    }
+                <Menu
+                    className="action-triple-dot-submenu"
+                    theme="light"
+                    mode="horizontal"
+                    style={{ lineHeight: '25px' }}
                 >
-                    <Menu.Item key="1">
+                    <SubMenu
+                        key="sub"
+                        title={
+                            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                        }
+                    >
+                        <Menu.Item key="1">
 
                             <span>Deregister</span>
-                        
-                    </Menu.Item>
-                </SubMenu>
-            </Menu> 
-            : 
-            null
-            
+
+                        </Menu.Item>
+                    </SubMenu>
+                </Menu>
+                :
+                null
+
         )
-        
+
     },
 ];
 
@@ -166,7 +166,7 @@ class TeamRegistrations extends Component {
 
         this.state = {
             organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: null,
             competitionUniqueKey: "-1",
             filterOrganisation: -1,
             competitionId: "",
@@ -181,6 +181,7 @@ class TeamRegistrations extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear() ? getGlobalYear() : -1
         const { teamRegListAction } = this.props.registrationState
 
         this.referenceCalls(this.state.organisationUniqueKey);
@@ -199,13 +200,14 @@ class TeamRegistrations extends Component {
             let filterOrganisation = teamRegListAction.payload.filterOrganisation
             let searchText = teamRegListAction.payload.searchText
             let divisionId = teamRegListAction.payload.divisionId
-            let yearRefId = teamRegListAction.payload.yearRefId
+            let yearRefId = JSON.parse(yearId)
             let membershipProductUniqueKey = teamRegListAction.payload.membershipProductUniqueKey
             await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, divisionId, yearRefId, membershipProductUniqueKey })
             page = Math.floor(offset / 10) + 1;
 
             this.handleRegTableList(page);
         } else {
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.handleRegTableList(1);
         }
     }
@@ -213,7 +215,7 @@ class TeamRegistrations extends Component {
     handleRegTableList = (page) => {
         const {
             organisationUniqueKey,
-            yearRefId,
+            // yearRefId,
             competitionUniqueKey,
             filterOrganisation,
             searchText,
@@ -222,7 +224,7 @@ class TeamRegistrations extends Component {
             sortOrder,
             membershipProductUniqueKey
         } = this.state;
-
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         const filter = {
             organisationUniqueKey,
             yearRefId,
@@ -269,6 +271,9 @@ class TeamRegistrations extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
             this.handleRegTableList(1);
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });

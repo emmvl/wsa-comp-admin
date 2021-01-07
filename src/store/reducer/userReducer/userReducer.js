@@ -70,7 +70,7 @@ const initialState = {
   personalEmergency: [],
   medicalData: [],
   personalByCompData: [],
-  userRegistrationList: [],
+  userRegistrationList: null,
   userRegistrationPage: 1,
   userRegistrationTotalCount: 1,
   userRegistrationOnLoad: false,
@@ -156,7 +156,10 @@ const initialState = {
   spectatorTotalCount: null,
   spectatorListAction: null,
   impersonationList: [],
-  onImpersonationLoad: false
+  onImpersonationLoad: false,
+  usersToBeMerged: [],
+  teamMembersDetails: null,
+  getTeamMembersOnLoad: false 
 };
 
 function userReducer(state = initialState, action) {
@@ -479,9 +482,49 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         userRegistrationOnLoad: false,
-        userRegistrationList: userRegistrationData.registrationDetails,
-        userRegistrationDataPage: userRegistrationData.page ? userRegistrationData.page.currentPage : 1,
-        userRegistrationDataTotalCount: userRegistrationData.page.totalCount,
+        userRegistrationList: userRegistrationData,
+        // userRegistrationDataPage: userRegistrationData.page ? userRegistrationData.page.currentPage : 1,
+        // userRegistrationDataTotalCount: userRegistrationData.page.totalCount,
+        status: action.status
+      };
+
+    case ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD:
+      return { ...state, getTeamMembersOnLoad: true };
+
+    case ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_SUCCESS:
+      let teamMembersDetailsData = action.result;
+      return {
+        ...state,
+        getTeamMembersOnLoad: false,
+        teamMembersDetails: teamMembersDetailsData,
+        status: action.status
+      };
+
+    case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD:
+      return { ...state, userRegistrationOnLoad: true };
+
+    case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_SUCCESS:
+      let userTeamRegistrationData = action.result;
+      return {
+        ...state,
+        userTeamRegistrationOnLoad: false,
+        userTeamRegistrationList: userTeamRegistrationData.registrationTeamDetails,
+        userTeamRegistrationDataPage: userTeamRegistrationData.page ? userTeamRegistrationData.page.currentPage : 1,
+        userTeamRegistrationDataTotalCount: userTeamRegistrationData.page.totalCount,
+        status: action.status
+      };
+
+    case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD:
+      return { ...state, userRegistrationOnLoad: true };
+
+    case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_SUCCESS:
+      let userOtherRegistrationData = action.result;
+      return {
+        ...state,
+        userOtherRegistrationOnLoad: false,
+        userOtherRegistrationList: userOtherRegistrationData.registrationYourDetails,
+        userOtherRegistrationDataPage: userOtherRegistrationData.page ? userOtherRegistrationData.page.currentPage : 1,
+        userOtherRegistrationDataTotalCount: userOtherRegistrationData.page.totalCount,
         status: action.status
       };
 
@@ -909,20 +952,38 @@ function userReducer(state = initialState, action) {
       state.affiliateTo = []
       return { ...state };
 
-    case ApiConstants.Api_REST_TFA_LOAD:
+    case ApiConstants.Api_RESET_TFA_LOAD:
       return {
         ...state,
         onMedicalLoad: true,
         status: null
       }
 
-    case ApiConstants.Api_REST_TFA_SUCCESS:
-      console.log(action)
+    case ApiConstants.Api_RESET_TFA_SUCCESS:
       return {
         ...state,
         onMedicalLoad: false
       }
 
+    case ApiConstants.ADD_USERS_TO_BE_MERGED:
+      state.usersToBeMerged = action.payload
+      return {
+        ...state
+      }
+    
+    case ApiConstants.API_GET_NETSETGO_LIST_LOAD:
+      return { ...state, onLoad: true, netSetGoListAction: action };
+
+    case ApiConstants.API_GET_NETSETGO_LIST_SUCCESS:
+      let netSetGoData = action.result;
+      return {
+        ...state,
+        onLoad: false,
+        netSetGoList: netSetGoData ? netSetGoData.netSetGo : [],
+        netSetGoPage: (netSetGoData && netSetGoData.page) ? netSetGoData.page.currentPage : 1,
+        netSetGoTotalCount: (netSetGoData && netSetGoData.page) ? netSetGoData.page.totalCount : 1,
+        status: action.status
+      };
 
     default:
       return state;

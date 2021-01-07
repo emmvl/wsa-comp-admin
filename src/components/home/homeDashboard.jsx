@@ -16,7 +16,7 @@ import {
 import moment from 'moment';
 
 import history from 'util/history';
-import { getOrganisationData } from 'util/sessionStorage';
+import { getOrganisationData, setGlobalYear, getGlobalYear } from 'util/sessionStorage';
 import { getUserRoleId, getCurrentYear } from 'util/permissions';
 import AppConstants from 'themes/appConstants';
 import AppImages from 'themes/appImages';
@@ -275,10 +275,18 @@ class HomeDashboard extends Component {
         this.props.getRoleAction();
         this.props.getUreAction();
         if (this.state.orgChange) {
+
             window.history.pushState(null, document.title, window.location.href);
             window.addEventListener('popstate', () => {
                 window.history.pushState(null, document.title, window.location.href);
             });
+        }
+        if (getGlobalYear()) {
+            let yearRefId = getGlobalYear()
+            this.props.setHomeDashboardYear(JSON.parse(yearRefId));
+        }
+        else if( this.props.homeDashboardState.yearRefId){
+            setGlobalYear(this.props.homeDashboardState.yearRefId)
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList);
         // this.props.getUserCount(1);
@@ -290,11 +298,11 @@ class HomeDashboard extends Component {
             const userOrganisation = this.props.userState.getUserOrganisation;
             if (this.state.userCountLoading && !this.props.appState.onLoad) {
                 if (yearList.length > 0) {
-                    const yearRefId = getCurrentYear(yearList);
-
+                    const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(yearList);
                     if (this.props.homeDashboardState.userCount == null) {
                         this.props.getUserCount(yearRefId);
-                        this.props.setHomeDashboardYear(yearRefId);
+                        setGlobalYear(yearRefId)
+                        this.props.setHomeDashboardYear(JSON.parse(yearRefId));
                     }
 
                     this.setState({ userCountLoading: false });
@@ -308,7 +316,7 @@ class HomeDashboard extends Component {
                         this.props.getOnlyYearListAction(this.props.appState.yearList);
                         this.setState({ userCountLoading: true, loading: false });
                     } else {
-                        const yearRefId = getCurrentYear(yearList);
+                        const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(yearList);;
                         if (this.props.homeDashboardState.userCount == null) {
                             this.props.getUserCount(yearRefId);
                             this.setState({ loading: false });
@@ -336,6 +344,7 @@ class HomeDashboard extends Component {
     }
 
     onYearChange = (yearRefId) => {
+        setGlobalYear(yearRefId)
         this.props.setHomeDashboardYear(yearRefId);
         this.props.clearHomeDashboardData('yearChange');
         this.props.getUserCount(yearRefId);

@@ -23,11 +23,13 @@ import { userProfileUpdateAction } from '../../store/actions/userAction/userActi
 import ValidationConstants from "../../themes/validationConstant";
 import {
     getCommonRefData, countryReferenceAction, nationalityReferenceAction,
-    getGenderAction, disabilityReferenceAction
+    getGenderAction, disabilityReferenceAction, checkVenueDuplication
 } from '../../store/actions/commonAction/commonAction';
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { getOrganisationData, getUserId } from "../../util/sessionStorage";
+import { regexNumberExpression } from '../../util/helpers'
+import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -76,7 +78,13 @@ class UserProfileEdit extends Component {
             },
             titleLabel: "",
             section: "",
-            isSameUserEmailChanged: false
+            isSameUserEmailChanged: false,
+            hasErrorParticipitant: false,
+            hasErrorParent: [],
+            hasErrorEmergency: false,
+            hasErrorAddressNumber: false,
+            venueAddressError: '',
+            manualAddress: false
         }
         this.props.getCommonRefData();
         this.props.countryReferenceAction();
@@ -128,7 +136,7 @@ class UserProfileEdit extends Component {
                 section = "primary";
             }
             let userDataTemp = this.state.userData;
-            if(moduleFrom == 7 || moduleFrom == 8){
+            if (moduleFrom == 7 || moduleFrom == 8) {
                 userDataTemp.userId = data.userId;
             }
             await this.setState({
@@ -244,6 +252,51 @@ class UserProfileEdit extends Component {
                 this.setState({ isSameUserEmailChanged: false });
             }
         }
+        else if (key === "mobileNumber") {
+            if (value.length === 10) {
+                this.setState({
+                    hasErrorAddressNumber: false
+                })
+                value = regexNumberExpression(value);
+            } else if (value.length < 10) {
+                this.setState({
+                    hasErrorAddressNumber: true
+                })
+                value = regexNumberExpression(value);
+            }
+            console.log(regexNumberExpression(value))
+            if (regexNumberExpression(value) == undefined) {
+                setTimeout(() => {
+                    this.formRef.current.setFieldsValue({
+                        mobileNumber: this.state.userData.mobileNumber,
+                    })
+                }, 300);
+            }
+
+        }
+        else if (key === "emergencyContactNumber") {
+            if (value.length === 10) {
+                this.setState({
+                    hasErrorEmergency: false
+                })
+                value = regexNumberExpression(value);
+            } else if (value.length < 10) {
+                this.setState({
+                    hasErrorEmergency: true
+                })
+                value = regexNumberExpression(value);
+            }
+            console.log(regexNumberExpression(value))
+            if (regexNumberExpression(value) == undefined) {
+                setTimeout(() => {
+                    this.formRef.current.setFieldsValue({
+                        emergencyContactNumber: this.state.userData.emergencyContactNumber,
+                    })
+                }, 300);
+            }
+
+        }
+
         data[key] = value;
 
         this.setState({ userData: data });
@@ -263,10 +316,60 @@ class UserProfileEdit extends Component {
         );
     };
 
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonReducerState;
+        const address = data;
+        let userData = this.state.userData;
+        this.props.checkVenueDuplication(address);
+
+        if (!address || !address.addressOne || !address.suburb) {
+            this.setState({
+                venueAddressError: ValidationConstants.venueAddressDetailsError,
+            })
+        } else {
+            this.setState({
+                venueAddressError: ''
+            })
+        }
+
+        this.setState({
+            venueAddress: address,
+        });
+        const stateRefId = stateList.length > 0 && address.state
+            ? stateList.find((state) => state.name === address.state).id
+            : null;
+
+        // this.formRef.current.setFieldsValue({
+        //     state: address.state,
+        //     addressOne: address.addressOne || null,
+        //     suburb: address.suburb || null,
+        //     postcode: address.postcode || null,
+        // });
+        if (address) {
+            userData['street1'] = address.addressOne
+            userData['stateRefId'] = stateRefId
+            userData['suburb'] = address.suburb
+            userData['postalCode'] = address.postcode
+        }
+    };
+
     addressEdit = () => {
         let userData = this.state.userData
         const { stateList } = this.props.commonReducerState;
-        console.log("userData",userData)
+        let hasErrorAddressNumber = this.state.hasErrorAddressNumber;
+
+        let state = (stateList.length > 0 && userData.stateRefId)
+            ? stateList.find((state) => state.id == userData.stateRefId).name
+            : null;
+
+        let defaultVenueAddress = null
+        if (userData.street1) {
+            defaultVenueAddress = `${userData.street1 && `${userData.street1},`
+                } ${userData.suburb && `${userData.suburb},`
+                } ${state && `${state},`
+                } `;
+        }
+
         return (
             <div className="pt-0">
                 <div className="row">
@@ -312,7 +415,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%'}}
+                            style={{ width: '100%' }}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -324,7 +427,10 @@ class UserProfileEdit extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}>
+                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}
+                            help={hasErrorAddressNumber && ValidationConstants.mobileLength}
+                            validateStatus={hasErrorAddressNumber ? "error" : 'validating'}
+                        >
                             <InputWithHead
                                 auto_complete="new-mobileNumber"
                                 required="required-field"
@@ -367,71 +473,109 @@ class UserProfileEdit extends Component {
                         )}
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-sm" >
-                        <InputWithHead
-                            auto_complete="new-addressOne"
-                            // style={{ marginTop: 9 }}
-                            heading={AppConstants.addressOne}
-                            placeholder={AppConstants.addressOne}
-                            name={'street1'}
-                            value={userData?.street1}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                        />
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead
-                            auto_complete="new-addressTwo"
-                            // style={{ marginTop: 9 }}
-                            heading={AppConstants.addressTwo}
-                            placeholder={AppConstants.addressTwo}
-                            name={'street2'}
-                            value={userData?.street2}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
-                        />
-                    </div>
+
+
+                {
+                    !this.state.manualAddress &&
+                    <PlacesAutocomplete
+                        defaultValue={defaultVenueAddress && `${defaultVenueAddress}Australia`}
+                        heading={AppConstants.addressSearch}
+                        // required
+                        error={this.state.venueAddressError}
+                        onSetData={this.handlePlacesAutocomplete}
+                    />
+                }
+
+                <div
+                    className="orange-action-txt" style={{ marginTop: "10px" }}
+                    onClick={() => this.setState({ manualAddress: !this.state.manualAddress })}
+
+                >{this.state.manualAddress ? AppConstants.returnAddressSearch : AppConstants.enterAddressManually}
                 </div>
-                <div className="row">
-                    <div className="col-sm" >
-                        <InputWithHead
-                            // style={{ marginTop: 9 }}
-                            heading={AppConstants.suburb}
-                            placeholder={AppConstants.suburb}
-                            name={'suburb'}
-                            value={userData?.suburb}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                        />
-                    </div>
-                    <div className="col-sm">
-                        <div >
-                            <InputWithHead heading={AppConstants.stateHeading} />
+
+                {
+                    this.state.manualAddress &&
+                    <div className="row">
+                        <div className="col-sm" >
+                            <InputWithHead
+                                auto_complete="new-addressOne"
+                                // required="required-field"
+                                heading={AppConstants.addressOne}
+                                placeholder={AppConstants.addressOne}
+                                name={'street1'}
+                                value={userData ?.street1}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
+                            // readOnly
+                            />
+
                         </div>
-                        <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                            placeholder={AppConstants.select}
-                            value={userData?.stateRefId}
-                            name="stateRefId"
-                            onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                        >
-                            {stateList.map((item) => (
-                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-                            ))}
-                        </Select>
+                        <div className="col-sm" >
+                            <InputWithHead
+                                auto_complete="new-addressTwo"
+                                // style={{ marginTop: 9 }}
+                                heading={AppConstants.addressTwo}
+                                placeholder={AppConstants.addressTwo}
+                                name={'street2'}
+                                value={userData ?.street2}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col-sm">
-                        <InputWithHead
-                            heading={AppConstants.postCode}
-                            placeholder={AppConstants.postCode}
-                            name={'postalCode'}
-                            value={userData?.postalCode}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                        />
+                }
+
+                {
+                    this.state.manualAddress &&
+                    <div className="row">
+                        <div className="col-sm" >
+                            <InputWithHead
+                                // style={{ marginTop: 9 }}
+                                heading={AppConstants.suburb}
+                                placeholder={AppConstants.suburb}
+                                // required="required-field"
+                                name={'suburb'}
+                                value={userData ?.suburb}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
+                            // readOnly
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <div >
+                                <InputWithHead heading={AppConstants.stateHeading} />
+                            </div>
+                            <Select
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                placeholder={AppConstants.select}
+                                // required="required-field"
+                                value={userData ?.stateRefId}
+                                name="stateRefId"
+                                onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
+                            // readOnly
+                            // disabled
+                            >
+                                {stateList.map((item) => (
+                                    <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                                ))}
+                            </Select>
+                        </div>
                     </div>
-                    <div className="col-sm" />
-                </div>
-            </div>
+                }
+                {
+                    this.state.manualAddress &&
+                    <div className="row">
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.postCode}
+                                placeholder={AppConstants.postCode}
+                                name={'postalCode'}
+                                value={userData ?.postalCode}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
+                            // readOnly
+                            />
+                        </div>
+                        <div className="col-sm" />
+                    </div>
+                }
+            </div >
         );
     };
 
@@ -569,7 +713,7 @@ class UserProfileEdit extends Component {
 
     emergencyContactEdit = () => {
         let userData = this.state.userData
-
+        let hasErrorEmergency = this.state.hasErrorEmergency;
         return (
             <div className="content-view pt-0">
                 {/* First and Last name row */}
@@ -601,7 +745,10 @@ class UserProfileEdit extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm-12 col-md-6">
-                        <Form.Item name='emergencyContactNumber' rules={[{ required: true, message: ValidationConstants.emergencyContactNumber[0] }]}>
+                        <Form.Item name='emergencyContactNumber' rules={[{ required: true, message: ValidationConstants.emergencyContactNumber[0] }]}
+                            help={hasErrorEmergency && ValidationConstants.mobileLength}
+                            validateStatus={hasErrorEmergency ? "error" : 'validating'}
+                        >
                             <InputWithHead
                                 auto_complete="new-emergencyContactName"
                                 required="required-field"
@@ -792,7 +939,7 @@ class UserProfileEdit extends Component {
     }
 
     addParentOrChild = () => {
-        return(
+        return (
             <div className="content-view pt-0">
                 <div className="row">
                     <div className="col-sm">
@@ -836,7 +983,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%'}}
+                            style={{ width: '100%' }}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -866,7 +1013,7 @@ class UserProfileEdit extends Component {
         const { displaySection } = this.state;
         return (
             <div className="content-view pt-0">
-                {(displaySection === "1" || displaySection === "2"  || displaySection === "6" || displaySection === "7" || displaySection === "8") && <div>{this.addressEdit()}</div>}
+                {(displaySection === "1" || displaySection === "2" || displaySection === "6" || displaySection === "7" || displaySection === "8") && <div>{this.addressEdit()}</div>}
                 {/* {(displaySection === "2" ) && <div>{this.primaryContactEdit()}</div>} */}
                 {displaySection === "3" && <div>{this.emergencyContactEdit()}</div>}
                 {displaySection === "4" && <div>{this.otherInfoEdit()}</div>}
@@ -880,11 +1027,22 @@ class UserProfileEdit extends Component {
         let data = this.state.userData;
         data["section"] = this.state.section;
         data["organisationId"] = this.state.organisationId;
-        if(this.state.displaySection == 8 && !data.parentUserId){
+
+        if (this.state.venueAddressError) {
+            message.config({ duration: 1.5, maxCount: 1, });
+            message.error(this.state.venueAddressError);
+            return;
+        }
+
+
+        if (this.state.displaySection == 8 && !data.parentUserId) {
             data["parentUserId"] = 0;
         }
-        else if(this.state.displaySection == 7 && !data.childUserId){
+        else if (this.state.displaySection == 7 && !data.childUserId) {
             data["childUserId"] = 0;
+        }
+        if (this.state.hasErrorAddressNumber == true || this.state.hasErrorEmergency == true) {
+            return false;
         }
         this.props.userProfileUpdateAction(data);
         this.setState({ saveLoad: true });
@@ -897,7 +1055,7 @@ class UserProfileEdit extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId} }}>
+                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId } }}>
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
@@ -932,7 +1090,7 @@ class UserProfileEdit extends Component {
                     >
                         <Content>
                             <div className="formView">{this.contentView()}</div>
-                            <Loader visible={this.props.userState.onUpUpdateLoad} />
+                            <Loader visible={this.props.userState.onUpUpdateLoad || this.props.commonReducerState.onLoad} />
                         </Content>
 
                         <Footer>{this.footerView()}</Footer>
@@ -950,7 +1108,8 @@ function mapDispatchToProps(dispatch) {
         countryReferenceAction,
         nationalityReferenceAction,
         getGenderAction,
-        disabilityReferenceAction
+        disabilityReferenceAction,
+        checkVenueDuplication
     }, dispatch)
 }
 

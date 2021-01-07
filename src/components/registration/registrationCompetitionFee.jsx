@@ -18,7 +18,7 @@ import {
     Switch
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
@@ -39,6 +39,7 @@ import {
     updatePaymentFeeOption,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     instalmentDateAction,
     competitionPaymentApi,
     addRemoveCompFeeDiscountAction,
@@ -71,7 +72,7 @@ import { isArrayNotEmpty } from '../../util/helpers';
 import ValidationConstants from '../../themes/validationConstant';
 import { NavLink } from 'react-router-dom';
 import Loader from '../../customComponents/loader';
-import { /* getUserId, */ getOrganisationData } from '../../util/sessionStorage';
+import { /* getUserId, */ getOrganisationData, getGlobalYear, setGlobalYear } from '../../util/sessionStorage';
 import { getAffiliateToOrganisationAction } from '../../store/actions/userAction/userAction';
 import CustomToolTip from 'react-png-tooltip';
 import { registrationRestrictionTypeAction } from '../../store/actions/commonAction/commonAction';
@@ -677,7 +678,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -961,7 +962,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1245,7 +1246,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1530,7 +1531,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Affiliate fees (excl. GST)',
+        title: 'Affiliate Competition fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1824,7 +1825,7 @@ const playerSeasonalTableTeamAssociation = [
                 ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2130,7 +2131,7 @@ const playerSeasonalTableTeamClub = [
                 ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2634,7 +2635,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Affiliate Fees (excl. GST)',
+        title: 'Affiliate Competition Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2940,7 +2941,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Affiliate fees (excl. GST)',
+        title: 'Affiliate Competition fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -3509,7 +3510,8 @@ class RegistrationCompetitionFee extends Component {
             divisionState: false,
             affiliateOrgId: null,
             heroImage: null,
-            yearRefId: null
+            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
+            isEdit: props.location.state ? props.location.state.isEdit : false
         };
 
         this_Obj = this;
@@ -3600,7 +3602,7 @@ class RegistrationCompetitionFee extends Component {
         }
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let main_YearRef__Id = getCurrentYear(this.props.appState.yearList)
+                let main_YearRef__Id = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList)
                 let mainYearRefId = this.props.location.state ? this.props.location.state.yearRefId ? this.props.location.state.yearRefId : main_YearRef__Id : main_YearRef__Id;
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
 
@@ -3608,12 +3610,13 @@ class RegistrationCompetitionFee extends Component {
 
                 this.setState({
                     onYearLoad: false,
-                    yearRefId: mainYearRefId
+                    yearRefId: JSON.parse(mainYearRefId)
                 })
                 this.formRef.current.setFieldsValue({
                     yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
+                setGlobalYear(mainYearRefId)
             }
         }
     }
@@ -3730,6 +3733,7 @@ class RegistrationCompetitionFee extends Component {
         this.props.competitionFeeInit();
         this.props.paymentFeeDeafault();
         this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
         this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction("all");
         this.props.registrationRestrictionTypeAction();
@@ -3755,6 +3759,7 @@ class RegistrationCompetitionFee extends Component {
     };
 
     setYear = (e) => {
+        setGlobalYear(e)
         this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
@@ -3769,7 +3774,8 @@ class RegistrationCompetitionFee extends Component {
                 hasRegistration,
                 "REG",
                 affiliateOrgId,
-                yearRefId
+                yearRefId,
+                this.state.isEdit
             );
             this.setState({ getDataLoading: true });
         } else {
@@ -3901,6 +3907,14 @@ class RegistrationCompetitionFee extends Component {
         // let govtVoucherData= this.props.competitionFeesState.competitionDiscountsData.govermentVouchers
         let govtVoucher = this.props.competitionFeesState.competitionDiscountsData.govermentVouchers;
         let discountDataArr = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts;
+        let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
+        selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
+
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.paymentMandatory);
+            return;
+        }
 
         discountDataArr.map((item) => {
             if (item.childDiscounts) {
@@ -4676,24 +4690,23 @@ class RegistrationCompetitionFee extends Component {
                     formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                     formData.append('logoFileUrl', compFeesState.defaultCompFeesOrgLogo);
                     formData.append('competition_logo', compFeesState.defaultCompFeesOrgLogo);
-                } else {
-                    if (this.state.image !== null) {
-                        formData.append('competition_logo', this.state.image);
-                        formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
-                    } else {
-                        formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
-                        formData.append('logoFileUrl', postData.competitionLogoUrl);
-                        // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
-                    }
+                } else if (!this.state.image) {
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
+                    formData.append('logoFileUrl', postData.competitionLogoUrl);
                 }
 
-                if (this.state.image) {
+                if (this.state.image && !this.state.heroImage) {
                     formData.append("uploadFileType", 1);
-                } else if (this.state.heroImage) {
+                    formData.append("competition_logo", this.state.image);
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
+                } else if (this.state.heroImage && !this.state.image) {
                     formData.append("uploadFileType", 2);
                     formData.append("competition_logo", this.state.heroImage);
                 } else if (this.state.image && this.state.heroImage) {
                     formData.append("uploadFileType", 3);
+                    formData.append("competition_logo", this.state.image);
+                    formData.append("competition_logo", this.state.heroImage);
+                    formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                 }
 
                 formData.append('logoIsDefault', postData.logoIsDefault);
@@ -4701,7 +4714,8 @@ class RegistrationCompetitionFee extends Component {
                     formData,
                     compFeesState.defaultCompFeesOrgLogoData.id,
                     AppConstants.Reg,
-                    this.state.affiliateOrgId
+                    this.state.affiliateOrgId,
+                    this.state.isEdit
                 );
                 this.setState({ loading: true });
             } else {
@@ -4734,16 +4748,27 @@ class RegistrationCompetitionFee extends Component {
                 //     finalmembershipProductTypes.splice(i, 1);
                 // }
             }
-            let arrayList = finalmembershipProductTypes.filter(x => x.membershipProductTypes.length > 0);
-            let payload = {
-                membershipProducts: arrayList,
-            };
-            this.props.saveCompetitionFeesMembershipTabAction(
-                payload,
-                competitionId,
-                this.state.affiliateOrgId
-            );
-            this.setState({ loading: true, divisionState: true });
+
+            if (!isArrayNotEmpty(finalmembershipProductTypes)) {
+                message.error(ValidationConstants.please_SelectMembership_Product);
+            }
+            else if (isArrayNotEmpty(finalmembershipProductTypes)) {
+                if (!isArrayNotEmpty(finalmembershipProductTypes[0].membershipProductTypes)) {
+                    message.error(ValidationConstants.please_SelectMembership_Types);
+                } else {
+                    let arrayList = finalmembershipProductTypes.filter(x => x.membershipProductTypes.length > 0);
+                    let payload = {
+                        membershipProducts: arrayList,
+                    };
+                    this.props.saveCompetitionFeesMembershipTabAction(
+                        payload,
+                        competitionId,
+                        this.state.affiliateOrgId
+                    );
+                    this.setState({ loading: true, divisionState: true });
+                }
+            }
+
         } else if (tabKey == '3') {
             let divisionArrayData = compFeesState.competitionDivisionsData;
             let finalDivisionArray = [];
@@ -4956,7 +4981,7 @@ class RegistrationCompetitionFee extends Component {
 
     headerView = () => (
         <div className="header-view">
-            <Header className="form-header-view bg-transparent d-flex align-items-center">
+            <Header className="form-header-view bg-transparent d-flex align-items-center pl-4">
                 <Breadcrumb separator=" > ">
                     <Breadcrumb.Item className="breadcrumb-add">
                         {AppConstants.competitionFees}
@@ -5004,44 +5029,81 @@ class RegistrationCompetitionFee extends Component {
         )
     };
 
+    // setImage = (data, key) => {
+    //     if (data.files[0] !== undefined) {
+    //         let files_ = data.files[0].type.split('image/');
+    //         let fileType = files_[1];
+
+    //         if (key === "competitionLogoUrl") {
+    //             if (data.files[0].size > AppConstants.logo_size) {
+    //                 message.error(AppConstants.logoImageSize);
+    //                 return;
+    //             }
+    //             if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //                 this.setState({
+    //                     image: data.files[0],
+    //                     profileImage: URL.createObjectURL(data.files[0]),
+    //                     isSetDefaul: true,
+    //                 });
+    //                 this.props.add_editcompetitionFeeDeatils(
+    //                     URL.createObjectURL(data.files[0]),
+    //                     'competitionLogoUrl'
+    //                 );
+    //                 this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
+    //             } else {
+    //                 message.error(AppConstants.logoType);
+    //                 return;
+    //             }
+    //         } else if (key === "heroImageUrl") {
+    //             if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //                 this.setState({
+    //                     heroImage: data.files[0]
+    //                 });
+    //                 this.props.add_editcompetitionFeeDeatils(
+    //                     URL.createObjectURL(data.files[0]),
+    //                     'heroImageUrl'
+    //                 );
+    //             } else {
+    //                 message.error(AppConstants.logoType);
+    //                 return;
+    //             }
+    //         }
+    //     }
+    // };
+
     setImage = (data, key) => {
         if (data.files[0] !== undefined) {
-            let files_ = data.files[0].type.split('image/');
-            let fileType = files_[1];
-
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             if (key === "competitionLogoUrl") {
-                if (data.files[0].size > AppConstants.logo_size) {
-                    message.error(AppConstants.logoImageSize);
-                    return;
-                }
-                if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
-                    this.setState({
-                        image: data.files[0],
-                        profileImage: URL.createObjectURL(data.files[0]),
-                        isSetDefaul: true,
-                    });
-                    this.props.add_editcompetitionFeeDeatils(
-                        URL.createObjectURL(data.files[0]),
-                        'competitionLogoUrl'
-                    );
-                    this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
-                } else {
-                    message.error(AppConstants.logoType);
-                    return;
-                }
+                this.setState({
+                    image: data.files[0],
+                    profileImage: URL.createObjectURL(data.files[0]),
+                    isSetDefaul: true,
+                });
+                this.props.add_editcompetitionFeeDeatils(
+                    URL.createObjectURL(data.files[0]),
+                    'competitionLogoUrl'
+                );
+                this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
             } else if (key === "heroImageUrl") {
-                if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
-                    this.setState({
-                        heroImage: data.files[0]
-                    });
-                    this.props.add_editcompetitionFeeDeatils(
-                        URL.createObjectURL(data.files[0]),
-                        'heroImageUrl'
-                    );
-                } else {
-                    message.error(AppConstants.logoType);
-                    return;
-                }
+                this.setState({
+                    heroImage: data.files[0]
+                });
+                this.props.add_editcompetitionFeeDeatils(
+                    URL.createObjectURL(data.files[0]),
+                    'heroImageUrl'
+                );
             }
         }
     };
@@ -5286,6 +5348,9 @@ class RegistrationCompetitionFee extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target, "competitionLogoUrl")}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -5323,6 +5388,9 @@ class RegistrationCompetitionFee extends Component {
                             )}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <InputWithHead heading={AppConstants.heroImageForCompetition} />
@@ -5353,8 +5421,17 @@ class RegistrationCompetitionFee extends Component {
                             id="hero-pic"
                             className="d-none"
                             onChange={(evt) => this.setImage(evt.target, "heroImageUrl")}
+                            onClick={(event) => {
+                                event.target.value = null
+                            }}
                         />
+                        <div className="d-flex align-items-center justify-content-center">
+                            <span className="image-size-format-text">
+                                {AppConstants.imageSizeFormatText}
+                            </span>
+                        </div>
                     </div>
+
                     <span
                         style={
                             detailsData.competitionDetailData.heroImageUrl == null
@@ -5608,6 +5685,8 @@ class RegistrationCompetitionFee extends Component {
                                     )
                                 }
                                 disabled={compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" >
@@ -5622,6 +5701,8 @@ class RegistrationCompetitionFee extends Component {
                                     )
                                 }
                                 disabled={compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div className="col-sm" >
@@ -5636,6 +5717,8 @@ class RegistrationCompetitionFee extends Component {
                                     )
                                 }
                                 disabled={compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
@@ -5743,7 +5826,7 @@ class RegistrationCompetitionFee extends Component {
         let membershipDisable = this.state.permissionState.membershipDisable;
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.membershipProduct}</span>
+                <span className="form-heading required-field">{AppConstants.membershipProduct}</span>
                 {membershipProductArray.map((item, index) => (
                     <div className="d-flex flex-column justify-content-center">
                         <Checkbox
@@ -6223,15 +6306,15 @@ class RegistrationCompetitionFee extends Component {
                                                                 {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
                                                                     <div className="d-flex">
                                                                         <Radio className="team-reg-radio-custom-style" style={{ width: "50%" }} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
-                                                                        <Radio className="team-reg-radio-custom-style" 
+                                                                        <Radio className="team-reg-radio-custom-style"
                                                                             disabled={item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2)}
-                                                                            style={{ width: "50%" }} 
+                                                                            style={{ width: "50%" }}
                                                                             value={3}><span>{AppConstants.feesPaidAtEachMatchByPlayer}
-                                                                                            {item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
-                                                                                                <CustomToolTip>{AppConstants.perMatchFeesCannotSet}</CustomToolTip>
-                                                                                            )} 
-                                                                                    </span>
-                                                                            </Radio>
+                                                                                {item.seasonalTeam.allType.find(x => x.allowTeamRegistrationTypeRefId == 2) && (
+                                                                                    <CustomToolTip>{AppConstants.perMatchFeesCannotSet}</CustomToolTip>
+                                                                                )}
+                                                                            </span>
+                                                                        </Radio>
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -6289,7 +6372,7 @@ class RegistrationCompetitionFee extends Component {
                                                     <Table
                                                         // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
-                                                        columns={item.teamRegChargeTypeRefId == 1 ? this.seasonalFeesTeamOnOrgTLevel() : this.casualFeesTeamOnOrgTLevel()}
+                                                        columns={this.seasonalFeesTeamOnOrgTLevel()}
                                                         dataSource={
                                                             item.isAllType !== 'allDivisions'
                                                                 ? item.seasonalTeam.perType
@@ -6907,7 +6990,7 @@ class RegistrationCompetitionFee extends Component {
                     <div className="inside-container-view pt-5">
                         <span className="form-heading">{AppConstants.paymentOptions}</span>
                         {isSeasonal == false && isCasual == false && isTeamSeasonal == false && isTeamCasual == false && (
-                            <span className="applicable-to-heading pt-0">
+                            <span className="applicable-to-heading pt-0 text-with-red-color">
                                 {AppConstants.please_Sel_Fee}
                             </span>
                         )}
@@ -6934,7 +7017,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.seasonalFee}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
                                         </CustomToolTip>
@@ -6969,7 +7052,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.singleGameFee}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>
@@ -6993,7 +7076,7 @@ class RegistrationCompetitionFee extends Component {
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
-                                    <div className="mt-2">
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7027,8 +7110,8 @@ class RegistrationCompetitionFee extends Component {
                         {isTeamCasual && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
-                                    <span className="form-heading">{AppConstants.teamSingleGameFee}</span>
-                                    <div className="mt-4">
+                                    <span className="form-heading">{AppConstants.teamFeePerMatch}</span>
+                                    <div className="mt-n3">
                                         <CustomToolTip placement="top">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
                                         </CustomToolTip>
@@ -7380,6 +7463,21 @@ class RegistrationCompetitionFee extends Component {
             case 3:
                 return (
                     <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            className="w-100"
+                            style={{ paddingRight: 1, minWidth: 182 }}
+                            onChange={(discountType) => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.checkDiscountDisable(item.organisationId)}
+                        >
+                            {this.props.appState.commonDiscountTypes.map((item) => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
                         {childDiscounts.map((childItem, childIndex) => (
                             <div className="row">
                                 <div className="col-sm-10">
@@ -7393,8 +7491,8 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         <InputWithHead
                                             auto_complete="new-child"
-                                            heading={`Family Participant ${childIndex + 1}%`}
-                                            placeholder={`Family Participant ${childIndex + 1}%`}
+                                            heading={`Family Participant ${childIndex + 1} discount`}
+                                            placeholder={`Family Participant ${childIndex + 1} discount`}
                                             onChange={(e) =>
                                                 this.onChangeChildPercent(
                                                     e.target.value,
@@ -8035,6 +8133,11 @@ class RegistrationCompetitionFee extends Component {
         this.setDetailsFieldValue();
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -8051,6 +8154,8 @@ class RegistrationCompetitionFee extends Component {
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
+
                     >
                         {this.headerView()}
                         {/* {this.dropdownView()} */}
@@ -8136,6 +8241,7 @@ function mapDispatchToProps(dispatch) {
             updatePaymentFeeOption,
             paymentFeeDeafault,
             paymentSeasonalFee,
+            paymentPerMatch,
             competitionPaymentApi,
             addRemoveCompFeeDiscountAction,
             add_editcompetitionFeeDeatils,

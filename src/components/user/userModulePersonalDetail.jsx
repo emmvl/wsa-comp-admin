@@ -27,6 +27,9 @@ import {
     getUserModulePersonalDetailsAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleRegistrationAction,
+    getUserModuleTeamMembersAction,
+    getUserModuleTeamRegistrationAction,
+    getUserModuleOtherRegistrationAction,
     getUserModuleMedicalInfoAction,
     getUserModuleActivityPlayerAction,
     getUserModuleActivityParentAction,
@@ -41,18 +44,17 @@ import {
     getUmpireActivityListAction,
     registrationResendEmailAction,
     userProfileUpdateAction,
-    restTfaAction
+    resetTfaAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import moment from "moment";
 import history from "../../util/history";
 import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../themes/dateformate";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
-import StripeKeys from "../stripe/stripeKeys";
-import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
+import { isArrayNotEmpty } from "../../util/helpers";
 
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key]);
@@ -103,15 +105,15 @@ const columns = [
         title: "Membership Valid Until",
         dataIndex: "expiryDate",
         key: "expiryDate",
-        render: (expiryDate) => (
+        render: (expiryDate, record) => (
             <span>
-                {expiryDate != null ? (expiryDate !== 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
+                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Single Game' && expiryDate !== 'Pay each Match' ? moment(expiryDate, "YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate, "YYYY-MM-DD").format("DD/MM/YYYY")}
             </span>
         )
     },
     {
         title: "Comp Fees Paid",
-        data: "compFeesPaid",
+        dataIndex: "compFeesPaid",
         key: "compFeesPaid"
     },
     {
@@ -214,6 +216,187 @@ const columns = [
         ),
     },
 ];
+
+const cloumnsRegistration = [
+    {
+        title: "Name",
+        dataIndex: "userName",
+        key: "userName"
+    },
+    {
+        title: "DOB",
+        dataIndex: "DOB",
+        key: "DOB",
+        render: (DOB, record) => (
+            liveScore_formateDate(DOB)
+        )
+    },
+    {
+        title: "Email",
+        dataIndex: "email",
+        key: "email"
+    },
+    {
+        title: "Phone",
+        dataIndex: "mobileNumber",
+        key: "mobileNumber"
+    },
+    {
+        title: "Affiliate",
+        dataIndex: "affiliate",
+        key: "affiliate"
+    },
+    {
+        title: "Competition",
+        dataIndex: "competitionName",
+        key: "competitionName"
+    },
+    {
+        title: "Comp Fees Paid",
+        dataIndex: "compFeesPaid",
+        key: "compFeesPaid"
+    },
+    {
+        title: "Membership Product",
+        dataIndex: "productName",
+        key: "productName"
+    },
+    {
+        title: "Division",
+        dataIndex: "divisionName",
+        key: "divisionName"
+    },
+    {
+        title: "Status",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus"
+    },
+    {
+        title: "Action",
+    }
+
+];
+
+const teamRegistrationColumns = [
+    {
+        title: "Team Name",
+        dataIndex: "teamName",
+        key: "teamName",
+        render: (teamName, record) => (
+            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.showTeamMembers(record,1)}>{teamName}</span>
+        )
+    },
+
+    {
+        title: "Organisation",
+        dataIndex: "organisationName",
+        key: "organisationName",
+    },
+
+    {
+        title: "Division",
+        key: "divisionName",
+        dataIndex: "divisionName",
+    },
+
+    {
+        title: "Product",
+        key: "productName",
+        dataIndex: "productName",
+    },
+
+    {
+        title: "Registered By",
+        dataIndex: "registeredBy",
+        key: "registeredBy",
+        render: (registeredBy, record) => (
+            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0">{registeredBy}</span>
+            </NavLink>
+        ),
+    },
+
+    {
+        title: "Registration Date",
+        key: "registrationDate",
+        dataIndex: "registrationDate",
+        render: (registrationDate) => (
+            <div>{registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}</div>
+        ),
+    },
+
+    {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+    },
+
+    {
+        title: "Action",
+        key: "action",
+    },
+]
+
+const childOtherRegistrationColumns = [
+    {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+    },
+
+    {
+        title: "DOB",
+        dataIndex: "dateOfBirth",
+        key: "dateOfBirth",
+        render: (dateOfBirth) => (
+            <div>{dateOfBirth != null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}</div>
+        ),
+    },
+
+    {
+        title: "Email",
+        key: "email",
+        dataIndex: "email",
+    },
+
+    {
+        title: "Phone",
+        key: "mobileNumber",
+        dataIndex: "mobileNumber",
+    },
+    {
+        title: "Fee Paid",
+        key: "feePaid",
+        dataIndex: "feePaid",
+    },
+]
+
+const teamMembersColumns = [
+    {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: "Status",
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: "Paid Fee",
+        dataIndex: "paidFee",
+        key: "paidFee",
+    },
+    {
+        title: "Pending Fee",
+        dataIndex: "pendingFee",
+        key: "pendingFee",
+    },
+    {
+        title: "Action",
+        key: "action",
+    },
+]
 
 const columnsPlayer = [
     {
@@ -1122,7 +1305,7 @@ function purchasesTableSort(key) {
         offset: this_Obj.state.purchasesOffset,
         order: sortOrder ? sortOrder : "",
         sorterBy: sortBy ? sortBy : "",
-        userId: this_Obj.state.userId
+        userId: this_Obj.state.userId,
     }
     this_Obj.props.getPurchasesListingAction(params)
     this_Obj.setState({ purchasesListSortBy: sortBy, purchasesListSortOrder: sortOrder });
@@ -1232,7 +1415,7 @@ class UserModulePersonalDetail extends Component {
             registrationForm: null,
             isRegistrationForm: false,
             screen: null,
-            yearRefId: -1,
+            yearRefId: null,
             competitions: [],
             teams: [],
             divisions: [],
@@ -1248,7 +1431,13 @@ class UserModulePersonalDetail extends Component {
             showChildUnlinkConfirmPopup: false,
             showParentUnlinkConfirmPopup: false,
             showCannotUnlinkPopup: false,
-            isAdmin: false
+            isAdmin: false,
+            myRegCurrentPage: 1,
+            otherRegCurrentPage: 1,
+            childRegCurrentPage: 1,
+            teamRegCurrentPage: 1,
+            isShowRegistrationTeamMembers: false,
+            registrationTeam: null
         };
     }
 
@@ -1259,6 +1448,8 @@ class UserModulePersonalDetail extends Component {
     }
 
     async componentDidMount() {
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        this.setState({ yearRefId })
         let isAdmin = getOrganisationData() ? getOrganisationData().userRole == 'admin' ? true : false : false
         this.props.getReferenceOrderStatus()
         if (
@@ -1278,6 +1469,12 @@ class UserModulePersonalDetail extends Component {
                 screen: screen,
                 tabKey: tabKey,
             });
+            this.tabApiCalls(
+                tabKey,
+                this.state.competition,
+                userId,
+                yearRefId
+            );
             this.apiCalls(userId);
             if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(
@@ -1288,6 +1485,7 @@ class UserModulePersonalDetail extends Component {
                 );
             }
         }
+
         this.setState({
             isAdmin
         })
@@ -1416,6 +1614,7 @@ class UserModulePersonalDetail extends Component {
 
         if (value != -1) {
             competitions = personal.competitions.filter((x) => x.yearRefId === value);
+            setGlobalYear(value)
         } else {
             competitions = personal.competitions;
         }
@@ -1562,6 +1761,8 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleMedicalInfoAction(payload);
         } else if (tabKey === "5") {
             this.handleRegistrationTableList(1, userId, competition, yearRefId);
+            // this.handleTeamRegistrationTableList(1, userId, competition, yearRefId);
+            // this.handleOtherRegistrationTableList(1, userId, competition, yearRefId);
         } else if (tabKey === "6") {
             this.handleHistoryTableList(1, userId);
         } else if (tabKey === "7") {
@@ -1586,7 +1787,7 @@ class UserModulePersonalDetail extends Component {
             offset: (page ? (10 * (page - 1)) : 0),
             order: "",
             sorterBy: "",
-            userId: userId
+            userId: userId,
         }
         this.props.getPurchasesListingAction(params)
     }
@@ -1621,7 +1822,62 @@ class UserModulePersonalDetail extends Component {
         if (key === "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
     };
 
-    handleRegistrationTableList = (page, userId, competition, yearRefId) => {
+    handleRegistrationTableList = (page, userId, competition, yearRefId , key) => {
+        if(key == 'myRegistrations'){
+            this.setState({myRegCurrentPage: page})
+        }else if(key == 'otherRegistrations'){
+            this.setState({otherRegCurrentPage: page})
+        }else if(key == 'teamRegistrations'){
+            this.setState({teamRegCurrentPage: page})
+        }else if(key == 'childRegistrations'){
+            this.setState({childRegCurrentPage: page})
+        }
+        setTimeout(() => {
+            let filter = {
+                competitionId: competition.competitionUniqueKey,
+                userId: userId,
+                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                yearRefId,
+                myRegPaging:{
+                    limit: 10,
+                    offset: this.state.myRegCurrentPage ? 10 * (this.state.myRegCurrentPage - 1) : 0,
+                },
+                otherRegPaging:{
+                    limit: 10,
+                    offset: this.state.otherRegCurrentPage ? 10 * (this.state.otherRegCurrentPage - 1) : 0,
+                },
+                teamRegPaging:{
+                    limit: 10,
+                    offset: this.state.teamRegCurrentPage ? 10 * (this.state.teamRegCurrentPage - 1) : 0,
+                },
+                childRegPaging:{
+                    limit: 10,
+                    offset: this.state.childRegCurrentPage ? 10 * (this.state.childRegCurrentPage - 1) : 0,
+                }
+            };
+            this.props.getUserModuleRegistrationAction(filter);
+        }, 300);
+        
+    };
+
+    showTeamMembers = (record,page) => {
+        try{
+            this.setState({isShowRegistrationTeamMembers: true,registrationTeam: record})
+            let payload = {
+                userId: record.userId,
+                teamId: record.teamId,
+                teamMemberPaging: {
+                    limit:10,
+                    offset: page ? 10 * (page - 1) : 0,
+                }
+            }
+            this.props.getUserModuleTeamMembersAction(payload);
+        }catch(ex){
+            console.log("Error in showTeamMember::"+ex);
+        }
+    }
+
+    handleTeamRegistrationTableList = (page, userId, competition, yearRefId) => {
         let filter = {
             competitionId: competition.competitionUniqueKey,
             userId: userId,
@@ -1632,7 +1888,21 @@ class UserModulePersonalDetail extends Component {
                 offset: page ? 10 * (page - 1) : 0,
             },
         };
-        this.props.getUserModuleRegistrationAction(filter);
+        this.props.getUserModuleTeamRegistrationAction(filter);
+    };
+
+    handleOtherRegistrationTableList = (page, userId, competition, yearRefId) => {
+        let filter = {
+            competitionId: competition.competitionUniqueKey,
+            userId: userId,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            yearRefId,
+            paging: {
+                limit: 10,
+                offset: page ? 10 * (page - 1) : 0,
+            },
+        };
+        this.props.getUserModuleOtherRegistrationAction(filter);
     };
 
     handleHistoryTableList = (page, userId) => {
@@ -1832,6 +2102,7 @@ class UserModulePersonalDetail extends Component {
                         )}
                         {/* <span className="desc-text-style side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
                     </div>
+                    {/* Umpire Accrediation */}
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">
@@ -1848,12 +2119,40 @@ class UserModulePersonalDetail extends Component {
                         </div>
                         <div className='live-score-title-icon-view ml-5'>
                             <span className="desc-text-style  side-bar-profile-data">
-                                {personal.accrediationLevel}
+                                {personal.umpireAccreditationLevel}
                             </span>
 
                             <div className='col-sm d-flex justify-content-end'>
                                 <span className="desc-text-style  side-bar-profile-data">
                                     {personal.accreditationUmpireExpiryDate && moment(personal.accreditationUmpireExpiryDate).format("DD-MM-YYYY")}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Coach Accrediation */}
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.whistleIcon} alt="" height="16" width="16" />
+                            </div>
+                            <span className="year-select-heading ml-3">
+                                {AppConstants.coachAccreditation}
+                            </span>
+                            <div className='col-sm d-flex justify-content-end'>
+                                <span className="year-select-heading  ml-3">
+                                    {AppConstants.expiry}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='live-score-title-icon-view ml-5'>
+                            <span className="desc-text-style  side-bar-profile-data">
+                                {personal.coachAccreditationLevel}
+                            </span>
+
+                            <div className='col-sm d-flex justify-content-end'>
+                                <span className="desc-text-style  side-bar-profile-data">
+                                    {personal.accreditationCoachExpiryDate && moment(personal.accreditationCoachExpiryDate).format("DD-MM-YYYY")}
                                 </span>
                             </div>
                         </div>
@@ -2053,8 +2352,17 @@ class UserModulePersonalDetail extends Component {
         }
 
         return (
-            <div className="comp-dash-table-view mt-2">
-                <div className="user-module-row-heading">{AppConstants.address}</div>
+            <div className="comp-dash-table-view pt-0">
+
+                <div className=" user-module-row-heading d-flex align-items-center mb-0">{AppConstants.address}</div>
+                {/* <div className="col-sm justify-content-end d-flex align-items-center">
+                        <NavLink to={{ pathname: `https://netball-registration-dev.worldsportaction.com/` }} target="_blank">
+                            <Button type="primary">
+                                {AppConstants.yourProfile}
+                            </Button>
+                        </NavLink>
+                    </div> */}
+
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
@@ -2321,41 +2629,227 @@ class UserModulePersonalDetail extends Component {
         );
     };
 
+    gotoAddTeamMember = () => {
+        history.push("/addTeamMember");
+    }
+
     registrationView = () => {
         let userState = this.props.userState;
         let userRegistrationList = userState.userRegistrationList;
-        let total = userState.userRegistrationDataTotalCount;
-
+        // let registrationTotal = userState.userRegistrationDataTotalCount;
+        // let userTeamRegistrationList = userState.userTeamRegistrationList;
+        // let teamRegistrationTotal = userState.userTeamRegistrationDataTotalCount;
+        // let userOtherRegistrationList = userState.userOtherRegistrationList;
+        // let OtherRegistrationTotal = userState.userOtherRegistrationDataTotalCount;
+        let myRegistrations = userRegistrationList?.myRegistrations.registrationDetails ? userRegistrationList?.myRegistrations.registrationDetails : [];
+        let myRegistrationsCurrentPage = userRegistrationList?.myRegistrations.page ? userRegistrationList?.myRegistrations.page.currentPage : 1; 
+        let myRegistrationsTotalCount = userRegistrationList?.myRegistrations.page.totalCount; 
+        let otherRegistrations = userRegistrationList?.otherRegistrations.registrationYourDetails ? userRegistrationList?.otherRegistrations.registrationYourDetails : [];
+        let otherRegistrationsCurrentPage = userRegistrationList?.otherRegistrations.page ? userRegistrationList?.otherRegistrations.page.currentPage : 1; 
+        let otherRegistrationsTotalCount = userRegistrationList?.otherRegistrations.page.totalCount; 
+        let teamRegistrations = userRegistrationList?.teamRegistrations.registrationTeamDetails ? userRegistrationList?.teamRegistrations.registrationTeamDetails : [];
+        let teamRegistrationsCurrentPage = userRegistrationList?.teamRegistrations.page ? userRegistrationList?.teamRegistrations.page.currentPage : 1; 
+        let teamRegistrationsTotalCount = userRegistrationList?.teamRegistrations.page.totalCount;
+        let childRegistrations = userRegistrationList?.childRegistrations.childRegistrationDetails ? userRegistrationList?.childRegistrations.childRegistrationDetails : [];
+        let childRegistrationsCurrentPage = userRegistrationList?.childRegistrations.page ? userRegistrationList?.childRegistrations.page.currentPage : 1; 
+        let childRegistrationsTotalCount = userRegistrationList?.childRegistrations.page.totalCount;  
+        let teamMembers = userState.teamMembersDetails ? userState.teamMembersDetails.teamMembers : [];
+        let teamMembersCurrentPage = userState.teamMembersDetails?.page ? userState.teamMembersDetails?.page.currentPage : 1; 
+        let teamMembersTotalCount = userState.teamMembersDetails?.page.totalCount;
         return (
-            <div className="comp-dash-table-view mt-2">
-                <div className="table-responsive home-dash-table-view">
-                    <Table
-                        className="home-dashboard-table"
-                        columns={columns}
-                        dataSource={userRegistrationList}
-                        pagination={false}
-                        loading={
-                            this.props.userState.userRegistrationOnLoad && true
-                        }
-                    />
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination pb-3"
-                        current={userState.userRegistrationDataPage}
-                        total={total}
-                        onChange={(page) =>
-                            this.handleRegistrationTableList(
-                                page,
-                                this.state.userId,
-                                this.state.competition,
-                                this.state.yearRefId
-                            )
-                        }
-                        showSizeChanger={false}
-                    />
-                </div>
+            <div>
+                {this.state.isShowRegistrationTeamMembers == false ? (
+                    <div className="comp-dash-table-view mt-2">
+                        {isArrayNotEmpty(myRegistrations) && (
+                            <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.ownRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={columns}
+                                        dataSource={myRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={myRegistrationsCurrentPage}
+                                        total={myRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "myRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                       {isArrayNotEmpty(otherRegistrations) && (
+                           <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.otherRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={childOtherRegistrationColumns}
+                                        dataSource={otherRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={otherRegistrationsCurrentPage}
+                                        total={otherRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "otherRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                           </div>
+                       )}
+                       {isArrayNotEmpty(childRegistrations) && (
+                           <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.childRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={childOtherRegistrationColumns}
+                                        dataSource={childRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={childRegistrationsCurrentPage}
+                                        total={childRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "childRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                           </div>
+                       )}
+                       {isArrayNotEmpty(teamRegistrations) && (
+                           <div>
+                                <div className="user-module-row-heading">
+                                    {AppConstants.teamRegistration}
+                                </div>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table
+                                        className="home-dashboard-table"
+                                        columns={teamRegistrationColumns}
+                                        dataSource={teamRegistrations}
+                                        pagination={false}
+                                        loading={
+                                            this.props.userState.userRegistrationOnLoad
+                                        }
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Pagination
+                                        className="antd-pagination pb-3"
+                                        current={teamRegistrationsCurrentPage}
+                                        total={teamRegistrationsTotalCount}
+                                        onChange={(page) =>
+                                            this.handleRegistrationTableList(
+                                                page,
+                                                this.state.userId,
+                                                this.state.competition,
+                                                this.state.yearRefId,
+                                                "teamRegistrations"
+                                            )
+                                        }
+                                        showSizeChanger={false}
+                                    />
+                                </div>
+                           </div>
+                       )} 
+                    </div>
+                ) : (
+                   <div className="comp-dash-table-view mt-2">
+                       <div className="row">
+                            <div className="col-sm d-flex align-content-center">
+                                <Breadcrumb separator=" > ">
+                                    <Breadcrumb.Item className="breadcrumb-add font-18 pointer" onClick={() => this.setState({isShowRegistrationTeamMembers: false})}>
+                                        {AppConstants.Registrations}
+                                    </Breadcrumb.Item>
+                                    <Breadcrumb.Item className="breadcrumb-add font-18">
+                                        {AppConstants.teamMembers}
+                                    </Breadcrumb.Item>
+                                </Breadcrumb>
+                            </div>
+                            <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
+                                + {AppConstants.addTeamMembers}
+                            </div>
+                        </div>
+                        <div className="user-module-row-heading font-18 mt-2">
+                            {AppConstants.team + ": " + this.state.registrationTeam.teamName}
+                        </div>
+                        <div className="table-responsive home-dash-table-view">
+                            <Table
+                                className="home-dashboard-table"
+                                columns={teamMembersColumns}
+                                dataSource={teamMembers}
+                                pagination={false}
+                                loading={
+                                    this.props.userState.getTeamMembersOnLoad
+                                }
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination pb-3"
+                                current={teamMembersCurrentPage}
+                                total={teamMembersTotalCount}
+                                onChange={(page) =>
+                                    this.showTeamMembers(
+                                        this.state.registrationTeam,
+                                        page
+                                    )
+                                }
+                                showSizeChanger={false}
+                            />
+                        </div>
+                   </div> 
+                )}
             </div>
+            
         );
     };
 
@@ -2463,8 +2957,8 @@ class UserModulePersonalDetail extends Component {
             </div>
         );
     };
-    restTfaAction = (e) => {
-        this.props.restTfaAction()
+    resetTfaAction = (e) => {
+        this.props.resetTfaAction(this.state.userId)
     }
 
     headerView = () => {
@@ -2473,37 +2967,33 @@ class UserModulePersonalDetail extends Component {
             history.push("/mergeUserMatches")
         }
 
-
-
         const menu =
             (
                 <Menu >
-                    {/* <Menu.Item onClick={handleMenuClick} key="merge">
-                    Merge
-              </Menu.Item> */}
+                    <Menu.Item onClick={handleMenuClick} key="merge">
+                        {AppConstants.merge}
+                    </Menu.Item>
                     {this.state.isAdmin ?
-                        <Menu.Item onClick={this.restTfaAction} key="merge">
-                            Rest TFA
-              </Menu.Item>
+                        <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
+                            {AppConstants.resetTFA}
+                        </Menu.Item>
                         : null}
                 </Menu >
 
             )
+
         return (
             <div className="row" >
                 <div className="col-sm">
                     <Header className="form-header-view bg-transparent d-flex pl-0 justify-content-between mt-5">
                         <Breadcrumb separator=" > ">
-                            {/* <NavLink to="/userGraphicalDashboard">
-                                <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
-                            </NavLink> */}
                             <NavLink to="/userTextualDashboard">
                                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
                             </NavLink>
                         </Breadcrumb>
                         <Dropdown overlay={menu}>
                             <Button type="primary">
-                                Actions <DownOutlined />
+                                {AppConstants.actions} <DownOutlined />
                             </Button>
                         </Dropdown>
                     </Header>
@@ -2687,28 +3177,10 @@ class UserModulePersonalDetail extends Component {
         );
     }
 
-    stripeConnected = () => {
-        let orgData = getOrganisationData()
-        let stripeAccountID = orgData ? orgData.stripeAccountID : null
-        return stripeAccountID
-    }
 
-    userEmail = () => {
-        let orgData = getOrganisationData()
-        let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
-        return email
-    }
-
-    stripeDashboardLoginUrl = () => {
-
-        this.setState({ stripeDashBoardLoad: true })
-        this.props.getStripeLoginLinkAction()
-    }
 
     umpireActivityView = () => {
-        let stripeConnected = this.stripeConnected()
-        let userEmail = this.userEmail()
-        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
+
         let { umpireActivityOnLoad, umpireActivityList, umpireActivityCurrentPage, umpireActivityTotalCount } = this.props.userState;
         return (
             <div className="comp-dash-table-view mt-2 default-bg">
@@ -2726,29 +3198,6 @@ class UserModulePersonalDetail extends Component {
                         </div>
                     </Button>
                 </div>
-
-                {/* <div className="transfer-image-view mb-3">
-                    {stripeConnected ?
-                        <Button
-                            type="primary"
-                            className="open-reg-button"
-                            onClick={() => this.stripeDashboardLoginUrl()}
-                        >
-                            {AppConstants.editBankAccount}
-                        </Button>
-                        :
-                        <Button
-                            type="primary"
-                            className="open-reg-button"
-                        >
-                            <a href={stripeConnectURL} className="stripe-connect">
-                                <span>
-                                    {AppConstants.uploadBankAccount}
-                                </span>
-                            </a>
-                        </Button>
-                    }
-                </div> */}
 
                 <div className="table-responsive home-dash-table-view">
                     <Table
@@ -3027,6 +3476,9 @@ function mapDispatchToProps(dispatch) {
             getUserModulePersonalDetailsAction,
             getUserModuleMedicalInfoAction,
             getUserModuleRegistrationAction,
+            getUserModuleTeamMembersAction,
+            getUserModuleTeamRegistrationAction,
+            getUserModuleOtherRegistrationAction,
             getUserModulePersonalByCompetitionAction,
             getUserModuleActivityPlayerAction,
             getUserModuleActivityParentAction,
@@ -3039,13 +3491,12 @@ function mapDispatchToProps(dispatch) {
             getScorerData,
             getUmpireData,
             getCoachData,
-            getStripeLoginLinkAction,
             getUmpireActivityListAction,
             getPurchasesListingAction,
             getReferenceOrderStatus,
             registrationResendEmailAction,
             userProfileUpdateAction,
-            restTfaAction
+            resetTfaAction
         },
         dispatch
     );

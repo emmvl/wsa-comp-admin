@@ -154,6 +154,22 @@ function getUserModuleRegistrationAction(payload) {
     };
 }
 
+function getUserModuleTeamRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD,
+        payload,
+    };
+
+}
+
+function getUserModuleOtherRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD,
+        payload,
+    };
+
+}
+
 function getUserModuleMedicalInfoAction(userId) {
     return {
         type: ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD,
@@ -424,11 +440,36 @@ function registrationResendEmailAction(teamId, userId) {
     }
     return action;
 }
-function restTfaAction() {
+function resetTfaAction(Id) {
     const action = {
-        type: ApiConstants.Api_REST_TFA_LOAD,
+        type: ApiConstants.Api_RESET_TFA_LOAD,
+        Id
     }
     return action
+}
+
+
+function addUsersToBeCompared(users) {
+    return {
+        type: ApiConstants.ADD_USERS_TO_BE_MERGED,
+        payload: users
+    }
+}
+
+function getUserModuleTeamMembersAction(payload){
+    return {
+        type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD,
+        payload: payload
+    }
+}
+
+function getNetSetGoActionList(payload, sortBy, sortOrder) {
+    return {
+        type: ApiConstants.API_GET_NETSETGO_LIST_LOAD,
+        payload,
+        sortBy,
+        sortOrder,
+    }
 }
 
 export {
@@ -450,6 +491,8 @@ export {
     getUserModulePersonalDetailsAction,
     getUserModuleMedicalInfoAction,
     getUserModuleRegistrationAction,
+    getUserModuleTeamRegistrationAction,
+    getUserModuleOtherRegistrationAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleActivityPlayerAction,
     getUserModuleActivityParentAction,
@@ -486,5 +529,8 @@ export {
     clearListAction,
     getSpectatorListAction,
     registrationResendEmailAction,
-    restTfaAction
+    resetTfaAction,
+    addUsersToBeCompared,
+    getUserModuleTeamMembersAction,
+    getNetSetGoActionList
 };

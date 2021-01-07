@@ -56,7 +56,7 @@ let AxiosApi = {
     },
 
     /////////////stripe payments transfer list
-    async getStripeTransferList(page, startingAfter, endingBefore) {
+    async getStripeTransferList(page, startingAfter, endingBefore, params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -68,13 +68,27 @@ let AxiosApi = {
                 limit: 10
             }
         }
-        // var url = `api/payments/list/transfer?organisationUniqueKey=${organisationUniqueKey}`;
         var url = `api/payments/list`;
+
+        if (params) {
+            if (params.year)
+                url += '?year=' + params.year
+            else if (params.startDate || params.endDate) {
+                if (params.startDate && params.endDate)
+                    url += `?startDate=${params.startDate}&endDate=${params.endDate}`
+                else if (params.startDate)
+                    url += `?startDate=${params.startDate}`
+                else
+                    url += `?endDate=${params.endDate}`
+            }
+
+        }
+
         return Method.dataPost(url, token, body);
     },
 
     //////////stripe payout list
-    async getStripePayoutList(page, startingAfter, endingBefore) {
+    async getStripePayoutList(page, startingAfter, endingBefore, params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -87,6 +101,19 @@ let AxiosApi = {
             }
         }
         var url = `api/payments/list`;
+        if (params) {
+            if (params.year)
+                url += '?year=' + params.year
+            else if (params.startDate || params.endDate) {
+                if (params.startDate && params.endDate)
+                    url += `?startDate=${params.startDate}&endDate=${params.endDate}`
+                else if (params.startDate)
+                    url += `?startDate=${params.startDate}`
+                else
+                    url += `?endDate=${params.endDate}`
+            }
+
+        }
         return Method.dataPost(url, token, body);
     },
 
@@ -119,7 +146,22 @@ let AxiosApi = {
     },
 
     //get payment list
-    async getPaymentList(offset, sortBy, sortOrder, userId, registrationId, yearId, competitionKey, paymentFor, dateFrom, dateTo,searchValue) {
+    async getPaymentList(offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentOption,
+        paymentMethod,
+        membershipType
+    ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -134,14 +176,17 @@ let AxiosApi = {
             competitionKey: competitionKey,
             paymentFor: paymentFor,
             dateFrom: dateFrom,
-            dateTo: dateTo
+            dateTo: dateTo,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType
         }
         var url = `/api/payments/transactions?search=${searchValue}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        
-        
+
         return Method.dataPost(url, token, body);
     },
     async exportPaymentApi(key) {
@@ -159,7 +204,7 @@ let AxiosApi = {
         }
         return Method.dataGetDownload(url, token, key);
     },
-     async getStripeRefundList(page, startingAfter, endingBefore) {
+    async getStripeRefundList(page, startingAfter, endingBefore) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {

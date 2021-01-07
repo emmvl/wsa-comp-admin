@@ -57,8 +57,10 @@ const routeAdminRole = [
     "/registrationFormList",
     "/competitionPlayerImport",
     "/competitionTeamsImport",
+    "/netSetGo",
     "/playWithFriend",
     "/referFriend",
+    "/spectator",
     "/matchDayDashboard",
     "/matchDayMatches",
     "/matchDayMatchDetails",
@@ -99,6 +101,7 @@ const routeAdminRole = [
     "/matchDayAddIncident",
     "/matchDayLadderSettings",
     "/matchDayDivisionImport",
+    "/matchDaySingleGameFee",
     "/userMedical",
     "/matchDayAssignMatch",
     "/matchDayVenueChange",
@@ -118,7 +121,7 @@ const routeAdminRole = [
     "/addUmpire",
     "/matchDayMatchSheet",
     "/shopDashboard",
-    "/umpireRoaster",
+    "/umpireRoster",
     "/umpireImport",
     "/umpire",
     "/listProducts",
@@ -158,6 +161,7 @@ const routeAdminRole = [
     "/userOurOrganisation",
     "/userPersonal",
     "/umpireRoster",
+    "/addTeamMember"
 ]
 
 const routeUmpireRole = [
@@ -173,8 +177,10 @@ const routeUmpireRole = [
     "/umpirePayout",
     "/umpirePaymentSetting",
     "/userTextualDashboard",
+    "/netSetGo",
     "/playWithFriend",
     "/referFriend",
+    "/spectator",
     "/userAffiliatesList",
     "/userOurOrganisation",
     "/affiliateDirectory",
@@ -191,14 +197,17 @@ const routeUmpireRole = [
     "/addUmpire",
     "/umpireImport",
     "/matchDayTeamView",
-    "/matchDaySettingsView"
+    "/matchDaySettingsView",
+    "/addTeamMember"
 ]
 
 const routeFinanceRole = [
     "/homeDashboard",
     "/userTextualDashboard",
+    "/netSetGo",
     "/playWithFriend",
     "/referFriend",
+    "/spectator",
     "/userAffiliatesList",
     "/userOurOrganisation",
     "/affiliateDirectory",
@@ -211,7 +220,8 @@ const routeFinanceRole = [
     "/registrationSettlements",
     "/matchDayTeamView",
     "/matchDayAddTeam",
-    "/registrationPayoutTransaction"
+    "/registrationPayoutTransaction",
+    "/addTeamMember"
 
     // "/shopDashboard",
     // "/listProducts",
