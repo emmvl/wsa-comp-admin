@@ -1029,7 +1029,7 @@ class AddProduct extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.shipping}</span>
                 <div className="row pt-1">
-                    <div className="col-sm-4">
+                    {/* <div className="col-sm-4">
                         <Checkbox
                             className="single-checkbox mt-3"
                             checked={productDetailData.deliveryType === "shipping"}
@@ -1038,7 +1038,7 @@ class AddProduct extends Component {
                         >
                             {AppConstants.shipping}
                         </Checkbox>
-                    </div>
+                    </div> */}
                     <div className="col-sm-8">
                         <Checkbox
                             className="single-checkbox mt-3"

@@ -1588,6 +1588,19 @@ const LiveScoreAxiosApi = {
         return Method.dataGetDownload(url, localStorage.token);
     },
 
+    getUmpirePoolAllocation(poolData) {
+
+        let url = `/competitions/` + poolData.compId + `/umpires/pools?organisationId=${poolData.orgId}`;
+
+        return Method.dataGet(url, token);
+    },
+
+    saveUmpirePoolAllocation(payload) {
+        let url = `competitions/` + payload.compId + `/umpires/pools?competitionId=${payload.compId}&organisationId=${payload.orgId}`;
+
+        return Method.dataPost(url, token, payload.poolObj);
+    },
+
 
 };
 
@@ -1605,17 +1618,19 @@ const Method = {
                     },
                 })
                 .then((result) => {
-                    if (result.status === 200) {
+                    if (result.status === 200 || result.status === 201) {
                         return resolve({
                             status: 1,
                             result,
                         });
-                    } if (result.status === 212) {
+                    }
+                    if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result,
                         });
-                    } if (result) {
+                    }
+                    if (result) {
                         return reject({
                             status: 3,
                             error: result.data.message,
