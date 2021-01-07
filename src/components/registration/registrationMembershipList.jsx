@@ -308,7 +308,7 @@ class RegistrationMembershipList extends Component {
                             onClick={() => this.props.clearReducerDataAction("getMembershipProductDetails")}
                         >
                             <NavLink
-                                to={{ pathname: `/registrationMembershipFee`, state: { id: null } }}
+                                to={{ pathname: `/registrationMembershipFee`, state: { id: null ,addNew: true} }}
                                 className="text-decoration-none"
                             >
                                 <Button className="primary-add-product" type="primary">+ {AppConstants.addMembershipProduct}</Button>

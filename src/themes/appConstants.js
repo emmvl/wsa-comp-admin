@@ -1708,7 +1708,9 @@ const AppConstants = {
   payoutId :'Payout Id',
   refundId :'Refund Id',
   teamMember: "Team Member",
-  addTeamMember: "Add Team Member"
+  addTeamMember: "Add Team Member",
+  addPool:'Add Pool',
+  pleaseEnterPoolName:'Please Enter Pool Name',
 };
 
 export default AppConstants;
