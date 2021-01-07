@@ -20,7 +20,7 @@
     "rules": {
         "consistent-return": 0,
         "indent": [
-            "error",
+            "warn",
             4,
             {
                 "SwitchCase": 1
