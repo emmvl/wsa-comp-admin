@@ -134,14 +134,14 @@ class AddCommunication extends Component {
                 author: name
             })
             this.props.liveScoreAddcommunicationDetailsAction(this.props.location.state.item)
-            this.setInitalFiledValue(this.props.location.state.item, name)
+            this.setInitialValue(this.props.location.state.item, name)
         } else {
             this.props.liveScoreRefreshcommunicationAction()
         }
     }
 
     onChangeEditorData = (event) => {
-        this.props.liveScoreUpdatecommunicationAction(event, "body")
+        this.props.liveScoreUpdateCommunicationAction(event, "body")
         // this.setState({ editorState: event })
     }
 
@@ -151,7 +151,7 @@ class AddCommunication extends Component {
         });
     };
 
-    setInitalFiledValue(data, author) {
+    setInitialValue(data, author) {
         let authorData = null
         if (getLiveScoreCompetiton()) {
             authorData = JSON.parse(getLiveScoreCompetiton())
@@ -175,12 +175,12 @@ class AddCommunication extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let communicationState = this.props.liveScoreCommunicationState.addcommunicationResult
+        let communicationState = this.props.liveScoreCommunicationState.addCommunicationResult
         let onLoad_2Data = this.props.liveScoreCommunicationState
         if (nextProps.communicationState !== communicationState) {
             if (onLoad_2Data.onLoad_2 === false && this.state.getDataLoading === true) {
                 // debugger
-                const appendData = this.props.liveScoreCommunicationState.addcommunicationResult
+                const appendData = this.props.liveScoreCommunicationState.addCommunicationResult
                 if (this.state.isEdit === true) {
                     if (!appendData.hasOwnProperty('communicationVideo')) {
                         appendData['communicationVideo'] = this.props.location.state.item.communicationVideo
@@ -231,10 +231,10 @@ class AddCommunication extends Component {
     onChangeTime(time, timeString) {
     }
 
-    ////method to setimage
+    // method to setimage
     setImage = (data) => {
         this.setState({ imageSelection: null, image: null })
-        this.props.liveScoreUpdatecommunicationAction(null, "communicationImage")
+        this.props.liveScoreUpdateCommunicationAction(null, "communicationImage")
 
         const { liveScoreCommunicationState } = this.props;
         let editData = liveScoreCommunicationState.addEditcommunication;
@@ -258,13 +258,13 @@ class AddCommunication extends Component {
         }
     }
 
-    ////method to setVideo
+    // method to setVideo
     setVideo = (data) => {
         const { liveScoreCommunicationState } = this.props;
         let editData = liveScoreCommunicationState.addEditcommunication;
 
         this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
-        this.props.liveScoreUpdatecommunicationAction(null, "communicationVideo")
+        this.props.liveScoreUpdateCommunicationAction(null, "communicationVideo")
 
         if (data.files[0] !== undefined) {
             if (data.files[0].size > AppConstants.video_size) {
@@ -285,12 +285,10 @@ class AddCommunication extends Component {
             if (this.state.isEdit) {
                 editData.communicationVideo = ''
             }
-            // this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
-            // this.props.liveScoreUpdatecommunicationAction(URL.createObjectURL(data.files[0]), "communicationVideo")
         }
     };
 
-    ///method to open file to select video
+    // method to open file to select video
     selectVideo() {
         const fileInput = document.getElementById('user-vdo');
         fileInput.setAttribute("type", "file");
@@ -300,15 +298,15 @@ class AddCommunication extends Component {
         }
     }
 
-    //On change title
+    // On change title
     onChangeTitle(title) {
         const { liveScoreCommunicationState } = this.props;
         let editData = liveScoreCommunicationState.addEditcommunication;
         editData.title = title
-        this.props.liveScoreUpdatecommunicationAction(editData)
+        this.props.liveScoreUpdateCommunicationAction(editData)
     }
 
-    ////modal view
+    // modal view
     ModalView() {
         return (
             <Modal
@@ -328,7 +326,7 @@ class AddCommunication extends Component {
         )
     }
 
-    /// view for breadcrumb
+    // view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
@@ -403,25 +401,14 @@ class AddCommunication extends Component {
         )
     }
 
-    html2text(html) {
-        var d = document.createElement('div');
-        d.innerHTML = html;
-        return d.textContent;
-    }
-
-    setRecipientData(recipientName, recipientKey) {
-        this.setState({ recipientSelection: recipientName })
-        this.props.liveScoreUpdatecommunicationAction(recipientName, recipientKey)
-    }
-
     deleteImage() {
         this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false })
-        this.props.liveScoreUpdatecommunicationAction(null, "communicationImage")
+        this.props.liveScoreUpdateCommunicationAction(null, "communicationImage")
     }
 
     deleteVideo() {
         this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
-        this.props.liveScoreUpdatecommunicationAction(null, "communicationVideo")
+        this.props.liveScoreUpdateCommunicationAction(null, "communicationVideo")
     }
 
     contentView = () => {
@@ -439,7 +426,7 @@ class AddCommunication extends Component {
                         heading={AppConstants.communicationTitle}
                         placeholder={AppConstants.enterCommunicationTitle}
                         name="communicationTitle"
-                        onChange={(event) => this.props.liveScoreUpdatecommunicationAction(captializedString(event.target.value), "title")}
+                        onChange={(event) => this.props.liveScoreUpdateCommunicationAction(captializedString(event.target.value), "title")}
                         value={editData.title}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
                             'communication_Title': captializedString(i.target.value)
@@ -463,7 +450,7 @@ class AddCommunication extends Component {
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
-                        onChange={(event) => this.props.liveScoreUpdatecommunicationAction(captializedString(event.target.value), "author")}
+                        onChange={(event) => this.props.liveScoreUpdateCommunicationAction(captializedString(event.target.value), "author")}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
                             'author': captializedString(i.target.value)
                         })}
@@ -552,14 +539,13 @@ class AddCommunication extends Component {
                     </div>
                 </div>
 
-                {/* communication expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.communicationExpiryDate} />
                         <DatePicker
                             // size="large"
                             style={{ width: '100%' }}
-                            onChange={(date) => this.props.liveScoreUpdatecommunicationAction(date, "expire_date")}
+                            onChange={(date) => this.props.liveScoreUpdateCommunicationAction(date, "expire_date")}
                             format="DD-MM-YYYY"
                             value={expiryDate ? moment(expiryDate) : ''}
                             showTime={false}
@@ -574,8 +560,8 @@ class AddCommunication extends Component {
                             style={{ width: '100%' }}
                             format="HH:mm"
                             value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
-                            onChange={(time) => this.props.liveScoreUpdatecommunicationAction(time, "expire_time")}
-                            onBlur={(e) => this.props.liveScoreUpdatecommunicationAction(e.target.value && moment(e.target.value, "HH:mm"), 'expire_time')}
+                            onChange={(time) => this.props.liveScoreUpdateCommunicationAction(time, "expire_time")}
+                            onBlur={(e) => this.props.liveScoreUpdateCommunicationAction(e.target.value && moment(e.target.value, "HH:mm"), 'expire_time')}
                             placeholder="Select Time"
                         />
                     </div>

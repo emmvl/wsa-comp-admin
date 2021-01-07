@@ -601,6 +601,48 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token);
     },
 
+    liveScoreCommunicationList(userId) {
+        const url = `/communications/admin?userId=${userId}`;
+        return Method.dataGet(url, token);
+    },
+
+    liveScoreAddCommunication(data) {
+        const body = new FormData();
+        let authorData = null;
+
+        if (JSON.parse(getLiveScoreCompetiton())) {
+            authorData = JSON.parse(getLiveScoreCompetiton());
+        }
+
+        body.append('id', data.id ? data.id : 0);
+        body.append('title', data.editData.title);
+        body.append('body', data.editData.body);
+        body.append('entityId', data.compId);
+        body.append('author', data.editData.author ? data.editData.author : authorData ? authorData.longName : 'World sport action');
+        body.append('recipients', data.editData.recipients);
+        body.append('communication_expire_date', data.editData.communication_expire_date);
+        body.append('recipientRefId', 12);
+        body.append('entityTypeId', 1);
+
+        if (data.communicationImage) {
+            body.append('communicationImage', data.communicationImage);
+        }
+
+        if (data.communicationVideo) {
+            body.append('communicationVideo', data.communicationVideo);
+        }
+
+        if (data.mediaArry !== []) {
+            for (const i in data.mediaArry) {
+                body.append('communicationMedia', data.mediaArry[i]);
+            }
+        }
+
+        let url = null;
+        url = '/communication';
+        return Method.dataPost(url, token, body);
+    },
+
     liveScoreNewsList(competitionId) {
         const url = `/news/admin?entityId=${competitionId}&entityTypeId=1`;
         return Method.dataGet(url, token);
@@ -1191,7 +1233,7 @@ const LiveScoreAxiosApi = {
         const body = paginationBody;
 
         if (status === 'All') {
-            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;            
+            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&roleIds=${refRoleId}`;
         } else {
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&status=${status}&roleIds=${refRoleId}`;
