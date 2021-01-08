@@ -896,11 +896,11 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Payouts</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="4" disabled={this.state.isImpersonation}>
+                        {/* <Menu.Item key="4" disabled={this.state.isImpersonation}>
                             <NavLink to="/registrationRefunds">
                                 <span>Refunds</span>
                             </NavLink>
-                        </Menu.Item>
+                        </Menu.Item> */}
                     </Menu>
                 )}
 
