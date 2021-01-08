@@ -10,6 +10,16 @@ function umpirePaymentSettingUpdate(data) {
     return action;
 }
 
+function getUmpirePaymentSettings(data) {
+    const action = {
+        type: ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD,
+        data
+    };
+
+    return action;
+}
+
 export {
-    umpirePaymentSettingUpdate
+    umpirePaymentSettingUpdate,
+    getUmpirePaymentSettings
 } 

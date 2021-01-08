@@ -115,6 +115,7 @@ const initialState = {
     badgeDataCompOrg: [],
     badgeDataByAffiliate: [],
 
+    paymentSettingsData: null,
 };
 
 function getSelectedValue(divId, allArray) {
@@ -181,23 +182,13 @@ function umpirePaymentSetting(state = initialState, action) {
                 state[key] = data
 
             } else if (key === 'paidByCompOrgDivision' || key === 'paidByAffiliateDivision') {
-                // if (key === 'paidByCompOrgDivision') {
-                //     state.affiliateDiv = getSelectedValue(data, state.affiliateDiv)
-                // }
-                // if (key === 'paidByAffiliateDivision') {
-                //     state.compOrgDiv = getSelectedValue(data, state.compOrgDiv)
-                // }
                 state[key] = data
 
             } else if (key === 'byBadge') {
                 state.byBadgeBtn = data
-                // state.byPoolBtn = false
-                // state.byBadgeDivision = ['BadgeAA', 'BadgeA', 'BadgeC']
 
             } else if (key === 'byPool') {
                 state.byPoolBtn = data
-                // state.byBadgeBtn = false
-                // state.inputFieldArray = []
             } else if (key === 'addAnotherGroup') {
                 var obj = {
                     name: null,
@@ -258,7 +249,6 @@ function umpirePaymentSetting(state = initialState, action) {
                 state.paidByCompOrg = true
                 state.paidByAffiliate = false
                 state.byBadgeDivision = []
-                // state.inputFieldArray = []
             }
             else if (key === "allDivisionBadge") {
                 state.allDivisionBadge = data
@@ -298,6 +288,21 @@ function umpirePaymentSetting(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
+            };
+
+
+        // get umpire payment settings
+        case ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+            
+        case ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                paymentSettingsData: action.result,
+                onLoad: false,
             };
 
         default:

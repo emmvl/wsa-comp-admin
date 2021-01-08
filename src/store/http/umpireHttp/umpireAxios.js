@@ -18,10 +18,12 @@ let token = getAuthToken();
 
 let UmpireAxiosApi = {
 
+    umpirePaymentSettingsGet(competitionId) {
+        const url = `/competitions/${competitionId}/umpires/payment/settings`;
+        return Method.dataGet(url, token);
+    },
 
 };
-
-
 
 
 const Method = {

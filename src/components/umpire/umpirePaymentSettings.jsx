@@ -16,10 +16,13 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { isArrayNotEmpty } from "../../util/helpers";
-import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
-import { umpirePaymentSettingUpdate } from '../../store/actions/umpireAction/umpirePaymentSettingAction'
-import { getRefBadgeData } from '../../store/actions/appAction'
+import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
+import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage';
+import { 
+    umpirePaymentSettingUpdate,
+    getUmpirePaymentSettings,
+} from '../../store/actions/umpireAction/umpirePaymentSettingAction';
+import { getRefBadgeData } from '../../store/actions/appAction';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -42,8 +45,8 @@ class UmpirePaymentSetting extends Component {
         this.props.getRefBadgeData()
     }
 
-    componentDidUpdate(nextProps) {
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
@@ -59,6 +62,18 @@ class UmpirePaymentSetting extends Component {
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
         }
+
+        if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
+            this.props.getUmpirePaymentSettings(this.state.selectedComp);
+        }
+
+        console.log('this.props.umpirePaymentSettingState.paymentSettingsData', this.props.umpirePaymentSettingState.paymentSettingsData)
+
+        // if (this.props.umpireSettingState !== prevProps.umpireSettingState && !!this.props.umpireSettingState.allocationSettingsData
+        //     && !this.props.umpireSettingState.onLoad) {
+
+        //     // /////////
+        // }
     }
 
     headerView = () => {
@@ -526,7 +541,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
         umpirePaymentSettingUpdate,
-        getRefBadgeData
+        getRefBadgeData,
+        getUmpirePaymentSettings,
     }, dispatch)
 }
 
