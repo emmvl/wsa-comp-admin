@@ -403,6 +403,7 @@ class UmpireSetting extends Component {
                 <Checkbox
                     checked={boxData.activateReserves}
                     onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
+                    style={{ fontWeight: 400 }}
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
@@ -411,6 +412,7 @@ class UmpireSetting extends Component {
                 <Checkbox
                     checked={boxData.activateCoaches}
                     onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
+                    style={{ fontWeight: 400 }}
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
