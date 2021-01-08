@@ -1711,6 +1711,7 @@ const AppConstants = {
   addTeamMember: "Add Team Member",
   addPool:'Add Pool',
   pleaseEnterPoolName:'Please Enter Pool Name',
+  payPerMatch: "Pay per Match"
 };
 
 export default AppConstants;
