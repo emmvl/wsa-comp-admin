@@ -74,6 +74,13 @@ const columns = [
         ),
     },
     {
+        title: 'Booking ID',
+        dataIndex: 'courierBookingId',
+        key: 'courierBookingId',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
@@ -100,11 +107,15 @@ const columns = [
         ),
     },
     {
-        title: 'Products',
-        dataIndex: 'products',
-        key: 'products',
+        title: 'Product',
+        dataIndex: 'product',
+        key: 'product',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        // CM-1757
+        render: (text, record) => (
+            <span className="pt-0">{record.products.join(', ')}</span>
+        ),
     },
     {
         title: 'Payment Status',
