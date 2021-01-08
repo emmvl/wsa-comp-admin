@@ -10,7 +10,7 @@ const CommunicationRichTextEditor = (props) => {
     const { editorState } = useState(null);
 
     return (
-        <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)", }}>
+        <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
             <div className="livescore-editor-news col-sm">
                 <Editor
                     editorState={editorState}
@@ -29,7 +29,7 @@ const CommunicationRichTextEditor = (props) => {
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default CommunicationRichTextEditor;
