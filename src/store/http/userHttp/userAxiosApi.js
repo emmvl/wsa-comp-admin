@@ -481,8 +481,15 @@ let userHttpApi = {
     const url = `users/dashboard/spectator`;
     return Method.dataPost(url, token, payload);
   },
-  getNetSetGoList(payload) {
-    const url = `api/user/dashboard/netsetgo`;
+  getNetSetGoList(payload, sortBy, sortOrder) {
+    let url;
+    if (sortBy && sortOrder) {
+      url = `api/user/dashboard/netsetgo?sortBy=${sortBy}&sortOrder=${sortOrder}`
+    }
+    else{
+       url = `api/user/dashboard/netsetgo`;
+
+    }
     return Method.dataPost(url, token, payload);
   },
   registrationResendEmail(teamId, userId) {

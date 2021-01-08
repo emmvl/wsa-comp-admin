@@ -1583,8 +1583,8 @@ const AppConstants = {
   setMembershipProducts: 'Set Membership Product(s)',
   chargedForFullSeason: 'Charge All Fees at Registration',
   chargedPerMatch: 'Charge at Match (Competition Fees only. Membership and Nomination Fees are charged at Registration)',
-  feesPaidAtEachMatchByUser: "Fees paid at each match by user who registered team",
-  feesPaidAtEachMatchByPlayer: "Fees Paid at each Match by each Player",
+  feesPaidAtEachMatchByUser: "Total Team Fee for each match (Enter Team Fee)",
+  feesPaidAtEachMatchByPlayer: "Individual Player Fee for each match (Enter Player Fee)",
   membershipPaymentOptions: 'MembershipPaymentOption',
   membershipFeesPaymentOptions: 'Membership Fee Payment Options',
   whenPaymentsRequired: 'When Payments are Required',
@@ -1720,7 +1720,10 @@ const AppConstants = {
   payoutId :'Payout Id',
   refundId :'Refund Id',
   teamMember: "Team Member",
-  addTeamMember: "Add Team Member"
+  addTeamMember: "Add Team Member",
+  addPool:'Add Pool',
+  pleaseEnterPoolName:'Please Enter Pool Name',
+  payPerMatch: "Pay per Match"
 };
 
 export default AppConstants;

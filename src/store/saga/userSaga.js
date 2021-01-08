@@ -1081,7 +1081,7 @@ function* userResetTFASaga(action) {
 
 function* getNetSetGoListSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.getNetSetGoList, action.payload);
+    const result = yield call(UserAxiosApi.getNetSetGoList, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({

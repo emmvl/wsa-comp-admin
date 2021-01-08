@@ -18,8 +18,8 @@ module.exports = {
                     "@font-size-base": "15px",
                     "@btn-font-weight": 600,
                     "@btn-border-radius-base": "8px",
-                }
-            }
-        }
-    ]
+                },
+            },
+        },
+    ],
 };
