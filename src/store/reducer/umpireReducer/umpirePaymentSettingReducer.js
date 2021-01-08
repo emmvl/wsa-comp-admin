@@ -108,16 +108,10 @@ const initialState = {
     affiliateDiv: affiliateDivObj,
     compOrgDiv: compOrgDivObj,
     allDivisionBadge: false,
-    byPoolBtnAffiliate: false,
-    byBadgeBtnAffiliate: false,
     inputFieldArrayAffiliate: defaultInputFieldArrayAffiliate,
-    byBadgeDivisionAffiliate: [],
     paidByCompOrgDivisionAffiliate: [],
     poolViewArray: [],
-    poolViewArrayAffiliate: [],
-    allDivisionBadgeAffiliate: false,
     inputFieldForByPool: defaultInputFieldForByPoolArray,
-    inputFieldsAffiliateOrgByPool: defaulInputFieldsAffiliateOrgByPool,
     badgeDataCompOrg: [],
     badgeDataByAffiliate: [],
 
@@ -219,15 +213,6 @@ function umpirePaymentSetting(state = initialState, action) {
                 }
                 state.poolViewArray.push(obj)
             }
-            else if (key === "addPoolFeeAffiliate") {
-                var obj = {
-                    fee: null,
-                }
-                state.poolViewArrayAffiliate.push(obj)
-            }
-            else if (key === "removeItemPoolAffiliate") {
-                state.poolViewArrayAffiliate.splice(action.data.index, 1)
-            }
 
             else if (key === 'addAnotherGroupAffiliate') {
                 var obj = {
@@ -253,7 +238,7 @@ function umpirePaymentSetting(state = initialState, action) {
                     umpReserveRate: null,
                     umpCoachRate: null
                 }
-                state.inputFieldsAffiliateOrgByPool.push(obj)
+                // state.inputFieldsAffiliateOrgByPool.push(obj)
             }
             else if (key === 'removeItem') {
                 state.inputFieldArray.splice(action.data.index, 1)
@@ -264,16 +249,10 @@ function umpirePaymentSetting(state = initialState, action) {
             else if (key === "removeItemPool") {
                 state.poolViewArray.splice(action.data.index, 1)
             }
-            else if (subkey === "feeFieldAffiliae") {
-                state.poolViewArrayAffiliate[action.data.index][key] = data
-            }
             else if (key === 'removeItemAffiliate') {
                 state.inputFieldArrayAffiliate.splice(action.data.index, 1)
             }
-            else if (key === "removeinputFieldsAffiliateOrgByPool") {
-                state.inputFieldsAffiliateOrgByPool.splice(action.data.index, 1)
-            }
-            else if (key === 'byBadgeDivision' || key === 'paidByCompOrgDivision' || key === 'byBadgeDivisionAffiliate') {
+            else if (key === 'byBadgeDivision' || key === 'paidByCompOrgDivision') {
                 state[key] = data
             } else if (key === 'refreshPage') {
                 state.paidByCompOrg = true
@@ -283,25 +262,6 @@ function umpirePaymentSetting(state = initialState, action) {
             }
             else if (key === "allDivisionBadge") {
                 state.allDivisionBadge = data
-            }
-            else if (key === "byBadgeBtnAffiliate") {
-                state.byBadgeBtnAffiliate = data
-                // state.byPoolBtnAffiliate = false
-                // state.byBadgeDivisionAffiliate = ['BadgeAA', 'BadgeA', 'BadgeC']
-            }
-            else if (key === "byPoolBtnAffiliate") {
-                state.byPoolBtnAffiliate = data
-                // state.byBadgeBtnAffiliate = false
-            }
-            else if (key === "allDivisionBadgeAffiliate") {
-                state.allDivisionBadgeAffiliate = data
-            }
-            else if (subkey === "inputFieldAffiliate") {
-                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
-                    state.inputFieldArrayAffiliate[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
-                } else {
-                    state.inputFieldArrayAffiliate[action.data.index][key] = data
-                }
             }
             else if (key === "fee") {
                 state.poolViewArray[action.data.index][key] = data
@@ -314,12 +274,6 @@ function umpirePaymentSetting(state = initialState, action) {
                     state.inputFieldForByPool[action.data.index][key] = data;
                 }
 
-            } else if (subkey === "inputFieldsAffiliateOrgByPool") {
-                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
-                    state.inputFieldsAffiliateOrgByPool[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
-                } else {
-                    state.inputFieldsAffiliateOrgByPool[action.data.index][key] = data;
-                }
             }
             else if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
                 state.badgeDataCompOrg[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
