@@ -22,7 +22,6 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import { getUmpireCompId, setUmpireCompId } from "../../util/sessionStorage";
 import { 
-    updateUmpireDataAction, 
     getUmpireAllocationSettings,
     saveUmpireAllocationSettings,
 } from "../../store/actions/umpireAction/umpireSettingAction";
@@ -714,7 +713,6 @@ class UmpireSetting extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        updateUmpireDataAction,
         getUmpireAllocationSettings,
         saveUmpireAllocationSettings,
         liveScoreGetDivision,
