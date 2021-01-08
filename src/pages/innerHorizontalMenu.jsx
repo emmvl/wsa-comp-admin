@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../util/helpers";
 import { innerHorizontalCompetitionListAction, updateInnerHorizontalData, initializeCompData } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
+import { getLiveScoreCompetiton, getImpersonation, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
 import history from "../util/history";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../store/actions/appAction";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
@@ -36,12 +36,17 @@ class InnerHorizontalMenu extends React.Component {
             defaultYear: null,
             userAccessPermission: "",
             userRoleId: getUserRoleId(),
-            count: 0
+            count: 0,
+            isImpersonation: false
         };
     }
 
     async componentDidMount() {
-
+        let impersonation = localStorage.getItem('Impersonation') == "true" ? true : false
+        this.setState({
+            isImpersonation: impersonation
+        })
+        console.log(impersonation, "****", this.state.isImpersonation)
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
@@ -879,32 +884,23 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Dashboard</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="2">
+                        <Menu.Item key="2" disabled={this.state.isImpersonation}>
                             <NavLink to="/registrationPayments">
                                 <span>Payment Gateway</span>
                             </NavLink>
                             {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
                         </Menu.Item>
-                        <Menu.Item key="3">
+
+                        <Menu.Item key="3" disabled={this.state.isImpersonation}>
                             <NavLink to="/registrationSettlements">
                                 <span>Payouts</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="4">
+                        <Menu.Item key="4" disabled={this.state.isImpersonation}>
                             <NavLink to="/registrationRefunds">
                                 <span>Refunds</span>
                             </NavLink>
                         </Menu.Item>
-                        {/* <SubMenu
-                            key="sub2"
-                            title={
-                                <span>Payments</span>
-                            }
-                        >
-
-
-
-                        </SubMenu> */}
                     </Menu>
                 )}
 
