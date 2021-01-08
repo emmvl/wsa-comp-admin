@@ -23,7 +23,7 @@ import { userProfileUpdateAction } from '../../store/actions/userAction/userActi
 import ValidationConstants from "../../themes/validationConstant";
 import {
     getCommonRefData, countryReferenceAction, nationalityReferenceAction,
-    getGenderAction, disabilityReferenceAction, checkVenueDuplication
+    getGenderAction, disabilityReferenceAction, checkVenueDuplication, accreditationUmpireReferenceAction
 } from '../../store/actions/commonAction/commonAction';
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
@@ -74,7 +74,8 @@ class UserProfileEdit extends Component {
                 childrenCheckNumber: "",
                 childrenCheckExpiryDate: "",
                 parentUserId: 0,
-                childUserId: 0
+                childUserId: 0,
+                accreditationLevelUmpireRefId:null
             },
             titleLabel: "",
             section: "",
@@ -92,6 +93,7 @@ class UserProfileEdit extends Component {
         this.props.getGenderAction();
         this.props.disabilityReferenceAction();
         this.formRef = React.createRef();
+        this.props.accreditationUmpireReferenceAction();
     }
 
     async componentDidMount() {
@@ -768,7 +770,7 @@ class UserProfileEdit extends Component {
 
     otherInfoEdit = () => {
         let userData = this.state.userData
-        const { countryList, nationalityList, genderData } = this.props.commonReducerState;
+        const { countryList, nationalityList, genderData, accreditationUmpireList } = this.props.commonReducerState;
 
         return (
             <div className="content-view pt-0">
@@ -789,6 +791,20 @@ class UserProfileEdit extends Component {
                                     ))}
                                 </Radio.Group>
                             </Form.Item>
+                        </div>
+
+                        <div>
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required={"required-field"} />
+                            <Radio.Group
+                                style={{ flexDirection: "column" }}
+                                className="registration-radio-group"
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelUmpireRefId")}
+                            value={userData.accreditationLevelUmpireRefId}
+                            >
+                                {(accreditationUmpireList || []).map((accreditaiton, accreditationIndex) => (
+                                    <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
+                                ))}
+                            </Radio.Group>
                         </div>
                     </div>
                 </div>
@@ -1109,7 +1125,8 @@ function mapDispatchToProps(dispatch) {
         nationalityReferenceAction,
         getGenderAction,
         disabilityReferenceAction,
-        checkVenueDuplication
+        checkVenueDuplication,
+        accreditationUmpireReferenceAction
     }, dispatch)
 }
 

@@ -64,9 +64,13 @@ class UmpirePoolAllocation extends Component {
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
 
         let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-        this.setState({
-            compOrgId: competitionOrganisation.id,
-        })
+        if (JSON.parse(getUmpireCompetitonData())) {
+            console.log(getUmpireCompetitonData(), 'getUmpireCompetitonData()', JSON.parse(getUmpireCompetitonData()))
+            this.setState({
+                compOrgId: competitionOrganisation.id,
+            })
+        }
+
         checkUmpireCompIsParent().then((value) => {
             this.setState({
                 compIsParent: value
@@ -88,12 +92,10 @@ class UmpirePoolAllocation extends Component {
                 //     setUmpireCompId(firstComp)
                 // }
 
-                // if (getUmpireCompetitonData()) {
-                //     let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-                //     orgId = competitionOrganisation.orgId
-                // }
+                if (JSON.parse(getUmpireCompetitonData())) {
+                    this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
+                }
 
-                this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, allCompetition: compList })
             }

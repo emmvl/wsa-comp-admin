@@ -59,6 +59,7 @@ const initialState = {
     regChangeTypes: [],
     venueListActionObject: null,
     membershipPaymentOptions: [],
+    accreditationUmpireList:[]
 };
 
 function commonReducerState(state = initialState, action) {
@@ -482,6 +483,19 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false,
                 membershipPaymentOptions: isArrayNotEmpty(action.result) ? action.result : [],
                 status: action.status,
+            };
+
+             ///////get the other accreditation coach list
+        case ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                accreditationUmpireList: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                error: null
             };
 
         default:

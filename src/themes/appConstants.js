@@ -1711,6 +1711,8 @@ const AppConstants = {
   addTeamMember: "Add Team Member",
   addPool:'Add Pool',
   pleaseEnterPoolName:'Please Enter Pool Name',
+  nationalAccreditationLevelUmpire: "What is your national accreditation level (Umpire)?",
+  accreditationUmpire: "accreditationUmpire",
   payPerMatch: "Pay per Match"
 };
 

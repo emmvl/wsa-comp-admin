@@ -322,12 +322,39 @@ function userReducer(state = initialState, action) {
 
       return { ...state };
 
-    case ApiConstants.UPDATE_NEW_AFFILIATE:
-      let oldAffiliateData = state.affiliate.affiliate;
-      let updatedVal = action.updatedData;
-      let key = action.key;
-      oldAffiliateData[key] = updatedVal;
-      return { ...state, error: null };
+      case ApiConstants.UPDATE_NEW_AFFILIATE:
+        let oldAffiliateData = state.affiliate.affiliate;
+        let updatedVal = action.updatedData;
+        let key = action.key;
+        if (key === 'addAffiliate') {
+
+          state.affiliate.affiliate = {
+            affiliateId: 0,
+            affiliateOrgId: 0,
+            organisationTypeRefId: 0,
+            affiliatedToOrgId: 0,
+            organisationId: "",
+            name: '',
+            street1: '',
+            street2: '',
+            suburb: '',
+            phoneNo: '',
+            city: '',
+            postalCode: '',
+            stateRefId: 0,
+            whatIsTheLowestOrgThatCanAddChild: 0,
+            contacts: [],
+            email: '',
+            charityRoundUp: [],
+            charity: []
+          };
+        } else {
+          oldAffiliateData[key] = updatedVal;
+        }
+
+        return {
+          ...state, error: null
+        };
 
     //Get organisation for add venue
     case ApiConstants.API_ORGANISATION_LOAD:
