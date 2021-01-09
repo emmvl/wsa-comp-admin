@@ -311,6 +311,15 @@ class UserProfileEdit extends Component {
 
         }
 
+        if (key === 'accreditationLevelUmpireRefId') {
+            data['accreditationUmpireExpiryDate'] = value == 1 && null
+        }
+
+        if (key === 'accreditationLevelCoachRefId') {
+            data['accreditationCoachExpiryDate'] = value == 1 && null
+        }
+
+
         data[key] = value;
 
         this.setState({ userData: data });
