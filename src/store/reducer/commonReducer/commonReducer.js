@@ -61,7 +61,7 @@ const initialState = {
     membershipPaymentOptions: [],
     accreditationUmpireList: [],
     umpireAccreditation: [],
-    coachAccreditation: []
+    coachAccreditation: [],
     tShirtSizeList: []
 };
 
