@@ -275,18 +275,16 @@ class HomeDashboard extends Component {
         this.props.getRoleAction();
         this.props.getUreAction();
         if (this.state.orgChange) {
-
             window.history.pushState(null, document.title, window.location.href);
             window.addEventListener('popstate', () => {
                 window.history.pushState(null, document.title, window.location.href);
             });
         }
         if (getGlobalYear()) {
-            let yearRefId = getGlobalYear()
+            const yearRefId = getGlobalYear();
             this.props.setHomeDashboardYear(JSON.parse(yearRefId));
-        }
-        else if( this.props.homeDashboardState.yearRefId){
-            setGlobalYear(this.props.homeDashboardState.yearRefId)
+        } else if (this.props.homeDashboardState.yearRefId) {
+            setGlobalYear(this.props.homeDashboardState.yearRefId);
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList);
         // this.props.getUserCount(1);
@@ -301,7 +299,7 @@ class HomeDashboard extends Component {
                     const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(yearList);
                     if (this.props.homeDashboardState.userCount == null) {
                         this.props.getUserCount(yearRefId);
-                        setGlobalYear(yearRefId)
+                        setGlobalYear(yearRefId);
                         this.props.setHomeDashboardYear(JSON.parse(yearRefId));
                     }
 
@@ -312,11 +310,11 @@ class HomeDashboard extends Component {
             if (this.state.loading && !this.props.userState.onOrgLoad) {
                 // if (nextProps.userState.getUserOrganisation !== userOrganisation) {
                 if (userOrganisation.length > 0) {
-                    if (this.props.appState.yearList.length == 0) {
+                    if (this.props.appState.yearList.length === 0) {
                         this.props.getOnlyYearListAction(this.props.appState.yearList);
                         this.setState({ userCountLoading: true, loading: false });
                     } else {
-                        const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(yearList);;
+                        const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(yearList);
                         if (this.props.homeDashboardState.userCount == null) {
                             this.props.getUserCount(yearRefId);
                             this.setState({ loading: false });
@@ -344,7 +342,7 @@ class HomeDashboard extends Component {
     }
 
     onYearChange = (yearRefId) => {
-        setGlobalYear(yearRefId)
+        setGlobalYear(yearRefId);
         this.props.setHomeDashboardYear(yearRefId);
         this.props.clearHomeDashboardData('yearChange');
         this.props.getUserCount(yearRefId);
@@ -410,7 +408,7 @@ class HomeDashboard extends Component {
                         <Table
                             className="home-dashboard-table"
                             columns={columnsInbox}
-                            dataSource={actionBoxList}
+                            dataSource={(actionBoxList || []).map((actionBox) => ({ ...actionBox, key: actionBox.actionsId }))}
                             pagination={false}
                             showHeader={false}
                             loading={this.props.homeDashboardState.onActionBoxLoad === true}

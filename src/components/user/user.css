@@ -316,3 +316,8 @@
 .user-delete-text {
   padding: 23px;
 }
+
+.single-checkbox span {
+  font-size: 13px;
+  color: var(--app-4c4c6d);
+}
