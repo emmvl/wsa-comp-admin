@@ -11,10 +11,12 @@ import { bindActionCreators } from 'redux';
 import {
     getStripePayoutListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import moment from 'moment'
+import history from 'util/history'
+
 
 const { Content } = Layout;
 /////function to sort table column
@@ -112,14 +114,20 @@ class RegistrationSettlements extends Component {
             dateTo: null,
             competition: "all",
             paymentFor: "all",
+            isImpersonation: localStorage.getItem('Impersonation') == "true" ? true : false
         }
     }
 
     componentDidMount() {
+        if (this.state.isImpersonation) {
+            history.push("/paymentDashboard")
+        }
         if (this.stripeConnected()) {
             this.props.getStripePayoutListAction(1, null, null)
         }
     }
+
+
 
     stripeConnected = () => {
         let orgData = getOrganisationData() ? getOrganisationData() : null

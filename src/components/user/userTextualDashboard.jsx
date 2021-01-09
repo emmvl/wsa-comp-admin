@@ -29,21 +29,22 @@ const { Option } = Select;
 const { SubMenu } = Menu;
 const { confirm } = Modal;
 
-let this_Obj = null;
+let thisObj = null;
 
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
-    if (this_Obj.state.sortBy !== key) {
+    if (thisObj.state.sortBy !== key) {
         sortOrder = 'ASC';
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+    } else if (thisObj.state.sortBy === key && thisObj.state.sortOrder === 'ASC') {
         sortOrder = 'DESC';
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
-        sortBy = sortOrder = null;
+    } else if (thisObj.state.sortBy === key && thisObj.state.sortOrder === 'DESC') {
+        sortBy = null;
+        sortOrder = null;
     }
 
-    this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getUserDashboardTextualAction(this_Obj.state.filter, sortBy, sortOrder);
+    thisObj.setState({ sortBy, sortOrder });
+    thisObj.props.getUserDashboardTextualAction(thisObj.state.filter, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -160,8 +161,8 @@ const columns = [
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
-                        {!e.role.find(x => x.role === 'Admin') && (
-                            <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e)}>
+                        {!e.role.find((x) => x.role === 'Admin') && (
+                            <Menu.Item key="2" onClick={() => thisObj.showDeleteConfirm(e)}>
                                 <span>Delete</span>
                             </Menu.Item>
                         )}
@@ -194,29 +195,32 @@ class UserTextualDashboard extends Component {
             postCode: null,
         };
 
-        this_Obj = this;
+        thisObj = this;
     }
 
     async componentDidMount() {
         const prevUrl = getPrevUrl();
-        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
-        const { userTextualDasboardListAction } = this.props.userState
-        let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
+        const yearId = getGlobalYear() ? getGlobalYear() : '-1';
+        const { userTextualDasboardListAction } = this.props.userState;
+        let page = 1;
+        let { sortBy, sortOrder } = this.state;
         if (userTextualDasboardListAction) {
-            let offsetData = userTextualDasboardListAction.payload.paging.offset
-            sortBy = userTextualDasboardListAction.sortBy
-            sortOrder = userTextualDasboardListAction.sortOrder
-            let dobFrom = userTextualDasboardListAction.payload.dobFrom !== '-1' ? moment(userTextualDasboardListAction.payload.dobFrom).format('YYYY-MM-DD') : this.state.dobFrom
-            let dobTo = userTextualDasboardListAction.payload.dobTo !== '-1' ? moment(userTextualDasboardListAction.payload.dobTo).format('YYYY-MM-DD') : this.state.dobTo
-            let genderRefId = userTextualDasboardListAction.payload.genderRefId
-            let linkedEntityId = userTextualDasboardListAction.payload.linkedEntityId
-            let postalCode = userTextualDasboardListAction.payload.postCode == '-1' ? '' : userTextualDasboardListAction.payload.postCode
-            let roleId = userTextualDasboardListAction.payload.roleId
-            let searchText = userTextualDasboardListAction.payload.searchText
-            let yearRefId = JSON.parse(yearId)
-            await this.setState({ offsetData, sortBy, sortOrder, dobFrom, dobTo, genderRefId, linkedEntityId, postalCode, roleId, searchText, yearRefId })
+            const offsetData = userTextualDasboardListAction.payload.paging.offset;
+            sortBy = userTextualDasboardListAction.sortBy;
+            sortOrder = userTextualDasboardListAction.sortOrder;
+            const dobFrom = userTextualDasboardListAction.payload.dobFrom !== '-1'
+                ? moment(userTextualDasboardListAction.payload.dobFrom).format('YYYY-MM-DD')
+                : this.state.dobFrom;
+            const dobTo = userTextualDasboardListAction.payload.dobTo !== '-1'
+                ? moment(userTextualDasboardListAction.payload.dobTo).format('YYYY-MM-DD')
+                : this.state.dobTo;
+            const { genderRefId } = userTextualDasboardListAction.payload;
+            const { linkedEntityId } = userTextualDasboardListAction.payload;
+            const postalCode = userTextualDasboardListAction.payload.postCode == '-1' ? '' : userTextualDasboardListAction.payload.postCode;
+            const { roleId } = userTextualDasboardListAction.payload;
+            const { searchText } = userTextualDasboardListAction.payload;
+            const yearRefId = JSON.parse(yearId);
+            await this.setState({ offsetData, sortBy, sortOrder, dobFrom, dobTo, genderRefId, linkedEntityId, postalCode, roleId, searchText, yearRefId });
             page = Math.floor(offsetData / 10) + 1;
         }
 
@@ -230,7 +234,7 @@ class UserTextualDashboard extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let userState = this.props.userState;
+        const { userState } = this.props;
 
         if (userState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
@@ -254,8 +258,8 @@ class UserTextualDashboard extends Component {
     };
 
     showDeleteConfirm = (user) => {
-        let this_ = this
-        let name = user.name
+        const this_ = this;
+        const { name } = user;
         confirm({
             title: `Do you really want to delete the user "${name}"?`,
             okText: 'Yes',
@@ -272,8 +276,8 @@ class UserTextualDashboard extends Component {
     };
 
     deleteUserId = (user) => {
-        let linkedList = user.linked;
-        let organisations = [];
+        const linkedList = user.linked;
+        const organisations = [];
         linkedList.forEach((item) => {
             organisations.push({
                 linkedEntityId: item.linkedEntityId,
@@ -292,7 +296,7 @@ class UserTextualDashboard extends Component {
         if (key === 'postalCode') {
             // const regex = /,/gi;
             let canCall = false;
-            let newVal = value.toString().split(',');
+            const newVal = value.toString().split(',');
             newVal.forEach((x) => {
                 canCall = Number(x.length) % 4 === 0 && x.length > 0;
             });
@@ -306,9 +310,9 @@ class UserTextualDashboard extends Component {
             }
         } else if (key === 'yearRefId') {
             if (value != -1) {
-                setGlobalYear(value)
+                setGlobalYear(value);
             }
-            await this.setState({ 'yearRefId': value, });
+            await this.setState({ yearRefId: value });
             this.handleTextualTableList(1);
         } else {
             let newValue;
@@ -334,7 +338,7 @@ class UserTextualDashboard extends Component {
     };
 
     onChangeSearchText = async (e) => {
-        const value = e.target.value;
+        const { value } = e.target;
 
         await this.setState({ searchText: value });
 
@@ -348,7 +352,6 @@ class UserTextualDashboard extends Component {
     };
 
     handleTextualTableList = (page) => {
-
         const {
             organisationId,
             yearRefId,
@@ -361,7 +364,7 @@ class UserTextualDashboard extends Component {
             postalCode,
             searchText,
         } = this.state;
-        let yearId = yearRefId == -1 ? yearRefId : getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        const yearId = yearRefId == -1 ? yearRefId : getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
 
         const filter = {
             organisationId,
@@ -477,7 +480,7 @@ class UserTextualDashboard extends Component {
         let competitionList;
         if (competitions) {
             if (this.state.yearRefId !== -1) {
-                competitionList = competitions.filter(x => x.yearRefId === this.state.yearRefId);
+                competitionList = competitions.filter((x) => x.yearRefId === this.state.yearRefId);
             } else {
                 competitionList = competitions;
             }
@@ -606,7 +609,7 @@ class UserTextualDashboard extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select user-filter-select-cal"
-                                    onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'dobFrom')}
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="dobFrom"
@@ -623,7 +626,7 @@ class UserTextualDashboard extends Component {
                                     placeholder="dd-mm-yyyy"
                                     // size="large"
                                     className="year-select user-filter-select-cal"
-                                    onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'dobTo')}
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="dobTo"
@@ -639,8 +642,8 @@ class UserTextualDashboard extends Component {
 
     countView = () => {
         const { userDashboardCounts } = this.props.userState;
-        let noOfRegisteredUsers = userDashboardCounts !== null ? userDashboardCounts.noOfRegisteredUsers : 0;
-        let noOfUsers = userDashboardCounts !== null ? userDashboardCounts.noOfUsers : 0;
+        const noOfRegisteredUsers = userDashboardCounts !== null ? userDashboardCounts.noOfRegisteredUsers : 0;
+        const noOfUsers = userDashboardCounts !== null ? userDashboardCounts.noOfUsers : 0;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="row">
@@ -668,9 +671,8 @@ class UserTextualDashboard extends Component {
     };
 
     contentView = () => {
-        let userState = this.props.userState;
-        let userDashboardTextualList = userState.userDashboardTextualList;
-        let total = userState.userDashboardTextualTotalCount;
+        const { userState } = this.props;
+        const { userDashboardTextualList } = userState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -688,7 +690,7 @@ class UserTextualDashboard extends Component {
                         className="antd-pagination"
                         current={userState.userDashboardTextualPage}
                         showSizeChanger={false}
-                        total={total}
+                        total={userState.userDashboardTextualTotalCount}
                         onChange={this.handleTextualTableList}
                     />
                 </div>

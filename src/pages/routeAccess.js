@@ -161,7 +161,8 @@ const routeAdminRole = [
     "/userOurOrganisation",
     "/userPersonal",
     "/umpireRoster",
-    "/addTeamMember"
+    "/addTeamMember",
+    "/teamMemberRegPayment"
 ]
 
 const routeUmpireRole = [
@@ -198,7 +199,8 @@ const routeUmpireRole = [
     "/umpireImport",
     "/matchDayTeamView",
     "/matchDaySettingsView",
-    "/addTeamMember"
+    "/addTeamMember",
+    "/teamMemberRegPayment"
 ]
 
 const routeFinanceRole = [
@@ -221,7 +223,8 @@ const routeFinanceRole = [
     "/matchDayTeamView",
     "/matchDayAddTeam",
     "/registrationPayoutTransaction",
-    "/addTeamMember"
+    "/addTeamMember",
+    "/teamMemberRegPayment"
 
     // "/shopDashboard",
     // "/listProducts",

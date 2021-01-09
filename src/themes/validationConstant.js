@@ -256,6 +256,8 @@ const ValidationConstants = {
     postcodeRequired: 'Postcode is required.',
     please_SelectMembership_Types: 'Please choose a Membership Type.',
     please_SelectMembership_Product: 'Please choose a Membership Product.',
+    pleaseEnterMobileNumber: "Please enter mobile number",
+    memberTypeIsRequired: "Member type is required",
 };
 
 export default ValidationConstants;

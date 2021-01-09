@@ -282,6 +282,27 @@ function membershipPaymentOptionAction() {
     return action;
 }
 
+function accreditationUmpireReferenceAction() {
+    const action = {
+        type: ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD,
+    };
+    return action;
+}
+
+function netSetGoTshirtSizeAction(){
+    const action = {
+        type: ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD,
+    };
+    return action;
+}
+
+function combinedAccreditationUmpieCoachRefrence() {
+    const action = {
+        type: ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD,
+    };
+    return action;
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -315,5 +336,8 @@ export {
     getMatchPrintTemplateType,
     checkVenueDuplication,
     registrationChangeType,
-    membershipPaymentOptionAction
+    membershipPaymentOptionAction,
+    accreditationUmpireReferenceAction,
+    netSetGoTshirtSizeAction,
+    combinedAccreditationUmpieCoachRefrence
 }

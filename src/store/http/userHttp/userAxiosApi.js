@@ -487,7 +487,7 @@ let userHttpApi = {
       url = `api/user/dashboard/netsetgo?sortBy=${sortBy}&sortOrder=${sortOrder}`
     }
     else{
-       url = `api/user/dashboard/netsetgo`;
+      url = `api/user/dashboard/netsetgo`;
 
     }
     return Method.dataPost(url, token, payload);
@@ -503,6 +503,16 @@ let userHttpApi = {
   async resetTfaApi(userId) {
     const url = `/users/profile/reset/tfa?userId=${userId}`;
     return Method.dataPost(url, token)
+  },
+
+  addChild(payload) {
+    const url = `usersApi/users/addChild/?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    return Method.dataPost(url, token, payload.body);
+  },
+
+  addParent(payload) {
+    const url = `usersApi/users/addParent/?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    return Method.dataPost(url, token, payload.body);
   },
 };
 

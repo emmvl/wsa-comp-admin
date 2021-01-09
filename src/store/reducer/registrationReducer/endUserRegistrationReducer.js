@@ -108,7 +108,7 @@ function endUserRegistrationReducer(state = initialState, action) {
             };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD:
-            return { ...state, onUserRegDashboardLoad: true, error: null, registrationListAction: action };
+            return { ...state, onUserRegDashboardLoad: true, error: null, registrationListAction: action,userRegDashboardListData:[] };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_SUCCESS:
             let dashboardListData = action.result;

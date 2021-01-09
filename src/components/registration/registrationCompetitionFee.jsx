@@ -7125,7 +7125,7 @@ class RegistrationCompetitionFee extends Component {
                                             className="single-checkbox mt-1"
                                             disabled={paymentsDisable}
                                         >
-                                            {item.description}
+                                            {/* {item.description} */}{AppConstants.payPerMatch}
                                         </Checkbox>
                                     </div>
                                 ))}
