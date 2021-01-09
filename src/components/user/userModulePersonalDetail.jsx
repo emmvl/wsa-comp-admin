@@ -1835,7 +1835,7 @@ class UserModulePersonalDetail extends Component {
         setTimeout(() => {
             let filter = {
                 competitionId: competition.competitionUniqueKey,
-                userId: 13367,
+                userId: userId,
                 organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
                 yearRefId,
                 myRegPaging:{
