@@ -792,6 +792,22 @@ export function* accreditationUmpireReferenceSaga(action) {
   }
 }
 
+export function* accreditationUmpireCoachReferenceSaga() {
+  try {
+    const result = yield call(CommonAxiosApi.getCombinedUmpireCoachAccreditationReference);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
 export function* netSetGoTshirtSizeSaga(){
   try {
       const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.tShirtSizeList);
@@ -844,5 +860,6 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_REGISTRATION_CHANGE_TYPE_LOAD, registrationChangeSaga);
   yield takeEvery(ApiConstants.API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD, getMembershipPaymentOptionsSaga);
   yield takeEvery(ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD, accreditationUmpireReferenceSaga);
+  yield takeEvery(ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD, accreditationUmpireCoachReferenceSaga);
   yield takeEvery(ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD, netSetGoTshirtSizeSaga);
 }

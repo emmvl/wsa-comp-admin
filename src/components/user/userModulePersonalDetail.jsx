@@ -2457,7 +2457,7 @@ class UserModulePersonalDetail extends Component {
                             <NavLink
                                 to={{
                                     pathname: `/userProfileEdit`,
-                                    state: { userData: personalByCompData[0], moduleFrom: "4" },
+                                    state: { userData: personalByCompData[0], moduleFrom: "4" ,personalData:personal},
                                 }}
                             >
                                 <Button className="other-info-edit-btn" type="primary">

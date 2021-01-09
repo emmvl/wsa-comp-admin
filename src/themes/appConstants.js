@@ -1734,6 +1734,9 @@ const AppConstants = {
   securePaymentOptions: "Secure Payment Options",
   somethingWentWrongErrorMsg: "Something went wrong.Please contact Administrator",
   tShirtSizeList: "TShirtSize",
+  payPerMatch: "Pay per Match",
+  nationalAccreditationLevelCoach: "What is your national accreditation level (Coach)?",
+  expiryDate: 'Expiry Date',
 };
 
 export default AppConstants;
