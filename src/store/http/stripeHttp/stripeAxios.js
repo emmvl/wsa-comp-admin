@@ -137,9 +137,12 @@ let AxiosApi = {
     },
 
     ///get invoice
-    getInvoice(registrationId) {
+    getInvoice(registrationId, userRegId, invoiceId, teamMemberRegId) {
         let body = {
-            registrationId: JSON.parse(registrationId),
+            registrationId: registrationId,
+            userRegId: userRegId,
+            invoiceId: invoiceId,
+            teamMemberRegId: teamMemberRegId
         }
         let url = `/api/invoice`
         return Method.dataPost(url, token, body)
@@ -218,6 +221,18 @@ let AxiosApi = {
         }
         var url = `api/payments/list`;
         return Method.dataPost(url, token, body);
+    },
+
+    getInvoiceStatus(registrationId, userRegId, invoiceId, teamMemberRegId) {
+        let body = {
+            registrationId: registrationId,
+            userRegId: userRegId,
+            invoiceId: invoiceId,
+            teamMemberRegId: teamMemberRegId
+        }
+        //console.log("body"+ JSON.stringify(body));
+        let url = `/api/payments/getInvoiceStatus`
+        return Method.dataPost(url, token, body)
     },
 
 };

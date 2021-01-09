@@ -289,6 +289,13 @@ function accreditationUmpireReferenceAction() {
     return action;
 }
 
+function netSetGoTshirtSizeAction(){
+    const action = {
+        type: ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD,
+    };
+    return action;
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -323,5 +330,6 @@ export {
     checkVenueDuplication,
     registrationChangeType,
     membershipPaymentOptionAction,
-    accreditationUmpireReferenceAction
+    accreditationUmpireReferenceAction,
+    netSetGoTshirtSizeAction
 }

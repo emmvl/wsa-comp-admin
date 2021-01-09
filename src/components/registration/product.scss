@@ -1128,3 +1128,77 @@ input[type="number"] {
   width: 75%;
   margin: auto;
 }
+
+.registration-form-view{
+  background-color: white;
+  border-radius: 10px;
+  padding: 40px;
+  margin-top: 30px;
+}
+
+.product-left-view{
+  margin-top:21px;
+  padding: 36px 32px;
+  margin-right: 27px;
+}
+
+.outline-style{
+  background: white;
+  border-radius: 10px;
+}
+
+.product-text-common {
+  display: flex;
+  align-content: flex-start;
+  color: var(--app-1b1b34);
+  font-weight: 600;
+  font-family: inter;
+}
+
+.product-right-view{
+  margin: 21px 0px 30px 0px;
+  width: 100%;
+  flex: 31 18 26.333333%!important;
+  max-width: 100%!important;
+}
+
+.inter-medium-w500{
+  font-weight:500 ;
+  font-family: "inter-medium";
+}
+
+.subtitle-text-common {
+	font-family:inter;
+	color: #414141;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.payment-option-txt{
+  color: var(--app-bbbbc6);
+  font-family: inter;
+  padding-top: 10px;
+}
+
+.link-text-common {
+	font-family:inter;
+	font-size: 13px;
+	color: #FF7A1F;
+	font-weight: 600;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.back-btn-text {
+  background-color: var(--app-white);
+  border-color: white;
+  color: var(--app-1b1b34);
+  font-weight: 600;
+  font-size: 14px;
+  height: 48px;
+  border-radius: 12px;
+  font-stretch: normal;
+  font-family: inter-medium;
+}

@@ -7,6 +7,7 @@ import { setAuthToken } from "util/sessionStorage";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi";
 import CommonAxiosApi from "store/http/axiosApi";
 import livescoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import registrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi"
 
 function* failSaga(result, key) {
   yield put({
@@ -1097,6 +1098,57 @@ function* getNetSetGoListSaga(action) {
   }
 }
 
+export function* teamMembersSaveSaga(action) {
+  try {
+    const result = yield call(registrationAxiosApi.teamMembersSave, action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_TEAM_MEMBERS_SAVE_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+export function* getTeamMembersSaga(action) {
+  try {
+      const result = yield call(registrationAxiosApi.getTeamMembers,action.teamMemberRegId);
+      if (result.status === 1) {
+      yield put({
+          type: ApiConstants.API_GET_TEAM_MEMBERS_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+      });
+      } else {
+      yield call(failSaga, result);
+      }
+  } catch (error) {
+      yield call(errorSaga, error);
+  }
+}
+
+export function* getTeamMembersReviewSaga(action) {
+  try {
+      const result = yield call(registrationAxiosApi.getTeamMembersReview,action.payload);
+      if (result.status === 1) {
+      yield put({
+          type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+      });
+      } else {
+      yield call(failSaga, result);
+      }
+  } catch (error) {
+      yield call(errorSaga, error);
+  }
+}
+
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
   yield takeEvery(ApiConstants.API_URE_LOAD, getUreSaga);
@@ -1151,6 +1203,9 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.Api_RESET_TFA_LOAD, userResetTFASaga);
   yield takeEvery(ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD, getUserModuleTeamMembersDataSaga);
   yield takeEvery(ApiConstants.API_GET_NETSETGO_LIST_LOAD, getNetSetGoListSaga);
+  yield takeEvery(ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD, teamMembersSaveSaga);
+  yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_LOAD, getTeamMembersSaga);
+  yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD, getTeamMembersReviewSaga);
 
 
 }

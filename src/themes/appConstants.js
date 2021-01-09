@@ -1713,7 +1713,27 @@ const AppConstants = {
   pleaseEnterPoolName:'Please Enter Pool Name',
   nationalAccreditationLevelUmpire: "What is your national accreditation level (Umpire)?",
   accreditationUmpire: "accreditationUmpire",
-  payPerMatch: "Pay per Match"
+  payPerMatch: "Pay per Match",
+  teamMemberParentCheck: "I am the Parent/ Guardian",
+  payingForMember: "I am paying all fees for this member",
+  addNewParentGaurdian: "Add New Parent/Gaurdian",
+  newParentOrGuardian: "New Parent/Guardian",
+  emergencyContact: "Emergency Contact",
+  mobileNumber: "Mobile Number",
+  selectedPaymentOption: "Please select a payment option",
+  directDebit: "Direct Debit",
+  creditCard: "Credit/Debit Card",
+  directDebitMsg: "A transaction fee of 1.5% +30c applies (capped at $3.50).",
+  creditCardMsg: "A transaction fee of 2.25% + 30c is charged for domestic credit cards and 3.0% + 30c for International. For American express cards a fee of 2.7% + 30c applies.",
+  stripeMandate1: `By providing your bank account details and confirming this payment,
+  you agree to this Direct Debit Request and the`,
+  stripeMandate2: `, and authorise Stripe Payments Australia Pty Ltd ACN 160 180 343 Direct Debit User ID number 507156(“Stripe”) to debit your account through the Bulk Electronic Clearing System (BECS) on behalf of World Sport Action Pty Ltd (the "Merchant") for any amounts separately communicated to you by the Merchant.You certify that you are either
+  an account holder or an authorised signatory on the account listed
+  above.`,
+  securePaymentMsg: "There is no payment required",
+  securePaymentOptions: "Secure Payment Options",
+  somethingWentWrongErrorMsg: "Something went wrong.Please contact Administrator",
+  tShirtSizeList: "TShirtSize",
 };
 
 export default AppConstants;

@@ -4,6 +4,7 @@ import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sess
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
+import moment from 'moment';
 
 async function logout() {
     await localStorage.clear();
@@ -396,8 +397,8 @@ let AxiosApi = {
     },
     //get end user membership products
     async getEndUserRegMembershipProducts(payload) {
-        let userId = await getUserId()
-        var url = `/api/registration/membershipproducts?userId=${userId}`;
+        payload["currentDate"] = moment(new Date()).format('YYYY-MM-DD');
+        var url = `/api/registration/membershipproducts`;
         return Method.dataPost(url, token, payload);
     },
 
@@ -561,6 +562,19 @@ let AxiosApi = {
         var url = `/api/singlegame/redeempay`
         return Method.dataPost(url, token, payload);
     },
+    teamMembersSave(payload){
+        var url = `api/registration/teamparticipant`;
+        return Method.dataPost(url,token,payload)
+    },
+
+    getTeamMembers(teamMemberRegId){
+        var url = `api/registration/teamparticipant?teamMemberRegId=${teamMemberRegId}`;
+        return Method.dataGet(url, token);
+    },
+    getTeamMembersReview(payload){
+        var url = `api/registration/teamparticipant/review?registrationId=${payload.registrationId}&teamMemberRegId=${payload.teamMemberRegId}`;
+        return Method.dataGet(url, token);
+    }
 };
 
 const Method = {

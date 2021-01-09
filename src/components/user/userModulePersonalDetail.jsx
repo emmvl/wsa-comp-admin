@@ -1835,7 +1835,7 @@ class UserModulePersonalDetail extends Component {
         setTimeout(() => {
             let filter = {
                 competitionId: competition.competitionUniqueKey,
-                userId: userId,
+                userId: 13367,
                 organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
                 yearRefId,
                 myRegPaging:{
@@ -2630,7 +2630,8 @@ class UserModulePersonalDetail extends Component {
     };
 
     gotoAddTeamMember = () => {
-        history.push("/addTeamMember");
+        const { registrationTeam } = this.state;
+        history.push("/addTeamMember",{registrationTeam: registrationTeam})
     }
 
     registrationView = () => {

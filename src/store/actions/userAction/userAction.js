@@ -472,6 +472,54 @@ function getNetSetGoActionList(payload, sortBy, sortOrder) {
     }
 }
 
+function teamMemberSaveUpdateAction(data,key,index,subIndex){
+    const action = {
+      type: ApiConstants.TEAM_MEMBER_SAVE_UPDATE_ACTION,
+      data,
+      key,
+      index,
+      subIndex
+    }
+    return action;
+  }
+  
+  function teamMembersSaveAction(payload){
+    const action = {
+      type: ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD,
+      payload
+    }
+    return action;
+  }
+  
+  function getTeamMembersAction(teamMemberRegId){
+    const action = {
+      type: ApiConstants.API_GET_TEAM_MEMBERS_LOAD,
+      teamMemberRegId
+    }
+    return action;
+  }
+
+  function updateReviewInfoAction(value, key, index, subkey, subIndex){
+    const action = {
+        type: ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO,
+        value: value,
+        key: key,
+        index: index,
+        subKey: subkey,
+        subIndex: subIndex
+    }
+  
+    return action;
+  }
+
+  function getTeamMembersReviewAction(payload){
+    const action = {
+      type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD,
+      payload
+    }
+    return action;
+  }
+
 export {
     getRoleAction,
     getUreAction,
@@ -532,5 +580,10 @@ export {
     resetTfaAction,
     addUsersToBeCompared,
     getUserModuleTeamMembersAction,
-    getNetSetGoActionList
+    getNetSetGoActionList,
+    teamMemberSaveUpdateAction,
+    teamMembersSaveAction,
+    getTeamMembersAction,
+    updateReviewInfoAction,
+    getTeamMembersReviewAction
 };
