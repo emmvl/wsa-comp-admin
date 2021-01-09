@@ -118,6 +118,10 @@ const feeIsNull = (fee) => {
     return ((fee === null||fee===undefined) ? 0 : (stringTOFloatNumberReg(fee)));
 }
 
+const  isNullOrUndefined = (e) => {
+    return (e === null || e === undefined) ? false : e;
+  }
+
 module.exports = {
     isArrayNotEmpty,
     isNotNullOrEmptyString,
@@ -133,5 +137,6 @@ module.exports = {
     teamListDataCheck,
     isImageSizeValid,
     formatValue,
-    feeIsNull
+    feeIsNull,
+    isNullOrUndefined
 };

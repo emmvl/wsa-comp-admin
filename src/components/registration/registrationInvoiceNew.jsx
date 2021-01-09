@@ -16,8 +16,8 @@ import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 import history from "../../util/history";
-// import Doc from '../../util/DocService';
-// import PdfContainer from '../../util/PdfContainer';
+import Doc from '../../util/DocService';
+import PdfContainer from '../../util/PdfContainer';
 import {getUserId } from '../../util/sessionStorage'
 import {netSetGoTshirtSizeAction} from '../../store/actions/commonAction/commonAction';
 
@@ -192,7 +192,7 @@ class RegistrationInvoice extends Component {
 
                     <div className="col-sm-5 mb-5 pl-0">
                         <div >
-                            {(getAffiliteDetailData).map((item, index) => {
+                            {(getAffiliteDetailData || []).map((item, index) => {
                                 return (
                                     <div className="affiliate-detail-View-Invoice" >
                                         <div className="pt-3" >
@@ -940,7 +940,7 @@ class RegistrationInvoice extends Component {
          )
     }
 
-    // createPdf = (html) => Doc.createPdf(html);
+    createPdf = (html) => Doc.createPdf(html);
 
     thankYouRegisteringView = () => {
         let userId = getUserId();
@@ -978,11 +978,11 @@ class RegistrationInvoice extends Component {
                     <Content className="registration-form-wrapper mt-5">
                         <div className="formView mb-4" style={{ width: "100%" }}>
                             <div>{this.thankYouRegisteringView()}</div>
-                            {/* <PdfContainer createPdf={this.createPdf} showPdfButton={this.state.invoiceDisabled}>
+                            <PdfContainer createPdf={this.createPdf} showPdfButton={this.state.invoiceDisabled}>
                                 {this.topView(result)}
                                 {this.contentView(result)}
                                 {this.totalInvoiceView(result)}
-                            </PdfContainer> */}
+                            </PdfContainer>
                         </div>
                         <Loader visible={this.props.stripeState.onLoad} />
                     </Content>

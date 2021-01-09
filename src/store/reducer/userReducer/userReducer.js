@@ -26,6 +26,7 @@ const teamMembersSaveTemp = {
   "teamMemberRegId": null,
   "existingUserId": null,
   "registeringYourself": 4,
+  "competitionMembershipProductDivisionId": null,
   "teamId": null,
   "registeringPersonUserId": null,
   "name": null,
@@ -344,9 +345,11 @@ const initialState = {
   teamMembersSave: deepCopyFunction(teamMembersSaveTemp),
   membershipProductsInfo: null,
   onMembershipLoad: false,
-  teamMemberRegReviewList: teamMemberRegReviewTemp,
+  teamMemberRegReviewList: null,
   teamMembersSaveErrorMsg: null,
-  teamMemberRegId : null
+  teamMemberRegId : null,
+  teamMembersSaveOnLoad: false,
+  getTeamMembersReviewOnLoad: false
 };
 
 function getUpdatedTeamMemberObj(competition){
@@ -1238,7 +1241,9 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_SUCCESS:
         state.membershipProductInfo = action.result;
-        upateTeamMembersSave(state)
+        if(!state.teamMemberRegId){
+          upateTeamMembersSave(state)
+        }
         return {
             ...state,
             onMembershipLoad: false,
@@ -1256,7 +1261,11 @@ function userReducer(state = initialState, action) {
             }
         }else if(action.key == "membershipProductTypes"){
             state.teamMembersSave.teamMembers[action.index].membershipProductTypes[action.subIndex].isChecked = action.data;
-        }else{
+        }
+        else if(action.key == "teamMemberRegId"){
+            state.teamMemberRegId = action.data
+        }
+        else{
             console.log("sdfsdfd",action.index,action.key)
             state.teamMembersSave.teamMembers[action.index][action.key] = action.data;
         }
@@ -1265,37 +1274,37 @@ function userReducer(state = initialState, action) {
         }
     
     case ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD:
-        return{...state,teamMembersSaveOnLoad: false}
+        return{...state,teamMembersSaveOnLoad: true}
 
     case ApiConstants.API_TEAM_MEMBERS_SAVE_SUCCESS: 
+    state.teamMembersSaveErrorMsg = action.result.errorMsg ? action.result.errorMsg : null;
+    state.teamMemberRegId= action.result.id ? action.result.id : null;
+    state.teamMembersSaveOnLoad= false;
         return {
+            ...state,
             status: action.status,
-            teamMembersSaveErrorMsg: action.result.errorMsg ? action.result.errorMsg : null,
-            teamMemberRegId: action.result.id ? action.result.id : null,
-            teamMembersSaveOnLoad: false,
-            ...state
         }
 
     case ApiConstants.API_GET_TEAM_MEMBERS_LOAD:
-        return{...state,onLoad: false}
+        return{...state,getTeamMembersOnLoad: true}
 
     case ApiConstants.API_GET_TEAM_MEMBERS_SUCCESS: 
         return {
+            ...state,
             status: action.status,
-            teamMembersSave: action.data,
-            onLoad: false,
-            ...state
+            teamMembersSave: action.result,
+            getTeamMembersOnLoad: false,
         }
       
     case ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD:
-      return{...state,onLoad: true}
+      return{...state,getTeamMembersReviewOnLoad: true}
   
     case ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_SUCCESS:
         return{
             ...state,
-            teamMemberRegReviewList: action.data,
+            teamMemberRegReviewList: action.result,
             status: action.status,
-            onLoad: false
+            getTeamMembersReviewOnLoad: false
         }
 
     case ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO:

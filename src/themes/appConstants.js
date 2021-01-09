@@ -1737,6 +1737,17 @@ const AppConstants = {
   payPerMatch: "Pay per Match",
   nationalAccreditationLevelCoach: "What is your national accreditation level (Coach)?",
   expiryDate: 'Expiry Date',
+
+  thankYouRegistering: "Thank you for registering!",
+  emailConfirmNewUserMessage: "We have sent you an email confirmation with your new login details. Please log in to the website to manage your profile.",
+  emailConfirmExistingUserMessage: "We have sent you an email confirmation. You can view your registrations and manage your profile on our website.",
+
+  subTotal: "Sub-total",
+  transactionFee: "Transaction Fee",
+  totalPaymentDue: "Total Payment Due",
+
+  warning: "Warning",
+
 };
 
 export default AppConstants;
