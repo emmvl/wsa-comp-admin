@@ -289,6 +289,13 @@ function accreditationUmpireReferenceAction() {
     return action;
 }
 
+function combinedAccreditationUmpieCoachRefrence() {
+    const action = {
+        type: ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD,
+    };
+    return action;
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -323,5 +330,6 @@ export {
     checkVenueDuplication,
     registrationChangeType,
     membershipPaymentOptionAction,
-    accreditationUmpireReferenceAction
+    accreditationUmpireReferenceAction,
+    combinedAccreditationUmpieCoachRefrence
 }

@@ -1713,7 +1713,9 @@ const AppConstants = {
   pleaseEnterPoolName:'Please Enter Pool Name',
   nationalAccreditationLevelUmpire: "What is your national accreditation level (Umpire)?",
   accreditationUmpire: "accreditationUmpire",
-  payPerMatch: "Pay per Match"
+  payPerMatch: "Pay per Match",
+  nationalAccreditationLevelCoach: "What is your national accreditation level (Coach)?",
+  expiryDate: 'Expiry Date',
 };
 
 export default AppConstants;

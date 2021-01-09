@@ -23,7 +23,8 @@ import { userProfileUpdateAction } from '../../store/actions/userAction/userActi
 import ValidationConstants from "../../themes/validationConstant";
 import {
     getCommonRefData, countryReferenceAction, nationalityReferenceAction,
-    getGenderAction, disabilityReferenceAction, checkVenueDuplication, accreditationUmpireReferenceAction
+    getGenderAction, disabilityReferenceAction, checkVenueDuplication,
+    combinedAccreditationUmpieCoachRefrence
 } from '../../store/actions/commonAction/commonAction';
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
@@ -75,7 +76,10 @@ class UserProfileEdit extends Component {
                 childrenCheckExpiryDate: "",
                 parentUserId: 0,
                 childUserId: 0,
-                accreditationLevelUmpireRefId:null
+                accreditationLevelUmpireRefId: null,
+                accreditationLevelCoachRefId: null,
+                accreditationUmpireExpiryDate: null,
+                accreditationCoachExpiryDate: null
             },
             titleLabel: "",
             section: "",
@@ -87,13 +91,13 @@ class UserProfileEdit extends Component {
             venueAddressError: '',
             manualAddress: false
         }
-        this.props.getCommonRefData();
+        // this.props.getCommonRefData();
         this.props.countryReferenceAction();
         this.props.nationalityReferenceAction();
         this.props.getGenderAction();
         this.props.disabilityReferenceAction();
         this.formRef = React.createRef();
-        this.props.accreditationUmpireReferenceAction();
+        this.props.combinedAccreditationUmpieCoachRefrence();
     }
 
     async componentDidMount() {
@@ -160,6 +164,7 @@ class UserProfileEdit extends Component {
                 this.setEmergencyFormField();
             } else if (this.state.displaySection === "4") {
                 this.setOtherInfoFormField();
+
             } else if (this.state.displaySection === "6") {
                 this.setPrimaryContactFormFields();
             }
@@ -233,6 +238,13 @@ class UserProfileEdit extends Component {
 
     setOtherInfoFormField = () => {
         let userData = this.state.userData;
+        let personalData = this.props.location.state ? this.props.location.state.personalData ? this.props.location.state.personalData : null : null
+        if (personalData) {
+            userData['accreditationCoachExpiryDate'] = personalData.accreditationCoachExpiryDate
+            userData['accreditationLevelCoachRefId'] = personalData.accreditationLevelCoachRefId
+            userData['accreditationLevelUmpireRefId'] = personalData.accreditationLevelUmpireRefId
+            userData['accreditationUmpireExpiryDate'] = personalData.accreditationUmpireExpiryDate
+        }
         this.formRef.current.setFieldsValue({
             genderRefId: userData.genderRefId != null ? parseInt(userData.genderRefId) : 0
         })
@@ -770,8 +782,7 @@ class UserProfileEdit extends Component {
 
     otherInfoEdit = () => {
         let userData = this.state.userData
-        const { countryList, nationalityList, genderData, accreditationUmpireList } = this.props.commonReducerState;
-
+        const { countryList, nationalityList, genderData, accreditationUmpireList, umpireAccreditation, coachAccreditation } = this.props.commonReducerState;
         return (
             <div className="content-view pt-0">
                 <div className="row">
@@ -796,16 +807,54 @@ class UserProfileEdit extends Component {
                         <div>
                             <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required={"required-field"} />
                             <Radio.Group
-                                style={{ flexDirection: "column" }}
                                 className="registration-radio-group"
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelUmpireRefId")}
-                            value={userData.accreditationLevelUmpireRefId}
+                                value={userData.accreditationLevelUmpireRefId}
                             >
-                                {(accreditationUmpireList || []).map((accreditaiton, accreditationIndex) => (
+                                {(umpireAccreditation || []).map((accreditaiton, accreditationIndex) => (
                                     <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
                                 ))}
                             </Radio.Group>
+
+                            {(userData.accreditationLevelUmpireRefId != 1 && userData.accreditationLevelUmpireRefId != null) && (
+                                <DatePicker
+                                    size="large"
+                                    placeholder={AppConstants.expiryDate}
+                                    style={{ width: "100%", marginTop: "20px" }}
+                                    onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationUmpireExpiryDate")}
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
+                                />
+                            )}
                         </div>
+
+                        <div>
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoach} required={"required-field"} />
+                            <Radio.Group
+                                style={{ display: "flex", flexDirection: "column" }}
+                                className="registration-radio-group"
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelCoachRefId")}
+                                value={userData.accreditationLevelCoachRefId}
+                            >
+                                {(coachAccreditation || []).map((accreditaiton, accreditationIndex) => (
+                                    <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
+                                ))}
+                            </Radio.Group>
+
+                            {(userData.accreditationLevelCoachRefId != 1 && userData.accreditationLevelCoachRefId != null) && (
+                                <DatePicker
+                                    size="large"
+                                    placeholder={AppConstants.expiryDate}
+                                    style={{ width: "100%", marginTop: "20px" }}
+                                    onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationCoachExpiryDate")}
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
+                                />
+                            )}
+                        </div>
+
                     </div>
                 </div>
                 {userData.userRegistrationId != null && (
@@ -1126,7 +1175,7 @@ function mapDispatchToProps(dispatch) {
         getGenderAction,
         disabilityReferenceAction,
         checkVenueDuplication,
-        accreditationUmpireReferenceAction
+        combinedAccreditationUmpieCoachRefrence
     }, dispatch)
 }
 
