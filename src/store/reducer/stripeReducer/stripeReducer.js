@@ -32,7 +32,9 @@ const initialState = {
     paymentDashboardListAction: null,
     paymentCompetitionList: [],
     invoiceId: null,
-    transactionId: null
+    transactionId: null,
+    getAffiliteDetailData: [],
+    invoiceData: null,
 }
 
 

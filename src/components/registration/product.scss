@@ -627,8 +627,9 @@ input[type="number"] {
   font-size: 13px;
   color: var(--app-4c4c6d);
   font-weight: 500;
-  font-family: inter, sans-serif;
-  padding-left: 35px;
+  font-family: inter-medium;
+  white-space: initial;
+    word-wrap: break-word
 }
 
 .contextualHelp-RowDirection {
@@ -1202,3 +1203,109 @@ input[type="number"] {
   font-stretch: normal;
   font-family: inter-medium;
 }
+
+.invoice-receipt{
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.invoice-receipt-num{
+  font-size: 14px;
+}
+
+.schoolInvoiceTxt{
+  font-size: 15px;
+  color: var(--app-red);
+  font-weight: 500;
+  font-family: inter-medium;
+  margin-left: 10px;
+}
+
+.affiliate-detail-View-Invoice{
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-right-column span {
+  float: right;
+}
+
+.invoice-amount-border{
+  border-top-style: solid;
+   border-top-width: 1px;
+   border-top-color: var(--app-4c4c6d);
+}
+
+.invoiceImageMain{
+  display: flex;
+  justify-content: flex-end
+}
+
+.invoiceImageMain img  {
+  height: 40px;
+  object-fit: contain;
+}
+
+@media (max-width: 576px) {
+  .invoiceImage,
+  .invoiceImageMain {
+    justify-content: center
+  }
+}
+
+.thank-you-registering-view{
+	padding: 10px 20px 10px 20px;
+	width: 100%;
+  border: 1px solid #dbdbdc;
+  display: flex;
+  align-items: center;
+}
+
+.thank-you-registering-view-title{
+	font-weight: 500;
+	font-family: inter-medium;
+	font-size: 15px;
+  color: var(--app-414141);
+}
+
+.thank-you-registering-view-content{
+	font-family: inter-medium;
+	font-size: 14px;
+  color: #414141b8;
+  margin-right: 10px;
+
+}
+
+.registration-form-wrapper {
+  width: 70%;
+  margin: auto;
+}
+
+.btn-text-common {
+  font-size: 14px;
+  color: var(--app-color);
+  font-weight: 600;
+  font-family: sans-serif;
+  margin-left: 5px;
+  margin-right: 15px;
+}
+
+.pdf-container-main-div{
+  /* width: 70%; */
+  display: flex;
+  justify-content: flex-end;
+  /* padding-right: 6.5vw; */
+  /* margin-top: 7.5vh; */
+  margin: 0 0 0 auto;
+  padding-right: 20px;
+}
+
+.center-align{
+  align-items: center;
+}
+
+.margin-left-auto{
+  margin-left: auto;
+}
+
+

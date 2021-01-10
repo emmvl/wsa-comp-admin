@@ -1186,13 +1186,21 @@ function checkTeamChargeType(feeArray) {
 ///// check Fee Type ----
 
 function checkIsDivisionAllType(productArray) {
-    for (let i in productArray) {
-        if (productArray[i].competitionMembershipProductDivisionId == null) {
-            return null
-        } else {
-            return productArray[i].competitionMembershipProductDivisionId
-        }
-    }
+    let filteredArr = productArray.find(x=>x.competitionMembershipProductDivisionId!= null);
+    return filteredArr;
+    // for (let i in productArray) {
+    //     if(productArray[i].isPlaying == 1){
+    //         if (productArray[i].competitionMembershipProductDivisionId == null) {
+    //             return null
+    //         } else {
+    //             return productArray[i].competitionMembershipProductDivisionId
+    //         }
+    //     }
+    //     else{
+
+    //     }
+        
+    // }
 }
 
 /// create product array
