@@ -8188,9 +8188,9 @@ class RegistrationCompetitionFee extends Component {
     };
 
     tabCallBack = (key) => {
-        this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
         let competitionId = this.props.competitionFeesState.competitionId;
         if (competitionId !== null && competitionId.length > 0) {
+            this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
             this.setState({
                 competitionTabKey: key,
                 divisionState: key == '3',
