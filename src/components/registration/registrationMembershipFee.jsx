@@ -212,19 +212,25 @@ class RegistrationMembershipFee extends Component {
                     // loading: false,
                     //membershipTabKey: this.state.buttonPressed === "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
                     membershipTabKey: JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
-                })
+                });
+                setTimeout(() => {
+                    if(this.state.isActivatedDiscountService == true){
+                        if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
+                            history.push('/registrationMembershipList');
+                        }
+                    }else{
+                        if(this.state.membershipTabKey == '3'){
+                            this.saveMembershipProductDetails();
+                        }else if(this.state.membershipTabKey == '2' && this.state.addNew){
+                            let data = registrationState.membershipProductFeesTableData;
+                            let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []; 
+                            for(let index in feesData){
+                                this.membershipFeeApplyRadio(365, index, "validityDays")
+                            }
+                        }
+                    }
+                },300)
             }
-            setTimeout(() => {
-                if(this.state.isActivatedDiscountService == true){
-                    if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
-                        history.push('/registrationMembershipList');
-                    }
-                }else{
-                    if(this.state.membershipTabKey == '3'){
-                        this.saveMembershipProductDetails();
-                    }
-                }
-            },300)
         }
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
@@ -814,10 +820,7 @@ class RegistrationMembershipFee extends Component {
     };
 
     ///membershipFees apply radio onchange
-    membershipFeeApplyRadio = (radioApplyId, feesIndex, key, subKey) => {
-        if(subKey == "Validity"){
-            this.setState({ addNew : false})
-        }
+    membershipFeeApplyRadio = (radioApplyId, feesIndex, key) => {
         this.props.membershipFeesApplyRadioAction(radioApplyId, feesIndex, key)
     }
 
@@ -833,8 +836,7 @@ class RegistrationMembershipFee extends Component {
     ////fees view inside the content
     feesView = () => {
         let data = this.props.registrationState.membershipProductFeesTableData
-        let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
-        let addNew = this.state.addNew;
+        let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : [];
         return (
             <div>
                 <div className="tab-formView fees-view pt-5">
@@ -880,9 +882,9 @@ class RegistrationMembershipFee extends Component {
                                                             rules={[{ required: true, message: ValidationConstants.daysRequired }]}
                                                         > */}
                                                         <InputWithHead
-                                                            value={addNew ? 365 : item.validityDays}
+                                                            value={item.validityDays}
                                                             placeholder={AppConstants._days}
-                                                            onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays", "Validity")}
+                                                            onChange={(e) => this.membershipFeeApplyRadio(e.target.value > -1 ? e.target.value : null, index, "validityDays")}
                                                             // onBlur={(e) => {
                                                             //     this.formRef.current.setFieldsValue({
                                                             //         [`validityDays${index}`]: e.target.value >= 0 ? e.target.value : ""
@@ -1634,7 +1636,7 @@ class RegistrationMembershipFee extends Component {
                         <Content>
                             <div className="tab-view">
                                 <Tabs
-                                    activeKey={this.state.membershipTabKey}
+                                    activeKey={(this.state.membershipTabKey != '3' && this.state.membershipTabKey != '4') ? this.state.membershipTabKey : '2'}
                                     onChange={this.tabCallBack}
                                 >
                                     <TabPane tab={AppConstants.membershipProduct} key="1">
