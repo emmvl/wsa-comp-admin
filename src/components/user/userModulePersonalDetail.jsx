@@ -2369,7 +2369,7 @@ class UserModulePersonalDetail extends Component {
                         loading={userState.onPersonLoad && true}
                     />
                 </div>
-                {/*{primaryContacts != null && primaryContacts.length > 0 && (*/}
+                {/* {primaryContacts != null && primaryContacts.length > 0 && ( */}
                 <div>
                     <div
                         className="user-module-row-heading"
@@ -2380,7 +2380,7 @@ class UserModulePersonalDetail extends Component {
                     <NavLink
                         to={{
                             pathname: `/userProfileEdit`,
-                            state: { moduleFrom: "8", userData: userState.personalData },
+                            state: { moduleFrom: "8", userData: personal },
                         }}
                     >
                         <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
@@ -2397,7 +2397,7 @@ class UserModulePersonalDetail extends Component {
                         />
                     </div>
                 </div>
-                {/*)}*/}
+                {/* )} */}
                 {(!personal.dateOfBirth || getAge(personal.dateOfBirth) > 18) && (
                     <div>
                         <div
@@ -2409,11 +2409,11 @@ class UserModulePersonalDetail extends Component {
                         <NavLink
                             to={{
                                 pathname: `/userProfileEdit`,
-                                state: { moduleFrom: "7", userData: userState.personalData },
+                                state: { moduleFrom: "7", userData: personal },
                             }}
                         >
                             <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
-                                + {AppConstants.addChild}
+                                {`+ ${AppConstants.addChild}`}
                             </span>
                         </NavLink>
                         <div className="table-responsive home-dash-table-view">
