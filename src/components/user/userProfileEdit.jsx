@@ -939,7 +939,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.checkExpiryDate} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%', marginTop: 9 }}
+                            style={{ width: '100%', marginTop: 9, minHeight: 50 }}
                             onChange={e => this.onChangeSetValue(e, "childrenCheckExpiryDate")}
                             format="DD-MM-YYYY"
                             showTime={false}
