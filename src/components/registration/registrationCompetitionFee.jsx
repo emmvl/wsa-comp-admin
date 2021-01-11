@@ -4823,7 +4823,7 @@ class RegistrationCompetitionFee extends Component {
         } else if (tabKey == '2') {
             this.saveCompMembershipApiCall(competitionId)
         } else if (tabKey == '3') {
-            this.saveCompDivApiCall(competitionId,postData,invitees,compFeesState);
+            this.saveCompDivApiCall(competitionId,postData,compFeesState);
         } else if (tabKey == '4') {
             this.saveCompFeesApiCall();
         } else if (tabKey == '5') {
@@ -4862,7 +4862,7 @@ class RegistrationCompetitionFee extends Component {
             } else if (tabKey == '2') {
                 this.saveCompMembershipApiCall(competitionId)
             } else if (tabKey == '3') {
-                this.saveCompDivApiCall(competitionId,postData,invitees,compFeesState);
+                this.saveCompDivApiCall(competitionId,postData,compFeesState);
             } else if (tabKey == '4') {
                 this.saveCompFeesApiCall();
             } else if (tabKey == '5') {
