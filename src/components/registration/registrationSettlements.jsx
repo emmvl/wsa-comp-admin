@@ -16,6 +16,8 @@ import { currencyFormat } from "../../util/currencyFormat";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import moment from 'moment'
 import history from 'util/history'
+import { NavLink } from 'react-router-dom';
+
 
 
 const { Content } = Layout;
@@ -32,6 +34,12 @@ const columns = [
         dataIndex: 'id',
         key: 'id',
         sorter: false,
+        render: (id, record) => (
+            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }}>
+                <span style={{ color: "#ff8237" }}>{id}</span>
+            </NavLink>
+        )
+
     },
     {
         title: AppConstants.transactionId,
@@ -237,8 +245,8 @@ class RegistrationSettlements extends Component {
         const currentYear = moment().format('YYYY')
         return [
             currentYear,
-            currentYear -1,
-            currentYear -2,
+            currentYear - 1,
+            currentYear - 2,
         ]
     }
 
