@@ -3646,6 +3646,8 @@ class RegistrationCompetitionFee extends Component {
 
     ////disable or enable particular fields
     setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
+        let feeDetails = this.props.competitionFeesState.competitionFeesData;
+        let isTeamSeasonal = this.checkIsTeamReg(feeDetails);
         if (isPublished) {
             if (isRegClosed) {
                 let permissionObject = {
@@ -3654,6 +3656,8 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: !isCreatorEdit ? false : true,
+                    feesTableRegDisable: !isCreatorEdit ? false : true,
+                    feesTableTeamRegDisable: !isCreatorEdit ? false : true,
                     paymentsDisable: true,
                     discountsDisable: true,
                     allDisable: false,
@@ -3670,6 +3674,8 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: true,
+                    feesTableRegDisable: true,
+                    feesTableTeamRegDisable: true,
                     paymentsDisable: true,
                     discountsDisable: false,
                     allDisable: false,
@@ -3683,7 +3689,9 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: false,
+                    feesTableDisable: true,
+                    feesTableRegDisable: false,
+                    feesTableTeamRegDisable: isTeamSeasonal ? true : false,
                     paymentsDisable: false,
                     discountsDisable: false,
                     allDisable: false,
@@ -3699,6 +3707,8 @@ class RegistrationCompetitionFee extends Component {
                 membershipDisable: false,
                 divisionsDisable: false,
                 feesTableDisable: false,
+                feesTableRegDisable: false,
+                feesTableTeamRegDisable: false,
                 paymentsDisable: false,
                 discountsDisable: false,
                 allDisable: false,
@@ -6162,7 +6172,8 @@ class RegistrationCompetitionFee extends Component {
         let allStates = this.props.competitionFeesState;
         let feeDetails = allStates.competitionFeesData;
         let feesTableDisable = this.state.permissionState.feesTableDisable;
-
+        let feesTableRegDisable = this.state.permissionState.feesTableRegDisable;
+        let feesTableTeamRegDisable = this.state.permissionState.feesTableTeamRegDisable;
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.fees}</span>
@@ -6227,7 +6238,7 @@ class RegistrationCompetitionFee extends Component {
                                         checked={item.isIndividualReg}
                                         className="single-checkbox"
                                         style={{ fontSize: '16px' }}
-                                        disabled={feesTableDisable}
+                                        disabled={feesTableRegDisable}
                                         onChange={(e) => {
                                             this.props.checkUncheckcompetitionFeeSction(
                                                 e.target.checked,
@@ -6246,7 +6257,7 @@ class RegistrationCompetitionFee extends Component {
                                                 style={{ marginLeft: '45px' }}
                                                 checked={item.isSeasonal}
                                                 className="single-checkbox"
-                                                disabled={feesTableDisable}
+                                                disabled={feesTableRegDisable}
                                                 onChange={(e) => {
                                                     this.props.checkUncheckcompetitionFeeSction(
                                                         e.target.checked,
@@ -6279,7 +6290,7 @@ class RegistrationCompetitionFee extends Component {
                                                 style={{ marginLeft: 45 }}
                                                 checked={item.isCasual}
                                                 className="single-checkbox"
-                                                disabled={feesTableDisable}
+                                                disabled={feesTableRegDisable}
                                                 onChange={(e) =>
                                                     this.props.checkUncheckcompetitionFeeSction(
                                                         e.target.checked,
@@ -6336,7 +6347,7 @@ class RegistrationCompetitionFee extends Component {
                                                     checked={item.isTeamSeasonal}
                                                     className="single-checkbox"
                                                     style={{ fontSize: '16px' }}
-                                                    disabled={feesTableDisable}
+                                                    disabled={feesTableTeamRegDisable}
                                                     onChange={(e) => {
                                                         this.props.checkUncheckcompetitionFeeSction(
                                                             e.target.checked,
@@ -6360,7 +6371,7 @@ class RegistrationCompetitionFee extends Component {
                                                             )
                                                         }
                                                         value={item.teamRegChargeTypeRefId}
-                                                        disabled={feesTableDisable}
+                                                        disabled={feesTableTeamRegDisable}
                                                     >
                                                         <div className="d-flex">
                                                             <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio>
@@ -7004,6 +7015,17 @@ class RegistrationCompetitionFee extends Component {
         }
         return isCasualValue;
     };
+
+    checkIsTeamReg = (feeDetails) => {
+        let isSeasonalValue = false;
+        for (let i in feeDetails) {
+            if (feeDetails[i].isTeamSeasonal) {
+                isSeasonalValue = true;
+                break;
+            }
+        }
+        return isSeasonalValue;
+    }
 
     //payment Option View in tab 5
     paymentOptionsView = () => {
