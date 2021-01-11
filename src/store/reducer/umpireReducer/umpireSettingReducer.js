@@ -49,6 +49,21 @@ function umpireSettingState(state = initialState, action) {
                 onLoad: false,
             };
 
+        case ApiConstants.API_UMPIRE_FAIL:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+        case ApiConstants.API_UMPIRE_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+
         default:
             return state;
     }
