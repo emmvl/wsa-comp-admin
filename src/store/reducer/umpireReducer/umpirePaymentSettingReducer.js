@@ -25,8 +25,6 @@ const initialState = {
     result: [],
     status: 0,
     umpireComptitionList: [],
-    paidByCompOrg: false,
-    paidByAffiliate: false,
     byBadgeBtn: false,
     byPoolBtn: false,
     paidByCompOrgDivisionAffiliate: [],
@@ -79,58 +77,14 @@ function umpirePaymentSetting(state = initialState, action) {
             let data = action.data.value
             let key = action.data.key
             let subkey = action.data.subkey
-            if (key === 'paidByComp') {
-                state.paidByCompOrg = data
-
-            } else if (key === 'paidByAffilate') {
-                state.paidByAffiliate = data
-
-            } else if (key === 'byBadge') {
+            if (key === 'byBadge') {
                 state.byBadgeBtn = data
 
             } else if (key === 'byPool') {
                 state.byPoolBtn = data
             } 
-            else if (key === "addPoolFee") {
-                var obj = {
-                    fee: null,
-                }
-                state.poolViewArray.push(obj)
-            }
-
-            else if (key === 'addAnotherGroupForByPool') {
-                var obj = {
-                    name: null,
-                    umpireRate: null,
-                    umpReserveRate: null,
-                    umpCoachRate: null
-                }
-                state.inputFieldForByPool.push(obj)
-            }
-            else if (key === 'addAnotherInputFieldsAffiliateOrgByPool') {
-                var obj = {
-                    name: null,
-                    umpireRate: null,
-                    umpReserveRate: null,
-                    umpCoachRate: null
-                }
-                // state.inputFieldsAffiliateOrgByPool.push(obj)
-            }
-            else if (key === 'removePoolItem') {
-                state.inputFieldForByPool.splice(action.data.index, 1)
-            }
-            else if (key === "removeItemPool") {
-                state.poolViewArray.splice(action.data.index, 1)
-            }
-            else if (key === 'refreshPage') {
-                state.paidByCompOrg = true
-                state.paidByAffiliate = false
-            }
             else if (key === "fee") {
                 state.poolViewArray[action.data.index][key] = data
-            }
-            else if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
-                state.badgeDataCompOrg[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
             }
             else {
                 state.badgeDataCompOrg[action.data.index][key] = data;
