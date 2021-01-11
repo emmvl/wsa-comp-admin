@@ -61,7 +61,8 @@ const initialState = {
     membershipPaymentOptions: [],
     accreditationUmpireList: [],
     umpireAccreditation: [],
-    coachAccreditation: []
+    coachAccreditation: [],
+    tShirtSizeList: []
 };
 
 function commonReducerState(state = initialState, action) {
@@ -518,6 +519,18 @@ function commonReducerState(state = initialState, action) {
                 status: action.status,
                 umpireAccreditation: action.result.accreditationUmpire,
                 coachAccreditation: action.result.accreditationCoach,
+                onLoad: false,
+                error: null
+            };
+
+        case ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD:
+            return { ...state, onLoad: true, error: null };
+        
+        case ApiConstants.API_NETSETGO_TSHIRT_SIZE_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                tShirtSizeList: isArrayNotEmpty(action.result) ? action.result : [],
                 onLoad: false,
                 error: null
             };

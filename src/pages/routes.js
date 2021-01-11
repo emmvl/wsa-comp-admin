@@ -180,6 +180,8 @@ import CommunicationView from 'components/communication/communictionView';
 import MergeUserMatches from 'components/user/mergeUserMatches'
 import MergeUserDetail from 'components/user/mergeUserDetail'
 import AddTeamMember from 'components/user/addTeamMember';
+import TeamMemberRegPayment from 'components/user/teamMemberRegPayment';
+import RegistrationInvoiceNew from 'components/registration/registrationInvoiceNew';
 
 class Routes extends React.Component {
     constructor(props) {
@@ -782,7 +784,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/invoice"
-                    component={this.haveAccess(userRoleId, '/invoice') ? lazyLoad(RegistrationInvoice) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/invoice') ? lazyLoad(RegistrationInvoiceNew) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -1006,6 +1008,12 @@ class Routes extends React.Component {
                     component={this.haveAccess(userRoleId, '/addTeamMember')
                         ? lazyLoad(AddTeamMember)
                         : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute path="/teamMemberRegPayment"
+                    component={this.haveAccess(userRoleId, '/teamMemberRegPayment')
+                    ? lazyLoad(TeamMemberRegPayment)
+                    : lazyLoad(NotFound)}
                 />
 
                 <Route path="/" component={lazyLoad(NotFound)} />

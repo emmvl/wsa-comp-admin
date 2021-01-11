@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString,isNullOrUndefined } from "../../../util/helpers";
 import { setOrganisationData, getOrganisationData } from "../../../util/sessionStorage";
 import AppConstants from "../../../themes/appConstants";
 
@@ -31,6 +31,10 @@ const initialState = {
     paymentListTotalCount: 1,
     paymentDashboardListAction: null,
     paymentCompetitionList: [],
+    invoiceId: null,
+    transactionId: null,
+    getAffiliteDetailData: [],
+    invoiceData: null,
 }
 
 
@@ -89,6 +93,55 @@ function calculateSubTotal(allData) {
 
     }
     return resultData
+}
+
+function getAffiliteDetailArray(allData) {
+    let getAffiliteDetailArray = []
+    let orgMap = new Map();
+    allData.compParticipants.map((item) => {
+        item.membershipProducts.map((mem) => {
+            if (isNullOrUndefined(mem.fees.membershipFee)) {
+                let key = mem.fees.membershipFee.organisationId;
+                if (orgMap.get(key) == undefined) {
+                    let obj = {
+                        organisationId: mem.fees.membershipFee.organisationId,
+                        organisationName: mem.fees.membershipFee.name,
+                        organiationEmailId: mem.fees.membershipFee.emailId,
+                        organiationPhoneNo: mem.fees.membershipFee.phoneNo
+                    }
+                    getAffiliteDetailArray.push(obj);
+                    orgMap.set(key, obj);
+                }
+            }
+            if (isNullOrUndefined(mem.fees.affiliateFee)) {
+                let key = mem.fees.affiliateFee.organisationId;
+                if (orgMap.get(key) == undefined) {
+                    let obj = {
+                        organisationId: mem.fees.affiliateFee.organisationId,
+                        organisationName: mem.fees.affiliateFee.name,
+                        organiationEmailId: mem.fees.affiliateFee.emailId,
+                        organiationPhoneNo: mem.fees.affiliateFee.phoneNo
+                    }
+                    getAffiliteDetailArray.push(obj);
+                    orgMap.set(key, obj);
+                }
+            }
+            if (isNullOrUndefined(mem.fees.competitionOrganisorFee)) {
+                let key = mem.fees.competitionOrganisorFee.organisationId;
+                if (orgMap.get(key) == undefined) {
+                    let obj = {
+                        organisationId: mem.fees.competitionOrganisorFee.organisationId,
+                        organisationName: mem.fees.competitionOrganisorFee.name,
+                        organiationEmailId: mem.fees.competitionOrganisorFee.emailId,
+                        organiationPhoneNo: mem.fees.competitionOrganisorFee.phoneNo
+                    }
+                    getAffiliteDetailArray.push(obj);
+                    orgMap.set(key, obj);
+                }
+            }
+        });
+    });
+    return getAffiliteDetailArray
 }
 
 
@@ -231,7 +284,28 @@ function stripe(state = initialState, action) {
             };
 
         ///get invoice
-        case ApiConstants.API_GET_INVOICE_LOAD:
+        // case ApiConstants.API_GET_INVOICE_LOAD:
+        //     return {
+        //         ...state,
+        //         onLoad: true,
+        //         error: null,
+
+        //     }
+
+        // case ApiConstants.API_GET_INVOICE_SUCCESS:
+        //     let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
+        //     let charityRoundUpData = getCharityRoundUpArray(invoicedata)
+        //     let calculateSubTotalData = calculateSubTotal(invoicedata)
+        //     state.subTotalFees = calculateSubTotalData.invoiceSubtotal
+        //     state.subTotalGst = calculateSubTotalData.invoiceGstTotal
+        //     state.charityRoundUpFilter = charityRoundUpData
+        //     state.getInvoicedata = action.result
+        //     return {
+        //         ...state,
+        //         onLoad: false,
+        //     }
+         ///get invoice
+         case ApiConstants.API_GET_INVOICE_LOAD:
             return {
                 ...state,
                 onLoad: true,
@@ -240,13 +314,8 @@ function stripe(state = initialState, action) {
             }
 
         case ApiConstants.API_GET_INVOICE_SUCCESS:
-            let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
-            let charityRoundUpData = getCharityRoundUpArray(invoicedata)
-            let calculateSubTotalData = calculateSubTotal(invoicedata)
-            state.subTotalFees = calculateSubTotalData.invoiceSubtotal
-            state.subTotalGst = calculateSubTotalData.invoiceGstTotal
-            state.charityRoundUpFilter = charityRoundUpData
-            state.getInvoicedata = action.result
+            state.invoiceData = action.result
+            state.getAffiliteDetailData = getAffiliteDetailArray(action.result)
             return {
                 ...state,
                 onLoad: false,
@@ -280,6 +349,25 @@ function stripe(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.paymentDashboardListAction = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.API_GET_INVOICE_STATUS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                error: null,
+
+            }
+
+        case ApiConstants.API_GET_INVOICE_STATUS_SUCCESS:
+            let getInvoiceStatusSuccessData = action.result.data
+            state.invoiceId = getInvoiceStatusSuccessData ? getInvoiceStatusSuccessData.invoiceId : 0
+            state.transactionId = getInvoiceStatusSuccessData ? getInvoiceStatusSuccessData.transactionId ?
+                getInvoiceStatusSuccessData.transactionId : 0 : 0
+            return {
+                ...state,
+                onLoad: false,
+                error: null,
+            }
 
         default:
             return state;

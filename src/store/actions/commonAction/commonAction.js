@@ -289,6 +289,13 @@ function accreditationUmpireReferenceAction() {
     return action;
 }
 
+function netSetGoTshirtSizeAction(){
+    const action = {
+        type: ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD,
+    };
+    return action;
+}
+
 function combinedAccreditationUmpieCoachRefrence() {
     const action = {
         type: ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD,
@@ -331,5 +338,6 @@ export {
     registrationChangeType,
     membershipPaymentOptionAction,
     accreditationUmpireReferenceAction,
+    netSetGoTshirtSizeAction,
     combinedAccreditationUmpieCoachRefrence
 }
