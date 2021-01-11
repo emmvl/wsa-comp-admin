@@ -55,11 +55,16 @@ class UserAddAffiliates extends Component {
         this.referenceCalls(this.state.organisationId);
         this.props.getRoleAction();
         this.clearContact();
-        this.addContact();
+        // this.addContact();
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
+        let isEdit = this.props.location.state ? this.props.location.state.isEdit : false
+        if (isEdit) {
+            this.props.updateNewAffiliateAction(null, "addAffiliate");
+            this.addContact();
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -392,7 +397,7 @@ class UserAddAffiliates extends Component {
                 <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
                     <InputWithHead
                         auto_complete="new-name"
-                        required="required-field pt-0"
+                        required="required-field"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}

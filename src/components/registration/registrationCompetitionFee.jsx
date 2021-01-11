@@ -3511,7 +3511,8 @@ class RegistrationCompetitionFee extends Component {
             affiliateOrgId: null,
             heroImage: null,
             yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
-            isEdit: props.location.state ? props.location.state.isEdit : false
+            isEdit: props.location.state ? props.location.state.isEdit : false,
+            clickedOnTab: false
         };
 
         this_Obj = this;
@@ -3532,7 +3533,7 @@ class RegistrationCompetitionFee extends Component {
                 window.scrollTo(0, 0);
                 let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4"
                     ? "6"
-                    : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
+                    : this.state.clickedOnTab == true ? this.state.competitionTabKey : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
                 this.setState({
                     // loading: false,
                     competitionTabKey,
@@ -4624,30 +4625,8 @@ class RegistrationCompetitionFee extends Component {
         }
     };
 
-    saveAPIsActionCall = (values) => {
-        let tabKey = this.state.competitionTabKey;
-        let compFeesState = this.props.competitionFeesState;
-        let competitionId = compFeesState.competitionId;
-        let postData = compFeesState.competitionDetailData;
-
-        let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
-        let venue = JSON.stringify(compFeesState.postVenues);
-        // let invitees = compFeesState.postInvitees
-        let invitees = [];
-        let anyOrgAffiliateArr = []
-        if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
-            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
-        }
-        if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
-            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
-        }
-        if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
-            invitees = compFeesState.affiliateArray.concat(anyOrgAffiliateArr);
-        } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
-            invitees = anyOrgAffiliateArr
-        }
-
-        if (tabKey == '1') {
+    saveCompDetailsApicall = (competitionId,postData,invitees,compFeesState,nonPlayingDate,venue) => {
+        try{
             if (
                 compFeesState.competitionDetailData.competitionLogoUrl !== null &&
                 // compFeesState.competitionDetailData.heroImageUrl !== null &&
@@ -4656,7 +4635,8 @@ class RegistrationCompetitionFee extends Component {
                 let formData = new FormData();
                 formData.append('competitionUniqueKey', competitionId);
                 formData.append('name', postData.competitionName);
-                formData.append('yearRefId', values.yearRefId);
+                // formData.append('yearRefId', values.yearRefId);
+                formData.append('yearRefId', this.state.yearRefId);
                 formData.append('description', postData.description);
                 formData.append('competitionTypeRefId', postData.competitionTypeRefId);
                 formData.append('competitionFormatRefId', postData.competitionFormatRefId);
@@ -4729,7 +4709,13 @@ class RegistrationCompetitionFee extends Component {
                 //     message.error(ValidationConstants.heroImageIsRequired);
                 // }
             }
-        } else if (tabKey == '2') {
+        }catch(ex){
+            console.log("Error in saveCompDetailsApiCall::"+ex);
+        }
+    }
+
+    saveCompMembershipApiCall = (competitionId) => {
+        try{
             let finalmembershipProductTypes = JSON.parse(
                 JSON.stringify(
                     this.props.competitionFeesState.defaultCompFeesMembershipProduct
@@ -4768,8 +4754,13 @@ class RegistrationCompetitionFee extends Component {
                     this.setState({ loading: true, divisionState: true });
                 }
             }
+        }catch(ex){
+            console.log("Error in savecompMembershipApiCall::"+ex);
+        }
+    }
 
-        } else if (tabKey == '3') {
+    saveCompDivApiCall = (competitionId,postData,compFeesState) => {
+        try{
             let divisionArrayData = compFeesState.competitionDivisionsData;
             let finalDivisionArray = [];
             for (let i in divisionArrayData) {
@@ -4798,8 +4789,43 @@ class RegistrationCompetitionFee extends Component {
                 );
                 this.setState({ loading: true });
             }
+        }catch(ex){
+            console.log("Error in saveCompDivApiCall::"+ex);
+        }
+    }
+
+    saveAPIsActionCall = (values) => {
+        this.setState({clickedOnTab: false});
+        let tabKey = this.state.competitionTabKey;
+        let compFeesState = this.props.competitionFeesState;
+        let competitionId = compFeesState.competitionId;
+        let postData = compFeesState.competitionDetailData;
+
+        let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
+        let venue = JSON.stringify(compFeesState.postVenues);
+        // let invitees = compFeesState.postInvitees
+        let invitees = [];
+        let anyOrgAffiliateArr = []
+        if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
+        }
+        if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
+        }
+        if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
+            invitees = compFeesState.affiliateArray.concat(anyOrgAffiliateArr);
+        } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
+            invitees = anyOrgAffiliateArr
+        }
+
+        if (tabKey == '1') {
+            this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
+        } else if (tabKey == '2') {
+            this.saveCompMembershipApiCall(competitionId)
+        } else if (tabKey == '3') {
+            this.saveCompDivApiCall(competitionId,postData,compFeesState);
         } else if (tabKey == '4') {
-            this.saveCompFeesApiCall(values);
+            this.saveCompFeesApiCall();
         } else if (tabKey == '5') {
             this.paymentApiCall(competitionId);
             //this.setState({ loading: true });
@@ -4807,6 +4833,45 @@ class RegistrationCompetitionFee extends Component {
             this.discountApiCall(competitionId);
         }
     };
+
+    tabCangeSaveApiActionCall = (tabKey) => {
+        try{
+            this.setState({clickedOnTab: true});
+            let compFeesState = this.props.competitionFeesState;
+            let competitionId = compFeesState.competitionId;
+            let postData = compFeesState.competitionDetailData;
+
+            let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
+            let venue = JSON.stringify(compFeesState.postVenues);
+            // let invitees = compFeesState.postInvitees
+            let invitees = [];
+            let anyOrgAffiliateArr = []
+            if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+                anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
+            }
+            if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+                anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
+            }
+            if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
+                invitees = compFeesState.affiliateArray.concat(anyOrgAffiliateArr);
+            } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
+                invitees = anyOrgAffiliateArr
+            }
+            if (tabKey == '1') {
+                this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
+            } else if (tabKey == '2') {
+                this.saveCompMembershipApiCall(competitionId)
+            } else if (tabKey == '3') {
+                this.saveCompDivApiCall(competitionId,postData,compFeesState);
+            } else if (tabKey == '4') {
+                this.saveCompFeesApiCall();
+            } else if (tabKey == '5') {
+                this.paymentApiCall(competitionId);
+            }
+        }catch(ex){
+            console.log("Error in tabChangeSaveApiActionCall::"+ex);
+        }
+    }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword);
@@ -8125,6 +8190,7 @@ class RegistrationCompetitionFee extends Component {
     tabCallBack = (key) => {
         let competitionId = this.props.competitionFeesState.competitionId;
         if (competitionId !== null && competitionId.length > 0) {
+            this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
             this.setState({
                 competitionTabKey: key,
                 divisionState: key == '3',

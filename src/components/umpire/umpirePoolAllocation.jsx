@@ -63,10 +63,13 @@ class UmpirePoolAllocation extends Component {
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
 
-        let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-        this.setState({
-            compOrgId: competitionOrganisation.id,
-        })
+        // let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+        // if (JSON.parse(getUmpireCompetitonData())) {
+        //     this.setState({
+        //         compOrgId: competitionOrganisation.id,
+        //     })
+        // }
+
         checkUmpireCompIsParent().then((value) => {
             this.setState({
                 compIsParent: value
@@ -88,12 +91,10 @@ class UmpirePoolAllocation extends Component {
                 //     setUmpireCompId(firstComp)
                 // }
 
-                // if (getUmpireCompetitonData()) {
-                //     let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-                //     orgId = competitionOrganisation.orgId
-                // }
+                if (JSON.parse(getUmpireCompetitonData())) {
+                    this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
+                }
 
-                this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, allCompetition: compList })
             }
@@ -117,18 +118,24 @@ class UmpirePoolAllocation extends Component {
     };
 
     onChangeComp = (compID) => {
+        console.log("called")
         let selectedComp = compID.comp
         let compKey = compID.competitionUniqueKey
         let compeList = this.state.allCompetition
         let orgId = null
         let selectedCompData = null
-
-        for (let i in compeList) {
-            if (compeList[i].id === selectedComp) {
-                orgId = compeList[i].competitionOrganisation.orgId
-                selectedCompData = compeList[i]
-            }
+        let matchIndex = compeList.findIndex(x => x.id === selectedComp)
+        if (matchIndex) {
+            console.log(compeList[matchIndex])
+            selectedCompData = compeList[matchIndex]
+            orgId = compeList[matchIndex].competitionOrganisation?.orgId
         }
+        // for (let i in compeList) {
+        //     if (compeList[i].id === selectedComp) {
+        //         orgId = compeList[i]?.competitionOrganisation?.orgId
+        //         selectedCompData = compeList[i]
+        //     }
+        // }
 
         // setUmpireCompId(selectedComp)
         setUmpireCompitionData(JSON.stringify(selectedCompData))
@@ -137,8 +144,8 @@ class UmpirePoolAllocation extends Component {
                 compIsParent: value
             })
         })
-        this.props.getUmpirePoolData({ orgId: orgId, compId: selectedComp })
-        this.setState({ selectedComp, competitionUniqueKey: compKey, orgId })
+        this.props.getUmpirePoolData({ orgId: orgId ? orgId : 0, compId: selectedComp })
+        this.setState({ selectedComp, competitionUniqueKey: compKey, orgId: orgId ? orgId : 0 })
     }
 
     dropdownView = () => {

@@ -1186,13 +1186,21 @@ function checkTeamChargeType(feeArray) {
 ///// check Fee Type ----
 
 function checkIsDivisionAllType(productArray) {
-    for (let i in productArray) {
-        if (productArray[i].competitionMembershipProductDivisionId == null) {
-            return null
-        } else {
-            return productArray[i].competitionMembershipProductDivisionId
-        }
-    }
+    let filteredArr = productArray.find(x=>x.competitionMembershipProductDivisionId!= null);
+    return filteredArr;
+    // for (let i in productArray) {
+    //     if(productArray[i].isPlaying == 1){
+    //         if (productArray[i].competitionMembershipProductDivisionId == null) {
+    //             return null
+    //         } else {
+    //             return productArray[i].competitionMembershipProductDivisionId
+    //         }
+    //     }
+    //     else{
+
+    //     }
+        
+    // }
 }
 
 /// create product array
@@ -2778,9 +2786,8 @@ function competitionFees(state = initialState, action) {
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(nominationFees) + (Number(action.data)) + (Number(action.record.mFees) +
                             Number(fee) + Number(gst)))).toFixed(2)
                     } else if (action.key === "affNominationFees") {
-                        let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst +
-                            array[index][action.arrayKey].perType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
-
+                        let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst +
+                            array[index][action.arrayKey].perType[action.tableIndex].nominationFees + array[index][action.arrayKey].perType[action.tableIndex].nominationGST;
                         let affililateFee = array[index][action.arrayKey].perType[action.tableIndex].affiliateFee;
                         let affiliateGst = array[index][action.arrayKey].perType[action.tableIndex].affiliateGst;
 
@@ -2790,7 +2797,7 @@ function competitionFees(state = initialState, action) {
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
                             Number(affililateFee) + Number(affiliateGst))).toFixed(2)
                     } else if (action.key === "affNominationGST") {
-                        let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst
+                        let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst
                         let affililateFee = array[index][action.arrayKey].perType[action.tableIndex].affiliateFee;
                         let affiliateGst = array[index][action.arrayKey].perType[action.tableIndex].affiliateGst;
 

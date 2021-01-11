@@ -56,6 +56,8 @@ const AppImages = {
   wentWrong: require("../images/went_wrong.jpg"),
   whistleIcon: require("../images/whistle.png"),
   docsIcon: require("../images/google-docs.png"),
+  removeIcon: require("../images/removeIcon.svg"),
+  printImage: require("../images/print.png"),
 };
 
 export default AppImages;

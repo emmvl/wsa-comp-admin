@@ -11,10 +11,14 @@ import { bindActionCreators } from 'redux';
 import {
     getStripePayoutListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import moment from 'moment'
+import history from 'util/history'
+import { NavLink } from 'react-router-dom';
+
+
 
 const { Content } = Layout;
 /////function to sort table column
@@ -30,6 +34,12 @@ const columns = [
         dataIndex: 'id',
         key: 'id',
         sorter: false,
+        render: (id, record) => (
+            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }}>
+                <span style={{ color: "#ff8237" }}>{id}</span>
+            </NavLink>
+        )
+
     },
     {
         title: AppConstants.transactionId,
@@ -112,14 +122,20 @@ class RegistrationSettlements extends Component {
             dateTo: null,
             competition: "all",
             paymentFor: "all",
+            isImpersonation: localStorage.getItem('Impersonation') == "true" ? true : false
         }
     }
 
     componentDidMount() {
+        if (this.state.isImpersonation) {
+            history.push("/paymentDashboard")
+        }
         if (this.stripeConnected()) {
             this.props.getStripePayoutListAction(1, null, null)
         }
     }
+
+
 
     stripeConnected = () => {
         let orgData = getOrganisationData() ? getOrganisationData() : null
@@ -229,8 +245,8 @@ class RegistrationSettlements extends Component {
         const currentYear = moment().format('YYYY')
         return [
             currentYear,
-            currentYear -1,
-            currentYear -2,
+            currentYear - 1,
+            currentYear - 2,
         ]
     }
 

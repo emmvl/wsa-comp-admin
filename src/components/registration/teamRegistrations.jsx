@@ -224,7 +224,7 @@ class TeamRegistrations extends Component {
             sortOrder,
             membershipProductUniqueKey
         } = this.state;
-        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1
         const filter = {
             organisationUniqueKey,
             yearRefId,

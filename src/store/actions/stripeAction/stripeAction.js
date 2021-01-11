@@ -83,10 +83,13 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
 }
 
 /////get invoice 
-function getInvoice(registrationid) {
+function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
-        registrationid
+        registrationid,
+        userRegId,
+        invoiceId,
+        teamMemberRegId
     }
     return action
 }
@@ -139,6 +142,17 @@ function exportPaymentApi(key) {
     return action
 }
 
+function getInvoiceStatusAction(registrationid, userRegId, invoiceId,teamMemberRegId) {
+    const action = {
+        type: ApiConstants.API_GET_INVOICE_STATUS_LOAD,
+        registrationid,
+        userRegId,
+        invoiceId,
+        teamMemberRegId
+    }
+    return action
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -150,4 +164,5 @@ export {
     getInvoice, getPaymentList,
     exportPaymentApi,
     getStripeRefundsListAction,
+    getInvoiceStatusAction
 }
