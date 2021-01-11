@@ -937,9 +937,16 @@ function registration(state = initialState, action) {
             }
             break;
           }
+          state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected = true
           state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-          state.registrationFormData[0][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-    
+          let sample = state.registrationFormData[0][action.key].find(x => x.id == action.getMembershipproductItem.id)
+          if(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected && !sample){
+            state.registrationFormData[0][action.key].push(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex])
+          }
+          else{
+            sample[action.subKey] = action.updatedData;
+          }
+              
       }
       else {
         let oldData = state.registrationFormData;
