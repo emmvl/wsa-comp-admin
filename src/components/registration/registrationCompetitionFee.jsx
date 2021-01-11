@@ -8227,13 +8227,12 @@ class RegistrationCompetitionFee extends Component {
                 finalmembershipProductTypes[i].membershipProductTypes = filterArray;
             }
             let empty = false;
-            if(this.state.competitionTabKey == '2'){
+            let membershipDisable = this.state.permissionState.membershipDisable;
+            if(this.state.competitionTabKey == '2' && membershipDisable == false){
                 if (!isArrayNotEmpty(finalmembershipProductTypes)) {
-                    message.error(ValidationConstants.please_SelectMembership_Product);
                     empty = true;
                 } else if (isArrayNotEmpty(finalmembershipProductTypes)) {
                     if (!isArrayNotEmpty(finalmembershipProductTypes[0].membershipProductTypes)) {
-                        message.error(ValidationConstants.please_SelectMembership_Types);
                         empty = true;
                     }
                 }
@@ -8247,7 +8246,9 @@ class RegistrationCompetitionFee extends Component {
     tabCallBack = (key) => {
         let competitionId = this.props.competitionFeesState.competitionId;
         if (competitionId !== null && competitionId.length > 0) {
-            this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
+            if(this.state.permissionState.membershipDisable == false){
+                this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
+            }
             this.setState({
                 competitionTabKey: this.checkMembershipEmpty() == false ? key : '2',
                 divisionState: key == '3',
