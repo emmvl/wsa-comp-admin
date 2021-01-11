@@ -8187,12 +8187,47 @@ class RegistrationCompetitionFee extends Component {
         );
     };
 
+    checkMembershipEmpty = (key) => {
+        try{
+            let finalmembershipProductTypes = JSON.parse(
+                JSON.stringify(
+                    this.props.competitionFeesState.defaultCompFeesMembershipProduct
+                )
+            );
+            let tempProductsArray = finalmembershipProductTypes.filter(
+                (data) => data.isProductSelected === true
+            );
+            finalmembershipProductTypes = tempProductsArray;
+            for (let i in finalmembershipProductTypes) {
+                var filterArray = finalmembershipProductTypes[i].membershipProductTypes.filter(
+                    (data) => data.isTypeSelected === true
+                );
+                finalmembershipProductTypes[i].membershipProductTypes = filterArray;
+            }
+            let empty = false;
+            if(this.state.competitionTabKey == '2'){
+                if (!isArrayNotEmpty(finalmembershipProductTypes)) {
+                    message.error(ValidationConstants.please_SelectMembership_Product);
+                    empty = true;
+                } else if (isArrayNotEmpty(finalmembershipProductTypes)) {
+                    if (!isArrayNotEmpty(finalmembershipProductTypes[0].membershipProductTypes)) {
+                        message.error(ValidationConstants.please_SelectMembership_Types);
+                        empty = true;
+                    }
+                }
+            }
+            return empty;
+        }catch(ex){
+            console.log("Error in checkMembershipCheckedOrNot::"+ex);
+        }
+    }
+
     tabCallBack = (key) => {
         let competitionId = this.props.competitionFeesState.competitionId;
         if (competitionId !== null && competitionId.length > 0) {
             this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
             this.setState({
-                competitionTabKey: key,
+                competitionTabKey: this.checkMembershipEmpty() == false ? key : '2',
                 divisionState: key == '3',
             });
         }
