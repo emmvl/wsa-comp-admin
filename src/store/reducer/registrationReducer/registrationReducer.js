@@ -1086,6 +1086,9 @@ function registration(state = initialState, action) {
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
       // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
       if(action.key){
+        if(action.key == "isNeedExtendedDate" && action.radioApplyId == false){
+          state.membershipProductFeesTableData.membershipFees[action.feesIndex].extendEndDate = null;
+        }
         state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
       }else{
         state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;
