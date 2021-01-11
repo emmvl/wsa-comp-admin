@@ -14,6 +14,8 @@ import {
     message,
     Checkbox,
     Modal,
+    Table,
+    Typography,
 } from "antd";
 import moment from 'moment';
 
@@ -22,7 +24,10 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import {
-    addChildAction, addParentAction, userProfileUpdateAction,
+    addChildAction,
+    addParentAction,
+    findPossibleMatches,
+    userProfileUpdateAction,
 } from '../../store/actions/userAction/userAction';
 import ValidationConstants from "../../themes/validationConstant";
 import {
@@ -40,6 +45,40 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
 const { confirm } = Modal;
+const { Text } = Typography;
+
+const columns = [
+    {
+        title: AppConstants.id,
+        dataIndex: "id",
+        key: "key",
+    },
+    {
+        title: AppConstants.name,
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: AppConstants.dateOfBirth,
+        dataIndex: "dob",
+        key: "dob",
+    },
+    {
+        title: AppConstants.emailAdd,
+        dataIndex: "email",
+        key: "email",
+    },
+    {
+        title: AppConstants.contactNumber,
+        dataIndex: "mobile",
+        key: "mobile",
+    },
+    {
+        title: AppConstants.affiliate,
+        dataIndex: "affiliate",
+        key: "affiliate",
+    },
+];
 
 class UserProfileEdit extends Component {
     constructor(props) {
@@ -94,6 +133,7 @@ class UserProfileEdit extends Component {
             hasErrorAddressNumber: false,
             venueAddressError: '',
             manualAddress: false,
+            isPossibleMatchShow: false,
         };
         this.confirmOpend = false;
         // this.props.getCommonRefData();
@@ -1117,6 +1157,71 @@ class UserProfileEdit extends Component {
         );
     };
 
+    possibleMatchesDetailView = (matches) => {
+        let selectedMatch = null;
+
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                selectedMatch = selectedRows;
+            },
+            getCheckboxProps: (record) => ({
+                name: record.name,
+            }),
+        };
+
+        const dataSource = matches.map((u) => ({
+            key: u.id,
+            id: u.id,
+            name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
+            dob: u.dateOfBirth,
+            email: u.email,
+            mobile: u.mobileNumber,
+            affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
+        }));
+
+        const addUser = () => {
+            if (!selectedMatch) return;
+
+            const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
+            const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
+            if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
+                this.props.addChildAction(selectedMatch, userId, sameEmail);
+            } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
+                this.props.addParentAction(selectedMatch, userId, sameEmail);
+            }
+            this.setState({ saveLoad: true });
+        };
+
+        const onCancel = () => {
+            this.setState({ isPossibleMatchShow: false });
+        };
+
+        return (
+            <div className="comp-dash-table-view mt-5">
+                <h2>{AppConstants.possibleMatches}</h2>
+                <Text type="secondary">
+                    {AppConstants.possibleMatchesDescription}
+                </Text>
+                <div className="table-responsive home-dash-table-view mt-3">
+                    <Table
+                        rowSelection={{
+                            type: 'radio',
+                            ...rowSelection,
+                        }}
+                        className="home-dashboard-table"
+                        dataSource={dataSource}
+                        columns={columns}
+                        pagination={false}
+                    />
+                </div>
+                <div className="d-flex align-items-center justify-content-between mt-4">
+                    <Button onClick={onCancel}>{AppConstants.cancel}</Button>
+                    <Button type="primary" onClick={addUser}>{AppConstants.next}</Button>
+                </div>
+            </div>
+        );
+    };
+
     onSaveClick = () => {
         if (this.confirmOpend) return;
 
@@ -1167,16 +1272,17 @@ class UserProfileEdit extends Component {
             return false;
         }
 
-        const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
-        const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
-        if (this.state.titleLabel === AppConstants.addChild) {
-            this.props.addChildAction(data, userId, sameEmail);
-        } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
-            this.props.addParentAction(data, userId, sameEmail);
+        if (this.state.isSameEmail) {
+            data.mobileNumber = this.props.history.location.state.userData.mobileNumber;
+        }
+
+        if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
+            this.props.findPossibleMatches(data);
+            this.setState({ isPossibleMatchShow: true });
         } else {
             this.props.userProfileUpdateAction(data);
+            this.setState({ saveLoad: true });
         }
-        this.setState({ saveLoad: true });
     };
 
     footerView = (isSubmitting) => {
@@ -1218,20 +1324,26 @@ class UserProfileEdit extends Component {
                 <InnerHorizontalMenu menu="user" userSelectedKey="5" />
 
                 <Layout>
-                    {this.headerView()}
-                    <Form
-                        ref={this.formRef}
-                        autoComplete="off"
-                        onFinish={this.onSaveClick}
-                        noValidate="noValidate"
-                    >
-                        <Content>
-                            <div className="formView">{this.contentView()}</div>
-                            <Loader visible={this.props.userState.onUpUpdateLoad || this.props.commonReducerState.onLoad} />
-                        </Content>
+                    {!this.state.isPossibleMatchShow ? (
+                        <>
+                            {this.headerView()}
+                            <Form
+                                ref={this.formRef}
+                                autoComplete="off"
+                                onFinish={this.onSaveClick}
+                                noValidate="noValidate"
+                            >
+                                <Content>
+                                    <div className="formView">{this.contentView()}</div>
+                                    <Loader visible={this.props.userState.onUpUpdateLoad || this.props.commonReducerState.onLoad} />
+                                </Content>
 
-                        <Footer>{this.footerView()}</Footer>
-                    </Form>
+                                <Footer>{this.footerView()}</Footer>
+                            </Form>
+                        </>
+                    ) : (
+                        this.possibleMatchesDetailView(this.props.userState.possibleMatches)
+                    )}
                 </Layout>
             </div>
         );
@@ -1242,6 +1354,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addChildAction,
         addParentAction,
+        findPossibleMatches,
         userProfileUpdateAction,
         getCommonRefData,
         countryReferenceAction,

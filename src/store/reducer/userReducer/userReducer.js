@@ -350,6 +350,8 @@ const initialState = {
   teamMemberRegId: null,
   teamMembersSaveOnLoad: false,
   getTeamMembersReviewOnLoad: false,
+  possibleMatches: [],
+  possibleMatchesOnLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -401,6 +403,7 @@ function userReducer(state = initialState, action) {
         status: action.status,
         umpireActivityOnLoad: false,
         onMedicalLoad: false,
+        possibleMatchesOnLoad: false,
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -415,6 +418,7 @@ function userReducer(state = initialState, action) {
         status: action.status,
         umpireActivityOnLoad: false,
         onMedicalLoad: false,
+        possibleMatchesOnLoad: false,
       };
 
     // get Role Entity List for current user
@@ -962,6 +966,16 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_ADD_PARENT_SUCCESS:
       return { ...state };
 
+    case ApiConstants.API_POSSIBLE_MATCH_LOAD:
+      return { ...state, possibleMatchesOnLoad: true };
+
+    case ApiConstants.API_POSSIBLE_MATCH_SUCCESS:
+      return {
+        ...state,
+        possibleMatches: action.payload,
+        possibleMatchesOnLoad: false,
+      };
+
     case ApiConstants.API_USER_PROFILE_UPDATE_LOAD:
       return { ...state, onUpUpdateLoad: true };
 
@@ -1230,10 +1244,10 @@ function userReducer(state = initialState, action) {
       }
 
     case ApiConstants.ADD_USERS_TO_BE_MERGED:
-      state.usersToBeMerged = action.payload
+      state.usersToBeMerged = action.payload;
       return {
-        ...state
-      }
+        ...state,
+      };
 
     case ApiConstants.API_GET_NETSETGO_LIST_LOAD:
       return { ...state, onLoad: true, netSetGoListAction: action };
@@ -1246,7 +1260,7 @@ function userReducer(state = initialState, action) {
         netSetGoList: netSetGoData ? netSetGoData.netSetGo : [],
         netSetGoPage: (netSetGoData && netSetGoData.page) ? netSetGoData.page.currentPage : 1,
         netSetGoTotalCount: (netSetGoData && netSetGoData.page) ? netSetGoData.page.totalCount : 1,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_LOAD:
@@ -1264,24 +1278,24 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.TEAM_MEMBER_SAVE_UPDATE_ACTION:
-      if (action.key == "teamMembersSave") {
+      if (action.key === "teamMembersSave") {
         state.teamMembersSave = action.data;
-      } else if (action.key == "teamMember") {
+      } else if (action.key === "teamMember") {
         if (action.index == undefined) {
-          updateTeamMembersSave(state)
+          updateTeamMembersSave(state);
         } else {
           state.teamMembersSave.teamMembers.splice(action.index, 1);
         }
-      } else if (action.key == "membershipProductTypes") {
+      } else if (action.key === "membershipProductTypes") {
         state.teamMembersSave.teamMembers[action.index].membershipProductTypes[action.subIndex].isChecked = action.data;
-      } else if(action.key == "teamMemberRegId") {
+      } else if (action.key === "teamMemberRegId") {
         state.teamMemberRegId = action.data;
       } else {
         state.teamMembersSave.teamMembers[action.index][action.key] = action.data;
       }
       return {
-        ...state
-      }
+        ...state,
+      };
 
     case ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD:
       return { ...state, teamMembersSaveOnLoad: true };
@@ -1293,7 +1307,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         status: action.status,
-      }
+      };
 
     case ApiConstants.API_GET_TEAM_MEMBERS_LOAD:
       return { ...state, getTeamMembersOnLoad: true }
@@ -1304,7 +1318,7 @@ function userReducer(state = initialState, action) {
         status: action.status,
         teamMembersSave: action.result,
         getTeamMembersOnLoad: false,
-      }
+      };
 
     case ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD:
       return { ...state, getTeamMembersReviewOnLoad: true };
@@ -1315,7 +1329,7 @@ function userReducer(state = initialState, action) {
         teamMemberRegReviewList: action.result,
         status: action.status,
         getTeamMembersReviewOnLoad: false
-      }
+      };
 
     case ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO:
       try {
@@ -1326,16 +1340,15 @@ function userReducer(state = initialState, action) {
           let transactionVal = 0;
           let targetVal = 0;
           if (action.value == 1) {
-            if (type == "International_CC") {
+            if (type === "International_CC") {
               transactionVal = (totalVal * 3.0 / 100) + 0.30;
             }
-            if (type == "International_AE") {
+            if (type === "International_AE") {
               transactionVal = (totalVal * 2.7 / 100) + 0.30;
-            } else if (type == "DOMESTIC_CC") {
+            } else if (type === "DOMESTIC_CC") {
               transactionVal = (totalVal * 2.25 / 100) + 0.30;
-            } else if (type == "direct_debit") {
+            } else if (type === "direct_debit") {
               transactionVal = (totalVal * 1.5 / 100) + 0.30;
-              console.log("transactionVal DD" + transactionVal);
               if (transactionVal > 3.50) {
                 transactionVal = 3.50;
               }

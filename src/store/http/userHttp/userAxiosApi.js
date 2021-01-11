@@ -454,8 +454,7 @@ let userHttpApi = {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     } else if (data.offset != null) {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
-    }
-    else {
+    } else {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
 
@@ -466,13 +465,10 @@ let userHttpApi = {
     return Method.dataGet(url, localStorage.token);
   },
   umpireSearch(data) {
-    console.log(data, 'umpireSearch')
-    let url = null
+    let url = null;
     if (data.userName) {
       url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}`;
-
     } else {
-
       url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`;
     }
     return Method.dataGet(url, token);
@@ -484,25 +480,20 @@ let userHttpApi = {
   getNetSetGoList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
-      url = `api/user/dashboard/netsetgo?sortBy=${sortBy}&sortOrder=${sortOrder}`
-    }
-    else{
+      url = `api/user/dashboard/netsetgo?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    } else {
       url = `api/user/dashboard/netsetgo`;
-
     }
     return Method.dataPost(url, token, payload);
   },
   registrationResendEmail(teamId, userId) {
-    let payload = {
-      teamId: teamId,
-      userId: userId
-    }
+    const payload = { teamId, userId };
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
   },
   async resetTfaApi(userId) {
     const url = `/users/profile/reset/tfa?userId=${userId}`;
-    return Method.dataPost(url, token)
+    return Method.dataPost(url, token);
   },
 
   addChild(payload) {
@@ -513,6 +504,10 @@ let userHttpApi = {
   addParent(payload) {
     const url = `usersApi/users/addParent/?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
     return Method.dataPost(url, token, payload.body);
+  },
+
+  findPossibleMerge(payload) {
+    return Method.dataPost('userMerge/find', token, payload);
   },
 };
 

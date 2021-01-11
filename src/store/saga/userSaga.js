@@ -861,10 +861,10 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
-        impersonationAccess: action.payload.access
+        impersonationAccess: action.payload.access,
       });
       if (action.payload.access == false) {
-        history.push('/homeDashboard')
+        history.push('/homeDashboard');
       }
     } else {
       yield call(failSaga, result);
@@ -986,7 +986,6 @@ function* getCoachSaga(action) {
   }
 }
 
-
 // Get the umpire Activity Data
 function* getUmpireActivityListSaga(action) {
   try {
@@ -1071,7 +1070,7 @@ function* userResetTFASaga(action) {
         result: result.result.data,
         status: result.status,
       });
-      message.success(AppConstants.tfaSuccessfullyReset)
+      message.success(AppConstants.tfaSuccessfullyReset);
     } else {
       yield call(failSaga, result, "TfaError");
     }
@@ -1117,35 +1116,86 @@ export function* teamMembersSaveSaga(action) {
 
 export function* getTeamMembersSaga(action) {
   try {
-      const result = yield call(registrationAxiosApi.getTeamMembers,action.teamMemberRegId);
-      if (result.status === 1) {
+    const result = yield call(registrationAxiosApi.getTeamMembers, action.teamMemberRegId);
+    if (result.status === 1) {
       yield put({
-          type: ApiConstants.API_GET_TEAM_MEMBERS_SUCCESS,
-          result: result.result.data,
-          status: result.status,
+        type: ApiConstants.API_GET_TEAM_MEMBERS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
       });
-      } else {
+    } else {
       yield call(failSaga, result);
-      }
+    }
   } catch (error) {
-      yield call(errorSaga, error);
+    yield call(errorSaga, error);
   }
 }
 
 export function* getTeamMembersReviewSaga(action) {
   try {
-      const result = yield call(registrationAxiosApi.getTeamMembersReview,action.payload);
-      if (result.status === 1) {
+    const result = yield call(registrationAxiosApi.getTeamMembersReview, action.payload);
+    if (result.status === 1) {
       yield put({
-          type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_SUCCESS,
-          result: result.result.data,
-          status: result.status,
+        type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_SUCCESS,
+        result: result.result.data,
+        status: result.status,
       });
-      } else {
+    } else {
       yield call(failSaga, result);
-      }
+    }
   } catch (error) {
-      yield call(errorSaga, error);
+    yield call(errorSaga, error);
+  }
+}
+
+function* addChildSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.addChild, action.payload);
+
+    if (result.status === 1 || result.status === 4) {
+      yield put({
+        type: ApiConstants.API_ADD_CHILD_SUCCESS,
+      });
+      history.goBack();
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* addParentSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.addParent, action.payload);
+
+    if (result.status === 1 || result.status === 4) {
+      yield put({
+        type: ApiConstants.API_ADD_PARENT_SUCCESS,
+      });
+      history.goBack();
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* findPossibleMergeSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.findPossibleMerge, action.payload);
+
+    if (result.status === 1 || result.status === 4) {
+      yield put({
+        type: ApiConstants.API_POSSIBLE_MATCH_SUCCESS,
+        payload: result.result.data,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
   }
 }
 
@@ -1206,6 +1256,7 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD, teamMembersSaveSaga);
   yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_LOAD, getTeamMembersSaga);
   yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD, getTeamMembersReviewSaga);
-
-
+  yield takeEvery(ApiConstants.API_ADD_CHILD_LOAD, addChildSaga);
+  yield takeEvery(ApiConstants.API_ADD_PARENT_LOAD, addParentSaga);
+  yield takeEvery(ApiConstants.API_POSSIBLE_MATCH_LOAD, findPossibleMergeSaga);
 }
