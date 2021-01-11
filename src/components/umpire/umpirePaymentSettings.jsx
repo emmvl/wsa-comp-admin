@@ -12,6 +12,7 @@ import {
 } from "antd";
 
 import InputWithHead from "../../customComponents/InputWithHead";
+import InputNumberWithHead from "../../customComponents/InputNumberWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -22,6 +23,7 @@ import {
     umpirePaymentSettingUpdate,
     getUmpirePaymentSettings,
 } from '../../store/actions/umpireAction/umpirePaymentSettingAction';
+import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { getRefBadgeData } from '../../store/actions/appAction';
 
 const { Header, Footer, Content } = Layout;
@@ -33,12 +35,14 @@ class UmpirePaymentSetting extends Component {
         this.state = {
             selectedComp: null,
             loading: false,
-            competitionUniqueKey: null
+            competitionUniqueKey: null,
+            paymentSettingsData: null,
+            selectedDivisions: null,
         };
     }
 
     componentDidMount() {
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
         this.props.umpirePaymentSettingUpdate({ value: null, key: 'refreshPage' })
@@ -48,7 +52,7 @@ class UmpirePaymentSetting extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
-                let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+                const compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
 
                 if (getUmpireCompId()) {
@@ -58,7 +62,11 @@ class UmpirePaymentSetting extends Component {
                     setUmpireCompId(firstComp)
                 }
 
-                let compKey = compList.length > 0 && compList[0].competitionUniqueKey
+                if (!!compList.length) {
+                    this.props.liveScoreGetDivision(firstComp);
+                }
+
+                const compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
         }
@@ -67,13 +75,22 @@ class UmpirePaymentSetting extends Component {
             this.props.getUmpirePaymentSettings(this.state.selectedComp);
         }
 
-        console.log('this.props.umpirePaymentSettingState.paymentSettingsData', this.props.umpirePaymentSettingState.paymentSettingsData)
+        if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
+            && !this.props.umpirePaymentSettingState.onLoad) {
 
-        // if (this.props.umpireSettingState !== prevProps.umpireSettingState && !!this.props.umpireSettingState.allocationSettingsData
-        //     && !this.props.umpireSettingState.onLoad) {
+            const { paymentSettingsData } = this.props.umpirePaymentSettingState;
+            const { divisionList } = this.props.liveScoreTeamState;
 
-        //     // /////////
-        // }
+            const selectedDivisions = [];
+    
+            // paymentSettingsData.divisions.forEach(item => {
+            //     item.allDivisions ? selectedDivisions.push(...divisionList) : selectedDivisions.push(...item.divisions);
+            // });
+            
+            this.setState({ paymentSettingsData, selectedDivisions });
+
+            console.log('this.props.umpirePaymentSettingState.paymentSettingsData', this.props.umpirePaymentSettingState.paymentSettingsData)
+        }
     }
 
     headerView = () => {
@@ -91,7 +108,7 @@ class UmpirePaymentSetting extends Component {
     };
 
     onChangeComp = compID => {
-        // this.props.liveScoreGetDivision(compID);
+        this.props.liveScoreGetDivision(compID);
         setUmpireCompId(compID);
 
         this.setState({ selectedComp: compID });
@@ -130,7 +147,6 @@ class UmpirePaymentSetting extends Component {
     };
 
     footerView = (isSubmitting) => {
-        const { paidByCompOrgDivision } = this.props.umpirePaymentSettingState
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -151,7 +167,7 @@ class UmpirePaymentSetting extends Component {
     contentView = () => {
         const { paidByCompOrg, paidByAffiliate } = this.props.umpirePaymentSettingState
         return (
-            <div className='pt-4' style={{ padding: '3%', minWidth: 240 }}>
+            <div className='pt-4 mt-5' style={{ padding: '3%', minWidth: 240 }}>
                 <span className='text-heading-large pt-2'>{AppConstants.whoPayUmpire}</span>
 
                 <div className="d-flex flex-column">
@@ -195,72 +211,82 @@ class UmpirePaymentSetting extends Component {
     }
 
     paidByCompOrgView = () => {
-        const { paidByCompOrgDivision, selectAllDiv, compOrgDiv } = this.props.umpirePaymentSettingState
+
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { selectedDivisions } = this.state;
+
+        console.log('divisionList', divisionList);
+
         return (
             <div className="d-flex flex-column">
+
                 <Checkbox
-                    onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                        value: e.target.checked,
-                        key: 'selectAllDiv'
-                    })}
-                    checked={selectAllDiv}
+                    // onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
+                    // checked={boxData.allDivisions}
                 >
                     {AppConstants.allDivisions}
                 </Checkbox>
-                {selectAllDiv === false && (
-                    <Select
-                        mode="multiple"
-                        placeholder="Select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                        onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
-                            value: divisionId,
-                            key: 'paidByCompOrgDivision'
-                        })}
-                        value={paidByCompOrgDivision}
-                    >
-                        {compOrgDiv.map((item) => (
-                            <Option key={'compOrgDivision_' + item.id} disabled={item.disabled} value={item.id}>
-                                {item.name}
-                            </Option>
-                        ))}
-                    </Select>
-                )}
+                            
+                <Select
+                    mode="multiple"
+                    placeholder="Select"
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                    // onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
+                    // value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
+                >
+                    {(divisionList || []).map((item) => (
+                        <Option
+                            key={'compDivision_' + item.id}
+                            // disabled={
+                            //     (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id 
+                            //         && !boxData.allDivisions && !boxData.divisions.find(division => division.id === item.id)
+                            //         ))
+                            //     }
+                            value={item.id}
+                        >
+                            {item.name}
+                        </Option>
+                    ))}
+                </Select>
             </div>
         )
     }
 
     paidByAffiliateView = () => {
-        const { paidByAffiliateDivision, selectAllDiv, affiliateDiv } = this.props.umpirePaymentSettingState
+
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { selectedDivisions } = this.state;
+
         return (
             <div className="d-flex flex-column">
                 <Checkbox
-                    onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                        value: e.target.checked,
-                        key: 'selectAllDiv'
-                    })}
-                    checked={selectAllDiv}
+                    // onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
+                    // checked={boxData.allDivisions}
                 >
                     {AppConstants.allDivisions}
                 </Checkbox>
-                {
-                    selectAllDiv === false &&
-                    <Select
-                        mode="multiple"
-                        placeholder="Select"
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                        onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
-                            value: divisionId,
-                            key: 'paidByAffiliateDivision'
-                        })}
-                        value={paidByAffiliateDivision}
-                    >
-                        {affiliateDiv.map((item) => (
-                            <Option key={'affiliateDivision_' + item.id} disabled={item.disabled} value={item.id}>
-                                {item.name}
-                            </Option>
-                        ))}
-                    </Select>
-                }
+                            
+                <Select
+                    mode="multiple"
+                    placeholder="Select"
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                    // onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
+                    // value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
+                >
+                    {(divisionList || []).map((item) => (
+                        <Option
+                            key={'compDivision_' + item.id}
+                            disabled={
+                                (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id 
+                                    // && !boxData.allDivisions && !boxData.divisions.find(division => division.id === item.id)
+                                    ))
+                                }
+                            value={item.id}
+                        >
+                            {item.name}
+                        </Option>
+                    ))}
+                </Select>
             </div>
         )
     }
@@ -277,6 +303,7 @@ class UmpirePaymentSetting extends Component {
                             key: 'byBadge'
                         })}
                         checked={byBadgeBtn}
+                        className="p-0"
                     >
                         {AppConstants.byBadge}
                     </Radio>
@@ -292,6 +319,7 @@ class UmpirePaymentSetting extends Component {
                             key: 'byPool'
                         })}
                         checked={byPoolBtn}
+                        className="p-0 mt-4"
                     >
                         {AppConstants.byPool}
                     </Radio>
@@ -302,7 +330,6 @@ class UmpirePaymentSetting extends Component {
                                     {this.inputFieldsForByPool(item, index)}
                                 </div>
                             ))}
-                            {/* <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addAnotherGroupForByPool' })} className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherGroup}</span> */}
                         </div>
                     )}
                 </div>
@@ -314,7 +341,7 @@ class UmpirePaymentSetting extends Component {
         const { inputFieldForByPool } = this.props.umpirePaymentSettingState
         return (
             <div>
-                <div className="row pt-3">
+                <div className="row">
                     <div className='col-sm input-width'>
                         <InputWithHead
                             auto_complete='new-password'
@@ -329,117 +356,69 @@ class UmpirePaymentSetting extends Component {
                             value={inputFieldForByPool[index].name}
                         />
                     </div>
+                    
                     <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete="off"
-                            prefix="$"
-                            type="number"
+                        <InputNumberWithHead
+                            prefixValue="$"
+                            defaultValue={0}
+                            min={0}
+                            precision={2}
+                            step={0.01}
                             heading={AppConstants.umpireRate}
-                            placeholder={"Umpire Rate"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'umpireRate',
-                                subkey: "byPoolInputFeilds"
-                            })}
-                            value={inputFieldForByPool[index].umpireRate}
+                            // value={inputFieldForByPool[index].umpireRate}
+                            onChange={e => console.log('changed', e)}
                         />
                     </div>
 
                     <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete="off"
-                            prefix="$"
-                            type="number"
+                        <InputNumberWithHead
+                            prefixValue="$"
+                            defaultValue={0}
+                            min={0}
+                            precision={2}
+                            step={0.01}
                             heading={AppConstants.umpireResRate}
-                            placeholder={"Umpire Reserve Rate"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'umpReserveRate',
-                                subkey: "byPoolInputFeilds"
-                            })}
-                            value={inputFieldForByPool[index].umpReserveRate}
+                            // value={inputFieldForByPool[index].umpReserveRate}
+                            onChange={e => console.log('changed', e)}
                         />
                     </div>
 
                     <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete="off"
-                            prefix="$"
-                            type="number"
+                        <InputNumberWithHead
+                            prefixValue="$"
+                            defaultValue={0}
+                            min={0}
+                            precision={2}
+                            step={0.01}
                             heading={AppConstants.umpireCoachRate}
-                            placeholder={"Umpire Coach Rate"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'umpCoachRate',
-                                subkey: "byPoolInputFeilds"
-                            })}
-                            value={inputFieldForByPool[index].umpCoachRate}
+                            // value={inputFieldForByPool[index].umpCoachRate}
+                            onChange={e => console.log('changed', e)}
                         />
                     </div>
-
-                    {/* <div className="col-sm-1 umpire-delete-image-view">
-                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removePoolItem', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
-                    </div> */}
                 </div>
             </div>
         )
     }
 
     byBadgeView = () => {
-        const { inputFieldArray, byBadgeDivision, allDivisionBadge, compOrgDiv } = this.props.umpirePaymentSettingState
-        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState
-        let badge = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : []
+        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
+        const badge = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
+
         return (
-            <div>
-                <div className="d-flex flex-column" style={{ marginTop: 20 }}>
-                    <Checkbox checked={allDivisionBadge} onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                        value: e.target.checked,
-                        key: 'allDivisionBadge'
-                    })}>
-                        {AppConstants.allDivisions}
-                    </Checkbox>
-                    {allDivisionBadge == false && (
-                        <Select
-                            mode="multiple"
-                            placeholder="Select"
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                            onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
-                                value: divisionId,
-                                key: 'byBadgeDivision'
-                            })}
-                            value={byBadgeDivision}
-                        >
-                            {compOrgDiv.map((item) => (
-                                <Option key={'compOrgDivision_' + item.id} disabled={item.disabled} value={item.id}>
-                                    {item.name}
-                                </Option>
-                            ))}
-                        </Select>
-                    )}
-                </div>
-                {/* <div> */}
+            <div className="mb-4">
                 {badge.map((item, index) => (
                     <div key={"inputFieldArray" + index}>
                         {this.inputFields(item, index)}
                     </div>
                 ))}
-                {/* <div style={{ marginTop: inputFieldArray.length === 0 ? null : -35 }}> */}
-                {/* <div>
-                    <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addAnotherGroup' })} className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherGroup}</span>
-                </div> */}
-                {/* </div> */}
             </div>
         )
     }
 
     inputFields = (badgeData, index) => {
-        const { inputFieldArray } = this.props.umpirePaymentSettingState
         return (
             <div>
-                <div className="row pt-3">
+                <div className="row">
                     <div className='col-sm input-width'>
                         <InputWithHead
                             auto_complete='new-password'
@@ -454,61 +433,45 @@ class UmpirePaymentSetting extends Component {
                             disabled
                         />
                     </div>
+
                     <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete="off"
-                            prefix="$"
-                            type="number"
-                            step=".01"
+                        <InputNumberWithHead
+                            prefixValue="$"
+                            defaultValue={0}
+                            min={0}
+                            precision={2}
+                            step={0.01}
                             heading={AppConstants.umpireRate}
-                            placeholder={"Umpire Rate"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'umpireRate'
-                            })}
-                            // value={inputFieldArray[index].umpireRate}
-                            value={badgeData.umpireRate}
+                            // value={badgeData.umpireRate}
+                            onChange={e => console.log('changed', e)}
                         />
                     </div>
 
                     <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete="off"
-                            prefix="$"
-                            type="number"
+                        <InputNumberWithHead
+                            prefixValue="$"
+                            defaultValue={0}
+                            min={0}
+                            precision={2}
+                            step={0.01}
                             heading={AppConstants.umpireResRate}
-                            placeholder={"Umpire Reserve Rate"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'umpReserveRate'
-                            })}
-                            // value={inputFieldArray[index].umpReserveRate}
-                            value={badgeData.umpReserveRate}
+                            // value={badgeData.umpReserveRate}
+                            onChange={e => console.log('changed', e)}
                         />
                     </div>
 
                     <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete="off"
-                            prefix="$"
-                            type="number"
+                        <InputNumberWithHead
+                            prefixValue="$"
+                            defaultValue={0}
+                            min={0}
+                            precision={2}
+                            step={0.01}
                             heading={AppConstants.umpireCoachRate}
-                            placeholder={"Umpire Coach Rate"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'umpCoachRate'
-                            })}
-                            // value={inputFieldArray[index].umpCoachRate}
-                            value={badgeData.umpCoachRate}
+                            // value={badgeData.umpCoachRate}
+                            onChange={e => console.log('changed', e)}
                         />
                     </div>
-
-                    {/* <div className="col-sm-1 umpire-delete-image-view">
-                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItem', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
-                    </div> */}
                 </div>
             </div>
         )
@@ -543,6 +506,7 @@ function mapDispatchToProps(dispatch) {
         umpirePaymentSettingUpdate,
         getRefBadgeData,
         getUmpirePaymentSettings,
+        liveScoreGetDivision,
     }, dispatch)
 }
 
@@ -550,6 +514,7 @@ function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpirePaymentSettingState: state.UmpirePaymentSettingState,
+        liveScoreTeamState: state.LiveScoreTeamState,
         appState: state.AppState
     }
 }
