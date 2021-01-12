@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString,isNullOrUndefined } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString, isNullOrUndefined } from "../../../util/helpers";
 import { setOrganisationData, getOrganisationData } from "../../../util/sessionStorage";
 import AppConstants from "../../../themes/appConstants";
 
@@ -156,14 +156,16 @@ function stripe(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onExportLoad: false
             };
         case ApiConstants.API_STRIPE_API_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onExportLoad: false
             };
 
 
@@ -254,7 +256,7 @@ function stripe(state = initialState, action) {
 
         case ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD:
             return { ...state, onLoad: true, error: null };
-        
+
         case ApiConstants.API_GET_STRIPE_REFUND_LIST_API_SUCCESS:
             let refundListData = action.result
             return {
@@ -304,8 +306,8 @@ function stripe(state = initialState, action) {
         //         ...state,
         //         onLoad: false,
         //     }
-         ///get invoice
-         case ApiConstants.API_GET_INVOICE_LOAD:
+        ///get invoice
+        case ApiConstants.API_GET_INVOICE_LOAD:
             return {
                 ...state,
                 onLoad: true,
@@ -367,6 +369,14 @@ function stripe(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: null,
+            }
+        case ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD:
+            return { ...state, onExportLoad: true }
+
+        case ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_SUCCESS:
+            return {
+                ...state,
+                onExportLoad: false,
             }
 
         default:

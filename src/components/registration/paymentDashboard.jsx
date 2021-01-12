@@ -9,13 +9,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import AppImages from "../../themes/appImages";
 import {
-    getOnlyYearListAction, 
+    getOnlyYearListAction,
     getFeeTypeAction,
     getPaymentOptionsListAction,
     getPaymentMethodsListAction,
 } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
-import { getPaymentList, exportPaymentApi } from "../../store/actions/stripeAction/stripeAction"
+import { getPaymentList, exportPaymentDashboardApi } from "../../store/actions/stripeAction/stripeAction"
 import { endUserRegDashboardListAction } from "../../store/actions/registrationAction/endUserRegistrationAction";
 import InputWithHead from "../../customComponents/InputWithHead"
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
@@ -23,6 +23,7 @@ import { getAffiliateToOrganisationAction } from "store/actions/userAction/userA
 import { isEmptyArray } from "formik";
 import moment from "moment";
 import { SearchOutlined } from "@ant-design/icons";
+import Loader from "customComponents/loader";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -283,14 +284,48 @@ class PaymentDashboard extends Component {
             regFrom: '-1',
             regTo: '-1',
             paging: {
-              limit: 10,
-              offset: 0
+                limit: 10,
+                offset: 0
             }
         }, null, null);
     };
 
     onExport() {
-        this.props.exportPaymentApi("paymentDashboard")
+        let {
+            sortBy,
+            sortOrder,
+            yearRefId,
+            competitionUniqueKey,
+            filterOrganisation,
+            dateFrom,
+            dateTo,
+            searchText,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType,
+            offset,
+        } = this.state
+        let year = getGlobalYear() ? getGlobalYear() : '-1'
+        this.props.exportPaymentDashboardApi(
+            offset,
+            sortBy,
+            sortOrder,
+            this.state.userId !== null ? this.state.userId : -1,
+            "-1",
+            this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(year),
+            competitionUniqueKey,
+            filterOrganisation,
+            dateFrom,
+            dateTo,
+            searchText,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType
+
+        );
+
     }
 
     clearFilterByUserId = () => {
@@ -929,6 +964,7 @@ class PaymentDashboard extends Component {
                     menuName={AppConstants.finance}
                 />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="1" />
+                <Loader visible={this.props.paymentState.onExportLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -947,7 +983,7 @@ function mapDispatchToProps(dispatch) {
         getPaymentOptionsListAction,
         getPaymentMethodsListAction,
         getPaymentList,
-        exportPaymentApi,
+        exportPaymentDashboardApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
     }, dispatch)
