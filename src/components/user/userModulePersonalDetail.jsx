@@ -332,6 +332,32 @@ const teamRegistrationColumns = [
     {
         title: "Action",
         key: "action",
+        dataIndex: "teamName",
+        render: (action, record)=> (
+        <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: "25px" }}
+        >
+            <SubMenu
+                key="sub1"
+                title={
+                    <img
+                        className="dot-image"
+                        src={AppImages.moreTripleDot}
+                        alt=""
+                        width="16"
+                        height="16"
+                    />
+                }
+            >
+                <Menu.Item key="1">
+                        <span onClick={() => this_Obj.showTeamMembers(record,1)}>View</span>
+                </Menu.Item>
+            </SubMenu>
+        </Menu>
+        )
     },
 ]
 
@@ -377,8 +403,8 @@ const teamMembersColumns = [
     },
     {
         title: "Status",
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
     },
     {
         title: "Paid Fee",

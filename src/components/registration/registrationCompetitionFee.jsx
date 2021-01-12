@@ -1660,7 +1660,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((fee != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1688,7 +1688,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((gst != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1716,7 +1716,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'affNominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((fee != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1744,7 +1744,7 @@ const playerSeasonalTableTeamAssociation = [
         key: 'affNominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((gst != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1891,11 +1891,13 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'total',
         key: 'total',
         width: 96,
-        render: () => (
+        render: (total) => (
             <Input
+                style={{ width: 95 }}
                 disabled
+                prefix="$"
                 className="input-inside-table-fees"
-                value="N/A"
+                value={total}
             />
         ),
     },
@@ -1966,7 +1968,7 @@ const playerSeasonalTableTeamClub = [
         key: 'nominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((fee != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1994,7 +1996,7 @@ const playerSeasonalTableTeamClub = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((gst != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -2022,7 +2024,7 @@ const playerSeasonalTableTeamClub = [
         key: 'affNominationFees',
         width: 84,
         render: (fee, record, index) => (
-            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((fee != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2050,7 +2052,7 @@ const playerSeasonalTableTeamClub = [
         key: 'affNominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((gst != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2197,11 +2199,13 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'total',
         key: 'total',
         width: 96,
-        render: () => (
+        render: (total) => (
             <Input
+                style={{ width: 95 }}
                 disabled
+                prefix="$"
                 className="input-inside-table-fees"
-                value="N/A"
+                value={total}
             />
         ),
     },
@@ -2273,7 +2277,7 @@ const playerSeasonalTeamTable = [
         width: 84,
         render: (fee, record, index) => {
             return (
-                ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ?
+                ((fee != null) && record.isPlayer == 1) ?
                     (
                         <Input
                             prefix="$"
@@ -2303,7 +2307,7 @@ const playerSeasonalTeamTable = [
         key: 'nominationGST',
         width: 84,
         render: (gst, record, index) => (
-            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((gst != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2331,7 +2335,7 @@ const playerSeasonalTeamTable = [
         key: 'fee',
         width: 84,
         render: (fee, record, index) =>
-            ((fee != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((fee != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2362,7 +2366,7 @@ const playerSeasonalTeamTable = [
         key: 'gst',
         width: 84,
         render: (gst, record, index) =>
-            ((gst != null || record.teamRegChargeTypeRefId == 1) && record.isPlayer == 1) ? (
+            ((gst != null) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2392,11 +2396,13 @@ const playerSeasonalTeamTable = [
         dataIndex: 'total',
         key: 'total',
         width: 96,
-        render: () => (
+        render: (total) => (
             <Input
+                style={{ width: 95 }}
                 disabled
+                prefix="$"
                 className="input-inside-table-fees"
-                value="N/A"
+                value={total}
             />
         ),
     },
@@ -3646,8 +3652,6 @@ class RegistrationCompetitionFee extends Component {
 
     ////disable or enable particular fields
     setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
-        let feeDetails = this.props.competitionFeesState.competitionFeesData;
-        let isTeamSeasonal = this.checkIsTeamReg(feeDetails);
         if (isPublished) {
             if (isRegClosed) {
                 let permissionObject = {
@@ -3656,8 +3660,6 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: !isCreatorEdit ? false : true,
-                    feesTableRegDisable: !isCreatorEdit ? false : true,
-                    feesTableTeamRegDisable: !isCreatorEdit ? false : true,
                     paymentsDisable: true,
                     discountsDisable: true,
                     allDisable: false,
@@ -3674,8 +3676,6 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: true,
-                    feesTableRegDisable: true,
-                    feesTableTeamRegDisable: true,
                     paymentsDisable: true,
                     discountsDisable: false,
                     allDisable: false,
@@ -3690,8 +3690,6 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: true,
-                    feesTableRegDisable: false,
-                    feesTableTeamRegDisable: isTeamSeasonal ? true : false,
                     paymentsDisable: false,
                     discountsDisable: false,
                     allDisable: false,
@@ -3707,8 +3705,6 @@ class RegistrationCompetitionFee extends Component {
                 membershipDisable: false,
                 divisionsDisable: false,
                 feesTableDisable: false,
-                feesTableRegDisable: false,
-                feesTableTeamRegDisable: false,
                 paymentsDisable: false,
                 discountsDisable: false,
                 allDisable: false,
@@ -6172,8 +6168,6 @@ class RegistrationCompetitionFee extends Component {
         let allStates = this.props.competitionFeesState;
         let feeDetails = allStates.competitionFeesData;
         let feesTableDisable = this.state.permissionState.feesTableDisable;
-        let feesTableRegDisable = this.state.permissionState.feesTableRegDisable;
-        let feesTableTeamRegDisable = this.state.permissionState.feesTableTeamRegDisable;
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.fees}</span>
@@ -6238,7 +6232,7 @@ class RegistrationCompetitionFee extends Component {
                                         checked={item.isIndividualReg}
                                         className="single-checkbox"
                                         style={{ fontSize: '16px' }}
-                                        disabled={feesTableRegDisable}
+                                        disabled={feesTableDisable}
                                         onChange={(e) => {
                                             this.props.checkUncheckcompetitionFeeSction(
                                                 e.target.checked,
@@ -6257,7 +6251,7 @@ class RegistrationCompetitionFee extends Component {
                                                 style={{ marginLeft: '45px' }}
                                                 checked={item.isSeasonal}
                                                 className="single-checkbox"
-                                                disabled={feesTableRegDisable}
+                                                disabled={feesTableDisable}
                                                 onChange={(e) => {
                                                     this.props.checkUncheckcompetitionFeeSction(
                                                         e.target.checked,
@@ -6290,7 +6284,7 @@ class RegistrationCompetitionFee extends Component {
                                                 style={{ marginLeft: 45 }}
                                                 checked={item.isCasual}
                                                 className="single-checkbox"
-                                                disabled={feesTableRegDisable}
+                                                disabled={feesTableDisable}
                                                 onChange={(e) =>
                                                     this.props.checkUncheckcompetitionFeeSction(
                                                         e.target.checked,
@@ -6347,7 +6341,7 @@ class RegistrationCompetitionFee extends Component {
                                                     checked={item.isTeamSeasonal}
                                                     className="single-checkbox"
                                                     style={{ fontSize: '16px' }}
-                                                    disabled={feesTableTeamRegDisable}
+                                                    disabled={feesTableDisable}
                                                     onChange={(e) => {
                                                         this.props.checkUncheckcompetitionFeeSction(
                                                             e.target.checked,
@@ -6371,7 +6365,7 @@ class RegistrationCompetitionFee extends Component {
                                                             )
                                                         }
                                                         value={item.teamRegChargeTypeRefId}
-                                                        disabled={feesTableTeamRegDisable}
+                                                        disabled={feesTableDisable}
                                                     >
                                                         <div className="d-flex">
                                                             <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio>
