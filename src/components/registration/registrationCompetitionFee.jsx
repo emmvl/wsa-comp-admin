@@ -3537,7 +3537,7 @@ class RegistrationCompetitionFee extends Component {
             this.setState({ loading: false });
             if (!competitionFeesState.error) {
                 window.scrollTo(0, 0);
-                let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4"
+                let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4" && this.state.clickedOnTab == false
                     ? "6"
                     : this.state.clickedOnTab == true ? this.state.competitionTabKey : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
                 this.setState({
@@ -4891,15 +4891,15 @@ class RegistrationCompetitionFee extends Component {
             } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
                 invitees = anyOrgAffiliateArr
             }
-            if (tabKey == '1') {
+            if (tabKey == '1' && this.state.isCreatorEdit == false) {
                 this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
-            } else if (tabKey == '2') {
+            } else if (tabKey == '2' && this.state.isCreatorEdit == false) {
                 this.saveCompMembershipApiCall(competitionId)
-            } else if (tabKey == '3') {
+            } else if (tabKey == '3' && this.state.isCreatorEdit == false) {
                 this.saveCompDivApiCall(competitionId,postData,compFeesState);
             } else if (tabKey == '4') {
                 this.saveCompFeesApiCall();
-            } else if (tabKey == '5') {
+            } else if (tabKey == '5' && this.state.isCreatorEdit == false) {
                 this.paymentApiCall(competitionId);
             } else if (tabKey == '6') {
                 this.discountApiCall(competitionId);
@@ -7900,7 +7900,7 @@ class RegistrationCompetitionFee extends Component {
                         </CustomToolTip>
                     </div>
                 </div>
-                {discountData.map((item, index) => (
+                {(discountData || []).map((item, index) => (
                     <div className="prod-reg-inside-container-view">
                         <div
                             className="transfer-image-view pt-2"
@@ -8009,7 +8009,7 @@ class RegistrationCompetitionFee extends Component {
                                     // value={item.competitionMembershipProductTypeId}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
                                 >
-                                    {item.membershipProductTypes.map((item) => (
+                                    {(item.membershipProductTypes || []).map((item) => (
                                         <Option
                                             key={'productType_' + item.competitionMembershipProductTypeId}
                                             value={item.competitionMembershipProductTypeId}
