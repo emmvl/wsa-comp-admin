@@ -61,12 +61,8 @@ const payments = [
         paymentTypeId: 2,
     },
     {
-        paymentType: "Queensland Fair Play Voucher",
+        paymentType: "Voucher",
         paymentTypeId: 3,
-    },
-    {
-        paymentType: "NSW Active Kids",
-        paymentTypeId: 4,
     }
 ];
 
