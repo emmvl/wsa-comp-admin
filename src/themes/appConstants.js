@@ -1749,6 +1749,7 @@ const AppConstants = {
   totalPaymentDue: "Total Payment Due",
 
   warning: "Warning",
+  confirmSaveMessage: "Would you like to save your changes?"
 
 };
 
