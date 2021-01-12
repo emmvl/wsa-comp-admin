@@ -352,6 +352,8 @@ const initialState = {
   getTeamMembersReviewOnLoad: false,
   possibleMatches: [],
   possibleMatchesOnLoad: false,
+  onTeamUpdateLoad: false,
+  teamMemberUpdate: null,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -1369,7 +1371,16 @@ function userReducer(state = initialState, action) {
       } catch (ex) {
         console.log("Error in UPDATE_TEAM_MEMBER_REVIEW_INFO::" + ex);
       }
+    case ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD:
+      return { ...state, onTeamUpdateLoad: true };
 
+    case ApiConstants.API_TEAM_MEMBER_UPDATE_SUCCESS:
+      return {
+        ...state,
+        onTeamUpdateLoad: false,
+        teamMemberUpdate: action.result,
+        status: action.status
+      };
     default:
       return state;
   }
