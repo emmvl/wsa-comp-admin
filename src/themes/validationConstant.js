@@ -258,6 +258,10 @@ const ValidationConstants = {
     please_SelectMembership_Product: 'Please choose a Membership Product.',
     pleaseEnterMobileNumber: "Please enter mobile number",
     memberTypeIsRequired: "Member type is required",
+
+    accreditationLevelUmpire: "National accreditation level umpire is required.",
+    accreditationLevelCoach: "National accreditation level coach is required.",
+    expiryDateRequire: 'Expire date is required.',
 };
 
 export default ValidationConstants;
