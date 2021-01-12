@@ -35,6 +35,21 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
+const initialPaymentSettingsData = {
+    allDivisions: false,
+    divisions: [],
+    UmpirePaymentFeeType: 'BY_BADGE',
+    byBadge: [],
+    byPool: [],
+    hasSettings: true,
+};
+
+const initialNoSettingsData = {
+    allDivisions: false,
+    divisions: [],
+    hasSettings: false,
+};
+
 class UmpirePaymentSetting extends Component {
     constructor(props) {
         super(props);
@@ -151,6 +166,42 @@ class UmpirePaymentSetting extends Component {
         }
 
         // console.log('this.props.umpirePoolAllocationState.umpirePoolData', this.props.umpirePoolAllocationState.umpirePoolData);
+    }
+
+    handleChangeWhoPaysUmpires = (e, isOrganiser) => {
+        const { paymentSettingsData } = this.state;
+        const { divisionList } = this.props.liveScoreTeamState;
+
+        const newSelectedDivisions = [];
+        let newSettingsData;
+        
+        if (isOrganiser) {
+            const filteredSettingsData = paymentSettingsData.settings.filter(item => item.hasSettings !== isOrganiser)
+            const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
+
+            if (e.target.checked) {
+                newSettingsData = [ ...filteredSettingsData, initialSettingsBoxData ];
+            } else {
+                newSettingsData = [ ...filteredSettingsData ];
+            }  
+        } else {
+            if (e.target.checked) {
+                newSettingsData = [ ...this.state.paymentSettingsData.settings, initialNoSettingsData ];
+            } else {
+                newSettingsData = [ ...this.state.paymentSettingsData.settings.filter(item => !!item.isOrganiser) ];
+            }  
+        }
+
+        newSettingsData.forEach(item => {
+            item.allDivisions ? newSelectedDivisions.push(...divisionList) : newSelectedDivisions.push(...item.divisions);
+        });
+
+        const paymentSettingsDataObj = {
+            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
+            settings: newSettingsData,
+        }
+
+        this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions: newSelectedDivisions });
     }
 
     handleChangeSettings = (sectionDataIndex, key, value, sectionData) => {
@@ -400,7 +451,7 @@ class UmpirePaymentSetting extends Component {
         return (
             <>
                 <Checkbox
-                    // onChange={(e) => this.handleChangeWhoAssignsUmpires(e, umpireAllocatorTypeRefId)}
+                    onChange={(e) => this.handleChangeWhoPaysUmpires(e, hasSettings)}
                     checked={!!sectionData?.length}
                     className="mx-0 mb-2"
                 >
