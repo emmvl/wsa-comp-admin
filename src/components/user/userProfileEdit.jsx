@@ -431,9 +431,9 @@ class UserProfileEdit extends Component {
         let defaultVenueAddress = null
         if (userData.street1) {
             defaultVenueAddress = `${userData.street1 && `${userData.street1},`
-            } ${userData.suburb && `${userData.suburb},`
-            } ${state && `${state},`
-            } `;
+                } ${userData.suburb && `${userData.suburb},`
+                } ${state && `${state},`
+                } `;
         }
 
         return (
@@ -587,9 +587,9 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.addressOne}
                                 placeholder={AppConstants.addressOne}
                                 name={'street1'}
-                                value={userData ?.street1}
+                                value={userData?.street1}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                                // readOnly
+                            // readOnly
                             />
 
                         </div>
@@ -600,7 +600,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.addressTwo}
                                 placeholder={AppConstants.addressTwo}
                                 name={'street2'}
-                                value={userData ?.street2}
+                                value={userData?.street2}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                             />
                         </div>
@@ -616,9 +616,9 @@ class UserProfileEdit extends Component {
                                 placeholder={AppConstants.suburb}
                                 // required="required-field"
                                 name={'suburb'}
-                                value={userData ?.suburb}
+                                value={userData?.suburb}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                                // readOnly
+                            // readOnly
                             />
                         </div>
                         <div className="col-sm">
@@ -629,11 +629,11 @@ class UserProfileEdit extends Component {
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.select}
                                 // required="required-field"
-                                value={userData ?.stateRefId}
+                                value={userData?.stateRefId}
                                 name="stateRefId"
                                 onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                                // readOnly
-                                // disabled
+                            // readOnly
+                            // disabled
                             >
                                 {stateList.map((item) => (
                                     <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
@@ -649,9 +649,9 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.postCode}
                                 placeholder={AppConstants.postCode}
                                 name={'postalCode'}
-                                value={userData ?.postalCode}
+                                value={userData?.postalCode}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                                // readOnly
+                            // readOnly
                             />
                         </div>
                         <div className="col-sm" />
@@ -1235,19 +1235,24 @@ class UserProfileEdit extends Component {
             } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
                 electionMsg = AppConstants[this.state.userRole === 'admin' ? 'parentMsg2Admin' : 'parentMsg2Child'];
             }
-            confirm({
-                content: electionMsg,
-                okText: 'Continue',
-                okType: 'primary',
-                cancelText: 'Cancel',
-                onOk: () => {
-                    saveAction();
-                    this.confirmOpend = false;
-                },
-                onCancel: () => {
-                    this.confirmOpend = false;
-                },
-            });
+            if (electionMsg != "") {
+                confirm({
+                    content: electionMsg,
+                    okText: 'Continue',
+                    okType: 'primary',
+                    cancelText: 'Cancel',
+                    onOk: () => {
+                        saveAction();
+                        this.confirmOpend = false;
+                    },
+                    onCancel: () => {
+                        this.confirmOpend = false;
+                    },
+                });
+            }
+            else {
+                saveAction();
+            }
         } else {
             saveAction();
         }
@@ -1342,8 +1347,8 @@ class UserProfileEdit extends Component {
                             </Form>
                         </>
                     ) : (
-                        this.possibleMatchesDetailView(this.props.userState.possibleMatches)
-                    )}
+                            this.possibleMatchesDetailView(this.props.userState.possibleMatches)
+                        )}
                 </Layout>
             </div>
         );

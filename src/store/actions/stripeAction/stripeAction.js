@@ -142,7 +142,7 @@ function exportPaymentApi(key) {
     return action
 }
 
-function getInvoiceStatusAction(registrationid, userRegId, invoiceId,teamMemberRegId) {
+function getInvoiceStatusAction(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_STATUS_LOAD,
         registrationid,
@@ -153,6 +153,40 @@ function getInvoiceStatusAction(registrationid, userRegId, invoiceId,teamMemberR
     return action
 }
 
+function exportPaymentDashboardApi(offset,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType) {
+    return {
+        type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
+        offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType
+    }
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -164,5 +198,6 @@ export {
     getInvoice, getPaymentList,
     exportPaymentApi,
     getStripeRefundsListAction,
-    getInvoiceStatusAction
+    getInvoiceStatusAction,
+    exportPaymentDashboardApi
 }
