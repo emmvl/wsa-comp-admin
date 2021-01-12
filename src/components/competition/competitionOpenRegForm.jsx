@@ -877,7 +877,7 @@ class CompetitionOpenRegForm extends Component {
         if (key === "name") {
             array[index].name = data
         } else {
-            array[index].nonPlayingDate = data
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD")
         }
 
         this.props.add_editcompetitionFeeDeatils(array, "nonPlayingDates")
