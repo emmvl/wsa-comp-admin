@@ -59,12 +59,18 @@ const initialState = {
     regChangeTypes: [],
     venueListActionObject: null,
     membershipPaymentOptions: [],
+    accreditationUmpireList: [],
+    umpireAccreditation: [],
+    coachAccreditation: [],
+    tShirtSizeList: []
 };
 
 function commonReducerState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_TIME_SLOT_INIT_LOAD:
-            return { ...state };
+            return {
+                ...state
+            };
 
         case ApiConstants.API_TIME_SLOT_INIT_SUCCESS:
             return {
@@ -482,6 +488,51 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false,
                 membershipPaymentOptions: isArrayNotEmpty(action.result) ? action.result : [],
                 status: action.status,
+            };
+
+        ///////get the other accreditation umpire list
+        case ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD:
+            return {
+                ...state, onLoad: true, error: null
+            };
+
+        case ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                accreditationUmpireList: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                error: null
+            };
+
+        ///////get the other accreditation umpire and coach list
+        case ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD:
+            return {
+                ...state, onLoad: true, error: null
+            };
+
+        case ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_SUCCESS:
+            console.log(action.result, 'API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_SUCCESS')
+
+            return {
+                ...state,
+                status: action.status,
+                umpireAccreditation: action.result.accreditationUmpire,
+                coachAccreditation: action.result.accreditationCoach,
+                onLoad: false,
+                error: null
+            };
+
+        case ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD:
+            return { ...state, onLoad: true, error: null };
+        
+        case ApiConstants.API_NETSETGO_TSHIRT_SIZE_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                tShirtSizeList: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                error: null
             };
 
         default:

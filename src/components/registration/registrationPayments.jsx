@@ -18,6 +18,7 @@ import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
 import StripeKeys from "../stripe/stripeKeys";
 import moment from "moment";
+import history from 'util/history'
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -107,20 +108,25 @@ class RegistrationPayments extends Component {
             paymentFor: "all",
             loadingSave: false,
             stripeDashBoardLoad: false,
-            isImpersonation: false
+            isImpersonation: localStorage.getItem('Impersonation') == "true" ? true : false
         }
     }
 
     componentDidUpdate() {
-        if (this.props.stripeState.onLoad === false && this.state.loadingSave === true) {
-            this.setState({ loadingSave: false })
-            this.props.accountBalanceAction()
-        }
-        if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
-            this.setState({ stripeDashBoardLoad: false })
-            let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
-            if (stripeDashboardUrl) {
-                window.open(stripeDashboardUrl, '_newtab');
+        if (this.state.isImpersonation) {
+            history.push("/paymentDashboard")
+
+        } else {
+            if (this.props.stripeState.onLoad === false && this.state.loadingSave === true) {
+                this.setState({ loadingSave: false })
+                this.props.accountBalanceAction()
+            }
+            if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
+                this.setState({ stripeDashBoardLoad: false })
+                let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
+                if (stripeDashboardUrl) {
+                    window.open(stripeDashboardUrl, '_newtab');
+                }
             }
         }
     }

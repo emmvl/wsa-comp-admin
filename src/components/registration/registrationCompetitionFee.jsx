@@ -3511,7 +3511,8 @@ class RegistrationCompetitionFee extends Component {
             affiliateOrgId: null,
             heroImage: null,
             yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
-            isEdit: props.location.state ? props.location.state.isEdit : false
+            isEdit: props.location.state ? props.location.state.isEdit : false,
+            clickedOnTab: false
         };
 
         this_Obj = this;
@@ -3532,7 +3533,7 @@ class RegistrationCompetitionFee extends Component {
                 window.scrollTo(0, 0);
                 let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4"
                     ? "6"
-                    : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
+                    : this.state.clickedOnTab == true ? this.state.competitionTabKey : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
                 this.setState({
                     // loading: false,
                     competitionTabKey,
@@ -3645,6 +3646,8 @@ class RegistrationCompetitionFee extends Component {
 
     ////disable or enable particular fields
     setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
+        let feeDetails = this.props.competitionFeesState.competitionFeesData;
+        let isTeamSeasonal = this.checkIsTeamReg(feeDetails);
         if (isPublished) {
             if (isRegClosed) {
                 let permissionObject = {
@@ -3653,6 +3656,8 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: !isCreatorEdit ? false : true,
+                    feesTableRegDisable: !isCreatorEdit ? false : true,
+                    feesTableTeamRegDisable: !isCreatorEdit ? false : true,
                     paymentsDisable: true,
                     discountsDisable: true,
                     allDisable: false,
@@ -3669,6 +3674,8 @@ class RegistrationCompetitionFee extends Component {
                     membershipDisable: true,
                     divisionsDisable: true,
                     feesTableDisable: true,
+                    feesTableRegDisable: true,
+                    feesTableTeamRegDisable: true,
                     paymentsDisable: true,
                     discountsDisable: false,
                     allDisable: false,
@@ -3682,7 +3689,9 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: false,
+                    feesTableDisable: true,
+                    feesTableRegDisable: false,
+                    feesTableTeamRegDisable: isTeamSeasonal ? true : false,
                     paymentsDisable: false,
                     discountsDisable: false,
                     allDisable: false,
@@ -3698,6 +3707,8 @@ class RegistrationCompetitionFee extends Component {
                 membershipDisable: false,
                 divisionsDisable: false,
                 feesTableDisable: false,
+                feesTableRegDisable: false,
+                feesTableTeamRegDisable: false,
                 paymentsDisable: false,
                 discountsDisable: false,
                 allDisable: false,
@@ -4624,30 +4635,8 @@ class RegistrationCompetitionFee extends Component {
         }
     };
 
-    saveAPIsActionCall = (values) => {
-        let tabKey = this.state.competitionTabKey;
-        let compFeesState = this.props.competitionFeesState;
-        let competitionId = compFeesState.competitionId;
-        let postData = compFeesState.competitionDetailData;
-
-        let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
-        let venue = JSON.stringify(compFeesState.postVenues);
-        // let invitees = compFeesState.postInvitees
-        let invitees = [];
-        let anyOrgAffiliateArr = []
-        if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
-            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
-        }
-        if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
-            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
-        }
-        if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
-            invitees = compFeesState.affiliateArray.concat(anyOrgAffiliateArr);
-        } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
-            invitees = anyOrgAffiliateArr
-        }
-
-        if (tabKey == '1') {
+    saveCompDetailsApicall = (competitionId,postData,invitees,compFeesState,nonPlayingDate,venue) => {
+        try{
             if (
                 compFeesState.competitionDetailData.competitionLogoUrl !== null &&
                 // compFeesState.competitionDetailData.heroImageUrl !== null &&
@@ -4656,7 +4645,8 @@ class RegistrationCompetitionFee extends Component {
                 let formData = new FormData();
                 formData.append('competitionUniqueKey', competitionId);
                 formData.append('name', postData.competitionName);
-                formData.append('yearRefId', values.yearRefId);
+                // formData.append('yearRefId', values.yearRefId);
+                formData.append('yearRefId', this.state.yearRefId);
                 formData.append('description', postData.description);
                 formData.append('competitionTypeRefId', postData.competitionTypeRefId);
                 formData.append('competitionFormatRefId', postData.competitionFormatRefId);
@@ -4729,7 +4719,13 @@ class RegistrationCompetitionFee extends Component {
                 //     message.error(ValidationConstants.heroImageIsRequired);
                 // }
             }
-        } else if (tabKey == '2') {
+        }catch(ex){
+            console.log("Error in saveCompDetailsApiCall::"+ex);
+        }
+    }
+
+    saveCompMembershipApiCall = (competitionId) => {
+        try{
             let finalmembershipProductTypes = JSON.parse(
                 JSON.stringify(
                     this.props.competitionFeesState.defaultCompFeesMembershipProduct
@@ -4768,8 +4764,13 @@ class RegistrationCompetitionFee extends Component {
                     this.setState({ loading: true, divisionState: true });
                 }
             }
+        }catch(ex){
+            console.log("Error in savecompMembershipApiCall::"+ex);
+        }
+    }
 
-        } else if (tabKey == '3') {
+    saveCompDivApiCall = (competitionId,postData,compFeesState) => {
+        try{
             let divisionArrayData = compFeesState.competitionDivisionsData;
             let finalDivisionArray = [];
             for (let i in divisionArrayData) {
@@ -4798,8 +4799,43 @@ class RegistrationCompetitionFee extends Component {
                 );
                 this.setState({ loading: true });
             }
+        }catch(ex){
+            console.log("Error in saveCompDivApiCall::"+ex);
+        }
+    }
+
+    saveAPIsActionCall = (values) => {
+        this.setState({clickedOnTab: false});
+        let tabKey = this.state.competitionTabKey;
+        let compFeesState = this.props.competitionFeesState;
+        let competitionId = compFeesState.competitionId;
+        let postData = compFeesState.competitionDetailData;
+
+        let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
+        let venue = JSON.stringify(compFeesState.postVenues);
+        // let invitees = compFeesState.postInvitees
+        let invitees = [];
+        let anyOrgAffiliateArr = []
+        if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
+        }
+        if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+            anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
+        }
+        if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
+            invitees = compFeesState.affiliateArray.concat(anyOrgAffiliateArr);
+        } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
+            invitees = anyOrgAffiliateArr
+        }
+
+        if (tabKey == '1') {
+            this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
+        } else if (tabKey == '2') {
+            this.saveCompMembershipApiCall(competitionId)
+        } else if (tabKey == '3') {
+            this.saveCompDivApiCall(competitionId,postData,compFeesState);
         } else if (tabKey == '4') {
-            this.saveCompFeesApiCall(values);
+            this.saveCompFeesApiCall();
         } else if (tabKey == '5') {
             this.paymentApiCall(competitionId);
             //this.setState({ loading: true });
@@ -4807,6 +4843,45 @@ class RegistrationCompetitionFee extends Component {
             this.discountApiCall(competitionId);
         }
     };
+
+    tabCangeSaveApiActionCall = (tabKey) => {
+        try{
+            this.setState({clickedOnTab: true});
+            let compFeesState = this.props.competitionFeesState;
+            let competitionId = compFeesState.competitionId;
+            let postData = compFeesState.competitionDetailData;
+
+            let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
+            let venue = JSON.stringify(compFeesState.postVenues);
+            // let invitees = compFeesState.postInvitees
+            let invitees = [];
+            let anyOrgAffiliateArr = []
+            if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+                anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
+            }
+            if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+                anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
+            }
+            if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
+                invitees = compFeesState.affiliateArray.concat(anyOrgAffiliateArr);
+            } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
+                invitees = anyOrgAffiliateArr
+            }
+            if (tabKey == '1') {
+                this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
+            } else if (tabKey == '2') {
+                this.saveCompMembershipApiCall(competitionId)
+            } else if (tabKey == '3') {
+                this.saveCompDivApiCall(competitionId,postData,compFeesState);
+            } else if (tabKey == '4') {
+                this.saveCompFeesApiCall();
+            } else if (tabKey == '5') {
+                this.paymentApiCall(competitionId);
+            }
+        }catch(ex){
+            console.log("Error in tabChangeSaveApiActionCall::"+ex);
+        }
+    }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword);
@@ -6097,7 +6172,8 @@ class RegistrationCompetitionFee extends Component {
         let allStates = this.props.competitionFeesState;
         let feeDetails = allStates.competitionFeesData;
         let feesTableDisable = this.state.permissionState.feesTableDisable;
-
+        let feesTableRegDisable = this.state.permissionState.feesTableRegDisable;
+        let feesTableTeamRegDisable = this.state.permissionState.feesTableTeamRegDisable;
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.fees}</span>
@@ -6162,7 +6238,7 @@ class RegistrationCompetitionFee extends Component {
                                         checked={item.isIndividualReg}
                                         className="single-checkbox"
                                         style={{ fontSize: '16px' }}
-                                        disabled={feesTableDisable}
+                                        disabled={feesTableRegDisable}
                                         onChange={(e) => {
                                             this.props.checkUncheckcompetitionFeeSction(
                                                 e.target.checked,
@@ -6181,7 +6257,7 @@ class RegistrationCompetitionFee extends Component {
                                                 style={{ marginLeft: '45px' }}
                                                 checked={item.isSeasonal}
                                                 className="single-checkbox"
-                                                disabled={feesTableDisable}
+                                                disabled={feesTableRegDisable}
                                                 onChange={(e) => {
                                                     this.props.checkUncheckcompetitionFeeSction(
                                                         e.target.checked,
@@ -6214,7 +6290,7 @@ class RegistrationCompetitionFee extends Component {
                                                 style={{ marginLeft: 45 }}
                                                 checked={item.isCasual}
                                                 className="single-checkbox"
-                                                disabled={feesTableDisable}
+                                                disabled={feesTableRegDisable}
                                                 onChange={(e) =>
                                                     this.props.checkUncheckcompetitionFeeSction(
                                                         e.target.checked,
@@ -6271,7 +6347,7 @@ class RegistrationCompetitionFee extends Component {
                                                     checked={item.isTeamSeasonal}
                                                     className="single-checkbox"
                                                     style={{ fontSize: '16px' }}
-                                                    disabled={feesTableDisable}
+                                                    disabled={feesTableTeamRegDisable}
                                                     onChange={(e) => {
                                                         this.props.checkUncheckcompetitionFeeSction(
                                                             e.target.checked,
@@ -6295,7 +6371,7 @@ class RegistrationCompetitionFee extends Component {
                                                             )
                                                         }
                                                         value={item.teamRegChargeTypeRefId}
-                                                        disabled={feesTableDisable}
+                                                        disabled={feesTableTeamRegDisable}
                                                     >
                                                         <div className="d-flex">
                                                             <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio>
@@ -6939,6 +7015,17 @@ class RegistrationCompetitionFee extends Component {
         }
         return isCasualValue;
     };
+
+    checkIsTeamReg = (feeDetails) => {
+        let isSeasonalValue = false;
+        for (let i in feeDetails) {
+            if (feeDetails[i].isTeamSeasonal) {
+                isSeasonalValue = true;
+                break;
+            }
+        }
+        return isSeasonalValue;
+    }
 
     //payment Option View in tab 5
     paymentOptionsView = () => {
@@ -8122,11 +8209,48 @@ class RegistrationCompetitionFee extends Component {
         );
     };
 
+    checkMembershipEmpty = (key) => {
+        try{
+            let finalmembershipProductTypes = JSON.parse(
+                JSON.stringify(
+                    this.props.competitionFeesState.defaultCompFeesMembershipProduct
+                )
+            );
+            let tempProductsArray = finalmembershipProductTypes.filter(
+                (data) => data.isProductSelected === true
+            );
+            finalmembershipProductTypes = tempProductsArray;
+            for (let i in finalmembershipProductTypes) {
+                var filterArray = finalmembershipProductTypes[i].membershipProductTypes.filter(
+                    (data) => data.isTypeSelected === true
+                );
+                finalmembershipProductTypes[i].membershipProductTypes = filterArray;
+            }
+            let empty = false;
+            let membershipDisable = this.state.permissionState.membershipDisable;
+            if(this.state.competitionTabKey == '2' && membershipDisable == false){
+                if (!isArrayNotEmpty(finalmembershipProductTypes)) {
+                    empty = true;
+                } else if (isArrayNotEmpty(finalmembershipProductTypes)) {
+                    if (!isArrayNotEmpty(finalmembershipProductTypes[0].membershipProductTypes)) {
+                        empty = true;
+                    }
+                }
+            }
+            return empty;
+        }catch(ex){
+            console.log("Error in checkMembershipCheckedOrNot::"+ex);
+        }
+    }
+
     tabCallBack = (key) => {
         let competitionId = this.props.competitionFeesState.competitionId;
         if (competitionId !== null && competitionId.length > 0) {
+            if(this.state.permissionState.membershipDisable == false){
+                this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
+            }
             this.setState({
-                competitionTabKey: key,
+                competitionTabKey: this.checkMembershipEmpty() == false ? key : '2',
                 divisionState: key == '3',
             });
         }
