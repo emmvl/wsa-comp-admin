@@ -60,8 +60,6 @@ class UmpirePaymentSetting extends Component {
             paymentSettingsData: null,
             selectedDivisions: null,
             allCompetition: null,
-            isCompetitionOrganiser: false,
-            isAffiliateOrganisations: false,
             allDivisionVisible: false,
             deleteModalVisible: false,
             sectionDataToDeleteIndex: null,
@@ -114,11 +112,8 @@ class UmpirePaymentSetting extends Component {
             const { divisionList } = this.props.liveScoreTeamState;
             const { umpirePaymentSettings } = this.props.umpirePaymentSettingState.paymentSettingsData;
 
-            const isCompetitionOrganiser = !!paymentSettingsData.umpirePaymentSettings.length;
-            const isAffiliateOrganisations = !!paymentSettingsData.allowedDivisionsSetting;
-
-            const selectedDivisionsOrganiser = isCompetitionOrganiser ? JSON.parse(JSON.stringify(umpirePaymentSettings[0].divisions)) : [];
-            const selectedDivisionsAffiliate = isAffiliateOrganisations ? JSON.parse(JSON.stringify(paymentSettingsData.allowedDivisionsSetting.divisions)) : [];
+            const selectedDivisionsOrganiser = !!paymentSettingsData.umpirePaymentSettings.length ? JSON.parse(JSON.stringify(umpirePaymentSettings[0].divisions)) : [];
+            const selectedDivisionsAffiliate = !!paymentSettingsData.allowedDivisionsSetting ? JSON.parse(JSON.stringify(paymentSettingsData.allowedDivisionsSetting.divisions)) : [];
 
             const selectedDivisions = [ ...selectedDivisionsOrganiser, ...selectedDivisionsAffiliate ];
 
@@ -160,7 +155,7 @@ class UmpirePaymentSetting extends Component {
                 settings: [ ...umpirePaymentSettingsObj, ...allowedDivisionsSettingObj ],
             }
 
-            this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions, isCompetitionOrganiser, isAffiliateOrganisations });
+            this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions });
 
             // console.log('this.props.umpirePaymentSettingState.paymentSettingsData', paymentSettingsDataObj);
         }
@@ -297,6 +292,46 @@ class UmpirePaymentSetting extends Component {
         this.setState({ 
             paymentSettingsData: newPaymentSettingsData, 
             selectedDivisions: updatedSelectedDivisions
+        });
+    }
+
+    handleChangeRateCell = (e, sectionData, sectionDataIndex, rateListKey, rateRoleId, rateLineDataId) => {
+        const { paymentSettingsData } = this.state;
+        const sectionDataCopy = JSON.parse(JSON.stringify(sectionData));
+
+        const rateList = sectionDataCopy[sectionDataIndex][rateListKey];
+
+        const cellLineIdKey = rateListKey === 'byPool' ? 'umpirePoolId' : 'accreditationUmpireRefId';
+
+        const rateLineDataForChange = rateList.find(data => data[cellLineIdKey] === rateLineDataId)?.rates;
+
+        const rateLineData = !!rateLineDataForChange ? rateLineDataForChange : [];
+
+        const rateDataForChangeIndex = rateLineData.findIndex(rate => rate.roleId === rateRoleId);
+
+        if (rateDataForChangeIndex >= 0) {
+            rateLineData[rateDataForChangeIndex].rate = e;
+        } else {
+            rateLineData.push({
+                rate: e,
+                roleId: rateRoleId,
+            });
+        }
+
+        if (!rateLineDataForChange) {
+            rateList.push({
+                [cellLineIdKey]: rateLineDataId, 
+                rates: rateLineData
+            });
+        }
+
+        const newPaymentSettingsData = {
+            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
+            settings: [ ...sectionDataCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
+        }
+        
+        this.setState({ 
+            paymentSettingsData: newPaymentSettingsData,
         });
     }
 
@@ -465,8 +500,6 @@ class UmpirePaymentSetting extends Component {
             ? paymentSettingsData?.settings.filter(item => item.hasSettings) 
             : paymentSettingsData?.settings.filter(item => !item.hasSettings);
 
-        console.log('sectionData', sectionData)
-
         return (
             <>
                 <Checkbox
@@ -518,7 +551,7 @@ class UmpirePaymentSetting extends Component {
                                     </Option>
                                 ))}
                             </Select>
-                            {hasSettings && this.feesView(boxData, sectionDataIndex, sectionData)}
+                            {hasSettings && this.feesView(sectionData, sectionDataIndex)}
                         </div>
                         ))}
                         {selectedDivisions.length < this.props.liveScoreTeamState.divisionList.length
@@ -540,45 +573,54 @@ class UmpirePaymentSetting extends Component {
         )
     }
 
-    feesView = () => {
-        const { byBadgeBtn, byPoolBtn, inputFieldForByPool } = this.props.umpirePaymentSettingState;
+    feesView = (sectionData, sectionDataIndex) => {
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
+
+        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
+        const umpireBadgesData = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
+
+        const { byBadge, byPool } = sectionData[sectionDataIndex];
 
         return (
             <div>
                 <span className='text-heading-large pt-3'>{AppConstants.fees}</span>
                 <div className="d-flex flex-column">
                     <Radio
-                        onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                            value: e.target.checked,
-                            key: 'byBadge'
-                        })}
-                        checked={byBadgeBtn}
+                        // onChange={(e) => this.props.umpirePaymentSettingUpdate({
+                        //     value: e.target.checked,
+                        //     key: 'byBadge'
+                        // })}
+                        checked={!!byBadge.length}
                         className="p-0"
                     >
                         {AppConstants.byBadge}
                     </Radio>
-                    {byBadgeBtn && (
+                    {!!byBadge.length && !!umpireBadgesData.length && (
                         <div>
-                            {this.byBadgeView()}
+                            {umpireBadgesData.map((badgeDataItem, i) => (
+                                <div key={"badgeDataItem" + i}>
+                                    {/* {this.byBadgeView2(byBadge, badgeDataItem)} */}
+                                    {this.ratesView('byBadge', badgeDataItem, sectionData, sectionDataIndex)}
+                                </div>
+                            ))}
                         </div>
                     )}
 
                     <Radio
-                        onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                            value: e.target.checked,
-                            key: 'byPool'
-                        })}
-                        checked={byPoolBtn}
+                        // onChange={(e) => this.props.umpirePaymentSettingUpdate({
+                        //     value: e.target.checked,
+                        //     key: 'byPool'
+                        // })}
+                        checked={!!byPool.length}
                         className="p-0 mt-4"
                     >
                         {AppConstants.byPool}
                     </Radio>
-                    {byPoolBtn && (
+                    {!!byPool.length && !!umpirePoolData.length && (
                         <div>
-                            {inputFieldForByPool.map((item, index) => (
-                                <div key={"inputFieldForByPool" + index}>
-                                    {this.inputFieldsForByPool(item, index)}
+                            {umpirePoolData.map((poolDataItem, i) => (
+                                <div key={"poolDataItem" + i}>
+                                    {this.ratesView('byPool', poolDataItem, sectionData, sectionDataIndex)}
                                 </div>
                             ))}
                         </div>
@@ -588,8 +630,11 @@ class UmpirePaymentSetting extends Component {
         )
     }
 
-    inputFieldsForByPool = (item, index) => {
-        const { inputFieldForByPool } = this.props.umpirePaymentSettingState;
+    ratesView = (radioListKey, dataItem, sectionData, sectionDataIndex) => {
+        const cellLineIdKey = radioListKey === 'byPool' ? 'umpirePoolId' : 'accreditationUmpireRefId';
+        const itemRates = sectionData[sectionDataIndex][radioListKey].find(data => data[cellLineIdKey] === dataItem.id)?.rates;
+
+        const { id } = dataItem;
 
         return (
             <div>
@@ -599,133 +644,41 @@ class UmpirePaymentSetting extends Component {
                             auto_complete='new-password'
                             heading={AppConstants.name}
                             placeholder={"Name"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'name',
-                                subkey: "byPoolInputFeilds"
-                            })}
-                            value={inputFieldForByPool[index].name}
-                        />
-                    </div>
-                    
-                    <div className='col-sm input-width'>
-                        <InputNumberWithHead
-                            prefixValue="$"
-                            defaultValue={0}
-                            min={0}
-                            precision={2}
-                            step={0.01}
-                            heading={AppConstants.umpireRate}
-                            // value={inputFieldForByPool[index].umpireRate}
-                            // onChange={e => console.log('changed', e)}
-                        />
-                    </div>
-
-                    <div className='col-sm input-width'>
-                        <InputNumberWithHead
-                            prefixValue="$"
-                            defaultValue={0}
-                            min={0}
-                            precision={2}
-                            step={0.01}
-                            heading={AppConstants.umpireResRate}
-                            // value={inputFieldForByPool[index].umpReserveRate}
-                            // onChange={e => console.log('changed', e)}
-                        />
-                    </div>
-
-                    <div className='col-sm input-width'>
-                        <InputNumberWithHead
-                            prefixValue="$"
-                            defaultValue={0}
-                            min={0}
-                            precision={2}
-                            step={0.01}
-                            heading={AppConstants.umpireCoachRate}
-                            // value={inputFieldForByPool[index].umpCoachRate}
-                            // onChange={e => console.log('changed', e)}
-                        />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    byBadgeView = () => {
-        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
-        const badge = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
-
-        return (
-            <div className="mb-4">
-                {badge.map((item, index) => (
-                    <div key={"inputFieldArray" + index}>
-                        {this.inputFields(item, index)}
-                    </div>
-                ))}
-            </div>
-        )
-    }
-
-    inputFields = (badgeData, index) => {
-        return (
-            <div>
-                <div className="row">
-                    <div className='col-sm input-width'>
-                        <InputWithHead
-                            auto_complete='new-password'
-                            heading={AppConstants.name}
-                            placeholder={"Name"}
-                            onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                                value: e.target.value,
-                                index,
-                                key: 'name'
-                            })}
-                            value={badgeData.description}
+                            value={dataItem.description || dataItem.name}
                             disabled
                         />
                     </div>
-
+                        
                     <div className='col-sm input-width'>
-                        <InputNumberWithHead
-                            prefixValue="$"
-                            defaultValue={0}
-                            min={0}
-                            precision={2}
-                            step={0.01}
-                            heading={AppConstants.umpireRate}
-                            // value={badgeData.umpireRate}
-                            // onChange={e => console.log('changed', e)}
-                        />
+                        {this.rateCellView(itemRates, 15, AppConstants.umpireRate, sectionData, sectionDataIndex, radioListKey, id )}
                     </div>
 
                     <div className='col-sm input-width'>
-                        <InputNumberWithHead
-                            prefixValue="$"
-                            defaultValue={0}
-                            min={0}
-                            precision={2}
-                            step={0.01}
-                            heading={AppConstants.umpireResRate}
-                            // value={badgeData.umpReserveRate}
-                            // onChange={e => console.log('changed', e)}
-                        />
+                        {this.rateCellView(itemRates, 19, AppConstants.umpireResRate, sectionData, sectionDataIndex, radioListKey, id )}
                     </div>
 
                     <div className='col-sm input-width'>
-                        <InputNumberWithHead
-                            prefixValue="$"
-                            defaultValue={0}
-                            min={0}
-                            precision={2}
-                            step={0.01}
-                            heading={AppConstants.umpireCoachRate}
-                            // value={badgeData.umpCoachRate}
-                            // onChange={e => console.log('changed', e)}
-                        />
+                        {this.rateCellView(itemRates, 20, AppConstants.umpireCoachRate, sectionData, sectionDataIndex, radioListKey, id )}
                     </div>
                 </div>
             </div>
+        )
+    }
+
+    rateCellView = (poolItemRates, rateRoleId, heading, sectionData, sectionDataIndex, radioListKey, id ) => {
+        const value = (poolItemRates || []).find(rate => rate.roleId === rateRoleId)?.rate;
+        
+        return (
+            <InputNumberWithHead
+                prefixValue="$"
+                defaultValue={0}
+                min={0}
+                precision={2}
+                step={0.01}
+                heading={heading}
+                onChange={e => this.handleChangeRateCell(e, sectionData, sectionDataIndex, radioListKey, rateRoleId, id )}
+                value={!!value ? value : 0}
+            /> 
         )
     }
 

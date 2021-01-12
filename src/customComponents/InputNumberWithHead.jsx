@@ -21,7 +21,8 @@ function InputNumberWithHead(props) {
             <InputNumber
                 id={id}
                 formatter={value => `${prefixValue} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(`${prefixValue}` + /\s?|(,*)/g, '')}
+                // parser={value => value.replace(`${prefixValue}` + /\s?|(,*)/g, '')}
+                parser={value => value.replace(/\$\s?|(,*)/g, '')}
                 className="input"
                 {...props}
             />

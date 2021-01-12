@@ -1,35 +1,13 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-var defaultInputFieldForByPoolArray = [{
-    name: "Pool A",
-    umpireRate: 0,
-    umpReserveRate: 0,
-    umpCoachRate: 0
-},
-{
-    name: "Pool B",
-    umpireRate: 0,
-    umpReserveRate: 0,
-    umpCoachRate: 0
-},
-{
-    name: "Pool C",
-    umpireRate: 0,
-    umpReserveRate: 0,
-    umpCoachRate: 0
-}]
-
 const initialState = {
     onLoad: false,
     error: null,
     result: [],
     status: 0,
     umpireComptitionList: [],
-    byBadgeBtn: false,
-    byPoolBtn: false,
     paidByCompOrgDivisionAffiliate: [],
     poolViewArray: [],
-    inputFieldForByPool: defaultInputFieldForByPoolArray,
     badgeDataCompOrg: [],
     badgeDataByAffiliate: [],
 
@@ -77,13 +55,7 @@ function umpirePaymentSetting(state = initialState, action) {
             let data = action.data.value
             let key = action.data.key
             let subkey = action.data.subkey
-            if (key === 'byBadge') {
-                state.byBadgeBtn = data
-
-            } else if (key === 'byPool') {
-                state.byPoolBtn = data
-            } 
-            else if (key === "fee") {
+            if (key === "fee") {
                 state.poolViewArray[action.data.index][key] = data
             }
             else {
