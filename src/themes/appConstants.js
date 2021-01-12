@@ -1532,7 +1532,7 @@ const AppConstants = {
   takenCourtForTraining: 'Have you taken the court for training, grading or a competition game',
   exportAttendance: 'Export Attendance',
   exportAttendanceMessage: 'Attendance exported successfully',
-  hardshipCode: 'Hardship Code',
+  singleUseDiscount: 'Single Use Discount - No Fee Charged',
   addCode: 'Add Code',
   go: 'Go',
   matchCalender: 'Match Calendar',

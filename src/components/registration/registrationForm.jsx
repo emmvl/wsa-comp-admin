@@ -255,7 +255,7 @@ class RegistrationForm extends Component {
         return (
             <div>
                 <a>
-                    <Mailto email="" subject={AppConstants.hardshipCode} body={body}>
+                    <Mailto email="" subject={AppConstants.singleUseDiscount} body={body}>
                         <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
                             {AppConstants.email}
                         </span>
@@ -1487,7 +1487,7 @@ class RegistrationForm extends Component {
         // let isPublished = this.state.isPublished;
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
+                <span className="form-heading pb-2">{AppConstants.singleUseDiscount}</span>
                 {hardShipCodesList.map((item) => (
                     <div>
                         <div className="d-flex" style={{ marginTop: "13px" }}>
