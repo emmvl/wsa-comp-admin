@@ -217,7 +217,7 @@ class UmpirePaymentSetting extends Component {
         if (key === 'allDivisions') {
             this.handleAllDivisionsChange(targetBoxData, sectionDataIndex, paymentSettingsDataCopy, value);
         } else {
-            // this.handleNonAllDivisionsChange(sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value);
+            this.handleNonAllDivisionsChange(sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value);
         }
     }
 
@@ -250,6 +250,53 @@ class UmpirePaymentSetting extends Component {
             paymentSettingsData: !value ? newPaymentSettingsData : paymentSettingsData,
             tempSelectedDivisions: !!value ? newSelectedDivisions : [],
             selectedDivisions: !value ? [] : selectedDivisions,
+        });
+    }
+
+    handleNonAllDivisionsChange = (sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value) => {
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { paymentSettingsData, selectedDivisions } = this.state;
+
+        const newSelectedDivisions = [];
+
+        const newSettingsData = [...otherBoxData, ...targetBoxData ];
+
+        if (key === 'divisions') {
+            targetBoxData[sectionDataIndex].divisions = value.map(item =>
+                divisionList.find(divisionListItem => divisionListItem.id === item)
+            );
+
+            newSettingsData.forEach(item => {
+                newSelectedDivisions.push(...item.divisions);
+            });
+        } else {
+            targetBoxData[sectionDataIndex][key] = value;
+
+            newSelectedDivisions.push(...selectedDivisions);
+        }
+
+        const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
+
+        if (key === 'divisions' && updatedSelectedDivisions.length < divisionList.length) {
+            newSettingsData.forEach(item => {
+                item.allDivisions = false;
+            });
+        }
+
+        if (key === 'divisions' && updatedSelectedDivisions.length === divisionList.length && value.length === divisionList.length) {
+            newSettingsData
+                .filter(item => item.hasSettings === sectionData[0].hasSettings)[sectionDataIndex]
+                .allDivisions = true;
+        }
+
+        const newPaymentSettingsData = {
+            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
+            settings: newSettingsData,
+        }
+
+        this.setState({ 
+            paymentSettingsData: newPaymentSettingsData, 
+            selectedDivisions: updatedSelectedDivisions
         });
     }
 
@@ -297,6 +344,19 @@ class UmpirePaymentSetting extends Component {
             tempPaymentSettingsData: null,
             tempSelectedDivisions: null,
         });
+    }
+
+    handleAddBox = () => {
+        const { paymentSettingsData } = this.state;
+        
+        const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
+
+        const newPaymentSettingsData = {
+            ...paymentSettingsData,
+            settings: [ ...paymentSettingsData.settings, initialSettingsBoxData ],
+        };
+
+        this.setState({ paymentSettingsData: newPaymentSettingsData });
     }
 
     headerView = () => {
@@ -382,47 +442,6 @@ class UmpirePaymentSetting extends Component {
         );
     };
 
-    contentView2 = () => {
-        const { isCompetitionOrganiser, isAffiliateOrganisations } = this.state;
-
-        return (
-            <div className='pt-4 mt-5' style={{ padding: '3%', minWidth: 240 }}>
-                <span className='text-heading-large pt-2'>{AppConstants.whoPayUmpire}</span>
-
-                <div className="d-flex flex-column">
-                    <Checkbox
-                        className="single-checkbox"
-                        onChange={e => this.setState({ isCompetitionOrganiser: e.target.checked })}
-                        checked={isCompetitionOrganiser}
-                    >
-                        {AppConstants.competitionOrganiser}
-                    </Checkbox>
-
-                    {isCompetitionOrganiser && (
-                        <div className="inside-container-view">
-                            {this.divisionsSelectView('umpirePaymentSettings')}
-                            {this.feesView()}
-                        </div>
-                    )}
-
-                    <Checkbox
-                        className="single-checkbox ml-0"
-                        onChange={e => this.setState({ isAffiliateOrganisations: e.target.checked })}
-                        checked={isAffiliateOrganisations}
-                    >
-                        {AppConstants.affiliateOrganisations}
-                    </Checkbox>
-
-                    {isAffiliateOrganisations && (
-                        <div className="inside-container-view">
-                            {this.divisionsSelectView('allowedDivisionsSetting')}
-                        </div>
-                    )}
-                </div>
-            </div>
-        )
-    }
-
     contentView = () => {
         return (
             <div className="content-view pt-4 mt-5">
@@ -499,7 +518,7 @@ class UmpirePaymentSetting extends Component {
                                     </Option>
                                 ))}
                             </Select>
-                            {/* {isSettings && this.boxSettingsView(boxData, sectionDataIndex, sectionData)} */}
+                            {hasSettings && this.feesView(boxData, sectionDataIndex, sectionData)}
                         </div>
                         ))}
                         {selectedDivisions.length < this.props.liveScoreTeamState.divisionList.length
@@ -508,7 +527,7 @@ class UmpirePaymentSetting extends Component {
                                 <div className="row mb-5 position-absolute">
                                     <div 
                                         className="col-sm"
-                                        // onClick={() => this.handleAddBox(umpireAllocatorTypeRefId)}
+                                        onClick={() => this.handleAddBox()}
                                     >
                                         <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
                                     </div>
@@ -518,46 +537,6 @@ class UmpirePaymentSetting extends Component {
                     </div>
                 )}
             </>
-        )
-    }
-
-    divisionsSelectView = () => {
-
-        const { divisionList } = this.props.liveScoreTeamState;
-        const { selectedDivisions, paymentSettingsData } = this.state;
-
-        return (
-            <div className="d-flex flex-column">
-
-                <Checkbox
-                    // onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
-                    // checked={boxData.allDivisions}
-                >
-                    {AppConstants.allDivisions}
-                </Checkbox>
-                            
-                <Select
-                    mode="multiple"
-                    placeholder="Select"
-                    style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                    // onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
-                    // value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
-                >
-                    {(divisionList || []).map((item) => (
-                        <Option
-                            key={'compDivision_' + item.id}
-                            // disabled={
-                            //     (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id 
-                            //         && !boxData.allDivisions && !boxData.divisions.find(division => division.id === item.id)
-                            //         ))
-                            //     }
-                            value={item.id}
-                        >
-                            {item.name}
-                        </Option>
-                    ))}
-                </Select>
-            </div>
         )
     }
 
