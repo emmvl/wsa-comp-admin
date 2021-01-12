@@ -49,6 +49,7 @@ class UmpirePaymentSetting extends Component {
             isAffiliateOrganisations: false,
             allDivisionVisible: false,
             deleteModalVisible: false,
+            sectionDataToDeleteIndex: null,
         };
     }
 
@@ -142,26 +143,36 @@ class UmpirePaymentSetting extends Component {
         // console.log('this.props.umpirePoolAllocationState.umpirePoolData', this.props.umpirePoolAllocationState.umpirePoolData);
     }
 
+    handleClickDeleteModal = (sectionDataIndex) => {
+        this.setState({ 
+            deleteModalVisible: true,
+            sectionDataToDeleteIndex: sectionDataIndex 
+        });
+    }
+
     handleDeleteModal = key => {
         if (key === "ok") {
-            // const { allocationSettingsData, sectionDataSelected, sectionDataToDeleteIndex } = this.state;
-            // const allocationSettingsDataCopy = [ ...allocationSettingsData ];;
-            // const sectionDataSelectedCopy = [ ...sectionDataSelected ];
+            const { paymentSettingsData, sectionDataToDeleteIndex } = this.state;
+            const umpirePaymentSettingsCopy = JSON.parse(JSON.stringify(paymentSettingsData.umpirePaymentSettings));
 
-            // const { umpireAllocatorTypeRefId = null } = sectionDataSelected[0];
+            umpirePaymentSettingsCopy.splice(sectionDataToDeleteIndex, 1);
 
-            // const otherUmpireData = allocationSettingsDataCopy.filter(item => item.umpireAllocatorTypeRefId !== umpireAllocatorTypeRefId);
-            // sectionDataSelectedCopy.splice(sectionDataToDeleteIndex, 1);
+            const newPaymentSettingsData = {
+                ...paymentSettingsData,
+                umpirePaymentSettings: umpirePaymentSettingsCopy,
+            };
 
-            // const newAllocationSettingsData = [...otherUmpireData, ...sectionDataSelectedCopy ];
+            const newSelectedDivisions = [];
 
-            // const newSelectedDivisions = [];
+            umpirePaymentSettingsCopy.forEach(item => {
+                newSelectedDivisions.push(...item.divisions);
+            });
 
-            // newAllocationSettingsData.forEach(item => {
-            //     newSelectedDivisions.push(...item.divisions);
-            // });
+            if (!!paymentSettingsData.allowedDivisionsSetting) {
+                newSelectedDivisions.push(...paymentSettingsData.allowedDivisionsSetting.divisions);
+            }
 
-            // this.setState({ allocationSettingsData: newAllocationSettingsData, selectedDivisions: newSelectedDivisions });
+            this.setState({ paymentSettingsData: newPaymentSettingsData, selectedDivisions: newSelectedDivisions });
         }
 
         this.setState({ deleteModalVisible: false, sectionDataSelected: null, sectionDataToDeleteIndex: null });
@@ -215,7 +226,8 @@ class UmpirePaymentSetting extends Component {
     }
 
     dropdownView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        const competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -264,7 +276,7 @@ class UmpirePaymentSetting extends Component {
         );
     };
 
-    contentView = () => {
+    contentView2 = () => {
         const { isCompetitionOrganiser, isAffiliateOrganisations } = this.state;
 
         return (
@@ -305,13 +317,13 @@ class UmpirePaymentSetting extends Component {
         )
     }
 
-    contentView2 = () => {
+    contentView = () => {
         return (
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
                 <div className="d-flex flex-column">
-                    {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, 246)}
-                    {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, 247)}
+                    {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, 'umpirePaymentSettings')}
+                    {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, 'allowedDivisionsSetting')}
                 </div>
 
                 {this.deleteConfirmModalView()}
@@ -320,19 +332,19 @@ class UmpirePaymentSetting extends Component {
         );
     };
 
-    umpireSettingsSectionView = (sectionTitle, umpireAllocatorTypeRefId) => {
+    umpireSettingsSectionView = (sectionTitle, key) => {
         const { divisionList } = this.props.liveScoreTeamState;
-        const { allocationSettingsData, selectedDivisions } = this.state;
+        const { paymentSettingsData, selectedDivisions } = this.state;
 
-        const sectionData = allocationSettingsData && umpireAllocatorTypeRefId ?
-            allocationSettingsData.filter(item => item.umpireAllocatorTypeRefId === umpireAllocatorTypeRefId)
-            : allocationSettingsData ? allocationSettingsData.filter(item => !item.hasUmpires)
-            : null;
+        const isSettings = key === 'umpirePaymentSettings' && !!paymentSettingsData?.umpirePaymentSettings.length;
+        const sectionData = isSettings && !!paymentSettingsData
+            ? paymentSettingsData[key] : !!paymentSettingsData && !!paymentSettingsData[key] ? [paymentSettingsData[key]] : null;
+        console.log('sectionData', sectionData)
 
         return (
             <>
                 <Checkbox
-                    onChange={(e) => this.handleChangeWhoAssignsUmpires(e, umpireAllocatorTypeRefId)}
+                    // onChange={(e) => this.handleChangeWhoAssignsUmpires(e, umpireAllocatorTypeRefId)}
                     checked={!!sectionData?.length}
                     className="mx-0 mb-2"
                 >
@@ -354,8 +366,8 @@ class UmpirePaymentSetting extends Component {
                                 </div>
                             )}
                             <Checkbox
-                                onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
-                                checked={boxData.allDivisions}
+                                // onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
+                                // checked={boxData.allDivisions}
                             >
                                 {AppConstants.allDivisions}
                             </Checkbox>
@@ -380,16 +392,16 @@ class UmpirePaymentSetting extends Component {
                                     </Option>
                                 ))}
                             </Select>
-                            {umpireAllocatorTypeRefId && this.boxSettingsView(boxData, sectionDataIndex, sectionData)}
+                            {/* {isSettings && this.boxSettingsView(boxData, sectionDataIndex, sectionData)} */}
                         </div>
                         ))}
                         {selectedDivisions.length < this.props.liveScoreTeamState.divisionList.length
-                            && umpireAllocatorTypeRefId 
+                            && isSettings 
                             && (
                                 <div className="row mb-5 position-absolute">
                                     <div 
                                         className="col-sm"
-                                        onClick={() => this.handleAddBox(umpireAllocatorTypeRefId)}
+                                        // onClick={() => this.handleAddBox(umpireAllocatorTypeRefId)}
                                     >
                                         <span className="input-heading-add-another pointer pt-0">+ {AppConstants.addDivision}</span>
                                     </div>
