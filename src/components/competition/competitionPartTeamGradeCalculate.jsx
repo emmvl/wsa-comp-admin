@@ -101,29 +101,31 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.appState !== this.props.appState) {
-            let competitionList = this.props.appState.own_CompetitionArr
+            const competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let storedCompetitionId = getOwn_competition();
-                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
+                    const storedCompetitionId = getOwn_competition();
+                    const competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId;
-                    let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId;
                     if (storedCompetitionId != undefined && storedCompetitionId !== "undefined") {
-                        let compIndex = competitionList.findIndex(x => x.competitionId == competitionId)
-                        statusRefId = competitionList[compIndex].statusRefId;
-                        finalTypeRefId = competitionList[compIndex].finalTypeRefId
+                        const compIndex = competitionList.findIndex(x => x.competitionId == competitionId);
+                        if (compIndex > -1) {
+                            statusRefId = competitionList[compIndex].statusRefId;
+                            finalTypeRefId = competitionList[compIndex].finalTypeRefId;
+                        }
                     }
-                    setOwn_competition(competitionId)
-                    setOwn_competitionStatus(statusRefId)
-                    setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
-                    this.props.getTeamGradingSummaryAction(yearId, competitionId)
+                    setOwn_competition(competitionId);
+                    setOwn_competitionStatus(statusRefId);
+                    setOwn_CompetitionFinalRefId(finalTypeRefId);
+                    const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
+                    this.props.getTeamGradingSummaryAction(yearId, competitionId);
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId,
-                        yearRefId: JSON.parse(yearId)
-                    })
+                        yearRefId: JSON.parse(yearId),
+                    });
                 }
             }
         }

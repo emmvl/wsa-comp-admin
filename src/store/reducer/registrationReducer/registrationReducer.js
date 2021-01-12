@@ -937,9 +937,16 @@ function registration(state = initialState, action) {
             }
             break;
           }
+          state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected = true
           state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-          state.registrationFormData[0][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-    
+          let sample = state.registrationFormData[0][action.key].find(x => x.id == action.getMembershipproductItem.id)
+          if(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected && !sample){
+            state.registrationFormData[0][action.key].push(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex])
+          }
+          else{
+            sample[action.subKey] = action.updatedData;
+          }
+              
       }
       else {
         let oldData = state.registrationFormData;
@@ -1086,6 +1093,9 @@ function registration(state = initialState, action) {
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
       // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
       if(action.key){
+        if(action.key == "isNeedExtendedDate" && action.radioApplyId == false){
+          state.membershipProductFeesTableData.membershipFees[action.feesIndex].extendEndDate = null;
+        }
         state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
       }else{
         state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;

@@ -11,10 +11,10 @@ import { bindActionCreators } from 'redux';
 import {
     getStripeRefundsListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import { liveScore_formateDate } from "../../themes/dateformate";
-
+import history from 'util/history'
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -113,12 +113,18 @@ class RegistrationRefunds extends Component {
             year: "2020",
             competition: "all",
             paymentFor: "all",
+            isImpersonation: localStorage.getItem('Impersonation') == "true" ? true : false
         }
     }
 
     componentDidMount() {
-        if (this.stripeConnected()) {
-            this.props.getStripeRefundsListAction(1, null, null)
+        if (this.state.isImpersonation) {
+            history.push("/paymentDashboard")
+
+        } else {
+            if (this.stripeConnected()) {
+                this.props.getStripeRefundsListAction(1, null, null)
+            }
         }
     }
 

@@ -61,7 +61,7 @@ function getAffiliateToOrganisationAction(organisationId, searchText) {
     return {
         type: ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD,
         payload: organisationId,
-        searchText
+        searchText,
     };
 }
 
@@ -159,7 +159,6 @@ function getUserModuleTeamRegistrationAction(payload) {
         type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD,
         payload,
     };
-
 }
 
 function getUserModuleOtherRegistrationAction(payload) {
@@ -167,7 +166,6 @@ function getUserModuleOtherRegistrationAction(payload) {
         type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD,
         payload,
     };
-
 }
 
 function getUserModuleMedicalInfoAction(userId) {
@@ -281,6 +279,27 @@ function userProfileUpdateAction(data) {
     return {
         type: ApiConstants.API_USER_PROFILE_UPDATE_LOAD,
         data,
+    };
+}
+
+function addChildAction(body, userId, sameEmail) {
+    return {
+        type: ApiConstants.API_ADD_CHILD_LOAD,
+        payload: { body, userId, sameEmail },
+    };
+}
+
+function addParentAction(body, userId, sameEmail) {
+    return {
+        type: ApiConstants.API_ADD_PARENT_LOAD,
+        payload: { body, userId, sameEmail },
+    };
+}
+
+function findPossibleMatches(payload) {
+    return {
+        type: ApiConstants.API_POSSIBLE_MATCH_LOAD,
+        payload,
     };
 }
 
@@ -433,34 +452,32 @@ function getSpectatorListAction(payload, sortBy, sortOrder) {
 }
 
 function registrationResendEmailAction(teamId, userId) {
-    const action = {
+    return {
         type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD,
         teamId,
-        userId
-    }
-    return action;
-}
-function resetTfaAction(Id) {
-    const action = {
-        type: ApiConstants.Api_RESET_TFA_LOAD,
-        Id
-    }
-    return action
+        userId,
+    };
 }
 
+function resetTfaAction(Id) {
+    return {
+        type: ApiConstants.Api_RESET_TFA_LOAD,
+        Id,
+    };
+}
 
 function addUsersToBeCompared(users) {
     return {
         type: ApiConstants.ADD_USERS_TO_BE_MERGED,
-        payload: users
-    }
+        payload: users,
+    };
 }
 
-function getUserModuleTeamMembersAction(payload){
+function getUserModuleTeamMembersAction(payload) {
     return {
         type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD,
-        payload: payload
-    }
+        payload,
+    };
 }
 
 function getNetSetGoActionList(payload, sortBy, sortOrder) {
@@ -469,6 +486,55 @@ function getNetSetGoActionList(payload, sortBy, sortOrder) {
         payload,
         sortBy,
         sortOrder,
+    };
+}
+
+function teamMemberSaveUpdateAction(data, key, index, subIndex) {
+    return {
+        type: ApiConstants.TEAM_MEMBER_SAVE_UPDATE_ACTION,
+        data,
+        key,
+        index,
+        subIndex,
+    };
+}
+
+function teamMembersSaveAction(payload) {
+    return {
+        type: ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD,
+        payload,
+    };
+}
+
+function getTeamMembersAction(teamMemberRegId) {
+    return {
+        type: ApiConstants.API_GET_TEAM_MEMBERS_LOAD,
+        teamMemberRegId,
+    };
+}
+
+function updateReviewInfoAction(value, key, index, subkey, subIndex) {
+    return {
+        type: ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO,
+        value,
+        key,
+        index,
+        subkey,
+        subIndex,
+    };
+}
+
+function getTeamMembersReviewAction(payload) {
+    return {
+        type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD,
+        payload,
+    };
+}
+
+function teamMemberUpdateAction(data) {
+    return {
+        type: ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD,
+        data,
     }
 }
 
@@ -532,5 +598,14 @@ export {
     resetTfaAction,
     addUsersToBeCompared,
     getUserModuleTeamMembersAction,
-    getNetSetGoActionList
+    getNetSetGoActionList,
+    addChildAction,
+    addParentAction,
+    findPossibleMatches,
+    teamMemberSaveUpdateAction,
+    teamMembersSaveAction,
+    getTeamMembersAction,
+    updateReviewInfoAction,
+    getTeamMembersReviewAction,
+    teamMemberUpdateAction
 };

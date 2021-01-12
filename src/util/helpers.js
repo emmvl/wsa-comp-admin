@@ -106,6 +106,22 @@ const isImageSizeValid = value => {
     return value > maxImageSize ? false : true;
 };
 
+const stringTOFloatNumberReg = (checkString) => {
+    return typeof checkString === 'string' ? Number(Number(checkString).toFixed(2)) : Number(Number(checkString).toFixed(2));
+}
+
+const formatValue = (val) => {
+    return  val === null ? "0.00" : stringTOFloatNumberReg(val).toFixed(2)
+  }
+
+const feeIsNull = (fee) => {
+    return ((fee === null||fee===undefined) ? 0 : (stringTOFloatNumberReg(fee)));
+}
+
+const  isNullOrUndefined = (e) => {
+    return (e === null || e === undefined) ? false : e;
+  }
+
 module.exports = {
     isArrayNotEmpty,
     isNotNullOrEmptyString,
@@ -120,4 +136,7 @@ module.exports = {
     randomKeyGen,
     teamListDataCheck,
     isImageSizeValid,
+    formatValue,
+    feeIsNull,
+    isNullOrUndefined
 };
