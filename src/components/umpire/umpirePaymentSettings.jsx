@@ -199,6 +199,32 @@ class UmpirePaymentSetting extends Component {
         this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions: newSelectedDivisions });
     }
 
+    handleChangeFeesRadio = (e, sectionData, sectionDataIndex, key) => {
+        const { paymentSettingsData } = this.state;
+
+        const sectionDataCopy = JSON.parse(JSON.stringify(sectionData));
+        let { byBadge, byPool, UmpirePaymentFeeType } = sectionDataCopy[sectionDataIndex];
+
+        if (key === 'byBadge') {
+            byPool.length = 0;
+            byBadge.push({});
+            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = "BY_BADGE";
+        } else {
+            byBadge.length = 0;
+            byPool.push({});
+            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = "BY_POOL";
+        }
+
+        const newPaymentSettingsData = {
+            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
+            settings: [ ...sectionDataCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
+        }
+        
+        this.setState({ 
+            paymentSettingsData: newPaymentSettingsData,
+        });
+    }
+
     handleChangeSettings = (sectionDataIndex, key, value, sectionData) => {
         const { paymentSettingsData } = this.state;
         const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData.settings));
@@ -579,18 +605,15 @@ class UmpirePaymentSetting extends Component {
         const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
         const umpireBadgesData = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
 
-        const { byBadge, byPool } = sectionData[sectionDataIndex];
+        const { byBadge, byPool, UmpirePaymentFeeType } = sectionData[sectionDataIndex];
 
         return (
             <div>
                 <span className='text-heading-large pt-3'>{AppConstants.fees}</span>
                 <div className="d-flex flex-column">
                     <Radio
-                        // onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                        //     value: e.target.checked,
-                        //     key: 'byBadge'
-                        // })}
-                        checked={!!byBadge.length}
+                        onChange={e => this.handleChangeFeesRadio(e, sectionData, sectionDataIndex, 'byBadge')}
+                        checked={UmpirePaymentFeeType === 'BY_BADGE'}
                         className="p-0"
                     >
                         {AppConstants.byBadge}
@@ -599,7 +622,6 @@ class UmpirePaymentSetting extends Component {
                         <div>
                             {umpireBadgesData.map((badgeDataItem, i) => (
                                 <div key={"badgeDataItem" + i}>
-                                    {/* {this.byBadgeView2(byBadge, badgeDataItem)} */}
                                     {this.ratesView('byBadge', badgeDataItem, sectionData, sectionDataIndex)}
                                 </div>
                             ))}
@@ -607,11 +629,8 @@ class UmpirePaymentSetting extends Component {
                     )}
 
                     <Radio
-                        // onChange={(e) => this.props.umpirePaymentSettingUpdate({
-                        //     value: e.target.checked,
-                        //     key: 'byPool'
-                        // })}
-                        checked={!!byPool.length}
+                        onChange={e => this.handleChangeFeesRadio(e, sectionData, sectionDataIndex, 'byPool')}
+                        checked={UmpirePaymentFeeType === 'BY_POOL'}
                         className="p-0 mt-4"
                     >
                         {AppConstants.byPool}
