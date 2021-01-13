@@ -63,13 +63,12 @@ class UmpirePoolAllocation extends Component {
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
 
-        let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-        if (JSON.parse(getUmpireCompetitonData())) {
-            console.log(getUmpireCompetitonData(), 'getUmpireCompetitonData()', JSON.parse(getUmpireCompetitonData()))
-            this.setState({
-                compOrgId: competitionOrganisation.id,
-            })
-        }
+        // let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+        // if (JSON.parse(getUmpireCompetitonData())) {
+        //     this.setState({
+        //         compOrgId: competitionOrganisation.id,
+        //     })
+        // }
 
         checkUmpireCompIsParent().then((value) => {
             this.setState({
@@ -124,10 +123,9 @@ class UmpirePoolAllocation extends Component {
         let compeList = this.state.allCompetition
         let orgId = null
         let selectedCompData = null
-
         for (let i in compeList) {
             if (compeList[i].id === selectedComp) {
-                orgId = compeList[i].competitionOrganisation.orgId
+                orgId = compeList[i]?.competitionOrganisation?.orgId
                 selectedCompData = compeList[i]
             }
         }
@@ -139,8 +137,8 @@ class UmpirePoolAllocation extends Component {
                 compIsParent: value
             })
         })
-        this.props.getUmpirePoolData({ orgId: orgId, compId: selectedComp })
-        this.setState({ selectedComp, competitionUniqueKey: compKey, orgId })
+        this.props.getUmpirePoolData({ orgId: orgId ? orgId : 0, compId: selectedComp })
+        this.setState({ selectedComp, competitionUniqueKey: compKey, orgId: orgId ? orgId : 0 })
     }
 
     dropdownView = () => {
@@ -518,7 +516,6 @@ class UmpirePoolAllocation extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <DragDropContext
-                // onDragEnd={console.log('value')}
                 >
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}

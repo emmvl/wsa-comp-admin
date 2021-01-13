@@ -287,7 +287,6 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     onClickComment(record) {
-        console.log("called")
         this.props.commentListingAction(this.state.firstTimeCompId, record.teamId, "2")
         this.setState({
             visible: true, comment: "",
@@ -298,7 +297,6 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     handleOk = e => {
-        console.log(this.state.comment)
         if (this.state.comment.length > 0) {
             this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
         }

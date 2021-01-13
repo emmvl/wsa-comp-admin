@@ -123,19 +123,6 @@ const initialState = {
 
 };
 
-function getSelectedValue(divId, allArray) {
-    for (let i in allArray) {
-        for (let j in divId) {
-            if (divId[j] === allArray[i].id) {
-                allArray[i].disabled = true
-            }
-        }
-    }
-
-    return allArray
-}
-
-
 function getFilterBadgeData(badgeData) {
 
     let arr = []
@@ -187,23 +174,13 @@ function umpirePaymentSetting(state = initialState, action) {
                 state[key] = data
 
             } else if (key === 'paidByCompOrgDivision' || key === 'paidByAffiliateDivision') {
-                // if (key === 'paidByCompOrgDivision') {
-                //     state.affiliateDiv = getSelectedValue(data, state.affiliateDiv)
-                // }
-                // if (key === 'paidByAffiliateDivision') {
-                //     state.compOrgDiv = getSelectedValue(data, state.compOrgDiv)
-                // }
                 state[key] = data
 
             } else if (key === 'byBadge') {
                 state.byBadgeBtn = data
-                // state.byPoolBtn = false
-                // state.byBadgeDivision = ['BadgeAA', 'BadgeA', 'BadgeC']
 
             } else if (key === 'byPool') {
                 state.byPoolBtn = data
-                // state.byBadgeBtn = false
-                // state.inputFieldArray = []
             } else if (key === 'addAnotherGroup') {
                 var obj = {
                     name: null,

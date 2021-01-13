@@ -296,6 +296,13 @@ function addParentAction(body, userId, sameEmail) {
     };
 }
 
+function findPossibleMatches(payload) {
+    return {
+        type: ApiConstants.API_POSSIBLE_MATCH_LOAD,
+        payload,
+    };
+}
+
 function userPhotoUpdateAction(payload, userDetail) {
     return {
         type: ApiConstants.API_USER_PHOTO_UPDATE_LOAD,
@@ -524,6 +531,13 @@ function getTeamMembersReviewAction(payload) {
     };
 }
 
+function teamMemberUpdateAction(data) {
+    return {
+        type: ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD,
+        data,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -587,9 +601,11 @@ export {
     getNetSetGoActionList,
     addChildAction,
     addParentAction,
+    findPossibleMatches,
     teamMemberSaveUpdateAction,
     teamMembersSaveAction,
     getTeamMembersAction,
     updateReviewInfoAction,
     getTeamMembersReviewAction,
+    teamMemberUpdateAction
 };

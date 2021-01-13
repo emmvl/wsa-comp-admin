@@ -14,6 +14,8 @@ import {
     message,
     Checkbox,
     Modal,
+    Table,
+    Typography,
 } from "antd";
 import moment from 'moment';
 
@@ -22,7 +24,10 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import {
-    addChildAction, addParentAction, userProfileUpdateAction,
+    addChildAction,
+    addParentAction,
+    findPossibleMatches,
+    userProfileUpdateAction,
 } from '../../store/actions/userAction/userAction';
 import ValidationConstants from "../../themes/validationConstant";
 import {
@@ -40,6 +45,40 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
 const { confirm } = Modal;
+const { Text } = Typography;
+
+const columns = [
+    {
+        title: AppConstants.id,
+        dataIndex: "id",
+        key: "key",
+    },
+    {
+        title: AppConstants.name,
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: AppConstants.dateOfBirth,
+        dataIndex: "dob",
+        key: "dob",
+    },
+    {
+        title: AppConstants.emailAdd,
+        dataIndex: "email",
+        key: "email",
+    },
+    {
+        title: AppConstants.contactNumber,
+        dataIndex: "mobile",
+        key: "mobile",
+    },
+    {
+        title: AppConstants.affiliate,
+        dataIndex: "affiliate",
+        key: "affiliate",
+    },
+];
 
 class UserProfileEdit extends Component {
     constructor(props) {
@@ -94,6 +133,7 @@ class UserProfileEdit extends Component {
             hasErrorAddressNumber: false,
             venueAddressError: '',
             manualAddress: false,
+            isPossibleMatchShow: false,
         };
         this.confirmOpend = false;
         // this.props.getCommonRefData();
@@ -251,9 +291,15 @@ class UserProfileEdit extends Component {
             userData['accreditationLevelCoachRefId'] = personalData.accreditationLevelCoachRefId
             userData['accreditationLevelUmpireRefId'] = personalData.accreditationLevelUmpireRefId
             userData['accreditationUmpireExpiryDate'] = personalData.accreditationUmpireExpiryDate
+            this.formRef.current.setFieldsValue({
+                [`accreditationLevelUmpireRefId`]: personalData.accreditationLevelUmpireRefId,
+                [`accreditationLevelCoachRefId`]: personalData.accreditationLevelCoachRefId,
+                [`accreditationUmpireExpiryDate`]: personalData.accreditationUmpireExpiryDate && moment(personalData.accreditationUmpireExpiryDate),
+                [`accreditationCoachExpiryDate`]: personalData.accreditationCoachExpiryDate && moment(personalData.accreditationCoachExpiryDate),
+            })
         }
         this.formRef.current.setFieldsValue({
-            genderRefId: userData.genderRefId != null ? parseInt(userData.genderRefId) : 0
+            genderRefId: userData.genderRefId ? parseInt(userData.genderRefId) : null
         })
     }
 
@@ -316,11 +362,17 @@ class UserProfileEdit extends Component {
         }
 
         if (key === 'accreditationLevelUmpireRefId') {
-            data['accreditationUmpireExpiryDate'] = value == 1 && null
+            data['accreditationUmpireExpiryDate'] = null
+            this.formRef.current.setFieldsValue({
+                [`accreditationUmpireExpiryDate`]: null,
+            })
         }
 
         if (key === 'accreditationLevelCoachRefId') {
-            data['accreditationCoachExpiryDate'] = value == 1 && null
+            data['accreditationCoachExpiryDate'] = null
+            this.formRef.current.setFieldsValue({
+                [`accreditationCoachExpiryDate`]: null,
+            })
         }
 
         data[key] = value;
@@ -343,7 +395,7 @@ class UserProfileEdit extends Component {
     };
 
     handlePlacesAutocomplete = (data) => {
-        const { stateList } = this.props.commonReducerState;
+        const { stateListData } = this.props.commonReducerState;
         const address = data;
         let userData = this.state.userData;
         this.props.checkVenueDuplication(address);
@@ -361,8 +413,8 @@ class UserProfileEdit extends Component {
         this.setState({
             venueAddress: address,
         });
-        const stateRefId = stateList.length > 0 && address.state
-            ? stateList.find((state) => state.name === address.state).id
+        const stateRefId = stateListData.length > 0 && address.state
+            ? stateListData.find((state) => state.name === address.state).id
             : null;
 
         // this.formRef.current.setFieldsValue({
@@ -381,19 +433,19 @@ class UserProfileEdit extends Component {
 
     addressEdit = () => {
         let userData = this.state.userData
-        const { stateList } = this.props.commonReducerState;
+        const { stateListData } = this.props.commonReducerState;
         let hasErrorAddressNumber = this.state.hasErrorAddressNumber;
 
-        let state = (stateList.length > 0 && userData.stateRefId)
-            ? stateList.find((state) => state.id == userData.stateRefId).name
+        let state = (stateListData.length > 0 && userData.stateRefId)
+            ? stateListData.find((state) => state.id == userData.stateRefId).name
             : null;
 
         let defaultVenueAddress = null
         if (userData.street1) {
             defaultVenueAddress = `${userData.street1 && `${userData.street1},`
-            } ${userData.suburb && `${userData.suburb},`
-            } ${state && `${state},`
-            } `;
+                } ${userData.suburb && `${userData.suburb},`
+                } ${state && `${state},`
+                } `;
         }
 
         return (
@@ -547,9 +599,9 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.addressOne}
                                 placeholder={AppConstants.addressOne}
                                 name={'street1'}
-                                value={userData ?.street1}
+                                value={userData?.street1}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                                // readOnly
+                            // readOnly
                             />
 
                         </div>
@@ -560,7 +612,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.addressTwo}
                                 placeholder={AppConstants.addressTwo}
                                 name={'street2'}
-                                value={userData ?.street2}
+                                value={userData?.street2}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                             />
                         </div>
@@ -576,9 +628,9 @@ class UserProfileEdit extends Component {
                                 placeholder={AppConstants.suburb}
                                 // required="required-field"
                                 name={'suburb'}
-                                value={userData ?.suburb}
+                                value={userData?.suburb}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                                // readOnly
+                            // readOnly
                             />
                         </div>
                         <div className="col-sm">
@@ -592,10 +644,10 @@ class UserProfileEdit extends Component {
                                 value={userData ?.stateRefId}
                                 name="stateRefId"
                                 onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                                // readOnly
-                                // disabled
+                            // readOnly
+                            // disabled
                             >
-                                {stateList.map((item) => (
+                                {stateListData.map((item) => (
                                     <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
@@ -609,9 +661,9 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.postCode}
                                 placeholder={AppConstants.postCode}
                                 name={'postalCode'}
-                                value={userData ?.postalCode}
+                                value={userData?.postalCode}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                                // readOnly
+                            // readOnly
                             />
                         </div>
                         <div className="col-sm" />
@@ -835,53 +887,64 @@ class UserProfileEdit extends Component {
                         </div>
 
                         <div>
-                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required={"required-field"} />
-                            <Radio.Group
-                                className="registration-radio-group"
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelUmpireRefId")}
-                                value={userData.accreditationLevelUmpireRefId}
-                            >
-                                {(umpireAccreditation || []).map((accreditaiton, accreditationIndex) => (
-                                    <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
-                                ))}
-                            </Radio.Group>
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required="required-field" />
+                            <Form.Item name='accreditationLevelUmpireRefId' rules={[{ required: true, message: ValidationConstants.accreditationLevelUmpire }]}>
+                                <Radio.Group
+                                    className="registration-radio-group"
+                                    onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelUmpireRefId")}
+                                // setFieldsValue={userData.accreditationLevelUmpireRefId}
+                                >
+                                    {(umpireAccreditation || []).map((accreditaiton, accreditationIndex) => (
+                                        <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
+                                    ))}
+                                </Radio.Group>
+                            </Form.Item>
 
                             {(userData.accreditationLevelUmpireRefId != 1 && userData.accreditationLevelUmpireRefId != null) && (
-                                <DatePicker
-                                    size="large"
-                                    placeholder={AppConstants.expiryDate}
-                                    style={{ width: "100%", marginTop: "20px" }}
-                                    onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationUmpireExpiryDate")}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
-                                />
+                                <Form.Item name='accreditationUmpireExpiryDate' rules={[{ required: true, message: ValidationConstants.expiryDateRequire }]}>
+                                    <DatePicker
+                                        size="large"
+                                        placeholder={AppConstants.expiryDate}
+                                        style={{ width: "100%", marginTop: "20px" }}
+                                        onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationUmpireExpiryDate")}
+                                        format="DD-MM-YYYY"
+                                        showTime={false}
+                                        // value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
+                                        disabledDate={d => !d || d.isSameOrBefore(new Date())}
+                                    />
+                                </Form.Item>
                             )}
                         </div>
 
                         <div>
-                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoach} required={"required-field"} />
-                            <Radio.Group
-                                style={{ display: "flex", flexDirection: "column" }}
-                                className="registration-radio-group"
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelCoachRefId")}
-                                value={userData.accreditationLevelCoachRefId}
-                            >
-                                {(coachAccreditation || []).map((accreditaiton, accreditationIndex) => (
-                                    <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
-                                ))}
-                            </Radio.Group>
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoach} required="required-field" />
+                            <Form.Item name='accreditationLevelCoachRefId' rules={[{ required: true, message: ValidationConstants.accreditationLevelCoach }]}>
+                                <Radio.Group
+                                    style={{ display: "flex", flexDirection: "column" }}
+                                    className="registration-radio-group"
+                                    onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelCoachRefId")}
+                                // setFieldsValue={userData.accreditationLevelCoachRefId}
+                                >
+                                    {(coachAccreditation || []).map((accreditaiton, accreditationIndex) => (
+                                        <Radio style={{ marginBottom: "10px" }} key={accreditaiton.id} value={accreditaiton.id}>{accreditaiton.description}</Radio>
+                                    ))}
+                                </Radio.Group>
+                            </Form.Item>
 
                             {(userData.accreditationLevelCoachRefId != 1 && userData.accreditationLevelCoachRefId != null) && (
-                                <DatePicker
-                                    size="large"
-                                    placeholder={AppConstants.expiryDate}
-                                    style={{ width: "100%", marginTop: "20px" }}
-                                    onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationCoachExpiryDate")}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
-                                />
+                                <Form.Item name='accreditationCoachExpiryDate' rules={[{ required: true, message: ValidationConstants.expiryDateRequire }]}>
+                                    <DatePicker
+                                        size="large"
+                                        placeholder={AppConstants.expiryDate}
+                                        style={{ width: "100%", marginTop: "20px" }}
+                                        // onChange={(e, f) => this.onChangeSetValue(e, "accreditationCoachExpiryDate")}
+                                        onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationCoachExpiryDate")}
+                                        format="DD-MM-YYYY"
+                                        showTime={false}
+                                        // value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
+                                        disabledDate={d => !d || d.isSameOrBefore(new Date())}
+                                    />
+                                </Form.Item>
                             )}
                         </div>
                     </div>
@@ -959,7 +1022,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.checkExpiryDate} />
                         <DatePicker
                             // size="large"
-                            style={{ width: '100%', marginTop: 9 }}
+                            style={{ width: '100%', marginTop: 9, minHeight: 50 }}
                             onChange={e => this.onChangeSetValue(e, "childrenCheckExpiryDate")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -1117,6 +1180,71 @@ class UserProfileEdit extends Component {
         );
     };
 
+    possibleMatchesDetailView = (matches) => {
+        let selectedMatch = null;
+
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                selectedMatch = selectedRows;
+            },
+            getCheckboxProps: (record) => ({
+                name: record.name,
+            }),
+        };
+
+        const dataSource = matches.map((u) => ({
+            key: u.id,
+            id: u.id,
+            name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
+            dob: u.dateOfBirth,
+            email: u.email,
+            mobile: u.mobileNumber,
+            affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
+        }));
+
+        const addUser = () => {
+            if (!selectedMatch) return;
+
+            const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
+            const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
+            if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
+                this.props.addChildAction(selectedMatch, userId, sameEmail);
+            } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
+                this.props.addParentAction(selectedMatch, userId, sameEmail);
+            }
+            this.setState({ saveLoad: true });
+        };
+
+        const onCancel = () => {
+            this.setState({ isPossibleMatchShow: false });
+        };
+
+        return (
+            <div className="comp-dash-table-view mt-5">
+                <h2>{AppConstants.possibleMatches}</h2>
+                <Text type="secondary">
+                    {AppConstants.possibleMatchesDescription}
+                </Text>
+                <div className="table-responsive home-dash-table-view mt-3">
+                    <Table
+                        rowSelection={{
+                            type: 'radio',
+                            ...rowSelection,
+                        }}
+                        className="home-dashboard-table"
+                        dataSource={dataSource}
+                        columns={columns}
+                        pagination={false}
+                    />
+                </div>
+                <div className="d-flex align-items-center justify-content-between mt-4">
+                    <Button onClick={onCancel}>{AppConstants.cancel}</Button>
+                    <Button type="primary" onClick={addUser}>{AppConstants.next}</Button>
+                </div>
+            </div>
+        );
+    };
+
     onSaveClick = () => {
         if (this.confirmOpend) return;
 
@@ -1130,19 +1258,24 @@ class UserProfileEdit extends Component {
             } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
                 electionMsg = AppConstants[this.state.userRole === 'admin' ? 'parentMsg2Admin' : 'parentMsg2Child'];
             }
-            confirm({
-                content: electionMsg,
-                okText: 'Continue',
-                okType: 'primary',
-                cancelText: 'Cancel',
-                onOk: () => {
-                    saveAction();
-                    this.confirmOpend = false;
-                },
-                onCancel: () => {
-                    this.confirmOpend = false;
-                },
-            });
+            if (electionMsg != "") {
+                confirm({
+                    content: electionMsg,
+                    okText: 'Continue',
+                    okType: 'primary',
+                    cancelText: 'Cancel',
+                    onOk: () => {
+                        saveAction();
+                        this.confirmOpend = false;
+                    },
+                    onCancel: () => {
+                        this.confirmOpend = false;
+                    },
+                });
+            }
+            else {
+                saveAction();
+            }
         } else {
             saveAction();
         }
@@ -1167,16 +1300,17 @@ class UserProfileEdit extends Component {
             return false;
         }
 
-        const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
-        const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
-        if (this.state.titleLabel === AppConstants.addChild) {
-            this.props.addChildAction(data, userId, sameEmail);
-        } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
-            this.props.addParentAction(data, userId, sameEmail);
+        if (this.state.isSameEmail) {
+            data.mobileNumber = this.props.history.location.state.userData.mobileNumber;
+        }
+
+        if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
+            this.props.findPossibleMatches(data);
+            this.setState({ isPossibleMatchShow: true });
         } else {
             this.props.userProfileUpdateAction(data);
+            this.setState({ saveLoad: true });
         }
-        this.setState({ saveLoad: true });
     };
 
     footerView = (isSubmitting) => {
@@ -1206,6 +1340,11 @@ class UserProfileEdit extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1218,20 +1357,27 @@ class UserProfileEdit extends Component {
                 <InnerHorizontalMenu menu="user" userSelectedKey="5" />
 
                 <Layout>
-                    {this.headerView()}
-                    <Form
-                        ref={this.formRef}
-                        autoComplete="off"
-                        onFinish={this.onSaveClick}
-                        noValidate="noValidate"
-                    >
-                        <Content>
-                            <div className="formView">{this.contentView()}</div>
-                            <Loader visible={this.props.userState.onUpUpdateLoad || this.props.commonReducerState.onLoad} />
-                        </Content>
+                    {!this.state.isPossibleMatchShow ? (
+                        <>
+                            {this.headerView()}
+                            <Form
+                                ref={this.formRef}
+                                autoComplete="off"
+                                onFinish={this.onSaveClick}
+                                noValidate="noValidate"
+                                onFinishFailed={this.onFinishFailed}
+                            >
+                                <Content>
+                                    <div className="formView">{this.contentView()}</div>
+                                    <Loader visible={this.props.userState.onUpUpdateLoad || this.props.commonReducerState.onLoad} />
+                                </Content>
 
-                        <Footer>{this.footerView()}</Footer>
-                    </Form>
+                                <Footer>{this.footerView()}</Footer>
+                            </Form>
+                        </>
+                    ) : (
+                            this.possibleMatchesDetailView(this.props.userState.possibleMatches)
+                        )}
                 </Layout>
             </div>
         );
@@ -1242,6 +1388,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addChildAction,
         addParentAction,
+        findPossibleMatches,
         userProfileUpdateAction,
         getCommonRefData,
         countryReferenceAction,

@@ -46,7 +46,6 @@ class InnerHorizontalMenu extends React.Component {
         this.setState({
             isImpersonation: impersonation
         })
-        console.log(impersonation, "****", this.state.isImpersonation)
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")

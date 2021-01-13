@@ -1062,7 +1062,6 @@ function checkFeeDivisionType(data, uniqueKey) {
 }
 
 function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
-    // console.log("checkStatus",getCompetitionFeeArray, item, divisionId, feeTypeRefId)
     let object = {
         status: false,
         result: []

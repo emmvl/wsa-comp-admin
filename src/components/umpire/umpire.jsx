@@ -9,7 +9,7 @@ import { getRefBadgeData } from '../../store/actions/appAction'
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import ValidationConstants from "themes/validationConstant";
-import { entityTypes } from "util/entityTypes";
+// import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
@@ -47,7 +47,7 @@ function checkUmpireUserRoll(rolesArr, key) {
     let isUmpire = "NO"
     if (isArrayNotEmpty(rolesArr)) {
         for (let i in rolesArr) {
-            if (rolesArr[i].roleId == key) {
+            if (rolesArr[i].roleId === key) {
                 isUmpire = "YES"
 
             }
@@ -265,7 +265,7 @@ class Umpire extends Component {
     }
 
     async componentDidUpdate(nextProps) {
-        const { sortBy, sortOrder } = this.state;
+        // const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)

@@ -172,7 +172,6 @@ function reverseArray(array) {
 }
 
 async function checkUmpireCompIsParent() {
-    console.log(JSON.parse(getUmpireCompetitonData()), 'getUmpireCompetitonData()')
     const orgItem = await getOrganisationData();
     const umpireCompetition = await getUmpireCompetitonData();
     const organisationId = orgItem ? orgItem.organisationId : 0;

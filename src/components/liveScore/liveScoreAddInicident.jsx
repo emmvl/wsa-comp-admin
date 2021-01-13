@@ -118,7 +118,7 @@ class LiveScoreAddIncident extends Component {
 
     ////set initial value for all validated fields
     setInitialFieldValue() {
-        const { incidentData, playerIds } = this.props.liveScoreIncidentState
+        const { incidentData } = this.props.liveScoreIncidentState
         this.formRef.current.setFieldsValue({
             'incidentTeamName': incidentData.teamId,
             'incidentPlayerName': incidentData.playerIds,
@@ -263,7 +263,7 @@ class LiveScoreAddIncident extends Component {
 
     //// Form View
     contentView = () => {
-        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
+        const { incidentData, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
         let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
         let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
         let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
@@ -272,9 +272,6 @@ class LiveScoreAddIncident extends Component {
         let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
         let startTime = time_formate ? moment(time_formate, "HH:mm") : null
-
-        console.log(incidentData, 'incidentData')
-
         return (
             <div className="content-view pt-4">
                 <div className="row">

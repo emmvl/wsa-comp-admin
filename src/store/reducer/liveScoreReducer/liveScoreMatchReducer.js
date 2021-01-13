@@ -533,7 +533,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                     let d_date = moment(action.data).format('YYYY-MM-DD').split('-');
                     let d_oldTime = moment(state.start_time).format('HH:mm').split(':')
                     let d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2], d_oldTime[0], d_oldTime[1]]).utc().format();
-                    console.log(d_newTime, d_date, d_oldTime)
                     state.matchData.startTime = d_newTime;
                     if (d_newTime != 'Invalid date') {
                         state.updateUmpireFetchCall = true;
@@ -547,7 +546,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                     let t_time = moment(action.data).format('HH:mm').split(':');
                     let t_newTime = moment([t_date[0], t_date[1] - 1, t_date[2], t_time[0], t_time[1]]).utc().format();
                     state.matchData.startTime = t_newTime;
-                    console.log(t_newTime, t_date, t_time)
                     if (t_newTime != 'Invalid date') {
                         state.updateUmpireFetchCall = true;
                     }

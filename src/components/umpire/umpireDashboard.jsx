@@ -117,7 +117,7 @@ function checkUmpireType(umpireArray, key) {
 function checkUmpireReserve(reserveArray, key) {
     let object = null;
     for (let i in reserveArray) {
-        if (reserveArray[i].roleId == key) {
+        if (reserveArray[i].roleId === key) {
             object = reserveArray[i]
             break
         }
@@ -639,9 +639,9 @@ class UmpireDashboard extends Component {
             let offsetData = umpireDashboardListActionObject.pageData.paging.offset
             sortBy = umpireDashboardListActionObject.sortBy
             sortOrder = umpireDashboardListActionObject.sortOrder
-            let division = umpireDashboardListActionObject.divisionId == "" ? "All" : umpireDashboardListActionObject.divisionId
-            let round = umpireDashboardListActionObject.roundId == "" ? "All" : umpireDashboardListActionObject.roundId
-            let venue = umpireDashboardListActionObject.venueId == "" ? "All" : umpireDashboardListActionObject.venueId
+            let division = umpireDashboardListActionObject.divisionId === "" ? "All" : umpireDashboardListActionObject.divisionId
+            let round = umpireDashboardListActionObject.roundId === "" ? "All" : umpireDashboardListActionObject.roundId
+            let venue = umpireDashboardListActionObject.venueId === "" ? "All" : umpireDashboardListActionObject.venueId
             await this.setState({ division, round, venue, offsetData, sortBy, sortOrder });
             // page = Math.floor(offset / 10) + 1;
         }

@@ -7,8 +7,8 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { bindActionCreators } from "redux";
 import { useHistory } from "react-router-dom";
 import userHttp from '../../store/http/userHttp/userHttp'
-import {useDispatch} from 'react-redux'
-import {addUsersToBeCompared} from '../../store/actions/userAction/userAction'
+import { useDispatch } from 'react-redux'
+import { addUsersToBeCompared } from '../../store/actions/userAction/userAction'
 const { Content } = Layout;
 const { Text } = Typography;
 
@@ -34,7 +34,6 @@ const UserDetailView = () => {
     const {
         UserState: { personalData: selectedUser },
     } = useSelector((state) => state);
-    console.log({ selectedUser });
 
     if (!Object.keys(selectedUser).length) {
         history.push("/userPersonal");
@@ -44,7 +43,7 @@ const UserDetailView = () => {
         {
             key: selectedUser.userId,
             id: selectedUser.userId,
-            name: `${selectedUser.firstName} ${selectedUser.lastName ? selectedUser.lastName : ''}` ,
+            name: `${selectedUser.firstName} ${selectedUser.lastName ? selectedUser.lastName : ''}`,
             dob: selectedUser.dateOfBirth || "",
             email: selectedUser.email,
             mobile: selectedUser.mobileNumber,
@@ -116,11 +115,6 @@ const MatchesDetailView = () => {
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                "selectedRows: ",
-                selectedRows
-            );
             userToBeMerged = selectedRows
         },
         getCheckboxProps: (record) => ({
@@ -128,17 +122,15 @@ const MatchesDetailView = () => {
         }),
     };
 
-    // console.log({matches})
-    // const dataSource = []
     const dataSource = matches.map(user => ({
-            key: user.id,
-            id: user.id,
-            name: `${user.firstName} ${user.lastName ? user.lastName: ''}`,
-            dob: user.dateOfBirth,
-            email: user.email,
-            mobile: user.mobileNumber,
-            affiliate: user.affiliates && user.affiliates.length ? user.affiliates.join(', '): '',
-        })
+        key: user.id,
+        id: user.id,
+        name: `${user.firstName} ${user.lastName ? user.lastName : ''}`,
+        dob: user.dateOfBirth,
+        email: user.email,
+        mobile: user.mobileNumber,
+        affiliate: user.affiliates && user.affiliates.length ? user.affiliates.join(', ') : '',
+    })
     )
 
     const columns = [
@@ -211,7 +203,7 @@ const MatchesDetailView = () => {
             </div>
             <div className="d-flex align-items-center justify-content-between mt-4">
                 <Button onClick={history.goBack}>{AppConstants.cancel}</Button>
-                <Button type="primary" onClick={() => {openDecisionScreen()}}>{AppConstants.next}</Button>
+                <Button type="primary" onClick={() => { openDecisionScreen() }}>{AppConstants.next}</Button>
             </div>
         </div>
     );

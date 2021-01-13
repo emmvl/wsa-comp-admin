@@ -269,19 +269,52 @@ function* exportPaymentSaga(action) {
 
 export function* getInvoiceStatusSaga(action) {
   try {
-      console.log("*****" + action.registrationid)
-      const result = yield call(AxiosApi.getInvoiceStatus, action.registrationid, action.userRegId, action.invoiceId,action.teamMemberRegId);
-      if (result.status === 1) {
-          yield put({
-              type: ApiConstants.API_GET_INVOICE_STATUS_SUCCESS,
-              result: result.result.data,
-              status: result.result.status
-          });
-      } else {
-          yield call(failSaga, result)
-      }
+    const result = yield call(AxiosApi.getInvoiceStatus, action.registrationid, action.userRegId, action.invoiceId, action.teamMemberRegId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_INVOICE_STATUS_SUCCESS,
+        result: result.result.data,
+        status: result.result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
   } catch (error) {
-      yield call(errorSaga, error)
+    yield call(errorSaga, error)
+  }
+}
+
+// Export payment Dashboard saga
+function* exportPaymentDashboardSaga(action) {
+  try {
+    const result = yield call(AxiosApi.exportPaymentDashboardApi,
+      action.offset,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
   }
 }
 
@@ -297,6 +330,7 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, getPaymentListSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, exportPaymentSaga);
-  yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga)
+  yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga);
+  yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD, exportPaymentDashboardSaga);
 
 }
