@@ -605,10 +605,6 @@ class RegistrationCompetitionForm extends Component {
         }
     }
 
-    onChange(checkedValues) {
-        // console.log("checked = ", checkedValues);
-    }
-
     divisionTableDataOnchange(checked, record, index, keyword) {
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword)
         this.setState({ divisionState: true })

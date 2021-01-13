@@ -1416,7 +1416,6 @@ class CompetitionOpenRegForm extends Component {
                 }
             },
             onCancel() {
-                // console.log('Cancel');
             },
         });
     }

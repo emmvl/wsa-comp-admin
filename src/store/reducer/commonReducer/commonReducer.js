@@ -512,8 +512,6 @@ function commonReducerState(state = initialState, action) {
             };
 
         case ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_SUCCESS:
-            console.log(action.result, 'API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_SUCCESS')
-
             return {
                 ...state,
                 status: action.status,
@@ -525,7 +523,7 @@ function commonReducerState(state = initialState, action) {
 
         case ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD:
             return { ...state, onLoad: true, error: null };
-        
+
         case ApiConstants.API_NETSETGO_TSHIRT_SIZE_SUCCESS:
             return {
                 ...state,

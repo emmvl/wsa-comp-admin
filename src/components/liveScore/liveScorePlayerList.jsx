@@ -209,7 +209,6 @@ class LiveScorePlayerList extends Component {
         if (getLiveScoreCompetiton()) {
             this.setLivScoreCompIsParent()
             const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
-            console.log(JSON.parse(getLiveScoreCompetiton()));
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             this.setState({ competitionId: id, compOrgId: compOrgId })
             if (id !== null) {

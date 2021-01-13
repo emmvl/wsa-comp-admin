@@ -213,9 +213,6 @@ const LiveScoreAxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-
-
-        console.log('url in fetch ====>', url);
         return Method.dataGet(url, localStorage.token);
     },
 
@@ -799,7 +796,6 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreDashboard(competitionID, startDay, currentTime, competitionOrganisationId, liveScoreCompIsParent) {
-        console.log("liveScoreCompIsParent", liveScoreCompIsParent)
         let url = ""
         if (!liveScoreCompIsParent) {
             url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}&competitionOrganisationId=${competitionOrganisationId}`;
@@ -897,7 +893,6 @@ const LiveScoreAxiosApi = {
     // Delete Player
     liveScoreDeletePlayer(playerId) {
         const url = `/players/id/${playerId}`;
-        console.log(url)
         return Method.dataDelete(url, token);
     },
 
@@ -1023,15 +1018,11 @@ const LiveScoreAxiosApi = {
     },
 
     liveScorePlayerImport(competitionId, csvFile, key) {
-        console.log('called', key)
         const body = new FormData();
         body.append('file', csvFile, csvFile.name);
-
         const { id, competitionOrganisation } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
         const url = key !== "own" ? `/players/import?competitionOrganisationId=${compOrgId}` : `/players/import?competitionId=${id}`
-
-        console.log(url)
         return Method.dataPost(url, token, body);
     },
 
@@ -1243,7 +1234,6 @@ const LiveScoreAxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        console.log(url)
         return Method.dataPost(url, token, body);
     },
 
@@ -1290,7 +1280,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// ////get all the assign umpire list on the basis of competitionId
-    getAssignUmpiresList(competitionId, body , userId) {
+    getAssignUmpiresList(competitionId, body, userId) {
         const url = `/matches/admin?competitionId=${competitionId}&roleId=15&userId=${userId}`;
         return Method.dataPost(url, token, body);
     },

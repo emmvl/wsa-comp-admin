@@ -147,7 +147,6 @@ class LiveScoreAddMatch extends Component {
                 const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton());
                 let compData = JSON.parse(getLiveScoreCompetiton())
                 let orgItem = await getOrganisationData();
-                console.log('compData', compData)
                 let userOrganisationId = orgItem ? orgItem.organisationId : 0;
                 let compOrg_Id = compData ? compData.organisationId : 0
                 let isCompParent = userOrganisationId === compOrg_Id
@@ -239,7 +238,6 @@ class LiveScoreAddMatch extends Component {
                 });
             }
             if (this.props.liveScoreMatchState.updateUmpireFetchCall) {
-                console.log('coming in did update', this.props.liveScoreMatchState.matchData);
                 let matchData = this.props.liveScoreMatchState.matchData;
                 let startTime = moment(matchData.startTime);
                 let endTime = moment(startTime).add(matchData.matchDuration, 'minutes').add(matchData.mainBreakDuration, 'minutes');

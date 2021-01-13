@@ -92,14 +92,12 @@ let userHttpApi = {
   },
 
   async getVenueOrganisation(key) {
-    console.log(key);
     let userId = await getUserId();
     let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
     let url = `api/organisation?userId=${userId}`;
     if (key) {
       url += `&organisationUniqueKey=${organisationUniqueKey}`
     }
-    console.log(url);
     return Method.dataGet(url, token)
   },
 
@@ -348,7 +346,6 @@ let userHttpApi = {
   },
 
   newUmpireList(data) {
-    console.log(data)
     let url = null;
     if (data.isCompParent !== true) {
       url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`;
@@ -365,7 +362,6 @@ let userHttpApi = {
   },
 
   updateBannerCount(payload) {
-    console.log(payload);
     const { organisationId } = getOrganisationData();
     const url = `api/bannerCount?organisationId=${organisationId}`;
     return Method.dataPost(url, token, payload);
@@ -374,7 +370,6 @@ let userHttpApi = {
   async getBannerCount(orgId) {
     const { organisationId } = getOrganisationData();
     const url = `api/bannerCount?organisationId=${organisationId}`;
-    console.log(url);
     return Method.dataGet(url, token)
   },
 

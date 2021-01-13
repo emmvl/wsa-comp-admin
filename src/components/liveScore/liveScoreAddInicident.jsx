@@ -272,9 +272,6 @@ class LiveScoreAddIncident extends Component {
         let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
         let startTime = time_formate ? moment(time_formate, "HH:mm") : null
-
-        console.log(incidentData, 'incidentData')
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
