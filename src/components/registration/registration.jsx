@@ -187,7 +187,10 @@ const columns = [
     {
         title: "Due per Instalment",
         dataIndex: "duePerInstalment",
-        key: "duePerInstalment"
+        key: "duePerInstalment",
+        render: new Intl.NumberFormat('en-AU', {
+            style: 'currency', currency: 'AUD', minimumFractionDigits: 2}
+        ).format
     },
     {
         title: "Action",
