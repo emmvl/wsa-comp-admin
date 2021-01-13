@@ -134,7 +134,10 @@ const LiveScoreAxiosApi = {
             } else {
                 url = `/competitions/admin?organisationId=${orgKey}&umpiredCompsOnly=${umpiredCompsOnly}&isParticipatingInCompetition=${isParticipatingInCompetition}`;
             }
-        } else {
+        } else if (!orgKey && recordUmpireTypes) {
+            url = `/competitions/admin?recordUmpireType=${recordUmpireTypes}&umpiredCompsOnly=${umpiredCompsOnly}&isParticipatingInCompetition=${isParticipatingInCompetition}`;
+        }
+        else {
             url = '/competitions/admin';
         }
 

@@ -54,6 +54,7 @@ class UmpirePaymentSetting extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            competitionList: null,
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
@@ -65,13 +66,16 @@ class UmpirePaymentSetting extends Component {
             sectionDataToDeleteIndex: null,
             tempPaymentSettingsData: null,
             tempSelectedDivisions: null,
+            isOrganiserView: false,
         };
     }
 
     componentDidMount() {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.setState({ loading: true });
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        // this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        // this.props.umpireCompetitionListAction(null, null, null);
+        this.props.umpireCompetitionListAction(null, null, null, 'USERS');
         this.props.getRefBadgeData();
     }
 
@@ -100,13 +104,38 @@ class UmpirePaymentSetting extends Component {
             }
         }
 
+        if (this.props.umpireCompetitionState.umpireComptitionList !== prevProps.umpireCompetitionState.umpireComptitionList) {
+            const allCompetitions = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+            const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+            const competitionList = allCompetitions.filter(item => (
+                item.organisationId === organisationId
+                ||
+                (organisationId !== item.organisationId && item.competitionOrganisation?.orgId === organisationId)
+            ));
+
+            const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
+
+            competitionListCopy.forEach(item => {
+                if (item.organisationId === organisationId) {
+                    item.isOrganiser = true;
+                } else {
+                    item.isOrganiser = false;
+                }
+            })
+
+            this.setState({ competitionList: competitionListCopy });
+        }
+
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
-            const { selectedComp, allCompetition } = this.state;
+            const { selectedComp, competitionList } = this.state;
             let orgId = null;
 
-            for (let i in allCompetition) {
-                if (allCompetition[i].id === selectedComp) {
-                    orgId = allCompetition[i].competitionOrganisation.orgId;
+            // console.log('selectedComp', selectedComp)
+
+            for (let i in competitionList) {
+                if (competitionList[i].id === selectedComp) {
+                    orgId = competitionList[i].competitionOrganisation.orgId;
                 }
             }
 
@@ -129,7 +158,7 @@ class UmpirePaymentSetting extends Component {
 
             const selectedDivisions = [ ...selectedDivisionsOrganiser, ...selectedDivisionsAffiliate ];
 
-            const umpirePaymentSettingsObj = !!paymentSettingsData.umpirePaymentSettings.length ? 
+            const umpirePaymentSettingsArray = !!paymentSettingsData.umpirePaymentSettings.length ? 
                 paymentSettingsData.umpirePaymentSettings.map(settingsItem => ({
                     allDivisions: settingsItem.allDivisions,
                     // divisions: settingsItem.divisions.map(item => item.id),
@@ -154,17 +183,22 @@ class UmpirePaymentSetting extends Component {
                     hasSettings: true,
                 })) : [];
 
-            const allowedDivisionsSettingObj = !!paymentSettingsData.allowedDivisionsSetting ? [{ 
+            const allowedDivisionsSettingArray = !!paymentSettingsData.allowedDivisionsSetting ? [{ 
                 allDivisions: paymentSettingsData.allowedDivisionsSetting.allDivisions,
                 // divisions: paymentSettingsData.allowedDivisionsSetting.divisions.map(item => item.id),
                 divisions: paymentSettingsData.allowedDivisionsSetting.divisions,
                 hasSettings: false,
             }] : [];
+
+            const { isOrganiserView } = this.state;
             
+            const affiliateViewSettingsArray = !isOrganiserView && !paymentSettingsData.umpirePaymentSettings.length ?
+                [initialPaymentSettingsData] : [];
+
 
             const paymentSettingsDataObj = {
                 umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
-                settings: [ ...umpirePaymentSettingsObj, ...allowedDivisionsSettingObj ],
+                settings: [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray, ...affiliateViewSettingsArray ],
             }
 
             this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions });
@@ -187,9 +221,9 @@ class UmpirePaymentSetting extends Component {
             const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
 
             if (e.target.checked) {
-                newSettingsData = [ ...filteredSettingsData, initialSettingsBoxData ];
+                newSettingsData = [ ...filteredSettingsData, initialSettingsBoxData, initialNoSettingsData ];
             } else {
-                newSettingsData = [ ...filteredSettingsData ];
+                newSettingsData = [ ...filteredSettingsData,  ];
             }  
         } else {
             if (e.target.checked) {
@@ -204,7 +238,7 @@ class UmpirePaymentSetting extends Component {
         });
 
         const paymentSettingsDataObj = {
-            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
+            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId || isOrganiser ? 1 : 2,
             settings: newSettingsData,
         }
 
@@ -215,7 +249,7 @@ class UmpirePaymentSetting extends Component {
         const { paymentSettingsData } = this.state;
 
         const sectionDataCopy = JSON.parse(JSON.stringify(sectionData));
-        let { byBadge, byPool, UmpirePaymentFeeType } = sectionDataCopy[sectionDataIndex];
+        let { byBadge, byPool } = sectionDataCopy[sectionDataIndex];
 
         if (key === 'byBadge') {
             byPool.length = 0;
@@ -431,10 +465,14 @@ class UmpirePaymentSetting extends Component {
     }
 
     onChangeComp = compID => {
+        const { competitionList } = this.state;
+
+        const { isOrganiser } = competitionList.find(competition => competition.id === compID);
+
         this.props.liveScoreGetDivision(compID);
         setUmpireCompId(compID);
 
-        this.setState({ selectedComp: compID });
+        this.setState({ selectedComp: compID, isOrganiserView: isOrganiser });
     }
 
     modifyPostArray = arr => {
@@ -456,7 +494,7 @@ class UmpirePaymentSetting extends Component {
             .filter(item => !item.hasSettings && !!item.divisions.length);
         
         const umpirePaymentSettingsArray = paymentSettingsDataCopy.settings
-            .filter(item => !!item.hasSettings && !!item.divisions.length && (!!item.byBadge));
+            .filter(item => !!item.hasSettings && !!item.divisions.length);
 
         this.modifyPostArray(affiliateSettingArray);
         this.modifyPostArray(umpirePaymentSettingsArray);
@@ -472,8 +510,6 @@ class UmpirePaymentSetting extends Component {
             umpirePaymentSettings,
             allowedDivisionsSetting,
         }
-
-        // console.log('bodyData', bodyData);
 
         const saveData = {
             organisationId,
@@ -500,8 +536,10 @@ class UmpirePaymentSetting extends Component {
     };
 
     dropdownView = () => {
-        const competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        
+        const { competitionList } = this.state;
+
+        // console.log('competitionList', competitionList);
+
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -520,7 +558,7 @@ class UmpirePaymentSetting extends Component {
                                     onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
                                 >
-                                    {competition.map((item) => (
+                                    {!!competitionList && competitionList.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
@@ -556,17 +594,32 @@ class UmpirePaymentSetting extends Component {
     };
 
     contentView = () => {
-        return (
-            <div className="content-view pt-4 mt-5">
-                <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
-                <div className="d-flex flex-column">
-                    {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, true)}
-                    {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, false)}
-                </div>
+        const { isOrganiserView } = this.state;
 
-                {this.deleteConfirmModalView()}
-                {this.allDivisionModalView()}
-            </div>
+        return (
+            <>
+                {isOrganiserView ? 
+                    <div className="content-view pt-4 mt-5">
+                        <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
+                        <div className="d-flex flex-column">
+                            {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, true)}
+                            {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, false)}
+                        </div>
+
+                        {this.deleteConfirmModalView()}
+                        {this.allDivisionModalView()}
+                    </div>
+                :
+                    <div className="content-view pt-4 mt-5">
+                        <div className="d-flex flex-column">
+                            {this.umpireSettingsSectionView(null, true)}
+                        </div>
+
+                        {this.deleteConfirmModalView()}
+                        {this.allDivisionModalView()}
+                    </div>
+                }
+            </>
         );
     };
 
@@ -580,13 +633,16 @@ class UmpirePaymentSetting extends Component {
 
         return (
             <>
-                <Checkbox
-                    onChange={(e) => this.handleChangeWhoPaysUmpires(e, hasSettings)}
-                    checked={!!sectionData?.length}
-                    className="mx-0 mb-2"
-                >
-                    {sectionTitle}
-                </Checkbox>
+                {sectionTitle &&
+                    <Checkbox
+                        onChange={(e) => this.handleChangeWhoPaysUmpires(e, hasSettings)}
+                        checked={!!sectionData?.length}
+                        className="mx-0 mb-2"
+                    >
+                    
+                        {sectionTitle}
+                    </Checkbox>
+                }
                 {sectionData && !!sectionData.length && (
                     <div className="position-relative" style={{ paddingBottom: 35 }}>
                         {sectionData.map((boxData, sectionDataIndex) => (
