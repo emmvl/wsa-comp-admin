@@ -24,9 +24,9 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage';
 
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
-import { 
-    umpirePaymentSettingUpdate,
+import {
     getUmpirePaymentSettings,
+    saveUmpirePaymentSettings,
 } from '../../store/actions/umpireAction/umpirePaymentSettingAction';
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { getUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
@@ -69,11 +69,10 @@ class UmpirePaymentSetting extends Component {
     }
 
     componentDidMount() {
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-        this.setState({ loading: true })
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
-        // this.props.umpirePaymentSettingUpdate({ value: null, key: 'refreshPage' })
-        this.props.getRefBadgeData()
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.setState({ loading: true });
+        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        this.props.getRefBadgeData();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -102,6 +101,19 @@ class UmpirePaymentSetting extends Component {
         }
 
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
+            const { selectedComp, allCompetition } = this.state;
+            let orgId = null;
+
+            for (let i in allCompetition) {
+                if (allCompetition[i].id === selectedComp) {
+                    orgId = allCompetition[i].competitionOrganisation.orgId;
+                }
+            }
+
+            this.props.getUmpirePoolData({ orgId, compId: selectedComp });
+        }
+
+        if (this.props.umpirePoolAllocationState.umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
             this.props.getUmpirePaymentSettings(this.state.selectedComp);
         }
 
@@ -207,12 +219,10 @@ class UmpirePaymentSetting extends Component {
 
         if (key === 'byBadge') {
             byPool.length = 0;
-            byBadge.push({});
-            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = "BY_BADGE";
+            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = 'BY_BADGE';
         } else {
             byBadge.length = 0;
-            byPool.push({});
-            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = "BY_POOL";
+            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = 'BY_POOL';
         }
 
         const newPaymentSettingsData = {
@@ -420,6 +430,61 @@ class UmpirePaymentSetting extends Component {
         this.setState({ paymentSettingsData: newPaymentSettingsData });
     }
 
+    onChangeComp = compID => {
+        this.props.liveScoreGetDivision(compID);
+        setUmpireCompId(compID);
+
+        this.setState({ selectedComp: compID });
+    }
+
+    modifyPostArray = arr => {
+        arr.forEach(item => {
+            item.divisions = item.allDivisions ? [] : item.divisions.map(division => division.id);
+            delete item.hasSettings; 
+        });
+
+        return arr;
+    }
+
+    handleSave = () => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { selectedComp, paymentSettingsData } = this.state;
+
+        const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData));
+
+        const affiliateSettingArray = paymentSettingsDataCopy.settings
+            .filter(item => !item.hasSettings && !!item.divisions.length);
+        
+        const umpirePaymentSettingsArray = paymentSettingsDataCopy.settings
+            .filter(item => !!item.hasSettings && !!item.divisions.length && (!!item.byBadge));
+
+        this.modifyPostArray(affiliateSettingArray);
+        this.modifyPostArray(umpirePaymentSettingsArray);
+
+        const allowedDivisionsSetting = !!affiliateSettingArray[0]?.divisions.length || !!affiliateSettingArray[0]?.allDivisions 
+            ? affiliateSettingArray[0] 
+            :  { allDivisions: false, divisions: [] };
+
+        const umpirePaymentSettings = !!umpirePaymentSettingsArray.length ? umpirePaymentSettingsArray : [];
+
+        const bodyData = {
+            umpirePayerTypeRefId: paymentSettingsDataCopy.umpirePayerTypeRefId,
+            umpirePaymentSettings,
+            allowedDivisionsSetting,
+        }
+
+        // console.log('bodyData', bodyData);
+
+        const saveData = {
+            organisationId,
+            competitionId: selectedComp,
+            type: 'organiser',
+            body: bodyData,
+        };
+
+        this.props.saveUmpirePaymentSettings(saveData);
+    }
+
     headerView = () => {
         return (
             <div className="header-view">
@@ -433,24 +498,6 @@ class UmpirePaymentSetting extends Component {
             </div>
         );
     };
-
-    onChangeComp = compID => {
-        const compeList = this.state.allCompetition;
-        let orgId = null;
-
-        for (let i in compeList) {
-            if (compeList[i].id === compID) {
-                orgId = compeList[i].competitionOrganisation.orgId;
-            }
-        }
-
-        this.props.liveScoreGetDivision(compID);
-        this.props.getUmpirePoolData({ orgId, compID });
-
-        setUmpireCompId(compID);
-
-        this.setState({ selectedComp: compID });
-    }
 
     dropdownView = () => {
         const competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
@@ -492,7 +539,12 @@ class UmpirePaymentSetting extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit">
+                                <Button 
+                                    onClick={this.handleSave}
+                                    className="publish-button save-draft-text" 
+                                    type="primary" 
+                                    htmlType="submit"
+                                >
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -618,7 +670,7 @@ class UmpirePaymentSetting extends Component {
                     >
                         {AppConstants.byBadge}
                     </Radio>
-                    {!!byBadge.length && !!umpireBadgesData.length && (
+                    {UmpirePaymentFeeType === 'BY_BADGE' && !!umpireBadgesData.length && (
                         <div>
                             {umpireBadgesData.map((badgeDataItem, i) => (
                                 <div key={"badgeDataItem" + i}>
@@ -635,7 +687,7 @@ class UmpirePaymentSetting extends Component {
                     >
                         {AppConstants.byPool}
                     </Radio>
-                    {!!byPool.length && !!umpirePoolData.length && (
+                    {UmpirePaymentFeeType === 'BY_POOL' && !!umpirePoolData.length && (
                         <div>
                             {umpirePoolData.map((poolDataItem, i) => (
                                 <div key={"poolDataItem" + i}>
@@ -762,9 +814,9 @@ class UmpirePaymentSetting extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        umpirePaymentSettingUpdate,
         getRefBadgeData,
         getUmpirePaymentSettings,
+        saveUmpirePaymentSettings,
         liveScoreGetDivision,
         getUmpirePoolData,
     }, dispatch)

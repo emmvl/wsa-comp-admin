@@ -115,10 +115,29 @@ function* umpirePaymentSettingsGetSaga(action) {
     }
 }
 
+function* umpirePaymentSettingsSaveSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.umpirePaymentSettingsPost, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.settingsUpdatedMessage);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
 
 export default function* rootUmpirePaymentSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_PAYMENT_DATA_LOAD, umpirePaymentListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_LOAD, umpirePaymentTransferSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_LOAD, umpirePaymenExportSaga);
     yield takeEvery(ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD, umpirePaymentSettingsGetSaga);
+    yield takeEvery(ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD, umpirePaymentSettingsSaveSaga);
 }

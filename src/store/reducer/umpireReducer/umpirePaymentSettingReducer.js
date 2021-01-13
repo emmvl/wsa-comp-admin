@@ -50,22 +50,6 @@ function umpirePaymentSetting(state = initialState, action) {
                 status: action.status
             };
 
-        case ApiConstants.API_UPDATE_UMPIRE_PAYMENT_SETTING:
-
-            let data = action.data.value
-            let key = action.data.key
-            let subkey = action.data.subkey
-            if (key === "fee") {
-                state.poolViewArray[action.data.index][key] = data
-            }
-            else {
-                state.badgeDataCompOrg[action.data.index][key] = data;
-            }
-            return {
-                ...state,
-
-            };
-
         ////Ref Badge 
         case ApiConstants.API_GET_REF_BADGE_LOAD:
             return { ...state, onLoad: true };
@@ -89,6 +73,20 @@ function umpirePaymentSetting(state = initialState, action) {
             };
             
         case ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                paymentSettingsData: action.result,
+                onLoad: false,
+            };
+
+        // save umpire payment settings
+        case ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+            
+        case ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
             return {
                 ...state,
                 paymentSettingsData: action.result,
