@@ -134,7 +134,7 @@ class LiveScoreUmpireList extends Component {
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
-        if (e.target.value == null || e.target.value == "") {
+        if (e.target.value === null || e.target.value === "") {
             const body = {
                 paging: {
                     limit: 10,
@@ -165,7 +165,7 @@ class LiveScoreUmpireList extends Component {
     // on click of search icon
     onClickSearchIcon = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText == null || this.state.searchText == "") {
+        if (this.state.searchText === null || this.state.searchText === "") {
         } else {
             const body = {
                 paging: {

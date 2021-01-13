@@ -62,7 +62,8 @@ const initialState = {
     accreditationUmpireList: [],
     umpireAccreditation: [],
     coachAccreditation: [],
-    tShirtSizeList: []
+    tShirtSizeList: [],
+    stateListData: [],
 };
 
 function commonReducerState(state = initialState, action) {
@@ -517,6 +518,7 @@ function commonReducerState(state = initialState, action) {
                 status: action.status,
                 umpireAccreditation: action.result.accreditationUmpire,
                 coachAccreditation: action.result.accreditationCoach,
+                stateListData: action.result.State,
                 onLoad: false,
                 error: null
             };

@@ -509,7 +509,7 @@ class CompetitionOpenRegForm extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;

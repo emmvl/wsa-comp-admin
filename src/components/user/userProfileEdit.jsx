@@ -395,7 +395,7 @@ class UserProfileEdit extends Component {
     };
 
     handlePlacesAutocomplete = (data) => {
-        const { stateList } = this.props.commonReducerState;
+        const { stateListData } = this.props.commonReducerState;
         const address = data;
         let userData = this.state.userData;
         this.props.checkVenueDuplication(address);
@@ -413,8 +413,8 @@ class UserProfileEdit extends Component {
         this.setState({
             venueAddress: address,
         });
-        const stateRefId = stateList.length > 0 && address.state
-            ? stateList.find((state) => state.name === address.state).id
+        const stateRefId = stateListData.length > 0 && address.state
+            ? stateListData.find((state) => state.name === address.state).id
             : null;
 
         // this.formRef.current.setFieldsValue({
@@ -433,11 +433,11 @@ class UserProfileEdit extends Component {
 
     addressEdit = () => {
         let userData = this.state.userData
-        const { stateList } = this.props.commonReducerState;
+        const { stateListData } = this.props.commonReducerState;
         let hasErrorAddressNumber = this.state.hasErrorAddressNumber;
 
-        let state = (stateList.length > 0 && userData.stateRefId)
-            ? stateList.find((state) => state.id == userData.stateRefId).name
+        let state = (stateListData.length > 0 && userData.stateRefId)
+            ? stateListData.find((state) => state.id == userData.stateRefId).name
             : null;
 
         let defaultVenueAddress = null
@@ -641,13 +641,13 @@ class UserProfileEdit extends Component {
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.select}
                                 // required="required-field"
-                                value={userData?.stateRefId}
+                                value={userData ?.stateRefId}
                                 name="stateRefId"
                                 onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                             // readOnly
                             // disabled
                             >
-                                {stateList.map((item) => (
+                                {stateListData.map((item) => (
                                     <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>

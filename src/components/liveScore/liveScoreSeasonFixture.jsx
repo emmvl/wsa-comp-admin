@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import { liveScoreRoundListAction, clearRoundData } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
 import Loader from '../../customComponents/loader'
-import { getOrganisationData } from "../../util/sessionStorage"
+// import { getOrganisationData } from "../../util/sessionStorage"
 import AppImages from "../../themes/appImages";
 import { fixtureCompetitionListAction } from "../../store/actions/LiveScoreAction/LiveScoreFixtureAction"
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -226,7 +226,7 @@ class LiveScoreSeasonFixture extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreFixtureCompState !== this.props.liveScoreFixtureCompState) {
-            if (this.state.onCompLoad && this.props.liveScoreFixtureCompState.onLoad == false) {
+            if (this.state.onCompLoad && this.props.liveScoreFixtureCompState.onLoad === false) {
                 let firstComp = this.props.liveScoreFixtureCompState.comptitionList && this.props.liveScoreFixtureCompState.comptitionList[0].id
                 this.props.getLiveScoreDivisionList(firstComp)
                 this.setState({ selectedComp: firstComp, onCompLoad: false, onDivisionLoad: true })
@@ -234,7 +234,7 @@ class LiveScoreSeasonFixture extends Component {
         }
 
         if (this.props.liveScoreMatchState !== nextProps.liveScoreMatchState) {
-            if (this.props.liveScoreMatchState.onLoad == false && this.state.onDivisionLoad) {
+            if (this.props.liveScoreMatchState.onLoad === false && this.state.onDivisionLoad) {
                 if (this.props.liveScoreMatchState.divisionList.length > 0) {
                     let division = this.props.liveScoreMatchState.divisionList[0].id
                     this.setState({ onDivisionLoad: false, division })
@@ -319,7 +319,7 @@ class LiveScoreSeasonFixture extends Component {
             for (let i in array) {
                 let matcheArray = array[i].matches
                 for (let j in matcheArray) {
-                    if (j == 0) {
+                    if (j === 0) {
                         matcheArray[j]["isRoundChnage"] = true
                     }
                     matcheArray[j]["roundName"] = array[i].name
