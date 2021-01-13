@@ -492,13 +492,13 @@ let userHttpApi = {
   },
 
   addChild(payload) {
-    const url = `usersApi/users/addChild/?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
-    return Method.dataPost(url, token, payload.body);
+    const url = `/admin/users/child/create?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    return Method.dataPost(url, token, {childUser: payload.body});
   },
 
   addParent(payload) {
-    const url = `usersApi/users/addParent/?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
-    return Method.dataPost(url, token, payload.body);
+    const url = `/admin/users/parent/create?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    return Method.dataPost(url, token, {parentUser: payload.body});
   },
 
   findPossibleMerge(payload) {
