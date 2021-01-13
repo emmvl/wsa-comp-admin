@@ -466,7 +466,7 @@ const AppConstants = {
   newOrganisationName: 'Organisation Name you are Transferring to?',
   organisationLogo: 'Organisation Logo',
   registrationOpen: 'Registration Open',
-  registrationLock: 'Registration Lock',
+  lockRegistrationsImmediately: 'Lock Registrations Immediately',
   endUserRegistrationUrl: 'End User Registration URL',
   addMembershipCategory: 'Add Membership Category',
   training: 'Training',

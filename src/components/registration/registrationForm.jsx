@@ -88,7 +88,7 @@ const columns = [
         width: "25%",
     },
     {
-        title: "Registration Lock",
+        title: AppConstants.lockRegistrationsImmediately,
         dataIndex: "registrationLock",
         width: 120,
         key: "registrationLock",
