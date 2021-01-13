@@ -3537,7 +3537,7 @@ class RegistrationCompetitionFee extends Component {
             this.setState({ loading: false });
             if (!competitionFeesState.error) {
                 window.scrollTo(0, 0);
-                let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4"
+                let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4" && this.state.clickedOnTab == false
                     ? "6"
                     : this.state.clickedOnTab == true ? this.state.competitionTabKey : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
                 this.setState({
@@ -3793,7 +3793,7 @@ class RegistrationCompetitionFee extends Component {
     }
 
     // for  save  payment
-    paymentApiCall = (competitionId) => {
+    paymentApiCall = (competitionId,fromValidation) => {
         let paymentDataArr = this.props.competitionFeesState.competitionPaymentsData;
         let selectedCasualPaymentArr = this.props.competitionFeesState.selectedCasualFee;
         let SelectedSeasonalPaymentArr = this.props.competitionFeesState.SelectedSeasonalFee;
@@ -3846,17 +3846,26 @@ class RegistrationCompetitionFee extends Component {
 
         if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
             message.error(ValidationConstants.pleaseSelectPaymentMethods);
+            if(fromValidation == "FromValidation"){
+                return true;
+            }
             return;
         }
 
         if (SelectedSeasonalPaymentArr.find(x => x.paymentOptionRefId == 5)) {
             if (selectedSeasonalInstalmentDates.length === 0) {
                 message.error(ValidationConstants.pleaseProvideInstalmentDate);
+                if(fromValidation == "FromValidation"){
+                    return true;
+                }
                 return;
             } else if (selectedSeasonalInstalmentDates.length > 0) {
                 let instalmentDate = selectedSeasonalInstalmentDates.find(x => x.instalmentDate == "")
                 if (instalmentDate) {
                     message.error(ValidationConstants.pleaseProvideInstalmentDate);
+                    if(fromValidation == "FromValidation"){
+                        return true;
+                    }
                     return;
                 }
             }
@@ -3864,6 +3873,9 @@ class RegistrationCompetitionFee extends Component {
         if (SelectedSeasonalPaymentArr.find(x => x.paymentOptionRefId == 8)) {
             if (paymentDataArr.seasonalSchoolRegCode.length === 0) {
                 message.error(ValidationConstants.pleaseFillRegistration);
+                if(fromValidation == "FromValidation"){
+                    return true;
+                }
                 this.setState({ loading: false });
                 return;
             }
@@ -3874,11 +3886,17 @@ class RegistrationCompetitionFee extends Component {
         if (selectedSeasonalTeamPaymentArr.find(x => x.paymentOptionRefId == 5)) {
             if (selectedTeamSeasonalInstalmentDates.length === 0) {
                 message.error(ValidationConstants.pleaseProvideInstalmentDate);
+                if(fromValidation == "FromValidation"){
+                    return true;
+                }
                 return;
             } else if (selectedTeamSeasonalInstalmentDates.length > 0) {
                 let instalmentDate = selectedTeamSeasonalInstalmentDates.find(x => x.instalmentDate == "")
                 if (instalmentDate) {
                     message.error(ValidationConstants.pleaseProvideInstalmentDate);
+                    if(fromValidation == "FromValidation"){
+                        return true;
+                    }
                     return;
                 }
             }
@@ -3886,13 +3904,20 @@ class RegistrationCompetitionFee extends Component {
         if (selectedSeasonalTeamPaymentArr.find(x => x.paymentOptionRefId == 8)) {
             if (paymentDataArr.teamSeasonalSchoolRegCode.length === 0) {
                 message.error(ValidationConstants.pleaseFillRegistration);
+                if(fromValidation == "FromValidation"){
+                    return true;
+                }
                 this.setState({ loading: false });
                 return;
             }
         }
 
-        this.setState({ loading: true });
-        this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
+        if(fromValidation != "FromValidation"){
+            this.setState({ loading: true });
+            this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
+        }else{
+            return false;
+        }
     };
 
     ////check the division objects does not contain empty division array
@@ -3953,7 +3978,7 @@ class RegistrationCompetitionFee extends Component {
 
         let discountBody = {
             competitionId,
-            statusRefId: this.state.statusRefId,
+            statusRefId: this.state.permissionState.isPublished ? 3 : this.state.statusRefId,
             competitionDiscounts: [
                 {
                     discounts: filterOrgPostDiscountData,
@@ -4077,7 +4102,7 @@ class RegistrationCompetitionFee extends Component {
         }
     }
 
-    saveCompFeesApiCall = (values) => {
+    saveCompFeesApiCall = (fromValidation) => {
         let compFeesState = this.props.competitionFeesState;
         let competitionId = compFeesState.competitionId;
         let finalPostData = [];
@@ -4622,12 +4647,15 @@ class RegistrationCompetitionFee extends Component {
                 finalpostarray = modifyArr;
             }
         }
-
         if (finalpostarray.length > 0) {
-            this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
-            this.setState({ loading: true });
+            if(fromValidation != "FromValidation"){
+                this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
+                this.setState({ loading: true });
+            }
+            return false;
         } else {
             message.error(ValidationConstants.feesCannotBeEmpty);
+            return true;
         }
     };
 
@@ -4863,16 +4891,18 @@ class RegistrationCompetitionFee extends Component {
             } else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
                 invitees = anyOrgAffiliateArr
             }
-            if (tabKey == '1') {
+            if (tabKey == '1' && this.state.isCreatorEdit == false) {
                 this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
-            } else if (tabKey == '2') {
+            } else if (tabKey == '2' && this.state.isCreatorEdit == false) {
                 this.saveCompMembershipApiCall(competitionId)
-            } else if (tabKey == '3') {
+            } else if (tabKey == '3' && this.state.isCreatorEdit == false) {
                 this.saveCompDivApiCall(competitionId,postData,compFeesState);
             } else if (tabKey == '4') {
                 this.saveCompFeesApiCall();
-            } else if (tabKey == '5') {
+            } else if (tabKey == '5' && this.state.isCreatorEdit == false) {
                 this.paymentApiCall(competitionId);
+            } else if (tabKey == '6') {
+                this.discountApiCall(competitionId);
             }
         }catch(ex){
             console.log("Error in tabChangeSaveApiActionCall::"+ex);
@@ -5204,7 +5234,7 @@ class RegistrationCompetitionFee extends Component {
         if (key === 'name') {
             array[index].name = data;
         } else {
-            array[index].nonPlayingDate = data;
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD");
         }
 
         this.props.add_editcompetitionFeeDeatils(array, 'nonPlayingDates');
@@ -5331,6 +5361,7 @@ class RegistrationCompetitionFee extends Component {
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo;
         let compDetailDisable = this.state.permissionState.compDetailDisable;
         let compDatesDisable = this.state.permissionState.compDatesDisable;
+        let isPublished = this.state.permissionState.isPublished;
         return (
             <div className="content-view pt-4">
 
@@ -5350,7 +5381,7 @@ class RegistrationCompetitionFee extends Component {
                         className="year-select reg-filter-select1"
                         style={{ maxWidth: 80 }}
                         onChange={(e) => this.setYear(e)}
-                        disabled={compDetailDisable}
+                        disabled={isPublished}
                     >
                         {this.props.appState.yearList.map((item) => (
                             <Option key={'year_' + item.id} value={item.id}>
@@ -6864,6 +6895,7 @@ class RegistrationCompetitionFee extends Component {
                                             ))} */}
                                                 <div className="d-flex flex-column" style={{ paddingLeft: 20 }}>
                                                     <Checkbox
+                                                        disabled={regInviteesDisable}
                                                         className="single-checkbox-radio-style"
                                                         style={{ paddingTop: 8 }}
                                                         checked={associationChecked}
@@ -6875,6 +6907,7 @@ class RegistrationCompetitionFee extends Component {
                                                     {this.affiliatesSearchInvitee(item.subReferences[0], anyOrgSelected)}
 
                                                     <Checkbox
+                                                        disabled={regInviteesDisable}
                                                         className="single-checkbox-radio-style ml-0"
                                                         style={{ paddingTop: 13 }}
                                                         checked={clubChecked}
@@ -7867,7 +7900,7 @@ class RegistrationCompetitionFee extends Component {
                         </CustomToolTip>
                     </div>
                 </div>
-                {discountData.map((item, index) => (
+                {(discountData || []).map((item, index) => (
                     <div className="prod-reg-inside-container-view">
                         <div
                             className="transfer-image-view pt-2"
@@ -7976,7 +8009,7 @@ class RegistrationCompetitionFee extends Component {
                                     // value={item.competitionMembershipProductTypeId}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
                                 >
-                                    {item.membershipProductTypes.map((item) => (
+                                    {(item.membershipProductTypes || []).map((item) => (
                                         <Option
                                             key={'productType_' + item.competitionMembershipProductTypeId}
                                             value={item.competitionMembershipProductTypeId}
@@ -8224,12 +8257,30 @@ class RegistrationCompetitionFee extends Component {
             let membershipDisable = this.state.permissionState.membershipDisable;
             if(this.state.competitionTabKey == '2' && membershipDisable == false){
                 if (!isArrayNotEmpty(finalmembershipProductTypes)) {
+                    message.error(ValidationConstants.please_SelectMembership_Product);
                     empty = true;
                 } else if (isArrayNotEmpty(finalmembershipProductTypes)) {
                     if (!isArrayNotEmpty(finalmembershipProductTypes[0].membershipProductTypes)) {
+                        message.error(ValidationConstants.please_SelectMembership_Product);
                         empty = true;
                     }
                 }
+            }
+            if(this.state.competitionTabKey == '3'){
+                let compFeesState = this.props.competitionFeesState;
+                let divisionArrayData = compFeesState.competitionDivisionsData;
+                if (this.checkDivisionEmpty(divisionArrayData)) {
+                    message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct);
+                    empty = true;
+                }
+            }
+            if(this.state.competitionTabKey == '4'){
+                empty = this.saveCompFeesApiCall("FromValidation");
+            }
+            if(this.state.competitionTabKey == '5'){
+                let compFeesState = this.props.competitionFeesState;
+                let competitionId = compFeesState.competitionId;
+                empty = this.paymentApiCall(competitionId,"FromValidation")
             }
             return empty;
         }catch(ex){
@@ -8240,11 +8291,12 @@ class RegistrationCompetitionFee extends Component {
     tabCallBack = (key) => {
         let competitionId = this.props.competitionFeesState.competitionId;
         if (competitionId !== null && competitionId.length > 0) {
-            if(this.state.permissionState.membershipDisable == false){
+            let empty = this.checkMembershipEmpty() ;
+            if(empty == false){
                 this.tabCangeSaveApiActionCall(this.state.competitionTabKey);
             }
             this.setState({
-                competitionTabKey: this.checkMembershipEmpty() == false ? key : '2',
+                competitionTabKey: empty == false ? key : this.state.competitionTabKey,
                 divisionState: key == '3',
             });
         }
