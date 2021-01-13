@@ -531,6 +531,13 @@ function getTeamMembersReviewAction(payload) {
     };
 }
 
+function teamMemberUpdateAction(data) {
+    return {
+        type: ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD,
+        data,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -600,4 +607,5 @@ export {
     getTeamMembersAction,
     updateReviewInfoAction,
     getTeamMembersReviewAction,
+    teamMemberUpdateAction
 };
