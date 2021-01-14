@@ -578,11 +578,11 @@ class UmpirePaymentSetting extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm px-0">
                             <div className="comp-buttons-view">
                                 <Button 
                                     onClick={this.handleSave}
-                                    className="publish-button save-draft-text" 
+                                    className="publish-button save-draft-text mr-0" 
                                     type="primary" 
                                     htmlType="submit"
                                 >
@@ -774,7 +774,7 @@ class UmpirePaymentSetting extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className='col-sm input-width'>
+                    <div className='col-sm input-width d-flex align-items-end'>
                         <InputWithHead
                             auto_complete='new-password'
                             heading={AppConstants.name}
@@ -784,17 +784,9 @@ class UmpirePaymentSetting extends Component {
                         />
                     </div>
                         
-                    <div className='col-sm input-width'>
-                        {this.rateCellView(itemRates, 15, AppConstants.umpireRate, sectionData, sectionDataIndex, radioListKey, id )}
-                    </div>
-
-                    <div className='col-sm input-width'>
-                        {this.rateCellView(itemRates, 19, AppConstants.umpireResRate, sectionData, sectionDataIndex, radioListKey, id )}
-                    </div>
-
-                    <div className='col-sm input-width'>
-                        {this.rateCellView(itemRates, 20, AppConstants.umpireCoachRate, sectionData, sectionDataIndex, radioListKey, id )}
-                    </div>
+                    {this.rateCellView(itemRates, 15, AppConstants.umpireRate, sectionData, sectionDataIndex, radioListKey, id )}
+                    {this.rateCellView(itemRates, 19, AppConstants.umpireResRate, sectionData, sectionDataIndex, radioListKey, id )}
+                    {this.rateCellView(itemRates, 20, AppConstants.umpireCoachRate, sectionData, sectionDataIndex, radioListKey, id )}
                 </div>
             </div>
         )
@@ -804,16 +796,18 @@ class UmpirePaymentSetting extends Component {
         const value = (poolItemRates || []).find(rate => rate.roleId === rateRoleId)?.rate;
         
         return (
-            <InputNumberWithHead
-                prefixValue="$"
-                defaultValue={0}
-                min={0}
-                precision={2}
-                step={0.01}
-                heading={heading}
-                onChange={e => this.handleChangeRateCell(e, sectionData, sectionDataIndex, radioListKey, rateRoleId, id )}
-                value={!!value ? value : 0}
-            /> 
+            <div className='col-sm input-width d-flex align-items-end'>
+                <InputNumberWithHead
+                    prefixValue="$"
+                    defaultValue={0}
+                    min={0}
+                    precision={2}
+                    step={0.01}
+                    heading={heading}
+                    onChange={e => this.handleChangeRateCell(e, sectionData, sectionDataIndex, radioListKey, rateRoleId, id )}
+                    value={!!value ? value : 0}
+                /> 
+            </div>
         )
     }
 

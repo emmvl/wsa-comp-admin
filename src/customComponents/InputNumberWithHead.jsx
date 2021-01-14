@@ -13,7 +13,7 @@ function InputNumberWithHead(props) {
     return (
         <div>
             {heading && (
-                <div className="d-flex align-items-center">
+                <div>
                     <span id={headingId} className={`input-heading ${required}`}>{heading}</span>
                 </div>
             )}
