@@ -394,7 +394,7 @@ class UmpireRoster extends Component {
                         columns={columns}
                         dataSource={umpireListResult}
                         pagination={false}
-                        rowKey={(record, index) => "umpireListResult" + record.id + index} />
+                        rowKey={(record) => "umpireListResult" + record.id } />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">

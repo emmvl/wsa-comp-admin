@@ -356,7 +356,7 @@ class LiveScoreTeam extends Component {
                         columns={columns}
                         dataSource={teamData}
                         pagination={false}
-                        rowKey={(record, index) => "teamData" + record.id + index}
+                        rowKey={(record) => "teamData" + record.id}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

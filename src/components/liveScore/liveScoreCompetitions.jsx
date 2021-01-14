@@ -589,7 +589,7 @@ class LiveScoreCompetitions extends Component {
                         dataSource={participatingInComptitions}
                         pagination={false}
                         loading={partLoad}
-                        rowKey={(record, index) => `participatingInComptitions${record.id}${index}`}
+                        rowKey={(record) => `participatingInComptitions${record.id}`}
                     />
                 </div>
 
@@ -671,7 +671,7 @@ class LiveScoreCompetitions extends Component {
                         dataSource={[...ownedCompetitions]}
                         pagination={false}
                         loading={ownedLoad}
-                        rowKey={(record, index) => `ownedCompetitions${record.id}${index}`}
+                        rowKey={(record) => `ownedCompetitions${record.id}`}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

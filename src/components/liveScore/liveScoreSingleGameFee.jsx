@@ -1,27 +1,27 @@
 import React, { Component } from "react";
 import {
-    Layout, Breadcrumb, Button, Modal, Table,Menu, Pagination,
+    Layout, Breadcrumb, Button, Modal, Table, Menu, Pagination,
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import moment from "moment";
+// import moment from "moment";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
     liveScoreSingleGameListAction,
     liveScoreSingleGameRedeemPayAction
 } from "../../store/actions/LiveScoreAction/liveScoreDashboardAction";
-import ValidationConstants from "../../themes/validationConstant";
+// import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage, getOrganisationData } from '../../util/sessionStorage';
 
 import { NavLink } from "react-router-dom";
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
 let this_Obj = null;
 
 function tableSort(a, b, key) {
@@ -150,18 +150,18 @@ class LiveScoreSingleGameFee extends Component {
         this.props.liveScoreSingleGameListAction(payload);
     }
 
-    componentDidUpdate(nextProps) { 
-        if(this.state.load === true && this.props.liveScoreDashboardState.onSingleGameRedeemPayLoad === false){
+    componentDidUpdate(nextProps) {
+        if (this.state.load === true && this.props.liveScoreDashboardState.onSingleGameRedeemPayLoad === false) {
             this.getLivescoreGameList(1);
-            this.setState({load : false})
+            this.setState({ load: false })
         }
     }
 
     showRedeemModal = (key, record) => {
-        if(key == "show"){
-            this.setState({redeemModalVisible: true, singleGameRecord: record});
+        if (key === "show") {
+            this.setState({ redeemModalVisible: true, singleGameRecord: record });
         }
-        else if(key == "ok"){
+        else if (key === "ok") {
             let record = this.state.singleGameRecord;
             let payload = {
                 userId: record.userId,
@@ -175,18 +175,18 @@ class LiveScoreSingleGameFee extends Component {
             }
 
             this.props.liveScoreSingleGameRedeemPayAction(payload);
-            this.setState({redeemModalVisible: false, load: true});
+            this.setState({ redeemModalVisible: false, load: true });
         }
-        else{
-            this.setState({redeemModalVisible: false});
+        else {
+            this.setState({ redeemModalVisible: false });
         }
     };
 
     showPayModal = (key, record) => {
-        if(key == "show"){
-            this.setState({payModalVisible: true,  singleGameRecord: record});
+        if (key === "show") {
+            this.setState({ payModalVisible: true, singleGameRecord: record });
         }
-        else if(key == "ok"){
+        else if (key === "ok") {
             let record = this.state.singleGameRecord;
             let payload = {
                 userId: record.userId,
@@ -334,7 +334,7 @@ class LiveScoreSingleGameFee extends Component {
     };
 
     render() {
-        let stateWideMsg = getKeyForStateWideMessage()
+        // let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
                 <Loader visible={this.props.liveScoreDashboardState.onSingleGameLoad} />

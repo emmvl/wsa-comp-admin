@@ -524,7 +524,7 @@ class ShopOrderStatus extends Component {
                         columns={columns}
                         dataSource={orderStatusListingData}
                         pagination={false}
-                        rowKey={(record, index) => `orderStatusListingData${record.orderId}${index}`}
+                        rowKey={(record) => `orderStatusListingData${record.orderId}`}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

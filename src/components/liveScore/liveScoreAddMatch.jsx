@@ -658,7 +658,7 @@ class LiveScoreAddMatch extends Component {
                                 onBlur={(e) => this.props.liveScoreUpdateMatchAction(e.target.value && moment(e.target.value, "HH:mm"), 'start_time')}
                                 format="HH:mm"
                                 placeholder="Select Time"
-                                defaultOpenValue={moment("00:00", "HH:mm")}
+                                defaultValue={moment("00:00", "HH:mm")}
                                 use12Hours={false}
                                 disabled={allDisabled}
                             />

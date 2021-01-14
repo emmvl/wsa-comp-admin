@@ -221,7 +221,7 @@ class LiveScoreNewsList extends Component {
                         columns={columns}
                         dataSource={newsData}
                         pagination={false}
-                        rowKey={(record, index) => "newsData" + index}
+                        rowKey={(record) => "newsData" + record.id}
                     />
                 </div>
 

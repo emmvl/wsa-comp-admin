@@ -384,7 +384,7 @@ class UmpirePayments extends Component {
                         columns={columns}
                         dataSource={umpirePaymentList}
                         pagination={false}
-                        rowKey={(record, index) => `umpirePayments${record.matchId}${index}`}
+                        rowKey={(record) => `umpirePayments${record.matchId}`}
                     />
                 </div>
 

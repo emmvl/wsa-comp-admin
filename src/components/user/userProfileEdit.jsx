@@ -134,6 +134,7 @@ class UserProfileEdit extends Component {
             venueAddressError: '',
             manualAddress: false,
             isPossibleMatchShow: false,
+            storedEmailAddress: null,
         };
         this.confirmOpend = false;
         // this.props.getCommonRefData();
@@ -245,6 +246,7 @@ class UserProfileEdit extends Component {
 
     setAddressFormFields = () => {
         const { userData } = this.state;
+        this.setState({ storedEmailAddress: userData.email })
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -1294,6 +1296,7 @@ class UserProfileEdit extends Component {
         const data = this.state.userData;
         data.section = this.state.section;
         data.organisationId = this.state.organisationId;
+        const { storedEmailAddress } = this.state
 
         if (this.state.venueAddressError) {
             message.config({ duration: 1.5, maxCount: 1 });
@@ -1319,7 +1322,12 @@ class UserProfileEdit extends Component {
                 () => this.setState({ isPossibleMatchShow: !!this.props.userState.possibleMatches.length }),
             );
         } else {
-            this.props.userProfileUpdateAction(data);
+            if (this.state.displaySection === "1") {
+                data['emailUpdated'] = storedEmailAddress === data.email ? 0 : 1
+                this.props.userProfileUpdateAction(data);
+            } else {
+                this.props.userProfileUpdateAction(data);
+            }
             this.setState({ saveLoad: true });
         }
     };

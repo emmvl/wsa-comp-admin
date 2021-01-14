@@ -374,7 +374,7 @@ class LiveScoreIncidentList extends Component {
                         columns={columns}
                         dataSource={liveScoreIncidentResult}
                         pagination={false}
-                        rowKey={(record, index) => "incident" + record.id + index}
+                        rowKey={(record) => "incident" + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
