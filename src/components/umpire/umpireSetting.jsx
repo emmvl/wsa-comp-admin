@@ -63,6 +63,8 @@ class UmpireSetting extends Component {
             sectionDataToDeleteIndex: null,
             selectedDivisions: null,
             tempSelectedDivisions: null,
+            competitionList: null,
+            isOrganiserView: false,
         };
     }
 
@@ -76,8 +78,12 @@ class UmpireSetting extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && !this.props.umpireCompetitionState.onLoad) {
-                const compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : [];
-                let firstComp = compList.length > 0 && compList[0].id;
+                const compListProps = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : [];
+                const competitionList = JSON.parse(JSON.stringify(compListProps));
+
+                const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+                let firstComp = competitionList.length > 0 && competitionList[0].id;
 
                 if (getUmpireCompId()) {
                     const compId = JSON.parse(getUmpireCompId());
@@ -86,12 +92,28 @@ class UmpireSetting extends Component {
                     setUmpireCompId(firstComp);
                 }
 
-                if (!!compList.length) {
+                if (!!competitionList.length) {
                     this.props.liveScoreGetDivision(firstComp);
                 }
 
-                const compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey });
+                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+
+                competitionList.forEach(item => {
+                    if (item.organisationId === organisationId) {
+                        item.isOrganiser = true;
+                    } else {
+                        item.isOrganiser = false;
+                    }
+                });
+
+                const { isOrganiser } = competitionList.find(competition => competition.id === firstComp);
+
+                this.setState({ 
+                    competitionList, 
+                    isOrganiserView: isOrganiser,
+                    selectedComp: firstComp, 
+                    loading: false, 
+                    competitionUniqueKey: compKey });
             }
         }
 
@@ -331,15 +353,19 @@ class UmpireSetting extends Component {
     };
 
     onChangeComp = (compID) => {
+        const { competitionList } = this.state;
+ 
+        const { isOrganiser } = competitionList.find(competition => competition.id === compID);
+
         this.props.liveScoreGetDivision(compID);
         setUmpireCompId(compID);
 
-        this.setState({ selectedComp: compID });
+        this.setState({ selectedComp: compID, isOrganiserView: isOrganiser });
     }
 
     dropdownView = () => {
-        const competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        
+        const { competitionList } = this.state;
+
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -355,7 +381,7 @@ class UmpireSetting extends Component {
                                     onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
                                 >
-                                    {competition.map((item) => (
+                                    {!!competitionList && competitionList.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
@@ -368,6 +394,8 @@ class UmpireSetting extends Component {
     };
 
     boxSettingsView = (boxData, sectionDataIndex, sectionData) => {
+        const { isOrganiserView } = this.state;
+
         return (
             <div className="pt-0 mt-4">
                 {this.boxSettingsRadioView(boxData, sectionDataIndex, sectionData)}
@@ -382,6 +410,7 @@ class UmpireSetting extends Component {
                                 min={0}
                                 precision={0}
                                 style={{ width: 100 }}
+                                disabled={isOrganiserView ? false : true}
                             />
                             <span className="ml-4">{AppConstants.minutes}</span>
                         </div>
@@ -393,6 +422,7 @@ class UmpireSetting extends Component {
                             min={0}
                             precision={0}
                             style={{ width: 100 }}
+                            disabled={isOrganiserView ? false : true}
                         />
                             
                     </>
@@ -403,6 +433,7 @@ class UmpireSetting extends Component {
                     checked={boxData.activateReserves}
                     onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'activateReserves', e.target.checked, sectionData)}
                     style={{ fontWeight: 400 }}
+                    disabled={isOrganiserView ? false : true}
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
@@ -412,6 +443,7 @@ class UmpireSetting extends Component {
                     checked={boxData.activateCoaches}
                     onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'activateCoaches', e.target.checked, sectionData)}
                     style={{ fontWeight: 400 }}
+                    disabled={isOrganiserView ? false : true}
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
@@ -420,6 +452,8 @@ class UmpireSetting extends Component {
     };
 
     boxSettingsRadioView = (boxData, sectionDataIndex, sectionData) => {
+        const { isOrganiserView } = this.state;
+
         return (
             <div>
                 <span className='text-heading-large pt-4'>{AppConstants.howUmpiresAllocated}</span>
@@ -427,6 +461,7 @@ class UmpireSetting extends Component {
                     <Radio
                         onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 242, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 242}
+                        disabled={isOrganiserView ? false : true}
                     >
                         {AppConstants.manuallyAllocate}
                     </Radio>
@@ -434,12 +469,14 @@ class UmpireSetting extends Component {
                     <Radio
                         onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 243, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 243}
+                        disabled={isOrganiserView ? false : true}
                     >
                         {AppConstants.allocateViaPools}
                     </Radio>
                     <Radio
                         onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 244, sectionData)}
                         checked={boxData.umpireAllocationTypeRefId === 244}
+                        disabled={isOrganiserView ? false : true}
                     >
                         {AppConstants.umpireYourOwnTeam}
                     </Radio>
@@ -447,6 +484,7 @@ class UmpireSetting extends Component {
                         <Radio
                             onChange={() => this.handleChangeSettings(sectionDataIndex, 'umpireAllocationTypeRefId', 245, sectionData)}
                             checked={boxData.umpireAllocationTypeRefId === 245}
+                            disabled={isOrganiserView ? false : true}
                         >
                             {AppConstants.umpireYourOwnOrganisation}
                         </Radio>
@@ -507,7 +545,7 @@ class UmpireSetting extends Component {
 
     umpireSettingsSectionView = (sectionTitle, umpireAllocatorTypeRefId) => {
         const { divisionList } = this.props.liveScoreTeamState;
-        const { allocationSettingsData, selectedDivisions } = this.state;
+        const { allocationSettingsData, selectedDivisions, isOrganiserView } = this.state;
 
         const sectionData = allocationSettingsData && umpireAllocatorTypeRefId ?
             allocationSettingsData.filter(item => item.umpireAllocatorTypeRefId === umpireAllocatorTypeRefId)
@@ -520,6 +558,7 @@ class UmpireSetting extends Component {
                     onChange={(e) => this.handleChangeWhoAssignsUmpires(e, umpireAllocatorTypeRefId)}
                     checked={!!sectionData?.length}
                     className="mx-0 mb-2"
+                    disabled={isOrganiserView ? false : true}
                 >
                     {sectionTitle}
                 </Checkbox>
@@ -541,6 +580,7 @@ class UmpireSetting extends Component {
                             <Checkbox
                                 onChange={(e) => this.handleChangeSettings(sectionDataIndex, 'allDivisions', e.target.checked, sectionData)}
                                 checked={boxData.allDivisions}
+                                disabled={isOrganiserView ? false : true}
                             >
                                 {AppConstants.allDivisions}
                             </Checkbox>
@@ -551,6 +591,7 @@ class UmpireSetting extends Component {
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                                 onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
                                 value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
+                                disabled={isOrganiserView ? false : true}
                             >
                                 {(divisionList || []).map((item) => (
                                     <Option
@@ -569,7 +610,7 @@ class UmpireSetting extends Component {
                         </div>
                         ))}
                         {selectedDivisions.length < this.props.liveScoreTeamState.divisionList.length
-                            && umpireAllocatorTypeRefId 
+                            && umpireAllocatorTypeRefId && isOrganiserView
                             && (
                                 <div className="row mb-5 position-absolute">
                                     <div 
@@ -638,49 +679,55 @@ class UmpireSetting extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm">
-                            {/* <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
-                            </div> */}
-                        </div>
-                        <div className="col-sm">
-                            {/* <div className="comp-buttons-view">
-                                <Button
-                                    className="publish-button save-draft-text"
-                                    type="primary"
-                                    htmlType="submit"
-                                    onClick={() => this.checkScreenNavigation("save")}
-                                >
-                                    {AppConstants.save}
-                                </Button>
-                                <Button
-                                    className="publish-button save-draft-text"
-                                    type="primary"
-                                    htmlType="submit"
-                                    onClick={() => this.checkScreenNavigation("next")}
-                                >
-                                    {AppConstants.next}
-                                </Button>
-                            </div> */}
+        const { isOrganiserView } = this.state;
 
-                            <div className="comp-buttons-view">
-                                <Button
-                                    className="publish-button save-draft-text"
-                                    type="primary"
-                                    htmlType="submit"
-                                    onClick={this.handleSave}
-                                >
-                                    {AppConstants.save}
-                                </Button>
+        return (
+            <>
+                {isOrganiserView && 
+                    <div className="fluid-width">
+                        <div className="footer-view">
+                            <div className="row">
+                                <div className="col-sm">
+                                    {/* <div className="reg-add-save-button">
+                                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                    </div> */}
+                                </div>
+                                <div className="col-sm px-0">
+                                    {/* <div className="comp-buttons-view">
+                                        <Button
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.checkScreenNavigation("save")}
+                                        >
+                                            {AppConstants.save}
+                                        </Button>
+                                        <Button
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.checkScreenNavigation("next")}
+                                        >
+                                            {AppConstants.next}
+                                        </Button>
+                                    </div> */}
+
+                                    <div className="comp-buttons-view">
+                                        <Button
+                                            className="publish-button save-draft-text mr-0"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={this.handleSave}
+                                        >
+                                            {AppConstants.save}
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                }
+            </>
         );
     };
 
