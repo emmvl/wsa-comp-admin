@@ -713,7 +713,7 @@ class UmpirePaymentSetting extends Component {
         const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
         const umpireBadgesData = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
 
-        const { byBadge, byPool, UmpirePaymentFeeType } = sectionData[sectionDataIndex];
+        const { UmpirePaymentFeeType } = sectionData[sectionDataIndex];
 
         return (
             <div>
@@ -750,6 +750,11 @@ class UmpirePaymentSetting extends Component {
                                     {this.ratesView('byPool', poolDataItem, sectionData, sectionDataIndex)}
                                 </div>
                             ))}
+                        </div>
+                    )}
+                    {UmpirePaymentFeeType === 'BY_POOL' && !umpirePoolData.length && (
+                        <div className="mt-4">
+                            {AppConstants.noPoolMsg}
                         </div>
                     )}
                 </div>

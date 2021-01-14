@@ -1741,6 +1741,7 @@ const AppConstants = {
   expiryDate: 'Expiry Date',
   byBadge: 'By Badge',
   byPool: 'By Pool',
+  noPoolMsg: 'There is no pools in this competition',
 
   thankYouRegistering: "Thank you for registering!",
   emailConfirmNewUserMessage: "We have sent you an email confirmation with your new login details. Please log in to the website to manage your profile.",
