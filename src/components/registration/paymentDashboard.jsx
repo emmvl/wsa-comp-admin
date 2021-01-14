@@ -524,7 +524,7 @@ class PaymentDashboard extends Component {
                 this.state.searchText
             );
         } else if (key === "dateFrom") {
-            await this.setState({ dateFrom: value });
+            await this.setState({ dateFrom: value ? moment(value).startOf('day').format('YYYY-MM-DD HH:mm:ss') : value });
             this.handlePaymentTableList(
                 1,
                 -1,
@@ -532,7 +532,7 @@ class PaymentDashboard extends Component {
                 this.state.searchText
             );
         } else if (key === "dateTo") {
-            await this.setState({ dateTo: value });
+            await this.setState({ dateTo: value ? moment(value).endOf('day').format('YYYY-MM-DD HH:mm:ss') : value });
             this.handlePaymentTableList(
                 1,
                 -1,

@@ -538,7 +538,7 @@ class LiveScoreMatchesList extends Component {
                         columns={columns}
                         dataSource={DATA}
                         pagination={false}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => "matchList" + record.id}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

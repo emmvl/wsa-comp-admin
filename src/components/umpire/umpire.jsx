@@ -379,7 +379,7 @@ class Umpire extends Component {
                         columns={columns}
                         dataSource={umpireListResult}
                         pagination={false}
-                        rowKey={(record, index) => "umpireListResult" + record.id + index}
+                        rowKey={(record) => "umpireListResult" + record.id}
                     />
                 </div>
 

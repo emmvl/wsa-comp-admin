@@ -251,7 +251,10 @@ function* getPaymentListSaga(action) {
 // Export payment saga
 function* exportPaymentSaga(action) {
   try {
-    const result = yield call(AxiosApi.exportPaymentApi, action.key);
+    const {
+        key, year, dateFrom, dateTo,
+    } = action;
+    const result = yield call(AxiosApi.exportPaymentApi, key, year, dateFrom, dateTo);
 
     if (result.status === 1) {
       yield put({
