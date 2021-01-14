@@ -60,7 +60,6 @@ class UmpirePaymentSetting extends Component {
             competitionUniqueKey: null,
             paymentSettingsData: null,
             selectedDivisions: null,
-            allCompetition: null,
             allDivisionVisible: false,
             deleteModalVisible: false,
             sectionDataToDeleteIndex: null,
@@ -81,7 +80,8 @@ class UmpirePaymentSetting extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
+            // if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
+            if (!this.props.umpireCompetitionState.onLoad) {
                 const compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = !!compList.length && compList[0].id;
                 
@@ -96,35 +96,33 @@ class UmpirePaymentSetting extends Component {
                     const orgId = compList[0].competitionOrganisation.orgId;
 
                     this.props.liveScoreGetDivision(firstComp);
-                    this.props.getUmpirePoolData({ orgId, compId: firstComp })
+                    this.props.getUmpirePoolData({ orgId, compId: firstComp });
                 }
 
-                const compKey = compList.length > 0 && compList[0].competitionUniqueKey
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, allCompetition: compList })
+                const compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+
+                const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+                const competitionList = compList.filter(item => (
+                    item.organisationId === organisationId
+                    ||
+                    (organisationId !== item.organisationId && item.competitionOrganisation?.orgId === organisationId)
+                ));
+
+                const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
+
+                competitionListCopy.forEach(item => {
+                    if (item.organisationId === organisationId) {
+                        item.isOrganiser = true;
+                    } else {
+                        item.isOrganiser = false;
+                    }
+                });
+
+                const { isOrganiser } = competitionListCopy.find(competition => competition.id === firstComp);
+
+                this.setState({ competitionList: competitionListCopy, isOrganiserView: isOrganiser, selectedComp: firstComp, loading: false, competitionUniqueKey: compKey });
             }
-        }
-
-        if (this.props.umpireCompetitionState.umpireComptitionList !== prevProps.umpireCompetitionState.umpireComptitionList) {
-            const allCompetitions = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-            const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-
-            const competitionList = allCompetitions.filter(item => (
-                item.organisationId === organisationId
-                ||
-                (organisationId !== item.organisationId && item.competitionOrganisation?.orgId === organisationId)
-            ));
-
-            const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
-
-            competitionListCopy.forEach(item => {
-                if (item.organisationId === organisationId) {
-                    item.isOrganiser = true;
-                } else {
-                    item.isOrganiser = false;
-                }
-            })
-
-            this.setState({ competitionList: competitionListCopy });
         }
 
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
@@ -202,11 +200,7 @@ class UmpirePaymentSetting extends Component {
             }
 
             this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions });
-
-            // console.log('this.props.umpirePaymentSettingState.paymentSettingsData', paymentSettingsDataObj);
         }
-
-        // console.log('this.props.umpirePoolAllocationState.umpirePoolData', this.props.umpirePoolAllocationState.umpirePoolData);
     }
 
     handleChangeWhoPaysUmpires = (e, isOrganiser) => {
@@ -486,7 +480,7 @@ class UmpirePaymentSetting extends Component {
 
     handleSave = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        const { selectedComp, paymentSettingsData } = this.state;
+        const { selectedComp, paymentSettingsData, isOrganiserView } = this.state;
 
         const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData));
 
@@ -505,16 +499,16 @@ class UmpirePaymentSetting extends Component {
 
         const umpirePaymentSettings = !!umpirePaymentSettingsArray.length ? umpirePaymentSettingsArray : [];
 
-        const bodyData = {
+        const bodyData = isOrganiserView ? {
             umpirePayerTypeRefId: paymentSettingsDataCopy.umpirePayerTypeRefId,
             umpirePaymentSettings,
             allowedDivisionsSetting,
-        }
+        } : umpirePaymentSettings
 
         const saveData = {
             organisationId,
             competitionId: selectedComp,
-            type: 'organiser',
+            type: isOrganiserView ? 'organiser' : 'affiliate',
             body: bodyData,
         };
 
