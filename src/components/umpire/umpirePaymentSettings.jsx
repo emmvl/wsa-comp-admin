@@ -66,6 +66,7 @@ class UmpirePaymentSetting extends Component {
             tempPaymentSettingsData: null,
             tempSelectedDivisions: null,
             isOrganiserView: false,
+            allowedDivisionList: null,
         };
     }
 
@@ -191,28 +192,30 @@ class UmpirePaymentSetting extends Component {
             const { isOrganiserView } = this.state;
             
             const affiliateViewSettingsArray = !isOrganiserView && !umpirePaymentSettings.length ?
-                [initialPaymentSettingsData] : [];
+                [initialPaymentSettingsData] : umpirePaymentSettingsArray;
 
-            const settings = [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray, ...affiliateViewSettingsArray ];
+            const settings = isOrganiserView ? [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray ]
+                : [ ...affiliateViewSettingsArray ];
 
             const paymentSettingsDataObj = {
                 umpirePayerTypeRefId,
                 settings,
-            }
+            };
+
+            const allowedDivisionList = isOrganiserView ? divisionList : allowedDivisionsSetting?.divisions;
 
             const selectedDivisions = [];
 
             settings.forEach(item => {
-                item.allDivisions ? selectedDivisions.push(...divisionList) : selectedDivisions.push(...item.divisions);
+                item.allDivisions ? selectedDivisions.push(...allowedDivisionList) : selectedDivisions.push(...item.divisions);
             });
 
-            this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions });
+            this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions, allowedDivisionList });
         }
     }
 
     handleChangeWhoPaysUmpires = (e, isOrganiser) => {
-        const { paymentSettingsData } = this.state;
-        const { divisionList } = this.props.liveScoreTeamState;
+        const { paymentSettingsData, allowedDivisionList } = this.state;
 
         const newSelectedDivisions = [];
         let newSettingsData;
@@ -235,7 +238,7 @@ class UmpirePaymentSetting extends Component {
         }
 
         newSettingsData.forEach(item => {
-            item.allDivisions ? newSelectedDivisions.push(...divisionList) : newSelectedDivisions.push(...item.divisions);
+            item.allDivisions ? newSelectedDivisions.push(...allowedDivisionList) : newSelectedDivisions.push(...item.divisions);
         });
 
         const paymentSettingsDataObj = {
@@ -288,8 +291,7 @@ class UmpirePaymentSetting extends Component {
     }
 
     handleAllDivisionsChange = (targetBoxData, sectionDataIndex, paymentSettingsDataCopy, value) => {
-        const { divisionList } = this.props.liveScoreTeamState;
-        const { paymentSettingsData, selectedDivisions } = this.state;
+        const { paymentSettingsData, selectedDivisions, allowedDivisionList } = this.state;
 
         const newSelectedDivisions = [];
 
@@ -299,10 +301,10 @@ class UmpirePaymentSetting extends Component {
         });
 
         if (!!value) {
-            newSelectedDivisions.push( ...divisionList);
+            newSelectedDivisions.push( ...allowedDivisionList);
         }
 
-        targetBoxData[sectionDataIndex].divisions = !!value ? divisionList : [];
+        targetBoxData[sectionDataIndex].divisions = !!value ? allowedDivisionList : [];
         targetBoxData[sectionDataIndex].allDivisions = value;
 
         const newPaymentSettingsData = {
@@ -320,8 +322,7 @@ class UmpirePaymentSetting extends Component {
     }
 
     handleNonAllDivisionsChange = (sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value) => {
-        const { divisionList } = this.props.liveScoreTeamState;
-        const { paymentSettingsData, selectedDivisions } = this.state;
+        const { paymentSettingsData, selectedDivisions, allowedDivisionList } = this.state;
 
         const newSelectedDivisions = [];
 
@@ -329,7 +330,7 @@ class UmpirePaymentSetting extends Component {
 
         if (key === 'divisions') {
             targetBoxData[sectionDataIndex].divisions = value.map(item =>
-                divisionList.find(divisionListItem => divisionListItem.id === item)
+                allowedDivisionList.find(divisionListItem => divisionListItem.id === item)
             );
 
             newSettingsData.forEach(item => {
@@ -343,13 +344,13 @@ class UmpirePaymentSetting extends Component {
 
         const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
 
-        if (key === 'divisions' && updatedSelectedDivisions.length < divisionList.length) {
+        if (key === 'divisions' && updatedSelectedDivisions.length < allowedDivisionList.length) {
             newSettingsData.forEach(item => {
                 item.allDivisions = false;
             });
         }
 
-        if (key === 'divisions' && updatedSelectedDivisions.length === divisionList.length && value.length === divisionList.length) {
+        if (key === 'divisions' && updatedSelectedDivisions.length === allowedDivisionList.length && value.length === allowedDivisionList.length) {
             newSettingsData
                 .filter(item => item.hasSettings === sectionData[0].hasSettings)[sectionDataIndex]
                 .allDivisions = true;
@@ -627,8 +628,7 @@ class UmpirePaymentSetting extends Component {
     };
 
     umpireSettingsSectionView = (sectionTitle, hasSettings) => {
-        const { divisionList } = this.props.liveScoreTeamState;
-        const { paymentSettingsData, selectedDivisions } = this.state;
+        const { paymentSettingsData, selectedDivisions, allowedDivisionList } = this.state;
 
         const sectionData = hasSettings && !!paymentSettingsData 
             ? paymentSettingsData?.settings.filter(item => item.hasSettings) 
@@ -673,9 +673,9 @@ class UmpirePaymentSetting extends Component {
                                 placeholder="Select"
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                                 onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
-                                value={(boxData.allDivisions ? divisionList : boxData.divisions).map(division => division.id)}
+                                value={(boxData.allDivisions ? allowedDivisionList : boxData.divisions).map(division => division.id)}
                             >
-                                {(divisionList || []).map((item) => (
+                                {(allowedDivisionList || []).map((item) => (
                                     <Option
                                         key={'compOrgDivision_' + item.id}
                                         disabled={
@@ -691,7 +691,7 @@ class UmpirePaymentSetting extends Component {
                             {hasSettings && this.feesView(sectionData, sectionDataIndex)}
                         </div>
                         ))}
-                        {selectedDivisions.length < this.props.liveScoreTeamState.divisionList.length
+                        {selectedDivisions.length < allowedDivisionList.length
                             && hasSettings 
                             && (
                                 <div className="row mb-5 position-absolute">
