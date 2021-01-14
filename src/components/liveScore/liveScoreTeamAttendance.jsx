@@ -624,7 +624,7 @@ class LiveScoreTeamAttendance extends Component {
                         columns={this.state.selectStatus === "Borrowed" ? borrowedColumns : columns}
                         dataSource={dataSource}
                         pagination={false}
-                        rowKey={(record, index) => record.matchId + index}
+                        rowKey={(record) => 'teamAttendance' + record.matchId}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
