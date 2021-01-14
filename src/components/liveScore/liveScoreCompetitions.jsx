@@ -18,7 +18,7 @@ import ColorsArray from 'util/colorsArray';
 import history from 'util/history';
 import { checkOrganisationLevel, getCurrentYear } from 'util/permissions';
 import {
-    getOrganisationData, getPrevUrl, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData, setKeyForStateWideMessage,
+    getOrganisationData, getPrevUrl, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData, setKeyForStateWideMessage, getGlobalYear, setGlobalYear
 } from 'util/sessionStorage';
 import { getOnlyYearListAction } from 'store/actions/appAction';
 import { liveScoreOwnPartCompetitionList, liveScoreCompetitionActionInitiate, liveScoreCompetitionDeleteInitiate } from 'store/actions/LiveScoreAction/liveScoreCompetitionAction';
@@ -102,14 +102,14 @@ const columnsOwned = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -259,14 +259,14 @@ const columnsParticipate = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -360,6 +360,10 @@ class LiveScoreCompetitions extends Component {
     componentDidMount() {
         this.props.updateInnerHorizontalData();
         localStorage.setItem('yearValue', 'false');
+        if (getGlobalYear()) {
+            let yearRefId = getGlobalYear()
+            this.setState({ year: JSON.parse(yearRefId) });
+        }
 
         checkOrganisationLevel().then((value) => {
             this.setState({ orgLevel: value });
@@ -392,9 +396,10 @@ class LiveScoreCompetitions extends Component {
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                const yearRefId = getCurrentYear(this.props.appState.yearList);
+                const yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
                 localStorage.setItem('yearId', yearRefId);
-                this.setState({ year: yearRefId, allyearload: false });
+                setGlobalYear(yearRefId)
+                this.setState({ year: JSON.parse(yearRefId), allyearload: false });
                 this.competitionListApi(yearRefId);
             }
         }
@@ -408,7 +413,8 @@ class LiveScoreCompetitions extends Component {
             const { sortBy } = competitionListActionObject;
             const { sortOrder } = competitionListActionObject;
             const { key } = competitionListActionObject;
-            const year = competitionListActionObject.yearRefId;
+            // const year = competitionListActionObject.yearRefId;
+            let year = getGlobalYear()
             this.props.liveScoreOwnPartCompetitionList(body, orgKey, sortBy, sortOrder, key, year);
             this.setState({
                 allCompListLoad: true, sortBy, sortOrder, year,
@@ -583,7 +589,7 @@ class LiveScoreCompetitions extends Component {
                         dataSource={participatingInComptitions}
                         pagination={false}
                         loading={partLoad}
-                        rowKey={(record, index) => `participatingInComptitions${record.id}${index}`}
+                        rowKey={(record) => `participatingInComptitions${record.id}`}
                     />
                 </div>
 
@@ -602,6 +608,7 @@ class LiveScoreCompetitions extends Component {
 
     onYearClick(yearId) {
         localStorage.setItem('yearId', yearId);
+        setGlobalYear(yearId)
         this.setState({ year: yearId });
 
         const body = {
@@ -618,6 +625,10 @@ class LiveScoreCompetitions extends Component {
     /// dropdown view containing all the dropdown of header
     dropDownView = () => {
         const { yearList } = this.props.appState;
+        let yearRefId = null
+        if (getGlobalYear()) {
+            yearRefId = getGlobalYear()
+        }
         return (
             <div
                 className="comp-player-grades-header-drop-down-view"
@@ -634,7 +645,7 @@ class LiveScoreCompetitions extends Component {
                                 className="year-select reg-filter-select-year ml-2"
                                 style={{ width: 90 }}
                                 onChange={(yearId) => this.onYearClick(yearId)}
-                                value={this.state.year}
+                                value={yearRefId ? JSON.parse(yearRefId) : this.state.year}
                             >
                                 {yearList.map((item) => (
                                     <Option key={`year_${item.id}`} value={item.id}>{item.name}</Option>
@@ -660,7 +671,7 @@ class LiveScoreCompetitions extends Component {
                         dataSource={[...ownedCompetitions]}
                         pagination={false}
                         loading={ownedLoad}
-                        rowKey={(record, index) => `ownedCompetitions${record.id}${index}`}
+                        rowKey={(record) => `ownedCompetitions${record.id}`}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

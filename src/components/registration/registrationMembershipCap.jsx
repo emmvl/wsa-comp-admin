@@ -34,7 +34,7 @@ import {
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import { captializedString } from "../../util/helpers";
@@ -45,6 +45,8 @@ import {
 } from "../../store/actions/registrationAction/registration";
 import { getDefaultCompFeesMembershipProductTabAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import AppImages from "../../themes/appImages";
+import { deepCopyFunction } from "../../util/helpers";
+
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -83,14 +85,15 @@ class RegistrationMembershipCap extends Component {
         try{
             if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
                 if (this.props.appState.yearList.length > 0) {
-                    let mainYearRefId = getCurrentYear(this.props.appState.yearList);
+                    let mainYearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList);
                     let hasRegistration = 1;
                     this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration, mainYearRefId);
+                    setGlobalYear(mainYearRefId)
                     this.setState({onYearLoad: false,yearRefId: mainYearRefId,getMembershipProductsOnLoad: true});
                 }
             }
             if(this.props.competitionFeesState.onLoad == false && this.state.getMembershipProductsOnLoad == true){
-                this.props.getMembershipCapListAction(this.state.organisationUniqueKey)
+                this.props.getMembershipCapListAction(this.state.organisationUniqueKey,this.state.yearRefId)
                 this.setState({getMembershipProductsOnLoad: false,getMembershipCapListOnLoad: true});
             }
             if(this.props.registrationState.onLoad == false && this.state.getMembershipCapListOnLoad == true){
@@ -98,8 +101,12 @@ class RegistrationMembershipCap extends Component {
                 this.setState({getMembershipCapListOnLoad: false});
             }
             if(this.props.registrationState.updateMembershipFeeCapOnLoad == false && this.state.updateMembershipFeeCapOnLoad == true){
-                this.props.getMembershipCapListAction(this.state.organisationUniqueKey)
+                this.props.getMembershipCapListAction(this.state.organisationUniqueKey,this.state.yearRefId)
                 this.setState({updateMembershipFeeCapOnLoad: false,getMembershipCapListOnLoad: true});
+            }
+            if(this.props.registrationState.isAllMembershipProductChanged == true){
+                this.setMembershipCapListFormFieldsValue();
+                this.props.updateMembershipFeeCapListAction(false,"isAllMembershipProductChanged");
             }
         }catch(ex){
             console.log("Error in componentDidUpdate::"+ex)
@@ -163,7 +170,7 @@ class RegistrationMembershipCap extends Component {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
             if(key == 'add'){
-                membershipFeeCapList.push(this.getMembershipProductObj());
+                membershipFeeCapList.push(deepCopyFunction(this.getMembershipProductObj()));
             }else if(key == 'remove'){
                 membershipFeeCapList.splice(index,1);
             }
@@ -219,21 +226,25 @@ class RegistrationMembershipCap extends Component {
     getEnabledDates = (date,feeCapIndex,membershipFeeCapIndex) => {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
-            for(let i in membershipFeeCapList){
-                for(let j in membershipFeeCapList[i].feeCaps){
-                    let dobFrom = moment(membershipFeeCapList[i].feeCaps[j].dobFrom);
-                    let dobTo = moment(membershipFeeCapList[i].feeCaps[j].dobTo);
-                    // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(date))
+            let dateFormat = moment(date);
+            // for(let i in membershipFeeCapList){
+                for(let j in membershipFeeCapList[membershipFeeCapIndex].feeCaps){
+                    let dobFrom = moment(membershipFeeCapList[membershipFeeCapIndex].feeCaps[j].dobFrom);
+                    let dobTo = moment(membershipFeeCapList[membershipFeeCapIndex].feeCaps[j].dobTo);
+                    // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(dateFormat))
                     // console.log("date",date.isSameOrAfter(dobFrom),date.isSameOrBefore(dobTo))
-                    if(date.isSameOrAfter(dobFrom) && date.isSameOrBefore(dobTo)){
-                        if(j == feeCapIndex){
-                            return false;
-                        }else{
+                    if(dateFormat.isSameOrAfter(dobFrom) && dateFormat.isSameOrBefore(dobTo)){
+                        if(j != feeCapIndex){
+                            // console.log(JSON.stringify(dobFrom),JSON.stringify(dobTo),JSON.stringify(dateFormat))
                             return true;
-                        } 
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
                     }
                 }
-            } 
+            // } 
         }catch(ex){
             console.log("Error in getEnabledDates::"+ex);
         }
@@ -242,7 +253,7 @@ class RegistrationMembershipCap extends Component {
     saveMembershipFeeCap = () => {
         try{
             const { membershipFeeCapList } = this.props.registrationState;
-            this.props.updateMembershipFeeCapAction(this.state.organisationUniqueKey,membershipFeeCapList);
+            this.props.updateMembershipFeeCapAction(this.state.organisationUniqueKey,this.state.yearRefId,membershipFeeCapList);
             this.setState({updateMembershipFeeCapOnLoad: true})
         }catch(ex){
             console.log("Error in saveMembershipFeeCap::"+ex)
@@ -277,6 +288,7 @@ class RegistrationMembershipCap extends Component {
                                     onChange={(e) => {
                                         this.props.getDefaultCompFeesMembershipProductTabAction(1, e); 
                                         this.setState({yearRefId: e,getMembershipProductsOnLoad: true})
+                                        setGlobalYear(e)
                                     }}
                                     value={this.state.yearRefId}
                                     className="year-select reg-filter-select1 ml-2"
@@ -385,8 +397,14 @@ class RegistrationMembershipCap extends Component {
                                             setFieldsValue={feeCap.amount}
                                             style={{height: 46}}
                                             placeholder=" "
-                                            onChange={(e) => this.onChangeMembershipProductValue(e.target.value, "feeCaps", index, "amount", feeCapIndex )}
+                                            onChange={(e) => {
+                                                this.onChangeMembershipProductValue(e.target.value >= 0 ? e.target.value : null, "feeCaps", index, "amount", feeCapIndex );
+                                                this.formRef.current.setFieldsValue({
+                                                    [`membershipFeeAmount${index}${feeCapIndex}`]: e.target.value >= 0 ? e.target.value : null
+                                                })
+                                            }}
                                             type={"number"}
+                                            min={0}
                                         />
                                     </Form.Item>
                                 </div>

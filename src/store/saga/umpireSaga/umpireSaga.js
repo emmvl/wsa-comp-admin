@@ -58,7 +58,25 @@ export function* umpireListSaga(action) {
         yield call(errorSaga, error)
     }
 }
+export function* newUmpireListSaga(action) {
+    try {
+        const result = yield call(UserAxiosApi.newUmpireList, action.data);
 
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_NEW_UMPIRE_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                key: action.data.userName ? "userData" : "data"
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
 export function* addEditUmpireSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.addEditUmpire, action.data, action.affiliateId, action.exsitingUmpireId, action.isUmpire, action.isUmpireCoach);

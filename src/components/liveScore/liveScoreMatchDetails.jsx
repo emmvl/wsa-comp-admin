@@ -131,7 +131,7 @@ const columnsTeam1 = [
                     // className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
                     className={record.lineup && record.lineup[0].playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
                     // checked={record.attendance && record.attendance.isPlaying}
-                    checked={record.played == "1" ? true : false}
+                    checked={record.played === "1" ? true : false}
                     onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
                 />
             )
@@ -177,7 +177,7 @@ const columnsTeam2 = [
 
             <Checkbox
                 className={record.lineup && record.lineup[0].playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
-                checked={record.played == "1" ? true : false}
+                checked={record.played === "1" ? true : false}
                 onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
             />
         ),
@@ -262,7 +262,7 @@ class LiveScoreMatchDetails extends Component {
         } else {
             if (getLiveScoreCompetiton()) {
                 if (isMatchId) {
-                    const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton());
+                    const { lineupSelectionEnabled, id } = JSON.parse(getLiveScoreCompetiton());
                     isLineUpEnable = lineupSelectionEnabled;
                     this.setState({ competitionId: id })
                 } else {
@@ -782,7 +782,7 @@ class LiveScoreMatchDetails extends Component {
                 scroll={{ x: '100%' }}
                 pagination={false}
                 loading={this.props.liveScoreGamePositionState.onLoad}
-                // rowKey={(record) => record.id}
+                rowKey={(record) => team + record.playerId}
             />
         )
     }
@@ -804,7 +804,7 @@ class LiveScoreMatchDetails extends Component {
         }
 
         let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
-        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
+        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking === 1) ? true : false //// Game Time Tracking
         let attendance = trackResultData.find((att) => att.playerId === playerId && att.period === period);
         if (key === 'flow1') {
             if (field === "positionId") {
@@ -877,8 +877,8 @@ class LiveScoreMatchDetails extends Component {
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
         const { noOfPosition, trackResultData } = this.props.liveScorePlayerMinuteTrackingState
 
-        let pt = (competition.positionTracking || competition.positionTracking == 1) ? true : false //// Position Tracking
-        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
+        let pt = (competition.positionTracking || competition.positionTracking === 1) ? true : false //// Position Tracking
+        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking === 1) ? true : false //// Game Time Tracking
         let art = competition.attendanceRecordingPeriod //// Attendance Recording Period
 
         let periodDuration = null
@@ -1036,7 +1036,7 @@ class LiveScoreMatchDetails extends Component {
                 ];
 
                 return columns
-            } else if (!pt && gtt && art != 'MINUTE') {
+            } else if (!pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
                         title: 'Name',
@@ -1298,7 +1298,7 @@ class LiveScoreMatchDetails extends Component {
                 ];
 
                 return columns
-            } else if (!pt && !gtt && art != "MINUTE") {
+            } else if (!pt && !gtt && art !== "MINUTE") {
                 const columns = [
                     {
                         title: 'Name',
@@ -2214,7 +2214,7 @@ class LiveScoreMatchDetails extends Component {
                 ];
 
                 return columns
-            } else if (!pt && !gtt && art != "MINUTE") {
+            } else if (!pt && !gtt && art !== "MINUTE") {
                 const columns = [
                     {
                         title: 'Name',
@@ -2517,7 +2517,7 @@ class LiveScoreMatchDetails extends Component {
     team_View = () => {
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : [];
         const { team1Players, team2Players } = this.props.liveScoreMatchState;
-        const { trackingList } = this.props.liveScorePlayerMinuteTrackingState
+        // const { trackingList } = this.props.liveScorePlayerMinuteTrackingState
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
         const length = match ? match.length : 0;
@@ -2581,6 +2581,7 @@ class LiveScoreMatchDetails extends Component {
                                         dataSource={team1PlayersData}
                                         pagination={false}
                                         scroll={{ x: '100%' }}
+                                        rowKey={(record) => 'team1' + record.playerId}
                                     />
                                 </div>
                             )}
@@ -2641,6 +2642,7 @@ class LiveScoreMatchDetails extends Component {
                                             dataSource={team2PlayersData}
                                             pagination={false}
                                             scroll={{ x: '100%' }}
+                                            rowKey={(record) => 'team2' + record.playerId}
                                         />
                                     </div>
                                 )}
@@ -2861,8 +2863,8 @@ class LiveScoreMatchDetails extends Component {
                 history.push('/matchDayCompetitions')
             }
         }
-        let pt = (competition.positionTracking || competition.positionTracking == 1) ? true : false //// Position Tracking
-        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
+        let pt = (competition.positionTracking || competition.positionTracking === 1) ? true : false //// Position Tracking
+        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking === 1) ? true : false //// Game Time Tracking
         let art = competition.attendanceRecordingPeriod //// Attendance Recording Period
 
         let filteredData = []

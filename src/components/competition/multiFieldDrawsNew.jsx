@@ -37,8 +37,7 @@ import {
 } from '../../store/actions/appAction';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
+    setGlobalYear, getGlobalYear,
     setOwn_competition,
     getOwn_competition,
     setDraws_venue,
@@ -270,7 +269,7 @@ class MultifieldDrawsNew extends Component {
                     let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId;
                     let finalTypeRefId = competitionList[0].finalTypeRefId
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     if (storedCompetitionId != undefined && storedCompetitionId !== "undefined") {
                         let compIndex = competitionList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = competitionList[compIndex].statusRefId;
@@ -339,7 +338,7 @@ class MultifieldDrawsNew extends Component {
     }
 
     apiCalls() {
-        let yearId = getOwnCompetitionYear();
+        let yearId = getGlobalYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -401,7 +400,7 @@ class MultifieldDrawsNew extends Component {
                 null,
                 'own_competition'
             );
-            // setOwnCompetitionYear(1);
+
         }
     }
 
@@ -442,7 +441,7 @@ class MultifieldDrawsNew extends Component {
 
     onYearChange = (yearId) => {
         this.props.clearMultiDraws('rounds');
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)

@@ -34,25 +34,37 @@ function getStripeLoginLinkAction() {
 }
 
 ////stripe payments transfer list
-function getStripeTransferListAction(page, starting_after, ending_before) {
+function getStripeTransferListAction(page, starting_after, ending_before, params) {
     const action = {
         type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD,
         page,
         starting_after,
-        ending_before
-
+        ending_before,
+        params
     };
     return action;
 }
 
 ////stripe payout list
-function getStripePayoutListAction(page, starting_after, ending_before) {
+function getStripePayoutListAction(page, starting_after, ending_before, params) {
     const action = {
         type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD,
         page,
         starting_after,
-        ending_before
+        ending_before,
+        params
+    };
+    return action;
+}
 
+////stripe payout list
+function getStripeRefundsListAction(page, starting_after, ending_before, params) {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD,
+        page,
+        starting_after,
+        ending_before,
+        params
     };
     return action;
 }
@@ -70,17 +82,36 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
     return action;
 }
 
-/////get invoice 
-function getInvoice(registrationid) {
+/////get invoice
+function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
-        registrationid
+        registrationid,
+        userRegId,
+        invoiceId,
+        teamMemberRegId
     }
     return action
 }
 
 /// payment dashboard
-function getPaymentList(offset, sortBy, sortOrder, userId, registrationId, yearId, competitionKey, paymentFor, dateFrom, dateTo,searchValue) {
+function getPaymentList(
+    offset,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType
+) {
     const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
         offset,
@@ -93,20 +124,72 @@ function getPaymentList(offset, sortBy, sortOrder, userId, registrationId, yearI
         paymentFor,
         dateFrom,
         dateTo,
-        searchValue
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType
     }
     return action
 }
 
 //export payment dashboard data
-function exportPaymentApi(key) {
+function exportPaymentApi(key, year, dateFrom, dateTo) {
     const action = {
         type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD,
-        key
+        key,
+        year,
+        dateFrom,
+        dateTo,
+    };
+    return action;
+}
+
+function getInvoiceStatusAction(registrationid, userRegId, invoiceId, teamMemberRegId) {
+    const action = {
+        type: ApiConstants.API_GET_INVOICE_STATUS_LOAD,
+        registrationid,
+        userRegId,
+        invoiceId,
+        teamMemberRegId
     }
     return action
 }
 
+function exportPaymentDashboardApi(offset,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType) {
+    return {
+        type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
+        offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType
+    }
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -116,5 +199,8 @@ export {
     getStripePayoutListAction,
     getTransactionPayoutListAction,
     getInvoice, getPaymentList,
-    exportPaymentApi
+    exportPaymentApi,
+    getStripeRefundsListAction,
+    getInvoiceStatusAction,
+    exportPaymentDashboardApi
 }

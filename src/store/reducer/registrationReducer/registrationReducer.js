@@ -118,7 +118,8 @@ const initialState = {
   canInviteSend: 0,
   membershipFeeCapList: [],
   membershipFeeCapListCopy: [],
-  updateMembershipFeeCapOnLoad: false
+  updateMembershipFeeCapOnLoad: false,
+  isAllMembershipProductChanged: false
 };
 
 
@@ -516,6 +517,10 @@ function feesDataObject(allMembershipData, membershipProductName) {
       );
       if (mappedMembershipTypeIndex > -1) {
         feesApiData[mappedMembershipTypeIndex]["editableIndex"] = parseInt(i);
+
+        //developed by
+        feesApiData[mappedMembershipTypeIndex].validityDays = feesApiData[mappedMembershipTypeIndex].validityDays == 0 ? null : feesApiData[mappedMembershipTypeIndex].validityDays;
+        
         feesTableData.push(feesApiData[mappedMembershipTypeIndex]);
       } else {
         var feesTableObject = {
@@ -790,14 +795,20 @@ function registration(state = initialState, action) {
       let onChangeIndex = data.findIndex(
         data => data.editableIndex == recordId
       );
-      data[onChangeIndex][key] = action.value;
+      if(key === "casualGst" || key === "seasonalGst"){
+        let gst = Number(action.value);
+        data[onChangeIndex][key] = gst > 0 ? gst : 0;
+      }
+      else{
+        data[onChangeIndex][key] = Number(action.value);
+      }
       if (key === "casualFee") {
         let casualGst = Number((action.value) / 10).toFixed(2)
-        data[onChangeIndex]["casualGst"] = casualGst
+        data[onChangeIndex]["casualGst"] = casualGst > 0 ? casualGst : 0;
       }
       if (key === "seasonalFee") {
         let seasonalGst = Number((action.value) / 10).toFixed(2)
-        data[onChangeIndex]["seasonalGst"] = seasonalGst
+        data[onChangeIndex]["seasonalGst"] = seasonalGst > 0 ? seasonalGst : 0;
       }
       return {
         ...state,
@@ -926,9 +937,16 @@ function registration(state = initialState, action) {
             }
             break;
           }
+          state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected = true
           state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-          state.registrationFormData[0][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-    
+          let sample = state.registrationFormData[0][action.key].find(x => x.id == action.getMembershipproductItem.id)
+          if(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected && !sample){
+            state.registrationFormData[0][action.key].push(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex])
+          }
+          else{
+            sample[action.subKey] = action.updatedData;
+          }
+              
       }
       else {
         let oldData = state.registrationFormData;
@@ -1073,8 +1091,11 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
       if(action.key){
+        if(action.key == "isNeedExtendedDate" && action.radioApplyId == false){
+          state.membershipProductFeesTableData.membershipFees[action.feesIndex].extendEndDate = null;
+        }
         state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
       }else{
         state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;
@@ -1310,6 +1331,8 @@ function registration(state = initialState, action) {
     case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
       if(action.key == 'membershipFeeCapList'){
         state.membershipFeeCapList = action.value;
+      }else if(action.key == 'isAllMembershipProductChanged'){
+        state.isAllMembershipProductChanged = action.value;
       }else if(action.key == 'productsInfo'){
         let productList = action.value;
         state.membershipFeeCapList[action.index].productsInfo = productList;
@@ -1338,6 +1361,7 @@ function registration(state = initialState, action) {
         }else{
           state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
         }
+        state.isAllMembershipProductChanged = true;
       }else{
         state.membershipFeeCapList[action.index][action.key] = action.value;
       }

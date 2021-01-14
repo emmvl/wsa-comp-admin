@@ -33,7 +33,7 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
@@ -165,7 +165,22 @@ class LiveScoreSettingsView extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]),timeout:2000 })
+            setTimeout(() => {
+                this.setState({ timeout: null })
+            }, 2000);
             const imgData = URL.createObjectURL(data.files[0])
             this.props.onChangeSettingForm({ key: 'competitionLogo', data: data.files[0] })
             this.props.onChangeSettingForm({ key: 'Logo', data: imgData })
@@ -595,10 +610,13 @@ class LiveScoreSettingsView extends Component {
                                 name="imageFile"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
-                                    this.setState({ timeout: 2000 })
-                                    setTimeout(() => {
-                                        this.setState({ timeout: null })
-                                    }, 2000);
+                                    // this.setState({ timeout: 2000 })
+                                    // setTimeout(() => {
+                                    //     this.setState({ timeout: null })
+                                    // }, 2000);
+                                }}
+                                onClick={(event) => {
+                                    event.target.value = null
                                 }}
                             />
                         </div>
@@ -612,6 +630,9 @@ class LiveScoreSettingsView extends Component {
                             </Checkbox>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 {/* venue multi selection */}
@@ -1415,6 +1436,11 @@ class LiveScoreSettingsView extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let local_Id = this.state.screenName === 'umpireDashboard' ? null : getLiveScoreCompetiton()
         return (
@@ -1440,7 +1466,8 @@ class LiveScoreSettingsView extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.handleSubmit}
-                        onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
+                        // onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
+                        onFinishFailed={this.onFinishFailed}
                         className="login-form"
                         noValidate="noValidate"
                     >

@@ -10,7 +10,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { liveScoreTeamAttendanceListAction } from '../../store/actions/LiveScoreAction/liveScoreTeamAttendanceAction'
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import history from "../../util/history";
 import { isArrayNotEmpty } from '../../util/helpers'
@@ -49,7 +49,7 @@ function tableSort(key) {
         sortBy,
         sortOrder,
     }
-    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus, this_Obj.state.selectedDivision === "All" ? '' : this_Obj.state.selectedDivision, this_Obj.state.selectedRound === "All" ? "" : this_Obj.state.selectedRound)
+    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus, this_Obj.state.selectedDivision === "All" ? '' : this_Obj.state.selectedDivision, this_Obj.state.selectedRound === "All" ? "" : this_Obj.state.selectedRound , this_Obj.state.liveScoreCompIsParent , this_Obj.state.compOrgId)
 }
 
 const columns = [
@@ -260,6 +260,8 @@ class LiveScoreTeamAttendance extends Component {
             roundLoad: false,
             sortBy: null,
             sortOrder: null,
+            compOrgId : 0,
+            liveScoreCompIsParent : false
         }
         this_Obj = this
     }
@@ -268,7 +270,11 @@ class LiveScoreTeamAttendance extends Component {
     async componentDidMount() {
         let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const { id , competitionOrganisation , organisationId } = JSON.parse(getLiveScoreCompetiton())
+            const orgItem = await getOrganisationData();
+            const userOrganisationId = orgItem ? orgItem.organisationId : 0;
+            let liveScoreCompIsParent = userOrganisationId === organisationId
+            let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0;
             if (teamAttendanceListActionObject) {
                 let body = teamAttendanceListActionObject.body
                 let searchText = body.search
@@ -279,9 +285,9 @@ class LiveScoreTeamAttendance extends Component {
                 let selectStatus = teamAttendanceListActionObject.select_status
                 await this.setState({ searchText, selectedDivision, selectedRound, sortBy, sortOrder, selectStatus })
             }
-            await this.setState({ competitionId: id, divisionLoad: true })
+            await this.setState({ competitionId: id, divisionLoad: true  , compOrgId , liveScoreCompIsParent})
             if (id !== null) {
-                this.props.getLiveScoreDivisionList(id)
+                this.props.getLiveScoreDivisionList(id , undefined , undefined , undefined , liveScoreCompIsParent , compOrgId)
             } else {
                 history.pushState('/matchDayCompetitions')
             }
@@ -296,7 +302,7 @@ class LiveScoreTeamAttendance extends Component {
         let roundList = this.props.liveScoreTeamAttendanceState.roundList
         if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
             if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
-                this.props.liveScoreRoundListAction(this.state.competitionId, this.state.selectedDivision == 'All' ? "" : this.state.selectedDivision)
+                this.props.liveScoreRoundListAction(this.state.competitionId, this.state.selectedDivision == 'All' ? "" : this.state.selectedDivision , this.state.liveScoreCompIsParent , this.state.compOrgId)
                 this.setState({ divisionLoad: false, roundLoad: true })
             }
         }
@@ -327,9 +333,9 @@ class LiveScoreTeamAttendance extends Component {
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
             if (this.state.selectStatus === 'All') {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, roundSelect === "All" ? "" : roundSelect)
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, roundSelect === "All" ? "" : roundSelect , this.state.liveScoreCompIsParent , this.state.compOrgId)
             } else {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, roundSelect === "All" ? "" : roundSelect)
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, roundSelect === "All" ? "" : roundSelect , this.state.liveScoreCompIsParent , this.state.compOrgId)
             }
         } else {
             history.pushState('/')
@@ -350,20 +356,32 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (status === 'All') {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound , this.state.liveScoreCompIsParent , this.state.compOrgId)
         } else {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
     onExport = () => {
         let url
-        if (this.state.selectStatus === 'All') {
-            url = AppConstants.teamAttendanceExport + this.state.competitionId
-        } else {
-            url = AppConstants.teamAttendanceExport + this.state.competitionId + `&status=${this.state.selectStatus}`
+        if(this.state.liveScoreCompIsParent !== true)
+        {
+            if (this.state.selectStatus === 'All') {
+                url = AppConstants.teamAttendanceExport + this.state.competitionId + `&competitionOrganisationId=${this.state.compOrgId}`
+            } else {
+                url = AppConstants.teamAttendanceExport + this.state.competitionId + `&status=${this.state.selectStatus}` + `&competitionOrganisationId=${this.state.compOrgId}`
+            }
+    
         }
-
+        else{
+            if (this.state.selectStatus === 'All') {
+                url = AppConstants.teamAttendanceExport + this.state.competitionId
+            } else {
+                url = AppConstants.teamAttendanceExport + this.state.competitionId + `&status=${this.state.selectStatus}`
+            }
+    
+        }
+        
         this.props.exportFilesAction(url)
     }
 
@@ -382,7 +400,7 @@ class LiveScoreTeamAttendance extends Component {
                 sortBy,
                 sortOrder
             }
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -403,7 +421,7 @@ class LiveScoreTeamAttendance extends Component {
                 sortOrder
             }
 
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -449,7 +467,7 @@ class LiveScoreTeamAttendance extends Component {
                 sortBy,
                 sortOrder
             };
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -521,7 +539,7 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     onChangeDivision = (division) => {
-        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division, this.state.selectedRound)
+        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division , this.state.liveScoreCompIsParent , this.state.compOrgId)
         this.setState({ selectedDivision: division, selectedRound: 'All', roundLoad: true })
     }
 
@@ -606,7 +624,7 @@ class LiveScoreTeamAttendance extends Component {
                         columns={this.state.selectStatus === "Borrowed" ? borrowedColumns : columns}
                         dataSource={dataSource}
                         pagination={false}
-                        rowKey={(record, index) => record.matchId + index}
+                        rowKey={(record) => 'teamAttendance' + record.matchId}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

@@ -13,7 +13,7 @@ import { registrationChangeType } from "../../store/actions/commonAction/commonA
 import { currencyFormat } from "../../util/currencyFormat";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
-import { getOrganisationData } from "util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import history from "../../util/history";
 
 // const { confirm } = Modal;
@@ -289,7 +289,7 @@ class RegistrationChange extends Component {
             searchText: '',
             competition: 'All',
             type: 'All',
-            yearRefId: -1,
+            yearRefId: null,
             competitionId: "-1",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             regChangeTypeRefId: -1,
@@ -300,18 +300,20 @@ class RegistrationChange extends Component {
     }
 
     componentDidMount() {
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        this.setState({ yearRefId })
         this.props.registrationChangeType();
         this.handleRegChangeList(1);
     }
 
     handleRegChangeList = (page) => {
         const {
-            yearRefId,
+            // yearRefId,
             competitionId,
             organisationId,
             regChangeTypeRefId
         } = this.state;
-
+        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1
         let filter = {
             organisationId,
             yearRefId,
@@ -343,11 +345,22 @@ class RegistrationChange extends Component {
     );
 
     onChangeDropDownValue = async (value, key) => {
-        await this.setState({
-            [key]: value,
-        });
+        if (key === 'yearRefId') {
+            await this.setState({
+                'yearRefId': value,
+            });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
+            this.handleRegChangeList(1);
+        }
+        else {
+            await this.setState({
+                [key]: value,
+            });
 
-        this.handleRegChangeList(1);
+            this.handleRegChangeList(1);
+        }
     };
 
     dropdownView = () => {

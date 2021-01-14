@@ -640,7 +640,7 @@ class LiveScoreDashboard extends Component {
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardIncidentList" + record.id + index}
+                        rowKey={(record) => "dashboardIncidentList" + record.id}
                     />
                 </div>
             </div>
@@ -733,7 +733,7 @@ class LiveScoreDashboard extends Component {
                         columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
                         dataSource={dashboardMatchList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardMatchList" + record.id + index}
+                        rowKey={(record) => "dashboardMatchList" + record.id}
                     />
                 </div>
             </div>
@@ -809,7 +809,7 @@ class LiveScoreDashboard extends Component {
                         columns={columnActiveNews}
                         dataSource={dashboardNewsList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardNewsList" + record.id + index}
+                        rowKey={(record) => "dashboardNewsList" + record.id}
                     />
                 </div>
             </div>
@@ -819,7 +819,7 @@ class LiveScoreDashboard extends Component {
     playersToPayHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3 d-flex align-items-center">
+               <div className="col-sm d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.playersToPay}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -827,13 +827,28 @@ class LiveScoreDashboard extends Component {
                         </Tooltip>
                     </div>
                 </div>
+                {this.state.liveScoreCompIsParent &&
+                    <div className="col-sm text-right">
+                        <NavLink
+                            to={{
+                                pathname: '/matchDaySingleGameFee',
+                                state: { key: 'dashboard', item: null }
+                            }}
+                            className="text-decoration-none"
+                        >
+                            <Button className="primary-add-comp-form" type="primary">
+                                {AppConstants.singleGameFees}
+                            </Button>
+                        </NavLink>
+                    </div>
+                }
             </div>
         )
     }
 
     ////////ownedView view for competition
     playersToPayView = () => {
-        const { dashboardMatchList } = this.props.liveScoreDashboardState
+        const { playerTopay } = this.props.liveScoreDashboardState
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
@@ -844,7 +859,7 @@ class LiveScoreDashboard extends Component {
                         columns={columnsPlayersToPay}
                         dataSource={playerTopay}
                         pagination={false}
-                        rowKey={(record, index) => "playerTopay" + record.id + index}
+                        rowKey={(record) => "playerTopay" + record.id}
                     />
                 </div>
             </div>
@@ -881,7 +896,7 @@ class LiveScoreDashboard extends Component {
                     <Content>
                         {this.addNewsView()}
                         {this.matchView()}
-                        {/* {this.playersToPayView()} */}
+                        {this.playersToPayView()}
                         {this.incidenceView()}
                     </Content>
                 </Layout>

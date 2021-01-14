@@ -95,7 +95,7 @@ function tableSort(key) {
 
     this_obj.setState({ sortBy, sortOrder });
 
-    this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, this_obj.state.searchText, sortBy, sortOrder)
+    this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, this_obj.state.searchText, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent ,this_obj.state.compOrgId)
 }
 
 const columns = [
@@ -210,7 +210,9 @@ class LiveScoreGameTimeList extends Component {
     async componentDidMount() {
         let { gameTimeStatisticsActionObject } = this.props.liveScoreGameTimeStatisticsState
         if (getLiveScoreCompetiton()) {
+            
             const { id, attendanceRecordingPeriod, organisationId, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            
             const orgItem = await getOrganisationData();
             const userOrganisationId = orgItem ? orgItem.organisationId : 0;
             let liveScoreCompIsParent = userOrganisationId === organisationId
@@ -225,9 +227,9 @@ class LiveScoreGameTimeList extends Component {
                     let sortOrder = gameTimeStatisticsActionObject.sortOrder
                     let aggregate = gameTimeStatisticsActionObject.aggregate
                     await this.setState({ offset, searchText, sortBy, sortOrder, filter: aggregate })
-                    this.props.gameTimeStatisticsListAction(id, aggregate === 'All' ? "" : aggregate, offset, searchText, sortBy, sortOrder)
+                    this.props.gameTimeStatisticsListAction(id, aggregate === 'All' ? "" : aggregate, offset, searchText, sortBy, sortOrder , liveScoreCompIsParent , compOrgId)
                 } else {
-                    this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+                    this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText , undefined , undefined , liveScoreCompIsParent , compOrgId)
                 }
             } else {
                 history.push("/matchDayCompetitions")
@@ -255,18 +257,26 @@ class LiveScoreGameTimeList extends Component {
         let offset = page ? 10 * (page - 1) : 0
         this.setState({ offset })
 
-        this.props.gameTimeStatisticsListAction(competitionId, aggregate === 'All' ? "" : aggregate, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
+        this.props.gameTimeStatisticsListAction(competitionId, aggregate === 'All' ? "" : aggregate, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
     }
 
     setFilterValue = (data) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let offset = 1 ? 10 * (1 - 1) : 0
         this.setState({ filter: data.filter })
-        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
+        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
     }
 
     onExport = () => {
-        let url = AppConstants.gameTimeExport + this.state.competitionId + `&aggregate=${this.state.filter}`
+        let url = '';
+        if(!this.state.liveScoreCompIsParent)
+        {
+            url = AppConstants.gameTimeExport + this.state.competitionId + `&aggregate=${this.state.filter}&competitionOrganisationId=` + this.state.compOrgId
+        }
+        else
+        {
+            url = AppConstants.gameTimeExport + this.state.competitionId + `&aggregate=${this.state.filter}`
+        }
         this.props.exportFilesAction(url)
     }
 
@@ -275,7 +285,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, e.target.value, this.state.sortBy, this.state.sortOrder)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, e.target.value, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
         }
     }
 
@@ -286,7 +296,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
         if (code === 13) { // 13 is the enter keycode
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
         }
     }
 
@@ -297,7 +307,7 @@ class LiveScoreGameTimeList extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
         }
     }
 
@@ -387,7 +397,7 @@ class LiveScoreGameTimeList extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
-                        rowKey={(record, index) => 'gameTime' + index}
+                        rowKey={(record) => 'gameTime' + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

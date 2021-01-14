@@ -88,7 +88,7 @@ const columns = [
         width: "25%",
     },
     {
-        title: "Registration Lock",
+        title: AppConstants.lockRegistrationsImmediately,
         dataIndex: "registrationLock",
         width: 120,
         key: "registrationLock",
@@ -100,13 +100,19 @@ const columns = [
                 </CustomTooltip>
             </div>
         ),
-        render: (registrationLock, record, index) => (
-            <Checkbox
-                className="single-checkbox mt-1"
-                checked={record.registrationLock == null ? false : record.registrationLock}
-                onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
-            />
-        )
+        render: (registrationLock, record, index) => {
+            return (
+                <div>
+                    {(record.isPlaying == 1 || record.isIndividualRegistration == 1) &&
+                        <Checkbox
+                            className="single-checkbox mt-1"
+                            checked={record.registrationLock == null ? false : record.registrationLock}
+                            onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
+                        />
+                    }
+                </div>
+            )
+        }
     },
 
     {
@@ -115,17 +121,20 @@ const columns = [
         key: "registrationCap",
         render: (registrationCap, record, index) => {
             return (
-                <InputWithHead 
-                    style={{ width: "70%" }}
-                    placeholder=" "
-                    type={"number"}
-                    min="0"
-                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
-                    value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
-                />
+                <div>
+                    {(record.isPlaying == 1 || record.isIndividualRegistration == 1) &&
+                        <InputWithHead
+                            style={{ width: "70%" }}
+                            placeholder=" "
+                            type={"number"}
+                            min="0"
+                            onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                            value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
+                        />
+                    }
+                </div>
             )
         }
-
     }
 ];
 
@@ -246,7 +255,7 @@ class RegistrationForm extends Component {
         return (
             <div>
                 <a>
-                    <Mailto email="" subject={AppConstants.hardshipCode} body={body}>
+                    <Mailto email="" subject={AppConstants.singleUseDiscount} body={body}>
                         <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
                             {AppConstants.email}
                         </span>
@@ -641,7 +650,7 @@ class RegistrationForm extends Component {
                     </div>
                 </div>
 
-                <InputWithHead heading={AppConstants.membershipProduct} />
+                <InputWithHead required={"required-field"} heading={AppConstants.membershipProduct} />
                 <Select
                     mode="multiple"
                     className="reg-form-multiple-select"
@@ -659,6 +668,7 @@ class RegistrationForm extends Component {
                 </Select>
 
                 {this.props.registrationState.selectedMemberShipType.map((item) => (
+                    item != undefined &&
                     <div className="inside-container-view">
                         <span className="form-heading pt-2 pl-2">
                             {item.membershipProductName}
@@ -1477,7 +1487,7 @@ class RegistrationForm extends Component {
         // let isPublished = this.state.isPublished;
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
+                <span className="form-heading pb-2">{AppConstants.singleUseDiscount}</span>
                 {hardShipCodesList.map((item) => (
                     <div>
                         <div className="d-flex" style={{ marginTop: "13px" }}>
@@ -1596,6 +1606,11 @@ class RegistrationForm extends Component {
         )
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         const { isHardshipEnabled } = this.props.registrationState.registrationFormData[0];
         return (
@@ -1614,6 +1629,7 @@ class RegistrationForm extends Component {
                         autoComplete="off"
                         onFinish={this.registrationSubmit}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
                     >
                         {/* {this.dropdownView()} */}
                         <Content>

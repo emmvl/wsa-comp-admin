@@ -290,6 +290,7 @@
   height: 30px;
   border-radius: 5px;
   background-image: var(--app-gradient-right);
+  padding: inherit;
 }
 
 .search-flex {
@@ -315,4 +316,9 @@
 
 .user-delete-text {
   padding: 23px;
+}
+
+.single-checkbox span {
+  font-size: 13px;
+  color: var(--app-4c4c6d);
 }

@@ -17,7 +17,8 @@ import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from "../../themes/dateformate";
 import StripeKeys from "../stripe/stripeKeys";
-
+import moment from "moment";
+import history from 'util/history'
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -26,13 +27,19 @@ let this_obj = null;
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.transferId,
+        dataIndex: 'id',
+        key: 'id',
+        sorter: false,
+    },
+    {
+        title: AppConstants.transactionId,
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
         sorter: false,
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: false,
@@ -41,7 +48,7 @@ const columns = [
         )
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: false,
@@ -54,7 +61,7 @@ const columns = [
         },
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         sorter: false,
@@ -94,25 +101,32 @@ class RegistrationPayments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2020",
+            year: null,
+            dateFrom: null,
+            dateTo: null,
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
             stripeDashBoardLoad: false,
-            isImpersonation: false
+            isImpersonation: localStorage.getItem('Impersonation') == "true" ? true : false
         }
     }
 
     componentDidUpdate() {
-        if (this.props.stripeState.onLoad === false && this.state.loadingSave === true) {
-            this.setState({ loadingSave: false })
-            this.props.accountBalanceAction()
-        }
-        if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
-            this.setState({ stripeDashBoardLoad: false })
-            let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
-            if (stripeDashboardUrl) {
-                window.open(stripeDashboardUrl, '_newtab');
+        if (this.state.isImpersonation) {
+            history.push("/paymentDashboard")
+
+        } else {
+            if (this.props.stripeState.onLoad === false && this.state.loadingSave === true) {
+                this.setState({ loadingSave: false })
+                this.props.accountBalanceAction()
+            }
+            if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
+                this.setState({ stripeDashBoardLoad: false })
+                let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
+                if (stripeDashboardUrl) {
+                    window.open(stripeDashboardUrl, '_newtab');
+                }
             }
         }
     }
@@ -139,7 +153,15 @@ class RegistrationPayments extends Component {
 
     //on export button click
     onExport() {
-        this.props.exportPaymentApi("transfer")
+        const { dateFrom, dateTo, year } = this.state;
+        const start = dateFrom ? moment(dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
+        const end = dateTo ? moment(dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
+        this.props.exportPaymentApi(
+            "transfer",
+            year,
+            start,
+            end,
+        );
     }
 
     headerView = () => {
@@ -157,38 +179,40 @@ class RegistrationPayments extends Component {
             //     </div>
             // </Header>
             // <div className="comp-player-grades-header-drop-down-view">
-            <div className="reg-payment-header-view mt-5">
-                <div className="row">
-                    <div className="col-sm d-flex align-content-center">
-                        <span className="form-heading">
-                            {AppConstants.dashboard}
-                        </span>
-                    </div>
-                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
-                        <div className="row">
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <div className="comp-buttons-view">
-                                        { stripeConnected ? (
-                                            <Button type="primary mx-4" onClick={() => this.onExport()}>
-                                                <img
-                                                    src={AppImages.export}
-                                                    alt=""
-                                                    className="export-image"
-                                                />
-                                                {AppConstants.exportPayments}
-                                            </Button>
-                                        ) : ('')}
-                                        { isBecsSetupDone ? (
-                                            <Button type="primary">
-                                                <img
-                                                    src={AppImages.export}
-                                                    alt=""
-                                                    className="export-image"
-                                                />
-                                                {AppConstants.exportWithdrawals}
-                                            </Button>
-                                        ) : ('')}
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm d-flex align-content-center">
+                            <span className="form-heading">
+                                {AppConstants.dashboard}
+                            </span>
+                        </div>
+                        <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
+                            <div className="row">
+                                <div className="col-sm pt-1">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <div className="comp-buttons-view">
+                                            {stripeConnected ? (
+                                                <Button type="primary mx-4" onClick={() => this.onExport()}>
+                                                    <img
+                                                        src={AppImages.export}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.exportPayments}
+                                                </Button>
+                                            ) : ('')}
+                                            {isBecsSetupDone ? (
+                                                <Button type="primary">
+                                                    <img
+                                                        src={AppImages.export}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.exportWithdrawals}
+                                                </Button>
+                                            ) : ('')}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -200,6 +224,15 @@ class RegistrationPayments extends Component {
         )
     }
 
+    getYearsForDropdown = () => {
+        const currentYear = moment().format('YYYY')
+        return [
+            currentYear,
+            currentYear -1,
+            currentYear -2,
+        ]
+    }
+
     dropdownView = () => {
         return (
             <div className="row">
@@ -208,59 +241,24 @@ class RegistrationPayments extends Component {
                     <Select
                         className="reg-payment-select w-100"
                         style={{ paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
-                        onChange={(year) => this.setState({ year })}
+                        onChange={(year) => this.onYearChange(year)}
                         value={this.state.year}
+                        placeholder={AppConstants.selectAYear}
+                        allowClear={true}
                     >
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
-                    </Select>
-                </div>
-                <div className="col-sm">
-                    <InputWithHead required="pt-0" heading={AppConstants.competition} />
-
-                    <Select
-                        className="reg-payment-select w-100"
-                        style={{ paddingRight: 1, minWidth: 160 }}
-                        onChange={(competition) => this.setState({ competition })}
-                        value={this.state.competition}
-                    >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
-                    </Select>
-                </div>
-                <div className="col-sm">
-                    <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
-                    <Select
-                        className="reg-payment-select w-100"
-                        style={{ paddingRight: 1, minWidth: 160 }}
-                        onChange={(paymentFor) => this.setState({ paymentFor })}
-                        value={this.state.paymentFor}
-                    >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
+                        {this.getYearsForDropdown().map((year) => <option value={year} key={year}>{year}</option>)}
                     </Select>
                 </div>
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
                         className="reg-payment-datepicker w-100"
-                        // size="large"
                         style={{ minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        value={this.state.dateFrom ? moment(this.state.dateFrom) : null}
                     />
                 </div>
                 <div className="col-sm">
@@ -273,6 +271,7 @@ class RegistrationPayments extends Component {
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        value={this.state.dateTo ? moment(this.state.dateTo) : null}
                     />
                 </div>
             </div>
@@ -281,12 +280,44 @@ class RegistrationPayments extends Component {
 
     ///setting the available from date
     dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
+        const dateFrom = date ? moment(date).startOf('day').format('YYYY-MM-DD HH:mm:ss') : date;
+        this.setState({
+            dateFrom: dateFrom,
+            year: null
+        })
+        this.handleStripeTransferList(null, {
+            year: null,
+            startDate: dateFrom,
+            endDate: this.state.dateTo
+        })
     }
 
     ////setting the available to date
     dateOnChangeTo = date => {
-        // console.log(date)
+        const dateTo = date ? moment(date).endOf('day').format('YYYY-MM-DD HH:mm:ss') : date;
+        this.setState({
+            dateTo: dateTo,
+            year: null
+        })
+
+        this.handleStripeTransferList(null, {
+            year: null,
+            startDate: this.state.dateFrom,
+            endDate: dateTo
+        })
+    }
+
+    onYearChange = year => {
+        this.setState({
+            year,
+            dateFrom: null,
+            dateTo: null
+        })
+        this.handleStripeTransferList(null, {
+            year,
+            startDate: null,
+            endDate: null
+        })
     }
 
     stripeConnected = () => {
@@ -321,45 +352,44 @@ class RegistrationPayments extends Component {
         // let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
         let isImpersonation = getImpersonation()
         return (
-            <div className="pb-5 pt-5">
-                <div className="row">
-                    <div className="col-sm">
-                        <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
-                    </div>
-                    <div className="comp-buttons-view">
-                        {isImpersonation !== "true" && (
-                            <div className="col-sm d-flex justify-content-end">
-                                {stripeConnected ? (
-                                    <Button
-                                        className="open-reg-button mx-4"
-                                        type="primary"
-                                        onClick={() => this.stripeDashboardLoginUrl()}
-                                    >
-                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
-                                        {AppConstants.stripePaymentDashboard}
-                                        {/* </a> */}
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        className="open-reg-button"
-                                        type="primary"
-                                    >
-                                        <a href={stripeConnectURL} className="stripe-connect">
-                                            <span>
-                                                {AppConstants.connectToStripe}
-                                            </span>
-                                        </a>
-                                    </Button>
-                                )}
-                                {isBecsSetupDone ? (
+            <div className="comp-dash-table-view mt-2">
+                <div className="pb-5 pt-5">
+                    <div className="row">
+                        <div className="col-sm">
+                            <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
+                        </div>
+                        <div className="comp-buttons-view">
+                            {isImpersonation !== "true" && (
+                                <div className="col-sm d-flex justify-content-end">
+                                    {stripeConnected ? (
+                                        <Button
+                                            className="open-reg-button mx-4"
+                                            type="primary"
+                                            onClick={() => this.stripeDashboardLoginUrl()}
+                                        >
+                                            {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
+                                            {AppConstants.stripePaymentDashboard}
+                                            {/* </a> */}
+                                        </Button>
+                                    ) : (
+                                            <Button
+                                                className="open-reg-button"
+                                                type="primary"
+                                            >
+                                                <a href={stripeConnectURL} className="stripe-connect">
+                                                    <span>
+                                                        {AppConstants.connectToStripe}
+                                                    </span>
+                                                </a>
+                                            </Button>
+                                        )}
+                                    {isBecsSetupDone ? (
                                     <Button
                                         className="open-reg-button mx-1"
                                         type="primary"
                                         onClick={() => this.stripeDashboardLoginUrl()}
                                     >
-                                        {/* <a href={stripeDashboardUrl} className="stripe-connect"> */}
                                         {AppConstants.stripeWithdrawalsDashboard}
-                                        {/* </a> */}
                                     </Button>
                                 ) : (
                                     <Button
@@ -370,15 +400,16 @@ class RegistrationPayments extends Component {
                                         {AppConstants.setupStripeForWithdrawals}
                                     </Button>
                                 )}
-                            </div>
-                        )}
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </div >
+                </div >
+            </div>
         )
     }
 
-    handleStripeTransferList = (key) => {
+    handleStripeTransferList = (key, params) => {
         let page = this.props.stripeState.stripeTransferListPage
         let stripeTransferList = this.props.stripeState.stripeTransferList
         let starting_after = null
@@ -389,15 +420,28 @@ class RegistrationPayments extends Component {
             let id = (stripeTransferList[stripeTransferList.length - 1]['id']);
             starting_after = id
             ending_before = null
-        }
-        if (key == "Previous") {
+        } else if (key == "Previous") {
             //////move backward
             page = parseInt(page) - 1
             let id = (stripeTransferList[0]['id']);
             starting_after = null
             ending_before = id
+        } else {
+            // Next or previous button didn't trigger it, change page no to 1 for new data
+            page = 1
         }
-        this.props.getStripeTransferListAction(page, starting_after, ending_before)
+        if (!params) {
+            params = {}
+            if (this.state.year)
+                params.year = this.state.year
+            else if (this.state.dateFrom || this.state.dateTo) {
+                if (this.state.dateFrom)
+                    params.startDate = this.state.dateFrom
+                if (this.state.dateTo)
+                    params.endDate = this.state.dateTo
+            }
+        }
+        this.props.getStripeTransferListAction(page, starting_after, ending_before, params)
     }
 
     ////checking for enabling click on next button or not
@@ -434,7 +478,7 @@ class RegistrationPayments extends Component {
                     <span className="reg-payment-paid-reg-text">{AppConstants.currentPage + " - " + currentPage}</span>
                     <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
                 </div>
-                <div className="d-flex justify-content-end mb-5">
+                <div className="d-flex justify-content-end paddingBottom80px">
                     <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripeTransferList("Previous")}>
                         <span
                             style={!previousEnabled ? { color: "#9b9bad" } : null}
@@ -458,7 +502,7 @@ class RegistrationPayments extends Component {
 
     contentView = () => {
         return (
-            <div>
+            <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
                 {/*
                 <div className="row">
@@ -573,6 +617,7 @@ class RegistrationPayments extends Component {
                     <div className="col-sm">
                     </div>
                 </div> */}
+
                 {this.transferListView()}
             </div>
         )
@@ -583,7 +628,7 @@ class RegistrationPayments extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="2" />
-                <Layout className="reg-payment-layout-view">
+                <Layout >
                     {this.headerView()}
                     {this.stripeView()}
                     <Content>

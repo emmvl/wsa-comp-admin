@@ -672,19 +672,6 @@ function CompetitionTimeSlots(state = initialState, action) {
             return { ...state }
 
 
-        // case ApiConstants.API_TIME_SLOT_INIT_SUCCESS:
-
-        //     console.log('refernce called')
-        //     state.allrefernceData = action.result
-        //     let venueData = getVenueData(action.result.ApplyToVenue)
-        //     let timeSlotGeneration = getVenueData(action.result.TimeslotGeneration)
-        //     // let rotationData = getRotationData(action.result.TimeslotRotation)
-        //     state.applyVenue = venueData
-        //     state.timeSlotRotation = action.result.TimeslotRotation
-        //     state.timeSlotGeneration = timeSlotGeneration
-        //     state.weekDays = action.result.Day
-        //     return { ...state }
-
         case ApiConstants.Api_ADD_REMOVE_TIME_SLOT_TABLE:
             if (action.key === "addTimeSlotManual") {
                 let timeSlotObj = {

@@ -5,34 +5,34 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
-    umpireRoasterList: [],
+    umpireRosterList: [],
     umpireCurrentPage: null,
     umpireTotalCount: null,
-    roasterLoading: false,
+    rosterLoading: false,
     umpireRosterListActionObject: null
 };
 
-function umpireRoasterdState(state = initialState, action) {
+function umpireRosterdState(state = initialState, action) {
     switch (action.type) {
         //// Umpire List
-        case ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD:
+        case ApiConstants.API_UMPIRE_ROSTER_LIST_LOAD:
             return { ...state, onLoad: true, umpireRosterListActionObject: action };
-        case ApiConstants.API_UMPIRE_ROASTER_LIST_SUCCESS:
+        case ApiConstants.API_UMPIRE_ROSTER_LIST_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
-                umpireRoasterList: action.result.results,
+                umpireRosterList: action.result.results,
                 umpireCurrentPage: action.result.page.currentPage,
                 umpireTotalCount: action.result.page.totalCount,
                 status: action.status
             };
         //// Umpire List
-        case ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD:
-            return { ...state, roasterLoading: true };
-        case ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_SUCCESS:
+        case ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_LOAD:
+            return { ...state, rosterLoading: true };
+        case ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_SUCCESS:
             return {
                 ...state,
-                roasterLoading: false,
+                rosterLoading: false,
                 status: action.status
             };
         //// Add Umpire
@@ -69,4 +69,4 @@ function umpireRoasterdState(state = initialState, action) {
             return state;
     }
 }
-export default umpireRoasterdState;
+export default umpireRosterdState;

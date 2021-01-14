@@ -166,6 +166,7 @@ class AssignUmpire extends Component {
             columns: column,
             loading: false,
             selectedComp: null,
+            userId : null
         };
         this_obj = this
     }
@@ -174,6 +175,10 @@ class AssignUmpire extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
+        
+        let userId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.id : 0 : 0;
+        // let userId = localStorage.getItem("userId");
+        this.setState({userId})
     }
 
     componentDidUpdate(nextProps) {
@@ -191,7 +196,7 @@ class AssignUmpire extends Component {
                         offset: 0
                     }
                 }
-                this.props.getAssignUmpireListAction(firstComp, body)
+                this.props.getAssignUmpireListAction(firstComp, body , this.state.userId)
                 this.setState({ selectedComp: firstComp, loading: false })
             }
         }
@@ -255,7 +260,7 @@ class AssignUmpire extends Component {
             },
         };
         this.setState({ selectedComp: compID });
-        this.props.getAssignUmpireListAction(compID, body);
+        this.props.getAssignUmpireListAction(compID, body , this.state.userId);
     }
 
     headerView = () => {
@@ -314,7 +319,7 @@ class AssignUmpire extends Component {
                 offset,
             },
         };
-        this.props.getAssignUmpireListAction(this.state.selectedComp, body)
+        this.props.getAssignUmpireListAction(this.state.selectedComp, body , this.state.userId)
     }
 
     ////////tableView view for all the umpire assigned matches list
@@ -329,6 +334,7 @@ class AssignUmpire extends Component {
                         columns={this.state.columns}
                         dataSource={assignUmpireList}
                         pagination={false}
+                        rowKey={(record) => "assignUmpire" + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

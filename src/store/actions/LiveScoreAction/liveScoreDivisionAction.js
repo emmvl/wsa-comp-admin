@@ -1,13 +1,15 @@
 import ApiConstants from "themes/apiConstants";
 
 // Division action
-function getLiveScoreDivisionList(competitionID, compKey, sortBy, sortOrder) {
+function getLiveScoreDivisionList(competitionID, compKey, sortBy, sortOrder , isParent , compOrgId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD,
         competitionID,
         compKey,
         sortBy,
         sortOrder,
+        isParent , 
+        compOrgId
     };
 }
 

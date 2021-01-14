@@ -16,6 +16,7 @@ import Login from './components/login';
 import ForgotPassword from './components/ForgotPassword';
 import lazyLoad from './components/lazyLoad';
 import ErrorBoundary from './components/emptyComponent/errorBoundary';
+import { getOrganisationData } from 'util/sessionStorage'
 
 import './customStyles/customStyles.css';
 import './customStyles/antdStyles.css';
@@ -23,18 +24,40 @@ import './customStyles/antdStyles.css';
 // const ORG_ID = 'Netball';
 const tagManagerArgs = {
     gtmId: process.env.REACT_APP_GTM_ID,
+
 };
 
 const tawkTo = require('tawkto-react');
 
 const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c';
+const userData = {
+    name: getOrganisationData() ? getOrganisationData().firstName + " " + getOrganisationData().lastName + " " + "|" + " " + getOrganisationData().name : "",
+    email: getOrganisationData() ? getOrganisationData().userEmail : "",
+}
 
 TagManager.initialize(tagManagerArgs);
 
 function App() {
     useEffect(() => {
         if (localStorage.token) {
-            tawkTo(tawkToPropertyId);
+            window.Tawk_API = window.Tawk_API || {};
+            window.Tawk_LoadStart = new Date();
+            (function () {
+                var s1 = document.createElement("script"),
+                    s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = "https://embed.tawk.to/5ef6f3ca4a7c6258179b6f5c/default";
+                s1.charset = "UTF-8";
+                s1.setAttribute("crossorigin", "*");
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+            window.Tawk_API.onLoad = function () {
+                window.Tawk_API.setAttributes({
+                    'name': userData.name,
+                    'email': userData.email,
+                }, function (error) { });
+            }
+
         }
     }, []);
 
@@ -51,8 +74,8 @@ function App() {
                             render={() => (localStorage.token ? (
                                 <Redirect to="/homeDashboard" />
                             ) : (
-                                <Redirect to="/login" />
-                            ))}
+                                    <Redirect to="/login" />
+                                ))}
                         />
 
                         <Route path="/login" component={lazyLoad(Login)} />

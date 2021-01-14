@@ -13,7 +13,7 @@ import { checkRegistrationType, getCurrentYear } from "../../util/permissions";
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import history from "../../util/history";
 import WizardModel from "../../customComponents/registrationWizardModel"
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import StripeKeys from "../stripe/stripeKeys";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 
@@ -177,6 +177,7 @@ class RegistrationMainDashboard extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear()
         const { regDashboardListAction } = this.props.registrationDashboardState
 
         this.props.getOnlyYearListAction(this.props.appState.yearList)
@@ -186,7 +187,7 @@ class RegistrationMainDashboard extends Component {
         if (regDashboardListAction) {
             sortBy = regDashboardListAction.sortBy
             sortOrder = regDashboardListAction.sortOrder
-            let year = regDashboardListAction.yearRefId
+            let year = JSON.parse(yearId)
             let key = regDashboardListAction.key
             await this.setState({ sortBy, sortOrder, year })
             this.props.registrationMainDashboardListAction(year, sortBy, sortOrder, key)
@@ -198,16 +199,17 @@ class RegistrationMainDashboard extends Component {
         const { yearList } = this.props.appState
         if (this.state.loading && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
-                let storedYearID = localStorage.getItem("yearId");
+                let storedYearID = getGlobalYear() && JSON.parse(getGlobalYear());
                 let yearRefId = null
                 if (storedYearID == null || storedYearID == "null") {
                     yearRefId = getCurrentYear(yearList)
                 } else {
                     yearRefId = storedYearID
                 }
+                setGlobalYear(yearRefId)
                 this.props.registrationMainDashboardListAction(yearRefId, this.state.sortBy, this.state.sortOrder, "all")
                 this.props.getAllCompetitionAction(yearRefId)
-                this.setState({ loading: false, year: yearRefId })
+                this.setState({ loading: false, year: JSON.parse(yearRefId) })
             }
         }
         let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
@@ -246,7 +248,7 @@ class RegistrationMainDashboard extends Component {
 
     onYearClick(yearId) {
         let { sortBy, sortOrder } = this.state
-        localStorage.setItem("yearId", yearId)
+        setGlobalYear(yearId)
         this.setState({ year: yearId })
         this.props.registrationMainDashboardListAction(yearId, sortBy, sortOrder, "all")
         this.props.getAllCompetitionAction(yearId)
@@ -452,7 +454,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-4 d-flex flex-row align-items-center">
+                        <div className="col-sm-6 d-flex flex-row align-items-center">
                             <span className="form-heading">
                                 {AppConstants.participateInCompReg}
 

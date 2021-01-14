@@ -16,14 +16,13 @@ import history from 'util/history';
 import { isArrayNotEmpty } from 'util/helpers';
 // import { getCurrentYear } from 'util/permissions';
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
     getOwn_CompetitionFinalRefId,
     setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, getVenuesTypeAction, clearYearCompetitionAction } from 'store/actions/appAction';
 import {
@@ -62,7 +61,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     // component did mount
     componentDidMount() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
@@ -114,7 +113,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(yearId, competitionId);
                     this.setState({
@@ -125,13 +124,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                     })
                 }
             }
-            // if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-            //     if (this.props.appState.own_YearArr.length > 0) {
-            //         let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-            //         setOwnCompetitionYear(yearRefId)
-            //         this.setState({ yearRefId: yearRefId })
-            //     }
-            // }
         }
         if (competitionTimeSlots.onLoad === false && this.state.onNextLoad === true) {
             if (!competitionTimeSlots.error) {
@@ -428,7 +420,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     );
 
     onYearChange = (yearId) => {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
@@ -508,8 +500,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.startTime != null && moment(item.startTime, 'HH:mm')}
                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, 'HH:mm'), index, 'startTime')}
-                        // disabledDate={d => !d || d.isAfter(closeDate)
-                        // minuteStep={15}
+                    // disabledDate={d => !d || d.isAfter(closeDate)
+                    // minuteStep={15}
                     />
                 </div>
                 <div className="col-sm">
@@ -524,8 +516,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.endTime != null && moment(item.endTime, 'HH:mm')}
                         onChange={(time) => this.onTimeChange(time, index, 'endTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, 'HH:mm'), index, 'endTime')}
-                        // minuteStep={15}
-                        // disabledHours={() => this.getDisabledHours(item.startTime)}
+                    // minuteStep={15}
+                    // disabledHours={() => this.getDisabledHours(item.startTime)}
                     />
                 </div>
                 {data.length > 1 && (
@@ -900,7 +892,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         onBlur={(e) => this.onVenueTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex, venueIndex, 'startTime')}
                                         value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                         format="HH:mm"
-                                        // minuteStep={15}
+                                    // minuteStep={15}
                                     />
                                     {item.startTime.length > 1 && (
                                         <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
@@ -1225,7 +1217,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onBlur={(e) => this.onCompVenueTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex, 'startTime')}
                                     value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                     format="HH:mm"
-                                    // minuteStep={15}
+                                // minuteStep={15}
                                 />
                                 {item.startTime.length > 1 && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>

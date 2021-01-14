@@ -13,6 +13,7 @@ import { liveScorePositionTrackingAction } from '../../store/actions/LiveScoreAc
 import { getLiveScoreCompetiton, getOrganisationData } from "../../util/sessionStorage"
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
+import { exportFilesAction } from "../../store/actions/appAction";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -585,6 +586,20 @@ class LiveScorePositionTrackReport extends Component {
         }
     }
 
+
+    // on Export
+    onExport = () => {
+        const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+        let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+        let url = ""
+        if (this.state.liveScoreCompIsParent) {
+            url = AppConstants.positionExport + `aggregate=${this.state.aggregate}&reporting=${this.state.reporting}&competitionId=${id}`
+        } else {
+            url = AppConstants.positionExport + `aggregate=${this.state.aggregate}&reporting=${this.state.reporting}&competitionId=${id}&competitionOrganisationId=${compOrgId}`
+        }
+        this.props.exportFilesAction(url)
+    }
+
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
@@ -599,7 +614,9 @@ class LiveScorePositionTrackReport extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button className="primary-add-comp-form" type="primary"
+                                        onClick={() => this.onExport()}
+                                    >
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -871,7 +888,8 @@ class LiveScorePositionTrackReport extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        liveScorePositionTrackingAction
+        liveScorePositionTrackingAction,
+        exportFilesAction
     }, dispatch)
 }
 

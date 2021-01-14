@@ -20,7 +20,7 @@
     "rules": {
         "consistent-return": 0,
         "indent": [
-            "error",
+            "warn",
             4,
             {
                 "SwitchCase": 1
@@ -56,6 +56,8 @@
         "react/jsx-indent": 0,
         "react/jsx-indent-props": 0,
         "react/jsx-props-no-spreading": 0,
-        "react/no-array-index-key": 1
+        "react/no-array-index-key": 1,
+        "react/no-unused-state": "warn",
+        "react/prop-types": 0
     }
 }

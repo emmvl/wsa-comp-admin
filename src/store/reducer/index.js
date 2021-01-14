@@ -63,7 +63,7 @@ import ShopProductState from './shopReducer/productReducer';
 /// / Umpire Module
 import UmpireDashboardState from './umpireReducer/umpireDashboardReducer';
 import UmpireCompetitionState from './umpireReducer/umpireCompetitionReducer';
-import UmpireRoasterState from './umpireReducer/umpireRoasterReducer';
+import UmpireRosterState from './umpireReducer/umpireRosterReducer';
 import UmpireState from './umpireReducer/umpireReducer';
 import AssignUmpireState from './umpireReducer/assignUmpireReducer';
 import UmpireSettingState from './umpireReducer/umpireSettingReducer';
@@ -81,6 +81,7 @@ import liveScorePlayerMinuteTrackingState from './liveScoreReducer/liveScorePlay
 
 import UmpirePaymentState from './umpireReducer/umpirePaymentReducer';
 import CommunicationModuleState from './communicationReducer/communicationReducer';
+import UmpirePoolAllocationState from './umpireReducer/umpirePoolAllocationReducer';
 
 const rootReducer = combineReducers({
     LoginState,
@@ -135,7 +136,7 @@ const rootReducer = combineReducers({
     ShopProductState,
     UmpireDashboardState,
     UmpireCompetitionState,
-    UmpireRoasterState,
+    UmpireRosterState,
     UmpireState,
     AssignUmpireState,
     UmpireSettingState,
@@ -151,7 +152,8 @@ const rootReducer = combineReducers({
     CompetitionMultiDrawsState,
     liveScorePlayerMinuteTrackingState,
     UmpirePaymentState,
-    CommunicationModuleState
+    CommunicationModuleState,
+    UmpirePoolAllocationState,
 });
 
 export default rootReducer;

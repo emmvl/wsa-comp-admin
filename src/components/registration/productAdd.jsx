@@ -419,7 +419,6 @@ class ProductAdd extends Component {
 
     ///setting the available from date
     dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
         console.log(date)
     }
 

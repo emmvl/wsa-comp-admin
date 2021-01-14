@@ -275,18 +275,20 @@ function updateMembershipFeeCapListAction(value,key,index,subKey,subIndex){
     return action;
 }
 
-function getMembershipCapListAction(organisationUniqueKey){
+function getMembershipCapListAction(organisationUniqueKey,yearRefId){
     const action = {
         type: ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD,
-        organisationUniqueKey
+        organisationUniqueKey,
+        yearRefId
     }
     return action;
 }
 
-function updateMembershipFeeCapAction(organisationUniqueKey,payload){
+function updateMembershipFeeCapAction(organisationUniqueKey,yearRefId,payload){
     const action = {
         type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD,
         organisationUniqueKey,
+        yearRefId,
         payload
     }
     return action;

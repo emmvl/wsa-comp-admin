@@ -8,7 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "./liveScore.css";
 import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import history from "../../util/history";
-import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwn_competition, setGlobalYear } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
@@ -360,7 +360,8 @@ class LiveScoreMatchesList extends Component {
             const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
             compKey = uniqueKey
         }
-        setOwnCompetitionYear(yearRefId);
+        // setOwnCompetitionYear(yearRefId);
+        setGlobalYear(yearRefId);
         setOwn_competition(compKey);
         history.push({ pathname: '/competitionDraws', state: { screenKey: "/matchDayMatches" } });
     }
@@ -537,7 +538,7 @@ class LiveScoreMatchesList extends Component {
                         columns={columns}
                         dataSource={DATA}
                         pagination={false}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => "matchList" + record.id}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -630,7 +631,7 @@ class LiveScoreMatchesList extends Component {
         this.setState({ selectedDivision: division, selectedRound: 'All' })
         let offset = 0;
         let start = 1;
-        const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
+        const { competitionId, searchText } = this.state;
 
         setTimeout(() => {
             this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
@@ -642,7 +643,7 @@ class LiveScoreMatchesList extends Component {
     onChangeRound(roundName) {
         let offset = 0;
         let start = 1
-        const { competitionId, searchText, selectedDivision, sortBy, sortOrder } = this.state;
+        const { competitionId, searchText, selectedDivision } = this.state;
         this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         this.setState({ selectedRound: roundName })
     }

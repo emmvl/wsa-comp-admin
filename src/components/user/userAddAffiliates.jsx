@@ -55,11 +55,16 @@ class UserAddAffiliates extends Component {
         this.referenceCalls(this.state.organisationId);
         this.props.getRoleAction();
         this.clearContact();
-        this.addContact();
+        // this.addContact();
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
+        let isEdit = this.props.location.state ? this.props.location.state.isEdit : false
+        if (isEdit) {
+            this.props.updateNewAffiliateAction(null, "addAffiliate");
+            this.addContact();
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -315,7 +320,7 @@ class UserAddAffiliates extends Component {
         return (
             <div className="content-view pt-4">
                 <InputWithHead
-                    required="pb-1"
+                    
                     heading={AppConstants.organisationType}
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.orgTypeMsg}
@@ -392,7 +397,7 @@ class UserAddAffiliates extends Component {
                 <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
                     <InputWithHead
                         auto_complete="new-name"
-                        required="required-field pt-0 pb-1"
+                        required="required-field"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
@@ -414,8 +419,7 @@ class UserAddAffiliates extends Component {
                 </Form.Item>
 
                 <InputWithHead
-                    maxLength={10}
-                    required="pb-1"
+                    maxLength={10}                    
                     heading={AppConstants.phoneNumber}
                     placeholder={AppConstants.phoneNumber}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
@@ -462,7 +466,7 @@ class UserAddAffiliates extends Component {
                         <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
                             <InputWithHead
                                 auto_complete="new-firstName"
-                                required="required-field pt-0 pb-1"
+                                required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(e) =>
@@ -478,8 +482,7 @@ class UserAddAffiliates extends Component {
                         </Form.Item>
 
                         <InputWithHead
-                            auto_complete="new-middleName"
-                            required="pb-1"
+                            auto_complete="new-middleName"                            
                             heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
                             onChange={(e) =>
@@ -495,7 +498,7 @@ class UserAddAffiliates extends Component {
                         <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
                                 auto_complete="new-lastName"
-                                required="required-field pb-1"
+                                required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 onChange={(e) =>
@@ -525,7 +528,7 @@ class UserAddAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-email"
-                                required="required-field pb-1"
+                                required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
                                 onChange={(e) =>
@@ -536,8 +539,7 @@ class UserAddAffiliates extends Component {
                         </Form.Item>
 
                         <InputWithHead
-                            auto_complete="off"
-                            required="pb-1"
+                            auto_complete="off"                            
                             heading={AppConstants.phoneNumber}
                             maxLength={10}
                             placeholder={AppConstants.phoneNumber}
@@ -551,8 +553,7 @@ class UserAddAffiliates extends Component {
                             value={item.mobileNumber}
                         />
 
-                        <InputWithHead
-                            required="pb-1"
+                        <InputWithHead                            
                             heading={AppConstants.permissionLevel}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.addAffiliatePermissionLevelMsg}

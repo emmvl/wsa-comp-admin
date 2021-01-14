@@ -186,12 +186,10 @@ class LiveScoreIncidentList extends Component {
 
     onExport = () => {
         let url = null
-        console.log("called", this.state.liveScoreCompIsParent)
         if (this.state.liveScoreCompIsParent) {
             url = AppConstants.incidentExport + this.state.competitionId + `&entityTypeId=1&search=`
         }
         else {
-            console.log("called", this.state.liveScoreCompIsParent)
             url = AppConstants.incidentExport + this.state.compOrgId + `&entityTypeId=6&search=`
         }
         this.props.exportFilesAction(url)
@@ -376,7 +374,7 @@ class LiveScoreIncidentList extends Component {
                         columns={columns}
                         dataSource={liveScoreIncidentResult}
                         pagination={false}
-                        rowKey={(record, index) => "incident" + record.id + index}
+                        rowKey={(record) => "incident" + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

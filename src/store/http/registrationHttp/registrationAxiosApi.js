@@ -4,6 +4,7 @@ import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sess
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
+import moment from 'moment';
 
 async function logout() {
     await localStorage.clear();
@@ -396,8 +397,8 @@ let AxiosApi = {
     },
     //get end user membership products
     async getEndUserRegMembershipProducts(payload) {
-        let userId = await getUserId()
-        var url = `/api/registration/membershipproducts?userId=${userId}`;
+        payload["currentDate"] = moment(new Date()).format('YYYY-MM-DD');
+        var url = `/api/registration/membershipproducts`;
         return Method.dataPost(url, token, payload);
     },
 
@@ -545,14 +546,39 @@ let AxiosApi = {
         var url = `/api/payments/umpireTransfer`;
         return Method.dataPost(url, token, postData);
     },
-    getMembershipFeeCapList(organisationUniqueKey){
-        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}`
+    getMembershipFeeCapList(organisationUniqueKey,yearRefId){
+        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
         return Method.dataGet(url, token);
     },
-    updateMembershipFeeCap(organisationUniqueKey,payload){
-        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}`
+    updateMembershipFeeCap(organisationUniqueKey,yearRefId,payload){
+        var url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`
         return Method.dataPost(url, token, payload);
     },
+    getSingleGameList(payload){
+        var url = `/api/singlegame/list`
+        return Method.dataPost(url, token, payload);
+    },
+    singleGameRedeemPay(payload){
+        var url = `/api/singlegame/redeempay`
+        return Method.dataPost(url, token, payload);
+    },
+    teamMembersSave(payload){
+        var url = `api/registration/teamparticipant`;
+        return Method.dataPost(url,token,payload)
+    },
+
+    getTeamMembers(teamMemberRegId){
+        var url = `api/registration/teamparticipantdata?teamMemberRegId=${teamMemberRegId}`;
+        return Method.dataGet(url, token);
+    },
+    getTeamMembersReview(payload){
+        var url = `api/registration/teamparticipant/review?registrationId=${payload.registrationId}&teamMemberRegId=${payload.teamMemberRegId}`;
+        return Method.dataGet(url, token);
+    },
+    updateTeamMembers(payload) {
+        const url = `api/registration/teamparticipant/removeoradd?userRegUniqueKey=${payload.userRegUniqueKey}&processType=${payload.processType}`;
+        return Method.dataPost(url, token, payload);
+      },
 };
 
 const Method = {

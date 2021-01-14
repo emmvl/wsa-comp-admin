@@ -16,8 +16,7 @@ import {
     playerSummaryCommentAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
-    setParticipatingYear,
-    getParticipatingYear,
+    setGlobalYear, getGlobalYear,
     setParticipating_competition,
     getParticipating_competition,
     getParticipating_competitionStatus,
@@ -124,7 +123,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                     let statusRefId = competitionList[0].statusRefId
                     setParticipating_competition(competitionId)
                     setParticipating_competitionStatus(statusRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     this.props.getCompPartPlayerGradingSummaryAction(yearId, competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) })
                 }
@@ -141,7 +140,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     }
 
     apiCalls = () => {
-        let yearId = getParticipatingYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getParticipating_competition()
         let storedCompetitionStatus = getParticipating_competitionStatus()
         let propsData = this.props.appState.participate_YearArr.length > 0 ? this.props.appState.participate_YearArr : undefined
@@ -162,7 +161,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
-                setParticipatingYear(1)
             }
         }
     }
@@ -195,7 +193,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     }
 
     onYearChange = (yearId) => {
-        setParticipatingYear(yearId)
+        setGlobalYear(yearId)
         setParticipating_competition(undefined)
         setParticipating_competitionStatus(undefined)
         this.props.getYearAndCompetitionParticipateAction(this.props.appState.yearList, yearId)

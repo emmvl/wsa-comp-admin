@@ -25,7 +25,8 @@ export default function PaymentSetupForm() {
         let secret
         const auBankAccount = elements.getElement(AuBankAccountElement);
         try {
-            const result = await userHttp.get(`${process.env.REACT_APP_USER_API_URL}/becs/secret`)
+            const orgDetail = await getOrganisationData()
+            const result = await userHttp.get(`${process.env.REACT_APP_USER_API_URL}/becs/secret/${orgDetail.organisationId}`)
             secret = result.data
         } catch(e) {
             console.log({e})
@@ -49,7 +50,7 @@ export default function PaymentSetupForm() {
                     au_becs_debit: auBankAccount,
                     billing_details: {
                         name: `${orgData.firstName} ${orgData.lastName}`,
-                        email: orgData.email
+                        email: orgData.email || orgData.userEmail
                     }
                 },
             }
@@ -64,9 +65,9 @@ export default function PaymentSetupForm() {
                     description: AppConstants.becsSetupNotificationBody
                 });
             };
-            await userHttp.get(`${process.env.REACT_APP_USER_API_URL}/becs/confirm`)
+            await userHttp.get(`${process.env.REACT_APP_USER_API_URL}/becs/confirm/${orgData.organisationId}`);
+            // const orgData = await getOrganisationData()
             // TODO: Temporary solution
-            const orgData = await getOrganisationData()
             orgData.stripeBecsMandateId = true;
             await setOrganisationData(orgData)
             openNotificationWithIcon('success')

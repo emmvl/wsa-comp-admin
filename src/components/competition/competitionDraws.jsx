@@ -44,8 +44,6 @@ import Loader from '../../customComponents/loader';
 import history from "../../util/history"
 import { setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData } from "../../util/sessionStorage"
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     setDraws_venue,
@@ -58,7 +56,7 @@ import {
     getDraws_division_grade,
     getOrganisationData,
     getOwn_competitionStatus,
-    setOwn_competitionStatus
+    setOwn_competitionStatus, getGlobalYear, setGlobalYear
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import moment from 'moment';
@@ -296,7 +294,7 @@ class CompetitionDraws extends Component {
     }
 
     apiCalls() {
-        let yearId = getOwnCompetitionYear();
+        let yearId = getGlobalYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0
@@ -355,7 +353,6 @@ class CompetitionDraws extends Component {
                 null,
                 'own_competition'
             );
-            // setOwnCompetitionYear(1);
         }
     }
 
@@ -587,7 +584,7 @@ class CompetitionDraws extends Component {
 
     onYearChange = (yearId) => {
         this.props.clearDraws('rounds');
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined)
         this.setState({

@@ -11,7 +11,7 @@ import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
 import history from "util/history";
-import { getOrganisationData, getPrevUrl } from "util/sessionStorage";
+import { getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import {
     getCommonRefData,
     getGenderAction,
@@ -62,7 +62,7 @@ const payments = [
     },
     {
         paymentType: "Voucher",
-        paymentTypeId : 3,
+        paymentTypeId: 3,
     }
 ];
 
@@ -187,7 +187,10 @@ const columns = [
     {
         title: "Due per Instalment",
         dataIndex: "duePerInstalment",
-        key: "duePerInstalment"
+        key: "duePerInstalment",
+        render: new Intl.NumberFormat('en-AU', {
+            style: 'currency', currency: 'AUD', minimumFractionDigits: 2}
+        ).format
     },
     {
         title: "Action",
@@ -247,7 +250,7 @@ class Registration extends Component {
         this.state = {
             year: "2020",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: "-1",
             competitionUniqueKey: "-1",
             dobFrom: "-1",
             dobTo: "-1",
@@ -268,7 +271,7 @@ class Registration extends Component {
             selectedRow: null,
             loading: false,
             teamName: null,
-            teamId : -1
+            teamId: -1
         }
 
         this_Obj = this;
@@ -277,6 +280,7 @@ class Registration extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear() ? getGlobalYear() : -1
         const { registrationListAction } = this.props.userRegistrationState
         let page = 1
         let sortBy = this.state.sortBy
@@ -302,7 +306,7 @@ class Registration extends Component {
                 let regFrom = registrationListAction.payload.regFrom !== "-1" ? moment(registrationListAction.payload.regFrom).format("YYYY-MM-DD") : this.state.regFrom
                 let regTo = registrationListAction.payload.regTo !== "-1" ? moment(registrationListAction.payload.regTo).format("YYYY-MM-DD") : this.state.regTo
                 let searchText = registrationListAction.payload.searchText
-                let yearRefId = registrationListAction.payload.yearRefId
+                let yearRefId = JSON.parse(yearId)
 
                 await this.setState({
                     offset,
@@ -329,9 +333,9 @@ class Registration extends Component {
             } else {
                 let teamName = this.props.location.state ? this.props.location.state.teamName : null;
                 let teamId = this.props.location.state ? this.props.location.state.teamId : -1;
-                this.setState({teamName: teamName, teamId: teamId})
-                setTimeout(()=> {
-                this.handleRegTableList(1);
+                this.setState({ teamName: teamName, teamId: teamId, yearRefId: JSON.parse(yearId) })
+                setTimeout(() => {
+                    this.handleRegTableList(1);
                 }, 300)
             }
         } else {
@@ -350,7 +354,7 @@ class Registration extends Component {
     handleRegTableList = (page) => {
         const {
             organisationId,
-            yearRefId,
+            //yearRefId,
             competitionUniqueKey,
             dobFrom,
             dobTo,
@@ -368,7 +372,7 @@ class Registration extends Component {
             sortOrder,
             teamId,
         } = this.state;
-
+        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : this.state.yearRefId
         let filter = {
             organisationUniqueKey: organisationId,
             yearRefId,
@@ -424,6 +428,14 @@ class Registration extends Component {
             } else if (value.length === 0) {
                 this.handleRegTableList(1);
             }
+        } else if (key === 'yearRefId') {
+            await this.setState({
+                'yearRefId': value,
+            });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
+            this.handleRegTableList(1)
         } else {
             let newValue;
             if (key === "dobFrom" || key === "dobTo" || key === "regFrom" || key === "regTo") {
@@ -507,9 +519,9 @@ class Registration extends Component {
     }
 
     clearFilterByTeamId = () => {
-        this.setState({teamName: null, teamId: -1})
+        this.setState({ teamName: null, teamId: -1 })
         setTimeout(() => {
-        this.handleRegTableList(1);   
+            this.handleRegTableList(1);
         }, 300)
     }
 
@@ -547,7 +559,7 @@ class Registration extends Component {
                 <div className="row" style={{ marginRight: 42 }}>
                     <div className="col-sm-9 padding-right-reg-dropdown-zero">
                         <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2">
-                            {this.state.teamName && 
+                            {this.state.teamName &&
                                 <div className="col-sm pt-1 align-self-center">
                                     <Tag
                                         closable

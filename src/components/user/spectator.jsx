@@ -9,7 +9,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import { getSpectatorListAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
@@ -136,7 +136,7 @@ class Spectator extends Component {
         super(props);
         this.state = {
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: null,
             pageNo: 1,
             sortBy: null,
             sortOrder: null
@@ -145,6 +145,7 @@ class Spectator extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { spectatorListAction } = this.props.userState
         this.referenceCalls();
         let pageNo = 1
@@ -154,24 +155,26 @@ class Spectator extends Component {
             let offset = spectatorListAction.payload.paging.offset
             sortBy = spectatorListAction.sortBy
             sortOrder = spectatorListAction.sortOrder
-            let yearRefId = spectatorListAction.payload.yearRefId
+            let yearRefId = JSON.parse(yearId)
             pageNo = Math.floor(offset / 10) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleSpectatorTableList(pageNo);
         } else {
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.handleSpectatorTableList(1);
         }
     }
 
     handleSpectatorTableList = (page) => {
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page
         })
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
-            yearRefId: this.state.yearRefId,
+            yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -191,6 +194,9 @@ class Spectator extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId")
             await this.setState({ yearRefId: value });
+        if (value != -1) {
+            setGlobalYear(value)
+        }
 
         this.handleSpectatorTableList(1);
     }
@@ -243,7 +249,6 @@ class Spectator extends Component {
         let userState = this.props.userState;
         let spectatorList = userState.spectatorList;
         let total = userState.spectatorTotalCount;
-        console.log(spectatorList)
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -271,7 +276,7 @@ class Spectator extends Component {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu="user" userSelectedKey="5" />
+                <InnerHorizontalMenu menu="user" userSelectedKey="67" />
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -116,7 +116,7 @@ function* getStripeLoginLinkSaga(action) {
 // Stripe payments transfer list
 function* getStripeTransferListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getStripeTransferList, action.page, action.starting_after, action.ending_before);
+    const result = yield call(AxiosApi.getStripeTransferList, action.page, action.starting_after, action.ending_before, action.params);
 
     if (result.status === 1) {
       yield put({
@@ -136,11 +136,31 @@ function* getStripeTransferListSaga(action) {
 // Stripe payout list
 function* getStripePayoutListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getStripePayoutList, action.page, action.starting_after, action.ending_before);
+    const result = yield call(AxiosApi.getStripePayoutList, action.page, action.starting_after, action.ending_before, action.params);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS,
+        result: result.result.data,
+        page: action.page,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+// Stripe refund list
+function* getStripeRefundListSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getStripeRefundList, action.page, action.starting_after, action.ending_before, action.params);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_STRIPE_REFUND_LIST_API_SUCCESS,
         result: result.result.data,
         page: action.page,
         status: result.status,
@@ -176,7 +196,7 @@ function* getTransactionPayoutListSaga(action) {
 // Get invoice saga
 function* getInvoiceSaga(action) {
   try {
-    const result = yield call(AxiosApi.getInvoice, action.registrationid);
+    const result = yield call(AxiosApi.getInvoice, action.registrationid, action.userRegId, action.invoiceId, action.teamMemberRegId);
 
     if (result.status === 1) {
       yield put({
@@ -195,8 +215,24 @@ function* getInvoiceSaga(action) {
 // Get payment list saga
 function* getPaymentListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getPaymentList, action.offset, action.sortBy, action.sortOrder, action.userId,
-      action.registrationId, action.yearId, action.competitionKey, action.paymentFor, action.dateFrom, action.dateTo,action.searchValue);
+    const result = yield call(
+      AxiosApi.getPaymentList,
+      action.offset,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType
+    );
 
     if (result.status === 1) {
       yield put({
@@ -215,7 +251,61 @@ function* getPaymentListSaga(action) {
 // Export payment saga
 function* exportPaymentSaga(action) {
   try {
-    const result = yield call(AxiosApi.exportPaymentApi, action.key);
+    const {
+        key, year, dateFrom, dateTo,
+    } = action;
+    const result = yield call(AxiosApi.exportPaymentApi, key, year, dateFrom, dateTo);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+export function* getInvoiceStatusSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getInvoiceStatus, action.registrationid, action.userRegId, action.invoiceId, action.teamMemberRegId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_INVOICE_STATUS_SUCCESS,
+        result: result.result.data,
+        status: result.result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+// Export payment Dashboard saga
+function* exportPaymentDashboardSaga(action) {
+  try {
+    const result = yield call(AxiosApi.exportPaymentDashboardApi,
+      action.offset,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType);
 
     if (result.status === 1) {
       yield put({
@@ -238,8 +328,12 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD, getStripeLoginLinkSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD, getStripeTransferListSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, getStripePayoutListSaga);
+  yield takeEvery(ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD, getStripeRefundListSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, getTransactionPayoutListSaga);
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, getPaymentListSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, exportPaymentSaga);
+  yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga);
+  yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD, exportPaymentDashboardSaga);
+
 }

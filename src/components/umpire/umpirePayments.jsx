@@ -208,7 +208,7 @@ class UmpirePayments extends Component {
             loading: false,
             competitionUniqueKey: null,
             year: "2019",
-            roasterLoad: false,
+            rosterLoad: false,
             compArray: [],
             sortBy: null,
             sortOrder: null,
@@ -384,7 +384,7 @@ class UmpirePayments extends Component {
                         columns={columns}
                         dataSource={umpirePaymentList}
                         pagination={false}
-                        rowKey={(record, index) => `umpirePayments${record.matchId}${index}`}
+                        rowKey={(record) => `umpirePayments${record.matchId}`}
                     />
                 </div>
 

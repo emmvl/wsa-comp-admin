@@ -1,11 +1,13 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 
-function liveScoreRoundListAction(competitionID, divisionId) {
+function liveScoreRoundListAction(competitionID, divisionId , isParent , compOrgId) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD,
         competitionID,
-        divisionId
+        divisionId,
+        isParent , 
+        compOrgId
     };
     return action;
 }

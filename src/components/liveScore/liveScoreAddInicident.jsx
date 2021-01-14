@@ -27,7 +27,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import history from "../../util/history";
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
 import Loader from '../../customComponents/loader'
@@ -45,8 +45,8 @@ class LiveScoreAddIncident extends Component {
             image: null,
             media: null,
             video: null,
-            imageSelection: '',
-            videoSelection: '',
+            imageSelection: AppImages.circleImage,
+            videoSelection: AppImages.circleImage,
             incidentImage: '',
             incidentVideo: '',
             editorData: "",
@@ -118,7 +118,7 @@ class LiveScoreAddIncident extends Component {
 
     ////set initial value for all validated fields
     setInitialFieldValue() {
-        const { incidentData, playerIds } = this.props.liveScoreIncidentState
+        const { incidentData } = this.props.liveScoreIncidentState
         this.formRef.current.setFieldsValue({
             'incidentTeamName': incidentData.teamId,
             'incidentPlayerName': incidentData.playerIds,
@@ -147,7 +147,7 @@ class LiveScoreAddIncident extends Component {
         }
     }
 
-    setImage = (data) => {
+    setImage_1 = (data) => {
         if (data.files[0] !== undefined) {
             if (this.state.isEdit === true) {
 
@@ -155,6 +155,27 @@ class LiveScoreAddIncident extends Component {
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
         }
         // this.props.liveScoreUpdateIncidentData(null, "clearImage")
+    };
+
+    setImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]), imageTimeout: 2000, crossImageIcon: false })
+            setTimeout(() => {
+                this.setState({ imageTimeout: null, crossImageIcon: true })
+            }, 2000);
+        }
     };
 
     ////method to setVideo
@@ -205,7 +226,8 @@ class LiveScoreAddIncident extends Component {
 
     deleteImage() {
         const { incidentMediaList } = this.props.liveScoreIncidentState
-        this.setState({ image: null, imageSelection: '', crossImageIcon: false })
+        // this.setState({ image: null, imageSelection: '', crossImageIcon: false })
+        this.setState({ image: null, crossImageIcon: false, imageSelection: AppImages.circleImage })
         if (incidentMediaList) {
             this.props.liveScoreUpdateIncidentData(null, "incidentImage")
         }
@@ -241,7 +263,7 @@ class LiveScoreAddIncident extends Component {
 
     //// Form View
     contentView = () => {
-        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
+        const { incidentData, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
         let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
         let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
         let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
@@ -250,7 +272,6 @@ class LiveScoreAddIncident extends Component {
         let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
         let startTime = time_formate ? moment(time_formate, "HH:mm") : null
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -279,7 +300,7 @@ class LiveScoreAddIncident extends Component {
                             onBlur={(e) => this.props.liveScoreUpdateIncidentData(e.target.value && moment(e.target.value, "HH:mm"), 'time')}
                             format="HH:mm"
                             placeholder="Select Time"
-                            defaultOpenValue={moment("00:00", "HH:mm")}
+                            defaultValue={moment("00:00", "HH:mm")}
                             use12Hours={false}
                             value={incidentData ? incidentData.time ? moment(incidentData.time) : startTime : startTime}
                         />
@@ -429,13 +450,14 @@ class LiveScoreAddIncident extends Component {
                             type="file"
                             id="user-pic"
                             className="d-none"
-                            onChange={(event) => {
-                                this.setImage(event.target, 'evt.target')
-                                this.setState({ imageTimeout: 2000, crossImageIcon: false })
-                                setTimeout(() => {
-                                    this.setState({ imageTimeout: null, crossImageIcon: true })
-                                }, 2000);
-                            }}
+                            // onChange={(event) => {
+                            //     this.setImage(event.target, 'evt.target')
+                            //     this.setState({ imageTimeout: 2000, crossImageIcon: false })
+                            //     setTimeout(() => {
+                            //         this.setState({ imageTimeout: null, crossImageIcon: true })
+                            //     }, 2000);
+                            // }}
+                            onChange={(evt) => this.setImage(evt.target)}
                             onClick={(event) => {
                                 event.target.value = null
                             }}
@@ -455,7 +477,11 @@ class LiveScoreAddIncident extends Component {
                                 </span>
                             )}
                         </div>
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
                     </div>
+
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.addVideos} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
@@ -463,7 +489,8 @@ class LiveScoreAddIncident extends Component {
                                 timeout={this.state.videoTimeout}
                                 video
                                 src={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
-                                poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
+                            // poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
+                            // poster={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
                             />
                         </div>
                         <input
