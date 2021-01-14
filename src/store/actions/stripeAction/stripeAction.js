@@ -82,7 +82,7 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
     return action;
 }
 
-/////get invoice 
+/////get invoice
 function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
@@ -134,12 +134,15 @@ function getPaymentList(
 }
 
 //export payment dashboard data
-function exportPaymentApi(key) {
+function exportPaymentApi(key, year, dateFrom, dateTo) {
     const action = {
         type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD,
-        key
-    }
-    return action
+        key,
+        year,
+        dateFrom,
+        dateTo,
+    };
+    return action;
 }
 
 function getInvoiceStatusAction(registrationid, userRegId, invoiceId, teamMemberRegId) {
