@@ -121,7 +121,13 @@ class UmpirePaymentSetting extends Component {
 
                 const { isOrganiser } = competitionListCopy.find(competition => competition.id === firstComp);
 
-                this.setState({ competitionList: competitionListCopy, isOrganiserView: isOrganiser, selectedComp: firstComp, loading: false, competitionUniqueKey: compKey });
+                this.setState({ 
+                    competitionList: competitionListCopy,
+                    isOrganiserView: isOrganiser,
+                    selectedComp: firstComp,
+                    loading: false,
+                    competitionUniqueKey: compKey
+                });
             }
         }
 
@@ -147,17 +153,11 @@ class UmpirePaymentSetting extends Component {
         if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
             && !this.props.umpirePaymentSettingState.onLoad) {
 
-            const { paymentSettingsData } = this.props.umpirePaymentSettingState;
             const { divisionList } = this.props.liveScoreTeamState;
-            const { umpirePaymentSettings } = this.props.umpirePaymentSettingState.paymentSettingsData;
+            const { umpirePayerTypeRefId, umpirePaymentSettings, allowedDivisionsSetting } = this.props.umpirePaymentSettingState.paymentSettingsData;
 
-            const selectedDivisionsOrganiser = !!paymentSettingsData.umpirePaymentSettings.length ? JSON.parse(JSON.stringify(umpirePaymentSettings[0].divisions)) : [];
-            const selectedDivisionsAffiliate = !!paymentSettingsData.allowedDivisionsSetting ? JSON.parse(JSON.stringify(paymentSettingsData.allowedDivisionsSetting.divisions)) : [];
-
-            const selectedDivisions = [ ...selectedDivisionsOrganiser, ...selectedDivisionsAffiliate ];
-
-            const umpirePaymentSettingsArray = !!paymentSettingsData.umpirePaymentSettings.length ? 
-                paymentSettingsData.umpirePaymentSettings.map(settingsItem => ({
+            const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ? 
+                umpirePaymentSettings.map(settingsItem => ({
                     allDivisions: settingsItem.allDivisions,
                     // divisions: settingsItem.divisions.map(item => item.id),
                     divisions: settingsItem.divisions,
@@ -181,23 +181,30 @@ class UmpirePaymentSetting extends Component {
                     hasSettings: true,
                 })) : [];
 
-            const allowedDivisionsSettingArray = !!paymentSettingsData.allowedDivisionsSetting ? [{ 
-                allDivisions: paymentSettingsData.allowedDivisionsSetting.allDivisions,
-                // divisions: paymentSettingsData.allowedDivisionsSetting.divisions.map(item => item.id),
-                divisions: paymentSettingsData.allowedDivisionsSetting.divisions,
+            const allowedDivisionsSettingArray = !!allowedDivisionsSetting ? [{ 
+                allDivisions: allowedDivisionsSetting.allDivisions,
+                // divisions: allowedDivisionsSetting.divisions.map(item => item.id),
+                divisions: allowedDivisionsSetting.divisions,
                 hasSettings: false,
             }] : [];
 
             const { isOrganiserView } = this.state;
             
-            const affiliateViewSettingsArray = !isOrganiserView && !paymentSettingsData.umpirePaymentSettings.length ?
+            const affiliateViewSettingsArray = !isOrganiserView && !umpirePaymentSettings.length ?
                 [initialPaymentSettingsData] : [];
 
+            const settings = [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray, ...affiliateViewSettingsArray ];
 
             const paymentSettingsDataObj = {
-                umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
-                settings: [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray, ...affiliateViewSettingsArray ],
+                umpirePayerTypeRefId,
+                settings,
             }
+
+            const selectedDivisions = [];
+
+            settings.forEach(item => {
+                item.allDivisions ? selectedDivisions.push(...divisionList) : selectedDivisions.push(...item.divisions);
+            });
 
             this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions });
         }
@@ -503,7 +510,9 @@ class UmpirePaymentSetting extends Component {
             umpirePayerTypeRefId: paymentSettingsDataCopy.umpirePayerTypeRefId,
             umpirePaymentSettings,
             allowedDivisionsSetting,
-        } : umpirePaymentSettings
+        } : umpirePaymentSettings;
+
+        // console.log('bodyData', bodyData);
 
         const saveData = {
             organisationId,
