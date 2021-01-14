@@ -155,7 +155,7 @@ class UserProfileEdit extends Component {
                 titleLabel = `${AppConstants.edit} ${AppConstants.address}`;
                 section = "address";
             } else if (moduleFrom === "2") {
-                titleLabel = `${AppConstants.edit} ${AppConstants.parentOrGuardianDetail}`
+                titleLabel = `${AppConstants.edit} ${AppConstants.parentOrGuardianDetail}`;
                 section = "primary";
             } else if (moduleFrom === "3") {
                 titleLabel = `${AppConstants.edit} ${AppConstants.emergencyContacts}`;
@@ -181,12 +181,11 @@ class UserProfileEdit extends Component {
             } else if (moduleFrom === "7") {
                 titleLabel = AppConstants.addChild;
                 section = "child";
-            }
-            else if (moduleFrom === "8") {
+            } else if (moduleFrom === "8") {
                 titleLabel = AppConstants.addParent_guardian;
                 section = "primary";
             }
-            let userDataTemp = this.state.userData;
+            const userDataTemp = this.state.userData;
             if (moduleFrom == 7 || moduleFrom == 8) {
                 userDataTemp.userId = data.userId;
             }
@@ -203,7 +202,7 @@ class UserProfileEdit extends Component {
 
     componentDidUpdate(nextProps) {
         if (this.state.loadValue) {
-            this.setState({ loadValue: false })
+            this.setState({ loadValue: false });
             if (this.state.displaySection === "1") {
                 this.setAddressFormFields();
             } else if (this.state.displaySection === "2") {
@@ -216,20 +215,20 @@ class UserProfileEdit extends Component {
                 this.setPrimaryContactFormFields();
             }
         }
-        let userState = this.props.userState;
+        const { userState } = this.props;
         if (userState.onUpUpdateLoad == false && this.state.saveLoad) {
-            this.setState({ saveLoad: false })
+            this.setState({ saveLoad: false });
             if (userState.status === 1) {
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 } else {
                     history.push({
                         pathname: '/userPersonal',
-                        state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId }
+                        state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId },
                     });
                 }
             } else if (userState.status === 4) {
-                message.config({ duration: 1.5, maxCount: 1, });
+                message.config({ duration: 1.5, maxCount: 1 });
                 message.error(userState.userProfileUpdate);
             }
         }
@@ -240,28 +239,28 @@ class UserProfileEdit extends Component {
             localStorage.clear();
             history.push("/login");
         } catch (error) {
-            console.log("Error" + error);
+            console.log(`Error${error}`);
         }
     };
 
     setAddressFormFields = () => {
-        let userData = this.state.userData;
+        const { userData } = this.state;
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
             mobileNumber: userData.mobileNumber,
-            dateOfBirth: ((userData.dateOfBirth != null && userData.dateOfBirth != '') ?
-                moment(userData.dateOfBirth, "YYYY-MM-DD") : null),
+            dateOfBirth: ((userData.dateOfBirth != null && userData.dateOfBirth != '')
+                ? moment(userData.dateOfBirth, "YYYY-MM-DD") : null),
             street1: userData.street1,
             email: userData.email,
             suburb: userData.suburb,
             stateRefId: userData.stateRefId,
             postalCode: userData.postalCode,
-        })
+        });
     }
 
     setPrimaryContactFormFields = () => {
-        let userData = this.state.userData;
+        const { userData } = this.state;
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -270,65 +269,64 @@ class UserProfileEdit extends Component {
             email: userData.email,
             suburb: userData.suburb,
             stateRefId: userData.stateRefId,
-            postalCode: userData.postalCode
-        })
+            postalCode: userData.postalCode,
+        });
     }
 
     setEmergencyFormField = () => {
-        let userData = this.state.userData;
+        const { userData } = this.state;
         this.formRef.current.setFieldsValue({
             emergencyFirstName: userData.emergencyFirstName,
             emergencyLastName: userData.emergencyLastName,
             emergencyContactNumber: userData.emergencyContactNumber,
-        })
+        });
     }
 
     setOtherInfoFormField = () => {
-        let userData = this.state.userData;
-        let personalData = this.props.location.state ? this.props.location.state.personalData ? this.props.location.state.personalData : null : null
+        const { userData } = this.state;
+        const personalData = this.props.location.state ? this.props.location.state.personalData ? this.props.location.state.personalData : null : null;
         if (personalData) {
-            userData['accreditationCoachExpiryDate'] = personalData.accreditationCoachExpiryDate
-            userData['accreditationLevelCoachRefId'] = personalData.accreditationLevelCoachRefId
-            userData['accreditationLevelUmpireRefId'] = personalData.accreditationLevelUmpireRefId
-            userData['accreditationUmpireExpiryDate'] = personalData.accreditationUmpireExpiryDate
+            userData.accreditationCoachExpiryDate = personalData.accreditationCoachExpiryDate;
+            userData.accreditationLevelCoachRefId = personalData.accreditationLevelCoachRefId;
+            userData.accreditationLevelUmpireRefId = personalData.accreditationLevelUmpireRefId;
+            userData.accreditationUmpireExpiryDate = personalData.accreditationUmpireExpiryDate;
             this.formRef.current.setFieldsValue({
                 [`accreditationLevelUmpireRefId`]: personalData.accreditationLevelUmpireRefId,
                 [`accreditationLevelCoachRefId`]: personalData.accreditationLevelCoachRefId,
                 [`accreditationUmpireExpiryDate`]: personalData.accreditationUmpireExpiryDate && moment(personalData.accreditationUmpireExpiryDate),
                 [`accreditationCoachExpiryDate`]: personalData.accreditationCoachExpiryDate && moment(personalData.accreditationCoachExpiryDate),
-            })
+            });
         }
         this.formRef.current.setFieldsValue({
-            genderRefId: userData.genderRefId ? parseInt(userData.genderRefId) : null
-        })
+            genderRefId: userData.genderRefId ? parseInt(userData.genderRefId) : null,
+        });
     }
 
     onChangeSetValue = (value, key) => {
-        let data = this.state.userData;
+        const data = this.state.userData;
         if (key === "isDisability") {
             if (value === 0) {
-                data["disabilityCareNumber"] = null;
-                data["disabilityTypeRefId"] = null;
+                data.disabilityCareNumber = null;
+                data.disabilityTypeRefId = null;
             }
         } else if (key === "dateOfBirth") {
-            value = (moment(value).format("YYYY-MM-DD"))
+            value = (moment(value).format("YYYY-MM-DD"));
         } else if (key === "email" && this.state.section === "address") {
             if (data.userId == getUserId()) {
                 this.setState({ isSameUserEmailChanged: true });
             } else {
                 this.setState({ isSameUserEmailChanged: false });
             }
-        }
-        else if (key === "mobileNumber") {
+        } else if (key === "mobileNumber") {
             if (value.length === 10) {
                 this.setState({
-                    hasErrorAddressNumber: false
-                })
+                    hasErrorAddressNumber: false,
+                });
                 value = regexNumberExpression(value);
             } else if (value.length < 10) {
                 this.setState({
-                    hasErrorAddressNumber: true
-                })
+                    hasErrorAddressNumber: true,
+                });
                 value = regexNumberExpression(value);
             }
 
@@ -336,19 +334,19 @@ class UserProfileEdit extends Component {
                 setTimeout(() => {
                     this.formRef.current.setFieldsValue({
                         mobileNumber: this.state.userData.mobileNumber,
-                    })
+                    });
                 }, 300);
             }
         } else if (key === "emergencyContactNumber") {
             if (value.length === 10) {
                 this.setState({
-                    hasErrorEmergency: false
-                })
+                    hasErrorEmergency: false,
+                });
                 value = regexNumberExpression(value);
             } else if (value.length < 10) {
                 this.setState({
-                    hasErrorEmergency: true
-                })
+                    hasErrorEmergency: true,
+                });
                 value = regexNumberExpression(value);
             }
 
@@ -356,23 +354,23 @@ class UserProfileEdit extends Component {
                 setTimeout(() => {
                     this.formRef.current.setFieldsValue({
                         emergencyContactNumber: this.state.userData.emergencyContactNumber,
-                    })
+                    });
                 }, 300);
             }
         }
 
         if (key === 'accreditationLevelUmpireRefId') {
-            data['accreditationUmpireExpiryDate'] = null
+            data.accreditationUmpireExpiryDate = null;
             this.formRef.current.setFieldsValue({
                 [`accreditationUmpireExpiryDate`]: null,
-            })
+            });
         }
 
         if (key === 'accreditationLevelCoachRefId') {
-            data['accreditationCoachExpiryDate'] = null
+            data.accreditationCoachExpiryDate = null;
             this.formRef.current.setFieldsValue({
                 [`accreditationCoachExpiryDate`]: null,
-            })
+            });
         }
 
         data[key] = value;
@@ -380,34 +378,32 @@ class UserProfileEdit extends Component {
         this.setState({ userData: data });
     }
 
-    headerView = () => {
-        return (
-            <div className="header-view">
-                <Header className="form-header-view d-flex bg-transparent align-items-center">
-                    <Breadcrumb separator=" > ">
-                        <Breadcrumb.Item className="breadcrumb-add">
-                            {this.state.titleLabel}
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </Header>
-            </div>
-        );
-    };
+    headerView = () => (
+        <div className="header-view">
+            <Header className="form-header-view d-flex bg-transparent align-items-center">
+                <Breadcrumb separator=" > ">
+                    <Breadcrumb.Item className="breadcrumb-add">
+                        {this.state.titleLabel}
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+            </Header>
+        </div>
+    );
 
     handlePlacesAutocomplete = (data) => {
         const { stateListData } = this.props.commonReducerState;
         const address = data;
-        let userData = this.state.userData;
+        const { userData } = this.state;
         this.props.checkVenueDuplication(address);
 
         if (!address || !address.addressOne || !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
-            })
+            });
         } else {
             this.setState({
-                venueAddressError: ''
-            })
+                venueAddressError: '',
+            });
         }
 
         this.setState({
@@ -424,64 +420,64 @@ class UserProfileEdit extends Component {
         //     postcode: address.postcode || null,
         // });
         if (address) {
-            userData['street1'] = address.addressOne
-            userData['stateRefId'] = stateRefId
-            userData['suburb'] = address.suburb
-            userData['postalCode'] = address.postcode
+            userData.street1 = address.addressOne;
+            userData.stateRefId = stateRefId;
+            userData.suburb = address.suburb;
+            userData.postalCode = address.postcode;
         }
     };
 
     addressEdit = () => {
-        let userData = this.state.userData
+        const { userData } = this.state;
         const { stateListData } = this.props.commonReducerState;
-        let hasErrorAddressNumber = this.state.hasErrorAddressNumber;
+        const { hasErrorAddressNumber } = this.state;
 
-        let state = (stateListData.length > 0 && userData.stateRefId)
+        const state = (stateListData.length > 0 && userData.stateRefId)
             ? stateListData.find((state) => state.id == userData.stateRefId).name
             : null;
 
-        let defaultVenueAddress = null
+        let defaultVenueAddress = null;
         if (userData.street1) {
             defaultVenueAddress = `${userData.street1 && `${userData.street1},`
-                } ${userData.suburb && `${userData.suburb},`
-                } ${state && `${state},`
-                } `;
+            } ${userData.suburb && `${userData.suburb},`
+            } ${state && `${state},`
+            } `;
         }
 
         return (
             <div className="pt-0">
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.firstName }]}>
+                        <Form.Item name="firstName" rules={[{ required: true, message: ValidationConstants.firstName }]}>
                             <InputWithHead
-                                auto_complete='new-firstName'
+                                auto_complete="new-firstName"
                                 required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
-                                name={'firstName'}
+                                name="firstName"
                                 value={userData?.firstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
                             />
                         </Form.Item>
                     </div>
                     <div className="col-sm">
-                        <Form.Item name='lastName' rules={[{ required: false }]}>
+                        <Form.Item name="lastName" rules={[{ required: false }]}>
                             <InputWithHead
-                                auto_complete='new-lastName'
+                                auto_complete="new-lastName"
                                 required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
-                                name={'lastName'}
+                                name="lastName"
                                 value={userData?.lastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
                             />
                         </Form.Item>
                     </div>
                 </div>
-                <div className="row" >
+                <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            auto_complete='new-middleName'
+                            auto_complete="new-middleName"
                             // style={{ marginTop: 9 }}
                             heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
@@ -494,7 +490,7 @@ class UserProfileEdit extends Component {
                         <DatePicker
                             // size="large"
                             style={{ width: '100%' }}
-                            onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
+                            onChange={(e) => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -543,13 +539,13 @@ class UserProfileEdit extends Component {
                                     name="email"
                                     rules={[
                                         {
-                                            required: true, message: ValidationConstants.emailField[0]
+                                            required: true, message: ValidationConstants.emailField[0],
                                         },
                                         {
                                             type: "email",
                                             pattern: new RegExp(AppConstants.emailExp),
-                                            message: ValidationConstants.email_validation
-                                        }
+                                            message: ValidationConstants.email_validation,
+                                        },
                                     ]}
                                 >
                                     <InputWithHead
@@ -598,7 +594,7 @@ class UserProfileEdit extends Component {
                                 // required="required-field"
                                 heading={AppConstants.addressOne}
                                 placeholder={AppConstants.addressOne}
-                                name={'street1'}
+                                name="street1"
                                 value={userData?.street1}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                             // readOnly
@@ -611,7 +607,7 @@ class UserProfileEdit extends Component {
                                 // style={{ marginTop: 9 }}
                                 heading={AppConstants.addressTwo}
                                 placeholder={AppConstants.addressTwo}
-                                name={'street2'}
+                                name="street2"
                                 value={userData?.street2}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                             />
@@ -627,7 +623,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.suburb}
                                 placeholder={AppConstants.suburb}
                                 // required="required-field"
-                                name={'suburb'}
+                                name="suburb"
                                 value={userData?.suburb}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                             // readOnly
@@ -641,14 +637,14 @@ class UserProfileEdit extends Component {
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.select}
                                 // required="required-field"
-                                value={userData ?.stateRefId}
+                                value={userData.stateRefId}
                                 name="stateRefId"
                                 onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                             // readOnly
                             // disabled
                             >
                                 {stateListData.map((item) => (
-                                    <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                                    <Option key={`state_${item.id}`} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </div>
@@ -660,7 +656,7 @@ class UserProfileEdit extends Component {
                             <InputWithHead
                                 heading={AppConstants.postCode}
                                 placeholder={AppConstants.postCode}
-                                name={'postalCode'}
+                                name="postalCode"
                                 value={userData?.postalCode}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
                             // readOnly
@@ -674,32 +670,32 @@ class UserProfileEdit extends Component {
     };
 
     primaryContactEdit = () => {
-        let userData = this.state.userData
+        const { userData } = this.state;
         const { stateList } = this.props.commonReducerState;
         return (
             <div className="content-view pt-0">
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.firstName }]}>
+                        <Form.Item name="firstName" rules={[{ required: true, message: ValidationConstants.firstName }]}>
                             <InputWithHead
                                 auto_complete="new-firstName"
                                 required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
-                                name={'firstName'}
+                                name="firstName"
                                 value={userData.firstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
                             />
                         </Form.Item>
                     </div>
                     <div className="col-sm">
-                        <Form.Item name='lastName' rules={[{ required: false }]}>
+                        <Form.Item name="lastName" rules={[{ required: false }]}>
                             <InputWithHead
                                 auto_complete="new-lastName"
                                 required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
-                                name={'lastName'}
+                                name="lastName"
                                 value={userData.lastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
                             />
@@ -712,35 +708,35 @@ class UserProfileEdit extends Component {
                             // style={{ marginTop: 9 }}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
-                            name={'street1'}
+                            name="street1"
                             value={userData.street1}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         />
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <InputWithHead
                             // style={{ marginTop: 9 }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
-                            name={'street2'}
+                            name="street2"
                             value={userData.street2}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                         />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <InputWithHead
                             // style={{ marginTop: 9 }}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
-                            name={'suburb'}
+                            name="suburb"
                             value={userData.suburb}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                         />
                     </div>
                     <div className="col-sm">
-                        <div >
+                        <div>
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
 
@@ -754,7 +750,7 @@ class UserProfileEdit extends Component {
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         >
                             {stateList.map((item) => (
-                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
+                                <Option key={`state_${item.id}`} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
                     </div>
@@ -762,23 +758,23 @@ class UserProfileEdit extends Component {
 
                 {/* PlayerId and Team Selection row */}
                 <div className="row">
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <InputWithHead
                             // style={{ marginTop: 9 }}
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.enterPostCode}
-                            name={'postalCode'}
+                            name="postalCode"
                             value={userData.postalCode}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
                         />
                     </div>
                     <div className="col-sm">
-                        <Form.Item name='email' rules={[{ required: true, message: ValidationConstants.emailField[0] }]}>
+                        <Form.Item name="email" rules={[{ required: true, message: ValidationConstants.emailField[0] }]}>
                             <InputWithHead
                                 auto_complete="new-email"
                                 heading={AppConstants.contactEmail}
                                 placeholder={AppConstants.contactEmail}
-                                name={'email'}
+                                name="email"
                                 value={userData.email}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             />
@@ -788,12 +784,12 @@ class UserProfileEdit extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='mobileNumber' rules={[{ required: true, message: ValidationConstants.contactField }]}>
+                        <Form.Item name="mobileNumber" rules={[{ required: true, message: ValidationConstants.contactField }]}>
                             <InputWithHead
                                 auto_complete="new-mobileNumber"
                                 heading={AppConstants.contactMobile}
                                 placeholder={AppConstants.contactMobile}
-                                name={'mobileNumber'}
+                                name="mobileNumber"
                                 value={userData.mobileNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
                             />
@@ -806,8 +802,8 @@ class UserProfileEdit extends Component {
     };
 
     emergencyContactEdit = () => {
-        let userData = this.state.userData
-        let hasErrorEmergency = this.state.hasErrorEmergency;
+        const { userData } = this.state;
+        const { hasErrorEmergency } = this.state;
         return (
             <div className="content-view pt-0">
                 {/* First and Last name row */}
@@ -819,7 +815,7 @@ class UserProfileEdit extends Component {
                                 required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
-                                name={'emergencyFirstName'}
+                                name="emergencyFirstName"
                                 value={userData.emergencyFirstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyFirstName")}
                             />
@@ -832,7 +828,7 @@ class UserProfileEdit extends Component {
                                 required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
-                                name={'emergencyLastName'}
+                                name="emergencyLastName"
                                 value={userData.emergencyLastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyLastName")}
                             />
@@ -850,7 +846,7 @@ class UserProfileEdit extends Component {
                                 required="required-field"
                                 heading={AppConstants.emergencyContactMobile}
                                 placeholder={AppConstants.emergencyContactMobile}
-                                name={'emergencyContactNumber'}
+                                name="emergencyContactNumber"
                                 maxLength={10}
                                 value={userData.emergencyContactNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyContactNumber")}
@@ -863,22 +859,24 @@ class UserProfileEdit extends Component {
     };
 
     otherInfoEdit = () => {
-        let userData = this.state.userData
-        const { countryList, nationalityList, genderData, accreditationUmpireList, umpireAccreditation, coachAccreditation } = this.props.commonReducerState;
+        const { userData } = this.state;
+        const {
+            countryList, nationalityList, genderData, accreditationUmpireList, umpireAccreditation, coachAccreditation,
+        } = this.props.commonReducerState;
         return (
             <div className="content-view pt-0">
                 <div className="row">
                     <div className="col-sm">
                         <div style={{ paddingTop: 11, paddingBottom: 10 }}>
                             <InputWithHead heading={AppConstants.gender} required="required-field" />
-                            <Form.Item name='genderRefId' rules={[{ required: true, message: ValidationConstants.genderField }]}>
+                            <Form.Item name="genderRefId" rules={[{ required: true, message: ValidationConstants.genderField }]}>
                                 <Radio.Group
                                     className="reg-competition-radio"
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "genderRefId")}
                                     value={userData.genderRefId}
                                 >
                                     {(genderData || []).map((gender) => (
-                                        <Radio key={'gender_' + gender.id} value={gender.id}>
+                                        <Radio key={`gender_${gender.id}`} value={gender.id}>
                                             {gender.description}
                                         </Radio>
                                     ))}
@@ -888,7 +886,7 @@ class UserProfileEdit extends Component {
 
                         <div>
                             <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required="required-field" />
-                            <Form.Item name='accreditationLevelUmpireRefId' rules={[{ required: true, message: ValidationConstants.accreditationLevelUmpire }]}>
+                            <Form.Item name="accreditationLevelUmpireRefId" rules={[{ required: true, message: ValidationConstants.accreditationLevelUmpire }]}>
                                 <Radio.Group
                                     className="registration-radio-group"
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "accreditationLevelUmpireRefId")}
@@ -901,7 +899,7 @@ class UserProfileEdit extends Component {
                             </Form.Item>
 
                             {(userData.accreditationLevelUmpireRefId != 1 && userData.accreditationLevelUmpireRefId != null) && (
-                                <Form.Item name='accreditationUmpireExpiryDate' rules={[{ required: true, message: ValidationConstants.expiryDateRequire }]}>
+                                <Form.Item name="accreditationUmpireExpiryDate" rules={[{ required: true, message: ValidationConstants.expiryDateRequire }]}>
                                     <DatePicker
                                         size="large"
                                         placeholder={AppConstants.expiryDate}
@@ -910,7 +908,7 @@ class UserProfileEdit extends Component {
                                         format="DD-MM-YYYY"
                                         showTime={false}
                                         // value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
-                                        disabledDate={d => !d || d.isSameOrBefore(new Date())}
+                                        disabledDate={(d) => !d || d.isSameOrBefore(new Date())}
                                     />
                                 </Form.Item>
                             )}
@@ -918,7 +916,7 @@ class UserProfileEdit extends Component {
 
                         <div>
                             <InputWithHead heading={AppConstants.nationalAccreditationLevelCoach} required="required-field" />
-                            <Form.Item name='accreditationLevelCoachRefId' rules={[{ required: true, message: ValidationConstants.accreditationLevelCoach }]}>
+                            <Form.Item name="accreditationLevelCoachRefId" rules={[{ required: true, message: ValidationConstants.accreditationLevelCoach }]}>
                                 <Radio.Group
                                     style={{ display: "flex", flexDirection: "column" }}
                                     className="registration-radio-group"
@@ -932,7 +930,7 @@ class UserProfileEdit extends Component {
                             </Form.Item>
 
                             {(userData.accreditationLevelCoachRefId != 1 && userData.accreditationLevelCoachRefId != null) && (
-                                <Form.Item name='accreditationCoachExpiryDate' rules={[{ required: true, message: ValidationConstants.expiryDateRequire }]}>
+                                <Form.Item name="accreditationCoachExpiryDate" rules={[{ required: true, message: ValidationConstants.expiryDateRequire }]}>
                                     <DatePicker
                                         size="large"
                                         placeholder={AppConstants.expiryDate}
@@ -942,7 +940,7 @@ class UserProfileEdit extends Component {
                                         format="DD-MM-YYYY"
                                         showTime={false}
                                         // value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
-                                        disabledDate={d => !d || d.isSameOrBefore(new Date())}
+                                        disabledDate={(d) => !d || d.isSameOrBefore(new Date())}
                                     />
                                 </Form.Item>
                             )}
@@ -964,7 +962,7 @@ class UserProfileEdit extends Component {
                                     name="countryRefId"
                                 >
                                     {countryList.map((country) => (
-                                        <Option key={'country_' + country.id} value={country.id}>
+                                        <Option key={`country_${country.id}`} value={country.id}>
                                             {country.description}
                                         </Option>
                                     ))}
@@ -1013,7 +1011,7 @@ class UserProfileEdit extends Component {
                             placeholder={AppConstants.childrenNumber}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "childrenCheckNumber")}
                             value={userData.childrenCheckNumber}
-                            name={'childrenCheckNumber'}
+                            name="childrenCheckNumber"
                         />
                     </div>
                 </div>
@@ -1023,12 +1021,12 @@ class UserProfileEdit extends Component {
                         <DatePicker
                             // size="large"
                             style={{ width: '100%', marginTop: 9, minHeight: 50 }}
-                            onChange={e => this.onChangeSetValue(e, "childrenCheckExpiryDate")}
+                            onChange={(e) => this.onChangeSetValue(e, "childrenCheckExpiryDate")}
                             format="DD-MM-YYYY"
                             showTime={false}
                             value={userData.childrenCheckExpiryDate !== null && moment(userData.childrenCheckExpiryDate)}
                             placeholder="dd-mm-yyyy"
-                            name={'childrenCheckExpiryDate'}
+                            name="childrenCheckExpiryDate"
                         />
                     </div>
                 </div>
@@ -1037,8 +1035,8 @@ class UserProfileEdit extends Component {
     };
 
     medicalEdit = () => {
-        let userData = this.state.userData
-        let { disabilityList } = this.props.commonReducerState;
+        const { userData } = this.state;
+        const { disabilityList } = this.props.commonReducerState;
 
         return (
             <div className="formView pt-5" style={{ paddingBottom: "40px" }}>
@@ -1070,7 +1068,7 @@ class UserProfileEdit extends Component {
                         {userData.isDisability == 1 && (
                             <div style={{ marginLeft: 25 }}>
                                 <InputWithHead
-                                    auto_complete='new-disabilityCareNumber'
+                                    auto_complete="new-disabilityCareNumber"
                                     heading={AppConstants.disabilityCareNumber}
                                     placeholder={AppConstants.disabilityCareNumber}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "disabilityCareNumber")}
@@ -1083,7 +1081,7 @@ class UserProfileEdit extends Component {
                                     value={userData.disabilityTypeRefId}
                                 >
                                     {(disabilityList || []).map((dis) => (
-                                        <Radio key={'disabilityType_' + dis.id} value={dis.id}>{dis.description}</Radio>
+                                        <Radio key={`disabilityType_${dis.id}`} value={dis.id}>{dis.description}</Radio>
                                     ))}
                                 </Radio.Group>
                             </div>
@@ -1092,79 +1090,77 @@ class UserProfileEdit extends Component {
                     </Radio.Group>
                 </div>
             </div>
-        )
-    }
-
-    addParentOrChild = () => {
-        return (
-            <div className="content-view pt-0">
-                <div className="row">
-                    <div className="col-sm">
-                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.firstName }]}>
-                            <InputWithHead
-                                auto_complete="new-firstName"
-                                required="required-field"
-                                heading={AppConstants.firstName}
-                                placeholder={AppConstants.firstName}
-                                name={'firstName'}
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
-                            />
-                        </Form.Item>
-                    </div>
-                    <div className="col-sm">
-                        <Form.Item name='lastName' rules={[{ required: false }]}>
-                            <InputWithHead
-                                auto_complete="new-lastName"
-                                required="required-field"
-                                heading={AppConstants.lastName}
-                                placeholder={AppConstants.lastName}
-                                name={'lastName'}
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
-                            />
-                        </Form.Item>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-sm">
-                        <Form.Item name='email' rules={[{ required: true, message: ValidationConstants.emailField[0] }]}>
-                            <InputWithHead
-                                auto_complete="new-email"
-                                heading={AppConstants.emailAdd}
-                                placeholder={AppConstants.emailAdd}
-                                name={'email'}
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
-                            />
-                        </Form.Item>
-                    </div>
-                    <div className="col-sm">
-                        <InputWithHead heading={AppConstants.dob} />
-                        <DatePicker
-                            // size="large"
-                            style={{ width: '100%' }}
-                            onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
-                            format="DD-MM-YYYY"
-                            showTime={false}
-                            placeholder="dd-mm-yyyy"
-                            name="dateOfBirth"
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-6">
-                        <Form.Item name="mobileNumber" rules={[{ required: true, message: ValidationConstants.contactField }]}>
-                            <InputWithHead
-                                auto_complete="new-mobileNumber"
-                                heading={AppConstants.contactMobile}
-                                placeholder={AppConstants.contactMobile}
-                                name="mobileNumber"
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
-                            />
-                        </Form.Item>
-                    </div>
-                </div>
-            </div>
         );
     }
+
+    addParentOrChild = () => (
+        <div className="content-view pt-0">
+            <div className="row">
+                <div className="col-sm">
+                    <Form.Item name="firstName" rules={[{ required: true, message: ValidationConstants.firstName }]}>
+                        <InputWithHead
+                            auto_complete="new-firstName"
+                            required="required-field"
+                            heading={AppConstants.firstName}
+                            placeholder={AppConstants.firstName}
+                            name="firstName"
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
+                        />
+                    </Form.Item>
+                </div>
+                <div className="col-sm">
+                    <Form.Item name="lastName" rules={[{ required: false }]}>
+                        <InputWithHead
+                            auto_complete="new-lastName"
+                            required="required-field"
+                            heading={AppConstants.lastName}
+                            placeholder={AppConstants.lastName}
+                            name="lastName"
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
+                        />
+                    </Form.Item>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm">
+                    <Form.Item name="email" rules={[{ required: true, message: ValidationConstants.emailField[0] }]}>
+                        <InputWithHead
+                            auto_complete="new-email"
+                            heading={AppConstants.emailAdd}
+                            placeholder={AppConstants.emailAdd}
+                            name="email"
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                        />
+                    </Form.Item>
+                </div>
+                <div className="col-sm">
+                    <InputWithHead heading={AppConstants.dob} />
+                    <DatePicker
+                        // size="large"
+                        style={{ width: '100%' }}
+                        onChange={(e) => this.onChangeSetValue(e, "dateOfBirth")}
+                        format="DD-MM-YYYY"
+                        showTime={false}
+                        placeholder="dd-mm-yyyy"
+                        name="dateOfBirth"
+                    />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-6">
+                    <Form.Item name="mobileNumber" rules={[{ required: true, message: ValidationConstants.contactField }]}>
+                        <InputWithHead
+                            auto_complete="new-mobileNumber"
+                            heading={AppConstants.contactMobile}
+                            placeholder={AppConstants.contactMobile}
+                            name="mobileNumber"
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
+                        />
+                    </Form.Item>
+                </div>
+            </div>
+        </div>
+    )
 
     contentView = () => {
         const { displaySection } = this.state;
@@ -1180,6 +1176,8 @@ class UserProfileEdit extends Component {
         );
     };
 
+    // possible matches view
+    // ideally this should be separate from the user profile view
     possibleMatchesDetailView = (matches) => {
         let selectedMatch = null;
 
@@ -1202,15 +1200,16 @@ class UserProfileEdit extends Component {
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
         }));
 
-        const addUser = () => {
-            if (!selectedMatch) return;
+        const addChildOrParent = () => {
+            // if match is not selected, save the user data from the form
+            const userToAdd = selectedMatch || this.state.userData;
 
             const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
             const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
             if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
-                this.props.addChildAction(selectedMatch, userId, sameEmail);
+                this.props.addChildAction(userToAdd, userId, sameEmail);
             } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
-                this.props.addParentAction(selectedMatch, userId, sameEmail);
+                this.props.addParentAction(userToAdd, userId, sameEmail);
             }
             this.setState({ saveLoad: true });
         };
@@ -1239,7 +1238,7 @@ class UserProfileEdit extends Component {
                 </div>
                 <div className="d-flex align-items-center justify-content-between mt-4">
                     <Button onClick={onCancel}>{AppConstants.cancel}</Button>
-                    <Button type="primary" onClick={addUser}>{AppConstants.next}</Button>
+                    <Button type="primary" onClick={addChildOrParent}>{AppConstants.next}</Button>
                 </div>
             </div>
         );
@@ -1272,8 +1271,7 @@ class UserProfileEdit extends Component {
                         this.confirmOpend = false;
                     },
                 });
-            }
-            else {
+            } else {
                 saveAction();
             }
         } else {
@@ -1287,7 +1285,7 @@ class UserProfileEdit extends Component {
         data.organisationId = this.state.organisationId;
 
         if (this.state.venueAddressError) {
-            message.config({ duration: 1.5, maxCount: 1, });
+            message.config({ duration: 1.5, maxCount: 1 });
             message.error(this.state.venueAddressError);
             return;
         }
@@ -1304,45 +1302,45 @@ class UserProfileEdit extends Component {
             data.mobileNumber = this.props.history.location.state.userData.mobileNumber;
         }
 
+        // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
-            this.props.findPossibleMatches(data);
-            this.setState({ isPossibleMatchShow: true });
+            this.props.findPossibleMatches(data).then(
+                () => this.setState({ isPossibleMatchShow: !!this.props.userState.possibleMatches.length }),
+            );
         } else {
             this.props.userProfileUpdateAction(data);
             this.setState({ saveLoad: true });
         }
     };
 
-    footerView = (isSubmitting) => {
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="reg-add-save-button">
-                                <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId } }}>
-                                    <Button type="cancel-button">{AppConstants.cancel}</Button>
-                                </NavLink>
-                            </div>
+    footerView = (isSubmitting) => (
+        <div className="fluid-width">
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="reg-add-save-button">
+                            <NavLink to={{ pathname: `/userPersonal`, state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId } }}>
+                                <Button type="cancel-button">{AppConstants.cancel}</Button>
+                            </NavLink>
                         </div>
-                        <div className="col-sm">
-                            <div className="comp-buttons-view">
-                                <Form.Item>
-                                    <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
-                                        {AppConstants.save}
-                                    </Button>
-                                </Form.Item>
-                            </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            <Form.Item>
+                                <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                    {AppConstants.save}
+                                </Button>
+                            </Form.Item>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     onFinishFailed = (errorInfo) => {
-        message.config({ maxCount: 1, duration: 1.5 })
-        message.error(ValidationConstants.plzReviewPage)
+        message.config({ maxCount: 1, duration: 1.5 });
+        message.error(ValidationConstants.plzReviewPage);
     };
 
     render() {
@@ -1376,8 +1374,8 @@ class UserProfileEdit extends Component {
                             </Form>
                         </>
                     ) : (
-                            this.possibleMatchesDetailView(this.props.userState.possibleMatches)
-                        )}
+                        this.possibleMatchesDetailView(this.props.userState.possibleMatches)
+                    )}
                 </Layout>
             </div>
         );
