@@ -500,7 +500,7 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
 
-                {(this.state.titleLabel === AppConstants.addParent_guardian || this.state.titleLabel === AppConstants.addChild) && (
+                {(this.state.titleLabel === AppConstants.addChild) && (
                     <Checkbox
                         className="single-checkbox"
                         checked={this.state.isSameEmail}
@@ -510,6 +510,17 @@ class UserProfileEdit extends Component {
                             ? AppConstants.useChildEmail : AppConstants.useParentEmail}
                     </Checkbox>
                 )}
+                {/* todo: below needs to be properly handled. hiding it now */}
+                {/* {(this.state.titleLabel === AppConstants.addParent_guardian || this.state.titleLabel === AppConstants.addChild) && ( */}
+                {/*    <Checkbox */}
+                {/*        className="single-checkbox" */}
+                {/*        checked={this.state.isSameEmail} */}
+                {/*        onChange={(e) => this.setState({ isSameEmail: e.target.checked })} */}
+                {/*    > */}
+                {/*        {this.state.titleLabel === AppConstants.addParent_guardian */}
+                {/*            ? AppConstants.useChildEmail : AppConstants.useParentEmail} */}
+                {/*    </Checkbox> */}
+                {/* )} */}
 
                 {
                     (!this.state.isSameEmail
