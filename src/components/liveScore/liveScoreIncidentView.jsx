@@ -32,7 +32,6 @@ class LiveScoreIncidentView extends Component {
 
     componentDidMount() {
         let incidentData = this.props.location.state ? this.props.location.state.item : null
-        console.log(incidentData, 'incidentData')
         if (!incidentData) {
             history.push('/matchDayIncidentList')
         }

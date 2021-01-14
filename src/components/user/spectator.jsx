@@ -249,7 +249,6 @@ class Spectator extends Component {
         let userState = this.props.userState;
         let spectatorList = userState.spectatorList;
         let total = userState.spectatorTotalCount;
-        console.log(spectatorList)
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">

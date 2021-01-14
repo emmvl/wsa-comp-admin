@@ -273,7 +273,6 @@ let AxiosApi = {
             invoiceId: invoiceId,
             teamMemberRegId: teamMemberRegId
         }
-        //console.log("body"+ JSON.stringify(body));
         let url = `/api/payments/getInvoiceStatus`
         return Method.dataPost(url, token, body)
     },

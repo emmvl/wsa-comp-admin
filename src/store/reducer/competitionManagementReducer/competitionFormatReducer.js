@@ -117,8 +117,6 @@ function competitionFormatReducer(state = initialState, action) {
 }
 
 function addCompetitionFormatDivision(data, key) {
-
-    //console.log("###" + JSON.stringify(data));
     let compFormatDivisionObj = {
         competitionFormatTemplateId: -(data.competionFormatDivisions.length),
         matchDuration: 0,

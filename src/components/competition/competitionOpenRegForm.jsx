@@ -509,7 +509,7 @@ class CompetitionOpenRegForm extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
@@ -877,7 +877,7 @@ class CompetitionOpenRegForm extends Component {
         if (key === "name") {
             array[index].name = data
         } else {
-            array[index].nonPlayingDate = data
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD")
         }
 
         this.props.add_editcompetitionFeeDeatils(array, "nonPlayingDates")
@@ -1416,7 +1416,6 @@ class CompetitionOpenRegForm extends Component {
                 }
             },
             onCancel() {
-                // console.log('Cancel');
             },
         });
     }

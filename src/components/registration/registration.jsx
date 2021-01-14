@@ -372,7 +372,6 @@ class Registration extends Component {
             sortOrder,
             teamId,
         } = this.state;
-        console.log("yearRegId",this.state.yearRefId,getGlobalYear())
         let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : this.state.yearRefId
         let filter = {
             organisationUniqueKey: organisationId,

@@ -159,7 +159,7 @@ function generateCourtData(courtData) {
         if (isArrayNotEmpty(courtDetails)) {
             for (let j in courtDetails) {
                 let object = {
-                    vId: courtData[i].venueId ? courtData[i].venueId :courtData[i].id,
+                    vId: courtData[i].venueId ? courtData[i].venueId : courtData[i].id,
                     lat: courtDetails[j].lat,
                     lng: courtDetails[j].lng,
                     courtNumber: courtDetails[j].courtNumber,
@@ -175,16 +175,16 @@ function generateCourtData(courtData) {
     return courtselectedArr
 }
 
-function clearVenueFromCourtPreferences(state){
-    let venueIds  = state.selectedVenueId;
+function clearVenueFromCourtPreferences(state) {
+    let venueIds = state.selectedVenueId;
     let courtPreferences = state.venueConstrainstData.courtPreferences;
     let courtsNotValid = courtPreferences.filter(x => !venueIds.some(y => x.venueId === y));
-    if(courtsNotValid){
-        for(let court of courtsNotValid){
+    if (courtsNotValid) {
+        for (let court of courtsNotValid) {
             // court.venueId = null;
             // court.venueCourtId = null;
             let index = courtPreferences.indexOf(court);
-            courtPreferences.splice(index,1);
+            courtPreferences.splice(index, 1);
         }
     }
 }
@@ -1098,29 +1098,8 @@ function VenueTimeState(state = initialState, action) {
                 status: action.status
             };
 
-        ////get common data for rotation radio button on own competition venue and times
-        // case ApiConstants.API_GET_COMMON_REF_DATA_SUCCESS:
-
-        //     // for (let i in action.result.CourtRotation) {
-        //     //     action.result.CourtRotation[i]["selectedPrefrence"] = null
-        //     // }
-        //     state.courtRotation = getCourtRotation(action.result.CourtRotation)
-        //     state.evenRotation = action.result.CourtRotation[0].subReferences[0].id
-        //     state.radioButton = action.result.CourtRotation[2].id
-        //     state.allocateToSameCourt = action.result.CourtRotation[1].subReferences[0].id
-        //     console.log(state.evenRotation)
-        //     return {
-        //         ...state,
-        //         onLoad: false,
-        //         homeTeamRotation: action.result.HomeTeamRotation
-        //     };
-
-
-
         ////Year and competition seletion
         case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-            // state.venueConstrainstData['yearRefId'] = action.selectedYearId
-
             return {
                 ...state,
                 onLoad: false,
@@ -1129,7 +1108,6 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_LIST:
-            // state.venueConstrainstData['competitionUniqueKey'] = action.data
             state.competitionUniqueKey = action.data
             return {
                 ...state,

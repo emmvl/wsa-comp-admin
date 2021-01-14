@@ -156,7 +156,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -436,8 +436,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
     };
 
     contentView = () => {
-        const { columns, data, addGradeVisible, updateGradeName, getDataLoading } = this.state;
-        const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
+        const { columns, addGradeVisible, updateGradeName, getDataLoading } = this.state;
+        const { ownTeamGradingSummaryGetData } = this.props.ownTeamGradingState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">

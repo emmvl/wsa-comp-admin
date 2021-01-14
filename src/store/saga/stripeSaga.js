@@ -269,7 +269,6 @@ function* exportPaymentSaga(action) {
 
 export function* getInvoiceStatusSaga(action) {
   try {
-    console.log("*****" + action.registrationid)
     const result = yield call(AxiosApi.getInvoiceStatus, action.registrationid, action.userRegId, action.invoiceId, action.teamMemberRegId);
     if (result.status === 1) {
       yield put({

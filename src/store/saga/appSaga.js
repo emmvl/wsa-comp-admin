@@ -430,7 +430,6 @@ function* getOnlyYearAndCompetitionListSaga(action) {
     } : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      //console.log("!!!!!!!!!!" + JSON.stringify(result.result.data));
       let yearId = action.yearId == null ? -1 : action.yearId
       const resultCompetition = yield call(RegistrationAxiosApi.getAllCompetitionList, yearId);
 

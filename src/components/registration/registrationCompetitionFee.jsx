@@ -4314,6 +4314,21 @@ class RegistrationCompetitionFee extends Component {
                         }
                     } */
 
+                    if(fee_data[i].isTeamSeasonal == true){
+                        for (let j in feeSeasonalData) {
+                            feeSeasonalData[j]['seasonalFees'] = feeSeasonalData[j].fee;
+                            feeSeasonalData[j]['seasonalGST'] = feeSeasonalData[j].gst;
+                            feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
+                            feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
+                            feeSeasonalData[j]['nominationSeasonalFee'] = feeSeasonalData[j].nominationFees;
+                            feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
+                            feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
+                            feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
+                        }
+                    }
+                   
+
+
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeSeasonalData];
                         finalPostData.map((item) => {
@@ -4382,6 +4397,19 @@ class RegistrationCompetitionFee extends Component {
                             }
                         }
                     } */
+
+                    if (fee_data[i].isTeamSeasonal) {
+                        for (let j in feeSeasonalData) {
+                            feeSeasonalData[j]['seasonalFees'] = feeSeasonalData[j].fee;
+                            feeSeasonalData[j]['seasonalGST'] = feeSeasonalData[j].gst;
+                            feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
+                            feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
+                            feeSeasonalData[j]['nominationSeasonalFee'] = feeSeasonalData[j].nominationFees;
+                            feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
+                            feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
+                            feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
+                        }
+                    }
 
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeSeasonalData];
@@ -5234,7 +5262,7 @@ class RegistrationCompetitionFee extends Component {
         if (key === 'name') {
             array[index].name = data;
         } else {
-            array[index].nonPlayingDate = data;
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD");
         }
 
         this.props.add_editcompetitionFeeDeatils(array, 'nonPlayingDates');
