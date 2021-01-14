@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Tooltip from 'react-png-tooltip';
-import { EditorState, ContentState, convertFromRaw } from 'draft-js';
+import { EditorState, ContentState, } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import htmlToDraft from 'html-to-draftjs';
 import InputWithHead from '../../customComponents/InputWithHead';
@@ -67,14 +67,6 @@ class CommunicationView extends Component {
 
     componentDidMount() {
         const newsData = this.state.newsItem;
-
-        // let finalBody = newsData ? newsData.body ? JSON.parse(newsData.body) : "" : ""
-        // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
-        // const editorState = EditorState.createWithContent(contentState);
-        // this.setState({
-        //     editorState
-        // })
-
         const html = (newsData && newsData.body) ? newsData.body : '';
         const contentBlock = htmlToDraft(html);
         if (contentBlock) {
@@ -132,7 +124,6 @@ class CommunicationView extends Component {
 
     /// ////view for breadcrumb
     headerView = () => {
-        const newsData = this.state.newsItem;
         return (
             <Header className="comp-venue-courts-header-view live-form-view-button-header">
                 <div className="row">
@@ -295,7 +286,6 @@ class CommunicationView extends Component {
 
     /// ///footer view containing all the buttons like submit and cancel
     footerView() {
-        const newsDataArr = this.state.newsItem;
         return (
             <div className="fluid-width">
                 <div className="footer-view">

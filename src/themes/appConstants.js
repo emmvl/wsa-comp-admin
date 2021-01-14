@@ -466,7 +466,7 @@ const AppConstants = {
   newOrganisationName: 'Organisation Name you are Transferring to?',
   organisationLogo: 'Organisation Logo',
   registrationOpen: 'Registration Open',
-  registrationLock: 'Registration Lock',
+  lockRegistrationsImmediately: 'Lock Registrations Immediately',
   endUserRegistrationUrl: 'End User Registration URL',
   addMembershipCategory: 'Add Membership Category',
   training: 'Training',
@@ -1537,7 +1537,7 @@ const AppConstants = {
   takenCourtForTraining: 'Have you taken the court for training, grading or a competition game',
   exportAttendance: 'Export Attendance',
   exportAttendanceMessage: 'Attendance exported successfully',
-  hardshipCode: 'Hardship Code',
+  singleUseDiscount: 'Single Use Discount - No Fee Charged',
   addCode: 'Add Code',
   go: 'Go',
   matchCalender: 'Match Calendar',
@@ -1761,7 +1761,12 @@ const AppConstants = {
   totalPaymentDue: "Total Payment Due",
 
   warning: "Warning",
+  confirmSaveMessage: "Would you like to save your changes?",
 
+  removed: "Removed",
+  removeFromTeam: "Remove from Team",
+  addToTeam: "Add to Team",
+  removeFromTeamPopUpMsg: "Do you want to remove this user from the team?"
 };
 
 export default AppConstants;

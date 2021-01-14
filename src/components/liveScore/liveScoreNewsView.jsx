@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Tooltip from 'react-png-tooltip';
-import { EditorState, ContentState, convertFromRaw } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import htmlToDraft from 'html-to-draftjs';
 import InputWithHead from '../../customComponents/InputWithHead';

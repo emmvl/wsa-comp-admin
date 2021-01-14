@@ -424,9 +424,7 @@ class ShopSettings extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-add-save-button">
-                            {/* <Button
-                                type="cancel-button"
-                                onClick={() => console.log("Cancel")}>{AppConstants.cancel}</Button> */}
+
                         </div>
                     </div>
                     <div className="col-sm">

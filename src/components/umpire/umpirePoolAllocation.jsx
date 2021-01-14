@@ -118,24 +118,17 @@ class UmpirePoolAllocation extends Component {
     };
 
     onChangeComp = (compID) => {
-        console.log("called")
         let selectedComp = compID.comp
         let compKey = compID.competitionUniqueKey
         let compeList = this.state.allCompetition
         let orgId = null
         let selectedCompData = null
-        let matchIndex = compeList.findIndex(x => x.id === selectedComp)
-        if (matchIndex) {
-            console.log(compeList[matchIndex])
-            selectedCompData = compeList[matchIndex]
-            orgId = compeList[matchIndex].competitionOrganisation?.orgId
+        for (let i in compeList) {
+            if (compeList[i].id === selectedComp) {
+                orgId = compeList[i]?.competitionOrganisation?.orgId
+                selectedCompData = compeList[i]
+            }
         }
-        // for (let i in compeList) {
-        //     if (compeList[i].id === selectedComp) {
-        //         orgId = compeList[i]?.competitionOrganisation?.orgId
-        //         selectedCompData = compeList[i]
-        //     }
-        // }
 
         // setUmpireCompId(selectedComp)
         setUmpireCompitionData(JSON.stringify(selectedCompData))
@@ -523,7 +516,6 @@ class UmpirePoolAllocation extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <DragDropContext
-                // onDragEnd={console.log('value')}
                 >
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}

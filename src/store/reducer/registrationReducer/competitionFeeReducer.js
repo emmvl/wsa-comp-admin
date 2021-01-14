@@ -1062,7 +1062,6 @@ function checkFeeDivisionType(data, uniqueKey) {
 }
 
 function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
-    // console.log("checkStatus",getCompetitionFeeArray, item, divisionId, feeTypeRefId)
     let object = {
         status: false,
         result: []
@@ -2581,7 +2580,25 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD:
             return { ...state, onLoad: true, }
         case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_SUCCESS:
+            console.log("Called dd")
+            let discountSuccessData = action.result.data
             state.orgRegistrationId = action.result.orgRegistrationId
+            let discountDataFinal = discountDataObject(discountSuccessData.competitiondiscounts)
+            state.competionDiscountValue.competitionDiscounts[0].discounts = discountDataFinal;
+            if (isArrayNotEmpty(discountSuccessData.competitiondiscounts.competitionDiscounts)) {
+                let selectDiscountArray = discountSuccessData.competitiondiscounts.competitionDiscounts[0].discounts
+                let discountslist = state.competionDiscountValue.competitionDiscounts[0].discounts
+                let memberShipDiscountProduct = []
+                for (let i in discountslist) {
+                    let selectedProductDiscount = checkDiscountProduct(discountslist[i], selectDiscountArray)
+                    if (selectedProductDiscount.status) {
+                        memberShipDiscountProduct = getSelectedDiscountProduct(selectedProductDiscount.result.membershipProductUniqueKey, discountSuccessData.competitionmembershipproduct)
+                        discountslist[i].competitionMembershipProductTypeId = selectedProductDiscount.result.competitionMembershipProductTypeId
+                    }
+                    discountslist[i].membershipProductTypes = memberShipDiscountProduct
+                }
+            }
+            state.competitionDiscountsData = discountSuccessData;
             return {
                 ...state,
                 onLoad: false,

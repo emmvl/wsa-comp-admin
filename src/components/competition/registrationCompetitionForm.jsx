@@ -605,10 +605,6 @@ class RegistrationCompetitionForm extends Component {
         }
     }
 
-    onChange(checkedValues) {
-        // console.log("checked = ", checkedValues);
-    }
-
     divisionTableDataOnchange(checked, record, index, keyword) {
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword)
         this.setState({ divisionState: true })
@@ -724,7 +720,7 @@ class RegistrationCompetitionForm extends Component {
         if (key === "name") {
             array[index].name = data
         } else {
-            array[index].nonPlayingDate = data
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD")
         }
         this.props.add_editcompetitionFeeDeatils(array, "nonPlayingDates")
     }
