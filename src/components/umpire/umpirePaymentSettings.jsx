@@ -275,7 +275,7 @@ class UmpirePaymentSetting extends Component {
 
         if (key === 'allDivisions') {
             this.handleAllDivisionsChange(targetBoxData, sectionDataIndex, paymentSettingsDataCopy, value);
-        } else {
+        } else if (key === 'divisions') {
             this.handleNonAllDivisionsChange(sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value);
         }
     }
@@ -318,29 +318,23 @@ class UmpirePaymentSetting extends Component {
 
         const newSettingsData = [...otherBoxData, ...targetBoxData ];
 
-        if (key === 'divisions') {
-            targetBoxData[sectionDataIndex].divisions = value.map(item =>
-                allowedDivisionList.find(divisionListItem => divisionListItem.id === item)
-            );
+        targetBoxData[sectionDataIndex].divisions = value.map(item =>
+            allowedDivisionList.find(divisionListItem => divisionListItem.id === item)
+        );
 
-            newSettingsData.forEach(item => {
-                newSelectedDivisions.push(...item.divisions);
-            });
-        } else {
-            targetBoxData[sectionDataIndex][key] = value;
-
-            newSelectedDivisions.push(...selectedDivisions);
-        }
+        newSettingsData.forEach(item => {
+            newSelectedDivisions.push(...item.divisions);
+        });
 
         const updatedSelectedDivisions = !!newSelectedDivisions.length ? newSelectedDivisions : [];
 
-        if (key === 'divisions' && updatedSelectedDivisions.length < allowedDivisionList.length) {
+        if (updatedSelectedDivisions.length < allowedDivisionList.length) {
             newSettingsData.forEach(item => {
                 item.allDivisions = false;
             });
         }
 
-        if (key === 'divisions' && updatedSelectedDivisions.length === allowedDivisionList.length && value.length === allowedDivisionList.length) {
+        if (updatedSelectedDivisions.length === allowedDivisionList.length && value.length === allowedDivisionList.length) {
             newSettingsData
                 .filter(item => item.hasSettings === sectionData[0].hasSettings)[sectionDataIndex]
                 .allDivisions = true;
