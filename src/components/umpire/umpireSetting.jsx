@@ -26,7 +26,6 @@ import {
     saveUmpireAllocationSettings,
 } from "../../store/actions/umpireAction/umpireSettingAction";
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
-import history from "util/history";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -147,11 +146,6 @@ class UmpireSetting extends Component {
             
             this.setState({ allocationSettingsData, selectedDivisions });
         }
-
-        // if (this.state.allocationSettingsData !== prevProps.allocationSettingsData) {
-        //     const { allocationSettingsData } = this.props.umpireSettingState;
-        //     this.setState({ allocationSettingsData });
-        // }
     }
 
     handleChangeWhoAssignsUmpires = (e, umpireAllocatorTypeRefId) => {
@@ -628,17 +622,6 @@ class UmpireSetting extends Component {
         )
     }
 
-    // checkScreenNavigation = (key) => {
-    //     const { allocateViaPool, manuallyAllocate, affiliateOrg } = this.props.umpireSettingState
-    //     if (affiliateOrg === true && key === "next") {
-    //         history.push("/umpirePayment");
-    //     } else if (allocateViaPool === true && key === "next") {
-    //         history.push("/umpirePoolAllocation");
-    //     } else if (manuallyAllocate === true) {
-    //         history.push("/umpireDashboard");
-    //     }
-    // }
-
     handleSave = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         const { selectedComp, allocationSettingsData } = this.state;
@@ -679,7 +662,7 @@ class UmpireSetting extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        const { isOrganiserView } = this.state;
+        const { isOrganiserView, allocationSettingsData } = this.state;
 
         return (
             <>
@@ -688,39 +671,19 @@ class UmpireSetting extends Component {
                         <div className="footer-view">
                             <div className="row">
                                 <div className="col-sm">
-                                    {/* <div className="reg-add-save-button">
-                                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
-                                    </div> */}
                                 </div>
                                 <div className="col-sm px-0">
-                                    {/* <div className="comp-buttons-view">
-                                        <Button
-                                            className="publish-button save-draft-text"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => this.checkScreenNavigation("save")}
-                                        >
-                                            {AppConstants.save}
-                                        </Button>
-                                        <Button
-                                            className="publish-button save-draft-text"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => this.checkScreenNavigation("next")}
-                                        >
-                                            {AppConstants.next}
-                                        </Button>
-                                    </div> */}
-
                                     <div className="comp-buttons-view">
-                                        <Button
-                                            className="publish-button save-draft-text mr-0"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={this.handleSave}
-                                        >
-                                            {AppConstants.save}
-                                        </Button>
+                                        {!!allocationSettingsData && 
+                                            <Button
+                                                className="publish-button save-draft-text mr-0"
+                                                type="primary"
+                                                htmlType="submit"
+                                                onClick={this.handleSave}
+                                            >
+                                                {AppConstants.save}
+                                            </Button>
+                                        }
                                     </div>
                                 </div>
                             </div>
