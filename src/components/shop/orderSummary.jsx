@@ -470,7 +470,7 @@ class OrderSummary extends Component {
                         columns={columns}
                         dataSource={orderSummaryListingData}
                         pagination={false}
-                        rowKey={(record, index) => "orderSummaryListingData" + record.id + index}
+                        rowKey={(record) => "orderSummaryListingData" + record.id}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

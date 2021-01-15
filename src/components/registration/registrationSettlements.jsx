@@ -145,7 +145,16 @@ class RegistrationSettlements extends Component {
 
     //on export button click
     onExport() {
-        this.props.exportPaymentApi("payout")
+        const { dateFrom, dateTo, year } = this.state;
+        const start = dateFrom ? moment(dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
+        const end = dateTo ? moment(dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
+
+        this.props.exportPaymentApi(
+            "payout",
+            year,
+            start,
+            end,
+        );
     }
 
     headerView = () => {
@@ -334,7 +343,7 @@ class RegistrationSettlements extends Component {
 
     ///setting the available from date
     dateOnChangeFrom = date => {
-        const dateFrom = moment(date).utc().toISOString()
+        const dateFrom = date ? moment(date).startOf('day').format('YYYY-MM-DD HH:mm:ss') : date;
         this.setState({
             dateFrom: dateFrom,
             year: null
@@ -348,7 +357,7 @@ class RegistrationSettlements extends Component {
 
     ////setting the available to date
     dateOnChangeTo = date => {
-        const dateTo = moment(date).utc().toISOString()
+        const dateTo = date ? moment(date).endOf('day').format('YYYY-MM-DD HH:mm:ss') : date;
         this.setState({
             dateTo: dateTo,
             year: null

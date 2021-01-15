@@ -334,6 +334,7 @@ class AssignUmpire extends Component {
                         columns={this.state.columns}
                         dataSource={assignUmpireList}
                         pagination={false}
+                        rowKey={(record) => "assignUmpire" + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

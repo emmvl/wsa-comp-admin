@@ -782,7 +782,7 @@ class LiveScoreMatchDetails extends Component {
                 scroll={{ x: '100%' }}
                 pagination={false}
                 loading={this.props.liveScoreGamePositionState.onLoad}
-                // rowKey={(record) => record.id}
+                rowKey={(record) => team + record.playerId}
             />
         )
     }
@@ -2581,6 +2581,7 @@ class LiveScoreMatchDetails extends Component {
                                         dataSource={team1PlayersData}
                                         pagination={false}
                                         scroll={{ x: '100%' }}
+                                        rowKey={(record) => 'team1' + record.playerId}
                                     />
                                 </div>
                             )}
@@ -2641,6 +2642,7 @@ class LiveScoreMatchDetails extends Component {
                                             dataSource={team2PlayersData}
                                             pagination={false}
                                             scroll={{ x: '100%' }}
+                                            rowKey={(record) => 'team2' + record.playerId}
                                         />
                                     </div>
                                 )}

@@ -86,10 +86,10 @@ class LiveScoreIncidentView extends Component {
         )
     }
 
-    //// this method called insside modal view function to show content of the modal
+    //// this method called inside modal view function to show content of the modal
     innerViewOfModal() {
         return (
-            <div className="comp-dashboard-botton-view-mobile d-flex justify-content-center" onClick={this.showModal}>
+            <div className="comp-dashboard-botton-view-mobile d-flex justify-content-center">
                 {
                     this.state.isVideo ?
                         <ReactPlayer playing={this.state.visible} url={this.state.modaldata} controls />
@@ -104,13 +104,14 @@ class LiveScoreIncidentView extends Component {
     ModalView() {
         return (
             <Modal
-                title="WSA 1"
+                // title="WSA 1"
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
                 centered
+            // footer={null}
             >
                 {this.innerViewOfModal()}
             </Modal>
@@ -148,7 +149,6 @@ class LiveScoreIncidentView extends Component {
     mediaView = () => {
         let array = this.state.incidentItem ? this.state.incidentItem.incidentPlayers : []
         let mediaPlayer = this.state.incidentItem ? isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : [] : []
-
         return (
             <div className="col-sm pt-3 pb-3 mt-5">
                 <div className="row">
@@ -159,9 +159,9 @@ class LiveScoreIncidentView extends Component {
                     </div>
 
                     <div className="col-sm-10">
-                        {array.map((item) => (
-                            <div className="side-bar-profile-data">
-                                <span>{item.player.firstName} {item.player.lastName}</span>
+                        {array.map((item, index) => (
+                            <div className="side-bar-profile-data" key={item.player.id + index}>
+                                <span >{item.player.firstName} {item.player.lastName}</span>
                             </div>
                         ))}
                     </div>
@@ -174,11 +174,11 @@ class LiveScoreIncidentView extends Component {
                     </div>
 
                     <div className="col-sm-10">
-                        {array.map((item) => (
-                            <div className="side-bar-profile-data">
-                                <span>{this.state.incidentItem.description}</span>
-                            </div>
-                        ))}
+                        {/* {array.map((item) => ( */}
+                        <div className="side-bar-profile-data">
+                            <span>{this.state.incidentItem.description}</span>
+                        </div>
+                        {/* ))} */}
                     </div>
                 </div>
                 <div className="row mt-5">
@@ -193,12 +193,12 @@ class LiveScoreIncidentView extends Component {
                             {mediaPlayer.map((item) => {
                                 var str = item.mediaType;
                                 var res = str.split("/", 1);
-                                return <div className="side-bar-profile-data">
+                                return <div className="side-bar-profile-data" key={'media' + item.id}>
                                     {
-                                        res === "video" ?
-                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
+                                        res[0] === "video" ?
+                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl ? item.mediaUrl : ''} height='70' width='70' />
                                             :
-                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
+                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl ? item.mediaUrl : ''} height='70' width='70' />
                                     }
                                 </div>
                             })}

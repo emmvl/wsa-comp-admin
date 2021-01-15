@@ -640,7 +640,7 @@ class LiveScoreDashboard extends Component {
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardIncidentList" + record.id + index}
+                        rowKey={(record) => "dashboardIncidentList" + record.id}
                     />
                 </div>
             </div>
@@ -733,7 +733,7 @@ class LiveScoreDashboard extends Component {
                         columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
                         dataSource={dashboardMatchList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardMatchList" + record.id + index}
+                        rowKey={(record) => "dashboardMatchList" + record.id}
                     />
                 </div>
             </div>
@@ -809,7 +809,7 @@ class LiveScoreDashboard extends Component {
                         columns={columnActiveNews}
                         dataSource={dashboardNewsList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardNewsList" + record.id + index}
+                        rowKey={(record) => "dashboardNewsList" + record.id}
                     />
                 </div>
             </div>
@@ -859,7 +859,7 @@ class LiveScoreDashboard extends Component {
                         columns={columnsPlayersToPay}
                         dataSource={playerTopay}
                         pagination={false}
-                        rowKey={(record, index) => "playerTopay" + record.id + index}
+                        rowKey={(record) => "playerTopay" + record.id}
                     />
                 </div>
             </div>

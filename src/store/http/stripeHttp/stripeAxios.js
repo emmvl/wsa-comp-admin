@@ -192,20 +192,20 @@ let AxiosApi = {
 
         return Method.dataPost(url, token, body);
     },
-    async exportPaymentApi(key) {
-        let orgItem = await getOrganisationData()
-        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url
+    async exportPaymentApi(key, year, dateFrom, dateTo) {
+        const orgItem = await getOrganisationData();
+        const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        const body = { year, dateFrom, dateTo };
+        let url;
         if (key === "paymentDashboard") {
             url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}`;
+        } else if (key === "payout") {
+            url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=payout`;
+        } else if (key === "transfer") {
+            url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`;
         }
-        else if (key === "payout") {
-            url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=payout`
-        }
-        else if (key === "transfer") {
-            url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`
-        }
-        return Method.dataGetDownload(url, token, key);
+
+        return Method.dataPostDownload(url, token, key, body);
     },
 
     async exportPaymentDashboardApi(offset,
