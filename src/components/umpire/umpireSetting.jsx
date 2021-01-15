@@ -71,7 +71,6 @@ class UmpireSetting extends Component {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
-        // this.props.umpireCompetitionListAction(null, null, null, 'USERS');
     }
 
     componentDidUpdate(prevProps, prevState) {

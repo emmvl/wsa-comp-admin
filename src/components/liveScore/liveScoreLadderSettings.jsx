@@ -108,7 +108,6 @@ class LiveScoreLadderSettings extends Component {
         let isAllDivisionChecked = isAllDivision != null;
         let allDivision = divisions.find(x => x.isDisabled == false);
         let allDivAdded = allDivision != null ? false : true;
-        console.log('ladderData', ladderData)
 
         return (
             <div className="content-view pt-4">
