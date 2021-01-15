@@ -112,7 +112,7 @@ class UmpirePaymentSetting extends Component {
                     }
                 });
 
-                const { isOrganiser } = competitionListCopy.find(competition => competition.id === firstComp);
+                const isOrganiser = competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser;
 
                 this.setState({ 
                     competitionList: competitionListCopy,
