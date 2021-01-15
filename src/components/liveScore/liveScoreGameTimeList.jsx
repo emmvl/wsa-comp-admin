@@ -397,7 +397,7 @@ class LiveScoreGameTimeList extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
-                        rowKey={(record, index) => 'gameTime' + index}
+                        rowKey={(record) => 'gameTime' + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

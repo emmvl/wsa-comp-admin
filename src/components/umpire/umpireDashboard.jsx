@@ -814,7 +814,7 @@ class UmpireDashboard extends Component {
                         // columns={columnsInvite}
                         dataSource={umpireListResult}
                         pagination={false}
-                        rowKey={(record, index) => "umpireListResult" + record.id + index}
+                        rowKey={(record) => "umpireListResult" + record.id}
                     />
                 </div>
 

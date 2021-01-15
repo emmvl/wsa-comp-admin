@@ -17,21 +17,29 @@ let token = getAuthToken();
 
 
 let UmpireAxiosApi = {
-
     umpirePaymentSettingsGet(competitionId) {
         const url = `/competitions/${competitionId}/umpires/payment/settings`;
         return Method.dataGet(url, token);
     },
-
+    umpireAllocationSettingsGet(competitionId) {
+        const url = `/competitions/${competitionId}/umpires/settings/allocation`;
+        return Method.dataGet(url, token);
+    },
+    umpireAllocationSettingsPost(data) {
+        const competitionId = JSON.stringify(data.competitionId);
+        const organisationId = JSON.stringify(data.organisationId);
+        const url = `/competitions/${competitionId}/umpires/settings/allocation?organisationId=${organisationId}`;
+        return Method.dataPost(url, token, data.body);
+    },
     umpirePaymentSettingsPost(data) {
         const competitionId = JSON.stringify(data.competitionId);
         const organisationId = JSON.stringify(data.organisationId);
         const type = JSON.stringify(data.type);
         // console.log('type', type)
-        const url = `/competitions/${competitionId}/umpires/payment/settings/${data.type}?organisationId=${organisationId}`;
+        const url = `/competitions/${competitionId}/umpires/payment/settings/${data.type}?organisationId=${organisationId}`
         return Method.dataPost(url, token, data.body);
-    },
-};
+    }
+}
 
 const Method = {
     async dataPost(newurl, authorization, body) {

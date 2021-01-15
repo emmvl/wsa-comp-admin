@@ -46,16 +46,16 @@ class LiveScoreBanners extends Component {
         this.state = {
             imageError: '',
             bannerImg: null,
-            timeout: null,
+            timeout: false,
         };
         _this = this;
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            this.setState({ timeout: 3000 });
+            this.setState({ timeout: true });
             setTimeout(() => {
-                this.setState({ timeout: null });
+                this.setState({ timeout: false });
             }, 3000);
             const { id } = JSON.parse(getLiveScoreCompetiton());
             if (id !== null) {
@@ -127,7 +127,7 @@ class LiveScoreBanners extends Component {
                     dataSource={bannerResult}
                     showHeader={false}
                     pagination={false}
-                    rowKey={(record, index) => record.bannerUrl + index}
+                    rowKey={(record) => 'banners' + record.id}
                 />
             </div>
         );

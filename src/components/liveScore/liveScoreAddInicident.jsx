@@ -300,7 +300,7 @@ class LiveScoreAddIncident extends Component {
                             onBlur={(e) => this.props.liveScoreUpdateIncidentData(e.target.value && moment(e.target.value, "HH:mm"), 'time')}
                             format="HH:mm"
                             placeholder="Select Time"
-                            defaultOpenValue={moment("00:00", "HH:mm")}
+                            defaultValue={moment("00:00", "HH:mm")}
                             use12Hours={false}
                             value={incidentData ? incidentData.time ? moment(incidentData.time) : startTime : startTime}
                         />
@@ -489,8 +489,8 @@ class LiveScoreAddIncident extends Component {
                                 timeout={this.state.videoTimeout}
                                 video
                                 src={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
-                                // poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
-                                poster={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
+                            // poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
+                            // poster={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
                             />
                         </div>
                         <input

@@ -3662,6 +3662,9 @@ class RegistrationCompetitionFee extends Component {
                     feesTableDisable: !isCreatorEdit ? false : true,
                     paymentsDisable: true,
                     discountsDisable: true,
+
+                    voucherDisable: true,
+
                     allDisable: false,
                     isPublished: true,
                     compDatesDisable: !isCreatorEdit ? false : true
@@ -3678,6 +3681,9 @@ class RegistrationCompetitionFee extends Component {
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: false,
+
+                    voucherDisable: true,
+
                     allDisable: false,
                     isPublished: true,
                     compDatesDisable: true
@@ -3692,6 +3698,9 @@ class RegistrationCompetitionFee extends Component {
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: false,
+
+                    voucherDisable: false,
+
                     allDisable: false,
                     isPublished: true,
                     compDatesDisable: false
@@ -3707,6 +3716,9 @@ class RegistrationCompetitionFee extends Component {
                 feesTableDisable: false,
                 paymentsDisable: false,
                 discountsDisable: false,
+
+                voucherDisable: false,
+
                 allDisable: false,
                 isPublished: false,
                 compDatesDisable: false
@@ -4903,6 +4915,9 @@ class RegistrationCompetitionFee extends Component {
             let competitionId = compFeesState.competitionId;
             let postData = compFeesState.competitionDetailData;
 
+            let membershipDisable = this.state.permissionState.membershipDisable;
+            let divisionsDisable = this.state.permissionState.divisionsDisable;
+
             let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
             let venue = JSON.stringify(compFeesState.postVenues);
             // let invitees = compFeesState.postInvitees
@@ -4921,9 +4936,9 @@ class RegistrationCompetitionFee extends Component {
             }
             if (tabKey == '1' && this.state.isCreatorEdit == false) {
                 this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
-            } else if (tabKey == '2' && this.state.isCreatorEdit == false) {
+            } else if (tabKey == '2' && this.state.isCreatorEdit == false && membershipDisable == false) {
                 this.saveCompMembershipApiCall(competitionId)
-            } else if (tabKey == '3' && this.state.isCreatorEdit == false) {
+            } else if (tabKey == '3' && this.state.isCreatorEdit == false && divisionsDisable == false) {
                 this.saveCompDivApiCall(competitionId,postData,compFeesState);
             } else if (tabKey == '4') {
                 this.saveCompFeesApiCall();
@@ -4999,12 +5014,14 @@ class RegistrationCompetitionFee extends Component {
     }
 
     instalmentUponReg(key, value) {
+        let paymentsDisable = this.state.permissionState.paymentsDisable;
         return (
             <div className="pt-4 pb-4">
                 <Switch
                     onChange={(e) => this.props.instalmentDateAction(e, key)}
                     checked={value}
                     style={{ marginRight: 10 }}
+                    disabled={paymentsDisable}
                 />
                 {AppConstants.uponRegistration}
             </div>
@@ -5025,7 +5042,8 @@ class RegistrationCompetitionFee extends Component {
             selectedSeasonalInstalmentDatesArrayItem: selectedSeasonalInstalmentDatesArrayItem,
             index
         }
-        let instalmentDate = selectedSeasonalInstalmentDatesArrayItem.instalmentDate
+        let instalmentDate = selectedSeasonalInstalmentDatesArrayItem.instalmentDate;
+        let paymentsDisable = this.state.permissionState.paymentsDisable;
         return (
             <div className="pt-3">
                 <DatePicker
@@ -5034,17 +5052,20 @@ class RegistrationCompetitionFee extends Component {
                     showTime={false}
                     onChange={(e) => this.instalmentPaymentDateChange(e, selectedSeasonalInstalmentDatesArrayItem, key)}
                     value={(instalmentDate == "") ? null : moment(instalmentDate, 'YYYY-MM-DD')}
+                    disabled={paymentsDisable}
                 />
 
                 <span style={{ marginLeft: 8, cursor: 'pointer' }}>
-                    <img
+                    {!paymentsDisable && (
+                        <img
                         className="dot-image"
                         src={AppImages.redCross}
                         alt=""
                         width="16"
                         height="16"
                         onClick={(e) => this.props.instalmentDateAction(removeObj, "instalmentRemoveDate", key)}
-                    />
+                        />
+                    )}
                 </span>
             </div>
         );
@@ -5061,14 +5082,20 @@ class RegistrationCompetitionFee extends Component {
     }
 
     addInstalmentDateBtn(selectedSeasonalInstalmentDatesArray, key) {
+        let paymentsDisable = this.state.permissionState.paymentsDisable;
         return (
-            <span
-                style={{ cursor: 'pointer', paddingTop: 0 }}
-                onClick={(e) => this.props.instalmentDateAction(selectedSeasonalInstalmentDatesArray, "instalmentAddDate", key)}
-                className="input-heading-add-another pt-4"
-            >
-                {AppConstants.addInstalmentDate}
-            </span>
+            <div>
+                {!paymentsDisable && (
+                    <span
+                        style={{ cursor: 'pointer', paddingTop: 0 }}
+                        onClick={(e) => this.props.instalmentDateAction(selectedSeasonalInstalmentDatesArray, "instalmentAddDate", key)}
+                        className="input-heading-add-another pt-4"
+                    >
+                        {AppConstants.addInstalmentDate}
+                    </span>
+                )}
+            </div>
+            
         );
     }
 
@@ -7378,7 +7405,8 @@ class RegistrationCompetitionFee extends Component {
     ////government voucher view
     voucherView = () => {
         let govtVoucher = this.props.competitionFeesState.govtVoucher;
-        let discountsDisable = this.state.permissionState.discountsDisable;
+        let discountDisable = this.state.permissionState.discountsDisable;
+        let voucherDisable = this.state.permissionState.voucherDisable;
         return (
             <div className="advanced-setting-view pt-5">
                 <span className="form-heading">{AppConstants.governmentVouchers}</span>
@@ -7395,7 +7423,7 @@ class RegistrationCompetitionFee extends Component {
                                         'govermentVouchers'
                                     )
                                 }
-                                disabled={discountsDisable}
+                                disabled={voucherDisable}
                             >
                                 {item.description}
                             </Checkbox>
@@ -7669,16 +7697,20 @@ class RegistrationCompetitionFee extends Component {
                             </div>
                         ))}
 
-                        <span
-                            className="input-heading-add-another"
-                            onClick={() =>
-                                !this.checkDiscountDisable(item.organisationId)
-                                    ? this.addRemoveChildDiscount(index, 'add', -1)
-                                    : null
-                            }
-                        >
-                            + {AppConstants.addChild}
-                        </span>
+                        { !this.checkDiscountDisable(item.organisationId) && (
+                            <span
+                                className="input-heading-add-another"
+                                onClick={() => this.addRemoveChildDiscount(index, 'add', -1)}
+                                // onClick={() =>
+                                //     !this.checkDiscountDisable(item.organisationId)
+                                //         ? this.addRemoveChildDiscount(index, 'add', -1)
+                                //         : null
+                                // }
+                            >
+                                + {AppConstants.addChild}
+                            </span>
+                        )}
+                        
                     </div>
                 );
 
@@ -7930,24 +7962,27 @@ class RegistrationCompetitionFee extends Component {
                 </div>
                 {(discountData || []).map((item, index) => (
                     <div className="prod-reg-inside-container-view">
-                        <div
-                            className="transfer-image-view pt-2"
-                            onClick={() =>
-                                !this.checkDiscountDisable(item.organisationId)
-                                    ? this.addRemoveDiscount('remove', index)
-                                    : null
-                            }
-                        >
-                            <div className="pointer">
-                                <span className="user-remove-btn">
-                                    <i className="fa fa-trash-o" aria-hidden="true" />
-                                </span>
-                                <span className="user-remove-text mr-0">
-                                    {AppConstants.remove}
-                                </span>
+                        {!this.checkDiscountDisable(item.organisationId) && (
+                            <div
+                                className="transfer-image-view pt-2"
+                                onClick={() => this.addRemoveDiscount('remove', index)}
+                                // onClick={() =>
+                                //     !this.checkDiscountDisable(item.organisationId)
+                                //         ? this.addRemoveDiscount('remove', index)
+                                //         : null
+                                // }
+                            >
+                                <div className="pointer">
+                                    <span className="user-remove-btn">
+                                        <i className="fa fa-trash-o" aria-hidden="true" />
+                                    </span>
+                                    <span className="user-remove-text mr-0">
+                                        {AppConstants.remove}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
+                        )}
+                        <div className={!this.checkDiscountDisable(item.organisationId) ? "row" : "row mt-5"}>
                             <div className="col-sm">
                                 <InputWithHead required="pt-0" heading="Discount Type" />
                                 <Form.Item
@@ -8294,7 +8329,8 @@ class RegistrationCompetitionFee extends Component {
                     }
                 }
             }
-            if(this.state.competitionTabKey == '3'){
+            let divisionsDisable = this.state.permissionState.divisionsDisable;
+            if(this.state.competitionTabKey == '3' && divisionsDisable == false){
                 let compFeesState = this.props.competitionFeesState;
                 let divisionArrayData = compFeesState.competitionDivisionsData;
                 if (this.checkDivisionEmpty(divisionArrayData)) {
