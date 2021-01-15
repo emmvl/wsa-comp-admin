@@ -147,7 +147,7 @@ class UmpirePaymentSetting extends Component {
             && !this.props.umpirePaymentSettingState.onLoad) {
 
             const { divisionList } = this.props.liveScoreTeamState;
-            const { umpirePayerTypeRefId, umpirePaymentSettings, allowedDivisionsSetting } = this.props.umpirePaymentSettingState.paymentSettingsData;
+            const { umpirePaymentSettings, allowedDivisionsSetting } = this.props.umpirePaymentSettingState.paymentSettingsData;
 
             const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ? 
                 umpirePaymentSettings.map(settingsItem => ({
@@ -188,7 +188,6 @@ class UmpirePaymentSetting extends Component {
                 : [ ...affiliateViewSettingsArray ];
 
             const paymentSettingsDataObj = {
-                umpirePayerTypeRefId,
                 settings,
             };
 
@@ -232,7 +231,6 @@ class UmpirePaymentSetting extends Component {
         });
 
         const paymentSettingsDataObj = {
-            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId || isOrganiser ? 1 : 2,
             settings: newSettingsData,
         }
 
@@ -254,7 +252,6 @@ class UmpirePaymentSetting extends Component {
         }
 
         const newPaymentSettingsData = {
-            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
             settings: [ ...sectionDataCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
         }
         
@@ -298,7 +295,6 @@ class UmpirePaymentSetting extends Component {
         targetBoxData[sectionDataIndex].allDivisions = value;
 
         const newPaymentSettingsData = {
-            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
             settings: [ targetBoxData[sectionDataIndex] ],
         }
 
@@ -341,7 +337,6 @@ class UmpirePaymentSetting extends Component {
         }
 
         const newPaymentSettingsData = {
-            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
             settings: newSettingsData,
         }
 
@@ -382,7 +377,6 @@ class UmpirePaymentSetting extends Component {
         }
 
         const newPaymentSettingsData = {
-            umpirePayerTypeRefId: paymentSettingsData.umpirePayerTypeRefId,
             settings: [ ...sectionDataCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
         }
         
@@ -492,7 +486,6 @@ class UmpirePaymentSetting extends Component {
         const umpirePaymentSettings = !!umpirePaymentSettingsArray.length ? umpirePaymentSettingsArray : [];
 
         const bodyData = isOrganiserView ? {
-            umpirePayerTypeRefId: paymentSettingsDataCopy.umpirePayerTypeRefId,
             umpirePaymentSettings,
             allowedDivisionsSetting,
         } : umpirePaymentSettings;
