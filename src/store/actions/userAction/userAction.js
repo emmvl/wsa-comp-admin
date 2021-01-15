@@ -257,6 +257,14 @@ function exportOrgRegQuestionAction(payload) {
     };
 }
 
+/* Export User Registration Data */
+function exportUserRegData(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_USER_REG_DATA_LOAD,
+        payload,
+    };
+}
+
 /* Affiliate Directory Listing */
 function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
     return {
@@ -599,5 +607,6 @@ export {
     getTeamMembersAction,
     updateReviewInfoAction,
     getTeamMembersReviewAction,
-    teamMemberUpdateAction
+    teamMemberUpdateAction,
+    exportUserRegData
 };

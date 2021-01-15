@@ -927,6 +927,17 @@ function userReducer(state = initialState, action) {
         error: null
       };
 
+      case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
+          return { ...state, onExpUserRegDataLoad: true };
+
+      case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
+          return {
+              ...state,
+              onExpUserRegDataLoad: false,
+              status: action.status,
+              error: null
+          };
+
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
 
