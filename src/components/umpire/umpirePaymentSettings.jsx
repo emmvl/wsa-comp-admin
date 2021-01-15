@@ -73,9 +73,7 @@ class UmpirePaymentSetting extends Component {
     componentDidMount() {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.setState({ loading: true });
-        // this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
-        // this.props.umpireCompetitionListAction(null, null, null);
-        this.props.umpireCompetitionListAction(null, null, null, 'USERS');
+        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
         this.props.getRefBadgeData();
     }
 
@@ -83,8 +81,8 @@ class UmpirePaymentSetting extends Component {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             // if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
             if (!this.props.umpireCompetitionState.onLoad) {
-                const compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = !!compList.length && compList[0].id;
+                const competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+                let firstComp = !!competitionList.length && competitionList[0].id;
                 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
@@ -93,22 +91,16 @@ class UmpirePaymentSetting extends Component {
                     setUmpireCompId(firstComp)
                 }
 
-                if (!!compList.length) {
-                    const orgId = compList[0].competitionOrganisation.orgId;
+                if (!!competitionList.length) {
+                    const orgId = competitionList[0].competitionOrganisation.orgId;
 
                     this.props.liveScoreGetDivision(firstComp);
                     this.props.getUmpirePoolData({ orgId, compId: firstComp });
                 }
 
-                const compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
 
                 const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-
-                const competitionList = compList.filter(item => (
-                    item.organisationId === organisationId
-                    ||
-                    (organisationId !== item.organisationId && item.competitionOrganisation?.orgId === organisationId)
-                ));
 
                 const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
 
@@ -160,7 +152,6 @@ class UmpirePaymentSetting extends Component {
             const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ? 
                 umpirePaymentSettings.map(settingsItem => ({
                     allDivisions: settingsItem.allDivisions,
-                    // divisions: settingsItem.divisions.map(item => item.id),
                     divisions: settingsItem.divisions,
                     UmpirePaymentFeeType: settingsItem.UmpirePaymentFeeType,
                     byBadge: !!settingsItem.byBadge.length ? 
@@ -184,7 +175,6 @@ class UmpirePaymentSetting extends Component {
 
             const allowedDivisionsSettingArray = !!allowedDivisionsSetting ? [{ 
                 allDivisions: allowedDivisionsSetting.allDivisions,
-                // divisions: allowedDivisionsSetting.divisions.map(item => item.id),
                 divisions: allowedDivisionsSetting.divisions,
                 hasSettings: false,
             }] : [];
