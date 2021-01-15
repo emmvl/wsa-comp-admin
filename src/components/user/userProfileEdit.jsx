@@ -1219,8 +1219,7 @@ class UserProfileEdit extends Component {
         const addChildOrParent = async () => {
             // if match is not selected, save the user data from the form
             const userToAdd = selectedMatch || this.state.userData;
-
-            const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
+            const { userId } = this.props.history.location.state.userData;
             const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
 
             this.setState({ isLoading: true });
@@ -1259,6 +1258,7 @@ class UserProfileEdit extends Component {
 
         return (
             <div className="comp-dash-table-view mt-5">
+                <Loader visible={this.state.isLoading} />
                 <h2>{AppConstants.possibleMatches}</h2>
                 <Text type="secondary">
                     {AppConstants.possibleMatchesDescription}
@@ -1416,7 +1416,6 @@ class UserProfileEdit extends Component {
                                     <Loader visible={
                                         this.props.userState.onUpUpdateLoad
                                         || this.props.commonReducerState.onLoad
-                                        || this.state.isLoading
                                     }
                                     />
                                 </Content>
