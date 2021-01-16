@@ -12,7 +12,6 @@ import {
     Radio,
     Form,
     message,
-    Checkbox,
     Modal,
     Table,
     Typography,
@@ -26,7 +25,6 @@ import AppConstants from "../../themes/appConstants";
 import {
     addChildAction,
     addParentAction,
-    findPossibleMatches,
     userProfileUpdateAction,
 } from '../../store/actions/userAction/userAction';
 import ValidationConstants from "../../themes/validationConstant";
@@ -40,6 +38,7 @@ import Loader from '../../customComponents/loader';
 import { getOrganisationData, getUserId } from "../../util/sessionStorage";
 import { regexNumberExpression } from '../../util/helpers';
 import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
+import UserAxiosApi from "../../store/http/userHttp/userAxiosApi";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -133,8 +132,11 @@ class UserProfileEdit extends Component {
             hasErrorAddressNumber: false,
             venueAddressError: '',
             manualAddress: false,
-            isPossibleMatchShow: false,
             storedEmailAddress: null,
+            // possible matches
+            possibleMatches: [],
+            isPossibleMatchShow: false,
+            isLoading: false,
         };
         this.confirmOpend = false;
         // this.props.getCommonRefData();
@@ -246,7 +248,7 @@ class UserProfileEdit extends Component {
 
     setAddressFormFields = () => {
         const { userData } = this.state;
-        this.setState({ storedEmailAddress: userData.email })
+        this.setState({ storedEmailAddress: userData.email });
         this.formRef.current.setFieldsValue({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -503,16 +505,16 @@ class UserProfileEdit extends Component {
                 </div>
 
                 {/* todo: below needs to be properly handled. hiding it now */}
-                {/*{(this.state.titleLabel === AppConstants.addChild) && (*/}
-                {/*    <Checkbox*/}
-                {/*        className="single-checkbox"*/}
-                {/*        checked={this.state.isSameEmail}*/}
-                {/*        onChange={(e) => this.setState({ isSameEmail: e.target.checked })}*/}
-                {/*    >*/}
-                {/*        {this.state.titleLabel === AppConstants.addParent_guardian*/}
-                {/*            ? AppConstants.useChildEmail : AppConstants.useParentEmail}*/}
-                {/*    </Checkbox>*/}
-                {/*)}*/}
+                {/* {(this.state.titleLabel === AppConstants.addChild) && ( */}
+                {/*    <Checkbox */}
+                {/*        className="single-checkbox" */}
+                {/*        checked={this.state.isSameEmail} */}
+                {/*        onChange={(e) => this.setState({ isSameEmail: e.target.checked })} */}
+                {/*    > */}
+                {/*        {this.state.titleLabel === AppConstants.addParent_guardian */}
+                {/*            ? AppConstants.useChildEmail : AppConstants.useParentEmail} */}
+                {/*    </Checkbox> */}
+                {/* )} */}
                 {/* {(this.state.titleLabel === AppConstants.addParent_guardian || this.state.titleLabel === AppConstants.addChild) && ( */}
                 {/*    <Checkbox */}
                 {/*        className="single-checkbox" */}
@@ -1213,18 +1215,41 @@ class UserProfileEdit extends Component {
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
         }));
 
-        const addChildOrParent = () => {
+        // actual function to call saving a child / parent
+        const addChildOrParent = async () => {
             // if match is not selected, save the user data from the form
             const userToAdd = selectedMatch || this.state.userData;
-
-            const userId = this.state.userRole === 'admin' ? getUserId() : this.props.history.location.state.userData.userId;
+            const { userId } = this.props.history.location.state.userData;
             const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
-            if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
-                this.props.addChildAction(userToAdd, userId, sameEmail);
+
+            this.setState({ isLoading: true });
+            if (this.state.titleLabel === AppConstants.addChild) {
+                try {
+                    const { status } = await UserAxiosApi.addChild({ userId, sameEmail, body: userToAdd });
+                    if ([1, 4].includes(status)) {
+                        history.push({
+                            pathname: '/userPersonal',
+                            state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId },
+                        });
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
             } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
-                this.props.addParentAction(userToAdd, userId, sameEmail);
+                try {
+                    const { status } = await UserAxiosApi.addParent({ userId, sameEmail, body: userToAdd });
+                    if ([1, 4].includes(status)) {
+                        history.push({
+                            pathname: '/userPersonal',
+                            state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId },
+                        });
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
             }
-            this.setState({ saveLoad: true });
+            this.setState({ isLoading: false });
+            // this.setState({ saveLoad: true });
         };
 
         const onCancel = () => {
@@ -1233,6 +1258,7 @@ class UserProfileEdit extends Component {
 
         return (
             <div className="comp-dash-table-view mt-5">
+                <Loader visible={this.state.isLoading} />
                 <h2>{AppConstants.possibleMatches}</h2>
                 <Text type="secondary">
                     {AppConstants.possibleMatchesDescription}
@@ -1292,11 +1318,11 @@ class UserProfileEdit extends Component {
         }
     };
 
-    saveAction = () => {
+    saveAction = async () => {
         const data = this.state.userData;
         data.section = this.state.section;
         data.organisationId = this.state.organisationId;
-        const { storedEmailAddress } = this.state
+        const { storedEmailAddress } = this.state;
 
         if (this.state.venueAddressError) {
             message.config({ duration: 1.5, maxCount: 1 });
@@ -1318,12 +1344,13 @@ class UserProfileEdit extends Component {
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
-            this.props.findPossibleMatches(data).then(
-                () => this.setState({ isPossibleMatchShow: !!this.props.userState.possibleMatches.length }),
-            );
+            const { status, result: { data: possibleMatches } } = await UserAxiosApi.findPossibleMerge(data);
+            if ([1, 4].includes(status)) {
+                this.setState({ isPossibleMatchShow: true, possibleMatches });
+            }
         } else {
             if (this.state.displaySection === "1") {
-                data['emailUpdated'] = storedEmailAddress === data.email ? 0 : 1
+                data.emailUpdated = storedEmailAddress === data.email ? 0 : 1;
                 this.props.userProfileUpdateAction(data);
             } else {
                 this.props.userProfileUpdateAction(data);
@@ -1386,14 +1413,18 @@ class UserProfileEdit extends Component {
                             >
                                 <Content>
                                     <div className="formView">{this.contentView()}</div>
-                                    <Loader visible={this.props.userState.onUpUpdateLoad || this.props.commonReducerState.onLoad} />
+                                    <Loader visible={
+                                        this.props.userState.onUpUpdateLoad
+                                        || this.props.commonReducerState.onLoad
+                                    }
+                                    />
                                 </Content>
 
                                 <Footer>{this.footerView()}</Footer>
                             </Form>
                         </>
                     ) : (
-                        this.possibleMatchesDetailView(this.props.userState.possibleMatches)
+                        this.possibleMatchesDetailView(this.state.possibleMatches)
                     )}
                 </Layout>
             </div>
@@ -1405,7 +1436,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addChildAction,
         addParentAction,
-        findPossibleMatches,
         userProfileUpdateAction,
         getCommonRefData,
         countryReferenceAction,

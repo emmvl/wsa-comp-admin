@@ -492,12 +492,12 @@ let userHttpApi = {
   },
 
   addChild(payload) {
-    const url = `/admin/users/child/create?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    const url = `/users/admin/child/create?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
     return Method.dataPost(url, token, {childUser: payload.body});
   },
 
   addParent(payload) {
-    const url = `/admin/users/parent/create?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    const url = `/users/admin/parent/create?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
     return Method.dataPost(url, token, {parentUser: payload.body});
   },
 
