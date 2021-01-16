@@ -163,7 +163,8 @@ let AxiosApi = {
         feeType,
         paymentOption,
         paymentMethod,
-        membershipType
+        membershipType,
+        paymentStatus
     ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -183,7 +184,8 @@ let AxiosApi = {
             feeType,
             paymentOption,
             paymentMethod,
-            membershipType
+            membershipType,
+            paymentStatus
         }
         var url = `/api/payments/transactions?search=${searchValue}`;
         if (sortBy && sortOrder) {
@@ -222,7 +224,8 @@ let AxiosApi = {
         feeType,
         paymentOption,
         paymentMethod,
-        membershipType) {
+        membershipType,
+        paymentStatus) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -241,7 +244,8 @@ let AxiosApi = {
             feeType,
             paymentOption,
             paymentMethod,
-            membershipType
+            membershipType,
+            paymentStatus
         }
         var url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}&search=${searchValue}`;
         if (sortBy && sortOrder) {
