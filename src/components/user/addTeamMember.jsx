@@ -86,6 +86,14 @@ class AddTeamMember extends Component {
                     this.setState({ getTeamMembersOnLoad: false });
                     this.setTeamMembersFormFieldsValue();
                 }
+                if(userState.teamMemberDeletion == true) {
+                    this.props.teamMemberSaveUpdateAction(false, "teamMemberDeletion");
+                    this.setTeamMembersFormFieldsValue();
+                }
+                if(userState.addTeamMember == true) {
+                    this.props.teamMemberSaveUpdateAction(false, "addTeamMember");
+                    this.setTeamMembersFormFieldsValue();
+                }
             }
         } catch (ex) {
             console.log(`Error in componentDidUpdate::${ex}`);
@@ -414,7 +422,9 @@ class AddTeamMember extends Component {
             console.log("Error in checkGenderDivisionRestriction::" + ex);
         }
     }
-
+    onCancelClick = () => {
+        history.push("/userPersonal", { userId: this.state.team.userId})
+    }
     onSaveClick = () => {
         try {
             const { teamMembersSave } = this.props.userState;
@@ -826,9 +836,7 @@ class AddTeamMember extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-add-save-button">
-                            <NavLink to={{ pathname: `/userPersonal` }}>
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
-                            </NavLink>
+                            <Button type="cancel-button" onClick={this.onCancelClick}>{AppConstants.cancel}</Button>
                         </div>
                     </div>
                     <div className="col-sm">
