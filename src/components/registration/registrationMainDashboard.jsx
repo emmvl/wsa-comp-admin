@@ -324,13 +324,13 @@ class RegistrationMainDashboard extends Component {
                         </div>
                     </div>
                     <div className="col-sm pb-3 d-flex align-content-center justify-content-end">
-                        <Button
+                        {/* <Button
                             className="open-reg-button"
                             type="primary"
                             onClick={() => this.openwizardmodel()}
                         >
                             {AppConstants.registrationWizard}
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
                 <div className="fluid-width">
