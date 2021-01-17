@@ -231,7 +231,8 @@ function* getPaymentListSaga(action) {
       action.feeType,
       action.paymentType,
       action.paymentMethod,
-      action.membershipType
+      action.membershipType,
+      action.paymentStatus
     );
 
     if (result.status === 1) {
@@ -305,7 +306,8 @@ function* exportPaymentDashboardSaga(action) {
       action.feeType,
       action.paymentType,
       action.paymentMethod,
-      action.membershipType);
+      action.membershipType,
+      action.paymentStatus);
 
     if (result.status === 1) {
       yield put({

@@ -4915,6 +4915,9 @@ class RegistrationCompetitionFee extends Component {
             let competitionId = compFeesState.competitionId;
             let postData = compFeesState.competitionDetailData;
 
+            let membershipDisable = this.state.permissionState.membershipDisable;
+            let divisionsDisable = this.state.permissionState.divisionsDisable;
+
             let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
             let venue = JSON.stringify(compFeesState.postVenues);
             // let invitees = compFeesState.postInvitees
@@ -4933,9 +4936,9 @@ class RegistrationCompetitionFee extends Component {
             }
             if (tabKey == '1' && this.state.isCreatorEdit == false) {
                 this.saveCompDetailsApicall(competitionId,postData,invitees,compFeesState,nonPlayingDate,venue)
-            } else if (tabKey == '2' && this.state.isCreatorEdit == false) {
+            } else if (tabKey == '2' && this.state.isCreatorEdit == false && membershipDisable == false) {
                 this.saveCompMembershipApiCall(competitionId)
-            } else if (tabKey == '3' && this.state.isCreatorEdit == false) {
+            } else if (tabKey == '3' && this.state.isCreatorEdit == false && divisionsDisable == false) {
                 this.saveCompDivApiCall(competitionId,postData,compFeesState);
             } else if (tabKey == '4') {
                 this.saveCompFeesApiCall();
@@ -8326,7 +8329,8 @@ class RegistrationCompetitionFee extends Component {
                     }
                 }
             }
-            if(this.state.competitionTabKey == '3'){
+            let divisionsDisable = this.state.permissionState.divisionsDisable;
+            if(this.state.competitionTabKey == '3' && divisionsDisable == false){
                 let compFeesState = this.props.competitionFeesState;
                 let divisionArrayData = compFeesState.competitionDivisionsData;
                 if (this.checkDivisionEmpty(divisionArrayData)) {

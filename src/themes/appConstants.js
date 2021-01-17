@@ -1533,6 +1533,7 @@ const AppConstants = {
   umpireAllocationSettings: 'Umpire Assignment Settings',
   whoAssignsUmpires: 'Who Assigns Umpires',
   affiliateOrganisations: 'Affiliate Organisations',
+  noUmpires: 'No Umpires',
   takenCourtForTraining: 'Have you taken the court for training, grading or a competition game',
   exportAttendance: 'Export Attendance',
   exportAttendanceMessage: 'Attendance exported successfully',
@@ -1702,6 +1703,17 @@ const AppConstants = {
   gamesRedeemed: "Games Redeemed",
   gamesToRedeem: "Games to redeem",
   howManyGames: "How many games?",
+
+  divisionSettings: 'Division settings',
+  divisionRemoveMsg: 'Are you sure you want to remove division settings?',
+  divisionAllDivisionMsg: "This will clear your other settings. Ok to proceed?",
+  manuallyAllocate: 'Manually Allocate',
+  allocateViaPools: 'Allocate Via Pools',
+  umpireYourOwnTeam: 'Umpire Your Own - Team',
+  umpireYourOwnOrganisation: 'Umpire Your Own - Organisation',
+  timeBetweenMatches: 'Time between matches',
+  maxNumberOfMatches: 'Maximum number of matches',
+
   coachAccreditation: "Coach Accreditation",
   teamMembers: "Team Members",
   addTeamMembers: "Add Team Members",
@@ -1756,6 +1768,7 @@ const AppConstants = {
   addToTeam: "Add to Team",
   removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
 
+  yourOrder: "Your Order",
   // Communication
   communicationTitle: 'Communication Title',
   enterCommunicationTitle: 'Enter Communication Title',

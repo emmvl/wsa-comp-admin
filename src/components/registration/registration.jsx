@@ -553,7 +553,12 @@ class Registration extends Component {
     );
 
     statusView = () => {
-        const { paymentStatus } = this.props.commonReducerState;
+        let paymentStatus = [
+            { id: 1, description: "Pending Competition Fee" },
+            { id: 2, description: "Pending Membership Fee" },
+            { id: 3, description: "Pending Registration Fee" },
+            { id: 4, description: "Registered" },
+        ];
         return (
             <div className="comp-player-grades-header-view-design" style={{ marginBottom: -10 }}>
                 <div className="row" style={{ marginRight: 42 }}>

@@ -110,7 +110,8 @@ function getPaymentList(
     feeType,
     paymentType,
     paymentMethod,
-    membershipType
+    membershipType,
+    paymentStatus
 ) {
     const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
@@ -128,7 +129,8 @@ function getPaymentList(
         feeType,
         paymentType,
         paymentMethod,
-        membershipType
+        membershipType,
+        paymentStatus
     }
     return action
 }
@@ -170,7 +172,8 @@ function exportPaymentDashboardApi(offset,
     feeType,
     paymentType,
     paymentMethod,
-    membershipType) {
+    membershipType,
+    paymentStatus) {
     return {
         type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
         offset,
@@ -187,7 +190,8 @@ function exportPaymentDashboardApi(offset,
         feeType,
         paymentType,
         paymentMethod,
-        membershipType
+        membershipType,
+        paymentStatus
     }
 }
 export {

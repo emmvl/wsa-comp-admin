@@ -221,6 +221,7 @@ class PaymentDashboard extends Component {
             status: -1,
             searchText: '',
             membershipType: -1,
+            paymentStatus: -1
         };
         this_Obj = this;
     }
@@ -467,6 +468,7 @@ class PaymentDashboard extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
+            paymentStatus
         } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         let year = getGlobalYear() ? getGlobalYear() : '-1'
@@ -491,7 +493,8 @@ class PaymentDashboard extends Component {
             feeType,
             paymentOption,
             paymentMethod,
-            membershipType
+            membershipType,
+            paymentStatus
         );
     };
 
@@ -565,6 +568,14 @@ class PaymentDashboard extends Component {
             );
         } else if (key === "membershipType") {
             await this.setState({ membershipType: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
+        } else if (key == "paymentStatus") {
+            await this.setState({ paymentStatus: value });
             this.handlePaymentTableList(
                 1,
                 -1,
@@ -808,12 +819,12 @@ class PaymentDashboard extends Component {
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(status) => this.setState({ status })}
-                            value={this.state.status}
+                            onChange={(status) => this.onChangeDropDownValue(status, "paymentStatus")}
+                            value={this.state.paymentStatus}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key={"paid"} value={"paid"}>{AppConstants.paid}</Option>
-                            <Option key={"pending"} value={"pending"}>{AppConstants.pending}</Option>
+                            <Option key={2} value={2}>{AppConstants.paid}</Option>
+                            <Option key={1} value={1}>{AppConstants.pending}</Option>
                             <Option key={"declined"} value={"declined"}>{AppConstants.declined}</Option>
                         </Select>
                     </div>
@@ -850,7 +861,7 @@ class PaymentDashboard extends Component {
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             {this.props.appState.paymentOptions.map(paymentOption => (
-                                <Option key={'paymentOption_' + paymentOption.id} value={paymentOption.name}>
+                                <Option key={'paymentOption_' + paymentOption.id} value={paymentOption.id}>
                                     {paymentOption.description}
                                 </Option>
                             ))}
