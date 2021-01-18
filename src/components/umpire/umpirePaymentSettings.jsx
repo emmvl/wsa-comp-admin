@@ -78,6 +78,8 @@ class UmpirePaymentSetting extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             // if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
             if (!this.props.umpireCompetitionState.onLoad) {
@@ -92,15 +94,11 @@ class UmpirePaymentSetting extends Component {
                 }
 
                 if (!!competitionList.length) {
-                    const orgId = competitionList[0].competitionOrganisation.orgId;
-
                     this.props.liveScoreGetDivision(firstComp);
-                    this.props.getUmpirePoolData({ orgId, compId: firstComp });
+                    // this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
                 }
 
                 const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
-
-                const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
                 const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
 
@@ -125,21 +123,12 @@ class UmpirePaymentSetting extends Component {
         }
 
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
-            const { selectedComp, competitionList } = this.state;
-            let orgId = null;
+            const { selectedComp } = this.state;
 
-            for (let i in competitionList) {
-                if (competitionList[i].id === selectedComp) {
-                    orgId = competitionList[i].competitionOrganisation.orgId;
-                }
-            }
-
-            this.props.getUmpirePoolData({ orgId, compId: selectedComp });
+            this.props.getUmpirePoolData({ orgId: organisationId, compId: selectedComp });
         }
 
         if (this.props.umpirePoolAllocationState.umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
-            const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-
             const reqData = {
                 organisationId,
                 competitionId: this.state.selectedComp,
@@ -817,6 +806,8 @@ class UmpirePaymentSetting extends Component {
     }
 
     render() {
+        // console.log('this.props.umpirePoolAllocationState.onLoad', this.props.umpirePoolAllocationState.onLoad);
+
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
