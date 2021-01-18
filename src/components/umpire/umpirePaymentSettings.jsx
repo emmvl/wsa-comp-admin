@@ -128,8 +128,6 @@ class UmpirePaymentSetting extends Component {
             const { selectedComp, competitionList } = this.state;
             let orgId = null;
 
-            // console.log('selectedComp', selectedComp)
-
             for (let i in competitionList) {
                 if (competitionList[i].id === selectedComp) {
                     orgId = competitionList[i].competitionOrganisation.orgId;
@@ -141,7 +139,7 @@ class UmpirePaymentSetting extends Component {
 
         if (this.props.umpirePoolAllocationState.umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
             const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-            
+
             const reqData = {
                 organisationId,
                 competitionId: this.state.selectedComp,
@@ -151,59 +149,62 @@ class UmpirePaymentSetting extends Component {
         }
 
         if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
-            && !this.props.umpirePaymentSettingState.onLoad) {
-
-            const { divisionList } = this.props.liveScoreTeamState;
-            const { umpirePaymentSettings, allowedDivisionsSetting } = this.props.umpirePaymentSettingState.paymentSettingsData;
-
-            const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ? 
-                umpirePaymentSettings.map(settingsItem => ({
-                    allDivisions: settingsItem.allDivisions,
-                    divisions: settingsItem.divisions,
-                    UmpirePaymentFeeType: settingsItem.UmpirePaymentFeeType,
-                    byBadge: !!settingsItem.byBadge.length ? 
-                            settingsItem.byBadge.map(byBadgeSetting => ({
-                                accreditationUmpireRefId: byBadgeSetting.accreditationUmpireRefId,
-                                rates: byBadgeSetting.rates.map(rate => ({
-                                    roleId: rate.roleId,
-                                    rate: rate.rate,
-                                }))
-                            })) : [],
-                    byPool: !!settingsItem.byPool.length ? 
-                            settingsItem.byPool.map(byPoolSetting => ({
-                                umpirePoolId: byPoolSetting.umpirePoolId,
-                                rates: byPoolSetting.rates.map(rate => ({
-                                    roleId: rate.roleId,
-                                    rate: rate.rate,
-                                }))
-                            })) : [],
-                    hasSettings: true,
-                })) : [];
-
-            const allowedDivisionsSettingArray = !!allowedDivisionsSetting ? [{ 
-                allDivisions: allowedDivisionsSetting.allDivisions,
-                divisions: allowedDivisionsSetting.divisions,
-                hasSettings: false,
-            }] : [];
-
-            const { isOrganiserView } = this.state;
-            
-            const affiliateViewSettingsArray = !isOrganiserView && !umpirePaymentSettings.length ?
-                [initialPaymentSettingsData] : umpirePaymentSettingsArray;
-
-            const settings = isOrganiserView ? [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray ]
-                : [ ...affiliateViewSettingsArray ];
-
-            const allowedDivisionList = isOrganiserView ? divisionList : allowedDivisionsSetting?.divisions;
-
-            const selectedDivisions = [];
-
-            settings.forEach(item => {
-                item.allDivisions ? selectedDivisions.push(...allowedDivisionList) : selectedDivisions.push(...item.divisions);
-            });
-
-            this.setState({ paymentSettingsData: settings, selectedDivisions, allowedDivisionList });
+                && !this.props.umpirePaymentSettingState.onLoad
+            ) {
+            this.modifyGetPaymentSettingsData(); 
         }
+    }
+
+    modifyGetPaymentSettingsData = () => {
+        const { divisionList } = this.props.liveScoreTeamState;
+        const { umpirePaymentSettings, allowedDivisionsSetting } = this.props.umpirePaymentSettingState.paymentSettingsData;
+        const { isOrganiserView } = this.state;
+
+        const selectedDivisions = [];
+
+        const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ? 
+            umpirePaymentSettings.map(settingsItem => ({
+                allDivisions: settingsItem.allDivisions,
+                divisions: settingsItem.divisions,
+                UmpirePaymentFeeType: settingsItem.UmpirePaymentFeeType,
+                byBadge: !!settingsItem.byBadge.length ? 
+                        settingsItem.byBadge.map(byBadgeSetting => ({
+                            accreditationUmpireRefId: byBadgeSetting.accreditationUmpireRefId,
+                            rates: byBadgeSetting.rates.map(rate => ({
+                                roleId: rate.roleId,
+                                rate: rate.rate,
+                            }))
+                        })) : [],
+                byPool: !!settingsItem.byPool.length ? 
+                        settingsItem.byPool.map(byPoolSetting => ({
+                            umpirePoolId: byPoolSetting.umpirePoolId,
+                            rates: byPoolSetting.rates.map(rate => ({
+                                roleId: rate.roleId,
+                                rate: rate.rate,
+                            }))
+                        })) : [],
+                hasSettings: true,
+            })) : [];
+
+        const allowedDivisionsSettingArray = !!allowedDivisionsSetting ? [{ 
+            allDivisions: allowedDivisionsSetting.allDivisions,
+            divisions: allowedDivisionsSetting.divisions,
+            hasSettings: false,
+        }] : [];
+        
+        const affiliateViewSettingsArray = !isOrganiserView && !umpirePaymentSettings.length ?
+            [initialPaymentSettingsData] : umpirePaymentSettingsArray;
+
+        const newPaymentSettingsData = isOrganiserView ? [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray ]
+            : [ ...affiliateViewSettingsArray ];
+
+        const allowedDivisionList = isOrganiserView ? divisionList : allowedDivisionsSetting?.divisions;
+
+        newPaymentSettingsData.forEach(item => {
+            item.allDivisions ? selectedDivisions.push(...allowedDivisionList) : selectedDivisions.push(...item.divisions);
+        });
+
+        this.setState({ paymentSettingsData: newPaymentSettingsData, selectedDivisions, allowedDivisionList });
     }
 
     handleChangeWhoPaysUmpires = (e, isBoxHasSettings) => {
@@ -503,8 +504,6 @@ class UmpirePaymentSetting extends Component {
 
     dropdownView = () => {
         const { competitionList } = this.state;
-
-        // console.log('competitionList', competitionList);
 
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
