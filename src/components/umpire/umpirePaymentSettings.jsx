@@ -187,10 +187,6 @@ class UmpirePaymentSetting extends Component {
             const settings = isOrganiserView ? [ ...umpirePaymentSettingsArray, ...allowedDivisionsSettingArray ]
                 : [ ...affiliateViewSettingsArray ];
 
-            const paymentSettingsDataObj = {
-                settings,
-            };
-
             const allowedDivisionList = isOrganiserView ? divisionList : allowedDivisionsSetting?.divisions;
 
             const selectedDivisions = [];
@@ -199,7 +195,7 @@ class UmpirePaymentSetting extends Component {
                 item.allDivisions ? selectedDivisions.push(...allowedDivisionList) : selectedDivisions.push(...item.divisions);
             });
 
-            this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions, allowedDivisionList });
+            this.setState({ paymentSettingsData: settings, selectedDivisions, allowedDivisionList });
         }
     }
 
@@ -210,7 +206,7 @@ class UmpirePaymentSetting extends Component {
         let newSettingsData;
         
         if (isOrganiser) {
-            const filteredSettingsData = paymentSettingsData.settings.filter(item => item.hasSettings !== isOrganiser)
+            const filteredSettingsData = paymentSettingsData.filter(item => item.hasSettings !== isOrganiser)
             const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
 
             if (e.target.checked) {
@@ -220,9 +216,9 @@ class UmpirePaymentSetting extends Component {
             }  
         } else {
             if (e.target.checked) {
-                newSettingsData = [ ...this.state.paymentSettingsData.settings, initialNoSettingsData ];
+                newSettingsData = [ ...this.state.paymentSettingsData, initialNoSettingsData ];
             } else {
-                newSettingsData = [ ...this.state.paymentSettingsData.settings.filter(item => !!item.isOrganiser) ];
+                newSettingsData = [ ...this.state.paymentSettingsData.filter(item => !!item.isOrganiser) ];
             }  
         }
 
@@ -230,11 +226,7 @@ class UmpirePaymentSetting extends Component {
             item.allDivisions ? newSelectedDivisions.push(...allowedDivisionList) : newSelectedDivisions.push(...item.divisions);
         });
 
-        const paymentSettingsDataObj = {
-            settings: newSettingsData,
-        }
-
-        this.setState({ paymentSettingsData: paymentSettingsDataObj, selectedDivisions: newSelectedDivisions });
+        this.setState({ paymentSettingsData: newSettingsData, selectedDivisions: newSelectedDivisions });
     }
 
     handleChangeFeesRadio = (e, sectionData, sectionDataIndex, key) => {
@@ -251,9 +243,7 @@ class UmpirePaymentSetting extends Component {
             sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = 'BY_POOL';
         }
 
-        const newPaymentSettingsData = {
-            settings: [ ...sectionDataCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
-        }
+        const newPaymentSettingsData = [ ...sectionDataCopy, ...paymentSettingsData.filter(item => !item.hasSettings) ]
         
         this.setState({ 
             paymentSettingsData: newPaymentSettingsData,
@@ -262,7 +252,7 @@ class UmpirePaymentSetting extends Component {
 
     handleChangeSettings = (sectionDataIndex, key, value, sectionData) => {
         const { paymentSettingsData } = this.state;
-        const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData.settings));
+        const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData));
 
         const targetBoxData = paymentSettingsDataCopy
             .filter(item => item.hasSettings === sectionData[0].hasSettings);
@@ -273,7 +263,7 @@ class UmpirePaymentSetting extends Component {
         if (key === 'allDivisions') {
             this.handleAllDivisionsChange(targetBoxData, sectionDataIndex, paymentSettingsDataCopy, value);
         } else if (key === 'divisions') {
-            this.handleNonAllDivisionsChange(sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value);
+            this.handleNonAllDivisionsChange(sectionData, targetBoxData, otherBoxData, sectionDataIndex, value);
         }
     }
 
@@ -294,9 +284,7 @@ class UmpirePaymentSetting extends Component {
         targetBoxData[sectionDataIndex].divisions = !!value ? allowedDivisionList : [];
         targetBoxData[sectionDataIndex].allDivisions = value;
 
-        const newPaymentSettingsData = {
-            settings: [ targetBoxData[sectionDataIndex] ],
-        }
+        const newPaymentSettingsData = [ targetBoxData[sectionDataIndex] ];
 
         this.setState({ 
             allDivisionVisible: !!value,
@@ -307,8 +295,8 @@ class UmpirePaymentSetting extends Component {
         });
     }
 
-    handleNonAllDivisionsChange = (sectionData, targetBoxData, otherBoxData, sectionDataIndex, key, value) => {
-        const { paymentSettingsData, selectedDivisions, allowedDivisionList } = this.state;
+    handleNonAllDivisionsChange = (sectionData, targetBoxData, otherBoxData, sectionDataIndex, value) => {
+        const { allowedDivisionList } = this.state;
 
         const newSelectedDivisions = [];
 
@@ -336,12 +324,8 @@ class UmpirePaymentSetting extends Component {
                 .allDivisions = true;
         }
 
-        const newPaymentSettingsData = {
-            settings: newSettingsData,
-        }
-
         this.setState({ 
-            paymentSettingsData: newPaymentSettingsData, 
+            paymentSettingsData: newSettingsData, 
             selectedDivisions: updatedSelectedDivisions
         });
     }
@@ -376,9 +360,7 @@ class UmpirePaymentSetting extends Component {
             });
         }
 
-        const newPaymentSettingsData = {
-            settings: [ ...sectionDataCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
-        }
+        const newPaymentSettingsData = [ ...sectionDataCopy, ...paymentSettingsData.filter(item => !item.hasSettings) ];
         
         this.setState({ 
             paymentSettingsData: newPaymentSettingsData,
@@ -395,18 +377,15 @@ class UmpirePaymentSetting extends Component {
     handleDeleteModal = key => {
         if (key === "ok") {
             const { paymentSettingsData, sectionDataToDeleteIndex } = this.state;
-            const umpirePaymentSettingsCopy = JSON.parse(JSON.stringify(paymentSettingsData.settings.filter(item => item.hasSettings)));
+            const umpirePaymentSettingsCopy = JSON.parse(JSON.stringify(paymentSettingsData.filter(item => item.hasSettings)));
 
             umpirePaymentSettingsCopy.splice(sectionDataToDeleteIndex, 1);
 
-            const newPaymentSettingsData = {
-                ...paymentSettingsData,
-                settings: [ ...umpirePaymentSettingsCopy, ...paymentSettingsData.settings.filter(item => !item.hasSettings) ],
-            };
+            const newPaymentSettingsData = [ ...umpirePaymentSettingsCopy, ...paymentSettingsData.filter(item => !item.hasSettings) ];
 
             const newSelectedDivisions = [];
 
-            newPaymentSettingsData.settings.forEach(item => {
+            newPaymentSettingsData.forEach(item => {
                 newSelectedDivisions.push(...item.divisions);
             });
 
@@ -417,10 +396,12 @@ class UmpirePaymentSetting extends Component {
     }
 
     handleAllDivisionModal = key => {
+        const { tempPaymentSettingsData, tempSelectedDivisions } = this.state;
+
         if (key === "ok") {
             this.setState({ 
-                paymentSettingsData: this.state.tempPaymentSettingsData,
-                selectedDivisions: this.state.tempSelectedDivisions,
+                paymentSettingsData: tempPaymentSettingsData,
+                selectedDivisions: tempSelectedDivisions,
             });
         }
 
@@ -436,10 +417,7 @@ class UmpirePaymentSetting extends Component {
         
         const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
 
-        const newPaymentSettingsData = {
-            ...paymentSettingsData,
-            settings: [ ...paymentSettingsData.settings, initialSettingsBoxData ],
-        };
+        const newPaymentSettingsData = [ ...paymentSettingsData, initialSettingsBoxData ];
 
         this.setState({ paymentSettingsData: newPaymentSettingsData });
     }
@@ -470,10 +448,10 @@ class UmpirePaymentSetting extends Component {
 
         const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData));
 
-        const affiliateSettingArray = paymentSettingsDataCopy.settings
+        const affiliateSettingArray = paymentSettingsDataCopy
             .filter(item => !item.hasSettings && !!item.divisions.length);
         
-        const umpirePaymentSettingsArray = paymentSettingsDataCopy.settings
+        const umpirePaymentSettingsArray = paymentSettingsDataCopy
             .filter(item => !!item.hasSettings && !!item.divisions.length);
 
         this.modifyPostArray(affiliateSettingArray);
@@ -608,8 +586,10 @@ class UmpirePaymentSetting extends Component {
         const { paymentSettingsData, selectedDivisions, allowedDivisionList } = this.state;
 
         const sectionData = hasSettings && !!paymentSettingsData 
-            ? paymentSettingsData?.settings.filter(item => item.hasSettings) 
-            : paymentSettingsData?.settings.filter(item => !item.hasSettings);
+            ? paymentSettingsData.filter(item => item.hasSettings) 
+            : !!paymentSettingsData 
+            ? paymentSettingsData.filter(item => !item.hasSettings) 
+            : [];
 
         return (
             <>
