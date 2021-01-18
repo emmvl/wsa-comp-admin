@@ -199,26 +199,26 @@ class UmpirePaymentSetting extends Component {
         }
     }
 
-    handleChangeWhoPaysUmpires = (e, isOrganiser) => {
+    handleChangeWhoPaysUmpires = (e, isBoxHasSettings) => {
         const { paymentSettingsData, allowedDivisionList } = this.state;
 
         const newSelectedDivisions = [];
         let newSettingsData;
         
-        if (isOrganiser) {
-            const filteredSettingsData = paymentSettingsData.filter(item => item.hasSettings !== isOrganiser)
+        if (isBoxHasSettings) {
             const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
+            const noSettingsDataState = paymentSettingsData.filter(item => !item.hasSettings);
 
             if (e.target.checked) {
-                newSettingsData = [ ...filteredSettingsData, initialSettingsBoxData, initialNoSettingsData ];
+                newSettingsData = [ ...noSettingsDataState, initialSettingsBoxData ];
             } else {
-                newSettingsData = [ ...filteredSettingsData,  ];
+                newSettingsData = [ ...noSettingsDataState  ];
             }  
         } else {
             if (e.target.checked) {
-                newSettingsData = [ ...this.state.paymentSettingsData, initialNoSettingsData ];
+                newSettingsData = [ ...paymentSettingsData, initialNoSettingsData ];
             } else {
-                newSettingsData = [ ...this.state.paymentSettingsData.filter(item => !!item.isOrganiser) ];
+                newSettingsData = [ ...paymentSettingsData.filter(item => !!item.hasSettings) ];
             }  
         }
 
