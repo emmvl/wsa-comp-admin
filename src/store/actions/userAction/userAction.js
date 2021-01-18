@@ -282,20 +282,6 @@ function userProfileUpdateAction(data) {
     };
 }
 
-function addChildAction(body, userId, sameEmail) {
-    return {
-        type: ApiConstants.API_ADD_CHILD_LOAD,
-        payload: { body, userId, sameEmail },
-    };
-}
-
-function addParentAction(body, userId, sameEmail) {
-    return {
-        type: ApiConstants.API_ADD_PARENT_LOAD,
-        payload: { body, userId, sameEmail },
-    };
-}
-
 function userPhotoUpdateAction(payload, userDetail) {
     return {
         type: ApiConstants.API_USER_PHOTO_UPDATE_LOAD,
@@ -528,7 +514,7 @@ function teamMemberUpdateAction(data) {
     return {
         type: ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD,
         data,
-    }
+    };
 }
 
 export {
@@ -592,12 +578,10 @@ export {
     addUsersToBeCompared,
     getUserModuleTeamMembersAction,
     getNetSetGoActionList,
-    addChildAction,
-    addParentAction,
     teamMemberSaveUpdateAction,
     teamMembersSaveAction,
     getTeamMembersAction,
     updateReviewInfoAction,
     getTeamMembersReviewAction,
-    teamMemberUpdateAction
+    teamMemberUpdateAction,
 };
