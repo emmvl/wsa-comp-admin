@@ -1713,7 +1713,7 @@ const AppConstants = {
   umpireYourOwnOrganisation: 'Umpire Your Own - Organisation',
   timeBetweenMatches: 'Time between matches',
   maxNumberOfMatches: 'Maximum number of matches',
-  
+
   coachAccreditation: "Coach Accreditation",
   teamMembers: "Team Members",
   addTeamMembers: "Add Team Members",
