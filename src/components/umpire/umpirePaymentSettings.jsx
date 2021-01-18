@@ -140,7 +140,14 @@ class UmpirePaymentSetting extends Component {
         }
 
         if (this.props.umpirePoolAllocationState.umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
-            this.props.getUmpirePaymentSettings(this.state.selectedComp);
+            const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+            
+            const reqData = {
+                organisationId,
+                competitionId: this.state.selectedComp,
+            };
+    
+            this.props.getUmpirePaymentSettings(reqData);
         }
 
         if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
@@ -459,7 +466,7 @@ class UmpirePaymentSetting extends Component {
 
         const allowedDivisionsSetting = !!affiliateSettingArray[0]?.divisions.length || !!affiliateSettingArray[0]?.allDivisions 
             ? affiliateSettingArray[0] 
-            :  { allDivisions: false, divisions: [] };
+            :  null;
 
         const umpirePaymentSettings = !!umpirePaymentSettingsArray.length ? umpirePaymentSettingsArray : [];
 
