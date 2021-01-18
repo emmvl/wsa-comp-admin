@@ -536,6 +536,13 @@ class UmpirePaymentSetting extends Component {
     };
 
     footerView = (isSubmitting) => {
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        const { paymentSettingsData } = this.state;
+
+        const someNoPoolSettings = !!paymentSettingsData && paymentSettingsData.some(settingsItem => (
+            settingsItem.UmpirePaymentFeeType === 'BY_POOL' && !umpirePoolData.length
+        ));
+
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -547,6 +554,9 @@ class UmpirePaymentSetting extends Component {
                                     className="publish-button save-draft-text mr-0" 
                                     type="primary" 
                                     htmlType="submit"
+                                    disabled={someNoPoolSettings 
+                                        || this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
+                                        || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
                                 >
                                     {AppConstants.save}
                                 </Button>
@@ -719,7 +729,7 @@ class UmpirePaymentSetting extends Component {
                         </div>
                     )}
                     {UmpirePaymentFeeType === 'BY_POOL' && !umpirePoolData.length && (
-                        <div className="mt-4">
+                        <div className="mt-4 error-message-inside">
                             {AppConstants.noPoolMsg}
                         </div>
                     )}

@@ -242,6 +242,10 @@
   min-width: 400px;
 }
 
+.error-message-inside {
+  color: var(--app-color);
+}
+
 @media (max-width: 767px) {
   .form-header-view.ant-layout-header {
     padding: 0;
