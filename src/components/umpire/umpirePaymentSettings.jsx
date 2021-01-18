@@ -535,39 +535,6 @@ class UmpirePaymentSetting extends Component {
         );
     };
 
-    footerView = (isSubmitting) => {
-        const { umpirePoolData } = this.props.umpirePoolAllocationState;
-        const { paymentSettingsData } = this.state;
-
-        const someNoPoolSettings = !!paymentSettingsData && paymentSettingsData.some(settingsItem => (
-            settingsItem.UmpirePaymentFeeType === 'BY_POOL' && !umpirePoolData.length
-        ));
-
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm px-0">
-                            <div className="comp-buttons-view">
-                                <Button 
-                                    onClick={this.handleSave}
-                                    className="publish-button save-draft-text mr-0" 
-                                    type="primary" 
-                                    htmlType="submit"
-                                    disabled={someNoPoolSettings 
-                                        || this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
-                                        || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
-                                >
-                                    {AppConstants.save}
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     contentView = () => {
         const { isOrganiserView } = this.state;
 
@@ -812,6 +779,39 @@ class UmpirePaymentSetting extends Component {
                 >
                     <p>{AppConstants.divisionAllDivisionMsg}</p>
                 </Modal>
+            </div>
+        );
+    }
+
+    footerView = () => {
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        const { paymentSettingsData } = this.state;
+
+        const someNoPoolSettings = !!paymentSettingsData && paymentSettingsData.some(settingsItem => (
+            settingsItem.UmpirePaymentFeeType === 'BY_POOL' && !umpirePoolData.length
+        ));
+
+        return (
+            <div className="fluid-width">
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm px-0">
+                            <div className="comp-buttons-view">
+                                <Button 
+                                    onClick={this.handleSave}
+                                    className="publish-button save-draft-text mr-0" 
+                                    type="primary" 
+                                    htmlType="submit"
+                                    disabled={someNoPoolSettings 
+                                        || this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
+                                        || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
+                                >
+                                    {AppConstants.save}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
