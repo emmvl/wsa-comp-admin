@@ -22,11 +22,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import {
-    addChildAction,
-    addParentAction,
-    userProfileUpdateAction,
-} from '../../store/actions/userAction/userAction';
+import {userProfileUpdateAction} from '../../store/actions/userAction/userAction';
 import ValidationConstants from "../../themes/validationConstant";
 import {
     getCommonRefData, countryReferenceAction, nationalityReferenceAction,
@@ -1434,8 +1430,6 @@ class UserProfileEdit extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addChildAction,
-        addParentAction,
         userProfileUpdateAction,
         getCommonRefData,
         countryReferenceAction,

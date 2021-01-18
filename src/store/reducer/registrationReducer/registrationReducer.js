@@ -1172,8 +1172,12 @@ function registration(state = initialState, action) {
       let getFormValue = state.registrationFormData;
       let tableValue = action.tableKey;
       let matchIndexKey = action.matchkey;
+      let subKey = action.subKey;
       productsData[matchIndexKey].membershipProductTypes[tableValue].isSelected = action.isSelected;
       productsData[matchIndexKey].membershipProductTypes[tableValue].registrationLock = action.registrationLock;
+      if(!action.isSelected){
+        productsData[matchIndexKey].membershipProductTypes[tableValue][subKey] = null;        
+      }
       let selectedArray = makeFinalProductArr(productsData, state.defaultMembershipProduct);
       getFormValue[0].membershipProductTypes = selectedArray;
       state.selectedMemberShipType = productsData;

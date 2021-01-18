@@ -404,9 +404,6 @@ const teamMembersColumns = [
         title: "Status",
         dataIndex: "paymentStatus",
         key: "paymentStatus",
-        render: (status, record) => (
-            <span>{record.isActive ? status : AppConstants.removed}</span>
-        ),
     },
     {
         title: "Paid Fee",

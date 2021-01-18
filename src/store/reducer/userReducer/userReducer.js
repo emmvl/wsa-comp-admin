@@ -354,6 +354,8 @@ const initialState = {
   possibleMatchesOnLoad: false,
   onTeamUpdateLoad: false,
   teamMemberUpdate: null,
+  teamMemberDeletion: false,
+  addTeamMember: false
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -1271,6 +1273,7 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_SUCCESS:
       state.membershipProductInfo = action.result;
       if (!state.teamMemberRegId) {
+        state.teamMembersSave = deepCopyFunction(teamMembersSaveTemp)
         updateTeamMembersSave(state);
       }
       return {
@@ -1285,14 +1288,21 @@ function userReducer(state = initialState, action) {
       } else if (action.key === "teamMember") {
         if (action.index == undefined) {
           updateTeamMembersSave(state);
+          state.addTeamMember = true;
         } else {
           state.teamMembersSave.teamMembers.splice(action.index, 1);
+          state.teamMemberDeletion = true;
         }
       } else if (action.key === "membershipProductTypes") {
         state.teamMembersSave.teamMembers[action.index].membershipProductTypes[action.subIndex].isChecked = action.data;
       } else if (action.key === "teamMemberRegId") {
         state.teamMemberRegId = action.data;
-      } else {
+      } else if (action.key === "teamMemberDeletion") {
+        state.teamMemberDeletion = false
+      } else if (action.key === "addTeamMember") {
+        state.addTeamMember = false
+      }
+      else {
         state.teamMembersSave.teamMembers[action.index][action.key] = action.data;
       }
       return {
@@ -1336,7 +1346,7 @@ function userReducer(state = initialState, action) {
     case ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO:
       try {
         let reviewData = state.teamMemberRegReviewList;
-        if (action.subKey == "total") {
+        if (action.subkey == "total") {
           let type = action.key;
           let totalVal = reviewData.total.total;
           let transactionVal = 0;

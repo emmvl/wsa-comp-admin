@@ -1713,7 +1713,7 @@ const AppConstants = {
   umpireYourOwnOrganisation: 'Umpire Your Own - Organisation',
   timeBetweenMatches: 'Time between matches',
   maxNumberOfMatches: 'Maximum number of matches',
-  
+
   coachAccreditation: "Coach Accreditation",
   teamMembers: "Team Members",
   addTeamMembers: "Add Team Members",
@@ -1769,7 +1769,9 @@ const AppConstants = {
   removed: "Removed",
   removeFromTeam: "Remove from Team",
   addToTeam: "Add to Team",
-  removeFromTeamPopUpMsg: "Do you want to remove this user from the team?"
+  removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
+
+  yourOrder: "Your Order"
 };
 
 export default AppConstants;
