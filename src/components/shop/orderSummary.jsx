@@ -325,6 +325,7 @@ class OrderSummary extends Component {
                                                     alt=""
                                                     className="export-image"
                                                 />
+                                                ASDASDASDASD
                                                 {AppConstants.export}
                                             </div>
                                         </div>
@@ -510,7 +511,7 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAffiliateToOrganisationAction,
         exportOrderSummaryAction,
-    }, dispatch)
+    }, dispatch);
 }
 
 function mapStatToProps(state) {
