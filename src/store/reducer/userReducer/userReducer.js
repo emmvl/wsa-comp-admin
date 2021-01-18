@@ -355,7 +355,8 @@ const initialState = {
   onTeamUpdateLoad: false,
   teamMemberUpdate: null,
   teamMemberDeletion: false,
-  addTeamMember: false
+  addTeamMember: false,
+  organisationUsersList: [],
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -1391,6 +1392,16 @@ function userReducer(state = initialState, action) {
         onTeamUpdateLoad: false,
         teamMemberUpdate: action.result,
         status: action.status
+      };
+
+    case ApiConstants.API_FILTER_USERS_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_FILTER_USERS_SUCCESS:
+      return {
+          ...state,
+          onLoad: false,
+          organisationUsersList: action.result,
       };
     default:
       return state;

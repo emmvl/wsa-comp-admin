@@ -531,6 +531,14 @@ function teamMemberUpdateAction(data) {
     }
 }
 
+function filterByRelations(data) {
+    return {
+        type: ApiConstants.API_FILTER_USERS_LOAD,
+        data,
+    }
+}
+
+
 export {
     getRoleAction,
     getUreAction,
@@ -599,5 +607,6 @@ export {
     getTeamMembersAction,
     updateReviewInfoAction,
     getTeamMembersReviewAction,
-    teamMemberUpdateAction
+    teamMemberUpdateAction,
+    filterByRelations
 };

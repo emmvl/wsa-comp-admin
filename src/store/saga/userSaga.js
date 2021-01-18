@@ -1217,6 +1217,24 @@ function* updateTeamMembersSaga(action) {
   }
 }
 
+function* getOrganisationUsers(action) {
+    try {
+        const result = yield call(UserAxiosApi.getFilterByRelations, action.data);
+
+        if (result.status === 1 || result.status === 4) {
+            yield put({
+                type: ApiConstants.API_FILTER_USERS_SUCCESS,
+                result: result.status == 1 ? result.result.data : result.result.data.message,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
   yield takeEvery(ApiConstants.API_URE_LOAD, getUreSaga);
@@ -1278,5 +1296,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ADD_PARENT_LOAD, addParentSaga);
   yield takeEvery(ApiConstants.API_POSSIBLE_MATCH_LOAD, findPossibleMergeSaga);
   yield takeEvery(ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD, updateTeamMembersSaga);
+  yield takeEvery(ApiConstants.API_FILTER_USERS_LOAD, getOrganisationUsers);
 
 }

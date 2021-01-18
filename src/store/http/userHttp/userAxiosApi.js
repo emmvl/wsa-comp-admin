@@ -80,6 +80,13 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  async getFilterByRelations(payload) {
+      let url = 'users/filterByRelations';
+
+      return Method.dataPost(url, token, payload);
+  },
+
+
   async affiliateToOrganisation(organisationId, searchText) {
     let userId = await getUserId();
     let url = null

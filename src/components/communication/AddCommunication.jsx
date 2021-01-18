@@ -34,7 +34,7 @@ import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/live
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import {
-    getAffiliatesListingAction, getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction,
+    getAffiliatesListingAction, filterByRelations, getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction,
 } from '../../store/actions/userAction/userAction';
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction';
 
@@ -44,6 +44,7 @@ import {
     setDefaultImageVideoNewAction,
 } from '../../store/actions/communicationAction/communicationAction';
 import CommunicationRichTextEditor from "./components/RichTextEditor";
+import Loader from "../../customComponents/loader";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -789,6 +790,7 @@ class AddCommunication extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
+                <Loader visible={this.props.userState.onImpersonationLoad} />
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
 
                 <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
@@ -822,6 +824,7 @@ function mapDispatchToProps(dispatch) {
         clearListAction,
         getUserDashboardTextualAction,
         updateCommunicationModuleData,
+        filterByRelations,
     }, dispatch);
 }
 
