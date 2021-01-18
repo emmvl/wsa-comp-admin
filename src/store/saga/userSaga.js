@@ -1274,8 +1274,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD, teamMembersSaveSaga);
   yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_LOAD, getTeamMembersSaga);
   yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD, getTeamMembersReviewSaga);
-  yield takeEvery(ApiConstants.API_ADD_CHILD_LOAD, addChildSaga);
-  yield takeEvery(ApiConstants.API_ADD_PARENT_LOAD, addParentSaga);
   yield takeEvery(ApiConstants.API_POSSIBLE_MATCH_LOAD, findPossibleMergeSaga);
   yield takeEvery(ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD, updateTeamMembersSaga);
 
