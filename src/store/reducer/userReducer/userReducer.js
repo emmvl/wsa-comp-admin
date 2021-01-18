@@ -674,7 +674,8 @@ function userReducer(state = initialState, action) {
       return { ...state, onTextualLoad: true, userTextualDasboardListAction: action };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
-      let textualData = action.result;
+      const textualData = action.result;
+
       return {
         ...state,
         onTextualLoad: false,

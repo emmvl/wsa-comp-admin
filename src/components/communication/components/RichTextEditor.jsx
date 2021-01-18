@@ -7,13 +7,10 @@ import history from "../../../util/history";
 const CommunicationRichTextEditor = (props) => {
     const { onChangeEditorData, onEditorStateChange } = props;
 
-    const { editorState } = useState(null);
-
     return (
         <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
             <div className="livescore-editor-news col-sm">
                 <Editor
-                    editorState={editorState}
                     editorClassName="newsDetailEditor"
                     placeholder={AppConstants.communicationBody}
                     onChange={(e) => onChangeEditorData(e.blocks)}

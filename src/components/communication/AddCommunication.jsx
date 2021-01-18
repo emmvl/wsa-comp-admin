@@ -1,9 +1,10 @@
+/* eslint-disable react/sort-comp */
+/* eslint-disable camelcase */
 import React, { Component } from "react";
 import {
     Layout,
     Breadcrumb,
     Select,
-    Input,
     Button,
     DatePicker,
     TimePicker,
@@ -12,65 +13,51 @@ import {
     Spin,
     Checkbox,
     message,
-    AutoComplete,
     Radio,
 } from "antd";
-import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import moment from "moment";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink } from "react-router-dom";
 import htmlToDraft from 'html-to-draftjs';
 
-import InputWithHead from "../../../customComponents/InputWithHead";
-import InnerHorizontalMenu from "../../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../../pages/dashboardLayout";
-import AppConstants from "../../../themes/appConstants";
-import AppImages from "../../../themes/appImages";
-import { getliveScoreScorerList } from '../../../store/actions/LiveScoreAction/liveScoreAction';
-import ValidationConstants from "../../../themes/validationConstant";
-import history from '../../../util/history';
-import Loader from '../../../customComponents/loader';
+import ImageLoader from '../../customComponents/ImageLoader';
+import InputWithHead from "../../customComponents/InputWithHead";
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import DashboardLayout from "../../pages/dashboardLayout";
+import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
+import ValidationConstants from "../../themes/validationConstant";
 
-import { getLiveScoreCompetiton, getKeyForStateWideMessage, getOrganisationData } from '../../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString } from "../../../util/helpers";
-import { liveScoreManagerListAction } from '../../../store/actions/LiveScoreAction/liveScoreManagerAction';
-import ImageLoader from '../../../customComponents/ImageLoader';
+import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage';
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import {
+    getAffiliatesListingAction, getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction,
+} from '../../store/actions/userAction/userAction';
+import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction';
 
-import { getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction } from "../../../store/actions/userAction/userAction";
-import { updateCommunicationModuleData } from '../../../store/actions/communicationAction/communicationAction';
-import CommunicationRichTextEditor from "./RichTextEditor";
-import CommunicationTargets from "./ReceiversSelectView";
+import {
+    refreshCommunicationModuleDataAction,
+    updateCommunicationModuleData,
+    setDefaultImageVideoNewAction,
+} from '../../store/actions/communicationAction/communicationAction';
+import CommunicationRichTextEditor from "./components/RichTextEditor";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-{ /* eslint-disable react/prop-types */ }
+
 class AddCommunication extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedFile: null,
-            // communicationImage: AppImages.circleImage,
+            body: '',
             recipientSelection: AppConstants.selectRecipients,
-            communicationTitle: null,
-            author: '',
-            managerData: [],
-            scorerData: [],
             imageSelection: AppImages.circleImage,
             videoSelection: '',
-            date: null,
-            time: null,
             isEdit: props.location.state ? props.location.state.isEdit : false,
-            load: false,
             visible: false,
-            bodyData: "",
-            image: null,
-            media: null,
-            video: null,
-            key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
-            getDataLoading: false,
-            editorState: EditorState.createEmpty(),
-            authorName: 'abc',
             imageTimeout: null,
             videoTimeout: null,
             screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
@@ -82,48 +69,29 @@ class AddCommunication extends Component {
             roleId: -1,
             genderRefId: -1,
             linkedEntityId: '-1',
-            postalCode: '',
-            searchText: '',
-            deleteLoading: false,
             dobFrom: '-1',
             dobTo: '-1',
-            sortBy: null,
-            sortOrder: null,
-            offsetData: 0,
             postCode: "-1",
-            exsitingValue: undefined,
-            userValue: undefined,
+            allOrg: true,
+            individualOrg: false,
+            allUser: true,
+            selectedRoles: false,
+            individualUsers: false,
         };
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
         let name;
-        if (getLiveScoreCompetiton()) {
-            const AuthorData = JSON.parse(getLiveScoreCompetiton());
-            name = AuthorData.longName;
+        if (getOrganisationData()) {
+            name = getOrganisationData().name;
         } else {
-            name = 'World sport actioa';
-        }
-
-        if (getLiveScoreCompetiton()) {
-            const { id, organisationId } = JSON.parse(getLiveScoreCompetiton());
-            if (this.state.screenKey === 'stateWideMsg') {
-                this.props.getliveScoreScorerList(organisationId, 4);
-                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, organisationId);
-            } else {
-                this.props.getliveScoreScorerList(id, 4);
-                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, 1);
-            }
-        } else {
-            this.props.getliveScoreScorerList(1, 4);
-            this.props.liveScoreManagerListAction(3, 1, 1);
+            name = 'World sport action';
         }
 
         this.setState({ getDataLoading: false, authorName: name });
-        const { addEditcommunication } = this.props.liveScoreCommunicationState;
         this.formRef.current.setFieldsValue({
-            author: addEditcommunication.author ? addEditcommunication.author : name,
+            author: name,
         });
 
         if (this.state.isEdit === true) {
@@ -132,16 +100,32 @@ class AddCommunication extends Component {
                 communicationVideo: this.props.location.state.item.communicationVideo,
                 author: name,
             });
-            this.props.liveScoreAddcommunicationDetailsAction(this.props.location.state.item);
-            this.setInitialValue(this.props.location.state.item, name);
+            this.setInitialFilledValue(this.props.location.state.item, name);
         } else {
-            this.props.liveScoreRefreshcommunicationAction();
+            this.props.refreshCommunicationModuleDataAction();
         }
+
+        this.props.getAffiliatesListingAction({
+            organisationId: getOrganisationData().organisationUniqueKey,
+            affiliatedToOrgId: -1,
+            organisationTypeRefId: -1,
+            statusRefId: -1,
+            paging: { limit: -1, offset: 0 },
+            stateOrganisations: true,
+        });
+    }
+
+    componentDidUpdate() {
+    }
+
+    handleChangeState(field, value) {
+        this.setState({
+            [field]: value,
+        });
     }
 
     onChangeEditorData = (event) => {
-        this.props.liveScoreUpdateCommunicationAction(event, "body");
-        // this.setState({ editorState: event })
+        this.setState({ body: event });
     }
 
     onEditorStateChange = (editorState) => {
@@ -150,14 +134,14 @@ class AddCommunication extends Component {
         });
     };
 
-    setInitialValue(data, author) {
+    setInitialFilledValue(data, author) {
         let authorData = null;
         if (getLiveScoreCompetiton()) {
             authorData = JSON.parse(getLiveScoreCompetiton());
         }
         this.formRef.current.setFieldsValue({
             communication_Title: data.title,
-            author: data.author ? data.author : author || (authorData ? authorData.longName : 'World sport actioa'),
+            author: data.author ? data.author : author || (authorData ? authorData.longName : 'World sport action'),
         });
 
         const finalBody = data ? data.body ? data.body : "" : "";
@@ -173,34 +157,6 @@ class AddCommunication extends Component {
         }
     }
 
-    componentDidUpdate(nextProps) {
-        const communicationState = this.props.liveScoreCommunicationState.addCommunicationResult;
-        const onLoad_2Data = this.props.liveScoreCommunicationState;
-        if (nextProps.communicationState !== communicationState) {
-            if (onLoad_2Data.onLoad_2 === false && this.state.getDataLoading === true) {
-                // debugger
-                const appendData = this.props.liveScoreCommunicationState.addCommunicationResult;
-                if (this.state.isEdit === true) {
-                    if (!appendData.hasOwnProperty('communicationVideo')) {
-                        appendData.communicationVideo = this.props.location.state.item.communicationVideo;
-                    }
-                    if (!appendData.hasOwnProperty('communicationImage')) {
-                        appendData.communicationImage = this.props.location.state.item.communicationImage;
-                    }
-                }
-
-                const { success } = this.props.liveScoreCommunicationState;
-
-                if (success) {
-                    history.push({
-                        pathname: '/matchDaycommunicationView',
-                        state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey },
-                    });
-                }
-            }
-        }
-    }
-
     /// method to show modal view after click
     showModal = () => {
         this.setState({
@@ -209,34 +165,25 @@ class AddCommunication extends Component {
     };
 
     /// method to hide modal view after ok click
-    handleOk = (e) => {
+    handleOk = () => {
         this.setState({
             visible: false,
         });
     };
 
     /// method to hide modal view after click on cancle button
-    handleCancel = (e) => {
+    handleCancel = () => {
         this.setState({
             visible: false,
         });
     };
 
-    onChangeExpiryDate(date) {
-        const { addEditcommunication } = this.props.liveScoreCommunicationState;
-    }
-
-    /// method to change time slots
-    onChangeTime(time, timeString) {
-    }
-
-    // method to setimage
+    /// method to setimage
     setImage = (data) => {
         this.setState({ imageSelection: null, image: null });
-        this.props.liveScoreUpdateCommunicationAction(null, "communicationImage");
+        this.setState({ communicationImage: null });
 
-        const { liveScoreCommunicationState } = this.props;
-        const editData = liveScoreCommunicationState.addEditcommunication;
+        const editData = this.state;
 
         if (data.files[0] !== undefined) {
             if (this.state.isEdit) {
@@ -257,13 +204,11 @@ class AddCommunication extends Component {
         }
     }
 
-    // method to setVideo
+    /// /method to setVideo
     setVideo = (data) => {
-        const { liveScoreCommunicationState } = this.props;
-        const editData = liveScoreCommunicationState.addEditcommunication;
-
-        this.setState({ video: null, videoSelection: '', crossVideoIcon: false });
-        this.props.liveScoreUpdateCommunicationAction(null, "communicationVideo");
+        this.setState({
+            video: null, videoSelection: '', crossVideoIcon: false, communicationVideo: null,
+        });
 
         if (data.files[0] !== undefined) {
             if (data.files[0].size > AppConstants.video_size) {
@@ -281,12 +226,13 @@ class AddCommunication extends Component {
             }, 2000);
 
             if (this.state.isEdit) {
-                editData.communicationVideo = '';
+                this.setState({ communicationVideo: null });
             }
         }
     };
 
-    // method to open file to select video
+    /// method to open file to select video
+    // eslint-disable-next-line class-methods-use-this
     selectVideo() {
         const fileInput = document.getElementById('user-vdo');
         fileInput.setAttribute("type", "file");
@@ -298,13 +244,10 @@ class AddCommunication extends Component {
 
     // On change title
     onChangeTitle(title) {
-        const { liveScoreCommunicationState } = this.props;
-        const editData = liveScoreCommunicationState.addEditcommunication;
-        editData.title = title;
-        this.props.liveScoreUpdateCommunicationAction(editData);
+        this.setState({ title });
     }
 
-    // modal view
+    /// /modal view
     ModalView() {
         return (
             <Modal
@@ -324,7 +267,7 @@ class AddCommunication extends Component {
         );
     }
 
-    // view for breadcrumb
+    /// view for breadcrumb
     headerView = () => {
         const isEdit = this.props.location.state ? this.props.location.state.isEdit : null;
         return (
@@ -385,8 +328,6 @@ class AddCommunication extends Component {
                         mode="tags"
                         placeholder="Select Manager"
                         style={{ width: '100%' }}
-                        // onChange={e => this.venueChange(e)}
-                        // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
                         {managerList.map((item) => (
                             <Option key={`manager_${item.firstName}`} value={item.firstName}>
@@ -400,24 +341,24 @@ class AddCommunication extends Component {
     }
 
     deleteImage() {
-        this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false });
-        this.props.liveScoreUpdateCommunicationAction(null, "communicationImage");
+        this.setState({
+            image: null, imageSelection: AppImages.circleImage, crossImageIcon: false, communicationImage: null,
+        });
     }
 
     deleteVideo() {
-        this.setState({ video: null, videoSelection: '', crossVideoIcon: false });
-        this.props.liveScoreUpdateCommunicationAction(null, "communicationVideo");
+        this.setState({
+            video: null, videoSelection: '', crossVideoIcon: false, communicationVideo: null,
+        });
     }
 
     contentView = () => {
         const {
-            addEditcommunication, communication_expire_date, expire_time, communicationImage, communicationVideo,
-        } = this.props.liveScoreCommunicationState;
-        const editData = addEditcommunication;
-        const expiryDate = communication_expire_date;
-        const expiryTime = expire_time;
-        const expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
-        const stateWideMsg = getKeyForStateWideMessage();
+            expiryDate, expiryTime, communicationImage, communicationVideo,
+        } = this.state;
+        const editData = this.state;
+        const expiryTime_format = expiryTime ? moment(expiryTime).format("HH:mm") : null;
+
         return (
             <div className="content-view pt-4">
                 <Form.Item name="communication_Title" rules={[{ required: true, message: ValidationConstants.communicationValidation[0] }]}>
@@ -426,7 +367,7 @@ class AddCommunication extends Component {
                         heading={AppConstants.communicationTitle}
                         placeholder={AppConstants.enterCommunicationTitle}
                         name="communicationTitle"
-                        onChange={(event) => this.props.liveScoreUpdateCommunicationAction(captializedString(event.target.value), "title")}
+                        onChange={(event) => this.setState({ title: captializedString(event.target.value) })}
                         value={editData.title}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
                             communication_Title: captializedString(i.target.value),
@@ -434,9 +375,7 @@ class AddCommunication extends Component {
                     />
                 </Form.Item>
                 <InputWithHead
-                    // required=""
                     heading={AppConstants.communicationBody}
-                    // value={editData.body}
                 />
 
                 <CommunicationRichTextEditor
@@ -450,7 +389,7 @@ class AddCommunication extends Component {
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
-                        onChange={(event) => this.props.liveScoreUpdateCommunicationAction(captializedString(event.target.value), "author")}
+                        onChange={(event) => this.setState({ author: captializedString(event.target.value) })}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
                             author: captializedString(i.target.value),
                         })}
@@ -480,6 +419,7 @@ class AddCommunication extends Component {
                                     }, 2000);
                                 }}
                                 onClick={(event) => {
+                                    // eslint-disable-next-line no-param-reassign
                                     event.target.value = null;
                                 }}
                             />
@@ -507,7 +447,7 @@ class AddCommunication extends Component {
                                 timeout={this.state.videoTimeout}
                                 video
                                 src={communicationVideo || this.state.videoSelection}
-                                poster={(communicationVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
+                                poster={(communicationVideo || this.state.videoSelection !== '') ? '' : AppImages.circleImage}
                             />
                         </div>
                         <input
@@ -518,6 +458,7 @@ class AddCommunication extends Component {
                                 this.setVideo(event.target, "evt.target");
                             }}
                             onClick={(event) => {
+                                // eslint-disable-next-line no-param-reassign
                                 event.target.value = null;
                             }}
                         />
@@ -540,18 +481,17 @@ class AddCommunication extends Component {
                     </div>
                 </div>
 
+                {/* communication expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.communicationExpiryDate} />
                         <DatePicker
-                            // size="large"
                             style={{ width: '100%' }}
-                            onChange={(date) => this.props.liveScoreUpdateCommunicationAction(date, "expire_date")}
+                            onChange={(date) => this.setState({ expiryDate: date })}
                             format="DD-MM-YYYY"
                             value={expiryDate ? moment(expiryDate) : ''}
                             showTime={false}
                             placeholder="dd-mm-yyyy"
-                            name="registrationOepn"
                         />
                     </div>
                     <div className="col-sm">
@@ -560,20 +500,19 @@ class AddCommunication extends Component {
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}
                             format="HH:mm"
-                            value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
-                            onChange={(time) => this.props.liveScoreUpdateCommunicationAction(time, "expire_time")}
-                            onBlur={(e) => this.props.liveScoreUpdateCommunicationAction(e.target.value && moment(e.target.value, "HH:mm"), 'expire_time')}
+                            value={expiryTime_format !== null && moment(expiryTime_format, "HH:mm")}
+                            onChange={(time) => this.setState({ expireTime: time })}
+                            onBlur={
+                                (e) => {
+                                    this.setState({ expireTime: e.target.value && moment(e.target.value, "HH:mm") });
+                                }
+                            }
                             placeholder="Select Time"
                         />
                     </div>
                 </div>
 
-                <CommunicationTargets
-                    userSearchApi={this.userSearchApi}
-                    updateCommunicationModuleData={updateCommunicationModuleData}
-                    getAffiliateToOrganisationAction={getAffiliateToOrganisationAction}
-                    {...this.props.communicationModuleState}
-                />
+                {this.stateWideMsgView()}
             </div>
         );
     };
@@ -611,50 +550,245 @@ class AddCommunication extends Component {
         this.props.getUserDashboardTextualAction(filter);
     }
 
+    stateWideMsgView() {
+        const {
+            allOrg,
+            individualOrg,
+            individualUsers,
+            allUser,
+            selectedRoles,
+            userName,
+            orgName,
+        } = this.state;
+
+        const {
+            impersonationList, userDashboardTextualList, onLoadSearch, onTextualLoad,
+        } = this.props.userState;
+
+        const affiliateToData = isArrayNotEmpty(impersonationList) ? impersonationList : [];
+        const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
+
+        const selctedRolArr = [
+            { label: 'Managers', value: "manager" },
+            { label: 'Coaches', value: "coaches" },
+            { label: 'Scorers', value: "scorers" },
+            { label: 'Players', value: "players" },
+            { label: 'Umpires', value: "umpires" },
+        ];
+
+        return (
+            <div>
+                <InputWithHead heading={`${AppConstants.organisation}(s)`} />
+                <div className="d-flex flex-column">
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allOrg: true,
+                                individualOrg: false,
+                            });
+                        }}
+                        checked={allOrg}
+                    >
+                        {AppConstants.allOrganisation}
+                    </Radio>
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allOrg: false,
+                                individualOrg: true,
+                            });
+                        }}
+                        checked={individualOrg}
+                    >
+                        {`${AppConstants.individualOrganisation}(s)`}
+                    </Radio>
+                </div>
+
+                {individualOrg && (
+                    <div className="mt-3">
+
+                        <Select
+                            mode="multiple"
+                            className="ml-5"
+                            style={{ width: '97%', height: '44px' }}
+                            placeholder={AppConstants.selectOrganisation}
+                            onChange={(item, option) => {
+                                const itemOrgName = option.children;
+                                const orgId = option.key;
+                                this.setState({
+                                    orgId,
+                                    orgName: itemOrgName,
+                                });
+                            }}
+                            filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
+                            value={orgName || undefined}
+                        >
+                            {
+                                affiliateToData.length > 0 && affiliateToData.map((org, index) => (
+                                    <Option key={`${org.organisationId}_${index}`} value={org.organisationId}>
+                                        {org.name}
+                                    </Option>
+                                ))
+                            }
+                        </Select>
+
+                    </div>
+                )}
+
+                <InputWithHead heading={AppConstants.recipients} />
+                <div
+                    className="mt-3"
+                    style={{ display: "flex", alignItems: "center" }}
+                >
+                    <Radio
+                        onChange={() => {
+                            this.setState({
+                                allUser: true,
+                                selectedRoles: false,
+                                individualUsers: false,
+                            });
+                        }}
+                        checked={allUser}
+                    >
+                        All Users
+                    </Radio>
+                </div>
+
+                <div
+                    style={{ display: "flex", alignItems: "center" }}
+                >
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allUser: false,
+                                selectedRoles: true,
+                                individualUsers: false,
+                            });
+                        }}
+                        checked={selectedRoles}
+                    >
+                        Selected Role(s)
+                    </Radio>
+
+                </div>
+
+                <div className="col-sm">
+                    {selectedRoles && (
+                        <Checkbox.Group>
+
+                            {selctedRolArr.map((item) => (
+                                <div key={item.value}>
+                                    <Checkbox className="single-checkbox-radio-style pt-4 ml-0" value={item.value}>
+                                        {item.label}
+                                    </Checkbox>
+                                </div>
+                            ))}
+
+                        </Checkbox.Group>
+                    )}
+                </div>
+
+                <div
+                    style={{ display: "flex", alignItems: "center" }}
+                >
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allUser: false,
+                                selectedRoles: false,
+                                individualUsers: true,
+                            });
+                        }}
+                        checked={individualUsers}
+                    >
+                        Individual User(s)
+                    </Radio>
+                </div>
+
+                {individualUsers && (
+                    <div className="mt-3">
+
+                        <Select
+                            className="ml-5"
+                            mode="multiple"
+                            style={{ width: '97%', height: '44px' }}
+                            placeholder="Select User"
+                            filterOption={false}
+                            onChange={(item, option) => {
+                                const itemUserName = option.children;
+                                const userId = option.value;
+                                this.setState({
+                                    userId,
+                                    userName: itemUserName,
+                                });
+                            }}
+                            notFoundContent={onTextualLoad === true ? <Spin size="small" /> : null}
+                            onSearch={(value) => {
+                                this.setState({ userValue: value });
+                                if (value && value.length > 2) {
+                                    this.userSearchApi(value);
+                                }
+                            }}
+                            value={userName || undefined}
+                        >
+                            {
+                                userData.length > 0 && userData.map((item) => (
+                                    <Option key={item.userId} value={item.userId}>
+                                        {item.name}
+                                    </Option>
+                                ))
+                            }
+                        </Select>
+
+                    </div>
+                )}
+
+            </div>
+        );
+    }
+
     onSaveButton = () => {
         this.setState({ getDataLoading: true });
     }
 
-    footerView = (isSubmitting) => {
-        const { liveScoreCommunicationState } = this.props;
-        const editData = liveScoreCommunicationState.addEditcommunication;
-
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm pl-3">
-                            <div className="reg-add-save-button">
-                                <NavLink
-                                    to={{
-                                        pathname: "/CommunicationList",
-                                        state: { screenKey: this.state.screenKey },
-                                    }}
-                                >
-                                    <Button className="cancelBtnWidth" type="cancel-button">
-                                        {AppConstants.cancel}
-                                    </Button>
-                                </NavLink>
-                            </div>
-                        </div>
-                        <div className="col-sm pr-3">
-                            <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
-                                    {AppConstants.next}
+    footerView = (isSubmitting) => (
+        <div className="fluid-width">
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm pl-3">
+                        <div className="reg-add-save-button">
+                            <NavLink
+                                to={{
+                                    pathname: "/CommunicationList",
+                                    state: { screenKey: this.state.screenKey },
+                                }}
+                            >
+                                <Button className="cancelBtnWidth" type="cancel-button">
+                                    {AppConstants.cancel}
                                 </Button>
-                            </div>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="col-sm pr-3">
+                        <div className="comp-buttons-view">
+                            <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                {AppConstants.next}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     render() {
-        const stateWideMsg = getKeyForStateWideMessage();
         return (
             <div className="fluid-width default-bg">
-                <Loader visible={this.props.liveScoreCommunicationState.onLoad_2} />
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
 
                 <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
@@ -679,6 +813,8 @@ class AddCommunication extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        getAffiliatesListingAction,
+        refreshCommunicationModuleDataAction,
         getliveScoreScorerList,
         liveScoreManagerListAction,
         setDefaultImageVideoNewAction,
@@ -691,7 +827,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        liveScoreCommunicationState: state.liveScoreCommunicationState,
         liveScoreScorerState: state.LiveScoreScorerState,
         liveScoreMangerState: state.LiveScoreMangerState,
         liveScoreState: state.LiveScoreState,

@@ -175,7 +175,7 @@ import { routeAdminRole, routeUmpireRole, routeFinanceRole } from './routeAccess
 import NotFound from './404';
 
 import CommunicationList from 'components/communication/communicationList';
-import AddCommunication from 'components/communication/addCommunication';
+import AddCommunication from 'components/communication/AddCommunication';
 import CommunicationView from 'components/communication/communictionView';
 import MergeUserMatches from 'components/user/mergeUserMatches'
 import MergeUserDetail from 'components/user/mergeUserDetail'
@@ -1018,7 +1018,7 @@ class Routes extends React.Component {
 
                 <Route path="/" component={lazyLoad(NotFound)} />
 
-               
+
 
                 <Redirect from="*" to="/404" />
             </Switch>

@@ -1,14 +1,15 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 const initialState = {
+    addEditCommunication: {},
     onLoad: false,
     error: null,
     result: [],
     status: 0,
-    umpireComptitionList: [],
+    communicationList: [],
     allOrg: false,
-    indivisualOrg: false,
-    indivisualUsers: false,
+    individualOrg: false,
+    individualUsers: false,
     allUser: false,
     selectedRoles: false,
     onTextualLoad: false,
@@ -18,64 +19,63 @@ const initialState = {
     orgName: "",
     userName: "",
     affiliateTo: [],
-    onLoadSearch: false
+    onLoadSearch: false,
 };
 function communicationModuleState(state = initialState, action) {
-
     switch (action.type) {
         case ApiConstants.API_COMMUNICATION_LIST_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_COMMUNICATION_LIST_SUCCESS:
-            let result = action.result
+            const { result } = action;
             return {
                 ...state,
                 onLoad: false,
-                umpireComptitionList: result,
-                status: action.status
+                communicationList: result,
+                status: action.status,
             };
 
         case ApiConstants.API_UPDATE_COMMUNICATION_DATA:
-            let data = action.data.data
-            let key = action.data.key
-            if (key == 'allOrg' || key == 'indivisualOrg') {
-                if (key == 'allOrg') {
-                    state[key] = data
-                    state['indivisualOrg'] = false
-                    state.orgId = null
-                    state.orgName = ""
+            const { data } = action.data;
+            const { key } = action.data;
+            if (key === 'allOrg' || key === 'individualOrg') {
+                if (key === 'allOrg') {
+                    state[key] = data;
+                    state.individualOrg = false;
+                    state.orgId = null;
+                    state.orgName = "";
                 }
-                if (key == 'indivisualOrg') {
-                    state[key] = data
-                    state['allOrg'] = false
-                    state.affiliateTo = []
+                if (key === 'individualOrg') {
+                    state[key] = data;
+                    state.allOrg = false;
+                    state.affiliateTo = [];
                 }
-            } else if (key === 'allUser' || key === 'selectedRoles' || key === 'indivisualUsers') {
+            } else if (key === 'allUser' || key === 'selectedRoles' || key === 'individualUsers') {
                 if (key === 'allUser') {
-                    state[key] = data
-                    state['selectedRoles'] = false
-                    state['indivisualUsers'] = false
-                    state.userId = null
-                    state.userName = ""
+                    state[key] = data;
+                    state.selectedRoles = false;
+                    state.individualUsers = false;
+                    state.userId = null;
+                    state.userName = "";
                 }
                 if (key === 'selectedRoles') {
-                    state[key] = data
-                    state['allUser'] = false
-                    state['indivisualUsers'] = false
-                    state.userId = null
-                    state.userName = ""
+                    state[key] = data;
+                    state.allUser = false;
+                    state.individualUsers = false;
+                    state.userId = null;
+                    state.userName = "";
                 }
-                if (key === 'indivisualUsers') {
-                    state[key] = data
-                    state['allUser'] = false
-                    state['selectedRoles'] = false
-                    state.userDashboardTextualList = []
+                if (key === 'individualUsers') {
+                    state[key] = data;
+                    state.allUser = false;
+                    state.selectedRoles = false;
+                    state.userDashboardTextualList = [];
                 }
             } else {
-                let subKey = action.data.subKey
-                let selectedName = action.data.selectedName
-                state[key] = data
-                state[subKey] = selectedName
+                const { subKey } = action.data;
+                const { selectedName } = action.data;
+                state[key] = data;
+                state[subKey] = selectedName;
             }
             return {
                 ...state,
@@ -86,14 +86,14 @@ function communicationModuleState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
         case ApiConstants.API_COMMUNICATION_LIST_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
 
         default:

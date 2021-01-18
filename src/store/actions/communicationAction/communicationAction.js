@@ -1,15 +1,38 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-//get communication List Action
-function getCommunicationListAction(orgUniquekey) {
+function communicationListAction(competitionId) {
     const action = {
         type: ApiConstants.API_COMMUNICATION_LIST_LOAD,
-        orgUniquekey,
+        competitionId,
     };
     return action;
 }
 
-//get communication List Action
+function addCommunicationAction(addNewItemDetail) {
+    const action = {
+        type: ApiConstants.API_ADD_COMMUNICATION,
+        addNewItemDetail,
+    };
+
+    return action;
+}
+
+function addCommunicationModuleDataAction(data) {
+    const action = {
+        type: ApiConstants.API_ADD_COMMUNICATION_LOAD,
+        data,
+    };
+    return action;
+}
+
+function refreshCommunicationModuleDataAction() {
+    const action = {
+        type: ApiConstants.API_REFRESH_COMMUNICATION_DATA,
+    };
+    return action;
+}
+
+// get communication List Action
 function updateCommunicationModuleData(data) {
     const action = {
         type: ApiConstants.API_UPDATE_COMMUNICATION_DATA,
@@ -18,7 +41,41 @@ function updateCommunicationModuleData(data) {
     return action;
 }
 
-export {
-    getCommunicationListAction,
-    updateCommunicationModuleData
+// Communication notification on click publish and notify
+function communicationNotificationAction(data, value, screenKey) {
+    const action = {
+        type: ApiConstants.API_COMMUNICATION_NOTIFICATION_LOAD,
+        data,
+        value,
+        screenKey,
+    };
+    return action;
 }
+
+// delete Communication data
+function deleteCommunicationAction(id) {
+    const action = {
+        type: ApiConstants.API_DELETE_COMMUNICATION_LOAD,
+        id,
+    };
+    return action;
+}
+
+function setDefaultImageVideoNewAction(data) {
+    const action = {
+        type: ApiConstants.API_DEFAULT_COMMUNICATION_IMAGE_VIDEO,
+        payload: data,
+    };
+    return action;
+}
+
+export {
+    communicationListAction,
+    addCommunicationAction,
+    addCommunicationModuleDataAction,
+    refreshCommunicationModuleDataAction,
+    communicationNotificationAction,
+    deleteCommunicationAction,
+    setDefaultImageVideoNewAction,
+    updateCommunicationModuleData,
+};
