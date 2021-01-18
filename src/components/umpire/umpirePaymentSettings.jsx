@@ -668,7 +668,7 @@ class UmpirePaymentSetting extends Component {
                             {hasSettings && this.feesView(sectionData, sectionDataIndex)}
                         </div>
                         ))}
-                        {selectedDivisions.length < allowedDivisionList.length
+                        {!!allowedDivisionList && selectedDivisions.length < allowedDivisionList.length
                             && hasSettings 
                             && (
                                 <div className="row mb-5 position-absolute">
