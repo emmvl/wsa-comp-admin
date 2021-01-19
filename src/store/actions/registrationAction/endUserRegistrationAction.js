@@ -1,11 +1,10 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-
-/////save end user registration
+/// //save end user registration
 function saveEndUserRegistrationAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_END_USER_REGISTRATION_LOAD,
-        payload
+        payload,
     };
     return action;
 }
@@ -15,35 +14,36 @@ function updateEndUserRegisrationAction(data, key) {
     const action = {
         type: ApiConstants.UPDATE_END_USER_REGISTRATION,
         updatedData: data,
-        key
+        key,
     };
     return action;
 }
 
-/////Organisation Registration Registration Settings
+/// //Organisation Registration Registration Settings
 function orgRegistrationRegSettingsEndUserRegAction(payload) {
     const action = {
         type: ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_LOAD,
-        payload
+        payload,
     };
     return action;
 }
 
-/////End User Registration Membership Products
+/// //End User Registration Membership Products
 function membershipProductEndUserRegistrationAction(payload) {
     const action = {
         type: ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_LOAD,
-        payload
+        payload,
     };
     return action;
 }
 
-/////end user registration Dashboard List
+/// //end user registration Dashboard List
 function endUserRegDashboardListAction(payload, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD,
         payload,
-        sortBy, sortOrder
+        sortBy,
+        sortOrder,
     };
     return action;
 }
@@ -51,13 +51,19 @@ function endUserRegDashboardListAction(payload, sortBy, sortOrder) {
 function regTransactionUpdateAction(payload) {
     const action = {
         type: ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD,
-        payload: payload
+        payload,
     };
 
     return action;
 }
 
-
+function exportRegistrationAction(params) {
+    const action = {
+        type: ApiConstants.API_GET_EXPORT_REGISTRATION_LOAD,
+        params,
+    };
+    return action;
+}
 
 export {
     saveEndUserRegistrationAction,
@@ -65,5 +71,6 @@ export {
     orgRegistrationRegSettingsEndUserRegAction,
     membershipProductEndUserRegistrationAction,
     endUserRegDashboardListAction,
-    regTransactionUpdateAction
-}
+    regTransactionUpdateAction,
+    exportRegistrationAction,
+};

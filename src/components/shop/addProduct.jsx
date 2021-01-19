@@ -842,7 +842,7 @@ class AddProduct extends Component {
                             >
                                 <InputNumber
                                     style={{ width: 90 }}
-                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    formatter={value => `${value}`.replace(/\B(?=(\d{4})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
                                     onChange={(quantity) => this.props.onChangeProductDetails(
                                         quantity,
@@ -851,6 +851,7 @@ class AddProduct extends Component {
                                     placeholder={AppConstants.quantity}
                                     min={0}
                                     type="number"
+                                    value={productDetailData.quantity}
                                     disabled={this.state.allDisabled}
                                 />
                             </Form.Item>
@@ -983,7 +984,7 @@ class AddProduct extends Component {
                                             <span className="input-heading">{AppConstants.quantity}</span>
                                             <InputNumber
                                                 style={{ width: 90 }}
-                                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                formatter={(value) => `${value}`.replace(/\B(?=(\d{4})+(?!\d))/g, ',')}
                                                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                                                 placeholder={AppConstants.quantity}
                                                 min={0}
