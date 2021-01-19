@@ -450,7 +450,7 @@ class UmpirePaymentSetting extends Component {
             .filter(item => !item.hasSettings && !!item.divisions.length);
         
         const umpirePaymentSettingsArray = paymentSettingsDataCopy
-            .filter(item => !!item.hasSettings && !!item.divisions.length);
+            .filter(item => !!item.hasSettings && (!!item.divisions.length || !!item.allDivisions));
 
         this.modifyPostArray(affiliateSettingArray);
         this.modifyPostArray(umpirePaymentSettingsArray);
