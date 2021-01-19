@@ -38,8 +38,6 @@ let UmpireAxiosApi = {
     umpirePaymentSettingsPost(data) {
         const competitionId = JSON.stringify(data.competitionId);
         const organisationId = JSON.stringify(data.organisationId);
-        const type = JSON.stringify(data.type);
-        // console.log('type', type)
         const url = `/competitions/${competitionId}/umpires/payment/settings/${data.type}?organisationId=${organisationId}`
         return Method.dataPost(url, token, data.body);
     }

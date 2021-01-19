@@ -803,8 +803,6 @@ class UmpirePaymentSetting extends Component {
     }
 
     render() {
-        // console.log('this.props.umpirePoolAllocationState.onLoad', this.props.umpirePoolAllocationState.onLoad);
-
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
