@@ -599,7 +599,7 @@ class UmpirePaymentSetting extends Component {
                             
                             <Select
                                 mode="multiple"
-                                placeholder="Select"
+                                placeholder={AppConstants.select}
                                 style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                                 onChange={divisions => this.handleChangeSettings(sectionDataIndex, 'divisions', divisions, sectionData)}
                                 value={(boxData.allDivisions ? allowedDivisionList : boxData.divisions).map(division => division.id)}
