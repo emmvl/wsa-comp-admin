@@ -2869,12 +2869,14 @@ class UserModulePersonalDetail extends Component {
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            {this.state.registrationTeam.organisationUniqueKey == organistaionId && 
+                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove ?
                                 <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
                                     +
                                     {' '}
                                     {AppConstants.addTeamMembers}
                                 </div>
+                                :
+                                null
                             }
                         </div>
                         <div className="user-module-row-heading font-18 mt-2">
