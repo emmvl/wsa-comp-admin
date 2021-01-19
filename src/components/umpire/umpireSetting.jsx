@@ -104,7 +104,7 @@ class UmpireSetting extends Component {
                     }
                 });
 
-                const { isOrganiser } = competitionList.find(competition => competition.id === firstComp);
+                const isOrganiser = competitionList.find(competition => competition.id === firstComp)?.isOrganiser;
 
                 this.setState({ 
                     competitionList, 
