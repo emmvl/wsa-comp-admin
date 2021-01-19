@@ -703,7 +703,7 @@ async function stripeTokenHandler(token, props, selectedOption, setClientKey, se
         url = "/api/payments/createteammemberpayments";
     }
     else {
-        url = "/api/payments/createteammemberpayments/directdebit";
+        url = "/createteampayments/directdebit";
     }
 
     let body;
