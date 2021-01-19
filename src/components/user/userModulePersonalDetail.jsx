@@ -1607,6 +1607,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
+                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -1937,6 +1938,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
+                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
