@@ -192,6 +192,17 @@ let AxiosApi = {
 
         return Method.dataPost(url, token, body);
     },
+
+    async exportPayoutTransaction(payoutId) {
+        console.log("call export exportPayoutTransaction");
+        const orgItem = await getOrganisationData();
+        const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        const body = { payoutId, organisationUniqueKey };
+        const url = '/api/payments/transactions/export';
+
+        return Method.dataPostDownload(url, token, 'payout-transaction', body);
+    },
+
     async exportPaymentApi(key, year, dateFrom, dateTo) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
