@@ -226,18 +226,19 @@ class UmpirePaymentSetting extends Component {
         this.setState({ paymentSettingsData: newSettingsData, selectedDivisions: newSelectedDivisions });
     }
 
-    handleChangeFeesRadio = (e, sectionData, sectionDataIndex, key) => {
+    handleChangeFeesRadio = (sectionData, sectionDataIndex, key) => {
         const { paymentSettingsData } = this.state;
 
         const sectionDataCopy = JSON.parse(JSON.stringify(sectionData));
-        let { byBadge, byPool } = sectionDataCopy[sectionDataIndex];
+        const boxData = sectionDataCopy[sectionDataIndex];
+        let { byBadge, byPool } = boxData;
 
         if (key === 'byBadge') {
             byPool.length = 0;
-            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = 'BY_BADGE';
+            boxData.UmpirePaymentFeeType = 'BY_BADGE';
         } else {
             byBadge.length = 0;
-            sectionDataCopy[sectionDataIndex].UmpirePaymentFeeType = 'BY_POOL';
+            boxData.UmpirePaymentFeeType = 'BY_POOL';
         }
 
         const newPaymentSettingsData = [ ...sectionDataCopy, ...paymentSettingsData.filter(item => !item.hasSettings) ]
@@ -652,7 +653,7 @@ class UmpirePaymentSetting extends Component {
                 <span className='text-heading-large pt-3'>{AppConstants.fees}</span>
                 <div className="d-flex flex-column">
                     <Radio
-                        onChange={e => this.handleChangeFeesRadio(e, sectionData, sectionDataIndex, 'byBadge')}
+                        onChange={() => this.handleChangeFeesRadio(sectionData, sectionDataIndex, 'byBadge')}
                         checked={UmpirePaymentFeeType === 'BY_BADGE'}
                         className="p-0"
                     >
@@ -669,25 +670,28 @@ class UmpirePaymentSetting extends Component {
                     )}
 
                     <Radio
-                        onChange={e => this.handleChangeFeesRadio(e, sectionData, sectionDataIndex, 'byPool')}
+                        onChange={() => this.handleChangeFeesRadio(sectionData, sectionDataIndex, 'byPool')}
                         checked={UmpirePaymentFeeType === 'BY_POOL'}
                         className="p-0 mt-4"
                     >
                         {AppConstants.byPool}
                     </Radio>
-                    {UmpirePaymentFeeType === 'BY_POOL' && !!umpirePoolData.length && (
-                        <div>
-                            {umpirePoolData.map((poolDataItem, i) => (
-                                <div key={"poolDataItem" + i}>
-                                    {this.ratesView('byPool', poolDataItem, sectionData, sectionDataIndex)}
+                    {UmpirePaymentFeeType === 'BY_POOL' && (
+                        <>
+                            {!!umpirePoolData.length ? 
+                                <div>
+                                    {umpirePoolData.map((poolDataItem, i) => (
+                                        <div key={"poolDataItem" + i}>
+                                            {this.ratesView('byPool', poolDataItem, sectionData, sectionDataIndex)}
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                    {UmpirePaymentFeeType === 'BY_POOL' && !umpirePoolData.length && (
-                        <div className="mt-4 error-message-inside">
-                            {AppConstants.noPoolMsg}
-                        </div>
+                                :
+                                <div className="mt-4 error-message-inside">
+                                    {AppConstants.noPoolMsg}
+                                </div>
+                            }
+                        </>
                     )}
                 </div>
             </div>
