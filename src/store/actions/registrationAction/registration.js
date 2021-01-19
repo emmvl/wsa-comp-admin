@@ -1,17 +1,17 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-//////get the membership fee list in registration
+/// ///get the membership fee list in registration
 function regMembershipListAction(offset, yearRefId, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD,
         offset,
         yearRefId,
         sortBy,
-        sortOrder
+        sortOrder,
     };
 }
 
-//////delete the membership list product
+/// ///delete the membership list product
 function regMembershipListDeleteAction(productId) {
     return {
         type: ApiConstants.API_REG_MEMBERSHIP_LIST_DELETE_LOAD,
@@ -19,7 +19,7 @@ function regMembershipListDeleteAction(productId) {
     };
 }
 
-//////get the membership  product details
+/// ///get the membership  product details
 function regGetMembershipProductDetailsAction(productId) {
     return {
         type: ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_LOAD,
@@ -27,30 +27,30 @@ function regGetMembershipProductDetailsAction(productId) {
     };
 }
 
-//////save the membership  product details
+/// ///save the membership  product details
 function regSaveMembershipProductDetailsAction(payload) {
     return {
         type: ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT__LOAD,
-        payload
+        payload,
     };
 }
 
-///////////get the default membership  product types in registartion membership fees
+/// ////////get the default membership  product types in registartion membership fees
 function regGetDefaultMembershipProductTypesAction() {
     return {
-        type: ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD
+        type: ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD,
     };
 }
 
-//////save the membership product fees
+/// ///save the membership product fees
 function regSaveMembershipProductFeesAction(payload) {
     return {
         type: ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_FEES__LOAD,
-        payload
+        payload,
     };
 }
 
-//////save the registration form
+/// ///save the registration form
 function regSaveRegistrationForm(payload) {
     return {
         type: ApiConstants.API_REG_FORM_LOAD,
@@ -75,36 +75,36 @@ function updateRegistrationForm(updatedData, key, subKey, membershipProductTypeI
         key,
         subKey,
         membershipProductTypeIndex,
-        getMembershipproductItem
+        getMembershipproductItem,
     };
 }
 
-//////save the membership product discount
+/// ///save the membership product discount
 function regSaveMembershipProductDiscountAction(payload) {
     return {
         type: ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_DISCOUNT__LOAD,
-        payload
+        payload,
     };
 }
 
-//////chnage the membership fees table data
+/// ///chnage the membership fees table data
 function membershipFeesTableInputChangeAction(value, record, key) {
     return {
         type: ApiConstants.CHANGE_MEMBERSHIP_FEES_TABLE_INPUT,
         value,
         record,
-        key
+        key,
     };
 }
 
-/////get the membership product discount Types
+/// //get the membership product discount Types
 function membershipProductDiscountTypesAction() {
     return {
-        type: ApiConstants.API_MEMBERSHIP_PRODUCT_DISCOUNT_TYPE__LOAD
+        type: ApiConstants.API_MEMBERSHIP_PRODUCT_DISCOUNT_TYPE__LOAD,
     };
 }
 
-///////add new membership type in the membership fees section
+/// ////add new membership type in the membership fees section
 function addNewMembershipTypeAction(newObject) {
     return {
         type: ApiConstants.ADD_NEW_MEMBERSHIP_TYPE,
@@ -112,7 +112,7 @@ function addNewMembershipTypeAction(newObject) {
     };
 }
 
-//////////clearing particular reducer data
+/// ///////clearing particular reducer data
 function clearReducerDataAction(dataName) {
     return {
         type: ApiConstants.REG_CLEARING_PARTICULAR_REDUCER_DATA,
@@ -120,16 +120,16 @@ function clearReducerDataAction(dataName) {
     };
 }
 
-///add another discount in membership fees section
+/// add another discount in membership fees section
 function addRemoveDiscountAction(keyAction, index) {
     return {
         type: ApiConstants.ADD_ANOTHER_DISCOUNT_MEMBERSHIP_FEES,
         keyAction,
-        index
+        index,
     };
 }
 
-///updated discount in membership fees section
+/// updated discount in membership fees section
 function updatedDiscountDataAction(discountData) {
     return {
         type: ApiConstants.UPDATE_DISCOUNT_DATA_MEMBERSHIP_FEES,
@@ -137,17 +137,17 @@ function updatedDiscountDataAction(discountData) {
     };
 }
 
-////membership fees radio apply fees on change
+/// /membership fees radio apply fees on change
 function membershipFeesApplyRadioAction(radioApplyId, feesIndex, key) {
     return {
         type: ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES,
         radioApplyId,
         feesIndex,
-        key
+        key,
     };
 }
 
-////age mandate onchange selection checkbox
+/// /age mandate onchange selection checkbox
 function onChangeAgeCheckBoxAction(index, checkedValue, keyword) {
     return {
         type: ApiConstants.ON_CHANGE_SELECTION_MEM_TYPE_AGE_MANDATE_CHECKBOX,
@@ -157,7 +157,7 @@ function onChangeAgeCheckBoxAction(index, checkedValue, keyword) {
     };
 }
 
-///////onchange date data in age restriction in the membership types
+/// ////onchange date data in age restriction in the membership types
 function updatedMembershipTypeDataAction(data) {
     return {
         type: ApiConstants.ON_CHANGE_DATE_AGE_MANDATE_MEMBERSHIP_TYPES,
@@ -175,15 +175,15 @@ function changeMembershipProduct(selectedCategory) {
 function getMembershipproduct(competition) {
     return {
         type: ApiConstants.API_REG_FORM_MEMBERSHIP_PRODUCT_LOAD,
-        competition
+        competition,
     };
 }
 
-////remove custom membership type from the membership fees
+/// /remove custom membership type from the membership fees
 function removeCustomMembershipTypeAction(index) {
     return {
         type: ApiConstants.REMOVE_CUSTOM_MEMBERSHIP_FEES_TYPE,
-        index
+        index,
     };
 }
 
@@ -210,7 +210,7 @@ function updateRegistrationLock(matchValue, table_key, selected, value) {
         matchValue,
         table_key,
         isSelected: value ? selected : true,
-        registrationLock: value !== null ? !value : true
+        registrationLock: value !== null ? !value : true,
     };
 }
 
@@ -219,7 +219,7 @@ function updateDisclamerText(value, index, key) {
         type: ApiConstants.REG_FORM_UPDATE_DISCLAIMER_TEXT,
         value,
         index,
-        key
+        key,
     };
 }
 
@@ -227,7 +227,7 @@ function isCheckedVisible(checked, key) {
     return {
         type: ApiConstants.REG_FORM_CHECKED_VISIBLE,
         checked,
-        key
+        key,
     };
 }
 
@@ -235,11 +235,11 @@ function isReplyCheckVisible(checked, key) {
     return {
         type: ApiConstants.REG_FORM_REPLY_CHECKED_VISIBLE,
         checked,
-        key
+        key,
     };
 }
 
-/////get the divisions list on the basis of year and competition
+/// //get the divisions list on the basis of year and competition
 function getDivisionsListAction(yearRefId, competitionId, sourceModule) {
     return {
         type: ApiConstants.API_GET_DIVISIONS_LIST_ON_YEAR_AND_COMPETITION_LOAD,
@@ -254,45 +254,45 @@ function getTeamRegistrationsAction(payload, sortBy, sortOrder) {
         type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD,
         payload,
         sortBy,
-        sortOrder
+        sortOrder,
     };
 }
 
 function exportTeamRegistrationAction(payload) {
     return {
         type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD,
-        payload
+        payload,
     };
 }
 
-function updateMembershipFeeCapListAction(value,key,index,subKey,subIndex){
+function updateMembershipFeeCapListAction(value, key, index, subKey, subIndex) {
     const action = {
         type: ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST,
         value,
         key,
         index,
         subKey,
-        subIndex
-    }
+        subIndex,
+    };
     return action;
 }
 
-function getMembershipCapListAction(organisationUniqueKey,yearRefId){
+function getMembershipCapListAction(organisationUniqueKey, yearRefId) {
     const action = {
         type: ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD,
         organisationUniqueKey,
-        yearRefId
-    }
+        yearRefId,
+    };
     return action;
 }
 
-function updateMembershipFeeCapAction(organisationUniqueKey,yearRefId,payload){
+function updateMembershipFeeCapAction(organisationUniqueKey, yearRefId, payload) {
     const action = {
         type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD,
         organisationUniqueKey,
         yearRefId,
-        payload
-    }
+        payload,
+    };
     return action;
 }
 
@@ -329,5 +329,5 @@ export {
     exportTeamRegistrationAction,
     updateMembershipFeeCapListAction,
     getMembershipCapListAction,
-    updateMembershipFeeCapAction
+    updateMembershipFeeCapAction,
 };

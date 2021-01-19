@@ -106,8 +106,10 @@ class RegistrationInvoice extends Component {
     }
 
     gotoUserPage = (userId) => {
+        let {invoiceData} = this.props.stripeState;
+        let id = invoiceData.yourInfo.id;
         if(userId != 0){
-            history.push({pathname: '/userPersonal'});
+            history.push({pathname: '/userPersonal',state: { userId: id }});
         }else{
             history.push({pathname: '/login'});
         }

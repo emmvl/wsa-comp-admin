@@ -316,6 +316,9 @@ class AddTeamMember extends Component {
             teamMembersSave.mobileNumber = personalData.mobileNumber;
             teamMembersSave.registrationId = this.state.team.registrationUniqueKey;
             teamMembersSave.competitionMembershipProductDivisionId = this.state.team.competitionMembershipProductDivisionId;
+            teamMembersSave.firstName = personalData.firstName;
+            teamMembersSave.lastName = personalData.lastName;
+            teamMembersSave.email = personalData.email;
             return teamMembersSave;
         } catch (ex) {
             console.log(`Error in getUpdatedTeamMembersSave::${ex}`);

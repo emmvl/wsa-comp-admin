@@ -1,30 +1,28 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
-
-let registrationObj = {
+const registrationObj = {
     organisationUniqueKey: "",
-	registrationId: 0,
-	orgRegistrationId: 0,
-	postalCode: "",
-	alternativeLocation: "",
-	countryRefId: null,
-	nationalityRefId: null,
-	languages: "",
-	volunteers:[],
+    registrationId: 0,
+    orgRegistrationId: 0,
+    postalCode: "",
+    alternativeLocation: "",
+    countryRefId: null,
+    nationalityRefId: null,
+    languages: "",
+    volunteers: [],
     competitionUniqueKey: "",
     childrenCheckNumber: "",
-    userRegistrations:[],
-    vouchers: []
-}
+    userRegistrations: [],
+    vouchers: [],
+};
 
-let membershipProdInfoObj = {
+const membershipProdInfoObj = {
     specialNote: "",
     training: "",
     competitionName: "",
-    membershipProducts: []
-}
-
+    membershipProducts: [],
+};
 
 const initialState = {
     onLoad: false,
@@ -44,9 +42,8 @@ const initialState = {
     postalCodes: [],
     feesPaid: 0,
     registrationListAction: null,
-    onTranSaveLoad: false
-}
-
+    onTranSaveLoad: false,
+};
 
 function endUserRegistrationReducer(state = initialState, action) {
     switch (action.type) {
@@ -55,7 +52,7 @@ function endUserRegistrationReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.API_END_USER_REGISTRATION_ERROR:
@@ -63,7 +60,7 @@ function endUserRegistrationReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
         case ApiConstants.API_SAVE_END_USER_REGISTRATION_LOAD:
             return { ...state, onLoad: true };
@@ -72,46 +69,48 @@ function endUserRegistrationReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.UPDATE_END_USER_REGISTRATION:
 
-            let oldData = state.registrationDetail;
-            let updatedValue = action.updatedData;
-            let getKey = action.key;
+            const oldData = state.registrationDetail;
+            const updatedValue = action.updatedData;
+            const getKey = action.key;
             oldData[getKey] = updatedValue;
-            return { ...state, error: null };  
+            return { ...state, error: null };
 
         case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_SUCCESS:
-            let data = action.result;
+            const data = action.result;
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                membershipProductInfo: data
+                membershipProductInfo: data,
             };
 
         case ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_SUCCESS:
-            let orgData = action.result;
+            const orgData = action.result;
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                registrationSettings: orgData
+                registrationSettings: orgData,
             };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD:
-            return { ...state, onUserRegDashboardLoad: true, error: null, registrationListAction: action,userRegDashboardListData:[] };
+            return {
+                ...state, onUserRegDashboardLoad: true, error: null, registrationListAction: action, userRegDashboardListData: [],
+            };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_SUCCESS:
-            let dashboardListData = action.result;
+            const dashboardListData = action.result;
             return {
                 ...state,
                 onUserRegDashboardLoad: false,
@@ -126,25 +125,25 @@ function endUserRegistrationReducer(state = initialState, action) {
                 postalCodes: dashboardListData.postalCodes,
                 feesPaid: dashboardListData.feesPaid,
                 status: action.status,
-                error: null
+                error: null,
             };
 
-            case ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD:
-                return { ...state, onTranSaveLoad: true };
+        case ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD:
+            return { ...state, onTranSaveLoad: true };
 
-            case ApiConstants.API_REG_TRANSACTION_UPDATE_SUCCESS:
-                return {
-                    ...state,
-                    onTranSaveLoad: false,
-                    status: action.status
-                };
+        case ApiConstants.API_REG_TRANSACTION_UPDATE_SUCCESS:
+            return {
+                ...state,
+                onTranSaveLoad: false,
+                status: action.status,
+            };
 
-            case ApiConstants.API_USER_REG_DASHBOARD_LIST_FAIL:
+        case ApiConstants.API_USER_REG_DASHBOARD_LIST_FAIL:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_ERROR:
@@ -152,12 +151,23 @@ function endUserRegistrationReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
-            state.registrationListAction = null
+            state.registrationListAction = null;
             return { ...state, onLoad: false };
+
+        case ApiConstants.API_GET_EXPORT_REGISTRATION_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_EXPORT_REGISTRATION_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null,
+            };
 
         default:
             return state;

@@ -425,31 +425,40 @@ const teamMembersColumns = [
         title: "Action",
         key: "action",
         dataIndex: "isActive",
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={(
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    )}
-                >
-                    <Menu.Item key="1">
-                        <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        ),
+        render: (data, record) => {
+            let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+            let compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
+            return (
+                <div>
+                    {compOrgId == organistaionId && record.isRemove == 1 &&
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <SubMenu
+                                key="sub1"
+                                title={(
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                    />
+                                )}
+                            >
+                                <Menu.Item key="1">
+                                    <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    }
+                </div>
+            )
+
+        },
 
     },
 ];
@@ -1598,6 +1607,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
+                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -1928,6 +1938,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
+                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -2703,6 +2714,7 @@ class UserModulePersonalDetail extends Component {
         const teamMembers = userState.teamMembersDetails ? userState.teamMembersDetails.teamMembers : [];
         const teamMembersCurrentPage = userState.teamMembersDetails?.page ? userState.teamMembersDetails?.page.currentPage : 1;
         const teamMembersTotalCount = userState.teamMembersDetails?.page.totalCount;
+        let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         return (
             <div>
                 {this.state.isShowRegistrationTeamMembers == false ? (
@@ -2857,11 +2869,15 @@ class UserModulePersonalDetail extends Component {
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
-                                +
-                                {' '}
-                                {AppConstants.addTeamMembers}
-                            </div>
+                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove ?
+                                <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
+                                    +
+                                    {' '}
+                                    {AppConstants.addTeamMembers}
+                                </div>
+                                :
+                                null
+                            }
                         </div>
                         <div className="user-module-row-heading font-18 mt-2">
                             {`${AppConstants.team}: ${this.state.registrationTeam.teamName}`}
