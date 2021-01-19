@@ -325,7 +325,6 @@ class OrderSummary extends Component {
                                                     alt=""
                                                     className="export-image"
                                                 />
-                                                ASDASDASDASD
                                                 {AppConstants.export}
                                             </div>
                                         </div>

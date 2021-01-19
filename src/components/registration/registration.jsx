@@ -1007,7 +1007,7 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.userRegistrationState.onLoad} />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}
