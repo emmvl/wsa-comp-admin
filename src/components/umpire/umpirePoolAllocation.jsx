@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Checkbox, Button, Select, Modal } from 'antd';
+import { Layout, Button, Select, Modal } from 'antd';
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -233,14 +232,14 @@ class UmpirePoolAllocation extends Component {
 
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
-        let commentList = []
-        const { umpirePoolData } = this.props.umpirePoolAllocationState
-        let assignedData = this.state.assignedData
+        let commentList = [];
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        console.log('umpirePoolData', umpirePoolData)
 
         return (
             <div className="d-flex flex-column">
-                {umpirePoolData.map((umpireItem, umpireIndex) => (
-                    <Droppable key={"assignedData" + umpireIndex} droppableId={`${umpireItem.id}`}>
+                {umpirePoolData.map((umpirePoolItem, umpireIndex) => (
+                    <Droppable key={"umpirePoolData" + umpireIndex} droppableId={`${umpirePoolItem.id}`}>
                         {(provided, snapshot) => (
                             <div
                                 ref={provided.innerRef}
@@ -248,15 +247,10 @@ class UmpirePoolAllocation extends Component {
                             >
                                 <div className="player-grading-droppable-heading-view">
                                     <div className="row">
-                                        {/* <Checkbox
-                                            className="single-checkbox mt-1 check-box-player"
-                                            checked={this.state.assignedcheckbox}
-                                            onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
-                                        /> */}
                                         <div className="col-sm d-flex align-items-center">
-                                            <span className="player-grading-haeding-team-name-text">{umpireItem.name}</span>
+                                            <span className="player-grading-haeding-team-name-text">{umpirePoolItem.name}</span>
                                             <span className="player-grading-haeding-player-count-text ml-2">
-                                                {umpireItem.umpires.length > 1 ? umpireItem.umpires.length + " Umpires" : umpireItem.umpires.length + " Umpire"}
+                                                {umpirePoolItem.umpires.length > 1 ? umpirePoolItem.umpires.length + " Umpires" : umpirePoolItem.umpires.length + " Umpire"}
                                             </span>
                                         </div>
                                         <div className="col-sm d-flex justify-content-end">
@@ -266,7 +260,7 @@ class UmpirePoolAllocation extends Component {
                                                 alt=""
                                                 height="20"
                                                 width="20"
-                                                onClick={() => this.onClickDeleteTeam(umpireItem, umpireIndex)}
+                                                onClick={() => this.onClickDeleteTeam(umpirePoolItem, umpireIndex)}
                                             />
                                             <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${umpireIndex}`} role="button" aria-expanded="false" aria-controls={umpireIndex}>
                                                 <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
@@ -275,7 +269,7 @@ class UmpirePoolAllocation extends Component {
                                     </div>
                                 </div>
                                 <div className="collapse" id={umpireIndex}>
-                                    {umpireItem.umpires.map((umpireItem, umpireIndex) => (
+                                    {umpirePoolItem.umpires.map((umpireItem, umpireIndex) => (
                                         <Draggable
                                             key={JSON.stringify(umpireItem.id)}
                                             draggableId={JSON.stringify(umpireItem.id)}
@@ -289,15 +283,9 @@ class UmpirePoolAllocation extends Component {
                                                     className="player-grading-draggable-view"
                                                 >
                                                     <div className="row">
-                                                        {/* <Checkbox
-                                                            checked={this.state.assignedcheckbox}
-                                                            className="single-checkbox mt-0 check-box-player"
-                                                            onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
-                                                        >
-                                                        </Checkbox> */}
                                                         <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {umpireItem.rank}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{umpireItem.name}
+                                                                {umpireItem.firstName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{umpireItem.lastName}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
@@ -531,32 +519,24 @@ class UmpirePoolAllocation extends Component {
         return (
             <div className="fluid-width paddingBottom56px pool-space">
                 <div className="row">
-                    <div className="col-sm-3 mt-3 pl-1">
-                        <div className="reg-add-save-button">
-                            <NavLink to='/umpireSetting'>
-                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
-                            </NavLink>
-                        </div>
-                    </div>
-                    <div className="col-sm mt-3 pr-1">
+                    <div className="col-sm mt-3 px-0">
                         <div className="d-flex justify-content-end">
-                            <Button className="publish-button save-draft-text" type="primary" htmlType="submit">
+                            <Button
+                                className="publish-button save-draft-text mr-0" 
+                                type="primary"
+                                htmlType="submit"
+                            >
                                 {AppConstants.save}
                             </Button>
-                            <NavLink to='/umpireDivisions'>
-                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit">
-                                    {AppConstants.next}
-                                </Button>
-                            </NavLink>
                         </div>
                     </div>
                 </div>
             </div>
-            // </div>
         )
     }
 
     render() {
+        // console.log('this.props.umpirePoolAllocationState.onLoad', this.props.umpirePoolAllocationState.onLoad)
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
