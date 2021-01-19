@@ -67,7 +67,7 @@ function getCharityRoundUpArray(allData) {
     return getCharityRoundUpArray
 }
 
-//for calculating subtotal 
+//for calculating subtotal
 function calculateSubTotal(allData) {
     let fees_All_Data = allData[0].fees
     let resultData = {
@@ -323,7 +323,7 @@ function stripe(state = initialState, action) {
                 onLoad: false,
             }
 
-        ///payment listing 
+        ///payment listing
         case ApiConstants.API_PAYMENT_TYPE_LIST_LOAD:
             return { ...state, onLoad: true, paymentDashboardListAction: action }
 
@@ -347,6 +347,16 @@ function stripe(state = initialState, action) {
                 ...state,
                 onExportLoad: false,
             }
+        case ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD: {
+            return {
+                ...state, onExportLoad: true,
+            };
+        }
+        case ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_SUCCESS: {
+            return {
+                ...state, onExportLoad: false,
+            };
+        }
 
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.paymentDashboardListAction = null
