@@ -234,7 +234,6 @@ class UmpirePoolAllocation extends Component {
     assignedView = () => {
         let commentList = [];
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
-        console.log('umpirePoolData', umpirePoolData)
 
         return (
             <div className="d-flex flex-column">
@@ -249,7 +248,7 @@ class UmpirePoolAllocation extends Component {
                                     <div className="row">
                                         <div className="col-sm d-flex align-items-center">
                                             <span className="player-grading-haeding-team-name-text">{umpirePoolItem.name}</span>
-                                            <span className="player-grading-haeding-player-count-text ml-2">
+                                            <span className="player-grading-haeding-player-count-text ml-4">
                                                 {umpirePoolItem.umpires.length > 1 ? umpirePoolItem.umpires.length + " Umpires" : umpirePoolItem.umpires.length + " Umpire"}
                                             </span>
                                         </div>
@@ -285,7 +284,12 @@ class UmpirePoolAllocation extends Component {
                                                     <div className="row">
                                                         <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {umpireItem.firstName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{umpireItem.lastName}
+                                                                {umpireIndex + 1}
+                                                            </span>
+                                                        </div>
+                                                        <div className="col-sm d-flex justify-content-flex-start align-items-center">
+                                                            <span className="player-grading-haeding-player-name-text pointer">
+                                                                {`${umpireItem.firstName} ${umpireItem.lastName}`}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
@@ -418,7 +422,7 @@ class UmpirePoolAllocation extends Component {
                                     </Checkbox> */}
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
-                                        <span className="player-grading-haeding-player-count-text ml-2">
+                                        <span className="player-grading-haeding-player-count-text ml-4">
                                             {unassignedData.length > 1 ? unassignedData.length + " Umpires" : unassignedData.length + " Umpire"}
                                         </span>
                                     </div>
