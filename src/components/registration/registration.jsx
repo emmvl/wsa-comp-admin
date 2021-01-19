@@ -2,28 +2,36 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal, Tag } from "antd";
+import {
+    Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal, Tag,
+} from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
 import moment from "moment";
-import Loader from '../../customComponents/loader';
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
 import history from "util/history";
-import { getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear } from "util/sessionStorage";
+import {
+    getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear,
+} from "util/sessionStorage";
 import {
     getCommonRefData,
     getGenderAction,
     registrationPaymentStatusAction,
 } from "store/actions/commonAction/commonAction";
-import { endUserRegDashboardListAction, regTransactionUpdateAction } from "store/actions/registrationAction/endUserRegistrationAction";
+import {
+    endUserRegDashboardListAction,
+    regTransactionUpdateAction,
+    exportRegistrationAction,
+} from "store/actions/registrationAction/endUserRegistrationAction";
 import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getOnlyYearListAction, } from "store/actions/appAction";
+import { getOnlyYearListAction } from "store/actions/appAction";
 import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import Loader from '../../customComponents/loader';
 
 import "./product.scss";
 
@@ -63,7 +71,7 @@ const payments = [
     {
         paymentType: "Voucher",
         paymentTypeId: 3,
-    }
+    },
 ];
 
 const columns = [
@@ -130,30 +138,30 @@ const columns = [
         title: "Paid By",
         dataIndex: "paidByUsers",
         key: "paidByUsers",
-        render: (paidBy, record, index) => {
-            return (
-                <div>
-                    {(record.paidByUsers || []).map((item, index) => (
+        render: (paidBy, record, index) => (
+            <div>
+                {(record.paidByUsers || []).map((item, index) => (
 
-                        record.userId == item.paidByUserId ? <div>{'Self'}</div> :
+                    record.userId == item.paidByUserId ? <div>Self</div>
+                        : (
                             <div>
                                 <NavLink
                                     to={{
                                         pathname: `/userPersonal`,
                                         state: {
                                             userId: item.paidByUserId,
-                                            tabKey: "registration"
+                                            tabKey: "registration",
                                         },
                                     }}
                                 >
                                     <span className="input-heading-add-another pt-0">{item.paidBy}</span>
                                 </NavLink>
                             </div>
-                    ))}
+                        )
+                ))}
 
-                </div>
-            )
-        },
+            </div>
+        ),
     },
     {
         title: "Paid Fee (incl. GST)",
@@ -182,63 +190,67 @@ const columns = [
     {
         title: "Due per Match",
         dataIndex: "duePenMatch",
-        key: "duePenMatch"
+        key: "duePenMatch",
     },
     {
         title: "Due per Instalment",
         dataIndex: "duePerInstalment",
         key: "duePerInstalment",
-        render: new Intl.NumberFormat('en-AU', {
-            style: 'currency', currency: 'AUD', minimumFractionDigits: 2}
-        ).format
+        render: new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 2 }).format,
     },
     {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-            record.actionView ?
-                <Menu
-                    className="action-triple-dot-submenu"
-                    theme="light"
-                    mode="horizontal"
-                    style={{ lineHeight: "25px" }}
-                >
-
-                    <SubMenu
-                        key="sub1"
-                        title={
-                            <img
-                                className="dot-image"
-                                src={AppImages.moreTripleDot}
-                                alt=""
-                                width="16"
-                                height="16"
-                            />
-                        }
+            record.actionView
+                ? (
+                    <Menu
+                        className="action-triple-dot-submenu"
+                        theme="light"
+                        mode="horizontal"
+                        style={{ lineHeight: "25px" }}
                     >
-                        <Menu.Item key="1">
-                            <NavLink to={{ pathname: "/" }}>
-                                <span>View</span>
-                            </NavLink>
-                        </Menu.Item>
-                        {
-                            record.actionView == 1 &&
-                            <Menu.Item key="2" onClick={() => this_Obj.setCashPayment(record)}>
-                                <span>Receive Cash Payment</span>
+
+                        <SubMenu
+                            key="sub1"
+                            title={(
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.moreTripleDot}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                />
+                            )}
+                        >
+                            <Menu.Item key="1">
+                                <NavLink to={{ pathname: "/" }}>
+                                    <span>View</span>
+                                </NavLink>
                             </Menu.Item>
+                            {
+                                record.actionView == 1
+                            && (
+                                <Menu.Item key="2" onClick={() => this_Obj.setCashPayment(record)}>
+                                    <span>Receive Cash Payment</span>
+                                </Menu.Item>
+                            )
 
-                        }
-                        {
-                            record.actionView == 2 &&
-                            <Menu.Item key="2">
-                                <span>Refund</span>
-                            </Menu.Item>
-                        }
+                            }
+                            {
+                                record.actionView == 2
+                            && (
+                                <Menu.Item key="2">
+                                    <span>Refund</span>
+                                </Menu.Item>
+                            )
+                            }
 
-                    </SubMenu>
+                        </SubMenu>
 
-                </Menu> : ""
+                    </Menu>
+                ) : ""
         ),
     },
 ];
@@ -271,8 +283,8 @@ class Registration extends Component {
             selectedRow: null,
             loading: false,
             teamName: null,
-            teamId: -1
-        }
+            teamId: -1,
+        };
 
         this_Obj = this;
 
@@ -280,33 +292,33 @@ class Registration extends Component {
     }
 
     async componentDidMount() {
-        let yearId = getGlobalYear() ? getGlobalYear() : -1
-        const { registrationListAction } = this.props.userRegistrationState
-        let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
+        const yearId = getGlobalYear() ? getGlobalYear() : -1;
+        const { registrationListAction } = this.props.userRegistrationState;
+        let page = 1;
+        let { sortBy } = this.state;
+        let { sortOrder } = this.state;
         const prevUrl = getPrevUrl();
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             this.referenceCalls(this.state.organisationId);
 
             if (registrationListAction) {
-                let offset = registrationListAction.payload.paging.offset
-                sortBy = registrationListAction.sortBy
-                sortOrder = registrationListAction.sortOrder
-                let affiliate = registrationListAction.payload.affiliate
-                let competitionUniqueKey = registrationListAction.payload.competitionUniqueKey
-                let dobFrom = registrationListAction.payload.dobFrom !== "-1" ? moment(registrationListAction.payload.dobFrom).format("YYYY-MM-DD") : this.state.dobFrom
-                let dobTo = registrationListAction.payload.dobTo !== "-1" ? moment(registrationListAction.payload.dobTo).format("YYYY-MM-DD") : this.state.dobTo
-                let genderRefId = registrationListAction.payload.genderRefId
-                let membershipProductId = registrationListAction.payload.membershipProductId
-                let membershipProductTypeId = registrationListAction.payload.membershipProductTypeId
-                let paymentId = registrationListAction.payload.paymentId
-                let paymentStatusRefId = registrationListAction.payload.paymentStatusRefId
-                let postalCode = registrationListAction.payload.postalCode == "-1" ? "" : registrationListAction.payload.postalCode
-                let regFrom = registrationListAction.payload.regFrom !== "-1" ? moment(registrationListAction.payload.regFrom).format("YYYY-MM-DD") : this.state.regFrom
-                let regTo = registrationListAction.payload.regTo !== "-1" ? moment(registrationListAction.payload.regTo).format("YYYY-MM-DD") : this.state.regTo
-                let searchText = registrationListAction.payload.searchText
-                let yearRefId = JSON.parse(yearId)
+                const { offset } = registrationListAction.payload.paging;
+                sortBy = registrationListAction.sortBy;
+                sortOrder = registrationListAction.sortOrder;
+                const { affiliate } = registrationListAction.payload;
+                const { competitionUniqueKey } = registrationListAction.payload;
+                const dobFrom = registrationListAction.payload.dobFrom !== "-1" ? moment(registrationListAction.payload.dobFrom).format("YYYY-MM-DD") : this.state.dobFrom;
+                const dobTo = registrationListAction.payload.dobTo !== "-1" ? moment(registrationListAction.payload.dobTo).format("YYYY-MM-DD") : this.state.dobTo;
+                const { genderRefId } = registrationListAction.payload;
+                const { membershipProductId } = registrationListAction.payload;
+                const { membershipProductTypeId } = registrationListAction.payload;
+                const { paymentId } = registrationListAction.payload;
+                const { paymentStatusRefId } = registrationListAction.payload;
+                const postalCode = registrationListAction.payload.postalCode == "-1" ? "" : registrationListAction.payload.postalCode;
+                const regFrom = registrationListAction.payload.regFrom !== "-1" ? moment(registrationListAction.payload.regFrom).format("YYYY-MM-DD") : this.state.regFrom;
+                const regTo = registrationListAction.payload.regTo !== "-1" ? moment(registrationListAction.payload.regTo).format("YYYY-MM-DD") : this.state.regTo;
+                const { searchText } = registrationListAction.payload;
+                const yearRefId = JSON.parse(yearId);
 
                 await this.setState({
                     offset,
@@ -325,18 +337,18 @@ class Registration extends Component {
                     regFrom,
                     regTo,
                     searchText,
-                    yearRefId
-                })
+                    yearRefId,
+                });
                 page = Math.floor(offset / 10) + 1;
 
                 this.handleRegTableList(page);
             } else {
-                let teamName = this.props.location.state ? this.props.location.state.teamName : null;
-                let teamId = this.props.location.state ? this.props.location.state.teamId : -1;
-                this.setState({ teamName: teamName, teamId: teamId, yearRefId: JSON.parse(yearId) })
+                const teamName = this.props.location.state ? this.props.location.state.teamName : null;
+                const teamId = this.props.location.state ? this.props.location.state.teamId : -1;
+                this.setState({ teamName, teamId, yearRefId: JSON.parse(yearId) });
                 setTimeout(() => {
                     this.handleRegTableList(1);
-                }, 300)
+                }, 300);
             }
         } else {
             history.push("/");
@@ -344,7 +356,7 @@ class Registration extends Component {
     }
 
     componentDidUpdate() {
-        let userRegistrationState = this.props.userRegistrationState;
+        const { userRegistrationState } = this.props;
         if (this.state.loading == true && userRegistrationState.onTranSaveLoad == false) {
             this.setState({ loading: false });
             this.handleRegTableList(1);
@@ -354,7 +366,7 @@ class Registration extends Component {
     handleRegTableList = (page) => {
         const {
             organisationId,
-            //yearRefId,
+            // yearRefId,
             competitionUniqueKey,
             dobFrom,
             dobTo,
@@ -372,8 +384,8 @@ class Registration extends Component {
             sortOrder,
             teamId,
         } = this.state;
-        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : this.state.yearRefId
-        let filter = {
+        const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : this.state.yearRefId;
+        const filter = {
             organisationUniqueKey: organisationId,
             yearRefId,
             competitionUniqueKey,
@@ -416,7 +428,7 @@ class Registration extends Component {
         if (key === "postalCode") {
             // const regex = /,/gi;
             let canCall = false;
-            let newVal = value.toString().split(",");
+            const newVal = value.toString().split(",");
             newVal.forEach((x) => {
                 canCall = Number(x.length) % 4 === 0 && x.length > 0;
             });
@@ -430,12 +442,12 @@ class Registration extends Component {
             }
         } else if (key === 'yearRefId') {
             await this.setState({
-                'yearRefId': value,
+                yearRefId: value,
             });
             if (value != -1) {
-                setGlobalYear(value)
+                setGlobalYear(value);
             }
-            this.handleRegTableList(1)
+            this.handleRegTableList(1);
         } else {
             let newValue;
             if (key === "dobFrom" || key === "dobTo" || key === "regFrom" || key === "regTo") {
@@ -460,7 +472,7 @@ class Registration extends Component {
     };
 
     onChangeSearchText = async (e) => {
-        const value = e.target.value;
+        const { value } = e.target;
 
         await this.setState({ searchText: value });
 
@@ -474,55 +486,53 @@ class Registration extends Component {
     };
 
     updateTransaction = () => {
-        let selectedRow = this.state.selectedRow;
+        const { selectedRow } = this.state;
         let amount = 0;
         if (this.state.cashTranferType == 1) {
             amount = selectedRow.amountToTransfer;
-        }
-        else {
+        } else {
             amount = this.state.amount;
         }
-        let payload = {
-            amount: amount,
+        const payload = {
+            amount,
             feeType: selectedRow.feeType,
             transactionId: selectedRow.transactionId,
-            pendingFee: selectedRow.pendingFee
-        }
-        this.props.regTransactionUpdateAction(payload)
+            pendingFee: selectedRow.pendingFee,
+        };
+        this.props.regTransactionUpdateAction(payload);
         this.setState({ loading: true });
     }
 
     setCashPayment = (record) => {
-        this.setState({ selectedRow: record, visible: true, amount: 0, cashTranferType: 1 });
+        this.setState({
+            selectedRow: record, visible: true, amount: 0, cashTranferType: 1,
+        });
     }
 
     receiveCashPayment = (key) => {
         if (key == "cancel") {
             this.setState({ visible: false });
-        }
-        else if (key == "ok") {
-            let selectedRow = this.state.selectedRow;
-            let pendingFee = selectedRow.pendingFee;
-            let amountToTransfer = selectedRow.amountToTransfer;
-            let amount = this.state.amount;
-            let totalAmt = Number(amountToTransfer) - Number(amount);
+        } else if (key == "ok") {
+            const { selectedRow } = this.state;
+            const { pendingFee } = selectedRow;
+            const { amountToTransfer } = selectedRow;
+            const { amount } = this.state;
+            const totalAmt = Number(amountToTransfer) - Number(amount);
             if (totalAmt >= 0) {
                 this.setState({ visible: false });
                 this.updateTransaction();
-            }
-            else {
-                message.config({ duration: 0.9, maxCount: 1 })
+            } else {
+                message.config({ duration: 0.9, maxCount: 1 });
                 message.error("Amount exceeded");
             }
-
         }
     }
 
     clearFilterByTeamId = () => {
-        this.setState({ teamName: null, teamId: -1 })
+        this.setState({ teamName: null, teamId: -1 });
         setTimeout(() => {
             this.handleRegTableList(1);
-        }, 300)
+        }, 300);
     }
 
     headerView = () => (
@@ -535,7 +545,7 @@ class Registration extends Component {
                 </div>
 
                 <div className="col-sm d-flex align-items-center justify-content-end">
-                    <Button className="primary-add-comp-form" type="primary">
+                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.onExport()}>
                         <div className="row">
                             <div className="col-sm">
                                 <img
@@ -552,6 +562,25 @@ class Registration extends Component {
         </div>
     );
 
+    onExport = () => {
+        const {
+            filter, sortBy, sortOrder, searchText,
+        } = this.state;
+        const params = {
+            ...filter,
+            paging: {
+                limit: 5000,
+                offset: filter.paging.offset,
+            },
+            sortBy,
+            sortOrder,
+            searchText,
+        };
+
+        console.log('params for export', params);
+        this.props.exportRegistrationAction(params);
+    }
+
     statusView = () => {
         const { paymentStatus } = this.props.commonReducerState;
         return (
@@ -559,18 +588,19 @@ class Registration extends Component {
                 <div className="row" style={{ marginRight: 42 }}>
                     <div className="col-sm-9 padding-right-reg-dropdown-zero">
                         <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2">
-                            {this.state.teamName &&
-                                <div className="col-sm pt-1 align-self-center">
-                                    <Tag
-                                        closable
-                                        color="volcano"
-                                        style={{ paddingTop: 3, height: 30 }}
-                                        onClose={() => { this.clearFilterByTeamId() }}
-                                    >
-                                        {this.state.teamName}
-                                    </Tag>
-                                </div>
-                            }
+                            {this.state.teamName
+                                && (
+                                    <div className="col-sm pt-1 align-self-center">
+                                        <Tag
+                                            closable
+                                            color="volcano"
+                                            style={{ paddingTop: 3, height: 30 }}
+                                            onClose={() => { this.clearFilterByTeamId(); }}
+                                        >
+                                            {this.state.teamName}
+                                        </Tag>
+                                    </div>
+                                )}
                             <div className="year-select-heading" style={{ width: 90 }}>
                                 {AppConstants.status}
                             </div>
@@ -582,7 +612,7 @@ class Registration extends Component {
                             >
                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                 {(paymentStatus || []).map((g) => (
-                                    <Option key={'paymentStatus_' + g.id} value={g.id}>{g.description}</Option>
+                                    <Option key={`paymentStatus_${g.id}`} value={g.id}>{g.description}</Option>
                                 ))}
                             </Select>
                         </div>
@@ -596,12 +626,12 @@ class Registration extends Component {
                                 placeholder="Search..."
                                 onKeyPress={this.onKeyEnterSearchText}
                                 value={this.state.searchText}
-                                prefix={
+                                prefix={(
                                     <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={this.onClickSearchIcon}
                                     />
-                                }
+                                )}
                                 allowClear
                             />
                         </div>
@@ -612,17 +642,17 @@ class Registration extends Component {
     };
 
     dropdownView = () => {
-        let affiliateToData = this.props.userState.affiliateTo;
+        const affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         if (affiliateToData.affiliatedTo !== undefined) {
-            let obj = {
+            const obj = {
                 organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
                 name: getOrganisationData() ? getOrganisationData().name : null,
             };
 
             uniqueValues.push(obj);
 
-            let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
+            const arr = [...new Map(affiliateToData.affiliatedTo.map((obj) => [obj.organisationId, obj])).values()];
             if (isEmptyArray) {
                 uniqueValues = [...uniqueValues, ...arr];
             }
@@ -640,12 +670,12 @@ class Registration extends Component {
                                 <Select
                                     name="yearRefId"
                                     className="year-select reg-filter-select"
-                                    onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                                    onChange={(yearRefId) => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => (
-                                        <Option key={'year_' + item.id} value={item.id}>
+                                    {this.props.appState.yearList.map((item) => (
+                                        <Option key={`year_${item.id}`} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -660,13 +690,13 @@ class Registration extends Component {
                                     showSearch
                                     optionFilterProp="children"
                                     className="year-select reg-filter-select1"
-                                    onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionUniqueKey")}
+                                    onChange={(competitionId) => this.onChangeDropDownValue(competitionId, "competitionUniqueKey")}
                                     value={this.state.competitionUniqueKey}
                                 >
                                     <Option key={-1} value="-1">{AppConstants.all}</Option>
-                                    {(competitions || []).map(item => (
+                                    {(competitions || []).map((item) => (
                                         <Option
-                                            key={'competition_' + item.competitionUniqueKey}
+                                            key={`competition_${item.competitionUniqueKey}`}
                                             value={item.competitionUniqueKey}
                                         >
                                             {item.competitionName}
@@ -682,7 +712,7 @@ class Registration extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
-                                    onChange={e => this.onChangeDropDownValue(e, "dobFrom")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "dobFrom")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -698,7 +728,7 @@ class Registration extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
-                                    onChange={e => this.onChangeDropDownValue(e, "dobTo")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "dobTo")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -723,7 +753,7 @@ class Registration extends Component {
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(membershipProducts || []).map((g) => (
                                         <Option
-                                            key={'membershipProduct_' + g.membershipProductUniqueKey}
+                                            key={`membershipProduct_${g.membershipProductUniqueKey}`}
                                             value={g.membershipProductUniqueKey}
                                         >
                                             {g.productName}
@@ -743,7 +773,7 @@ class Registration extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(genderData || []).map((g) => (
-                                        <Option key={'gender_' + g.id} value={g.id}>{g.description}</Option>
+                                        <Option key={`gender_${g.id}`} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -761,7 +791,7 @@ class Registration extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org) => (
-                                        <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
+                                        <Option key={`organisation_${org.organisationId}`} value={org.organisationId}>
                                             {org.name}
                                         </Option>
                                     ))}
@@ -780,7 +810,7 @@ class Registration extends Component {
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(payments || []).map((payment) => (
                                         <Option
-                                            key={'paymentType_' + payment.paymentTypeId}
+                                            key={`paymentType_${payment.paymentTypeId}`}
                                             value={payment.paymentTypeId}
                                         >
                                             {payment.paymentType}
@@ -806,7 +836,7 @@ class Registration extends Component {
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(membershipProductTypes || []).map((g) => (
                                         <Option
-                                            key={'membershipProductType_' + g.membershipProductTypeId}
+                                            key={`membershipProductType_${g.membershipProductTypeId}`}
                                             value={g.membershipProductTypeId}
                                         >
                                             {g.membershipProductTypeName}
@@ -836,7 +866,7 @@ class Registration extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
-                                    onChange={e => this.onChangeDropDownValue(e, "regFrom")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "regFrom")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -852,7 +882,7 @@ class Registration extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
-                                    onChange={e => this.onChangeDropDownValue(e, "regTo")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "regTo")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -868,9 +898,9 @@ class Registration extends Component {
     };
 
     countView = () => {
-        let userRegistrationState = this.props.userRegistrationState;
-        let total = userRegistrationState.userRegDashboardListTotalCount;
-        let feesPaid = userRegistrationState.feesPaid;
+        const { userRegistrationState } = this.props;
+        const total = userRegistrationState.userRegDashboardListTotalCount;
+        const { feesPaid } = userRegistrationState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div>
@@ -896,9 +926,9 @@ class Registration extends Component {
     };
 
     contentView = () => {
-        let userRegistrationState = this.props.userRegistrationState;
-        let userRegDashboardList = userRegistrationState.userRegDashboardListData;
-        let total = userRegistrationState.userRegDashboardListTotalCount;
+        const { userRegistrationState } = this.props;
+        const userRegDashboardList = userRegistrationState.userRegDashboardListData;
+        const total = userRegistrationState.userRegDashboardListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -925,7 +955,7 @@ class Registration extends Component {
     };
 
     transferModalView() {
-        let selectedRow = this.state.selectedRow;
+        const { selectedRow } = this.state;
 
         return (
             <Modal
@@ -937,11 +967,18 @@ class Registration extends Component {
                 onOk={() => this.receiveCashPayment("ok")}
                 centered
             >
-                <div> {AppConstants.amount} : {selectedRow ? selectedRow.amountToTransfer : 0}</div>
+                <div>
+                    {' '}
+                    {AppConstants.amount}
+                    {' '}
+:
+                    {' '}
+                    {selectedRow ? selectedRow.amountToTransfer : 0}
+                </div>
                 <Radio.Group
                     className="reg-competition-radio"
                     value={this.state.cashTranferType}
-                    onChange={(e) => { this.setState({ cashTranferType: e.target.value }) }}
+                    onChange={(e) => { this.setState({ cashTranferType: e.target.value }); }}
                 >
                     <Radio value={1}>{AppConstants.fullCashAmount}</Radio>
                     {/* <Radio value={2}>{AppConstants.partialCashAmount}</Radio> */}
@@ -955,7 +992,7 @@ class Registration extends Component {
                     )} */}
                 </Radio.Group>
             </Modal>
-        )
+        );
     }
 
     render() {
@@ -970,7 +1007,7 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.userRegistrationState.onLoad} />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}
@@ -991,7 +1028,8 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAllCompetitionAction,
         registrationPaymentStatusAction,
-        regTransactionUpdateAction
+        regTransactionUpdateAction,
+        exportRegistrationAction,
     }, dispatch);
 }
 

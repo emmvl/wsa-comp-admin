@@ -510,7 +510,7 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAffiliateToOrganisationAction,
         exportOrderSummaryAction,
-    }, dispatch)
+    }, dispatch);
 }
 
 function mapStatToProps(state) {
