@@ -222,6 +222,7 @@ class PaymentDashboard extends Component {
             status: -1,
             searchText: '',
             membershipType: -1,
+            paymentStatus: -1
         };
         this_Obj = this;
     }
@@ -467,9 +468,10 @@ class PaymentDashboard extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
-        } = this.state;
-        const offset = page ? 10 * (page - 1) : 0;
-        const year = getGlobalYear() ? getGlobalYear() : '-1';
+			paymentStatus
+        } = this.state
+        let offset = page ? 10 * (page - 1) : 0;
+        let year = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             offset,
             userId,
@@ -492,6 +494,7 @@ class PaymentDashboard extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
+            paymentStatus
         );
     };
 
@@ -570,6 +573,14 @@ class PaymentDashboard extends Component {
                 -1,
                 "-1",
                 this.state.searchText,
+            );
+		} else if (key == "paymentStatus") {
+            await this.setState({ paymentStatus: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
             );
         }
     };
@@ -813,7 +824,7 @@ class PaymentDashboard extends Component {
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
                             onChange={(status) => this.onChangeDropDownValue(status, "paymentStatus")}
-                            value={this.state.status}
+                            value={this.state.paymentStatus}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             <Option key="paid" value={2}>{AppConstants.paid}</Option>
