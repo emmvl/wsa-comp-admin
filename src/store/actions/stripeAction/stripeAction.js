@@ -194,6 +194,14 @@ function exportPaymentDashboardApi(offset,
         paymentStatus
     }
 }
+
+function exportPayoutTransaction(payoutId) {
+    const action = {
+        type: ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD,
+        payoutId,
+    };
+    return action;
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -206,5 +214,6 @@ export {
     exportPaymentApi,
     getStripeRefundsListAction,
     getInvoiceStatusAction,
-    exportPaymentDashboardApi
-}
+    exportPaymentDashboardApi,
+    exportPayoutTransaction,
+};
