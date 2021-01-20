@@ -471,7 +471,7 @@ class PaymentDashboard extends Component {
             paymentStatus
         } = this.state
         let offset = page ? 10 * (page - 1) : 0;
-        let year = getGlobalYear() ? getGlobalYear() : '-1'  
+        let year = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             offset,
             userId,

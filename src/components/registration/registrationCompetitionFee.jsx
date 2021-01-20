@@ -4346,7 +4346,7 @@ class RegistrationCompetitionFee extends Component {
                             feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
                         }
                     }
-
+                   
 
 
                     if (fee_data[i].isTeamSeasonal == false) {
