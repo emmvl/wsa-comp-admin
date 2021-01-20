@@ -812,7 +812,7 @@ class PaymentDashboard extends Component {
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(status) => this.setState({ status })}
+                            onChange={(status) => this.onChangeDropDownValue(status, "paymentStatus")}
                             value={this.state.status}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
