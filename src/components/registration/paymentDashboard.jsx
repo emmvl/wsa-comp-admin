@@ -829,7 +829,7 @@ class PaymentDashboard extends Component {
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             <Option key="paid" value={2}>{AppConstants.paid}</Option>
                             <Option key="pending" value={1}>{AppConstants.pending}</Option>
-                            <Option key="declined" value="declined">{AppConstants.declined}</Option>
+                            <Option key="declined" value={6}>{AppConstants.declined}</Option>
                         </Select>
                     </div>
                 </div>
