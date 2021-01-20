@@ -118,6 +118,10 @@ class UmpirePoolAllocation extends Component {
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
             this.props.getUmpireList(this.state.selectedComp);
         }
+
+        if (this.props.umpireState.umpireListDataNew !== prevProps.umpireState.umpireListDataNew) {
+            console.log('this.props.umpireState.umpireListDataNew', this.props.umpireState.umpireListDataNew)
+        }
     }
 
     headerView = () => {
@@ -237,7 +241,7 @@ class UmpirePoolAllocation extends Component {
     }
 
     onClickDeleteTeam = async (umpireItem, umpireIndex) => {
-        await this.setState({ teamID: umpireItem.teamId, deleteModalVisible: true });
+        this.setState({ teamID: umpireItem.teamId, deleteModalVisible: true });
     }
 
     // model cancel for disappear a model
@@ -626,7 +630,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
-        umpirePoolAllocationState: state.UmpirePoolAllocationState
+        umpirePoolAllocationState: state.UmpirePoolAllocationState,
+        umpireState: state.UmpireState,
     }
 }
 
