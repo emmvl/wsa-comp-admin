@@ -319,6 +319,8 @@ class Registration extends Component {
                 const regTo = registrationListAction.payload.regTo !== "-1" ? moment(registrationListAction.payload.regTo).format("YYYY-MM-DD") : this.state.regTo;
                 const { searchText } = registrationListAction.payload;
                 const yearRefId = JSON.parse(yearId);
+                const teamName = this.props.location.state ? this.props.location.state.teamName : null;
+                const teamId = this.props.location.state ? this.props.location.state.teamId : -1;
 
                 await this.setState({
                     offset,
@@ -338,6 +340,8 @@ class Registration extends Component {
                     regTo,
                     searchText,
                     yearRefId,
+                    teamName,
+                    teamId
                 });
                 page = Math.floor(offset / 10) + 1;
 
