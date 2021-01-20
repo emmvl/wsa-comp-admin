@@ -45,6 +45,7 @@ import {
     userProfileUpdateAction,
     resetTfaAction,
     teamMemberUpdateAction,
+    exportUserRegData
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -3018,6 +3019,14 @@ class UserModulePersonalDetail extends Component {
         this.props.resetTfaAction(this.state.userId);
     };
 
+    exportUserRegistrationData = () => {
+        const { userState } = this.props;
+        const personal = userState.personalData;
+        const userId = personal.userId;
+
+        this.props.exportUserRegData({ userId });
+    }
+
     headerView = () => {
         function handleMenuClick(e) {
             history.push("/mergeUserMatches");
@@ -3029,9 +3038,14 @@ class UserModulePersonalDetail extends Component {
                     {AppConstants.merge}
                 </Menu.Item>
                 {this.state.isAdmin && (
-                    <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
-                        {AppConstants.resetTFA}
-                    </Menu.Item>
+                    <>
+                        <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
+                            {AppConstants.resetTFA}
+                        </Menu.Item>
+                        <Menu.Item onClick={this.exportUserRegistrationData} key={AppConstants.export}>
+                            {AppConstants.export}
+                        </Menu.Item>
+                    </>
                 )}
             </Menu>
         );
@@ -3579,6 +3593,7 @@ function mapDispatchToProps(dispatch) {
             userProfileUpdateAction,
             resetTfaAction,
             teamMemberUpdateAction,
+            exportUserRegData
         },
         dispatch,
     );
