@@ -11,19 +11,27 @@ import {
     Menu,
  } from 'antd';
 
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import AppImages from "../../themes/appImages";
+
+import InputWithHead from "../../customComponents/InputWithHead";
+import Loader from '../../customComponents/loader';
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
-import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage'
+
+import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
+
+import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
+import { getUmpirePoolData, saveUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
+import {
+    getUmpireList,
+} from '../../store/actions/umpireAction/umpireAction';
+
+import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
 import { checkUmpireCompIsParent } from "util/permissions";
-import { getUmpirePoolData, saveUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction"
-import InputWithHead from "../../customComponents/InputWithHead";
-import Loader from '../../customComponents/loader'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -84,8 +92,8 @@ class UmpirePoolAllocation extends Component {
         })
     }
 
-    componentDidUpdate(nextProps) {
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
@@ -105,6 +113,10 @@ class UmpirePoolAllocation extends Component {
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, allCompetition: compList })
             }
+        }
+
+        if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
+            this.props.getUmpireList(this.state.selectedComp);
         }
     }
 
@@ -607,6 +619,7 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         getUmpirePoolData,
         saveUmpirePoolData,
+        getUmpireList,
     }, dispatch)
 }
 

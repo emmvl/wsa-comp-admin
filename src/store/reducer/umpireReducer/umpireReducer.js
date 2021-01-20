@@ -37,7 +37,8 @@ const initialState = {
     totalCount_Data: null,
     umpireListActionObject: null,
     umpireListData: [],
-    umpireCheckbox:false
+    umpireCheckbox:false,
+    umpireListDataNew: [],
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -274,6 +275,21 @@ function umpireState(state = initialState, action) {
             return {
                 ...state,
             }
+
+        // get umpire list settings - new
+        case ApiConstants.API_GET_UMPIRE_LIST_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+
+        case ApiConstants.API_GET_UMPIRE_LIST_SUCCESS:
+            return {
+                ...state,
+                umpireListDataNew: action.result,
+                onLoad: false,
+            };
+
         //// Fail and Error case
         case ApiConstants.API_UMPIRE_FAIL:
             return {
