@@ -1,7 +1,15 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Button, Select, Modal } from 'antd';
+
+import { 
+    Layout, 
+    Button, 
+    Select, 
+    Modal,
+    Menu,
+ } from 'antd';
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -306,6 +314,39 @@ class UmpirePoolAllocation extends Component {
                                                             <span className="player-grading-haeding-player-name-text pointer">
                                                                 {umpireItem.matches} {AppConstants.games}
                                                             </span>
+                                                        </div>
+                                                        <div className="col-sm d-flex justify-content-center align-items-center">
+                                                            <Menu
+                                                                className="action-triple-dot-submenu"
+                                                                theme="light"
+                                                                mode="horizontal"
+                                                                style={{ lineHeight: "25px" }}
+                                                            >
+                                                                <Menu.SubMenu
+                                                                    key="sub1"
+                                                                    style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                                                                    title={
+                                                                        <img
+                                                                            className="dot-image"
+                                                                            src={AppImages.moreTripleDot}
+                                                                            width="16"
+                                                                            height="16"
+                                                                            alt=""
+                                                                        />
+                                                                    }
+                                                                >
+                                                                    <Menu.Item key="1">
+                                                                        <NavLink
+                                                                            to={{
+                                                                                // pathname: "/matchDayAddMatch",
+                                                                                // state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
+                                                                            }}
+                                                                        >
+                                                                            <span>Edit</span>
+                                                                        </NavLink>
+                                                                    </Menu.Item>
+                                                                </Menu.SubMenu>
+                                                            </Menu>
                                                         </div>
                                                     </div>
                                                 </div>
