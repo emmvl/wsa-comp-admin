@@ -666,6 +666,7 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreAddNews(data) {
+        console.log('------------------', data);
         const body = new FormData();
         let authorData = null;
 
