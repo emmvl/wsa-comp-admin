@@ -318,8 +318,15 @@ class UmpirePoolAllocation extends Component {
                                                 width="20"
                                                 onClick={() => this.onClickDeletePool(umpirePoolItem.id)}
                                             />
-                                            <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${umpirePoolItemIndex}`} role="button" aria-expanded="false" aria-controls={umpirePoolItemIndex}>
-                                                <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
+                                            <a 
+                                                className="view-more-btn collapsed" 
+                                                data-toggle="collapse" 
+                                                href={`#${umpirePoolItemIndex}`} 
+                                                role="button" 
+                                                aria-expanded="false" 
+                                                aria-controls={umpirePoolItemIndex}
+                                            >
+                                                <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                                             </a>
                                         </div>
                                     </div>
@@ -391,7 +398,7 @@ class UmpirePoolAllocation extends Component {
                                                                                 // state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
                                                                             }}
                                                                         >
-                                                                            <span>Edit</span>
+                                                                            <span>{AppConstants.addToAnotherPool}</span>
                                                                         </NavLink>
                                                                     </Menu.Item>
                                                                 </Menu.SubMenu>

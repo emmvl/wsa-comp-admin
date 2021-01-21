@@ -1773,6 +1773,7 @@ const AppConstants = {
 
   deletePool: "Delete pool",
   removePoolMsg: "Are you sure you want to delete this pool?",
+  addToAnotherPool: "Add to another pool",
 
   yourOrder: "Your Order"
 };
