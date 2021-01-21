@@ -100,12 +100,12 @@ class UmpirePoolAllocation extends Component {
                 let firstComp = compList.length > 0 && compList[0].id
                 let orgId = compList.length > 0 && compList[0].competitionOrganisation.orgId
 
-                // if (getUmpireCompId()) {
-                //     let compId = JSON.parse(getUmpireCompId())
-                //     firstComp = compId
-                // } else {
-                //     setUmpireCompId(firstComp)
-                // }
+                if (getUmpireCompId()) {
+                    let compId = JSON.parse(getUmpireCompId())
+                    firstComp = compId
+                } else {
+                    setUmpireCompId(firstComp)
+                }
 
                 if (JSON.parse(getUmpireCompetitonData())) {
                     this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
@@ -142,28 +142,19 @@ class UmpirePoolAllocation extends Component {
         );
     };
 
-    onChangeComp = (compID) => {
-        let selectedComp = compID.comp
-        let compKey = compID.competitionUniqueKey
-        let compeList = this.state.allCompetition
-        let orgId = null
-        let selectedCompData = null
-        for (let i in compeList) {
-            if (compeList[i].id === selectedComp) {
-                orgId = compeList[i]?.competitionOrganisation?.orgId
-                selectedCompData = compeList[i]
-            }
-        }
+    onChangeComp = compId => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
-        // setUmpireCompId(selectedComp)
-        setUmpireCompitionData(JSON.stringify(selectedCompData))
+        setUmpireCompId(compId);
+
         checkUmpireCompIsParent().then((value) => {
             this.setState({
                 compIsParent: value
             })
-        })
-        this.props.getUmpirePoolData({ orgId: orgId ? orgId : 0, compId: selectedComp })
-        this.setState({ selectedComp, competitionUniqueKey: compKey, orgId: orgId ? orgId : 0 })
+        });
+
+        this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
+        this.setState({ selectedComp: compId })
     }
 
     dropdownView = () => {
@@ -178,7 +169,7 @@ class UmpirePoolAllocation extends Component {
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 200, maxWidth: 250 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
+                                    onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
                                 >
                                     {competition.map((item) => (
