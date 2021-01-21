@@ -471,7 +471,7 @@ class PaymentDashboard extends Component {
             paymentStatus
         } = this.state
         let offset = page ? 10 * (page - 1) : 0;
-        let year = getGlobalYear() ? getGlobalYear() : '-1'  
+        let year = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             offset,
             userId,
@@ -827,9 +827,9 @@ class PaymentDashboard extends Component {
                             value={this.state.paymentStatus}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key="paid" value="paid">{AppConstants.paid}</Option>
-                            <Option key="pending" value="pending">{AppConstants.pending}</Option>
-                            <Option key="declined" value="declined">{AppConstants.declined}</Option>
+                            <Option key="paid" value={2}>{AppConstants.paid}</Option>
+                            <Option key="pending" value={1}>{AppConstants.pending}</Option>
+                            <Option key="declined" value={6}>{AppConstants.declined}</Option>
                         </Select>
                     </div>
                 </div>
@@ -865,7 +865,7 @@ class PaymentDashboard extends Component {
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             {this.props.appState.paymentOptions.map((paymentOption) => (
-                                <Option key={`paymentOption_${paymentOption.id}`} value={paymentOption.name}>
+                                <Option key={`paymentOption_${paymentOption.id}`} value={paymentOption.id}>
                                     {paymentOption.description}
                                 </Option>
                             ))}

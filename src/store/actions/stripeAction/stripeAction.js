@@ -82,7 +82,7 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
     return action;
 }
 
-/////get invoice
+/////get invoice 
 function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
