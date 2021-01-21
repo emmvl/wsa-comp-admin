@@ -14,8 +14,15 @@ function saveUmpirePoolData(payload) {
     };
 }
 
+function deleteUmpirePoolData(payload) {
+    return {
+        type: ApiConstants.API_DELETE_UMPIRE_POOL_DATA_LOAD,
+        payload,
+    };
+}
 
 export {
     getUmpirePoolData,
     saveUmpirePoolData,
+    deleteUmpirePoolData,
 }

@@ -1771,6 +1771,9 @@ const AppConstants = {
   addToTeam: "Add to Team",
   removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
 
+  deletePool: "Delete pool",
+  removePoolMsg: "Are you sure you want to delete this pool?",
+
   yourOrder: "Your Order"
 };
 

@@ -24,7 +24,11 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
-import { getUmpirePoolData, saveUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
+import {
+    getUmpirePoolData,
+    saveUmpirePoolData,
+    deleteUmpirePoolData
+ } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import {
     getUmpireList,
 } from '../../store/actions/umpireAction/umpireAction';
@@ -68,7 +72,8 @@ class UmpirePoolAllocation extends Component {
             compOrgId: 0,
             compIsParent: false,
             orgId: null,
-            allCompetition: null
+            allCompetition: null,
+            umpirePoolIdToDelete: '',
         }
         this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -244,12 +249,29 @@ class UmpirePoolAllocation extends Component {
         })
     }
 
-    handleDeleteTeamCancel = () => {
+    handleDeletePoolOk = () => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { selectedComp, umpirePoolIdToDelete } = this.state;
+        
+        this.props.deleteUmpirePoolData({ 
+            orgId: organisationId, 
+            compId: selectedComp,
+            umpirePoolId: umpirePoolIdToDelete
+        })
+
+        this.setState({ 
+            deleteModalVisible: false,
+            umpirePoolIdToDelete: '',
+            loading: true,
+        });
+    }
+
+    handleDeletePoolCancel = () => {
         this.setState({ deleteModalVisible: false });
     }
 
-    onClickDeleteTeam = async (umpireItem, umpireIndex) => {
-        this.setState({ teamID: umpireItem.teamId, deleteModalVisible: true });
+    onClickDeletePool = umpirePoolIdToDelete => {
+        this.setState({ umpirePoolIdToDelete, deleteModalVisible: true });
     }
 
     // model cancel for disappear a model
@@ -294,7 +316,7 @@ class UmpirePoolAllocation extends Component {
                                                 alt=""
                                                 height="20"
                                                 width="20"
-                                                onClick={() => this.onClickDeleteTeam(umpirePoolItem, umpirePoolItemIndex)}
+                                                onClick={() => this.onClickDeletePool(umpirePoolItem.id)}
                                             />
                                             <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${umpirePoolItemIndex}`} role="button" aria-expanded="false" aria-controls={umpirePoolItemIndex}>
                                                 <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
@@ -401,12 +423,12 @@ class UmpirePoolAllocation extends Component {
 
                 <Modal
                     className="add-membership-type-modal"
-                    title={AppConstants.deleteTeam}
+                    title={AppConstants.deletePool}
                     visible={this.state.deleteModalVisible}
-                    // onOk={this.handleDeleteTeamOk}
-                    onCancel={this.handleDeleteTeamCancel}
+                    onOk={this.handleDeletePoolOk}
+                    onCancel={this.handleDeletePoolCancel}
                 >
-                    <p>Are you sure you want to delete?</p>
+                    <p>{AppConstants.removePoolMsg}</p>
                 </Modal>
             </div>
         )
@@ -620,6 +642,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
         getUmpirePoolData,
+        deleteUmpirePoolData,
         saveUmpirePoolData,
         getUmpireList,
     }, dispatch)
