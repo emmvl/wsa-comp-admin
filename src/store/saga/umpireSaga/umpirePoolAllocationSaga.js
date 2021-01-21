@@ -82,6 +82,24 @@ function* saveUmpirePoolAllocationSaga(action) {
     }
 }
 
+function* updateUmpirePoolAllocationSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.updateUmpirePoolAllocation, action.payload);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 function* deleteUmpirePoolAllocationSaga(action) {
     try {
         const result = yield call(UmpireAxiosApi.deleteUmpirePoolAllocation, action.payload);
@@ -89,7 +107,7 @@ function* deleteUmpirePoolAllocationSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_DELETE_UMPIRE_POOL_DATA_SUCCESS,
-                result: result.result.data,
+                result: action.payload.umpirePoolId,
                 status: result.status,
             });
         } else {
@@ -104,4 +122,5 @@ export default function* rootUmpirePoolAllocationSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_POOL_DATA_LOAD, getUmpirePoolAllocationSaga);
     yield takeEvery(ApiConstants.API_SAVE_UMPIRE_POOL_DATA_LOAD, saveUmpirePoolAllocationSaga);
     yield takeEvery(ApiConstants.API_DELETE_UMPIRE_POOL_DATA_LOAD, deleteUmpirePoolAllocationSaga);
+    yield takeEvery(ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_LOAD, updateUmpirePoolAllocationSaga);
 }

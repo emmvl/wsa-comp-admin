@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -27,6 +26,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import {
     getUmpirePoolData,
     saveUmpirePoolData,
+    updateUmpirePoolData,
     deleteUmpirePoolData
  } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import {
@@ -46,7 +46,9 @@ class UmpirePoolAllocation extends Component {
         super(props);
         this.state = {
             newPool: "",
-            visible: false,
+            savePoolModalVisible: false,
+            updatePoolModalVisible: false,
+            addUmpireToPoolModalVisible: false,
             modalVisible: false,
             comment: null,
             teamID: null,
@@ -73,6 +75,8 @@ class UmpirePoolAllocation extends Component {
             compIsParent: false,
             orgId: null,
             umpirePoolIdToDelete: '',
+            umpireToUpdate: null,
+            umpirePoolIdToUpdate: '',
         }
         this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -273,6 +277,12 @@ class UmpirePoolAllocation extends Component {
         })
     }
 
+    // delete pool handling
+
+    handleClickDeletePool = umpirePoolIdToDelete => {
+        this.setState({ umpirePoolIdToDelete, deleteModalVisible: true });
+    }
+
     handleDeletePoolOk = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         const { selectedComp, umpirePoolIdToDelete } = this.state;
@@ -294,10 +304,6 @@ class UmpirePoolAllocation extends Component {
         this.setState({ deleteModalVisible: false });
     }
 
-    onClickDeletePool = umpirePoolIdToDelete => {
-        this.setState({ umpirePoolIdToDelete, deleteModalVisible: true });
-    }
-
     // model cancel for disappear a model
     handleModalCancel = e => {
         this.setState({
@@ -307,6 +313,80 @@ class UmpirePoolAllocation extends Component {
             teamID: null,
         });
     };
+
+    // save pool handling
+
+    handleAddUmpirePool = () => {
+        this.setState({ savePoolModalVisible: true });
+    }
+
+    handleOkSavePool = (e) => {
+        if (this.state.newPool.length > 0) {
+
+            let poolObj = {
+                name: this.state.newPool,
+                umpires: []
+            }
+
+            this.props.saveUmpirePoolData({
+                compId: this.state.selectedComp,
+                orgId: this.state.orgId,
+                poolObj: poolObj
+
+            });
+        }
+        this.setState({
+            savePoolModalVisible: false,
+            newPool: "",
+        });
+    };
+
+    handleCancelSavePool = (e) => {
+        this.setState({
+            savePoolModalVisible: false,
+            newPool: "",
+        });
+    };
+
+    // update pool handling
+
+    handleUpdateUmpirePool = umpireToUpdate => {
+        this.setState({ umpireToUpdate, updatePoolModalVisible: true });
+    }
+
+    handleOkUpdatePool = (e) => {
+        // if (this.state.newPool.length > 0) {
+
+        //     let poolObj = {
+        //         name: this.state.newPool,
+        //         umpires: []
+        //     }
+
+        //     this.props.saveUmpirePoolData({
+        //         compId: this.state.selectedComp,
+        //         orgId: this.state.orgId,
+        //         poolObj: poolObj
+
+        //     });
+        // }
+        this.setState({
+            updatePoolModalVisible: false,
+            umpireToUpdate: null,
+            umpirePoolIdToUpdate: '',
+        });
+    };
+
+    handleCancelUpdatePool = (e) => {
+        this.setState({
+            updatePoolModalVisible: false,
+            umpireToUpdate: null,
+            umpirePoolIdToUpdate: '',
+        });
+    };
+
+    handleChangePoolToUpdate = umpirePoolIdToUpdate => {
+        this.setState({ umpirePoolIdToUpdate });
+    }
 
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
@@ -342,7 +422,7 @@ class UmpirePoolAllocation extends Component {
                                                     alt=""
                                                     height="20"
                                                     width="20"
-                                                    onClick={() => this.onClickDeletePool(umpirePoolItem.id)}
+                                                    onClick={() => this.handleClickDeletePool(umpirePoolItem.id)}
                                                 />
                                             }
                                             <a 
@@ -418,15 +498,11 @@ class UmpirePoolAllocation extends Component {
                                                                         />
                                                                     }
                                                                 >
-                                                                    <Menu.Item key="1">
-                                                                        <NavLink
-                                                                            to={{
-                                                                                // pathname: "/matchDayAddMatch",
-                                                                                // state: { matchId: record.id, umpireKey: "umpire", isEdit: true, screenName: "umpireDashboard" },
-                                                                            }}
-                                                                        >
-                                                                            <span>{AppConstants.addToAnotherPool}</span>
-                                                                        </NavLink>
+                                                                    <Menu.Item
+                                                                        key="1"
+                                                                        onClick={() => this.handleUpdateUmpirePool(umpireItem)}
+                                                                    >
+                                                                        <span>{AppConstants.addToAnotherPool}</span>
                                                                     </Menu.Item>
                                                                 </Menu.SubMenu>
                                                             </Menu>
@@ -468,49 +544,14 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
-    // model visible
-    addUmpirePool = () => {
-        this.setState({ visible: true });
-    }
-
-    // model ok button
-    handleOk = (e) => {
-        if (this.state.newPool.length > 0) {
-
-            let poolObj = {
-                name: this.state.newPool,
-                umpires: []
-            }
-
-            this.props.saveUmpirePoolData({
-                compId: this.state.selectedComp,
-                orgId: this.state.orgId,
-                poolObj: poolObj
-
-            });
-        }
-        this.setState({
-            visible: false,
-            newPool: "",
-        });
-    };
-
-    // model cancel for disappear a model
-    handleCancel = (e) => {
-        this.setState({
-            visible: false,
-            newPool: "",
-        });
-    };
-
     poolModalView = () => {
         return (
             <Modal
                 className="add-membership-type-modal"
                 title={AppConstants.addPool}
-                visible={this.state.visible}
-                onOk={() => this.handleOk()}
-                onCancel={() => this.handleCancel()}
+                visible={this.state.savePoolModalVisible}
+                onOk={() => this.handleOkSavePool()}
+                onCancel={() => this.handleCancelSavePool()}
             >
                 <div>
                     <InputWithHead
@@ -523,6 +564,47 @@ class UmpirePoolAllocation extends Component {
                     />
                 </div>
 
+            </Modal>
+        )
+    }
+
+    updatePoolModalView = () => {
+        const { umpireToUpdate } = this.state;
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+
+        const umpirePoolDataToAdd = umpirePoolData.filter(poolDataItem => {
+            const hasUmpire = poolDataItem.umpires.some(umpireItem => umpireItem.id === umpireToUpdate?.id);
+
+            if (hasUmpire) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.addUmpireToPool}
+                visible={this.state.updatePoolModalVisible}
+                onOk={() => this.handleOkUpdatePool()}
+                onCancel={() => this.handleCancelUpdatePool()}
+            >
+                {umpireToUpdate && 
+                    <div>
+                        <p>{`${AppConstants.add} ${umpireToUpdate.firstName} ${umpireToUpdate.lastName} ${AppConstants.toPool}:`}</p>
+                        <Select
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ minWidth: 200, maxWidth: 250 }}
+                            onChange={this.handleChangePoolToUpdate}
+                            value={this.state.umpirePoolIdToUpdate}
+                        >
+                            {umpirePoolDataToAdd.map((item) => (
+                                <Option key={'pool' + item.id} value={item.id}>{item.name}</Option>
+                            ))}
+                        </Select>
+                    </div>
+                }
             </Modal>
         )
     }
@@ -551,7 +633,7 @@ class UmpirePoolAllocation extends Component {
                                                 className="primary-add-comp-form"
                                                 type="primary"
                                                 disabled={!this.state.compIsParent}
-                                                onClick={this.addUmpirePool}
+                                                onClick={this.handleAddUmpirePool}
                                             >
                                                 + {AppConstants.umpirePools}
                                             </Button>
@@ -666,6 +748,7 @@ class UmpirePoolAllocation extends Component {
                     <Content>
                         {this.contentView()}
                         {this.poolModalView()}
+                        {this.updatePoolModalView()}
                     </Content>
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
@@ -680,6 +763,7 @@ function mapDispatchToProps(dispatch) {
         getUmpirePoolData,
         deleteUmpirePoolData,
         saveUmpirePoolData,
+        updateUmpirePoolData,
         getUmpireList,
     }, dispatch)
 }

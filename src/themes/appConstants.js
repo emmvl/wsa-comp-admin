@@ -1774,6 +1774,8 @@ const AppConstants = {
   deletePool: "Delete pool",
   removePoolMsg: "Are you sure you want to delete this pool?",
   addToAnotherPool: "Add to another pool",
+  addUmpireToPool: "Add umpire to pool",
+  toPool: "to pool",
 
   yourOrder: "Your Order"
 };
