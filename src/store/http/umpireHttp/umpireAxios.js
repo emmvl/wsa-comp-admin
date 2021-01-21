@@ -45,7 +45,17 @@ let UmpireAxiosApi = {
         const organisationId = JSON.stringify(data.organisationId);
         const url = `/competitions/${competitionId}/umpires/payment/settings/${data.type}?organisationId=${organisationId}`
         return Method.dataPost(url, token, data.body);
-    }
+    },
+
+    getUmpirePoolAllocation(poolData) {
+        const url = `/competitions/` + poolData.compId + `/umpires/pools?organisationId=${poolData.orgId}`;
+        return Method.dataGet(url, token);
+    },
+
+    saveUmpirePoolAllocation(payload) {
+        const url = `competitions/` + payload.compId + `/umpires/pools?competitionId=${payload.compId}&organisationId=${payload.orgId}`;
+        return Method.dataPost(url, token, payload.poolObj);
+    },
 }
 
 const Method = {

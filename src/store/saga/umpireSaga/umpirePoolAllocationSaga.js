@@ -8,7 +8,8 @@ import {
 } from "antd";
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+
+import UmpireAxiosApi from "store/http/umpireHttp/umpireAxios";
 
 function* failSaga(result) {
     yield put({
@@ -47,7 +48,7 @@ function* errorSaga(error) {
 
 function* getUmpirePoolAllocationSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.getUmpirePoolAllocation, action.payload);
+        const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
 
         if (result.status === 1) {
             yield put({
@@ -65,7 +66,7 @@ function* getUmpirePoolAllocationSaga(action) {
 
 function* saveUmpirePoolAllocationSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.saveUmpirePoolAllocation, action.payload);
+        const result = yield call(UmpireAxiosApi.saveUmpirePoolAllocation, action.payload);
 
         if (result.status === 1) {
             yield put({
