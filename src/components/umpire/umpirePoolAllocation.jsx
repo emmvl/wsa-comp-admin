@@ -72,7 +72,6 @@ class UmpirePoolAllocation extends Component {
             compOrgId: 0,
             compIsParent: false,
             orgId: null,
-            allCompetition: null,
             umpirePoolIdToDelete: '',
         }
         this_obj = this;
@@ -99,11 +98,13 @@ class UmpirePoolAllocation extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
-                let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = compList.length > 0 && compList[0].id
-                let orgId = compList.length > 0 && compList[0].competitionOrganisation.orgId
+                let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+                let firstComp = competitionList.length > 0 && competitionList[0].id
+                let orgId = competitionList.length > 0 && competitionList[0].competitionOrganisation.orgId
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
@@ -116,8 +117,27 @@ class UmpirePoolAllocation extends Component {
                     this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
                 }
 
-                let compKey = compList.length > 0 && compList[0].competitionUniqueKey
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, allCompetition: compList })
+                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+
+                const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
+
+                competitionListCopy.forEach(item => {
+                    if (item.organisationId === organisationId) {
+                        item.isOrganiser = true;
+                    } else {
+                        item.isOrganiser = false;
+                    }
+                });
+
+                const isOrganiser = competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser;
+
+                this.setState({ 
+                    competitionList: competitionListCopy,
+                    selectedComp: firstComp,
+                    isOrganiserView: isOrganiser,
+                    loading: false, 
+                    competitionUniqueKey: compKey 
+                })
             }
         }
 
@@ -164,6 +184,9 @@ class UmpirePoolAllocation extends Component {
 
     onChangeComp = compId => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { competitionList } = this.state;
+
+        const { isOrganiser } = competitionList.find(competition => competition.id === compId);
 
         setUmpireCompId(compId);
 
@@ -174,11 +197,12 @@ class UmpirePoolAllocation extends Component {
         });
 
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
-        this.setState({ selectedComp: compId })
+        this.setState({ selectedComp: compId, isOrganiserView: isOrganiser });
     }
 
     dropdownView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        const { competitionList } = this.state;
+        
         return (
             <div className="comp-player-grades-header-drop-down-view comp">
                 <div className="fluid-width">
@@ -192,7 +216,7 @@ class UmpirePoolAllocation extends Component {
                                     onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
                                 >
-                                    {competition.map((item) => (
+                                    {!!competitionList && competitionList.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
@@ -288,6 +312,7 @@ class UmpirePoolAllocation extends Component {
     assignedView = () => {
         let commentList = [];
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        const { isOrganiserView } = this.state;
 
         return (
             <div className="d-flex flex-column">
@@ -310,14 +335,16 @@ class UmpirePoolAllocation extends Component {
                                             </span>
                                         </div>
                                         <div className="col-sm d-flex justify-content-end">
-                                            <img
-                                                className="comp-player-table-img team-delete-link pointer"
-                                                src={AppImages.deleteImage}
-                                                alt=""
-                                                height="20"
-                                                width="20"
-                                                onClick={() => this.onClickDeletePool(umpirePoolItem.id)}
-                                            />
+                                            {isOrganiserView && 
+                                                <img
+                                                    className="comp-player-table-img team-delete-link pointer"
+                                                    src={AppImages.deleteImage}
+                                                    alt=""
+                                                    height="20"
+                                                    width="20"
+                                                    onClick={() => this.onClickDeletePool(umpirePoolItem.id)}
+                                                />
+                                            }
                                             <a 
                                                 className="view-more-btn collapsed" 
                                                 data-toggle="collapse" 
@@ -503,7 +530,7 @@ class UmpirePoolAllocation extends Component {
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         let commentList = [];
-        const { unassignedData } = this.state;
+        const { unassignedData, isOrganiserView } = this.state;
 
         return (
             <div>
@@ -518,16 +545,18 @@ class UmpirePoolAllocation extends Component {
                                             {unassignedData.length > 1 ? unassignedData.length + " Umpires" : unassignedData.length + " Umpire"}
                                         </span>
                                     </div>
-                                    <div className="col-sm d-flex justify-content-end">
-                                        <Button
-                                            className="primary-add-comp-form"
-                                            type="primary"
-                                            disabled={!this.state.compIsParent}
-                                            onClick={this.addUmpirePool}
-                                        >
-                                            + {AppConstants.umpirePools}
-                                        </Button>
-                                    </div>
+                                    { isOrganiserView &&
+                                        <div className="col-sm d-flex justify-content-end">
+                                            <Button
+                                                className="primary-add-comp-form"
+                                                type="primary"
+                                                disabled={!this.state.compIsParent}
+                                                onClick={this.addUmpirePool}
+                                            >
+                                                + {AppConstants.umpirePools}
+                                            </Button>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             {!!unassignedData.length && unassignedData.map((umpireItem, umpireIndex) => (
