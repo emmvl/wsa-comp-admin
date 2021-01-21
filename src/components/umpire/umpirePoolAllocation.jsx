@@ -120,9 +120,24 @@ class UmpirePoolAllocation extends Component {
             this.props.getUmpireList(this.state.selectedComp);
         }
 
-        if (this.props.umpireState.umpireListDataNew !== prevProps.umpireState.umpireListDataNew) {
-            console.log('this.props.umpireState.umpireListDataNew', this.props.umpireState.umpireListDataNew);
-            // this.setState({unassignedData: this.props.umpireState.umpireListDataNew });
+        if ((this.props.umpireState.onLoad !== prevProps.umpireState.onLoad
+            || this.props.umpirePoolAllocationState.onLoad !== prevProps.umpirePoolAllocationState.onLoad) && 
+            !this.props.umpireState.onLoad && !this.props.umpirePoolAllocationState.onLoad
+        ) {
+            const { umpireListDataNew } = this.props.umpireState;
+            const { umpirePoolData } = this.props.umpirePoolAllocationState;
+
+            const assignedUmpiresIdSet = new Set();
+
+            umpirePoolData.forEach(umpirePoolItem => {
+                umpirePoolItem.umpires.forEach(umpireItem => {
+                    assignedUmpiresIdSet.add(umpireItem.id);
+                })
+            });
+
+            const unassignedUmpires = umpireListDataNew.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
+
+            this.setState({unassignedData: unassignedUmpires });
         }
     }
 
@@ -251,7 +266,6 @@ class UmpirePoolAllocation extends Component {
     assignedView = () => {
         let commentList = [];
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
-        console.log('umpirePoolData', umpirePoolData)
 
         return (
             <div className="d-flex flex-column">
@@ -460,8 +474,7 @@ class UmpirePoolAllocation extends Component {
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         let commentList = [];
-        let unassignedData = this.state.unassignedData;
-        const { umpireListDataNew } = this.props.umpireState;
+        const { unassignedData } = this.state;
 
         return (
             <div>
@@ -473,7 +486,7 @@ class UmpirePoolAllocation extends Component {
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-4">
-                                            {umpireListDataNew.length > 1 ? umpireListDataNew.length + " Umpires" : umpireListDataNew.length + " Umpire"}
+                                            {unassignedData.length > 1 ? unassignedData.length + " Umpires" : unassignedData.length + " Umpire"}
                                         </span>
                                     </div>
                                     <div className="col-sm d-flex justify-content-end">
@@ -488,7 +501,7 @@ class UmpirePoolAllocation extends Component {
                                     </div>
                                 </div>
                             </div>
-                            {!!umpireListDataNew.length && umpireListDataNew.map((umpireItem, umpireIndex) => (
+                            {!!unassignedData.length && unassignedData.map((umpireItem, umpireIndex) => (
                                 <Draggable
                                     key={JSON.stringify(umpireItem.id)}
                                     draggableId={'unassigned' + JSON.stringify(umpireItem.id) + umpireIndex}
