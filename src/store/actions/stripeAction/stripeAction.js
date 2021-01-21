@@ -82,7 +82,7 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
     return action;
 }
 
-/////get invoice
+/////get invoice 
 function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
@@ -194,6 +194,14 @@ function exportPaymentDashboardApi(offset,
         paymentStatus
     }
 }
+
+function exportPayoutTransaction(payoutId) {
+    const action = {
+        type: ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD,
+        payoutId,
+    };
+    return action;
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -206,5 +214,6 @@ export {
     exportPaymentApi,
     getStripeRefundsListAction,
     getInvoiceStatusAction,
-    exportPaymentDashboardApi
-}
+    exportPaymentDashboardApi,
+    exportPayoutTransaction,
+};

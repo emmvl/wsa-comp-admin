@@ -271,6 +271,25 @@ function* exportPaymentSaga(action) {
   }
 }
 
+// Export transaction saga
+function* exportPayoutsTransactionSaga(action) {
+    try {
+        const { payoutId } = action;
+        const result = yield call(AxiosApi.exportPayoutTransaction, payoutId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 export function* getInvoiceStatusSaga(action) {
   try {
     const result = yield call(AxiosApi.getInvoiceStatus, action.registrationid, action.userRegId, action.invoiceId, action.teamMemberRegId);
@@ -337,5 +356,5 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, exportPaymentSaga);
   yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD, exportPaymentDashboardSaga);
-
+  yield takeEvery(ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD, exportPayoutsTransactionSaga);
 }

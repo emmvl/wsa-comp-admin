@@ -931,6 +931,17 @@ function userReducer(state = initialState, action) {
         error: null
       };
 
+      case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
+          return { ...state, onExpUserRegDataLoad: true };
+
+      case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
+          return {
+              ...state,
+              onExpUserRegDataLoad: false,
+              status: action.status,
+              error: null
+          };
+
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
 
@@ -959,18 +970,6 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_USER_PROFILE_UPDATE_PLAYER:
       return { ...state, onExpAffiliateDirLoad: true };
-
-    case ApiConstants.API_ADD_CHILD_LOAD:
-      return { ...state };
-
-    case ApiConstants.API_ADD_CHILD_SUCCESS:
-      return { ...state };
-
-    case ApiConstants.API_ADD_PARENT_LOAD:
-      return { ...state };
-
-    case ApiConstants.API_ADD_PARENT_SUCCESS:
-      return { ...state };
 
     case ApiConstants.API_POSSIBLE_MATCH_LOAD:
       return { ...state, possibleMatchesOnLoad: true };
