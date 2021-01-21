@@ -286,7 +286,9 @@ function umpireState(state = initialState, action) {
         case ApiConstants.API_GET_UMPIRE_LIST_SUCCESS:
             return {
                 ...state,
-                umpireListDataNew: action.result,
+                umpireListDataNew: action.result.data,
+                currentPage_Data: action.result.page ? action.result.page.currentPage : null,
+                totalCount_Data: action.result.page ? action.result.page.totalCount : null,
                 onLoad: false,
             };
 

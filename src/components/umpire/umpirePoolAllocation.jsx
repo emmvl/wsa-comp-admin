@@ -61,9 +61,10 @@ class UmpirePoolAllocation extends Component {
                 //     ]
                 // },
             ],
-            unassignedData: [
-                { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
-            ],
+            // unassignedData: [
+            //     { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
+            // ],
+            unassignedData: [],
             compOrgId: 0,
             compIsParent: false,
             orgId: null,
@@ -120,7 +121,8 @@ class UmpirePoolAllocation extends Component {
         }
 
         if (this.props.umpireState.umpireListDataNew !== prevProps.umpireState.umpireListDataNew) {
-            console.log('this.props.umpireState.umpireListDataNew', this.props.umpireState.umpireListDataNew)
+            console.log('this.props.umpireState.umpireListDataNew', this.props.umpireState.umpireListDataNew);
+            // this.setState({unassignedData: this.props.umpireState.umpireListDataNew });
         }
     }
 
@@ -258,11 +260,15 @@ class UmpirePoolAllocation extends Component {
     assignedView = () => {
         let commentList = [];
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        console.log('umpirePoolData', umpirePoolData)
 
         return (
             <div className="d-flex flex-column">
-                {umpirePoolData.map((umpirePoolItem, umpireIndex) => (
-                    <Droppable key={"umpirePoolData" + umpireIndex} droppableId={`${umpirePoolItem.id}`}>
+                {umpirePoolData.map((umpirePoolItem, umpirePoolItemIndex) => (
+                    <Droppable 
+                        key={"umpirePoolData" + umpirePoolItemIndex} 
+                        droppableId={`${umpirePoolItem.id}`}
+                    >
                         {(provided, snapshot) => (
                             <div
                                 ref={provided.innerRef}
@@ -283,19 +289,19 @@ class UmpirePoolAllocation extends Component {
                                                 alt=""
                                                 height="20"
                                                 width="20"
-                                                onClick={() => this.onClickDeleteTeam(umpirePoolItem, umpireIndex)}
+                                                onClick={() => this.onClickDeleteTeam(umpirePoolItem, umpirePoolItemIndex)}
                                             />
-                                            <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${umpireIndex}`} role="button" aria-expanded="false" aria-controls={umpireIndex}>
+                                            <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${umpirePoolItemIndex}`} role="button" aria-expanded="false" aria-controls={umpirePoolItemIndex}>
                                                 <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="collapse" id={umpireIndex}>
+                                <div className="collapse" id={umpirePoolItemIndex}>
                                     {umpirePoolItem.umpires.map((umpireItem, umpireIndex) => (
                                         <Draggable
                                             key={JSON.stringify(umpireItem.id)}
-                                            draggableId={JSON.stringify(umpireItem.id)}
+                                            draggableId={'assigned' + JSON.stringify(umpireItem.id) + umpirePoolItemIndex}
                                             index={umpireIndex}
                                         >
                                             {(provided, snapshot) => (
@@ -462,8 +468,10 @@ class UmpirePoolAllocation extends Component {
 
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
-        let commentList = []
-        let unassignedData = this.state.unassignedData
+        let commentList = [];
+        let unassignedData = this.state.unassignedData;
+        const { umpireListDataNew } = this.props.umpireState;
+
         return (
             <div>
                 <Droppable droppableId="1">
@@ -471,16 +479,10 @@ class UmpirePoolAllocation extends Component {
                         <div ref={provided.innerRef} className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">
                                 <div className="row">
-                                    {/* <Checkbox
-                                        className="single-checkbox mt-1 check-box-player"
-                                        checked={this.state.unassignedcheckbox}
-                                        onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
-                                    >
-                                    </Checkbox> */}
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-4">
-                                            {unassignedData.length > 1 ? unassignedData.length + " Umpires" : unassignedData.length + " Umpire"}
+                                            {umpireListDataNew.length > 1 ? umpireListDataNew.length + " Umpires" : umpireListDataNew.length + " Umpire"}
                                         </span>
                                     </div>
                                     <div className="col-sm d-flex justify-content-end">
@@ -495,10 +497,10 @@ class UmpirePoolAllocation extends Component {
                                     </div>
                                 </div>
                             </div>
-                            {unassignedData && unassignedData.map((playerItem, umpireIndex) => (
+                            {!!umpireListDataNew.length && umpireListDataNew.map((umpireItem, umpireIndex) => (
                                 <Draggable
-                                    key={JSON.stringify(playerItem.playerId)}
-                                    draggableId={JSON.stringify(playerItem.playerId)}
+                                    key={JSON.stringify(umpireItem.id)}
+                                    draggableId={'unassigned' + JSON.stringify(umpireItem.id) + umpireIndex}
                                     index={umpireIndex}
                                 >
                                     {(provided, snapshot) => (
@@ -509,30 +511,24 @@ class UmpirePoolAllocation extends Component {
                                             className="player-grading-draggable-view"
                                         >
                                             <div className="row">
-                                                {/* <Checkbox
-                                                    checked={this.state.unassignedcheckbox}
-                                                    onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
-                                                    className="single-checkbox mt-0 check-box-player"
-                                                >
-                                                </Checkbox> */}
                                                 <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.rank}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{playerItem.playerName}
+                                                        {`${umpireItem.firstName} ${umpireItem.lastName}`}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.Badge}
+                                                        {umpireItem.Badge}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.years}
+                                                        {umpireItem.years}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.matches} {AppConstants.games}
+                                                        {umpireItem.matches} {AppConstants.games}
                                                     </span>
                                                 </div>
                                             </div>
@@ -540,8 +536,6 @@ class UmpirePoolAllocation extends Component {
                                     )}
                                 </Draggable>
                             ))}
-                            {/* </Draggable> */}
-                            {/* ))} */}
                             {provided.placeholder}
                         </div>
                     )}
