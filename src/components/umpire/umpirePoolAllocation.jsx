@@ -56,20 +56,21 @@ class UmpirePoolAllocation extends Component {
             deleteModalVisible: false,
             loading: false,
             selectedComp: null,
-            assignedData: [
-                {
-                    teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
-                        { playerId: 1, playerName: "Jhon", Badge: "Badge A", years: "2 Years", matches: "3005", rank: 1 },
-                    ]
-                },
+            // assignedData: [
+            //     {
+            //         teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
+            //             { playerId: 1, playerName: "Jhon", Badge: "Badge A", years: "2 Years", matches: "3005", rank: 1 },
+            //         ]
+            //     },
                 // {
                 //     teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
                 //     ]
                 // },
-            ],
+            // ],
             // unassignedData: [
             //     { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
             // ],
+            assignedData: [],
             unassignedData: [],
             compOrgId: 0,
             compIsParent: false,
@@ -166,7 +167,7 @@ class UmpirePoolAllocation extends Component {
 
             const unassignedUmpires = umpireListDataNew.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
 
-            this.setState({unassignedData: unassignedUmpires });
+            this.setState({unassignedData: unassignedUmpires, assignedData: umpirePoolData });
         }
     }
 
@@ -190,41 +191,76 @@ class UmpirePoolAllocation extends Component {
 
     onDragEnd = result => {
         const { source, destination } = result;
-        let assignedPlayerData = this.state.assignedData
-        let unassignedPlayerData = this.state.unassignedData
 
-        let playerId
+        const assignedDataCopy = JSON.parse(JSON.stringify(this.state.assignedData));
+        const unassignedDataCopy = JSON.parse(JSON.stringify(this.state.unassignedData));
+
         // dropped outside the list
         if (!destination) {
             return;
         }
 
-        if (source.droppableId !== destination.droppableId) {
-            let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
-            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
+        if (source.droppableId === '1') {
+            const assignedUmpire = unassignedDataCopy[source.index];
+            unassignedDataCopy.splice(source.index, 1);
 
-            if (teamId !== null) {
-                if (sourceTeamID == null) {
-                    playerId = unassignedPlayerData[source.index].playerId
-                } else {
-                    for (let i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                            playerId = assignedPlayerData[i].players[source.index].playerId
-                        }
-                    }
-                }
-            } else {
-                for (let i in assignedPlayerData) {
-                    if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        playerId = assignedPlayerData[i].players[source.index].playerId
-                    }
-                }
-            }
-            // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
-        } else {
-            // this.props.onSameTeamDragAction(source, destination)
+            const poolToAdd = assignedDataCopy.find(pool => +pool.id === +destination.droppableId);
+            poolToAdd.umpires.splice(destination.index, 0, assignedUmpire);
         }
+
+        this.setState({ 
+            unassignedData: unassignedDataCopy,
+            assignedData: assignedDataCopy,
+         });
     };
+
+
+    // onDragEnd = result => {
+    //     const { source, destination } = result;
+
+    //     const assignedPlayerData = this.state.assignedData;
+    //     const unassignedPlayerData = this.state.unassignedData;
+
+    //     let umpireId;
+
+    //     // dropped outside the list
+    //     if (!destination) {
+    //         return;
+    //     }
+
+    //     console.log('source', source);
+    //     console.log('destination', destination);
+
+        // if (source.droppableId !== destination.droppableId) {
+            // let poolId = !destination.droppableId ? null : destination.droppableId;
+            // let sourcePoolID = !source.droppableId ? null : source.droppableId;
+
+            // console.log('poolId, sourcePoolID', poolId, sourcePoolID);
+
+            // if (poolId) {
+            //     console.log('poolId, sourcePoolID', poolId, sourcePoolID);
+            //     if (!sourcePoolID) {
+            //         umpireId = unassignedPlayerData[source.index].id;
+            //     } else {
+            //         for (let i in assignedPlayerData) {
+            //             if (source.droppableId === assignedPlayerData[i].id) {
+            //                 umpireId = assignedPlayerData[i].umpires[source.index].id
+            //             }
+            //         }
+            //     }
+            // } else {
+            //     for (let i in assignedPlayerData) {
+            //         if (source.droppableId === assignedPlayerData[i].teamId) {
+            //             umpireId = assignedPlayerData[i].umpires[source.index].id
+            //         }
+            //     }
+            // }
+
+            // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
+        // } else {
+            // this.props.onSameTeamDragAction(source, destination)
+        // }
+    // };
 
     onClickComment = (player, teamID) => {
         this.setState({
@@ -386,12 +422,11 @@ class UmpirePoolAllocation extends Component {
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
         let commentList = [];
-        const { umpirePoolData } = this.props.umpirePoolAllocationState;
-        const { isOrganiserView } = this.state;
+        const { isOrganiserView, assignedData } = this.state;
 
         return (
             <div className="d-flex flex-column">
-                {umpirePoolData.map((umpirePoolItem, umpirePoolItemIndex) => (
+                {assignedData.map((umpirePoolItem, umpirePoolItemIndex) => (
                     <Droppable 
                         key={"umpirePoolData" + umpirePoolItemIndex} 
                         droppableId={`${umpirePoolItem.id}`}
@@ -564,10 +599,9 @@ class UmpirePoolAllocation extends Component {
     }
 
     updatePoolModalView = () => {
-        const { umpireToUpdate, umpirePoolIdToUpdate } = this.state;
-        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        const { umpireToUpdate, umpirePoolIdToUpdate, assignedData } = this.state;
 
-        const umpirePoolDataToAdd = umpirePoolData.filter(poolDataItem => {
+        const umpirePoolDataToAdd = assignedData.filter(poolDataItem => {
             const hasUmpire = poolDataItem.umpires.some(umpireItem => umpireItem.id === umpireToUpdate?.id);
 
             if (hasUmpire) {
@@ -699,6 +733,7 @@ class UmpirePoolAllocation extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <DragDropContext
+                    onDragEnd={this.onDragEnd}
                 >
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}
