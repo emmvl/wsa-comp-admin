@@ -160,6 +160,7 @@ const routeAdminRole = [
     "/matchDayCoachImport",
     "/userOurOrganisation",
     "/userPersonal",
+    "/submittedRegData",
     "/umpireRoster",
     "/addTeamMember",
     "/teamMemberRegPayment"

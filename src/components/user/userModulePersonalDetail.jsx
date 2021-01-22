@@ -45,7 +45,8 @@ import {
     userProfileUpdateAction,
     resetTfaAction,
     teamMemberUpdateAction,
-    exportUserRegData
+    exportUserRegData,
+    getSubmittedRegData,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -89,6 +90,12 @@ const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
 const section = null;
+
+let userRoleId;
+
+if (localStorage.setOrganisationData) {
+    userRoleId = JSON.parse(localStorage.setOrganisationData).userRoleId;
+}
 
 const columns = [
     {
@@ -209,6 +216,14 @@ const columns = [
                     <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
                         <span>Payment</span>
                     </Menu.Item>
+                    {
+                        userRoleId === 1 &&
+                        <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
+                            <span>
+                                Registration Form
+                            </span>
+                        </Menu.Item>
+                    }
                 </SubMenu>
             </Menu>
         ),
@@ -3027,6 +3042,12 @@ class UserModulePersonalDetail extends Component {
         this.props.exportUserRegData({ userId });
     }
 
+    registrationFormClicked = (registrationId) => {
+        this.props.getSubmittedRegData({ registrationId });
+
+        history.push('/submittedRegData');
+    }
+
     headerView = () => {
         function handleMenuClick(e) {
             history.push("/mergeUserMatches");
@@ -3593,7 +3614,8 @@ function mapDispatchToProps(dispatch) {
             userProfileUpdateAction,
             resetTfaAction,
             teamMemberUpdateAction,
-            exportUserRegData
+            exportUserRegData,
+            getSubmittedRegData,
         },
         dispatch,
     );
