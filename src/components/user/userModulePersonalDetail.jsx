@@ -201,7 +201,7 @@ const columns = [
                     <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
                         <span>View</span>
                     </Menu.Item>
-                    {e.alreadyDeRegistered == 0 && (
+                    {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
                         <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
