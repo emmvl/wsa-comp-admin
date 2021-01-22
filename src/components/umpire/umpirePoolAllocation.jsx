@@ -27,6 +27,7 @@ import {
     getUmpirePoolData,
     saveUmpirePoolData,
     updateUmpirePoolData,
+    updateUmpirePoolManyData,
     deleteUmpirePoolData
  } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import {
@@ -373,6 +374,22 @@ class UmpirePoolAllocation extends Component {
 
     handleChangePoolToUpdate = umpirePoolIdToUpdate => {
         this.setState({ umpirePoolIdToUpdate });
+    }
+
+    handleSave = () => {
+        const { selectedComp, assignedData } = this.state;
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        const body = assignedData.map(dataItem => ({
+            id: dataItem.id,
+            umpires: dataItem.umpires.map(umpire => umpire.id)
+        }))
+
+        this.props.updateUmpirePoolManyData({
+            compId: selectedComp,
+            orgId: organisationId,
+            body,
+        });
     }
 
     headerView = () => {
@@ -755,6 +772,7 @@ class UmpirePoolAllocation extends Component {
                                 className="publish-button save-draft-text mr-0" 
                                 type="primary"
                                 htmlType="submit"
+                                onClick={this.handleSave}
                             >
                                 {AppConstants.save}
                             </Button>
@@ -795,6 +813,7 @@ function mapDispatchToProps(dispatch) {
         deleteUmpirePoolData,
         saveUmpirePoolData,
         updateUmpirePoolData,
+        updateUmpirePoolManyData,
         getUmpireList,
     }, dispatch)
 }

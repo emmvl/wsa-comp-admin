@@ -21,6 +21,13 @@ function updateUmpirePoolData(payload) {
     };
 }
 
+function updateUmpirePoolManyData(payload) {
+    return {
+        type: ApiConstants.API_UPDATE_UMPIRE_POOL_MANY_DATA_LOAD,
+        payload,
+    };
+}
+
 function deleteUmpirePoolData(payload) {
     return {
         type: ApiConstants.API_DELETE_UMPIRE_POOL_DATA_LOAD,
@@ -32,5 +39,6 @@ export {
     getUmpirePoolData,
     saveUmpirePoolData,
     updateUmpirePoolData,
+    updateUmpirePoolManyData,
     deleteUmpirePoolData,
 }
