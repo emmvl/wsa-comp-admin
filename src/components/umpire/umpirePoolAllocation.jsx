@@ -170,22 +170,6 @@ class UmpirePoolAllocation extends Component {
         }
     }
 
-    headerView = () => {
-        return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm pt-1 d-flex align-content-center">
-                            <span className="form-heading">
-                                {AppConstants.umpirePools}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     onChangeComp = compId => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         const { competitionList } = this.state;
@@ -202,34 +186,6 @@ class UmpirePoolAllocation extends Component {
 
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
         this.setState({ selectedComp: compId, isOrganiserView: isOrganiser });
-    }
-
-    dropdownView = () => {
-        const { competitionList } = this.state;
-        
-        return (
-            <div className="comp-player-grades-header-drop-down-view comp">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="w-100 d-flex flex-row align-items-center">
-                                <span className="year-select-heading">{AppConstants.competition}:</span>
-                                <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 200, maxWidth: 250 }}
-                                    onChange={this.onChangeComp}
-                                    value={this.state.selectedComp}
-                                >
-                                    {!!competitionList && competitionList.map((item) => (
-                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
     }
 
     onDragEnd = result => {
@@ -381,6 +337,50 @@ class UmpirePoolAllocation extends Component {
 
     handleChangePoolToUpdate = umpirePoolIdToUpdate => {
         this.setState({ umpirePoolIdToUpdate });
+    }
+
+    headerView = () => {
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-4">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm pt-1 d-flex align-content-center">
+                            <span className="form-heading">
+                                {AppConstants.umpirePools}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    dropdownView = () => {
+        const { competitionList } = this.state;
+        
+        return (
+            <div className="comp-player-grades-header-drop-down-view comp">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="w-100 d-flex flex-row align-items-center">
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
+                                <Select
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 200, maxWidth: 250 }}
+                                    onChange={this.onChangeComp}
+                                    value={this.state.selectedComp}
+                                >
+                                    {!!competitionList && competitionList.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     //////for the assigned teams on the left side of the view port
