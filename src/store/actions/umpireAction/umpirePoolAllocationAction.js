@@ -16,7 +16,7 @@ function saveUmpirePoolData(payload) {
 
 function updateUmpirePoolData(payload) {
     return {
-        type: ApiConstants.API_SAVE_UMPIRE_POOL_DATA_LOAD,
+        type: ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_LOAD,
         payload,
     };
 }

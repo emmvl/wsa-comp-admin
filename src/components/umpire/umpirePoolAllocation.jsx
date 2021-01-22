@@ -355,20 +355,15 @@ class UmpirePoolAllocation extends Component {
     }
 
     handleOkUpdatePool = (e) => {
-        // if (this.state.newPool.length > 0) {
+        const { umpirePoolIdToUpdate, umpireToUpdate, selectedComp } = this.state;
+        const umpireId = umpireToUpdate.id;
 
-        //     let poolObj = {
-        //         name: this.state.newPool,
-        //         umpires: []
-        //     }
+        this.props.updateUmpirePoolData({
+            compId: selectedComp,
+            umpirePoolId: umpirePoolIdToUpdate,
+            umpires: [umpireId]
+        });
 
-        //     this.props.saveUmpirePoolData({
-        //         compId: this.state.selectedComp,
-        //         orgId: this.state.orgId,
-        //         poolObj: poolObj
-
-        //     });
-        // }
         this.setState({
             updatePoolModalVisible: false,
             umpireToUpdate: null,
@@ -569,7 +564,7 @@ class UmpirePoolAllocation extends Component {
     }
 
     updatePoolModalView = () => {
-        const { umpireToUpdate } = this.state;
+        const { umpireToUpdate, umpirePoolIdToUpdate } = this.state;
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
         const umpirePoolDataToAdd = umpirePoolData.filter(poolDataItem => {
@@ -589,6 +584,7 @@ class UmpirePoolAllocation extends Component {
                 visible={this.state.updatePoolModalVisible}
                 onOk={() => this.handleOkUpdatePool()}
                 onCancel={() => this.handleCancelUpdatePool()}
+                okButtonProps={{ disabled: !umpirePoolIdToUpdate }}
             >
                 {umpireToUpdate && 
                     <div>
@@ -597,7 +593,7 @@ class UmpirePoolAllocation extends Component {
                             className="year-select reg-filter-select1 ml-2"
                             style={{ minWidth: 200, maxWidth: 250 }}
                             onChange={this.handleChangePoolToUpdate}
-                            value={this.state.umpirePoolIdToUpdate}
+                            value={umpirePoolIdToUpdate}
                         >
                             {umpirePoolDataToAdd.map((item) => (
                                 <Option key={'pool' + item.id} value={item.id}>{item.name}</Option>
