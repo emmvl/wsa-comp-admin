@@ -50,6 +50,7 @@ class UmpirePoolAllocation extends Component {
             savePoolModalVisible: false,
             updatePoolModalVisible: false,
             addUmpireToPoolModalVisible: false,
+            removeUmpireFromPoolModalVisible: false,
             modalVisible: false,
             comment: null,
             teamID: null,
@@ -57,27 +58,13 @@ class UmpirePoolAllocation extends Component {
             deleteModalVisible: false,
             loading: false,
             selectedComp: null,
-            // assignedData: [
-            //     {
-            //         teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
-            //             { playerId: 1, playerName: "Jhon", Badge: "Badge A", years: "2 Years", matches: "3005", rank: 1 },
-            //         ]
-            //     },
-                // {
-                //     teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
-                //     ]
-                // },
-            // ],
-            // unassignedData: [
-            //     { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
-            // ],
             assignedData: [],
             unassignedData: [],
             compOrgId: 0,
             compIsParent: false,
             orgId: null,
             umpirePoolIdToDelete: '',
-            umpireToUpdate: null,
+            umpireForAction: null,
             umpirePoolIdToUpdate: '',
         }
         this_obj = this;
@@ -345,23 +332,25 @@ class UmpirePoolAllocation extends Component {
 
     // update pool handling
 
-    handleUpdateUmpirePool = umpireToUpdate => {
-        this.setState({ umpireToUpdate, updatePoolModalVisible: true });
+    handleUpdateUmpirePool = umpireForAction => {
+        this.setState({ umpireForAction, updatePoolModalVisible: true });
     }
 
-    handleOkUpdatePool = (e) => {
-        const { umpirePoolIdToUpdate, umpireToUpdate, selectedComp } = this.state;
-        const umpireId = umpireToUpdate.id;
+    handleOkUpdatePool = () => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { umpirePoolIdToUpdate, umpireForAction, selectedComp } = this.state;
+        const umpireId = umpireForAction.id;
 
         this.props.updateUmpirePoolData({
             compId: selectedComp,
+            orgId: organisationId,
             umpirePoolId: umpirePoolIdToUpdate,
             umpires: [umpireId]
         });
 
         this.setState({
             updatePoolModalVisible: false,
-            umpireToUpdate: null,
+            umpireForAction: null,
             umpirePoolIdToUpdate: '',
         });
     };
@@ -369,7 +358,7 @@ class UmpirePoolAllocation extends Component {
     handleCancelUpdatePool = (e) => {
         this.setState({
             updatePoolModalVisible: false,
-            umpireToUpdate: null,
+            umpireForAction: null,
             umpirePoolIdToUpdate: '',
         });
     };
@@ -377,6 +366,55 @@ class UmpirePoolAllocation extends Component {
     handleChangePoolToUpdate = umpirePoolIdToUpdate => {
         this.setState({ umpirePoolIdToUpdate });
     }
+
+    // remove umpire from pool handling
+
+    handleRemoveUmpireFromPool = (umpireForAction, umpirePoolIdToUpdate) => {
+        this.setState({ 
+            umpireForAction,
+            umpirePoolIdToUpdate,
+            removeUmpireFromPoolModalVisible: true 
+        });
+    }
+    
+    handleOkRemoveUmpireFromPool = (e) => {
+        const { selectedComp, assignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+
+        assignedDataCopy.forEach(poolDataItem => {
+            if (poolDataItem.id === umpirePoolIdToUpdate) {
+                const indexToRemove = poolDataItem.umpires.findIndex(umpire => umpire.id === umpireForAction.id);
+                poolDataItem.umpires.splice(indexToRemove, 1);
+            }
+        })
+
+        const body = assignedDataCopy.map(dataItem => ({
+            id: dataItem.id,
+            umpires: dataItem.umpires.map(umpire => umpire.id)
+        }))
+
+        this.props.updateUmpirePoolManyData({
+            compId: selectedComp,
+            orgId: organisationId,
+            body,
+        });
+
+        this.setState({
+            removeUmpireFromPoolModalVisible: false,
+            umpireForAction: null,
+            umpirePoolIdToUpdate: ''
+        });
+    }
+    
+    handleCancelRemoveUmpireFromPool = () => {
+        this.setState({
+            removeUmpireFromPoolModalVisible: false,
+            umpireForAction: null,
+            umpirePoolIdToUpdate: ''
+        });
+    };
 
     handleSave = () => {
         const { selectedComp, assignedData } = this.state;
@@ -553,6 +591,13 @@ class UmpirePoolAllocation extends Component {
                                                                     >
                                                                         <span>{AppConstants.addToAnotherPool}</span>
                                                                     </Menu.Item>
+
+                                                                    <Menu.Item
+                                                                        key="2"
+                                                                        onClick={() => this.handleRemoveUmpireFromPool(umpireItem, umpirePoolItem.id)}
+                                                                    >
+                                                                        <span>{AppConstants.removeFromPool}</span>
+                                                                    </Menu.Item>
                                                                 </Menu.SubMenu>
                                                             </Menu>
                                                         </div>
@@ -618,10 +663,10 @@ class UmpirePoolAllocation extends Component {
     }
 
     updatePoolModalView = () => {
-        const { umpireToUpdate, umpirePoolIdToUpdate, assignedData } = this.state;
+        const { umpireForAction, umpirePoolIdToUpdate, assignedData, updatePoolModalVisible } = this.state;
 
         const umpirePoolDataToAdd = assignedData.filter(poolDataItem => {
-            const hasUmpire = poolDataItem.umpires.some(umpireItem => umpireItem.id === umpireToUpdate?.id);
+            const hasUmpire = poolDataItem.umpires.some(umpireItem => umpireItem.id === umpireForAction?.id);
 
             if (hasUmpire) {
                 return false;
@@ -634,14 +679,14 @@ class UmpirePoolAllocation extends Component {
             <Modal
                 className="add-membership-type-modal"
                 title={AppConstants.addUmpireToPool}
-                visible={this.state.updatePoolModalVisible}
+                visible={updatePoolModalVisible}
                 onOk={() => this.handleOkUpdatePool()}
                 onCancel={() => this.handleCancelUpdatePool()}
                 okButtonProps={{ disabled: !umpirePoolIdToUpdate }}
             >
-                {umpireToUpdate && 
+                {umpireForAction && 
                     <div>
-                        <p>{`${AppConstants.add} ${umpireToUpdate.firstName} ${umpireToUpdate.lastName} ${AppConstants.toPool}:`}</p>
+                        <p>{`${AppConstants.add} ${umpireForAction.firstName} ${umpireForAction.lastName} ${AppConstants.toPool}:`}</p>
                         <Select
                             className="year-select reg-filter-select1 ml-2"
                             style={{ minWidth: 200, maxWidth: 250 }}
@@ -652,6 +697,26 @@ class UmpirePoolAllocation extends Component {
                                 <Option key={'pool' + item.id} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
+                    </div>
+                }
+            </Modal>
+        )
+    }
+
+    removeUmpireFromPoolModalView = () => {
+        const { umpireForAction, removeUmpireFromPoolModalVisible } = this.state;
+
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.removeFromPool}
+                visible={removeUmpireFromPoolModalVisible}
+                onOk={() => this.handleOkRemoveUmpireFromPool()}
+                onCancel={() => this.handleCancelRemoveUmpireFromPool()}
+            >
+                {umpireForAction && 
+                    <div>
+                        <p>{`${AppConstants.removeMsg} ${umpireForAction.firstName} ${umpireForAction.lastName}?`}</p>
                     </div>
                 }
             </Modal>
@@ -800,6 +865,7 @@ class UmpirePoolAllocation extends Component {
                         {this.contentView()}
                         {this.poolModalView()}
                         {this.updatePoolModalView()}
+                        {this.removeUmpireFromPoolModalView()}
                     </Content>
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
