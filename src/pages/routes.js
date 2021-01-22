@@ -94,6 +94,7 @@ import UserDashboard from 'components/user/userDashboard';
 import UserEditAffiliates from 'components/user/userEditAffiliates';
 import userModuleMedical from 'components/user/userModuleMedical';
 import UserModulePersonalDetail from 'components/user/userModulePersonalDetail';
+import UserSubmittedRegistrationData from 'components/user/userSubmittedRegistrationData';
 import UserOurOrganization from 'components/user/userOurOragnization';
 import UserProfileEdit from 'components/user/userProfileEdit';
 import UserTextualDashboard from 'components/user/userTextualDashboard';
@@ -427,6 +428,12 @@ class Routes extends React.Component {
                     path="/userPersonal"
                     component={this.haveAccess(userRoleId, '/userPersonal')
                         ? lazyLoad(UserModulePersonalDetail)
+                        : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/submittedRegData"
+                    component={this.haveAccess(userRoleId, '/submittedRegData')
+                        ? lazyLoad(UserSubmittedRegistrationData)
                         : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
@@ -1018,7 +1025,7 @@ class Routes extends React.Component {
 
                 <Route path="/" component={lazyLoad(NotFound)} />
 
-               
+
 
                 <Redirect from="*" to="/404" />
             </Switch>
