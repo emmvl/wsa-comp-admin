@@ -42,12 +42,12 @@ import {
     getUserDashboardTextualAction,
     getRoleAction,
 } from '../../store/actions/userAction/userAction';
-import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction';
 
 import {
     refreshCommunicationModuleDataAction,
     updateCommunicationModuleData,
     setDefaultImageVideoNewAction,
+    addCommunicationAction,
 } from '../../store/actions/communicationAction/communicationAction';
 import Loader from "../../customComponents/loader";
 
@@ -66,7 +66,6 @@ class AddCommunication extends Component {
             toOrganisationIds: [],
             toUserRoleIds: [],
             toUserIds: [],
-            recipientSelection: AppConstants.selectRecipients,
             communicationImage: null,
             communicationVideo: null,
             image: null,
@@ -107,7 +106,7 @@ class AddCommunication extends Component {
 
         this.props.getRoleAction();
 
-        this.setState({ getDataLoading: false, authorName: name });
+        this.setState({ getDataLoading: false, author: name });
         this.formRef.current.setFieldsValue({
             author: name,
         });
@@ -142,10 +141,6 @@ class AddCommunication extends Component {
         });
     }
 
-    onChangeEditorData = (event) => {
-        this.setState({ body: event });
-    }
-
     onEditorStateChange = (editorState) => {
         const body = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
@@ -156,13 +151,9 @@ class AddCommunication extends Component {
     };
 
     setInitialFilledValue(data, author) {
-        let authorData = null;
-        if (getLiveScoreCompetiton()) {
-            authorData = JSON.parse(getLiveScoreCompetiton());
-        }
         this.formRef.current.setFieldsValue({
             communication_Title: data.title,
-            author: data.author ? data.author : author || (authorData ? authorData.longName : 'World sport action'),
+            author: data.author ? data.author : author,
         });
 
         const finalBody = data ? data.body ? data.body : "" : "";
@@ -355,7 +346,6 @@ class AddCommunication extends Component {
                             editorState={this.state.editorState}
                             editorClassName="newsDetailEditor"
                             placeholder={AppConstants.communicationBody}
-                            onChange={(e) => this.onChangeEditorData(e.blocks)}
                             onEditorStateChange={this.onEditorStateChange}
                             toolbar={{
                                 options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign',
@@ -767,7 +757,7 @@ class AddCommunication extends Component {
             communicationVideo: this.state.communicationVideo,
         };
 
-
+        this.props.addCommunicationAction(payload);
         console.log('===============', payload);
     }
 
@@ -844,13 +834,13 @@ function mapDispatchToProps(dispatch) {
         getRoleAction,
         getAffiliatesListingAction,
         refreshCommunicationModuleDataAction,
-        liveScoreManagerListAction,
         setDefaultImageVideoNewAction,
         getAffiliateToOrganisationAction,
         clearListAction,
         getUserDashboardTextualAction,
         updateCommunicationModuleData,
         filterByRelations,
+        addCommunicationAction,
     }, dispatch);
 }
 

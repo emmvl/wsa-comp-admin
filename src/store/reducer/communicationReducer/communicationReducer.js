@@ -55,6 +55,13 @@ function communicationModuleState(state = initialState, action) {
                 error: action.error,
                 status: action.status,
             };
+        case ApiConstants.API_ADD_COMMUNICATION_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status,
+            };
         default:
             return state;
     }

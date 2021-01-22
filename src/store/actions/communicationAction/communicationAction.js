@@ -8,20 +8,12 @@ function communicationListAction(competitionId) {
     return action;
 }
 
-function addCommunicationAction(addNewItemDetail) {
-    const action = {
-        type: ApiConstants.API_ADD_COMMUNICATION,
-        addNewItemDetail,
-    };
-
-    return action;
-}
-
-function addCommunicationModuleDataAction(data) {
+function addCommunicationAction(data) {
     const action = {
         type: ApiConstants.API_ADD_COMMUNICATION_LOAD,
         data,
     };
+
     return action;
 }
 
@@ -72,7 +64,6 @@ function setDefaultImageVideoNewAction(data) {
 export {
     communicationListAction,
     addCommunicationAction,
-    addCommunicationModuleDataAction,
     refreshCommunicationModuleDataAction,
     communicationNotificationAction,
     deleteCommunicationAction,

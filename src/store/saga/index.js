@@ -49,7 +49,7 @@ import {
     getTeamRegistrationsSaga,
     exportTeamRegistrationsSaga,
     getMembershipFeeCapListSaga,
-    updateMembershipFeeCapSaga
+    updateMembershipFeeCapSaga,
 } from './registrationSaga/registrationSaga';
 
 /// /**************************Live Score***************************Start
@@ -114,7 +114,7 @@ import {
     deleteTeamSaga,
     playerChangeDivisionSaga,
     playerCommentList,
-    playerGradingExport
+    playerGradingExport,
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 
 import * as regChangeSaga from './registrationSaga/registrationChangeSaga';
@@ -180,15 +180,16 @@ import * as competitionQuickSaga from './competitionManagementSaga/competitionQu
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 
 import {
-    getInnerHorizontalCompSaga
+    getInnerHorizontalCompSaga,
 } from './liveScoreSaga/liveScoreInnerHorizontalSaga';
 
 import {
-    liveScorePositionTrackSaga
+    liveScorePositionTrackSaga,
 } from './liveScoreSaga/liveScorePositionTrackSaga';
 import rootCompetitionMultiDrawSaga from './competitionManagementSaga/competitionMultiDrawsSaga';
 import umpirePaymentSaga from './umpireSaga/umpirePaymentSaga';
 import umpirePoolAllocationSaga from './umpireSaga/umpirePoolAllocationSaga';
+import rootCommunicationListSaga from "./communicationSaga/communicationSaga";
 
 export default function* rootSaga() {
     yield all([
@@ -240,8 +241,11 @@ export default function* rootSaga() {
         // Umpire Payment Saga
         fork(umpirePaymentSaga),
 
-        //Umpire Pool Allocation Saga
+        // Umpire Pool Allocation Saga
         fork(umpirePoolAllocationSaga),
+
+        // Communication
+        fork(rootCommunicationListSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
@@ -567,13 +571,12 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD, competitionQuickSaga.UpdateGrid_TimeSlotSaga);
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD, competitionQuickSaga.updateGrid_DivisionSaga);
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_VENUE_LOAD, competitionQuickSaga.updateGrid_VenueSaga);
-    yield takeEvery(ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD, playerGradingExport)
-    yield takeEvery(ApiConstants.API_GET_EXPORT_REGISTRATION_LOAD, endUserRegSaga.exportRegistrationSaga)
+    yield takeEvery(ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD, playerGradingExport);
+    yield takeEvery(ApiConstants.API_GET_EXPORT_REGISTRATION_LOAD, endUserRegSaga.exportRegistrationSaga);
 
-    yield takeEvery(ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD, getMembershipFeeCapListSaga)
-    yield takeEvery(ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD, updateMembershipFeeCapSaga)
+    yield takeEvery(ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD, getMembershipFeeCapListSaga);
+    yield takeEvery(ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD, updateMembershipFeeCapSaga);
 
     yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_LIST_LOAD, liveScoreSingleGameListSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_REDEEM_PAY_LOAD, liveScoreSingleGameRedeemPaySaga);
-
 }

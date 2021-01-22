@@ -3,12 +3,12 @@ import { message } from "antd";
 
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import communicationAxiosApi from "../../http/communicationHttp/communicationAxiosApi";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_COMMUNICATION_LIST_FAIL });
 
-    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
+    const msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
     message.config({
         duration: 1.5,
         maxCount: 1,
@@ -19,7 +19,7 @@ function* failSaga(result) {
 function* errorSaga(error) {
     yield put({
         type: ApiConstants.API_COMMUNICATION_LIST_ERROR,
-        error: error,
+        error,
         status: error.status,
     });
 
@@ -40,7 +40,7 @@ function* errorSaga(error) {
 
 export function* communicationListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.communicationList, action.data);
+        const result = yield call(communicationAxiosApi.communicationList, action.data);
 
         if (result.status === 1) {
             yield put({
