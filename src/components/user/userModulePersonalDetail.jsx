@@ -90,7 +90,12 @@ const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
 const section = null;
-const { userRoleId } = JSON.parse(localStorage.setOrganisationData);
+
+let userRoleId;
+
+if (localStorage.setOrganisationData) {
+    userRoleId = JSON.parse(localStorage.setOrganisationData).userRoleId;
+}
 
 const columns = [
     {
