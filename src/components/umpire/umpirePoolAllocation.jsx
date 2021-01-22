@@ -314,6 +314,8 @@ class UmpirePoolAllocation extends Component {
     }
 
     handleOkSavePool = (e) => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
         if (this.state.newPool.length > 0) {
 
             let poolObj = {
@@ -323,7 +325,7 @@ class UmpirePoolAllocation extends Component {
 
             this.props.saveUmpirePoolData({
                 compId: this.state.selectedComp,
-                orgId: this.state.orgId,
+                orgId: organisationId,
                 poolObj: poolObj
 
             });

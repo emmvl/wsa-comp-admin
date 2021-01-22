@@ -89,7 +89,7 @@ const Method = {
 
                 .then(result => {
 
-                    if (result.status === 200) {
+                    if (result.status === 200 || result.status === 201) {
                         return resolve({
                             status: 1,
                             result: result

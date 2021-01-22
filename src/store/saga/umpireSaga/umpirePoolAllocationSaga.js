@@ -74,6 +74,7 @@ function* saveUmpirePoolAllocationSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result);
         }
@@ -92,7 +93,7 @@ function* updateUmpirePoolAllocationSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            message.success('Updated successfully.');
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result);
         }
@@ -111,7 +112,7 @@ function* updateUmpirePoolAllocationManySaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            message.success('Updated successfully.');
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result);
         }
@@ -130,7 +131,7 @@ function* deleteUmpirePoolAllocationSaga(action) {
                 result: action.payload.umpirePoolId,
                 status: result.status,
             });
-            message.success('Deleted successfully.');
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result);
         }
