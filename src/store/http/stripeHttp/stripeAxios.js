@@ -215,7 +215,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            organisationUniqueKey: organisationUniqueKey,
+            organisationId: organisationUniqueKey,
             userId: parseInt(userId),
             registrationId: registrationId,
             paging: {

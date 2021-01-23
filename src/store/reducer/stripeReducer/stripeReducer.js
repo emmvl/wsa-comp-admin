@@ -396,7 +396,7 @@ function stripe(state = initialState, action) {
             let paymentSummary = action.result;
             return {
                 ...state, onLoad: false,
-                paymentSummaryList: paymentSummary.paymentSummaryList,
+                paymentSummaryList: paymentSummary.payementSummary,
                 paymentCompetitionList: paymentSummary.competitionList,
                 paymentSummaryListTotalCount: paymentSummary.page.totalCount,
                 paymentSummaryListPage: paymentSummary.page
