@@ -1131,7 +1131,7 @@ const AppConstants = {
     replyContactDetailMsg: 'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
     howUserRegisterMsg: 'Define how Users can Register for your Competition.',
     additionQuesMsg: 'Click on the Questions you would like to ask Users who are Registering to your Competition.',
-    allDivisionsMsg: 'All Divisions are changed the same Fees.',
+    allDivisionsMsg: 'All Divisions are charged the same Fees.',
     perDivisionMsg: 'Each Division can be charged a different Fee. ',
     paymentSeasonalFeeMsg: 'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
     paymentCausalFeeMsg: 'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
