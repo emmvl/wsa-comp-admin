@@ -55,6 +55,7 @@
 
 .input {
   color: var(--app-1b1b34);
+  text-overflow: ellipsis;
 }
 
 .textAreaInput textarea.ant-input {
@@ -239,6 +240,10 @@
 
 .error-message-column {
   min-width: 400px;
+}
+
+.error-message-inside {
+  color: var(--app-color);
 }
 
 @media (max-width: 767px) {

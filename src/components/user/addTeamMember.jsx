@@ -11,6 +11,7 @@ import {
   Radio,
   Form,
   message,
+  Modal
 } from "antd";
 import moment from 'moment';
 
@@ -45,6 +46,7 @@ class AddTeamMember extends Component {
             getMembershipProductsInfoOnLoad: false,
             teamMembersSaveOnLoad: false,
             getTeamMembersOnLoad: false,
+            addTeamSaveErrorPopUpVisible: false
         };
         this.props.teamMemberSaveUpdateAction(this.state.teamMemberRegId, "teamMemberRegId");
         this.formRef = React.createRef();
@@ -71,7 +73,7 @@ class AddTeamMember extends Component {
                     this.setState({ teamMembersSaveOnLoad: false });
                     if (userState.status == 1) {
                         if (userState.teamMembersSaveErrorMsg) {
-
+                            this.setState({ addTeamSaveErrorPopUpVisible: true })
                         } else {
                             if (userState.teamMemberRegId) {
                                 history.push('/teamMemberRegPayment', {
@@ -84,6 +86,14 @@ class AddTeamMember extends Component {
                 }
                 if (userState.getTeamMembersOnLoad == false && this.state.getTeamMembersOnLoad == true) {
                     this.setState({ getTeamMembersOnLoad: false });
+                    this.setTeamMembersFormFieldsValue();
+                }
+                if(userState.teamMemberDeletion == true) {
+                    this.props.teamMemberSaveUpdateAction(false, "teamMemberDeletion");
+                    this.setTeamMembersFormFieldsValue();
+                }
+                if(userState.addTeamMember == true) {
+                    this.props.teamMemberSaveUpdateAction(false, "addTeamMember");
                     this.setTeamMembersFormFieldsValue();
                 }
             }
@@ -308,6 +318,9 @@ class AddTeamMember extends Component {
             teamMembersSave.mobileNumber = personalData.mobileNumber;
             teamMembersSave.registrationId = this.state.team.registrationUniqueKey;
             teamMembersSave.competitionMembershipProductDivisionId = this.state.team.competitionMembershipProductDivisionId;
+            teamMembersSave.firstName = personalData.firstName;
+            teamMembersSave.lastName = personalData.lastName;
+            teamMembersSave.email = personalData.email;
             return teamMembersSave;
         } catch (ex) {
             console.log(`Error in getUpdatedTeamMembersSave::${ex}`);
@@ -414,7 +427,9 @@ class AddTeamMember extends Component {
             console.log("Error in checkGenderDivisionRestriction::" + ex);
         }
     }
-
+    onCancelClick = () => {
+        history.push("/userPersonal", { userId: this.state.team.userId})
+    }
     onSaveClick = () => {
         try {
             const { teamMembersSave } = this.props.userState;
@@ -434,6 +449,30 @@ class AddTeamMember extends Component {
         } catch (ex) {
             console.log("Error in onSaveClick::" + ex);
         }
+    }
+
+    addTeamSaveErrorPopUp = () => {
+        let userState = this.props.userState;
+        let errorMsg = userState.teamMembersSaveErrorMsg;
+        return(
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.userDetailsInvalid}
+                    visible={this.state.addTeamSaveErrorPopUpVisible}
+                    onCancel={() => this.setState({ addTeamSaveErrorPopUpVisible: false })}
+                    footer={[
+                        <Button onClick={() => this.setState({ addTeamSaveErrorPopUpVisible: false })}>
+                            {AppConstants.ok}
+                        </Button>
+                    ]}
+                >
+                    {(errorMsg || []).map((item, index) => (
+                        <p key={index}> {item}</p>
+                    ))}
+                </Modal>
+            </div>
+        )
     }
 
     headerView = () => {
@@ -826,9 +865,7 @@ class AddTeamMember extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-add-save-button">
-                            <NavLink to={{ pathname: `/userPersonal` }}>
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
-                            </NavLink>
+                            <Button type="cancel-button" onClick={this.onCancelClick}>{AppConstants.cancel}</Button>
                         </div>
                     </div>
                     <div className="col-sm">
@@ -874,6 +911,7 @@ class AddTeamMember extends Component {
                                     this.props.userState.onMembershipLoad
                                 }
                             />
+                            {this.addTeamSaveErrorPopUp()}
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

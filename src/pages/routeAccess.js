@@ -127,6 +127,7 @@ const routeAdminRole = [
     "/listProducts",
     "/addProduct",
     "/paymentDashboard",
+    "/paymentSummary",
     "/orderSummary",
     "/orderStatus",
     "/shopSettings",
@@ -160,6 +161,7 @@ const routeAdminRole = [
     "/matchDayCoachImport",
     "/userOurOrganisation",
     "/userPersonal",
+    "/submittedRegData",
     "/umpireRoster",
     "/addTeamMember",
     "/teamMemberRegPayment"
@@ -218,6 +220,7 @@ const routeFinanceRole = [
     "/userProfileEdit",
     "/userEditAffiliates",
     "/paymentDashboard",
+    "/paymentSummary",
     "/registrationPayments",
     "/registrationSettlements",
     "/matchDayTeamView",

@@ -231,7 +231,8 @@ function* getPaymentListSaga(action) {
       action.feeType,
       action.paymentType,
       action.paymentMethod,
-      action.membershipType
+      action.membershipType,
+      action.paymentStatus
     );
 
     if (result.status === 1) {
@@ -324,11 +325,48 @@ function* exportPaymentDashboardSaga(action) {
       action.feeType,
       action.paymentType,
       action.paymentMethod,
-      action.membershipType);
+      action.membershipType,
+      action.paymentStatus);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* getPaymentSummarySaga(action) {
+  try {
+    const result = yield call(
+      AxiosApi.getPaymentSummary,
+      action.offset,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType,
+      action.paymentStatus
+    );
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_SUMMARY_LIST_SUCCESS,
         result: result.result.data,
         status: result.result.status,
       });
@@ -355,4 +393,5 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD, exportPaymentDashboardSaga);
   yield takeEvery(ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD, exportPayoutsTransactionSaga);
+  yield takeEvery(ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD, getPaymentSummarySaga);
 }

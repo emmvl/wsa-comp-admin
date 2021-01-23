@@ -300,6 +300,16 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "RegistrationQuestions");
   },
 
+  exportUserRegData(payload) {
+    const url = `api/export/registration/data`;
+    return Method.dataPostDownload(url, token, payload, "UserRegistrationData");
+  },
+
+  async getSubmittedRegData(payload) {
+    const url = `api/user/registration/registrationForm`;
+    return Method.dataPost(url, token, payload);
+  },
+
   async affiliateDirectory(payload, sortBy, sortOrder) {
     let url;
 

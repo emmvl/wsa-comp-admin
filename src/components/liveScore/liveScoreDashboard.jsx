@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import { Layout, Input, Button, Table, message } from 'antd';
+import { Layout, Input, Button, Table, message, Pagination, Menu } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreDashboardListAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import { liveScoreDashboardListAction, liveScorePlayersToPayListAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getCompetitonId, getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
@@ -17,7 +18,9 @@ import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import ValidationConstants from "../../themes/validationConstant";
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import { checkLivScoreCompIsParent } from 'util/permissions'
+import { checkLivScoreCompIsParent } from 'util/permissions';
+import Loader from '../../customComponents/loader';
+
 
 const { Content } = Layout;
 let this_obj = null;
@@ -530,28 +533,51 @@ const columnsPlayersToPay = [
     },
     {
         title: "Division",
-        dataIndex: 'division',
-        key: 'division',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
         sorter: (a, b) => checkSorting(a, b, "division"),
     },
     {
         title: "Grade",
-        dataIndex: 'grade',
-        key: 'grade',
+        dataIndex: 'gradeName',
+        key: 'gradeName',
         sorter: (a, b) => checkSorting(a, b, "grade"),
     },
     {
         title: "Team",
-        dataIndex: 'team',
-        key: 'team',
+        dataIndex: 'teamName',
+        key: 'teamName',
         sorter: (a, b) => checkSorting(a, b, "team"),
     },
     {
         title: "Payment Required",
-        dataIndex: 'payReq',
-        key: 'payReq',
+        dataIndex: 'paymentRequired',
+        key: 'paymentRequired',
         sorter: (a, b, payReq) => checkSorting(a, b, payReq),
     },
+    {
+        title: "Action",
+        dataIndex: 'action',
+        key: 'action',
+        render: (data, record) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
+            >
+                <Menu.SubMenu key="sub1" style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                    title={<img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />}
+                >
+                    <Menu.Item key="1">
+                        <span>View</span>
+                    </Menu.Item>
+
+                </Menu.SubMenu>
+                
+            </Menu>
+        )
+    }
 ];
 
 const playerTopay = [
@@ -572,7 +598,9 @@ class LiveScoreDashboard extends Component {
         this.state = {
             incidents: "incidents",
             liveScoreCompIsParent: false,
-            compOrgId: 0
+            compOrgId: 0,
+            onload: false,
+            page: 1,
         }
         this_obj = this
         this.props.initializeCompData()
@@ -587,6 +615,7 @@ class LiveScoreDashboard extends Component {
             const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             checkLivScoreCompIsParent().then((value) => {
+                this.getPlayersToPayList(1);
                 this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
                 this.setState({
                     liveScoreCompIsParent: value,
@@ -600,7 +629,30 @@ class LiveScoreDashboard extends Component {
         }
     }
 
+    componentDidUpdate() {
+        if(this.state.onload == true && this.props.liveScoreDashboardState.onPlayersToPayLoad == false){
+            this.getPlayersToPayList(this.state.page)
+            this.setState({ onload : false})
+        }
+    }
 
+    getPlayersToPayList = (page) => {
+        const { organisationUniqueKey } = getOrganisationData();
+        let payload = {
+            organisationId: organisationUniqueKey,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0),
+            },
+        }
+        this.props.liveScorePlayersToPayListAction(payload);
+    }
+
+    handleTablePage = (page, key) => {
+        if(key=="playerToPay"){
+            this.setState({onload: true, page: page})
+        }
+    }
 
     checkUserId(record) {
         if (record.player.userId == null) {
@@ -848,7 +900,7 @@ class LiveScoreDashboard extends Component {
 
     ////////ownedView view for competition
     playersToPayView = () => {
-        const { playerTopay } = this.props.liveScoreDashboardState
+        const { playersToPayList, liveScorePlayerstoPayListTotalCount } = this.props.liveScoreDashboardState
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
@@ -857,9 +909,18 @@ class LiveScoreDashboard extends Component {
                         loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table"
                         columns={columnsPlayersToPay}
-                        dataSource={playerTopay}
+                        dataSource={playersToPayList}
                         pagination={false}
                         rowKey={(record) => "playerTopay" + record.id}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination pb-5"
+                        defaultCurrent={1}
+                        total={liveScorePlayerstoPayListTotalCount}
+                        showSizeChanger={false}
+                        onChange={(page) => this.handleTablePage(page, "playerToPay")}
                     />
                 </div>
             </div>
@@ -890,6 +951,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
+                <Loader visible={this.props.liveScoreDashboardState.onPlayersToPayLoad} />
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
@@ -906,7 +968,7 @@ class LiveScoreDashboard extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData }, dispatch);
+    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction }, dispatch);
 }
 
 function mapStateToProps(state) {

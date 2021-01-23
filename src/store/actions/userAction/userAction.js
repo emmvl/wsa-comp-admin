@@ -257,6 +257,22 @@ function exportOrgRegQuestionAction(payload) {
     };
 }
 
+/* Export User Registration Data */
+function getSubmittedRegData(payload) {
+    return {
+        type: ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD,
+        payload,
+    };
+}
+
+/* Export User Registration Data */
+function exportUserRegData(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_USER_REG_DATA_LOAD,
+        payload,
+    };
+}
+
 /* Affiliate Directory Listing */
 function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
     return {
@@ -282,6 +298,7 @@ function userProfileUpdateAction(data) {
     };
 }
 
+
 function addChildAction(body, userId, sameEmail) {
     return {
         type: ApiConstants.API_ADD_CHILD_LOAD,
@@ -295,6 +312,7 @@ function addParentAction(body, userId, sameEmail) {
         payload: { body, userId, sameEmail },
     };
 }
+
 
 function userPhotoUpdateAction(payload, userDetail) {
     return {
@@ -528,7 +546,7 @@ function teamMemberUpdateAction(data) {
     return {
         type: ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD,
         data,
-    }
+    };
 }
 
 export {
@@ -599,5 +617,7 @@ export {
     getTeamMembersAction,
     updateReviewInfoAction,
     getTeamMembersReviewAction,
-    teamMemberUpdateAction
+    teamMemberUpdateAction,
+    exportUserRegData,
+    getSubmittedRegData,
 };

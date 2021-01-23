@@ -82,7 +82,7 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
     return action;
 }
 
-/////get invoice
+/////get invoice 
 function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
@@ -110,7 +110,8 @@ function getPaymentList(
     feeType,
     paymentType,
     paymentMethod,
-    membershipType
+    membershipType,
+    paymentStatus
 ) {
     const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
@@ -128,7 +129,8 @@ function getPaymentList(
         feeType,
         paymentType,
         paymentMethod,
-        membershipType
+        membershipType,
+        paymentStatus
     }
     return action
 }
@@ -170,7 +172,8 @@ function exportPaymentDashboardApi(offset,
     feeType,
     paymentType,
     paymentMethod,
-    membershipType) {
+    membershipType,
+    paymentStatus) {
     return {
         type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
         offset,
@@ -187,7 +190,8 @@ function exportPaymentDashboardApi(offset,
         feeType,
         paymentType,
         paymentMethod,
-        membershipType
+        membershipType,
+        paymentStatus
     }
 }
 
@@ -197,6 +201,46 @@ function exportPayoutTransaction(payoutId) {
         payoutId,
     };
     return action;
+}
+
+function getPaymentSummary(
+    offset,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType,
+    paymentStatus
+) {
+    const action = {
+        type: ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD,
+        offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType,
+        paymentStatus
+    }
+    return action
 }
 export {
     accountBalanceAction,
@@ -212,4 +256,5 @@ export {
     getInvoiceStatusAction,
     exportPaymentDashboardApi,
     exportPayoutTransaction,
+    getPaymentSummary
 };

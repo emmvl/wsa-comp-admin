@@ -45,7 +45,7 @@ function umpirePoolAllocationState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                    status: action.status,
+                status: action.status,
 
             };
 
@@ -53,15 +53,15 @@ function umpirePoolAllocationState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                    error: action.error,
-                    status: action.status
+                error: action.error,
+                status: action.status
             };
         case ApiConstants.API_UMPIRE_POOL_ALLOCATION_ERROR:
             return {
                 ...state,
                 onLoad: false,
-                    error: action.error,
-                    status: action.status
+                error: action.error,
+                status: action.status
             };
 
         default:

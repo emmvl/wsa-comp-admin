@@ -1,15 +1,24 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function umpirePaymentSettingUpdate(data) {
+function getUmpirePaymentSettings(data) {
     const action = {
-        type: ApiConstants.API_UPDATE_UMPIRE_PAYMENT_SETTING,
+        type: ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD,
         data
+    };
 
+    return action;
+}
+
+function saveUmpirePaymentSettings(data) {
+    const action = {
+        type: ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD,
+        data
     };
 
     return action;
 }
 
 export {
-    umpirePaymentSettingUpdate
+    getUmpirePaymentSettings,
+    saveUmpirePaymentSettings,
 } 

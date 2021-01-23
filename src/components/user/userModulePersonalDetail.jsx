@@ -45,6 +45,8 @@ import {
     userProfileUpdateAction,
     resetTfaAction,
     teamMemberUpdateAction,
+    exportUserRegData,
+    getSubmittedRegData,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -88,6 +90,12 @@ const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
 const section = null;
+
+let userRoleId;
+
+if (localStorage.setOrganisationData) {
+    userRoleId = JSON.parse(localStorage.setOrganisationData).userRoleId;
+}
 
 const columns = [
     {
@@ -200,14 +208,21 @@ const columns = [
                     <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
                         <span>View</span>
                     </Menu.Item>
-                    {e.alreadyDeRegistered == 0 && (
+                    {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
                         <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
-                    <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
+                    <Menu.Item key="3" onClick={() => history.push("/paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
                         <span>Payment</span>
                     </Menu.Item>
+                    {userRoleId === 1 && (
+                        <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
+                            <span>
+                                Registration Form
+                            </span>
+                        </Menu.Item>
+                    )}
                 </SubMenu>
             </Menu>
         ),
@@ -404,9 +419,6 @@ const teamMembersColumns = [
         title: "Status",
         dataIndex: "paymentStatus",
         key: "paymentStatus",
-        render: (status, record) => (
-            <span>{record.isActive ? status : AppConstants.removed}</span>
-        ),
     },
     {
         title: "Paid Fee",
@@ -428,31 +440,40 @@ const teamMembersColumns = [
         title: "Action",
         key: "action",
         dataIndex: "isActive",
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={(
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    )}
-                >
-                    <Menu.Item key="1">
-                        <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        ),
+        render: (data, record) => {
+            let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+            let compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
+            return (
+                <div>
+                    {compOrgId == organistaionId && record.isRemove == 1 &&
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <SubMenu
+                                key="sub1"
+                                title={(
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                    />
+                                )}
+                            >
+                                <Menu.Item key="1">
+                                    <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    }
+                </div>
+            )
+
+        },
 
     },
 ];
@@ -1601,6 +1622,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
+                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -1931,6 +1953,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
+                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -2706,6 +2729,7 @@ class UserModulePersonalDetail extends Component {
         const teamMembers = userState.teamMembersDetails ? userState.teamMembersDetails.teamMembers : [];
         const teamMembersCurrentPage = userState.teamMembersDetails?.page ? userState.teamMembersDetails?.page.currentPage : 1;
         const teamMembersTotalCount = userState.teamMembersDetails?.page.totalCount;
+        let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         return (
             <div>
                 {this.state.isShowRegistrationTeamMembers == false ? (
@@ -2860,11 +2884,15 @@ class UserModulePersonalDetail extends Component {
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
-                                +
-                                {' '}
-                                {AppConstants.addTeamMembers}
-                            </div>
+                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove ?
+                                <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
+                                    +
+                                    {' '}
+                                    {AppConstants.addTeamMembers}
+                                </div>
+                                :
+                                null
+                            }
                         </div>
                         <div className="user-module-row-heading font-18 mt-2">
                             {`${AppConstants.team}: ${this.state.registrationTeam.teamName}`}
@@ -3005,6 +3033,20 @@ class UserModulePersonalDetail extends Component {
         this.props.resetTfaAction(this.state.userId);
     };
 
+    exportUserRegistrationData = () => {
+        const { userState } = this.props;
+        const personal = userState.personalData;
+        const userId = personal.userId;
+
+        this.props.exportUserRegData({ userId });
+    }
+
+    registrationFormClicked = (registrationId) => {
+        this.props.getSubmittedRegData({ registrationId });
+
+        history.push('/submittedRegData');
+    }
+
     headerView = () => {
         function handleMenuClick(e) {
             history.push("/mergeUserMatches");
@@ -3016,9 +3058,14 @@ class UserModulePersonalDetail extends Component {
                     {AppConstants.merge}
                 </Menu.Item>
                 {this.state.isAdmin && (
-                    <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
-                        {AppConstants.resetTFA}
-                    </Menu.Item>
+                    <>
+                        <Menu.Item onClick={this.resetTfaAction} key={AppConstants.resetTFA}>
+                            {AppConstants.resetTFA}
+                        </Menu.Item>
+                        <Menu.Item onClick={this.exportUserRegistrationData} key={AppConstants.export}>
+                            {AppConstants.export}
+                        </Menu.Item>
+                    </>
                 )}
             </Menu>
         );
@@ -3566,6 +3613,8 @@ function mapDispatchToProps(dispatch) {
             userProfileUpdateAction,
             resetTfaAction,
             teamMemberUpdateAction,
+            exportUserRegData,
+            getSubmittedRegData,
         },
         dispatch,
     );

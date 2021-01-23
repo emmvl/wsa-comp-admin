@@ -647,6 +647,44 @@ function* exportOrgRegQuestionsSaga(action) {
   }
 }
 
+// Export User Registration Data
+function* exportUserRegDataSaga(action) {
+    try {
+        const result = yield call(UserAxiosApi.exportUserRegData, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            //  message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+// Get Submitted Registration Data
+export function* getSubmittedRegDataSaga(action) {
+    try {
+        const result = yield call(UserAxiosApi.getSubmittedRegData, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_SUBMITTED_REG_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            //  message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 // Get the Affiliate Directory
 function* getAffiliateDirectorySaga(action) {
   try {
@@ -1246,6 +1284,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, deleteOrgPhotosSaga);
   yield takeEvery(ApiConstants.API_DELETE_ORG_CONTACT_LOAD, deleteOrgContactSaga);
   yield takeEvery(ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD, exportOrgRegQuestionsSaga);
+  yield takeEvery(ApiConstants.API_EXPORT_USER_REG_DATA_LOAD, exportUserRegDataSaga);
+  yield takeEvery(ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD, getSubmittedRegDataSaga);
   yield takeEvery(ApiConstants.API_AFFILIATE_DIRECTORY_LOAD, getAffiliateDirectorySaga);
   yield takeEvery(ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD, exportAffiliateDirectorySaga);
   yield takeEvery(ApiConstants.API_USER_PROFILE_UPDATE_LOAD, updateUserProfileSaga);
@@ -1274,8 +1314,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD, teamMembersSaveSaga);
   yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_LOAD, getTeamMembersSaga);
   yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD, getTeamMembersReviewSaga);
-  yield takeEvery(ApiConstants.API_ADD_CHILD_LOAD, addChildSaga);
-  yield takeEvery(ApiConstants.API_ADD_PARENT_LOAD, addParentSaga);
   yield takeEvery(ApiConstants.API_POSSIBLE_MATCH_LOAD, findPossibleMergeSaga);
   yield takeEvery(ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD, updateTeamMembersSaga);
 

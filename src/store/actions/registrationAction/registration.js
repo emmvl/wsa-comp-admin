@@ -192,6 +192,7 @@ function updateProductSelection(
     tableKey,
     value,
     registrationLock,
+    subKey
 ) {
     return {
         type: ApiConstants.REG_FORM_UPDATE_MEMBERSHIP_PRODUCT_TYPES,
@@ -199,6 +200,7 @@ function updateProductSelection(
         tableKey,
         isSelected: value !== null ? !value : true,
         registrationLock: value !== true ? registrationLock : false,
+        subKey
     };
 }
 

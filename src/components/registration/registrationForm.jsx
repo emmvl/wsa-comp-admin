@@ -397,7 +397,7 @@ class RegistrationForm extends Component {
         let allMemberProductArr = this.props.registrationState.selectedMemberShipType
         let matchIndexValue = allMemberProductArr.findIndex(x => x.membershipProductId == record.membershipProductId)
         if (matchIndexValue > -1) {
-            this.props.updateProductSelection(matchIndexValue, key, record.isSelected, record.registrationLock)
+            this.props.updateProductSelection(matchIndexValue, key, record.isSelected, record.registrationLock, record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap")
         }
 
     }
