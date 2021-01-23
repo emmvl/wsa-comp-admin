@@ -83,3 +83,21 @@ export function* liveScoreSingleGameRedeemPaySaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* liveScorePlayersToPayListSaga(action) {
+    try {
+        const result = yield call(RegistrationAxiosApi.getPlayersToPayList, action.payload);
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
