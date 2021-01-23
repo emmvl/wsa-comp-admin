@@ -28,7 +28,7 @@ import {
     getPaymentMethodsListAction,
 } from "store/actions/appAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getPaymentList, exportPaymentDashboardApi } from "store/actions/stripeAction/stripeAction";
+import { getPaymentSummary, exportPaymentDashboardApi } from "store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
@@ -52,7 +52,7 @@ function tableSort(key) {
     }
 
     thisObj.setState({ sortBy, sortOrder });
-    thisObj.props.getPaymentList(
+    thisObj.props.getPaymentSummary(
         thisObj.state.offset,
         sortBy,
         sortOrder,
@@ -75,8 +75,8 @@ const listeners = (key) => ({
 const columns = [
     {
         title: AppConstants.firstName,
-        dataIndex: "userFirstName",
-        key: "userFirstName",
+        dataIndex: "firstName",
+        key: "firstName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (userFirstName, record) => (
@@ -98,8 +98,8 @@ const columns = [
     },
     {
         title: AppConstants.lastName,
-        dataIndex: "userLastName",
-        key: "userLastName",
+        dataIndex: "lastName",
+        key: "lastName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (userLastName, record) => (
@@ -131,27 +131,27 @@ const columns = [
         children: [
             {
                 title: AppConstants.paid,
-                dataIndex: "paid",
+                dataIndex: "membership",
                 key: "paid",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (paid) => currencyFormat(paid),
+                render: (paid, record) => currencyFormat(record.membership.paid),
             },
             {
                 title: AppConstants.declined,
-                dataIndex: "declined",
+                dataIndex: "membership",
                 key: "declined",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (declined) => currencyFormat(declined),
+                render: (declined, record) => currencyFormat(record.membership.declined),
             },
             {
                 title: AppConstants.owing,
-                dataIndex: "owing",
+                dataIndex: "membership",
                 key: "owing",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (owing) => currencyFormat(owing),
+                render: (owing, record) => currencyFormat(record.membership.owing),
             },
         ],
     },
@@ -160,51 +160,51 @@ const columns = [
         children: [
             {
                 title: AppConstants.nominationFeesPaid,
-                dataIndex: "nominationFeesPaid",
+                dataIndex: "competitionNomination",
                 key: "nominationFeesPaid",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid) => currencyFormat(feesPaid),
+                render: (feesPaid, record) => currencyFormat(record.competitionNomination.paid),
             },
             {
                 title: AppConstants.nominationFeesDeclined,
-                dataIndex: "nominationFeesDeclined",
+                dataIndex: "competitionNomination",
                 key: "nominationFeesDeclined",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees) => currencyFormat(fees),
+                render: (fees, record) => currencyFormat(record.competitionNomination.declined),
             },
             {
                 title: AppConstants.nominationFeesOwing,
-                dataIndex: "nominationFeesOwing",
+                dataIndex: "competitionNomination",
                 key: "nominationFeesOwing",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing) => currencyFormat(feesOwing),
+                render: (feesOwing, record) => currencyFormat(record.competitionNomination.owing),
             },
             {
                 title: AppConstants.competitionFeesPaid,
-                dataIndex: "competitionFeesPaid",
+                dataIndex: "competition",
                 key: "competitionFeesPaid",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid) => currencyFormat(feesPaid),
+                render: (feesPaid, record) => currencyFormat(record.competition.paid),
             },
             {
                 title: AppConstants.competitionFeesDeclined,
-                dataIndex: "competitionFeesDeclined",
+                dataIndex: "competition",
                 key: "competitionFeesDeclined",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees) => currencyFormat(fees),
+                render: (fees, record) => currencyFormat(record.competition.declined),
             },
             {
                 title: AppConstants.competitionFeesOwing,
-                dataIndex: "competitionFeesOwing",
+                dataIndex: "competition",
                 key: "competitionFeesOwing",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing) => currencyFormat(feesOwing),
+                render: (feesOwing, record) => currencyFormat(record.competition.owing),
             },
         ],
     },
@@ -213,51 +213,51 @@ const columns = [
         children: [
             {
                 title: AppConstants.nominationFeesPaid,
-                dataIndex: "nominationFeesPaid",
+                dataIndex: "affiliateNomination",
                 key: "nominationFeesPaid",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid) => currencyFormat(feesPaid),
+                render: (feesPaid, record) => currencyFormat(record.affiliateNomination.paid),
             },
             {
                 title: AppConstants.nominationFeesDeclined,
-                dataIndex: "nominationFeesDeclined",
+                dataIndex: "affiliateNomination",
                 key: "nominationFeesDeclined",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees) => currencyFormat(fees),
+                render: (fees, record) => currencyFormat(record.affiliateNomination.declined),
             },
             {
                 title: AppConstants.nominationFeesOwing,
-                dataIndex: "nominationFeesOwing",
+                dataIndex: "affiliateNomination",
                 key: "nominationFeesOwing",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing) => currencyFormat(feesOwing),
+                render: (feesOwing, record) => currencyFormat(record.affiliateNomination.owing),
             },
             {
                 title: AppConstants.competitionFeesPaid,
-                dataIndex: "competitionFeesPaid",
+                dataIndex: "affiliate",
                 key: "competitionFeesPaid",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid) => currencyFormat(feesPaid),
+                render: (feesPaid, record) => currencyFormat(record.affiliate.paid),
             },
             {
                 title: AppConstants.competitionFeesDeclined,
-                dataIndex: "competitionFeesDeclined",
+                dataIndex: "affiliate",
                 key: "competitionFeesDeclined",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees) => currencyFormat(fees),
+                render: (fees, record) => currencyFormat(record.affiliate.declined),
             },
             {
                 title: AppConstants.competitionFeesOwing,
-                dataIndex: "competitionFeesOwing",
+                dataIndex: "affiliate",
                 key: "competitionFeesOwing",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing) => currencyFormat(feesOwing),
+                render: (feesOwing, record) => currencyFormat(record.affiliate.owing),
             },
         ],
     },
@@ -557,7 +557,7 @@ class PaymentSummary extends Component {
             registrationId: regId,
         });
 
-        this.props.getPaymentList(
+        this.props.getPaymentSummary(
             offset,
             sortBy,
             sortOrder,
@@ -877,7 +877,7 @@ class PaymentSummary extends Component {
 
     contentView = () => {
         const { paymentState } = this.props;
-        const total = paymentState.paymentListTotalCount;
+        const total = paymentState.paymentSummaryListTotalCount;
         const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
         return (
@@ -889,7 +889,7 @@ class PaymentSummary extends Component {
                         className="home-dashboard-table"
                         bordered
                         columns={columns}
-                        dataSource={paymentState.paymentListData}
+                        dataSource={paymentState.paymentSummaryList}
                         pagination={false}
                         loading={this.props.paymentState.onLoad && true}
                     />
@@ -898,7 +898,7 @@ class PaymentSummary extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={paymentState.paymentListPage}
+                        current={paymentState.paymentSummaryListPage}
                         total={total}
                         onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
                         showSizeChanger={false}
@@ -937,7 +937,7 @@ function mapDispatchToProps(dispatch) {
         getFeeTypeAction,
         getPaymentOptionsListAction,
         getPaymentMethodsListAction,
-        getPaymentList,
+        getPaymentSummary,
         exportPaymentDashboardApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,

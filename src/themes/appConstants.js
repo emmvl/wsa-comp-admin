@@ -1782,6 +1782,8 @@ const AppConstants = {
     competitionFeesDeclined: 'Competition Fees Declined',
     competitionFeesOwing: 'Competition Fees Owing',
     affiliateIfApplicable: "Affiliate (if applicable)",
+
+    userDetailsInvalid: "User Details Invalid",
 };
 
 export default AppConstants;

@@ -388,6 +388,21 @@ function stripe(state = initialState, action) {
                 ...state,
                 onExportLoad: false,
             }
+        
+        case ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD:
+            return { ...state, onLoad: true, paymentDashboardListAction: action }
+
+        case ApiConstants.API_PAYMENT_SUMMARY_LIST_SUCCESS:
+            let paymentSummary = action.result;
+            return {
+                ...state, onLoad: false,
+                paymentSummaryList: paymentSummary.paymentSummaryList,
+                paymentCompetitionList: paymentSummary.competitionList,
+                paymentSummaryListTotalCount: paymentSummary.page.totalCount,
+                paymentSummaryListPage: paymentSummary.page
+                    ? paymentSummary.page.currentPage
+                    : 1,
+            }
 
         default:
             return state;

@@ -195,6 +195,52 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    async getPaymentSummary(offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentOption,
+        paymentMethod,
+        membershipType,
+        paymentStatus
+    ) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationUniqueKey: organisationUniqueKey,
+            userId: parseInt(userId),
+            registrationId: registrationId,
+            paging: {
+                offset: offset,
+                limit: 10
+            },
+            yearId: parseInt(yearId),
+            competitionKey: competitionKey,
+            paymentFor: paymentFor,
+            dateFrom: dateFrom,
+            dateTo: dateTo,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType,
+            paymentStatus
+        }
+        var url = `api/payment/summary`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+
+        return Method.dataPost(url, token, body);
+    },
+
     async exportPayoutTransaction(payoutId) {
         console.log("call export exportPayoutTransaction");
         const orgItem = await getOrganisationData();
