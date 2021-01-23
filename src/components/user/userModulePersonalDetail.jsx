@@ -213,17 +213,16 @@ const columns = [
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
-                    <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
+                    <Menu.Item key="3" onClick={() => history.push("/paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
                         <span>Payment</span>
                     </Menu.Item>
-                    {
-                        userRoleId === 1 &&
+                    {userRoleId === 1 && (
                         <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                             <span>
                                 Registration Form
                             </span>
                         </Menu.Item>
-                    }
+                    )}
                 </SubMenu>
             </Menu>
         ),

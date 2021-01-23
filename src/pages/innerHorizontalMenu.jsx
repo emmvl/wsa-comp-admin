@@ -1,21 +1,24 @@
 import React from "react";
-import { Menu, Select, message } from "antd";
 import { NavLink } from "react-router-dom";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Menu, Select, message } from "antd";
 
 import AppConstants from "../themes/appConstants";
-import { checkOrganisationLevel, checkLivScoreCompIsParent } from "../util/permissions";
+import { checkOrganisationLevel, checkLivScoreCompIsParent, getUserRoleId } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
 import AppUniqueId from "../themes/appUniqueId";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../util/helpers";
-import { innerHorizontalCompetitionListAction, updateInnerHorizontalData, initializeCompData } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import { getLiveScoreCompetiton, getImpersonation, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
+import {
+    innerHorizontalCompetitionListAction,
+    updateInnerHorizontalData,
+    initializeCompData,
+} from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction';
+import { getLiveScoreCompetiton, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
 import history from "../util/history";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../store/actions/appAction";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
-import { getUserRoleId } from '../util/permissions'
 
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -37,30 +40,30 @@ class InnerHorizontalMenu extends React.Component {
             userAccessPermission: "",
             userRoleId: getUserRoleId(),
             count: 0,
-            isImpersonation: false
+            isImpersonation: false,
         };
     }
 
     async componentDidMount() {
-        let impersonation = localStorage.getItem('Impersonation') == "true" ? true : false
+        const impersonation = localStorage.getItem('Impersonation') === "true";
         this.setState({
-            isImpersonation: impersonation
-        })
+            isImpersonation: impersonation,
+        });
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
-            this.setState({ selectedComp: id, yearId: yearRefId })
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            const yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId");
+            this.setState({ selectedComp: id, yearId: yearRefId });
         }
 
         if (this.props.menu === "liveScore") {
-            this.props.getOnlyYearListAction(this.props.appState.yearList)
-            this.setState({ yearLoading: true })
+            this.props.getOnlyYearListAction(this.props.appState.yearList);
+            this.setState({ yearLoading: true });
         }
 
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value, orgState: true })
         ));
-        this.setLivScoreCompIsParent()
+        this.setLivScoreCompIsParent();
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
                 localStorage.removeItem("draws_roundTime");
@@ -70,34 +73,46 @@ class InnerHorizontalMenu extends React.Component {
         }
     }
 
-    setLivScoreCompIsParent = () => {
-        checkLivScoreCompIsParent().then((value) => (
-            this.setState({ liveScoreCompIsParent: value })
-        ))
-    }
-
     async componentDidUpdate(nextProps) {
         if (this.props.userState.onLoad == false && this.state.orgState) {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
-                let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+                const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
                 if (this.props.menu === "liveScore") {
-
-
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
-                            let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
-                            let yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId")
+                            const yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id;
+                            const yearRefId = getGlobalYear() ? getGlobalYear() : localStorage.getItem("yearId");
                             if (yearRefId) {
                                 if (!this.props.innerHorizontalState.error) {
-                                    this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
+                                    this.props.innerHorizontalCompetitionListAction(
+                                        organisationId,
+                                        yearRefId,
+                                        this.props.innerHorizontalState.competitionList,
+                                    );
                                 }
 
-                                this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId: yearRefId })
+                                this.setState({
+                                    yearLoading: false,
+                                    loading: true,
+                                    orgId: organisationId,
+                                    orgState: false,
+                                    yearId: yearRefId,
+                                });
                             } else {
                                 if (!this.props.innerHorizontalState.error) {
-                                    this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList)
+                                    this.props.innerHorizontalCompetitionListAction(
+                                        organisationId,
+                                        yearId,
+                                        this.props.innerHorizontalState.competitionList,
+                                    );
                                 }
-                                this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId })
+                                this.setState({
+                                    yearLoading: false,
+                                    loading: true,
+                                    orgId: organisationId,
+                                    orgState: false,
+                                    yearId,
+                                });
                             }
                         }
                     }
@@ -106,91 +121,95 @@ class InnerHorizontalMenu extends React.Component {
         }
 
         if (nextProps.innerHorizontalState !== this.props.innerHorizontalState) {
-
             if (this.state.loading && this.props.innerHorizontalState.onLoad == false) {
-                let compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList) ? this.props.innerHorizontalState.competitionList : []
-                let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+                const compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList)
+                    ? this.props.innerHorizontalState.competitionList
+                    : [];
+                const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
                 if (!isArrayNotEmpty(compList)) {
                     message.config({
                         duration: 1.5,
-                        maxCount: 1
-                    })
+                        maxCount: 1,
+                    });
                     if (this.state.count < 1) {
                         message.info(AppConstants.noCompetitionYear, 1.5);
                     }
 
-                    let defaultYear = localStorage.getItem("defaultYearId")
+                    const defaultYear = localStorage.getItem("defaultYearId");
                     // let defaultYear = getGlobalYear()
-                    this.setState({ yearId: defaultYear, loading: true })
-                    localStorage.setItem("yearId", defaultYear)
-                    setGlobalYear(defaultYear)
+                    this.setState({ yearId: defaultYear, loading: true });
+                    localStorage.setItem("yearId", defaultYear);
+                    setGlobalYear(defaultYear);
                     if (!this.props.innerHorizontalState.error && this.state.count < 1) {
-                        this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
-                        this.setState({ count: this.state.count + 1 })
+                        this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList);
+                        this.setState({ count: this.state.count + 1 });
                     }
-                    return
+                    return;
                 }
 
-                let firstComp = 1
+                let firstComp = 1;
+                const isCompetition = await getLiveScoreCompetiton();
+                const yearValue = localStorage.getItem("yearValue");
 
-                let isCompetition = await getLiveScoreCompetiton()
-                let yearValue = localStorage.getItem("yearValue")
-
-                if (yearValue == "true") {
+                if (yearValue === "true") {
                     firstComp = compList.length > 0 && compList[0].id
                     localStorage.setItem("yearValue", "false")
                     localStorage.setItem("LiveScoreCompetition", JSON.stringify(compList[0]))
+                } else if (isCompetition) {
+                    const { id } = JSON.parse(isCompetition);
+                    firstComp = id;
                 } else {
-                    if (isCompetition) {
-                        const { id } = JSON.parse(isCompetition)
-
-                        firstComp = id
-                    } else {
-                        firstComp = compList.length > 0 && compList[0].id
-                    }
+                    firstComp = compList.length > 0 && compList[0].id;
                 }
-                this.setState({ selectedComp: firstComp, compArray: compList, loading: false })
-                this.setLivScoreCompIsParent()
+
+                this.setState({ selectedComp: firstComp, compArray: compList, loading: false });
+                this.setLivScoreCompIsParent();
             }
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ));
     }
 
     setCompetitionID = (compId) => {
         this.setState({ selectedComp: compId });
         let compObj = null;
-        for (let i in this.state.compArray) {
+        for (const i in this.state.compArray) {
             if (compId == this.state.compArray[i].id) {
                 compObj = this.state.compArray[i];
                 break;
             }
         }
-        this.props.clearDataOnCompChangeAction()
+        this.props.clearDataOnCompChangeAction();
         localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj));
         history.push("/matchDayDashboard");
     };
 
     setYearId = (yearId) => {
-        this.props.updateInnerHorizontalData()
+        this.props.updateInnerHorizontalData();
         localStorage.setItem("yearValue", "true");
         this.setState({ yearId, loading: true });
         // localStorage.setItem("LiveScoreCompetition", undefined);
         localStorage.setItem("yearId", yearId);
-        setGlobalYear(yearId)
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        this.props.clearDataOnCompChangeAction()
+        setGlobalYear(yearId);
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.props.clearDataOnCompChangeAction();
         this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList);
 
         history.push("/matchDayDashboard");
     };
 
     render() {
-        let orgLevel = this.state.organisationLevel;
+        const orgLevel = this.state.organisationLevel;
         const { menu, selectedKey } = this.props;
         const { competitionList } = this.props.innerHorizontalState;
-        let compList = isArrayNotEmpty(competitionList) ? competitionList : [];
-        let { liveScoreCompIsParent } = this.state;
+        const compList = isArrayNotEmpty(competitionList) ? competitionList : [];
+        const { liveScoreCompIsParent } = this.state;
         const { yearList } = this.props.appState;
-        const { userRoleId } = this.state
+        const { userRoleId } = this.state;
 
         return (
             <div>
@@ -219,7 +238,9 @@ class InnerHorizontalMenu extends React.Component {
                             <Menu.Item key="2">
                                 {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
                                 <NavLink to="/quickCompetition">
-                                    <span onClick={() => this.props.CLEAR_OWN_COMPETITION_DATA('all')} id={AppUniqueId.quick_comp_subtab}>Quick Competition</span>
+                                    <span onClick={() => this.props.CLEAR_OWN_COMPETITION_DATA('all')} id={AppUniqueId.quick_comp_subtab}>
+                                        Quick Competition
+                                    </span>
                                 </NavLink>
                             </Menu.Item>
                             <Menu.Item key="3">
@@ -276,8 +297,7 @@ class InnerHorizontalMenu extends React.Component {
                                 {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
                                 <NavLink to="/competitionDraws">
                                     {/* <span id={AppUniqueId.draws_subtab}>Draws</span> */}
-                                    <span >Draws</span>
-
+                                    <span>Draws</span>
                                 </NavLink>
                             </Menu.Item>
                             {/*
@@ -449,7 +469,6 @@ class InnerHorizontalMenu extends React.Component {
                                             <span>Coaches</span>
                                         </NavLink>
                                     </Menu.Item>
-
                                     <Menu.Item key="5">
                                         <NavLink to="/matchDayScorerList">
                                             <span>Scorers</span>
@@ -459,7 +478,7 @@ class InnerHorizontalMenu extends React.Component {
                                         <NavLink
                                             to={{
                                                 pathname: "/umpireDashboard",
-                                                state: { liveScoreUmpire: 'liveScoreUmpire', isParticiapte: liveScoreCompIsParent ? false : true }
+                                                state: { liveScoreUmpire: 'liveScoreUmpire', isParticipate: !liveScoreCompIsParent },
                                             }}
                                         >
                                             <span>Umpires</span>
@@ -562,7 +581,7 @@ class InnerHorizontalMenu extends React.Component {
                                             <NavLink
                                                 to={{
                                                     pathname: '/matchDaySettingsView',
-                                                    state: 'edit'
+                                                    state: 'edit',
                                                 }}
                                             >
                                                 <span>Settings</span>
@@ -605,7 +624,7 @@ class InnerHorizontalMenu extends React.Component {
                                     value={JSON.parse(this.state.yearId)}
                                 >
                                     {yearList.map((item) => (
-                                        <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
+                                        <Option key={`year_${item.id}`} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -618,7 +637,7 @@ class InnerHorizontalMenu extends React.Component {
                                     value={this.state.selectedComp}
                                 >
                                     {compList.map((item) => (
-                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                        <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -889,7 +908,6 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                             {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
                         </Menu.Item>
-
                         <Menu.Item key="3" disabled={this.state.isImpersonation}>
                             <NavLink to="/registrationSettlements">
                                 <span>Payouts</span>
@@ -900,6 +918,11 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Refunds</span>
                             </NavLink>
                         </Menu.Item> */}
+                        <Menu.Item key="5">
+                            <NavLink to="/paymentSummary">
+                                <span>Payment Summary</span>
+                            </NavLink>
+                        </Menu.Item>
                     </Menu>
                 )}
 
@@ -938,14 +961,13 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>
-
                         <Menu.Item key="2">
                             <NavLink to="/communication">
                                 <span>{AppConstants.banners}</span>
                             </NavLink>
                         </Menu.Item>
-                    </Menu>)
-                }
+                    </Menu>
+                )}
             </div>
         );
     }
@@ -958,8 +980,8 @@ function mapDispatchToProps(dispatch) {
         updateInnerHorizontalData,
         initializeCompData,
         clearDataOnCompChangeAction,
-        CLEAR_OWN_COMPETITION_DATA
-    }, dispatch)
+        CLEAR_OWN_COMPETITION_DATA,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
@@ -967,7 +989,7 @@ function mapStateToProps(state) {
         innerHorizontalState: state.InnerHorizontalState,
         userState: state.UserState,
         appState: state.AppState,
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InnerHorizontalMenu);

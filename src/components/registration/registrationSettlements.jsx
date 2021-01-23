@@ -128,14 +128,12 @@ class RegistrationSettlements extends Component {
 
     componentDidMount() {
         if (this.state.isImpersonation) {
-            history.push("/paymentDashboard")
+            history.push("/paymentDashboard");
         }
         if (this.stripeConnected()) {
-            this.props.getStripePayoutListAction(1, null, null)
+            this.props.getStripePayoutListAction(1, null, null);
         }
     }
-
-
 
     stripeConnected = () => {
         let orgData = getOrganisationData() ? getOrganisationData() : null

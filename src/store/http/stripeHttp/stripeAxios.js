@@ -212,6 +212,8 @@ let AxiosApi = {
         let url;
         if (key === "paymentDashboard") {
             url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}`;
+        } else if (key === "paymentSummary") {
+            url = `/api/payments/summary/export?organisationUniqueKey=${organisationUniqueKey}`;
         } else if (key === "payout") {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=payout`;
         } else if (key === "transfer") {
