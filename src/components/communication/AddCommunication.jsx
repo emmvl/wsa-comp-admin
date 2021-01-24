@@ -195,13 +195,13 @@ class AddCommunication extends Component {
         }
 
         const toOrganisationIds = data.toOrganisationIds
-            ? data.toOrganisationIds.split(',')
+            ? data.toOrganisationIds.split(',').map((id) => parseInt(id, 10))
             : [];
         const toUserRoleIds = data.toUserRoleIds
-            ? data.toUserRoleIds.split(',')
+            ? data.toUserRoleIds.split(',').map((id) => parseInt(id, 10))
             : [];
         const toUserIds = data.toUserIds
-            ? data.toUserIds.split(',')
+            ? data.toUserIds.split(',').map((id) => parseInt(id, 10))
             : [];
         if (data.toUserIds) {
             this.props.getUsersByIds(toUserIds);
