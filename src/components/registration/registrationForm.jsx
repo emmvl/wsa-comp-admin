@@ -255,7 +255,7 @@ class RegistrationForm extends Component {
         return (
             <div>
                 <a>
-                    <Mailto email="" subject={AppConstants.singleUseDiscount} body={body}>
+                    <Mailto email="" subject={AppConstants.singleUseDiscountSubject} body={body}>
                         <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
                             {AppConstants.email}
                         </span>

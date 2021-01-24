@@ -92,9 +92,9 @@ let this_Obj = null;
 const section = null;
 
 let userRoleId;
-
-if (localStorage.setOrganisationData) {
-    userRoleId = JSON.parse(localStorage.setOrganisationData).userRoleId;
+const setOrganisationData = JSON.parse(localStorage.setOrganisationData);
+if (setOrganisationData) {
+    userRoleId = setOrganisationData.userRoleId;
 }
 
 const columns = [
