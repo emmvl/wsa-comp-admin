@@ -32,7 +32,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import ValidationConstants from "../../themes/validationConstant";
 
-import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage';
+import { getOrganisationData } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import {
     getAffiliatesListingAction,
@@ -45,11 +45,10 @@ import {
 
 import {
     refreshCommunicationModuleDataAction,
-    updateCommunicationModuleData,
-    setDefaultImageVideoNewAction,
     addCommunicationAction,
 } from '../../store/actions/communicationAction/communicationAction';
 import Loader from "../../customComponents/loader";
+import history from "../../util/history";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -66,8 +65,8 @@ class AddCommunication extends Component {
             toOrganisationIds: [],
             toUserRoleIds: [],
             toUserIds: [],
-            communicationImage: null,
-            communicationVideo: null,
+            imageUrl: null,
+            videoUrl: null,
             image: null,
             imageSelection: AppImages.circleImage,
             videoSelection: '',
@@ -75,7 +74,8 @@ class AddCommunication extends Component {
             visible: false,
             imageTimeout: null,
             videoTimeout: null,
-            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
+            screenKey: props.location?.state?.screenKey,
+            key: props.location?.state?.key,
             crossImageIcon: false,
             crossVideoIcon: false,
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
@@ -112,9 +112,9 @@ class AddCommunication extends Component {
         });
 
         if (this.state.isEdit === true) {
-            this.props.setDefaultImageVideoNewAction({
-                communicationImage: this.props.location.state.item.communicationImage,
-                communicationVideo: this.props.location.state.item.communicationVideo,
+            this.setState({
+                imageUrl: this.props.location.state.item.imageUrl,
+                videoUrl: this.props.location.state.item.videoUrl,
                 author: name,
             });
             this.setInitialFilledValue(this.props.location.state.item, name);
@@ -132,7 +132,18 @@ class AddCommunication extends Component {
         });
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(nextProps) {
+        const { communicationState } = this.props;
+        if (nextProps.communicationState !== communicationState) {
+            if (nextProps.communicationState.addSuccess !== communicationState.addSuccess
+                && communicationState.addSuccess
+            ) {
+                history.push({
+                    pathname: '/communicationView',
+                    state: { item: communicationState.addedCommunication, id: this.state.key, screenKey: this.state.screenKey },
+                });
+            }
+        }
     }
 
     handleChangeState(field, value) {
@@ -168,6 +179,27 @@ class AddCommunication extends Component {
                 body: data.body,
             });
         }
+
+        if (data.expiryDate) {
+            const expiryDate = moment(data.expiryDate).format("YYYY-MM-DD");
+            const expiryTime = moment(data.expiryDate).format("HH:mm");
+
+            this.setState({
+                expiryDate,
+                expiryTime,
+            });
+        }
+
+        this.setState({
+            title: data.title || '',
+            allUser: !(data.toUserIds || data.toUserRoleIds),
+            selectedRoles: !!data.toUserRoleIds,
+            individualUsers: !!data.toUserIds,
+            individualOrg: !!data.toOrganisationIds,
+            toUserIds: data?.toUserIds || [],
+            toOrganisationIds: data?.toOrganisationIds || [],
+            toUserRoleIds: data?.toUserRoleIds || [],
+        });
     }
 
     /// method to show modal view after click
@@ -193,14 +225,14 @@ class AddCommunication extends Component {
 
     /// method to setimage
     setImage = (data) => {
-        this.setState({ imageSelection: null, image: null, communicationImage: null });
+        this.setState({ imageSelection: null, image: null, imageUrl: null });
         this.setState({ });
 
         const editData = this.state;
 
         if (data.files[0] !== undefined) {
             if (this.state.isEdit) {
-                editData.communicationImage = '';
+                editData.imageUrl = '';
             }
 
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) });
@@ -220,7 +252,7 @@ class AddCommunication extends Component {
     /// /method to setVideo
     setVideo = (data) => {
         this.setState({
-            video: null, videoSelection: '', crossVideoIcon: false, communicationVideo: null,
+            video: null, videoSelection: '', crossVideoIcon: false, videoUrl: null,
         });
 
         if (data.files[0] !== undefined) {
@@ -239,7 +271,7 @@ class AddCommunication extends Component {
             }, 2000);
 
             if (this.state.isEdit) {
-                this.setState({ communicationVideo: null });
+                this.setState({ videoUrl: null });
             }
         }
     };
@@ -305,22 +337,21 @@ class AddCommunication extends Component {
 
     deleteImage() {
         this.setState({
-            image: null, imageSelection: AppImages.circleImage, crossImageIcon: false, communicationImage: null,
+            image: null, imageSelection: AppImages.circleImage, crossImageIcon: false, imageUrl: null,
         });
     }
 
     deleteVideo() {
         this.setState({
-            video: null, videoSelection: '', crossVideoIcon: false, communicationVideo: null,
+            video: null, videoSelection: '', crossVideoIcon: false, videoUrl: null,
         });
     }
 
     contentView = () => {
         const {
-            expiryDate, expiryTime, communicationImage, communicationVideo,
+            expiryDate, expiryTime, imageUrl, videoUrl,
         } = this.state;
         const editData = this.state;
-        const expiryTime_format = expiryTime ? moment(expiryTime).format("HH:mm") : null;
 
         return (
             <div className="content-view pt-4">
@@ -373,11 +404,11 @@ class AddCommunication extends Component {
                 </Form.Item>
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.communicationImage} />
+                        <InputWithHead heading={AppConstants.imageUrl} />
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
                             <ImageLoader
                                 timeout={this.state.imageTimeout}
-                                src={communicationImage || this.state.imageSelection}
+                                src={imageUrl || this.state.imageSelection}
                             />
                         </div>
                         <div>
@@ -399,7 +430,7 @@ class AddCommunication extends Component {
                             />
 
                             <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
-                                {(this.state.crossImageIcon || communicationImage) && (
+                                {(this.state.crossImageIcon || imageUrl) && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                         <img
                                             className="dot-image"
@@ -415,13 +446,13 @@ class AddCommunication extends Component {
                         </div>
                     </div>
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.communicationVideo} />
+                        <InputWithHead heading={AppConstants.videoUrl} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
                             <ImageLoader
                                 timeout={this.state.videoTimeout}
                                 video
-                                src={communicationVideo || this.state.videoSelection}
-                                poster={(communicationVideo || this.state.videoSelection !== '') ? '' : AppImages.circleImage}
+                                src={videoUrl || this.state.videoSelection}
+                                poster={(videoUrl || this.state.videoSelection !== '') ? '' : AppImages.circleImage}
                             />
                         </div>
                         <input
@@ -437,7 +468,7 @@ class AddCommunication extends Component {
                             }}
                         />
                         <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
-                            {(this.state.crossVideoIcon || communicationVideo)
+                            {(this.state.crossVideoIcon || videoUrl)
                             && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
@@ -474,7 +505,7 @@ class AddCommunication extends Component {
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}
                             format="HH:mm"
-                            value={expiryTime_format !== null && moment(expiryTime_format, "HH:mm")}
+                            value={expiryTime && moment(expiryTime, "HH:mm")}
                             onChange={(time) => this.setState({ expiryTime: time })}
                             onBlur={
                                 (e) => {
@@ -531,8 +562,6 @@ class AddCommunication extends Component {
             individualUsers,
             allUser,
             selectedRoles,
-            userName,
-            orgName,
         } = this.state;
 
         const {
@@ -594,7 +623,7 @@ class AddCommunication extends Component {
                             }}
                             filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                            value={orgName || undefined}
+                            value={this.state.toOrganisationIds}
                         >
                             {
                                 affiliateToData.length > 0 && affiliateToData.map((org, index) => (
@@ -649,6 +678,11 @@ class AddCommunication extends Component {
                 <div className="col-sm">
                     {selectedRoles && (
                         <Checkbox.Group
+                            value={
+                                this.props.userState.roles
+                                    .filter((role) => this.state.toUserRoleIds.includes(role.id))
+                                    .map((role) => role.name)
+                            }
                             onChange={(value) => {
                                 const selected = value.length > 0
                                     ? value.map((item) => {
@@ -713,7 +747,7 @@ class AddCommunication extends Component {
                                     this.userSearchApi(value);
                                 }
                             }}
-                            value={userName || undefined}
+                            value={this.state.toUserIds}
                         >
                             {
                                 userData.length > 0 && userData.map((item) => (
@@ -742,7 +776,7 @@ class AddCommunication extends Component {
         const postDate = moment(`${expiryDate} ${expiryTime}`);
 
         const payload = {
-            id: null,
+            id: this.state.isEdit ? this.props.location.state.item.id : null,
             title: this.state.title,
             author: this.state.author,
             body: this.state.body,
@@ -750,15 +784,14 @@ class AddCommunication extends Component {
             mediaArray,
             expiryDate: postDate,
             organisationId: this.state.organisationId,
-            toOrganisationIds: this.state.toOrganisationIds,
-            toUserRoleIds: this.state.toUserRoleIds,
-            toUserIds: this.state.toUserIds,
-            communicationImage: this.state.communicationImage,
-            communicationVideo: this.state.communicationVideo,
+            toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
+            toUserRoleIds: this.state.selectedRoles ? this.state.toUserRoleIds : [],
+            toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
+            imageUrl: this.state.imageUrl,
+            videoUrl: this.state.videoUrl,
         };
 
         this.props.addCommunicationAction(payload);
-        console.log('===============', payload);
     }
 
     footerView = (isSubmitting) => (
@@ -769,7 +802,7 @@ class AddCommunication extends Component {
                         <div className="reg-add-save-button">
                             <NavLink
                                 to={{
-                                    pathname: "/CommunicationList",
+                                    pathname: "/communicationList",
                                     state: { screenKey: this.state.screenKey },
                                 }}
                             >
@@ -803,6 +836,7 @@ class AddCommunication extends Component {
                     visible={
                         this.props.userState.onImpersonationLoad
                         || this.props.userState.onLoad
+                        || this.props.communicationState.onLoad
                     }
                 />
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
@@ -834,11 +868,9 @@ function mapDispatchToProps(dispatch) {
         getRoleAction,
         getAffiliatesListingAction,
         refreshCommunicationModuleDataAction,
-        setDefaultImageVideoNewAction,
         getAffiliateToOrganisationAction,
         clearListAction,
         getUserDashboardTextualAction,
-        updateCommunicationModuleData,
         filterByRelations,
         addCommunicationAction,
     }, dispatch);
@@ -850,7 +882,7 @@ function mapStateToProps(state) {
         liveScoreMangerState: state.LiveScoreMangerState,
         liveScoreState: state.LiveScoreState,
         userState: state.UserState,
-        communicationModuleState: state.CommunicationModuleState,
+        communicationState: state.CommunicationState,
     };
 }
 

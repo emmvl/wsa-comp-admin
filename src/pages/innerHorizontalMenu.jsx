@@ -934,7 +934,7 @@ class InnerHorizontalMenu extends React.Component {
                         onClick={() => this.props.clearDataOnCompChangeAction(), () => this.props.CLEAR_OWN_COMPETITION_DATA('all')}
                     >
                         <Menu.Item key="1">
-                            <NavLink to="/CommunicationList">
+                            <NavLink to="/communicationList">
                                 <span>{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>

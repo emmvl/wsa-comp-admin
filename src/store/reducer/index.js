@@ -80,7 +80,7 @@ import CompetitionMultiDrawsState from './competitionManagementReducer/competiti
 import liveScorePlayerMinuteTrackingState from './liveScoreReducer/liveScorePlayerMinuteTrackingReducer';
 
 import UmpirePaymentState from './umpireReducer/umpirePaymentReducer';
-import CommunicationModuleState from './communicationReducer/communicationReducer';
+import CommunicationState from './communicationReducer/communicationReducer';
 import UmpirePoolAllocationState from './umpireReducer/umpirePoolAllocationReducer';
 
 const rootReducer = combineReducers({
@@ -152,7 +152,7 @@ const rootReducer = combineReducers({
     CompetitionMultiDrawsState,
     liveScorePlayerMinuteTrackingState,
     UmpirePaymentState,
-    CommunicationModuleState,
+    CommunicationState,
     UmpirePoolAllocationState,
 });
 

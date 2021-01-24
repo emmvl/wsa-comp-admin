@@ -15,18 +15,17 @@ const communicationAxiosApi = {
             form.append('body', data.body);
             form.append('author', data.author ? data.author : 'World sport action');
             form.append('expiryDate', data.expiryDate);
-            form.append('expiryDate', data.expiryDate);
             form.append('organisationId', data.organisationId);
             form.append('toOrganisationIds', data.toOrganisationIds);
             form.append('toUserRoleIds', data.toUserRoleIds);
             form.append('toUserIds', data.toUserIds);
 
-            if (data.communicationImage) {
-                form.append('communicationImage', data.communicationImage);
+            if (data.imageUrl) {
+                form.append('imageUrl', data.imageUrl);
             }
 
-            if (data.communicationVideo) {
-                form.append('communicationVideo', data.communicationVideo);
+            if (data.videoUrl) {
+                form.append('videoUrl', data.videoUrl);
             }
 
             if (data.mediaArray !== []) {
@@ -40,10 +39,26 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    communicationList(userId) {
+    communicationList() {
         try {
-            const url = `${communicationBaseUrl}/admin?userId=${userId}`;
+            const url = `${communicationBaseUrl}/`;
             return Method.dataGet(url, token);
+        } catch (e) {
+            console.error(e);
+        }
+    },
+    publishCommunication({ id, silent }) {
+        try {
+            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${silent}`;
+            return Method.dataGet(url, token);
+        } catch (e) {
+            console.error(e);
+        }
+    },
+    deleteCommunication(id) {
+        try {
+            const url = `${communicationBaseUrl}/id/${id}`;
+            return Method.dataDelete(url, token);
         } catch (e) {
             console.error(e);
         }

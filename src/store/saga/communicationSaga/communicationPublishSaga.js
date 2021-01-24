@@ -6,7 +6,7 @@ import ApiConstants from "themes/apiConstants";
 import communicationAxiosApi from "../../http/communicationHttp/communicationAxiosApi";
 
 function* failSaga(result) {
-    yield put({ type: ApiConstants.API_COMMUNICATION_LIST_FAIL });
+    yield put({ type: ApiConstants.API_COMMUNICATION_PUBLISH_FAIL });
 
     const msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
     message.config({
@@ -18,7 +18,7 @@ function* failSaga(result) {
 
 function* errorSaga(error) {
     yield put({
-        type: ApiConstants.API_COMMUNICATION_LIST_ERROR,
+        type: ApiConstants.API_COMMUNICATION_PUBLISH_ERROR,
         error,
         status: error.status,
     });
@@ -38,14 +38,14 @@ function* errorSaga(error) {
     }
 }
 
-export function* communicationListSaga() {
+export function* communicationPublishSaga(action) {
     try {
-        const result = yield call(communicationAxiosApi.communicationList);
+        const result = yield call(communicationAxiosApi.publishCommunication, action.data);
 
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_COMMUNICATION_LIST_SUCCESS,
-                result: result.result.data,
+                type: ApiConstants.API_COMMUNICATION_PUBLISH_SUCCESS,
+                result: action.data,
                 status: result.status,
             });
         } else {

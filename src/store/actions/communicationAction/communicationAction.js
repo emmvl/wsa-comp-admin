@@ -1,9 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function communicationListAction(competitionId) {
+function communicationListAction() {
     const action = {
         type: ApiConstants.API_COMMUNICATION_LIST_LOAD,
-        competitionId,
     };
     return action;
 }
@@ -13,7 +12,6 @@ function addCommunicationAction(data) {
         type: ApiConstants.API_ADD_COMMUNICATION_LOAD,
         data,
     };
-
     return action;
 }
 
@@ -24,7 +22,6 @@ function refreshCommunicationModuleDataAction() {
     return action;
 }
 
-// get communication List Action
 function updateCommunicationModuleData(data) {
     const action = {
         type: ApiConstants.API_UPDATE_COMMUNICATION_DATA,
@@ -33,13 +30,11 @@ function updateCommunicationModuleData(data) {
     return action;
 }
 
-// Communication notification on click publish and notify
-function communicationNotificationAction(data, value, screenKey) {
+// Communication publish
+function communicationPublishAction(data) {
     const action = {
-        type: ApiConstants.API_COMMUNICATION_NOTIFICATION_LOAD,
+        type: ApiConstants.API_COMMUNICATION_PUBLISH_LOAD,
         data,
-        value,
-        screenKey,
     };
     return action;
 }
@@ -48,15 +43,7 @@ function communicationNotificationAction(data, value, screenKey) {
 function deleteCommunicationAction(id) {
     const action = {
         type: ApiConstants.API_DELETE_COMMUNICATION_LOAD,
-        id,
-    };
-    return action;
-}
-
-function setDefaultImageVideoNewAction(data) {
-    const action = {
-        type: ApiConstants.API_DEFAULT_COMMUNICATION_IMAGE_VIDEO,
-        payload: data,
+        data: id,
     };
     return action;
 }
@@ -65,8 +52,7 @@ export {
     communicationListAction,
     addCommunicationAction,
     refreshCommunicationModuleDataAction,
-    communicationNotificationAction,
+    communicationPublishAction,
     deleteCommunicationAction,
-    setDefaultImageVideoNewAction,
     updateCommunicationModuleData,
 };
