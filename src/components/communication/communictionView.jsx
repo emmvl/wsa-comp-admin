@@ -327,7 +327,12 @@ class CommunicationView extends Component {
     render() {
         return (
             <div className="fluid-width default-bg">
-                <Loader visible={this.props.communicationState.onDeleteLoad} />
+                <Loader
+                    visible={
+                        this.props.communicationState.onDeleteLoad
+                        || this.props.communicationState.onPublishLoad
+                    }
+                />
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
                 <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
                 <Layout>

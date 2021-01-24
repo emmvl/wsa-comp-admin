@@ -136,10 +136,10 @@ class AddCommunication extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        const { communicationState, userState } = this.props;
+        const { communicationState } = this.props;
 
-        if (nextProps.userState !== userState) {
-            if (nextProps.userState.addSuccess !== userState.addSuccess
+        if (nextProps.communicationState !== communicationState) {
+            if (nextProps.communicationState.addSuccess !== communicationState.addSuccess
                 && communicationState.addSuccess
             ) {
                 history.push({
@@ -604,7 +604,7 @@ class AddCommunication extends Component {
 
         const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : userDefaultData;
 
-        const selctedRolArr = [
+        const selectedRoleArray = [
             { label: 'Managers', value: "manager" },
             { label: 'Coaches', value: "coach" },
             { label: 'Scorers', value: "scorer" },
@@ -634,6 +634,7 @@ class AddCommunication extends Component {
                             this.setState({
                                 allOrg: false,
                                 individualOrg: true,
+                                toOrganisationIds: [],
                             });
                         }}
                         checked={individualOrg}
@@ -683,6 +684,7 @@ class AddCommunication extends Component {
                         onChange={() => {
                             this.setState({
                                 allUser: true,
+                                toUserRoleIds: [],
                                 selectedRoles: false,
                                 individualUsers: false,
                             });
@@ -701,6 +703,7 @@ class AddCommunication extends Component {
                         onChange={() => {
                             this.setState({
                                 allUser: false,
+                                toUserIds: [],
                                 selectedRoles: true,
                                 individualUsers: false,
                             });
@@ -718,12 +721,13 @@ class AddCommunication extends Component {
                             value={
                                 this.props.userState.roles
                                     .filter((role) => this.state.toUserRoleIds.includes(role.id))
-                                    .map((role) => role.name)
+                                    .map((role) => role.description.toLowerCase())
                             }
                             onChange={(value) => {
                                 const selected = value.length > 0
                                     ? value.map((item) => {
-                                        const role = this.props.userState.roles.find((rol) => rol.name === item);
+                                        const role = this.props.userState.roles
+                                            .find((rol) => rol.description.toLowerCase() === item.toLowerCase());
                                         return role?.id;
                                     }).filter((item) => item)
                                     : [];
@@ -733,7 +737,7 @@ class AddCommunication extends Component {
                             }}
                         >
 
-                            {selctedRolArr.map((item) => (
+                            {selectedRoleArray.map((item) => (
                                 <div key={item.value}>
                                     <Checkbox className="single-checkbox-radio-style pt-4 ml-0" value={item.value}>
                                         {item.label}
@@ -754,6 +758,7 @@ class AddCommunication extends Component {
                             this.setState({
                                 allUser: false,
                                 selectedRoles: false,
+                                toUserRoleIds: [],
                                 individualUsers: true,
                             });
                         }}
@@ -920,9 +925,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        liveScoreScorerState: state.LiveScoreScorerState,
-        liveScoreMangerState: state.LiveScoreMangerState,
-        liveScoreState: state.LiveScoreState,
         userState: state.UserState,
         communicationState: state.CommunicationState,
     };
