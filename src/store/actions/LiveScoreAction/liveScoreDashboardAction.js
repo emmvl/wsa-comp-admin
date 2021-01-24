@@ -32,8 +32,18 @@ function liveScoreSingleGameRedeemPayAction(payload){
     return action;
 }
 
+function liveScorePlayersToPayListAction(payload){
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_LIST_LOAD,
+        payload
+    }
+
+    return action;
+}
+
 export {
     liveScoreDashboardListAction,
     liveScoreSingleGameListAction,
-    liveScoreSingleGameRedeemPayAction
+    liveScoreSingleGameRedeemPayAction,
+    liveScorePlayersToPayListAction
 }

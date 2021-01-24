@@ -114,16 +114,15 @@ class RegistrationPayments extends Component {
 
     componentDidUpdate() {
         if (this.state.isImpersonation) {
-            history.push("/paymentDashboard")
-
+            history.push("/paymentDashboard");
         } else {
             if (this.props.stripeState.onLoad === false && this.state.loadingSave === true) {
-                this.setState({ loadingSave: false })
-                this.props.accountBalanceAction()
+                this.setState({ loadingSave: false });
+                this.props.accountBalanceAction();
             }
             if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
-                this.setState({ stripeDashBoardLoad: false })
-                let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
+                this.setState({ stripeDashBoardLoad: false });
+                const stripeDashboardUrl = this.props.stripeState.stripeLoginLink;
                 if (stripeDashboardUrl) {
                     window.open(stripeDashboardUrl, '_newtab');
                 }

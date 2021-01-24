@@ -173,9 +173,10 @@ const playerSeasonalTable = [
                     type="number"
                     className="input-inside-table-fees"
                     value={fee}
-                    onChange={(e) =>
+                    onChange={(e) => 
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -204,7 +205,8 @@ const playerSeasonalTable = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -227,12 +229,13 @@ const playerSeasonalTable = [
                 prefix="$"
                 disabled={this_Obj.state.permissionState.allDisable}
                 type="number"
-                min={0}
+                // min={0}
                 className="input-inside-table-fees"
                 value={fee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'fee',
@@ -252,12 +255,13 @@ const playerSeasonalTable = [
                 prefix="$"
                 disabled={this_Obj.state.permissionState.allDisable}
                 type="number"
-                min={0}
+                // min={0}
                 className="input-inside-table-fees"
                 value={gst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'gst',
@@ -358,7 +362,8 @@ const playerCasualTable = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -386,7 +391,8 @@ const playerCasualTable = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -413,7 +419,8 @@ const playerCasualTable = [
                 value={fee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'fee',
@@ -437,7 +444,8 @@ const playerCasualTable = [
                 value={gst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'gst',
@@ -538,7 +546,8 @@ const playerSeasonalTableAssociation = [
                     value={fee}
                     onChange={(e) => {
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -566,7 +575,8 @@ const playerSeasonalTableAssociation = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -594,7 +604,8 @@ const playerSeasonalTableAssociation = [
                     value={fee}
                     onChange={(e) => {
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationFees',
@@ -622,7 +633,8 @@ const playerSeasonalTableAssociation = [
                     value={gst}
                     onChange={(e) => {
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationGST',
@@ -649,7 +661,8 @@ const playerSeasonalTableAssociation = [
                 value={fee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'fee',
@@ -673,7 +686,8 @@ const playerSeasonalTableAssociation = [
                 value={gst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'gst',
@@ -698,7 +712,8 @@ const playerSeasonalTableAssociation = [
                 value={affiliateFee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateFee',
@@ -823,7 +838,8 @@ const playerCasualTableAssociation = [
                     value={fee}
                     onChange={(e) => {
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -852,7 +868,8 @@ const playerCasualTableAssociation = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -880,7 +897,8 @@ const playerCasualTableAssociation = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationFees',
@@ -908,7 +926,8 @@ const playerCasualTableAssociation = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationGST',
@@ -934,7 +953,8 @@ const playerCasualTableAssociation = [
                 value={fee}
                 onChange={(e) => {
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'fee',
@@ -959,7 +979,8 @@ const playerCasualTableAssociation = [
                 value={gst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'gst',
@@ -983,7 +1004,8 @@ const playerCasualTableAssociation = [
                 value={affiliateFee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateFee',
@@ -1007,7 +1029,8 @@ const playerCasualTableAssociation = [
                 value={affiliateGst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateGst',
@@ -1108,7 +1131,8 @@ const playerSeasonalTableClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -1136,7 +1160,8 @@ const playerSeasonalTableClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -1164,7 +1189,8 @@ const playerSeasonalTableClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationFees',
@@ -1192,7 +1218,8 @@ const playerSeasonalTableClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationGST',
@@ -1219,7 +1246,8 @@ const playerSeasonalTableClub = [
                 value={fee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'fee',
@@ -1243,7 +1271,8 @@ const playerSeasonalTableClub = [
                 value={gst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'gst',
@@ -1268,7 +1297,8 @@ const playerSeasonalTableClub = [
                 value={affiliateFee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateFee',
@@ -1292,7 +1322,8 @@ const playerSeasonalTableClub = [
                 value={affiliateGst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateGst',
@@ -1393,7 +1424,8 @@ const playerCasualTableClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -1421,7 +1453,8 @@ const playerCasualTableClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -1449,7 +1482,8 @@ const playerCasualTableClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationFees',
@@ -1477,7 +1511,8 @@ const playerCasualTableClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationGST',
@@ -1504,7 +1539,8 @@ const playerCasualTableClub = [
                 value={fee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'fee',
@@ -1528,7 +1564,8 @@ const playerCasualTableClub = [
                 value={gst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'gst',
@@ -1552,7 +1589,8 @@ const playerCasualTableClub = [
                 value={affiliateFee}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateFee',
@@ -1576,7 +1614,8 @@ const playerCasualTableClub = [
                 value={affiliateGst}
                 onChange={(e) =>
                     this_Obj.onChangeDetails(
-                        getNotNegativeVal(e),
+                        // getNotNegativeVal(e),
+                        e.target.value,
                         index,
                         record,
                         'affiliateGst',
@@ -1677,7 +1716,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -1705,7 +1745,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -1733,7 +1774,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationFees',
@@ -1761,7 +1803,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationGST',
@@ -1789,7 +1832,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'fee',
@@ -1816,7 +1860,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'gst',
@@ -1847,7 +1892,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={affiliateFee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affiliateFee',
@@ -1878,7 +1924,8 @@ const playerSeasonalTableTeamAssociation = [
                     value={affiliateGst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affiliateGst',
@@ -1985,7 +2032,8 @@ const playerSeasonalTableTeamClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationFees',
@@ -2013,7 +2061,8 @@ const playerSeasonalTableTeamClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -2041,7 +2090,8 @@ const playerSeasonalTableTeamClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationFees',
@@ -2069,7 +2119,8 @@ const playerSeasonalTableTeamClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affNominationGST',
@@ -2097,7 +2148,8 @@ const playerSeasonalTableTeamClub = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'fee',
@@ -2124,7 +2176,8 @@ const playerSeasonalTableTeamClub = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'gst',
@@ -2155,7 +2208,8 @@ const playerSeasonalTableTeamClub = [
                     value={affiliateFee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affiliateFee',
@@ -2186,7 +2240,8 @@ const playerSeasonalTableTeamClub = [
                     value={affiliateGst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'affiliateGst',
@@ -2295,7 +2350,8 @@ const playerSeasonalTeamTable = [
                             value={fee}
                             onChange={(e) =>
                                 this_Obj.onChangeDetails(
-                                    getNotNegativeVal(e),
+                                    // getNotNegativeVal(e),
+                                    e.target.value,
                                     index,
                                     record,
                                     'nominationFees',
@@ -2324,7 +2380,8 @@ const playerSeasonalTeamTable = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -2352,7 +2409,8 @@ const playerSeasonalTeamTable = [
                     value={fee}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'fee',
@@ -2383,7 +2441,8 @@ const playerSeasonalTeamTable = [
                     value={gst}
                     onChange={(e) =>
                         this_Obj.onChangeDetails(
-                            getNotNegativeVal(e),
+                            // getNotNegativeVal(e),
+                            e.target.value,
                             index,
                             record,
                             'gst',
@@ -2491,7 +2550,8 @@ const playerCasualTableTeamAssociation = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'nominationFees',
@@ -2520,7 +2580,8 @@ const playerCasualTableTeamAssociation = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -2549,7 +2610,8 @@ const playerCasualTableTeamAssociation = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affNominationFees',
@@ -2578,7 +2640,8 @@ const playerCasualTableTeamAssociation = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affNominationGST',
@@ -2606,7 +2669,8 @@ const playerCasualTableTeamAssociation = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'fee',
@@ -2635,7 +2699,8 @@ const playerCasualTableTeamAssociation = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'gst',
@@ -2664,7 +2729,8 @@ const playerCasualTableTeamAssociation = [
                         value={affiliateFee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affiliateFee',
@@ -2693,7 +2759,8 @@ const playerCasualTableTeamAssociation = [
                         value={affiliateGst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affiliateGst',
@@ -2796,7 +2863,8 @@ const playerCasualTableTeamClub = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'nominationFees',
@@ -2825,7 +2893,8 @@ const playerCasualTableTeamClub = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -2854,7 +2923,8 @@ const playerCasualTableTeamClub = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affNominationFees',
@@ -2883,7 +2953,8 @@ const playerCasualTableTeamClub = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affNominationGST',
@@ -2912,7 +2983,8 @@ const playerCasualTableTeamClub = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'fee',
@@ -2941,7 +3013,8 @@ const playerCasualTableTeamClub = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'gst',
@@ -2970,7 +3043,8 @@ const playerCasualTableTeamClub = [
                         value={affiliateFee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affiliateFee',
@@ -2999,7 +3073,8 @@ const playerCasualTableTeamClub = [
                         value={affiliateGst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'affiliateGst',
@@ -3102,7 +3177,8 @@ const playerCasualTeamTable = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'nominationFees',
@@ -3131,7 +3207,8 @@ const playerCasualTeamTable = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                             index,
                             record,
                             'nominationGST',
@@ -3160,7 +3237,8 @@ const playerCasualTeamTable = [
                         value={fee}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'fee',
@@ -3189,7 +3267,8 @@ const playerCasualTeamTable = [
                         value={gst}
                         onChange={(e) =>
                             this_Obj.onChangeDetails(
-                                getNotNegativeVal(e),
+                                // getNotNegativeVal(e),
+                                e.target.value,
                                 index,
                                 record,
                                 'gst',

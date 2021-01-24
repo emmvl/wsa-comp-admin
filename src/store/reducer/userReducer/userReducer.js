@@ -356,6 +356,7 @@ const initialState = {
   teamMemberUpdate: null,
   teamMemberDeletion: false,
   addTeamMember: false,
+  userSubmittedRegData: [],
   organisationUsersList: [],
 };
 
@@ -932,12 +933,25 @@ function userReducer(state = initialState, action) {
       };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
+          console.log('11');
           return { ...state, onExpUserRegDataLoad: true };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
           return {
               ...state,
               onExpUserRegDataLoad: false,
+              status: action.status,
+              error: null
+          };
+
+      case ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD:
+          return { ...state, onGetSubmittedRegDataLoad: true };
+
+      case ApiConstants.API_GET_SUBMITTED_REG_DATA_SUCCESS:
+          return {
+              ...state,
+              userSubmittedRegData: action.result,
+              onGetSubmittedRegDataLoad: false,
               status: action.status,
               error: null
           };

@@ -119,12 +119,9 @@ class RegistrationRefunds extends Component {
 
     componentDidMount() {
         if (this.state.isImpersonation) {
-            history.push("/paymentDashboard")
-
-        } else {
-            if (this.stripeConnected()) {
-                this.props.getStripeRefundsListAction(1, null, null)
-            }
+            history.push("/paymentDashboard");
+        } else if (this.stripeConnected()) {
+            this.props.getStripeRefundsListAction(1, null, null);
         }
     }
 

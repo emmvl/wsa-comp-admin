@@ -258,6 +258,14 @@ function exportOrgRegQuestionAction(payload) {
 }
 
 /* Export User Registration Data */
+function getSubmittedRegData(payload) {
+    return {
+        type: ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD,
+        payload,
+    };
+}
+
+/* Export User Registration Data */
 function exportUserRegData(payload) {
     return {
         type: ApiConstants.API_EXPORT_USER_REG_DATA_LOAD,
@@ -619,5 +627,6 @@ export {
     getTeamMembersReviewAction,
     teamMemberUpdateAction,
     exportUserRegData,
+    getSubmittedRegData,
     filterByRelations
 };
