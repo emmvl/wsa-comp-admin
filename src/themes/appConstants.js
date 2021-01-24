@@ -1540,6 +1540,7 @@ const AppConstants = {
     exportAttendance: 'Export Attendance',
     exportAttendanceMessage: 'Attendance exported successfully',
     singleUseDiscount: 'Single Use Discount - No Fee Charged',
+    singleUseDiscountSubject: 'Your Single Use discount voucher to use with your Netball Registration',
     addCode: 'Add Code',
     go: 'Go',
     matchCalender: 'Match Calendar',
