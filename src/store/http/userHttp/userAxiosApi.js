@@ -521,6 +521,10 @@ let userHttpApi = {
   findPossibleMerge(payload) {
     return Method.dataPost('userMerge/find', token, payload);
   },
+
+  getUsersByIds(ids) {
+      return Method.dataGet(`users/byIds?ids=${ids}`);
+  },
 };
 
 let Method = {

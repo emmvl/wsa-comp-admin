@@ -237,6 +237,7 @@ const initialState = {
   affiliateEdit: affiliate,
   affiliateOurOrg: affiliate,
   affiliateList: [],
+  affiliatesByParentList: [],
   affiliateTo: {},
   roles: [],
   userRolesEntity: [],
@@ -358,6 +359,7 @@ const initialState = {
   addTeamMember: false,
   userSubmittedRegData: [],
   organisationUsersList: [],
+  usersByIdsList: [],
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -466,6 +468,7 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateList: data.affiliates,
         impersonationList: data.affiliates,
+        affiliatesByParentList: data?.affiliateList || [],
         affiliateListPage: data.page ? data.page.currentPage : 1,
         affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status,
@@ -476,6 +479,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onImpersonationLoad: false,
         impersonationList: action.result.affiliates,
+        affiliatesByParentList: action.result?.affiliateList || [],
         status: action.status,
       };
     case ApiConstants.API_SAVE_AFFILIATE_LOAD:
@@ -1415,6 +1419,14 @@ function userReducer(state = initialState, action) {
           ...state,
           onLoad: false,
           organisationUsersList: action.result,
+      };
+    case ApiConstants.API_GET_USERS_BY_IDS_LOAD:
+      return { ...state, onLoad: true };
+    case ApiConstants.API_GET_USERS_BY_IDS_SUCCESS:
+      return {
+          ...state,
+          onLoad: false,
+          usersByIdsList: action.result,
       };
     default:
       return state;

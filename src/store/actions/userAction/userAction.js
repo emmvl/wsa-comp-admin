@@ -556,6 +556,13 @@ function filterByRelations(data) {
     }
 }
 
+function getUsersByIds(data) {
+    return {
+        type: ApiConstants.API_GET_USERS_BY_IDS_LOAD,
+        data,
+    }
+}
+
 
 export {
     getRoleAction,
@@ -628,5 +635,6 @@ export {
     teamMemberUpdateAction,
     exportUserRegData,
     getSubmittedRegData,
-    filterByRelations
+    filterByRelations,
+    getUsersByIds,
 };

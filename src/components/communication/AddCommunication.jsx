@@ -40,7 +40,7 @@ import {
     getAffiliateToOrganisationAction,
     clearListAction,
     getUserDashboardTextualAction,
-    getRoleAction,
+    getRoleAction, getUsersByIds,
 } from '../../store/actions/userAction/userAction';
 
 import {
@@ -78,7 +78,7 @@ class AddCommunication extends Component {
             key: props.location?.state?.key,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
@@ -92,6 +92,7 @@ class AddCommunication extends Component {
             allUser: true,
             selectedRoles: false,
             individualUsers: false,
+            isFetchedUsersData: false,
         };
         this.formRef = React.createRef();
     }
@@ -128,14 +129,17 @@ class AddCommunication extends Component {
             organisationTypeRefId: -1,
             statusRefId: -1,
             paging: { limit: -1, offset: 0 },
-            stateOrganisations: true,
+            stateOrganisations: false,
+            affiliateListByParent: true,
+            parentId: getOrganisationData().organisationId,
         });
     }
 
     componentDidUpdate(nextProps) {
-        const { communicationState } = this.props;
-        if (nextProps.communicationState !== communicationState) {
-            if (nextProps.communicationState.addSuccess !== communicationState.addSuccess
+        const { communicationState, userState } = this.props;
+
+        if (nextProps.userState !== userState) {
+            if (nextProps.userState.addSuccess !== userState.addSuccess
                 && communicationState.addSuccess
             ) {
                 history.push({
@@ -190,15 +194,29 @@ class AddCommunication extends Component {
             });
         }
 
+        const toOrganisationIds = data.toOrganisationIds
+            ? data.toOrganisationIds.split(',')
+            : [];
+        const toUserRoleIds = data.toUserRoleIds
+            ? data.toUserRoleIds.split(',')
+            : [];
+        const toUserIds = data.toUserIds
+            ? data.toUserIds.split(',')
+            : [];
+        if (data.toUserIds) {
+            this.props.getUsersByIds(toUserIds);
+        }
+
         this.setState({
             title: data.title || '',
             allUser: !(data.toUserIds || data.toUserRoleIds),
             selectedRoles: !!data.toUserRoleIds,
             individualUsers: !!data.toUserIds,
+            allOrg: !data.toOrganisationIds,
             individualOrg: !!data.toOrganisationIds,
-            toUserIds: data?.toUserIds || [],
-            toOrganisationIds: data?.toOrganisationIds || [],
-            toUserRoleIds: data?.toUserRoleIds || [],
+            toUserIds,
+            toOrganisationIds,
+            toUserRoleIds,
         });
     }
 
@@ -404,7 +422,7 @@ class AddCommunication extends Component {
                 </Form.Item>
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.imageUrl} />
+                        <InputWithHead heading={AppConstants.communicationImage} />
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
                             <ImageLoader
                                 timeout={this.state.imageTimeout}
@@ -446,7 +464,7 @@ class AddCommunication extends Component {
                         </div>
                     </div>
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.videoUrl} />
+                        <InputWithHead heading={AppConstants.communicationVideo} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
                             <ImageLoader
                                 timeout={this.state.videoTimeout}
@@ -486,7 +504,6 @@ class AddCommunication extends Component {
                     </div>
                 </div>
 
-                {/* communication expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.communicationExpiryDate} />
@@ -523,8 +540,9 @@ class AddCommunication extends Component {
     };
 
     userSearchApi(searchText) {
+        this.setState({ isFetchedUsersData: true });
+
         const {
-            organisationId,
             yearRefId,
             competitionUniqueKey,
             roleId,
@@ -536,7 +554,7 @@ class AddCommunication extends Component {
         } = this.state;
 
         const filter = {
-            organisationId,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId,
             competitionUniqueKey,
             roleId,
@@ -562,14 +580,29 @@ class AddCommunication extends Component {
             individualUsers,
             allUser,
             selectedRoles,
+            isFetchedUsersData,
         } = this.state;
 
         const {
-            impersonationList, userDashboardTextualList, onLoadSearch, onTextualLoad,
+            impersonationList, affiliatesByParentList, usersByIdsList, userDashboardTextualList, onLoadSearch, onTextualLoad,
         } = this.props.userState;
 
-        const affiliateToData = isArrayNotEmpty(impersonationList) ? impersonationList : [];
-        const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
+        const impersonationListData = isArrayNotEmpty(impersonationList) ? impersonationList : [];
+        const affiliateToData = impersonationListData.length > 0
+            ? impersonationListData.map((aff) => {
+                const orgId = affiliatesByParentList.find((item) => item.id === aff.affiliateId)?.affiliateOrgId;
+                return {
+                    ...aff,
+                    orgId,
+                };
+            }) : [];
+        const userDefaultData = !isFetchedUsersData
+            ? usersByIdsList.map((user) => ({
+                userId: user.id,
+                name: `${user.firstName} ${user.lastName}`,
+            })) : [];
+
+        const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : userDefaultData;
 
         const selctedRolArr = [
             { label: 'Managers', value: "manager" },
@@ -623,12 +656,16 @@ class AddCommunication extends Component {
                             }}
                             filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                            value={this.state.toOrganisationIds}
+                            value={
+                                affiliateToData
+                                    .filter((org) => this.state.toOrganisationIds.includes(org.orgId))
+                                    .map((role) => role.orgId)
+                            }
                         >
                             {
                                 affiliateToData.length > 0 && affiliateToData.map((org, index) => (
-                                    <Option key={`${org.id}_${index}`} value={org.id}>
-                                        {org.name}
+                                    <Option key={`${org.orgId}_${index}`} value={org.orgId}>
+                                        {org.affiliateName}
                                     </Option>
                                 ))
                             }
@@ -747,7 +784,11 @@ class AddCommunication extends Component {
                                     this.userSearchApi(value);
                                 }
                             }}
-                            value={this.state.toUserIds}
+                            value={
+                                !isFetchedUsersData && userDefaultData
+                                    ? userDefaultData.map((usr) => usr.userId)
+                                    : this.state.toUserIds
+                            }
                         >
                             {
                                 userData.length > 0 && userData.map((item) => (
@@ -873,6 +914,7 @@ function mapDispatchToProps(dispatch) {
         getUserDashboardTextualAction,
         filterByRelations,
         addCommunicationAction,
+        getUsersByIds,
     }, dispatch);
 }
 
