@@ -8,6 +8,7 @@ import {
     Select, 
     Modal,
     Menu,
+    message,
  } from 'antd';
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -194,6 +195,8 @@ class UmpirePoolAllocation extends Component {
 
             const poolToAdd = assignedDataCopy.find(pool => +pool.id === +destination.droppableId);
             poolToAdd.umpires.splice(destination.index, 0, assignedUmpire);
+        } else {
+            message.error(AppConstants.somethingWentWrong);
         }
 
         this.setState({ 
