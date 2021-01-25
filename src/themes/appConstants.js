@@ -1781,6 +1781,8 @@ const AppConstants = {
     addUmpireToPool: "Add umpire to pool",
     toPool: "to pool",
     umpireAlreadyInPool: "This umpire is already added to this pool.",
+    confirmUnassignMsg: "This umpire is also added to another pool. Would you like to move him to Unassigned section?",
+    removeFromAllPools: "Remove from all pools",
 
     yourOrder: "Your Order",
 

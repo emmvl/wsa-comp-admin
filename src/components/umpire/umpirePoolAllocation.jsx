@@ -49,6 +49,7 @@ class UmpirePoolAllocation extends Component {
             updatePoolModalVisible: false,
             addUmpireToPoolModalVisible: false,
             removeUmpireFromPoolModalVisible: false,
+            moveToUnassignModalVisible: false,
             deleteModalVisible: false,
             loading: false,
             selectedComp: null,
@@ -59,6 +60,8 @@ class UmpirePoolAllocation extends Component {
             umpirePoolIdToDelete: '',
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            unassignedDataTemp: [],
+            assignedDataTemp: [],
         }
         this.onDragEnd = this.onDragEnd.bind(this);
     }
@@ -160,8 +163,10 @@ class UmpirePoolAllocation extends Component {
     onDragEnd = result => {
         const { source, destination } = result;
 
-        const assignedDataCopy = JSON.parse(JSON.stringify(this.state.assignedData));
-        const unassignedDataCopy = JSON.parse(JSON.stringify(this.state.unassignedData));
+        const { assignedData, unassignedData } = this.state;
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+        const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
 
         // dropped outside the list
         if (!destination) {
@@ -175,7 +180,32 @@ class UmpirePoolAllocation extends Component {
             const poolToAdd = assignedDataCopy.find(pool => +pool.id === +destination.droppableId);
             poolToAdd.umpires.splice(destination.index, 0, assignedUmpire);
         } else if (destination.droppableId === '1') {
-            message.error(AppConstants.somethingWentWrong);
+            const assignedUmpire = assignedDataCopy
+                .find(dataItem => +dataItem.id === +source.droppableId)
+                .umpires[source.index];
+
+            const sourceAssignedData = assignedDataCopy
+                .find(dataItem => +dataItem.id === +source.droppableId);
+
+            sourceAssignedData.umpires.splice(source.index, 1);
+
+            let isMultipleAssigned;
+            assignedDataCopy.forEach(dataItem => {
+                if (!isMultipleAssigned) {
+                    isMultipleAssigned = dataItem.umpires.some(umpire => umpire.id === assignedUmpire.id);
+                }
+            });
+
+            unassignedDataCopy.splice(destination.index, 0, assignedUmpire);
+
+            this.setState({ 
+                unassignedDataTemp: unassignedData,
+                assignedDataTemp: assignedData,
+                moveToUnassignModalVisible: isMultipleAssigned,
+                umpireForAction: isMultipleAssigned ? assignedUmpire : null,
+            });
+
+            // message.error(AppConstants.somethingWentWrong);
         } else {
             const assignedUmpire = assignedDataCopy
                 .find(dataItem => +dataItem.id === +source.droppableId)
@@ -200,7 +230,7 @@ class UmpirePoolAllocation extends Component {
         this.setState({ 
             unassignedData: unassignedDataCopy,
             assignedData: assignedDataCopy,
-         });
+        });
     };
 
     // delete pool handling
@@ -352,6 +382,44 @@ class UmpirePoolAllocation extends Component {
         });
     };
 
+    // move umpire to unassigned section if he has multiple pools
+
+    handleOkMoveToUnassigned = () => {
+        const { umpireForAction, assignedData } = this.state;
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+
+        assignedDataCopy.forEach(dataItem => {
+            const umpireIdxToRemove = dataItem.umpires.findIndex(umpire => umpire.id === umpireForAction.id);
+
+            if (umpireIdxToRemove >= 0) {
+                dataItem.umpires.splice(umpireIdxToRemove, 1);
+            }
+        })
+
+        this.setState({
+            assignedData: assignedDataCopy,
+            moveToUnassignModalVisible: false,
+            umpireForAction: null,
+            umpirePoolIdToUpdate: '',
+        });
+    };
+
+    handleCancelMoveToUnassigned = (e) => {
+        const { unassignedDataTemp, assignedDataTemp } = this.state;
+
+        this.setState({
+            moveToUnassignModalVisible: false,
+            umpireForAction: null,
+            unassignedData: unassignedDataTemp,
+            assignedData: assignedDataTemp,
+            unassignedDataTemp: [],
+            assignedDataTemp: [],
+        });
+    };
+
+
+    // save new data
     handleSave = () => {
         const { selectedComp, assignedData } = this.state;
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
@@ -646,6 +714,26 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
+    confirmUnassignModalView = () => {
+        const { moveToUnassignModalVisible, umpireForAction } = this.state;
+
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.removeFromAllPools}
+                visible={moveToUnassignModalVisible}
+                onOk={() => this.handleOkMoveToUnassigned()}
+                onCancel={() => this.handleCancelMoveToUnassigned()}
+            >
+                {umpireForAction && 
+                    <div>
+                        <p>{AppConstants.confirmUnassignMsg}</p>
+                    </div>
+                }
+            </Modal>
+        )
+    }
+
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         const { unassignedData, isOrganiserView } = this.state;
@@ -774,6 +862,7 @@ class UmpirePoolAllocation extends Component {
                     <Content>
                         {this.contentView()}
                         {this.poolModalView()}
+                        {this.confirmUnassignModalView()}
                         {this.updatePoolModalView()}
                         {this.removeUmpireFromPoolModalView()}
                     </Content>
