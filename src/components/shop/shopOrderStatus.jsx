@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    Input, Layout, Button, Table, Select, Menu, Pagination,
+    Input, Layout, Button, Table, Select, Menu, Pagination, Modal, Form,
 } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -148,6 +148,15 @@ const columns = [
         ),
     },
     {
+        title: 'Refunded Amount',
+        dataIndex: 'refundedAmount',
+        key: 'refundedAmount',
+        sorter: false,
+        render: (refundedAmount) => (
+            <span>{currencyFormat(refundedAmount)}</span>
+        ),
+    },
+    {
         title: "Action",
         dataIndex: "action",
         key: "action",
@@ -172,7 +181,7 @@ const columns = [
                         <span>{AppConstants.refundFullAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="3" onClick={() => this_obj.updateOrderStatusApi(record, 4)}>
+                    <Menu.Item key="3" onClick={() => this_obj.openPartialRefundModal(record.orderId)}>
                         <span>{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
@@ -202,6 +211,9 @@ class ShopOrderStatus extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            partialRefundModalVisible: false,
+            partialRefundAmount: 0,
+            partialRefundId: null,
         };
         this_obj = this;
     }
@@ -277,10 +289,13 @@ class ShopOrderStatus extends Component {
     /// /update order status api call
     updateOrderStatusApi = (record, actionValue) => {
         const payload = {
-            orderId: record.orderId,
+            orderId: record.orderId || this.state.partialRefundId,
             action: actionValue,
-            amount: record.total,
+            // amount: record.total,
         };
+        if (this.state.partialRefundAmount) {
+            payload.amount = this.state.partialRefundAmount
+        }
         this.props.updateOrderStatusAction(payload);
     }
 
@@ -396,6 +411,34 @@ class ShopOrderStatus extends Component {
     onChangefulfilmentStatus(data) {
         this.setState({ fulfilmentStatus: data.fulfilmentStatus });
     }
+
+    // Partial refund modal start
+    openPartialRefundModal = (id) => {
+        this.setState({
+            partialRefundId: id,
+            partialRefundModalVisible: true,
+        });
+    }
+
+    handleOk = () => {
+        this.setState({
+            partialRefundModalVisible: false,
+        });
+        this_obj.updateOrderStatusApi(this.state.partialRefundId, 4)
+    }
+
+    onPartialRefundAmountChange = (value) => {
+        this.setState({
+            partialRefundAmount: value,
+        })
+    }
+
+    handleCancel = () => {
+        this.setState({
+            partialRefundModalVisible: false,
+        });
+    };
+    // Partial refund modal end
 
     dropdownView = () => {
         const paymentStatusData = [
@@ -548,6 +591,31 @@ class ShopOrderStatus extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
+                        <Modal
+                            title={AppConstants.refundPartialAmount}
+                            visible={this.state.partialRefundModalVisible}
+                            onFinishFailed={this.onFinishFailed}
+                            onCancel={this.handleCancel}
+                            onOk={this.handleOk}
+                        >
+                            <Form
+                                name="basic"
+                                onFinish={this.onFinish}
+                            >
+                                <Form.Item
+                                    label={AppConstants.amount}
+                                    name="amount"
+                                    type="number"
+                                    onChange={(event) => this.onPartialRefundAmountChange(event.target.value)}
+                                    rules={[{
+                                        required: true,
+                                        message: AppConstants.pleaseInputAmount,
+                                    }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Form>
+                        </Modal>
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>

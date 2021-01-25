@@ -1793,7 +1793,12 @@ const AppConstants = {
     communicationImage: 'Communication Image',
     communicationVideo: 'Communication Video',
     communicationExpiryDate: 'Communication Expiry Date',
-    communicationExpiryTime: 'Communication Expiry Time'
+    communicationExpiryTime: 'Communication Expiry Time',
+    pleaseInputAmount: "Please input amount",
+
+    cashReceived: "Cash Received",
+    retryPayment: "Retry Payment",
+
 };
 
 export default AppConstants;

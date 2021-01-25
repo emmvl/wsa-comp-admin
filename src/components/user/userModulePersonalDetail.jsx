@@ -92,7 +92,7 @@ let this_Obj = null;
 const section = null;
 
 let userRoleId;
-const setOrganisationData = JSON.parse(localStorage.setOrganisationData);
+const setOrganisationData = localStorage.setOrganisationData && JSON.parse(localStorage.setOrganisationData);
 if (setOrganisationData) {
     userRoleId = setOrganisationData.userRoleId;
 }

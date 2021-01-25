@@ -81,6 +81,17 @@ function liveScoreDashboardsReducer(state = initialState, action) {
                 liveScorePlayerstoPayListTotalCount: action.result.page ? action.result.page.totalCount : 0,
             };
 
+        case ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_LOAD:
+            return { ...state, onRetryPaymentLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_SUCCESS:
+            return {
+                ...state,
+                onRetryPaymentLoad: false,
+                retryPaymentMessage: action.result.message,
+                retryPaymentSuccess: action.result.success,
+            };
+
         default:
             return state;
     };

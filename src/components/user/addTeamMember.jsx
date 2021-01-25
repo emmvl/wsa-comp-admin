@@ -788,7 +788,7 @@ class AddTeamMember extends Component {
                             </Form.Item>
                         </div>
                     </div>
-                    {teamMember.membershipProductTypes.find(x => x.isChecked == true) && (
+                    {/* {teamMember.membershipProductTypes.find(x => x.isChecked == true) && (
                         <Checkbox
                             className="single-checkbox"
                             checked={teamMember.payingFor == 1}
@@ -799,7 +799,7 @@ class AddTeamMember extends Component {
                         >
                             {AppConstants.payingForMember}
                         </Checkbox>
-                    )}
+                    )} */}
                     {isArrayNotEmpty(teamMember.parentOrGuardian) && (
                         <div>
                             <div className="form-heading" style={{ paddingBottom: "0px", marginTop: 20 }}>{AppConstants.parentOrGuardianDetail}</div>

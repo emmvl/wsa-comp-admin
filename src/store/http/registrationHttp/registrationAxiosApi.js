@@ -576,6 +576,10 @@ const AxiosApi = {
         const url = `api/playerstopay/list`;
         return Method.dataPost(url, token, payload);
     },
+    playersToPayRetryPayment(payload) {
+        const url = `api/playerstopay/pay`;
+        return Method.dataPost(url, token, payload);
+    },
     async exportRegistraion(params) {
         const body = {
             ...params,

@@ -242,6 +242,43 @@ function getPaymentSummary(
     }
     return action
 }
+
+function exportPaymentSummaryApi(offset,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType,
+    paymentStatus) {
+    return {
+        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
+        offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType,
+        paymentStatus
+    }
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -256,5 +293,6 @@ export {
     getInvoiceStatusAction,
     exportPaymentDashboardApi,
     exportPayoutTransaction,
-    getPaymentSummary
+    getPaymentSummary,
+    exportPaymentSummaryApi
 };
