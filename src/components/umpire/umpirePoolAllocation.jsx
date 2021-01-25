@@ -163,75 +163,112 @@ class UmpirePoolAllocation extends Component {
     onDragEnd = result => {
         const { source, destination } = result;
 
-        const { assignedData, unassignedData } = this.state;
-
-        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
-        const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
+        let newData;
 
         // dropped outside the list
         if (!destination) {
             return;
         }
 
+        // handle drop changes
         if (source.droppableId === '1') {
-            const assignedUmpire = unassignedDataCopy[source.index];
-            unassignedDataCopy.splice(source.index, 1);
-
-            const poolToAdd = assignedDataCopy.find(pool => +pool.id === +destination.droppableId);
-            poolToAdd.umpires.splice(destination.index, 0, assignedUmpire);
+            newData = this.unassignedToAssignedMove(source, destination);
         } else if (destination.droppableId === '1') {
-            const assignedUmpire = assignedDataCopy
-                .find(dataItem => +dataItem.id === +source.droppableId)
-                .umpires[source.index];
-
-            const sourceAssignedData = assignedDataCopy
-                .find(dataItem => +dataItem.id === +source.droppableId);
-
-            sourceAssignedData.umpires.splice(source.index, 1);
-
-            let isMultipleAssigned;
-            assignedDataCopy.forEach(dataItem => {
-                if (!isMultipleAssigned) {
-                    isMultipleAssigned = dataItem.umpires.some(umpire => umpire.id === assignedUmpire.id);
-                }
-            });
-
-            unassignedDataCopy.splice(destination.index, 0, assignedUmpire);
-
-            this.setState({ 
-                unassignedDataTemp: unassignedData,
-                assignedDataTemp: assignedData,
-                moveToUnassignModalVisible: isMultipleAssigned,
-                umpireForAction: isMultipleAssigned ? assignedUmpire : null,
-            });
-
-            // message.error(AppConstants.somethingWentWrong);
+            newData = this.moveToUnassigned(source, destination);
         } else {
-            const assignedUmpire = assignedDataCopy
-                .find(dataItem => +dataItem.id === +source.droppableId)
-                .umpires[source.index];
-
-            const sourceAssignedData = assignedDataCopy
-                .find(dataItem => +dataItem.id === +source.droppableId);
-
-            const destinationAssignedData = assignedDataCopy
-                .find(dataItem => +dataItem.id === +destination.droppableId);
-
-            const hasUmpire = destinationAssignedData.umpires.some(umpire => umpire.id === assignedUmpire.id);
-
-            if (hasUmpire && source.droppableId !== destination.droppableId) {
-                message.error(AppConstants.umpireAlreadyInPool);
-            } else {
-                sourceAssignedData.umpires.splice(source.index, 1);
-                destinationAssignedData.umpires.splice(destination.index, 0, assignedUmpire);
-            }
+            newData = this.moveToAnotherPool(source, destination);
         }
 
         this.setState({ 
-            unassignedData: unassignedDataCopy,
-            assignedData: assignedDataCopy,
+            ...newData
         });
     };
+
+    unassignedToAssignedMove = (source, destination) => {
+        const { assignedData, unassignedData } = this.state;
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+        const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
+
+        const assignedUmpire = unassignedDataCopy[source.index];
+        unassignedDataCopy.splice(source.index, 1);
+
+        const poolToAdd = assignedDataCopy.find(pool => +pool.id === +destination.droppableId);
+        poolToAdd.umpires.splice(destination.index, 0, assignedUmpire);
+
+        return { 
+            unassignedData: unassignedDataCopy,
+            assignedData: assignedDataCopy,
+        }
+    }
+
+    moveToUnassigned = (source, destination) => {
+        const { assignedData, unassignedData } = this.state;
+        const { assignedUmpire, sourceAssignedData, assignedDataCopy, unassignedDataCopy } = this.getDataForDnD(source, destination);
+
+        sourceAssignedData.umpires.splice(source.index, 1);
+
+        let isMultipleAssigned;
+        assignedDataCopy.forEach(dataItem => {
+            if (!isMultipleAssigned) {
+                isMultipleAssigned = dataItem.umpires.some(umpire => umpire.id === assignedUmpire.id);
+            }
+        });
+
+        unassignedDataCopy.splice(destination.index, 0, assignedUmpire);
+
+        return { 
+            unassignedData: unassignedDataCopy,
+            assignedData: assignedDataCopy,
+            unassignedDataTemp: unassignedData,
+            assignedDataTemp: assignedData,
+            moveToUnassignModalVisible: isMultipleAssigned,
+            umpireForAction: isMultipleAssigned ? assignedUmpire : null,
+        }
+    }
+
+    moveToAnotherPool = (source, destination) => {
+        const { assignedUmpire, sourceAssignedData, destinationAssignedData, assignedDataCopy, unassignedDataCopy } = this.getDataForDnD(source, destination);
+
+        const hasUmpire = destinationAssignedData.umpires.some(umpire => umpire.id === assignedUmpire.id);
+
+        if (hasUmpire && source.droppableId !== destination.droppableId) {
+            message.error(AppConstants.umpireAlreadyInPool);
+        } else {
+            sourceAssignedData.umpires.splice(source.index, 1);
+            destinationAssignedData.umpires.splice(destination.index, 0, assignedUmpire);
+        }
+
+        return { 
+            unassignedData: unassignedDataCopy,
+            assignedData: assignedDataCopy,
+        }
+    }
+
+    getDataForDnD = (source, destination) => {
+        const { assignedData, unassignedData } = this.state;
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+        const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
+
+        const assignedUmpire = assignedDataCopy
+            .find(dataItem => +dataItem.id === +source.droppableId)
+            .umpires[source.index];
+
+        const sourceAssignedData = assignedDataCopy
+            .find(dataItem => +dataItem.id === +source.droppableId);
+
+        const destinationAssignedData = assignedDataCopy
+            .find(dataItem => +dataItem.id === +destination.droppableId);
+
+        return {
+            assignedUmpire,
+            sourceAssignedData,
+            destinationAssignedData,
+            assignedDataCopy,
+            unassignedDataCopy,
+        }
+    }
 
     // delete pool handling
 
