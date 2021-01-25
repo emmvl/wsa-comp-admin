@@ -5,7 +5,9 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
-    umpirePoolData: []
+    umpirePoolData: [],
+    deletedUmpirePoolId: '',
+    newUmpirePool: null,
 };
 
 function umpirePoolAllocationState(state = initialState, action) {
@@ -28,25 +30,17 @@ function umpirePoolAllocationState(state = initialState, action) {
         case ApiConstants.API_SAVE_UMPIRE_POOL_DATA_LOAD:
             return {
                 ...state,
+                newUmpirePool: null,
                 onLoad: true
             };
 
         case ApiConstants.API_SAVE_UMPIRE_POOL_DATA_SUCCESS:
-            let poolResult = action.result
-            let poolObj = {
-                competition: poolResult.poolDat,
-                competitionId: poolResult.competitionId,
-                divisions: [],
-                id: poolResult.id,
-                name: poolResult.name,
-                umpires: poolResult.umpires,
-            }
-            state.umpirePoolData.push(poolObj)
+            // state.umpirePoolData.push(action.result)
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-
+                newUmpirePool: action.result,
             };
 
         case ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_LOAD:
@@ -87,6 +81,7 @@ function umpirePoolAllocationState(state = initialState, action) {
         case ApiConstants.API_DELETE_UMPIRE_POOL_DATA_LOAD:
             return {
                 ...state,
+                deletedUmpirePoolId: '',
                 onLoad: true
             };
     
@@ -97,7 +92,8 @@ function umpirePoolAllocationState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                umpirePoolData: umpirePoolDatanew
+                deletedUmpirePoolId: action.result,
+                // umpirePoolData: umpirePoolDatanew
             };
 
         case ApiConstants.API_UMPIRE_POOL_ALLOCATION_FAIL:

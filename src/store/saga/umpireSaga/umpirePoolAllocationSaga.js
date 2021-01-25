@@ -74,7 +74,7 @@ function* saveUmpirePoolAllocationSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            message.success(AppConstants.settingsUpdatedMessage);
+            message.success(AppConstants.poolAddedSuccessMsg);
         } else {
             yield call(failSaga, result);
         }
@@ -131,7 +131,7 @@ function* deleteUmpirePoolAllocationSaga(action) {
                 result: action.payload.umpirePoolId,
                 status: result.status,
             });
-            message.success(AppConstants.settingsUpdatedMessage);
+            message.success(AppConstants.poolRemovedSuccessMsg);
         } else {
             yield call(failSaga, result);
         }

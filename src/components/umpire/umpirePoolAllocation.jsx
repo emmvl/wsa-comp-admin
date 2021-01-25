@@ -45,7 +45,7 @@ class UmpirePoolAllocation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newPool: "",
+            newPoolName: "",
             savePoolModalVisible: false,
             updatePoolModalVisible: false,
             addUmpireToPoolModalVisible: false,
@@ -83,6 +83,9 @@ class UmpirePoolAllocation extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        const { deletedUmpirePoolId, newUmpirePool } = this.props.umpirePoolAllocationState;
+        const { assignedData } = this.state;
 
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
@@ -147,6 +150,19 @@ class UmpirePoolAllocation extends Component {
             const unassignedUmpires = umpireListDataNew.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
 
             this.setState({unassignedData: unassignedUmpires, assignedData: umpirePoolData });
+        }
+
+        if (!!deletedUmpirePoolId && deletedUmpirePoolId !== prevProps.umpirePoolAllocationState.deletedUmpirePoolId) {
+            const assignedDataFiltered = assignedData.filter(dataItem => dataItem.id !== deletedUmpirePoolId);
+
+            this.setState({ assignedData: assignedDataFiltered });
+        }
+
+        if (!!newUmpirePool && newUmpirePool !== prevProps.umpirePoolAllocationState.newUmpirePool) {
+            const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+            assignedDataCopy.push(newUmpirePool);
+
+            this.setState({ assignedData: assignedDataCopy });
         }
     }
 
@@ -308,10 +324,10 @@ class UmpirePoolAllocation extends Component {
     handleOkSavePool = (e) => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
-        if (this.state.newPool.length > 0) {
+        if (!!this.state.newPoolName.length) {
 
             let poolObj = {
-                name: this.state.newPool,
+                name: this.state.newPoolName,
                 umpires: []
             }
 
@@ -319,19 +335,18 @@ class UmpirePoolAllocation extends Component {
                 compId: this.state.selectedComp,
                 orgId: organisationId,
                 poolObj: poolObj
-
             });
         }
         this.setState({
             savePoolModalVisible: false,
-            newPool: "",
+            newPoolName: "",
         });
     };
 
     handleCancelSavePool = (e) => {
         this.setState({
             savePoolModalVisible: false,
-            newPool: "",
+            newPoolName: "",
         });
     };
 
@@ -343,24 +358,33 @@ class UmpirePoolAllocation extends Component {
 
     handleOkUpdatePool = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        const { umpirePoolIdToUpdate, umpireForAction, selectedComp } = this.state;
-        const umpireId = umpireForAction.id;
+        const { umpirePoolIdToUpdate, umpireForAction, assignedData, selectedComp } = this.state;
+        // const umpireId = umpireForAction.id;
 
-        const body = {
-            umpireId
-        };
+        // const body = {
+        //     umpireId
+        // };
 
-        this.props.updateUmpirePoolData({
-            compId: selectedComp,
-            orgId: organisationId,
-            umpirePoolId: umpirePoolIdToUpdate,
-            body
-        });
+        // this.props.updateUmpirePoolData({
+        //     compId: selectedComp,
+        //     orgId: organisationId,
+        //     umpirePoolId: umpirePoolIdToUpdate,
+        //     body
+        // });
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+
+        assignedDataCopy.forEach(poolDataItem => {
+            if (poolDataItem.id === umpirePoolIdToUpdate) {
+                poolDataItem.umpires.push(umpireForAction);
+            }
+        })
 
         this.setState({
             updatePoolModalVisible: false,
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            assignedData: assignedDataCopy,
         });
     };
 
@@ -397,23 +421,24 @@ class UmpirePoolAllocation extends Component {
                 const indexToRemove = poolDataItem.umpires.findIndex(umpire => umpire.id === umpireForAction.id);
                 poolDataItem.umpires.splice(indexToRemove, 1);
             }
-        })
-
-        const body = assignedDataCopy.map(dataItem => ({
-            id: dataItem.id,
-            umpires: dataItem.umpires.map(umpire => umpire.id)
-        }))
-
-        this.props.updateUmpirePoolManyData({
-            compId: selectedComp,
-            orgId: organisationId,
-            body,
         });
+
+        // const body = assignedDataCopy.map(dataItem => ({
+        //     id: dataItem.id,
+        //     umpires: dataItem.umpires.map(umpire => umpire.id)
+        // }));
+
+        // this.props.updateUmpirePoolManyData({
+        //     compId: selectedComp,
+        //     orgId: organisationId,
+        //     body,
+        // });
 
         this.setState({
             removeUmpireFromPoolModalVisible: false,
             umpireForAction: null,
-            umpirePoolIdToUpdate: ''
+            umpirePoolIdToUpdate: '',
+            assignedData: assignedDataCopy,
         });
     }
     
@@ -679,8 +704,8 @@ class UmpirePoolAllocation extends Component {
                         required="pt-0 mt-0"
                         heading={AppConstants.addPool}
                         placeholder={AppConstants.pleaseEnterPoolName}
-                        onChange={(e) => this.setState({ newPool: e.target.value })}
-                        value={this.state.newPool}
+                        onChange={(e) => this.setState({ newPoolName: e.target.value })}
+                        value={this.state.newPoolName}
                     />
                 </div>
             </Modal>
