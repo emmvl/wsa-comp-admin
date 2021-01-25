@@ -541,13 +541,13 @@ class UmpirePoolAllocation extends Component {
                             >
                                 <div className="player-grading-droppable-heading-view">
                                     <div className="row">
-                                        <div className="col-sm d-flex align-items-center">
+                                        <div className="col-sm-9 d-flex align-items-center">
                                             <span className="player-grading-haeding-team-name-text">{umpirePoolItem.name}</span>
-                                            <span className="player-grading-haeding-player-count-text ml-4">
+                                            <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
                                                 {umpirePoolItem.umpires.length > 1 ? umpirePoolItem.umpires.length + " Umpires" : umpirePoolItem.umpires.length + " Umpire"}
                                             </span>
                                         </div>
-                                        <div className="col-sm d-flex justify-content-end align-items-center">
+                                        <div className="col-sm-3 d-flex justify-content-end align-items-center">
                                             {isOrganiserView && 
                                                 <img
                                                     className="comp-player-table-img pointer mr-4"
@@ -639,15 +639,22 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
-    umpireLineView = (umpireItem, umpireIndex) => (
-        <>
-            {this.umpireLineCellView(umpireIndex + 1)}
-            {this.umpireLineCellView(`${umpireItem.firstName} ${umpireItem.lastName}`)}
-            {this.umpireLineCellView(umpireItem.Badge)}
-            {this.umpireLineCellView(umpireItem.years)}
-            {this.umpireLineCellView(`${umpireItem.matches} ${AppConstants.games}`)}
-        </>
-    )
+    umpireLineView = (umpireItem, umpireIndex) => {
+        const { badgeData } = this.props.appState;
+        const umpireBadgesData = isArrayNotEmpty(badgeData) ? badgeData : [];
+
+        const umpireBadge = umpireBadgesData.find(badgeItem => badgeItem.id === umpireItem.accreditationLevelUmpireRefId)?.description;
+
+        return (
+            <>
+                {this.umpireLineCellView(umpireIndex + 1)}
+                {this.umpireLineCellView(`${umpireItem.firstName} ${umpireItem.lastName}`)}
+                {this.umpireLineCellView(umpireBadge)}
+                {this.umpireLineCellView(umpireItem.years)}
+                {this.umpireLineCellView(`${umpireItem.matches} ${AppConstants.games}`)}
+            </>
+        )
+    }
 
     umpireLineCellView = data => (
         <div className="col-sm d-flex justify-content-flex-start align-items-center">
@@ -788,7 +795,7 @@ class UmpirePoolAllocation extends Component {
                                 <div className="row">
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
-                                        <span className="player-grading-haeding-player-count-text ml-4">
+                                        <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
                                             {unassignedData.length > 1 ? unassignedData.length + " Umpires" : unassignedData.length + " Umpire"}
                                         </span>
                                     </div>
