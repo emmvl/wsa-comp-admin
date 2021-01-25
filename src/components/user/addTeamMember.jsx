@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import {
   Layout,
   Breadcrumb,
@@ -667,6 +667,7 @@ class AddTeamMember extends Component {
                                 onClick={() => { this.onChangeTeamMemberSaveUpdate(null, "teamMember", teamMemberIndex) }}
                                 style={{ marginLeft: "auto", width: "25px" }}
                                 src={AppImages.removeIcon}
+                                alt=""
                             />
                         )}
                     </div>

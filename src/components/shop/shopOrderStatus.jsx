@@ -223,7 +223,11 @@ class ShopOrderStatus extends Component {
         const { orderStatusListActionObject } = this.props.shopOrderStatusState;
         this.referenceCalls();
         const {
-            yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
+            // yearRefId,
+            searchText,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
         } = this.state;
         const params = {
             limit: 10,
@@ -441,18 +445,18 @@ class ShopOrderStatus extends Component {
     // Partial refund modal end
 
     dropdownView = () => {
-        const paymentStatusData = [
-            { name: "Not Paid", value: "not paid" },
-            { name: "Paid", value: "paid" },
-            { name: "Refunded", value: "refunded" },
-            { name: "Partially refunded", value: "partially refunded" },
-        ];
-        const fulfilmentStatusData = [
-            { name: "To Be Sent", value: "to be sent" },
-            { name: "Awaiting Pickup", value: "awaiting pickup" },
-            { name: "In Transit", value: "in transit" },
-            { name: "Completed", value: "completed" },
-        ];
+        // const paymentStatusData = [
+        //     { name: "Not Paid", value: "not paid" },
+        //     { name: "Paid", value: "paid" },
+        //     { name: "Refunded", value: "refunded" },
+        //     { name: "Partially refunded", value: "partially refunded" },
+        // ];
+        // const fulfilmentStatusData = [
+        //     { name: "To Be Sent", value: "to be sent" },
+        //     { name: "Awaiting Pickup", value: "awaiting pickup" },
+        //     { name: "In Transit", value: "in transit" },
+        //     { name: "Completed", value: "completed" },
+        // ];
         const { ShopFulfilmentStatusArr, ShopPaymentStatus } = this.props.shopOrderStatusState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">

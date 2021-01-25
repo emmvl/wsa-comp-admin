@@ -3,7 +3,7 @@ import {
     Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message,
 } from 'antd';
 import './competition.css';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -275,8 +275,8 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     onChangeSetValue = (id, fieldName) => {
-        const data = this.props.competitionFormatState.competitionFormatList;
-        const fixtureTemplateId = null;
+        // const data = this.props.competitionFormatState.competitionFormatList;
+        // const fixtureTemplateId = null;
         if (fieldName === "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
             //     if (item.noOfRounds == id) {

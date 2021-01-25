@@ -17,7 +17,11 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import history from "../../util/history";
 import AppUniqueId from "../../themes/appUniqueId";
 
-const { Content, Header, Footer } = Layout;
+const {
+    Content,
+    Header,
+    // Footer
+} = Layout;
 
 const columns = [
     {

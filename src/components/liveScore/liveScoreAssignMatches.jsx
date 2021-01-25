@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination, Select } from "antd";
+import { Layout, Table, Breadcrumb, Pagination, Select } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -13,7 +13,7 @@ import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from '../../util/helpers';
-import { parseTwoDigitYear } from "moment";
+// import { parseTwoDigitYear } from "moment";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -28,7 +28,7 @@ function tableSort(a, b, key) {
 }
 
 function checkScorerMatch(data) {
-    let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
+    // let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
     // if(data && data.id == scorerID){
     if (data) {
         return "Unassign"
@@ -38,55 +38,55 @@ function checkScorerMatch(data) {
 }
 
 ///columens data
-const columns1 = [
-    {
-        title: 'Match Id',
-        dataIndex: 'id',
-        key: 'id',
-        sorter: (a, b) => tableSort(a, b, "id"),
-        render: (id) => <NavLink to={{
-            pathname: '/matchDayMatchDetails',
-            state: { matchId: id }
-        }}>
-            <span className="input-heading-add-another pt-0">{id}</span>
-        </NavLink>
-    },
-    {
-        title: 'Start Time',
-        dataIndex: 'startTime',
-        key: 'startTime',
-        sorter: (a, b) => tableSort(a, b, "startTime"),
-        render: (startTime) => <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
-    },
-    {
-        title: 'Team 1',
-        dataIndex: 'team1',
-        key: 'team1',
-        width: "80%",
-        sorter: (a, b) => tableSort(a, b, "team1"),
-        render: (team1, records, index) => {
-            return (
-                <div className="row d-flex justify-content-center">
-                    <div className="col-sm-1">
-                        <img
-                            className="dot-image"
-                            src={records.scorer1 ? records.scorer1.rosterStatus ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.blueDot : AppImages.greyDot}
-                            alt=""
-                            width="12"
-                            height="12"
-                        />
-                    </div>
-                    <div className="col-sm d-flex justify-content-start">
-                        <span style={{ overflowX: "auto" }} className="input-heading-add-another pt-0 column-width-style">{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
-                    </div>
-                    <div className="col-sm mr-5 d-flex justify-content-end">
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{records.scorer1 ? "Unassign" : "Assign"}</span>
-                    </div>
-                </div>
-            )
-        }
-    }
-]
+// const columns1 = [
+//     {
+//         title: 'Match Id',
+//         dataIndex: 'id',
+//         key: 'id',
+//         sorter: (a, b) => tableSort(a, b, "id"),
+//         render: (id) => <NavLink to={{
+//             pathname: '/matchDayMatchDetails',
+//             state: { matchId: id }
+//         }}>
+//             <span className="input-heading-add-another pt-0">{id}</span>
+//         </NavLink>
+//     },
+//     {
+//         title: 'Start Time',
+//         dataIndex: 'startTime',
+//         key: 'startTime',
+//         sorter: (a, b) => tableSort(a, b, "startTime"),
+//         render: (startTime) => <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
+//     },
+//     {
+//         title: 'Team 1',
+//         dataIndex: 'team1',
+//         key: 'team1',
+//         width: "80%",
+//         sorter: (a, b) => tableSort(a, b, "team1"),
+//         render: (team1, records, index) => {
+//             return (
+//                 <div className="row d-flex justify-content-center">
+//                     <div className="col-sm-1">
+//                         <img
+//                             className="dot-image"
+//                             src={records.scorer1 ? records.scorer1.rosterStatus ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.blueDot : AppImages.greyDot}
+//                             alt=""
+//                             width="12"
+//                             height="12"
+//                         />
+//                     </div>
+//                     <div className="col-sm d-flex justify-content-start">
+//                         <span style={{ overflowX: "auto" }} className="input-heading-add-another pt-0 column-width-style">{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
+//                     </div>
+//                     <div className="col-sm mr-5 d-flex justify-content-end">
+//                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{records.scorer1 ? "Unassign" : "Assign"}</span>
+//                     </div>
+//                 </div>
+//             )
+//         }
+//     }
+// ]
 
 const columns2 = [
     {

@@ -40,7 +40,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getOrganisationData } from '../../util/sessionStorage';
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import ApiConstants from "themes/apiConstants";
+// import ApiConstants from "themes/apiConstants";
 import { getCurrentYear } from "util/permissions";
 
 const { Header, Footer } = Layout;
@@ -123,7 +123,14 @@ class LiveScoreSettingsView extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            const { competitionName, shortName, competitionLogo, scoring, recordUmpireType, gameTimeTrackingType } = this.props.liveScoreSetting.form
+            const {
+                competitionName,
+                shortName,
+                // competitionLogo,
+                scoring,
+                // recordUmpireType,
+                gameTimeTrackingType
+            } = this.props.liveScoreSetting.form
             this.formRef.current.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
@@ -206,8 +213,8 @@ class LiveScoreSettingsView extends Component {
     }
 
     ////method to change time
-    onChangeTime(time, timeString) {
-    }
+    // onChangeTime(time, timeString) {
+    // }
 
     tabCallBack = (key) => {
         this.setState({ competitionTabKey: key })
@@ -228,7 +235,7 @@ class LiveScoreSettingsView extends Component {
     }
 
     handleSubmit = values => {
-        const arrayOfVenue = this.props.liveScoreSetting.form.allVenue.map(data => data.id)
+        // const arrayOfVenue = this.props.liveScoreSetting.form.allVenue.map(data => data.id)
         const {
             id,
             competitionName,
@@ -253,16 +260,16 @@ class LiveScoreSettingsView extends Component {
             buzzerEnabled,
             warningBuzzerEnabled,
             recordUmpire,
-            affiliateSelected,
-            anyOrgSelected,
-            otherSelected,
+            // affiliateSelected,
+            // anyOrgSelected,
+            // otherSelected,
             invitedTo,
-            invitedOrganisation,
+            // invitedOrganisation,
             lineupSelection,
             borrowedPlayer,
             gamesBorrowedThreshold,
             linkedCompetitionId,
-            premierCompLink,
+            // premierCompLink,
             yearRefId,
             invitedAnyAssoc,
             invitedAnyClub,
@@ -280,8 +287,8 @@ class LiveScoreSettingsView extends Component {
         let clubValue = null
         let selectionValue = null
 
-        let arr_1 = radioSelectionArr.sort()
-        let arr_2 = invitedTo.sort()
+        // let arr_1 = radioSelectionArr.sort()
+        // let arr_2 = invitedTo.sort()
 
         if (JSON.stringify(radioSelectionArr) === JSON.stringify(invitedTo)) {
             invitedToValue = false
@@ -289,10 +296,8 @@ class LiveScoreSettingsView extends Component {
             invitedToValue = true
         }
 
-
-        let sortedArr = invitedAnyAssoc.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
-        let sortedArr_1 = invitedAnyAssocArr.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
-
+        // let sortedArr = invitedAnyAssoc.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
+        // let sortedArr_1 = invitedAnyAssocArr.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
 
         if (invitedAnyAssoc.length > 0) {
             if (JSON.stringify(invitedAnyAssocArr) === JSON.stringify(invitedAnyAssoc)) {
@@ -317,8 +322,8 @@ class LiveScoreSettingsView extends Component {
         }
         localStorage.setItem("yearId", yearRefId)
 
-        const umpire = record1.includes("recordUmpire")
-        const umpirenum = umpire ? 1 : 0
+        // const umpire = record1.includes("recordUmpire")
+        // const umpirenum = umpire ? 1 : 0
         const gameTimeTracking = record1.includes("gameTimeTracking")
         const positionTracking = record1.includes("positionTracking")
         const recordGoalAttempts = record1.includes("recordGoalAttempts")
@@ -516,9 +521,35 @@ class LiveScoreSettingsView extends Component {
     }
 
     contentView = () => {
-        const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId, disabled } = this.props.liveScoreSetting
-        let grade = this.state.venueData
+        const {
+            // competitionName,
+            // competitionLogo,
+            // scoring,
+            days,
+            hours,
+            minutes,
+            lineupSelectionDays,
+            lineupSelectionHours,
+            lineupSelectionMins,
+            record1,
+            venue,
+            Logo
+        } = this.props.liveScoreSetting.form
+        const {
+            // loader,
+            buzzerEnabled,
+            warningBuzzerEnabled,
+            // recordUmpire,
+            lineupSelection,
+            // gameborrowed,
+            // minutesBorrowed,
+            premierCompLink,
+            borrowedPlayer,
+            gamesBorrowedThreshold,
+            linkedCompetitionId,
+            disabled
+        } = this.props.liveScoreSetting
+        // let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [
             { label: 'Game Time Tracking', value: "gameTimeTracking" },
@@ -529,8 +560,8 @@ class LiveScoreSettingsView extends Component {
             { label: 'Centre Pass Enabled', value: "centrePassEnabled" },
             { label: 'Incidents Enabled', value: "incidentsEnabled" },
         ];
-        const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
-        const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
+        // const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
+        // const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
@@ -1179,7 +1210,24 @@ class LiveScoreSettingsView extends Component {
     };
 
     regInviteesView = () => {
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked, invitedTo, anyOrgArray, radioSelectionArr, invitedAnyAssocArr, invitedAnyClubArr, invitedAnyAssoc, invitedAnyClub } = this.props.liveScoreSetting
+        const {
+            affiliateSelected,
+            anyOrgSelected,
+            otherSelected,
+            // nonSelected,
+            affiliateNonSelected,
+            anyOrgNonSelected,
+            registrationInvitees,
+            associationChecked,
+            clubChecked,
+            // invitedTo,
+            // anyOrgArray,
+            // radioSelectionArr,
+            // invitedAnyAssocArr,
+            // invitedAnyClubArr,
+            // invitedAnyAssoc,
+            // invitedAnyClub
+        } = this.props.liveScoreSetting
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
         let disabledComponent = ((this.state.isEdit === 'edit' || this.state.edit === 'edit') && this.state.onOkClick)

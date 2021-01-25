@@ -590,9 +590,9 @@ class CompetitionQuickCompetition extends Component {
 
     /////form content view
     contentView = () => {
-        let appState = this.props.appState
-        let quickCompetitionState = this.props.quickCompetitionState
-        let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
+        // let appState = this.props.appState
+        // let quickCompetitionState = this.props.quickCompetitionState
+        // let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
 
         return (
             <div className="comp-draw-content-view mt-0">

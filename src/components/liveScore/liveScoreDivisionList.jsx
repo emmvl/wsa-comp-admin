@@ -13,7 +13,12 @@ import {
     getMainDivisionListAction,
     liveScoreDeleteDivision
 } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
-import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition, setGlobalYear } from "../../util/sessionStorage";
+import {
+    getLiveScoreCompetiton,
+    // setOwnCompetitionYear,
+    setOwn_competition,
+    setGlobalYear
+} from "../../util/sessionStorage";
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
 import { checkLivScoreCompIsParent } from "../../util/permissions";

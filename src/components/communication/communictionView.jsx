@@ -167,6 +167,7 @@ class CommunicationView extends Component {
                         src={newsData ? newsData.newsImage : ''}
                         height="100"
                         width="100"
+                        alt=""
                     />
                 )}
 
@@ -261,7 +262,7 @@ class CommunicationView extends Component {
             <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center' }}>
                 {this.state.isVideo
                     ? <ReactPlayer url={this.state.modaldata} playing={this.state.visible} controls />
-                    : <img src={this.state.modaldata} height="250" width="250" />}
+                    : <img src={this.state.modaldata} height="250" width="250" alt="" />}
             </div>
         );
     }
@@ -353,7 +354,7 @@ class CommunicationView extends Component {
 
     /// /main render function
     render() {
-        const stateWideMsg = getKeyForStateWideMessage();
+        // const stateWideMsg = getKeyForStateWideMessage();
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />

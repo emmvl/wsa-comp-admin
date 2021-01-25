@@ -13,7 +13,7 @@ import {
     message,
     Form
 } from "antd";
-import CSVReader from 'react-csv-reader';
+// import CSVReader from 'react-csv-reader';
 import moment from "moment";
 
 import "./competition.css";
@@ -36,20 +36,20 @@ import { getOrganisationData } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-let this_Obj = null;
+// let this_Obj = null;
 
-const papaparseOptions = {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    transformHeader: header =>
-        header
-            .toLowerCase()
-            .replace(/\W/g, '_'),
-    complete: function (results, file) {
-        // console.log("Parsing complete:", results, file);
-    }
-}
+// const papaparseOptions = {
+//     header: true,
+//     dynamicTyping: true,
+//     skipEmptyLines: true,
+//     transformHeader: header =>
+//         header
+//             .toLowerCase()
+//             .replace(/\W/g, '_'),
+//     complete: function (results, file) {
+//         // console.log("Parsing complete:", results, file);
+//     }
+// }
 
 class CompetitionVenueAndTimesEdit extends Component {
     constructor(props) {
@@ -186,7 +186,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             manualAddress: false,
 
         };
-        this_Obj = this;
+        // this_Obj = this;
         this.props.getCommonRefData();
         const organisationData = getOrganisationData() ? getOrganisationData() : null;
         this.props.getAffiliatesListingAction({
@@ -237,7 +237,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let competitionList = this.props.appState.competitionList
+        // let competitionList = this.props.appState.competitionList
         if (this.state.saveContraintLoad && this.props.venueTimeState.onLoad == false) {
             this.navigateTo();
         }
@@ -310,8 +310,8 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     setVenueOrganisation = () => {
         let venueData = this.props.venueTimeState.venuData;
-        let isVenueMapped = venueData.isVenueMapped;
-        let affiliateData = venueData.affiliateData;
+        // let isVenueMapped = venueData.isVenueMapped;
+        // let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.affiliateList;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         if (venueOrganisation != null && venueOrganisation.length > 0) {

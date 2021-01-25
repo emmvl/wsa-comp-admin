@@ -27,7 +27,8 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
     setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
@@ -69,7 +70,7 @@ class CompetitionFormat extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
@@ -346,8 +347,8 @@ class CompetitionFormat extends Component {
     }
 
     onChangeSetValue = (id, fieldName) => {
-        let data = this.props.competitionFormatState.competitionFormatList;
-        let fixtureTemplateId = null;
+        // let data = this.props.competitionFormatState.competitionFormatList;
+        // let fixtureTemplateId = null;
         if (fieldName === "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
             //     if (item.noOfRounds == id) {

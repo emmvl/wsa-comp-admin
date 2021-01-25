@@ -234,7 +234,7 @@ class RegistrationMembershipFee extends Component {
         }
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                // let mainYearRefId = getCurrentYear(this.props.appState.yearList)
                 this.setState({
                     onYearLoad: false
                 })
@@ -544,7 +544,7 @@ class RegistrationMembershipFee extends Component {
         try {
             let registrationState = this.props.registrationState
             const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
-            let allData = this.props.registrationState.getMembershipProductDetails
+            // let allData = this.props.registrationState.getMembershipProductDetails
             let { allowTeamRegistration } = this.props.commonReducerState;
             return (
                 <div>
@@ -743,9 +743,9 @@ class RegistrationMembershipFee extends Component {
     }
 
     contentView = () => {
-        let appState = this.props.appState
-        let allData = this.props.registrationState.getMembershipProductDetails
-        let membershipProductData = allData !== null ? allData.membershipproduct : []
+        // let appState = this.props.appState
+        // let allData = this.props.registrationState.getMembershipProductDetails
+        // let membershipProductData = allData !== null ? allData.membershipproduct : []
         return (
             <div className="content-view pt-5">
                 <span className="form-heading">{AppConstants.membershipProduct}</span>

@@ -571,7 +571,7 @@ class RegistrationForm extends Component {
         let fillteredProduct = this.props.registrationState.selectedProductName !== 0 ? this.props.registrationState.selectedProductName : []
         let productList = this.props.registrationState.membershipProductTypes.length !== 0 ? this.props.registrationState.membershipProductTypes : [];
         let venueList = this.props.appState.venueList.length !== 0 ? this.props.appState.venueList : [];
-        let dateOpen = this.regOpenDate()
+        // let dateOpen = this.regOpenDate()
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
@@ -1152,15 +1152,20 @@ class RegistrationForm extends Component {
 
     ///advance  setting view
     advancedSettingView = () => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+        // let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
-        let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
+        // let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
         let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
-        let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
-        const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
+        // let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
+        const { 
+            selectedInvitees, 
+            // selectedDemographic, 
+            // SelectedOtherQuestions, 
+            selectedNetballQuestions 
+        } = this.props.registrationState
         let isPublished = false; // this.state.isPublished // CM-1513
         let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
-        let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
+        // let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
 
         return (
             <div className="discount-view pt-5">

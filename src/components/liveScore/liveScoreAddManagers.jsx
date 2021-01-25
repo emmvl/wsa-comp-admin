@@ -161,7 +161,7 @@ class LiveScoreAddManager extends Component {
     managerExistingRadioButton() {
         const { managerListResult, onLoadSearch } = this.props.liveScoreMangerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
-        const { teamId } = this.props.liveScoreMangerState
+        // const { teamId } = this.props.liveScoreMangerState
         let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
 
         return (
@@ -233,7 +233,11 @@ class LiveScoreAddManager extends Component {
     }
 
     managerNewRadioBtnView() {
-        const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
+        const {
+            // managerData,
+            // teamId,
+            teamResult
+        } = this.props.liveScoreMangerState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         let hasError = this.state.hasError;
         return (

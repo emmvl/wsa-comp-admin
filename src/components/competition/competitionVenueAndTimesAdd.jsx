@@ -14,7 +14,7 @@ import {
     Form,
 } from 'antd';
 import moment from 'moment';
-import CSVReader from 'react-csv-reader'
+// import CSVReader from 'react-csv-reader'
 import Tooltip from 'react-png-tooltip'
 
 import "./competition.css";
@@ -42,12 +42,12 @@ import { getOrganisationData } from "../../util/sessionStorage";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
-const papaparseOptions = {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    transformHeader: header => header.toLowerCase().replace(/\W/g, '_')
-}
+// const papaparseOptions = {
+//     header: true,
+//     dynamicTyping: true,
+//     skipEmptyLines: true,
+//     transformHeader: header => header.toLowerCase().replace(/\W/g, '_')
+// }
 
 class CompetitionVenueAndTimesAdd extends Component {
     constructor(props) {

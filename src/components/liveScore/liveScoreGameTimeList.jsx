@@ -69,13 +69,13 @@ function checkPlayTime(record) {
     }
 }
 
-function checkPlayerId(player) {
-    if (player.mnbPlayerId == "undefined" || player.mnbPlayerId == "") {
-        return player.id
-    } else {
-        return player.mnbPlayerId
-    }
-}
+// function checkPlayerId(player) {
+//     if (player.mnbPlayerId == "undefined" || player.mnbPlayerId == "") {
+//         return player.id
+//     } else {
+//         return player.mnbPlayerId
+//     }
+// }
 
 // listeners for sorting
 const listeners = (key) => ({

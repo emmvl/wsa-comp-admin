@@ -175,6 +175,7 @@ class LiveScoreNewsView extends Component {
                         src={newsData ? newsData.newsImage : ''}
                         height="100"
                         width="100"
+                        alt=""
                     />
                 )}
 
@@ -211,7 +212,7 @@ class LiveScoreNewsView extends Component {
             <div className="comp-dashboard-botton-view-mobile d-flex justify-content-center">
                 {this.state.isVideo
                     ? <ReactPlayer url={this.state.modaldata} playing={this.state.visible} controls />
-                    : <img src={this.state.modaldata} height="250" width="250" />}
+                    : <img src={this.state.modaldata} height="250" width="250" alt="" />}
             </div>
         );
     }

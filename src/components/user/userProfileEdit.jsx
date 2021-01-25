@@ -876,7 +876,12 @@ class UserProfileEdit extends Component {
     otherInfoEdit = () => {
         const { userData } = this.state;
         const {
-            countryList, nationalityList, genderData, accreditationUmpireList, umpireAccreditation, coachAccreditation,
+            countryList,
+            // nationalityList,
+            genderData,
+            // accreditationUmpireList,
+            umpireAccreditation,
+            coachAccreditation,
         } = this.props.commonReducerState;
         return (
             <div className="content-view pt-0">

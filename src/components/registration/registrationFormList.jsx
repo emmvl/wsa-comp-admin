@@ -20,7 +20,10 @@ import Tooltip from 'react-png-tooltip'
 import { getCurrentYear } from "util/permissions"
 import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
 

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import {
-    Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination, Tag, Input,
+    Layout, Breadcrumb, Button, Table,
 } from 'antd';
 import './product.scss';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
+// import moment from 'moment';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import InputWithHead from "../../customComponents/InputWithHead";
+// import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
@@ -16,20 +16,23 @@ import {
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
-import Loader from '../../customComponents/loader';
+// import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from '../../themes/dateformate';
-import { SearchOutlined } from "@ant-design/icons";
+// import { SearchOutlined } from "@ant-design/icons";
 
-const { Header, Content } = Layout;
-const { Option } = Select;
-const { SubMenu } = Menu;
+const {
+    // Header,
+    Content
+} = Layout;
+// const { Option } = Select;
+// const { SubMenu } = Menu;
 
 /// //function to sort table column
-function tableSort(a, b, key) {
-    const stringA = JSON.stringify(a[key]);
-    const stringB = JSON.stringify(b[key]);
-    return stringA.localeCompare(stringB);
-}
+// function tableSort(a, b, key) {
+//     const stringA = JSON.stringify(a[key]);
+//     const stringB = JSON.stringify(b[key]);
+//     return stringA.localeCompare(stringB);
+// }
 
 const columns = [
     {

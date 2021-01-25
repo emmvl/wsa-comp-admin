@@ -35,7 +35,7 @@ import { getVenuesTypeAction, searchVenueList, clearFilter } from "../../store/a
 import { venueListAction, getCommonRefData } from '../../store/actions/commonAction/commonAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from '../../util/history'
-import { getCurrentYear } from 'util/permissions'
+// import { getCurrentYear } from 'util/permissions'
 import ValidationConstant from '../../themes/validationConstant'
 import {
     setOwn_competition,

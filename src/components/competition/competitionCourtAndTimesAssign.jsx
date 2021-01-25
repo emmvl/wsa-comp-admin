@@ -265,7 +265,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
         //filter data for if apply time slot for per venue
         if (timeSlotData.applyToVenueRefId == 2) {
-            let newObj = null
+            // let newObj = null
             let updatedTimeSlotManualArr = []
             for (let i in AllVenueData) {
                 if (AllVenueData[i].timeslots.length > 0) {
@@ -1041,7 +1041,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     addTimeSlotDivision(item, index, mainId, id, data) {
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
-        let timeSlotEntityKey = this.props.competitionTimeSlots
+        // let timeSlotEntityKey = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="d-flex">
@@ -1108,7 +1108,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     addTimeSlotGrades(item, index, mainId, id, data) {
         let grades = this.props.competitionTimeSlots.getcompetitionTimeSlotData
-        let timeSlotEntityKey = this.props.competitionTimeSlots
+        // let timeSlotEntityKey = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1
         let mainGradeList = this.props.competitionTimeSlots.mainGradeList
 

@@ -186,7 +186,7 @@ class UmpireDivisions extends Component {
     }
 
     contentView_1 = () => {
-        const { badgeData } = this.props.appState
+        // const { badgeData } = this.props.appState
 
         return (
             <div className="content-view pt-5">

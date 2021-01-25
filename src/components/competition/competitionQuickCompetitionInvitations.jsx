@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Button, Radio, Select, message, Modal } from 'antd';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Loader from "../../customComponents/loader";
+// import Loader from "../../customComponents/loader";
 import { updateSelectedTeamPlayer, getMergeCompetitionAction, quickCompImportDataCleanUpAction, validateMergeCompetitionaction, mergeCompetitionProceed } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import ImportTeamPlayerModal from "../../customComponents/importTeamPlayerModal"
-import { getYearAndCompetitionOwnAction, CLEAR_OWN_COMPETITION_DATA } from '../../store/actions/appAction'
+import {
+    // getYearAndCompetitionOwnAction,
+    CLEAR_OWN_COMPETITION_DATA
+} from '../../store/actions/appAction'
 import ValidationConstants from "../../themes/validationConstant";
 const { Option } = Select;
 const { Header, Footer, Content } = Layout;
-const { confirm } = Modal
+// const { confirm } = Modal
 
 class QuickCompetitionInvitations extends Component {
     constructor(props) {
@@ -301,7 +304,12 @@ class QuickCompetitionInvitations extends Component {
     }
 
     contentView = () => {
-        const { teamPlayerArray, selectedTeamPlayer, importModalVisible, importPlayer } = this.props.quickCompetitionState
+        const {
+            teamPlayerArray,
+            selectedTeamPlayer,
+            importModalVisible,
+            // importPlayer
+        } = this.props.quickCompetitionState
         return (
             <div className="content-view pt-5 mt-0">
                 <span className="form-heading">{AppConstants.how_Add_teams_players}</span>

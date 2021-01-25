@@ -169,11 +169,11 @@ class CompetitionFixtures extends Component {
     onSwap(source, target, round_Id, draws) {
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
-        let sourceXIndex = sourceIndexArray[0];
+        // let sourceXIndex = sourceIndexArray[0];
         let sourceYIndex = sourceIndexArray[1];
         let sourceZIndex = sourceIndexArray[2];
         let sourceID = sourceIndexArray[3];
-        let targetXIndex = targetIndexArray[0];
+        // let targetXIndex = targetIndexArray[0];
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
         let targetID = targetIndexArray[3];
@@ -316,7 +316,7 @@ class CompetitionFixtures extends Component {
     }
 
     dragableView = () => {
-        var dateMargin = 25;
+        // var dateMargin = 25;
         var dayMargin = 25;
         let topMargin = 0;
         let getStaticDrawsData = [{

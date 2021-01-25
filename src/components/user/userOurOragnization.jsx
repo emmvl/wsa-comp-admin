@@ -678,6 +678,7 @@ class UserOurOrganization extends Component {
                                         style={{
                                             borderRadius: 60
                                         }}
+                                        alt=""
                                     />
                                 </label>
                             </div>
@@ -840,11 +841,10 @@ class UserOurOrganization extends Component {
                                 required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
-                                disabled={!item.isSameUser}
+                                disabled={!item.isSameUser || !this.state.isEditable}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index)}
                                 // value={item.email}
                                 value={item.email}
-                                disabled={!this.state.isEditable}
                             />
                         </Form.Item>
                         {(item.isSameUser && this.state.isSameUserEmailChanged) && (
