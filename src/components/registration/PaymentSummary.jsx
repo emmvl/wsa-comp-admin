@@ -28,7 +28,7 @@ import {
     getPaymentMethodsListAction,
 } from "store/actions/appAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getPaymentSummary, exportPaymentDashboardApi } from "store/actions/stripeAction/stripeAction";
+import { getPaymentSummary, exportPaymentSummaryApi } from "store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
@@ -386,7 +386,7 @@ class PaymentSummary extends Component {
 
         const year = getGlobalYear() ? getGlobalYear() : '-1';
 
-        this.props.exportPaymentDashboardApi(
+        this.props.exportPaymentSummaryApi(
             offset,
             sortBy,
             sortOrder,
@@ -938,7 +938,7 @@ function mapDispatchToProps(dispatch) {
         getPaymentOptionsListAction,
         getPaymentMethodsListAction,
         getPaymentSummary,
-        exportPaymentDashboardApi,
+        exportPaymentSummaryApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
     }, dispatch);
