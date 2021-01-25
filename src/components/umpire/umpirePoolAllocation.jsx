@@ -344,11 +344,15 @@ class UmpirePoolAllocation extends Component {
         const { umpirePoolIdToUpdate, umpireForAction, selectedComp } = this.state;
         const umpireId = umpireForAction.id;
 
+        const body = {
+            umpireId
+        };
+
         this.props.updateUmpirePoolData({
             compId: selectedComp,
             orgId: organisationId,
             umpirePoolId: umpirePoolIdToUpdate,
-            umpires: [umpireId]
+            body
         });
 
         this.setState({

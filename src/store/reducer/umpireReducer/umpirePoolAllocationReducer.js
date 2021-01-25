@@ -56,11 +56,18 @@ function umpirePoolAllocationState(state = initialState, action) {
             };
     
         case ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_SUCCESS:
+            const umpirePoolDataCopyForUpdate = JSON.parse(JSON.stringify(state.umpirePoolData));
+
+            const umpirePoolUmpireIdx = umpirePoolDataCopyForUpdate
+                .findIndex(dataItem => dataItem.id === action.result.id);
+
+            umpirePoolDataCopyForUpdate.splice(umpirePoolUmpireIdx, 1, action.result);
+
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                umpirePoolData: action.result
+                umpirePoolData: umpirePoolDataCopyForUpdate
             };
 
         case ApiConstants.API_UPDATE_UMPIRE_POOL_MANY_DATA_LOAD:
