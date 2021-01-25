@@ -33,6 +33,7 @@ import {
 import {
     getUmpireList,
 } from '../../store/actions/umpireAction/umpireAction';
+import { getRefBadgeData } from '../../store/actions/appAction';
 
 import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -67,9 +68,10 @@ class UmpirePoolAllocation extends Component {
     }
 
     componentDidMount() {
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-        this.setState({ loading: true })
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.setState({ loading: true });
+        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        this.props.getRefBadgeData();
 
         // let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
         // if (JSON.parse(getUmpireCompetitonData())) {
@@ -874,7 +876,7 @@ class UmpirePoolAllocation extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="5" />
-                <Loader visible={this.props.umpirePoolAllocationState.onLoad} />
+                <Loader visible={this.props.umpirePoolAllocationState.onLoad || this.props.appState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
@@ -903,6 +905,7 @@ function mapDispatchToProps(dispatch) {
         updateUmpirePoolData,
         updateUmpirePoolManyData,
         getUmpireList,
+        getRefBadgeData,
     }, dispatch)
 }
 
@@ -911,6 +914,7 @@ function mapStateToProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpirePoolAllocationState: state.UmpirePoolAllocationState,
         umpireState: state.UmpireState,
+        appState: state.AppState
     }
 }
 
