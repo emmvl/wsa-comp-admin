@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreDashboardListAction, liveScorePlayersToPayListAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
+import { getCompetitonId, getLiveScoreCompetiton, getOrganisationData, getLiveScoreUmpireCompition } from '../../util/sessionStorage'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
@@ -550,10 +550,16 @@ const columnsPlayersToPay = [
         sorter: (a, b) => checkSorting(a, b, "team"),
     },
     {
-        title: "Payment Required",
-        dataIndex: 'paymentRequired',
-        key: 'paymentRequired',
+        title: "Status",
+        dataIndex: 'status',
+        key: 'status',
         sorter: (a, b, payReq) => checkSorting(a, b, payReq),
+    },
+    {
+        title: "Payment Method",
+        dataIndex: 'paymentMethod',
+        key: 'paymentMethod',
+        sorter: (a, b, payMethod) => checkSorting(a, b, payMethod),
     },
     {
         title: "Action",
@@ -638,7 +644,9 @@ class LiveScoreDashboard extends Component {
 
     getPlayersToPayList = (page) => {
         const { organisationUniqueKey } = getOrganisationData();
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
         let payload = {
+            competitionId: uniqueKey,
             organisationId: organisationUniqueKey,
             paging: {
                 limit: 10,
