@@ -11,6 +11,7 @@ import {
   Radio,
   Form,
   message,
+  Modal
 } from "antd";
 import moment from 'moment';
 
@@ -45,6 +46,7 @@ class AddTeamMember extends Component {
             getMembershipProductsInfoOnLoad: false,
             teamMembersSaveOnLoad: false,
             getTeamMembersOnLoad: false,
+            addTeamSaveErrorPopUpVisible: false
         };
         this.props.teamMemberSaveUpdateAction(this.state.teamMemberRegId, "teamMemberRegId");
         this.formRef = React.createRef();
@@ -71,7 +73,7 @@ class AddTeamMember extends Component {
                     this.setState({ teamMembersSaveOnLoad: false });
                     if (userState.status == 1) {
                         if (userState.teamMembersSaveErrorMsg) {
-
+                            this.setState({ addTeamSaveErrorPopUpVisible: true })
                         } else {
                             if (userState.teamMemberRegId) {
                                 history.push('/teamMemberRegPayment', {
@@ -447,6 +449,30 @@ class AddTeamMember extends Component {
         } catch (ex) {
             console.log("Error in onSaveClick::" + ex);
         }
+    }
+
+    addTeamSaveErrorPopUp = () => {
+        let userState = this.props.userState;
+        let errorMsg = userState.teamMembersSaveErrorMsg;
+        return(
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.userDetailsInvalid}
+                    visible={this.state.addTeamSaveErrorPopUpVisible}
+                    onCancel={() => this.setState({ addTeamSaveErrorPopUpVisible: false })}
+                    footer={[
+                        <Button onClick={() => this.setState({ addTeamSaveErrorPopUpVisible: false })}>
+                            {AppConstants.ok}
+                        </Button>
+                    ]}
+                >
+                    {(errorMsg || []).map((item, index) => (
+                        <p key={index}> {item}</p>
+                    ))}
+                </Modal>
+            </div>
+        )
     }
 
     headerView = () => {
@@ -885,6 +911,7 @@ class AddTeamMember extends Component {
                                     this.props.userState.onMembershipLoad
                                 }
                             />
+                            {this.addTeamSaveErrorPopUp()}
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

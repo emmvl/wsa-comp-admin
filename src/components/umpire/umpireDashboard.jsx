@@ -618,7 +618,7 @@ class UmpireDashboard extends Component {
             compArray: [],
             competitionObj: null,
             liveScoreUmpire: (props.location && props.location.state && props.location.state.liveScoreUmpire) ? props.location.state.liveScoreUmpire : null,
-            isParticipateInCompetition: (props.location && props.location.state && props.location.state.isParticiapte) ? props.location.state.isParticiapte : false,
+            isParticipateInCompetition: (props.location && props.location.state && props.location.state.isParticipate) ? props.location.state.isParticipate : false,
             round: "All",
             offsetData: 0,
             sortBy: null,

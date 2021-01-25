@@ -90,7 +90,12 @@ const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
 const section = null;
-const { userRoleId } = JSON.parse(localStorage.setOrganisationData);
+
+let userRoleId;
+const setOrganisationData = localStorage.setOrganisationData && JSON.parse(localStorage.setOrganisationData);
+if (setOrganisationData) {
+    userRoleId = setOrganisationData.userRoleId;
+}
 
 const columns = [
     {
@@ -203,22 +208,21 @@ const columns = [
                     <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
                         <span>View</span>
                     </Menu.Item>
-                    {e.alreadyDeRegistered == 0 && (
+                    {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
                         <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
-                    <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
+                    <Menu.Item key="3" onClick={() => history.push("/paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
                         <span>Payment</span>
                     </Menu.Item>
-                    {
-                        userRoleId === 1 &&
+                    {userRoleId === 1 && (
                         <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                             <span>
                                 Registration Form
                             </span>
                         </Menu.Item>
-                    }
+                    )}
                 </SubMenu>
             </Menu>
         ),

@@ -572,6 +572,10 @@ const AxiosApi = {
         const url = `api/registration/teamparticipant/removeoradd?userRegUniqueKey=${payload.userRegUniqueKey}&processType=${payload.processType}`;
         return Method.dataPost(url, token, payload);
     },
+    getPlayersToPayList(payload) {
+        const url = `api/playerstopay/list`;
+        return Method.dataPost(url, token, payload);
+    },
     async exportRegistraion(params) {
         const body = {
             ...params,
