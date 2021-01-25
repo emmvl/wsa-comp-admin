@@ -1786,6 +1786,10 @@ const AppConstants = {
 
     userDetailsInvalid: "User Details Invalid",
     pleaseInputAmount: "Please input amount",
+
+    cashReceived: "Cash Received",
+    retryPayment: "Retry Payment"
+
 };
 
 export default AppConstants;

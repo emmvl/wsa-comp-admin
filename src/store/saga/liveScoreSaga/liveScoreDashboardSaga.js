@@ -101,3 +101,21 @@ export function* liveScorePlayersToPayListSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* liveScorePlayersToPayRetryPaymentSaga(action) {
+    try {
+        const result = yield call(RegistrationAxiosApi.playersToPayRetryPayment, action.payload);
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
