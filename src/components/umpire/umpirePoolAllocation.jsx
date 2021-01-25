@@ -545,10 +545,10 @@ class UmpirePoolAllocation extends Component {
                                                 {umpirePoolItem.umpires.length > 1 ? umpirePoolItem.umpires.length + " Umpires" : umpirePoolItem.umpires.length + " Umpire"}
                                             </span>
                                         </div>
-                                        <div className="col-sm d-flex justify-content-end">
+                                        <div className="col-sm d-flex justify-content-end align-items-center">
                                             {isOrganiserView && 
                                                 <img
-                                                    className="comp-player-table-img team-delete-link pointer"
+                                                    className="comp-player-table-img pointer mr-4"
                                                     src={AppImages.deleteImage}
                                                     alt=""
                                                     height="20"
@@ -557,12 +557,13 @@ class UmpirePoolAllocation extends Component {
                                                 />
                                             }
                                             <a 
-                                                className="view-more-btn collapsed" 
+                                                className="view-more-btn position-static collapsed" 
                                                 data-toggle="collapse" 
                                                 href={`#${umpirePoolItemIndex}`} 
                                                 role="button" 
                                                 aria-expanded="false" 
                                                 aria-controls={umpirePoolItemIndex}
+                                                style={{ transform: 'none'}}
                                             >
                                                 <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                                             </a>
@@ -584,31 +585,7 @@ class UmpirePoolAllocation extends Component {
                                                     className="player-grading-draggable-view"
                                                 >
                                                     <div className="row">
-                                                        <div className="col-sm d-flex justify-content-flex-start align-items-center">
-                                                            <span className="player-grading-haeding-player-name-text pointer">
-                                                                {umpireIndex + 1}
-                                                            </span>
-                                                        </div>
-                                                        <div className="col-sm d-flex justify-content-flex-start align-items-center">
-                                                            <span className="player-grading-haeding-player-name-text pointer">
-                                                                {`${umpireItem.firstName} ${umpireItem.lastName}`}
-                                                            </span>
-                                                        </div>
-                                                        <div className="col-sm d-flex justify-content-center align-items-center">
-                                                            <span className="player-grading-haeding-player-name-text pointer">
-                                                                {umpireItem.Badge}
-                                                            </span>
-                                                        </div>
-                                                        <div className="col-sm d-flex justify-content-center align-items-center">
-                                                            <span className="player-grading-haeding-player-name-text pointer">
-                                                                {umpireItem.years}
-                                                            </span>
-                                                        </div>
-                                                        <div className="col-sm d-flex justify-content-center align-items-center">
-                                                            <span className="player-grading-haeding-player-name-text pointer">
-                                                                {umpireItem.matches} {AppConstants.games}
-                                                            </span>
-                                                        </div>
+                                                        {this.umpireLineView(umpireItem, umpireIndex)}
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
                                                             <Menu
                                                                 className="action-triple-dot-submenu"
@@ -655,20 +632,28 @@ class UmpirePoolAllocation extends Component {
                             </div>
                         )}
                     </Droppable>
-                ))}
-
-                <Modal
-                    className="add-membership-type-modal"
-                    title={AppConstants.deletePool}
-                    visible={this.state.deleteModalVisible}
-                    onOk={this.handleDeletePoolOk}
-                    onCancel={this.handleDeletePoolCancel}
-                >
-                    <p>{AppConstants.removePoolMsg}</p>
-                </Modal>
+                ))}                
             </div>
         )
     }
+
+    umpireLineView = (umpireItem, umpireIndex) => (
+        <>
+            {this.umpireLineCellView(umpireIndex + 1)}
+            {this.umpireLineCellView(`${umpireItem.firstName} ${umpireItem.lastName}`)}
+            {this.umpireLineCellView(umpireItem.Badge)}
+            {this.umpireLineCellView(umpireItem.years)}
+            {this.umpireLineCellView(`${umpireItem.matches} ${AppConstants.games}`)}
+        </>
+    )
+
+    umpireLineCellView = data => (
+        <div className="col-sm d-flex justify-content-flex-start align-items-center">
+            <span className="player-grading-haeding-player-name-text pointer">
+                {data}
+            </span>
+        </div>
+    )
 
     poolModalView = () => {
         return (
@@ -689,7 +674,20 @@ class UmpirePoolAllocation extends Component {
                         value={this.state.newPool}
                     />
                 </div>
+            </Modal>
+        )
+    }
 
+    deletePoolModalView = () => {
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.deletePool}
+                visible={this.state.deleteModalVisible}
+                onOk={this.handleDeletePoolOk}
+                onCancel={this.handleDeletePoolCancel}
+            >
+                <p>{AppConstants.removePoolMsg}</p>
             </Modal>
         )
     }
@@ -819,26 +817,7 @@ class UmpirePoolAllocation extends Component {
                                             className="player-grading-draggable-view"
                                         >
                                             <div className="row">
-                                                <div className="col-sm d-flex justify-content-flex-start align-items-center">
-                                                    <span className="player-grading-haeding-player-name-text pointer">
-                                                        {`${umpireItem.firstName} ${umpireItem.lastName}`}
-                                                    </span>
-                                                </div>
-                                                <div className="col-sm d-flex justify-content-center align-items-center">
-                                                    <span className="player-grading-haeding-player-name-text pointer">
-                                                        {umpireItem.Badge}
-                                                    </span>
-                                                </div>
-                                                <div className="col-sm d-flex justify-content-center align-items-center">
-                                                    <span className="player-grading-haeding-player-name-text pointer">
-                                                        {umpireItem.years}
-                                                    </span>
-                                                </div>
-                                                <div className="col-sm d-flex justify-content-center align-items-center">
-                                                    <span className="player-grading-haeding-player-name-text pointer">
-                                                        {umpireItem.matches} {AppConstants.games}
-                                                    </span>
-                                                </div>
+                                                {this.umpireLineView(umpireItem, umpireIndex)}
                                             </div>
                                         </div>
                                     )}
@@ -906,6 +885,7 @@ class UmpirePoolAllocation extends Component {
                         {this.confirmUnassignModalView()}
                         {this.updatePoolModalView()}
                         {this.removeUmpireFromPoolModalView()}
+                        {this.deletePoolModalView()}
                     </Content>
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
