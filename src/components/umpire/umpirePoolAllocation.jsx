@@ -18,7 +18,6 @@ import DashboardLayout from "../../pages/dashboardLayout";
 
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from '../../customComponents/loader';
-import PlayerCommentModal from "../../customComponents/playerCommentModal";
 
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
@@ -37,11 +36,9 @@ import {
 
 import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
-import { checkUmpireCompIsParent } from "util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-let this_obj = null;
 
 class UmpirePoolAllocation extends Component {
     constructor(props) {
@@ -52,23 +49,17 @@ class UmpirePoolAllocation extends Component {
             updatePoolModalVisible: false,
             addUmpireToPoolModalVisible: false,
             removeUmpireFromPoolModalVisible: false,
-            modalVisible: false,
-            comment: null,
-            teamID: null,
-            comments: null,
             deleteModalVisible: false,
             loading: false,
             selectedComp: null,
             assignedData: [],
             unassignedData: [],
             compOrgId: 0,
-            compIsParent: false,
             orgId: null,
             umpirePoolIdToDelete: '',
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
         }
-        this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
@@ -83,12 +74,6 @@ class UmpirePoolAllocation extends Component {
         //         compOrgId: competitionOrganisation.id,
         //     })
         // }
-
-        checkUmpireCompIsParent().then((value) => {
-            this.setState({
-                compIsParent: value
-            })
-        })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -168,12 +153,6 @@ class UmpirePoolAllocation extends Component {
 
         setUmpireCompId(compId);
 
-        checkUmpireCompIsParent().then((value) => {
-            this.setState({
-                compIsParent: value
-            })
-        });
-
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
         this.setState({ selectedComp: compId, isOrganiserView: isOrganiser });
     }
@@ -195,8 +174,27 @@ class UmpirePoolAllocation extends Component {
 
             const poolToAdd = assignedDataCopy.find(pool => +pool.id === +destination.droppableId);
             poolToAdd.umpires.splice(destination.index, 0, assignedUmpire);
-        } else {
+        } else if (destination.droppableId === '1') {
             message.error(AppConstants.somethingWentWrong);
+        } else {
+            const assignedUmpire = assignedDataCopy
+                .find(dataItem => +dataItem.id === +source.droppableId)
+                .umpires[source.index];
+
+            const sourceAssignedData = assignedDataCopy
+                .find(dataItem => +dataItem.id === +source.droppableId);
+
+            const destinationAssignedData = assignedDataCopy
+                .find(dataItem => +dataItem.id === +destination.droppableId);
+
+            const hasUmpire = destinationAssignedData.umpires.some(umpire => umpire.id === assignedUmpire.id);
+
+            if (hasUmpire && source.droppableId !== destination.droppableId) {
+                message.error(AppConstants.umpireAlreadyInPool);
+            } else {
+                sourceAssignedData.umpires.splice(source.index, 1);
+                destinationAssignedData.umpires.splice(destination.index, 0, assignedUmpire);
+            }
         }
 
         this.setState({ 
@@ -204,61 +202,6 @@ class UmpirePoolAllocation extends Component {
             assignedData: assignedDataCopy,
          });
     };
-
-
-    // onDragEnd = result => {
-    //     const { source, destination } = result;
-
-    //     const assignedPlayerData = this.state.assignedData;
-    //     const unassignedPlayerData = this.state.unassignedData;
-
-    //     let umpireId;
-
-    //     // dropped outside the list
-    //     if (!destination) {
-    //         return;
-    //     }
-
-    //     console.log('source', source);
-    //     console.log('destination', destination);
-
-        // if (source.droppableId !== destination.droppableId) {
-            // let poolId = !destination.droppableId ? null : destination.droppableId;
-            // let sourcePoolID = !source.droppableId ? null : source.droppableId;
-
-            // console.log('poolId, sourcePoolID', poolId, sourcePoolID);
-
-            // if (poolId) {
-            //     console.log('poolId, sourcePoolID', poolId, sourcePoolID);
-            //     if (!sourcePoolID) {
-            //         umpireId = unassignedPlayerData[source.index].id;
-            //     } else {
-            //         for (let i in assignedPlayerData) {
-            //             if (source.droppableId === assignedPlayerData[i].id) {
-            //                 umpireId = assignedPlayerData[i].umpires[source.index].id
-            //             }
-            //         }
-            //     }
-            // } else {
-            //     for (let i in assignedPlayerData) {
-            //         if (source.droppableId === assignedPlayerData[i].teamId) {
-            //             umpireId = assignedPlayerData[i].umpires[source.index].id
-            //         }
-            //     }
-            // }
-
-            // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
-        // } else {
-            // this.props.onSameTeamDragAction(source, destination)
-        // }
-    // };
-
-    onClickComment = (player, teamID) => {
-        this.setState({
-            modalVisible: true, comment: "", playerId: player.playerId,
-            teamID
-        })
-    }
 
     // delete pool handling
 
@@ -286,16 +229,6 @@ class UmpirePoolAllocation extends Component {
     handleDeletePoolCancel = () => {
         this.setState({ deleteModalVisible: false });
     }
-
-    // model cancel for disappear a model
-    handleModalCancel = e => {
-        this.setState({
-            modalVisible: false,
-            comment: "",
-            playerId: null,
-            teamID: null,
-        });
-    };
 
     // save pool handling
 
@@ -481,7 +414,6 @@ class UmpirePoolAllocation extends Component {
 
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
-        let commentList = [];
         const { isOrganiserView, assignedData } = this.state;
 
         return (
@@ -616,18 +548,6 @@ class UmpirePoolAllocation extends Component {
                     </Droppable>
                 ))}
 
-                <PlayerCommentModal
-                    visible={this.state.modalVisible}
-                    modalTitle={AppConstants.add_edit_comment}
-                    // onOK={this.handleModalOk}
-                    onCancel={this.handleModalCancel}
-                    placeholder={AppConstants.addYourComment}
-                    // onChange={(e) => this.setState({ comment: e.target.value })}
-                    value={this.state.comment}
-                    commentList={commentList}
-                    commentLoad={false}
-                />
-
                 <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.deletePool}
@@ -728,7 +648,6 @@ class UmpirePoolAllocation extends Component {
 
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
-        let commentList = [];
         const { unassignedData, isOrganiserView } = this.state;
 
         return (
@@ -749,7 +668,6 @@ class UmpirePoolAllocation extends Component {
                                             <Button
                                                 className="primary-add-comp-form"
                                                 type="primary"
-                                                disabled={!this.state.compIsParent}
                                                 onClick={this.handleAddUmpirePool}
                                             >
                                                 + {AppConstants.umpirePools}
@@ -801,17 +719,6 @@ class UmpirePoolAllocation extends Component {
                         </div>
                     )}
                 </Droppable>
-                <PlayerCommentModal
-                    visible={this.state.modalVisible}
-                    modalTitle={AppConstants.add_edit_comment}
-                    // onOK={this.handleModalOk}
-                    onCancel={this.handleModalCancel}
-                    placeholder={AppConstants.addYourComment}
-                    // onChange={(e) => this.setState({ comment: e.target.value })}
-                    value={this.state.comment}
-                    commentList={commentList}
-                    commentLoad={false}
-                />
             </div>
         )
     }

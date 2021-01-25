@@ -1780,6 +1780,7 @@ const AppConstants = {
     removeFromPool: "Remove from pool",
     addUmpireToPool: "Add umpire to pool",
     toPool: "to pool",
+    umpireAlreadyInPool: "This umpire is already added to this pool.",
 
     yourOrder: "Your Order",
 
