@@ -22,8 +22,6 @@ import history from "../../util/history";
 const { Header, Footer } = Layout;
 const { Option } = Select;
 
-let _this = ""
-
 class LiveScoreLadderSettings extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +32,6 @@ class LiveScoreLadderSettings extends Component {
             ladderIndex: null,
             saveLoad: false
         };
-        _this = this
     }
 
     componentDidMount() {
@@ -240,7 +237,7 @@ class LiveScoreLadderSettings extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        const { postData } = this.props.ladderSettingState
+        // const { postData } = this.props.ladderSettingState
 
         return (
             <div className="fluid-width">

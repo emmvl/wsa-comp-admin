@@ -3,7 +3,7 @@ import {
     Layout,
     Breadcrumb,
     Select,
-    Checkbox,
+    // Checkbox,
     Button,
     DatePicker,
     Form,
@@ -368,8 +368,8 @@ class LiveScoreAddPlayer extends Component {
             phoneNumber,
             mnbPlayerId,
             teamId,
-            competitionId,
-            photoUrl
+            // competitionId,
+            // photoUrl
         } = this.props.liveScorePlayerState.playerData
 
         let playerId = this.state.playerData ? this.state.playerData.playerId ? this.state.playerData.playerId : this.state.playerData.id ? this.state.playerData.id : '' : ''

@@ -1,4 +1,4 @@
-import AppConstants from "themes/appConstants";
+// import AppConstants from "themes/appConstants";
 import ApiConstants from "../../../themes/apiConstants";
 
 function liveScoreDashboardListAction(competitionID, startDay, currentTime, competitionOrganisationId,liveScoreCompIsParent) {
@@ -41,9 +41,20 @@ function liveScorePlayersToPayListAction(payload){
     return action;
 }
 
+function liveScorePlayersToPayRetryPaymentAction(payload){
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_LOAD,
+        payload
+    }
+
+    return action;
+}
+
+
 export {
     liveScoreDashboardListAction,
     liveScoreSingleGameListAction,
     liveScoreSingleGameRedeemPayAction,
-    liveScorePlayersToPayListAction
+    liveScorePlayersToPayListAction,
+    liveScorePlayersToPayRetryPaymentAction
 }

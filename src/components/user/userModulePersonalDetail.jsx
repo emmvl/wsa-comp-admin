@@ -84,12 +84,16 @@ function umpireActivityTableSort(key) {
     this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
 }
 
-const { Header, Footer, Content } = Layout;
+const { 
+    Header, 
+    // Footer, 
+    Content 
+} = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
-const section = null;
+// const section = null;
 
 let userRoleId;
 const setOrganisationData = localStorage.setOrganisationData && JSON.parse(localStorage.setOrganisationData);
@@ -229,65 +233,65 @@ const columns = [
     },
 ];
 
-const cloumnsRegistration = [
-    {
-        title: "Name",
-        dataIndex: "userName",
-        key: "userName",
-    },
-    {
-        title: "DOB",
-        dataIndex: "DOB",
-        key: "DOB",
-        render: (DOB, record) => (
-            liveScore_formateDate(DOB)
-        ),
-    },
-    {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-    },
-    {
-        title: "Phone",
-        dataIndex: "mobileNumber",
-        key: "mobileNumber",
-    },
-    {
-        title: "Affiliate",
-        dataIndex: "affiliate",
-        key: "affiliate",
-    },
-    {
-        title: "Competition",
-        dataIndex: "competitionName",
-        key: "competitionName",
-    },
-    {
-        title: "Comp Fees Paid",
-        dataIndex: "compFeesPaid",
-        key: "compFeesPaid",
-    },
-    {
-        title: "Membership Product",
-        dataIndex: "productName",
-        key: "productName",
-    },
-    {
-        title: "Division",
-        dataIndex: "divisionName",
-        key: "divisionName",
-    },
-    {
-        title: "Status",
-        dataIndex: "paymentStatus",
-        key: "paymentStatus",
-    },
-    {
-        title: "Action",
-    },
+// const cloumnsRegistration = [
+//     {
+//         title: "Name",
+//         dataIndex: "userName",
+//         key: "userName",
+//     },
+//     {
+//         title: "DOB",
+//         dataIndex: "DOB",
+//         key: "DOB",
+//         render: (DOB, record) => (
+//             liveScore_formateDate(DOB)
+//         ),
+//     },
+//     {
+//         title: "Email",
+//         dataIndex: "email",
+//         key: "email",
+//     },
+//     {
+//         title: "Phone",
+//         dataIndex: "mobileNumber",
+//         key: "mobileNumber",
+//     },
+//     {
+//         title: "Affiliate",
+//         dataIndex: "affiliate",
+//         key: "affiliate",
+//     },
+//     {
+//         title: "Competition",
+//         dataIndex: "competitionName",
+//         key: "competitionName",
+//     },
+//     {
+//         title: "Comp Fees Paid",
+//         dataIndex: "compFeesPaid",
+//         key: "compFeesPaid",
+//     },
+//     {
+//         title: "Membership Product",
+//         dataIndex: "productName",
+//         key: "productName",
+//     },
+//     {
+//         title: "Division",
+//         dataIndex: "divisionName",
+//         key: "divisionName",
+//     },
+//     {
+//         title: "Status",
+//         dataIndex: "paymentStatus",
+//         key: "paymentStatus",
+//     },
+//     {
+//         title: "Action",
+//     },
 
-];
+// ];
 
 const teamRegistrationColumns = [
     {

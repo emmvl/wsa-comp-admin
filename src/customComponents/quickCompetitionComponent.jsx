@@ -59,21 +59,26 @@ class CompetitionSwappable extends Component {
     }
 
     render() {
-        const dropZoneStyle = {
-            width: '50px',
-            minHeight: '50px',
-            //   padding: '10px',
-            border: '1px solid #aaaaaa'
-        };
+        // const dropZoneStyle = {
+        //     width: '50px',
+        //     minHeight: '50px',
+        //     //   padding: '10px',
+        //     border: '1px solid #aaaaaa'
+        // };
 
-        const draggableStyle = {
-            width: '50px',
-            height: '50px',
-            //   padding: '10px',
-            border: '1px solid red'
-        };
+        // const draggableStyle = {
+        //     width: '50px',
+        //     height: '50px',
+        //     //   padding: '10px',
+        //     border: '1px solid red'
+        // };
 
-        const { id, content, swappable, customFunc } = this.props;
+        const {
+            id,
+            // content,
+            swappable,
+            customFunc
+        } = this.props;
         const dropzoneId = 'drop' + id;
         // const dragableId = 'drag' + id;
         const dragableId = id;

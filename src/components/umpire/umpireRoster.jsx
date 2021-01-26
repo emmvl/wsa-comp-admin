@@ -11,14 +11,14 @@ import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRosterListAction, umpireRosterOnActionClick } from "../../store/actions/umpireAction/umpirRosterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { refRoleTypes } from '../../util/refRoles'
+// import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompetiton, getUmpireCompetitonData, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
-import { getOrganisationAction } from "store/actions/userAction/userAction";
-import { regCompetitionFeeListDeleteSaga } from "store/saga/registrationSaga/competitionFeeSaga";
+// import { getOrganisationAction } from "store/actions/userAction/userAction";
+// import { regCompetitionFeeListDeleteSaga } from "store/saga/registrationSaga/competitionFeeSaga";
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
 
@@ -505,7 +505,7 @@ class UmpireRoster extends Component {
     }
 
     headerView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        // let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">

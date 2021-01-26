@@ -1,6 +1,6 @@
 import ApiConstants from '../../../themes/apiConstants'
 import moment from 'moment';
-import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
+// import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
 import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 
 var object = {
@@ -140,9 +140,9 @@ function liveScoreNewsState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_NEWS:
 
-            let news_object = state.addEditNews
-            let dateFormat = null
-            let utcTimestamp = null
+            // let news_object = state.addEditNews
+            // let dateFormat = null
+            // let utcTimestamp = null
             if (action.key === "expire_date") {
                 state[action.key] = action.data
                 state.newExpiryDate = moment(action.data, "YYYY-MM-DD")
@@ -175,7 +175,7 @@ function liveScoreNewsState(state = initialState, action) {
             }
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_SUCCESS:
             // history.push('/matchDayNewsList')
-            let data = action.result
+            // let data = action.result
             return {
                 ...state,
                 onLoad_2: false,

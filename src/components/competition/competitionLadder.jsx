@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Table, Modal } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Modal } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";

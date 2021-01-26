@@ -12,7 +12,7 @@ import AppImages from "../../themes/appImages";
 import { liveScoreGoalListAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
-import { liveScore_formateDateTime } from '../../themes/dateformate'
+// import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 

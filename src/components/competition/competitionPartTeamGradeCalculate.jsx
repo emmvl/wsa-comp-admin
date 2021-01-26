@@ -12,8 +12,10 @@ import history from 'util/history';
 import {
     setOwn_competition,
     getOwn_competition,
-    getOwn_competitionStatus, setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    getOwn_competitionStatus,
+    setOwn_competitionStatus,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
     setGlobalYear, getGlobalYear
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from 'store/actions/appAction';

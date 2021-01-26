@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import {
   Layout,
   Breadcrumb,
@@ -667,6 +667,7 @@ class AddTeamMember extends Component {
                                 onClick={() => { this.onChangeTeamMemberSaveUpdate(null, "teamMember", teamMemberIndex) }}
                                 style={{ marginLeft: "auto", width: "25px" }}
                                 src={AppImages.removeIcon}
+                                alt=""
                             />
                         )}
                     </div>
@@ -788,7 +789,7 @@ class AddTeamMember extends Component {
                             </Form.Item>
                         </div>
                     </div>
-                    {teamMember.membershipProductTypes.find(x => x.isChecked == true) && (
+                    {/* {teamMember.membershipProductTypes.find(x => x.isChecked == true) && (
                         <Checkbox
                             className="single-checkbox"
                             checked={teamMember.payingFor == 1}
@@ -799,7 +800,7 @@ class AddTeamMember extends Component {
                         >
                             {AppConstants.payingForMember}
                         </Checkbox>
-                    )}
+                    )} */}
                     {isArrayNotEmpty(teamMember.parentOrGuardian) && (
                         <div>
                             <div className="form-heading" style={{ paddingBottom: "0px", marginTop: 20 }}>{AppConstants.parentOrGuardianDetail}</div>

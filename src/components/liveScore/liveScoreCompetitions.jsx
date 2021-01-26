@@ -25,7 +25,10 @@ import { liveScoreOwnPartCompetitionList, liveScoreCompetitionActionInitiate, li
 // import Loader from "customComponents/loader";
 import DashboardLayout from 'pages/dashboardLayout';
 import './liveScore.css';
-import { updateInnerHorizontalData, initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction';
+import {
+    updateInnerHorizontalData,
+    // initializeCompData
+} from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction';
 
 const { Option } = Select;
 const { confirm } = Modal;

@@ -18,7 +18,28 @@ class RegistrationWizardModel extends React.Component {
     }
 
     render() {
-        const { competitionStatus, registrationStatus, competitionClick, registrationClick, publishStatus, stripeConnectURL, stripeConnected, competitionId, competitionChange, wizardCompetition, heading, placeholder, name, handleBlur, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
+        const {
+            competitionStatus,
+            registrationStatus,
+            competitionClick,
+            registrationClick,
+            publishStatus,
+            stripeConnectURL,
+            stripeConnected,
+            competitionId,
+            competitionChange,
+            wizardCompetition,
+            // heading,
+            // placeholder,
+            // name,
+            // handleBlur,
+            modalTitle,
+            // visible,
+            onOK,
+            onCancel,
+            // ownnerComment,
+            // affilateComment
+        } = this.props
         let isImpersonation = getImpersonation()
         let showStripe = (isImpersonation !== "true" && !stripeConnected) ? true : false
         return (

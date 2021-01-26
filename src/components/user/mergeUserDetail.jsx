@@ -207,7 +207,7 @@ const MatchesDetailView = () => {
         };
 
         try {
-            const result = await userHttp.post(
+            await userHttp.post(
                 `${process.env.REACT_APP_USER_API_URL}/userMerge/merge`, {
                     masterUserId: master.userId,
                     otherUserId: second.id,

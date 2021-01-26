@@ -31,14 +31,18 @@ import {
     getGlobalYear, setGlobalYear
 } from "../../util/sessionStorage"
 import ValidationConstants from "../../themes/validationConstant";
-import moment from "moment"
+// import moment from "moment"
 import {
     clearReducerCompPartPlayerGradingAction,
     commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import AppUniqueId from "../../themes/appUniqueId";
-import { getCurrentYear } from "util/permissions"
-const { Header, Footer, Content } = Layout;
+// import { getCurrentYear } from "util/permissions"
+const {
+    // Header,
+    Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 let this_obj = null;
 const { SubMenu } = Menu;

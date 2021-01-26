@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Layout, Table, Pagination, Select, Modal } from 'antd';
+import { Layout, Table, Pagination, Modal } from 'antd';
 
 import AppConstants from 'themes/appConstants';
 import AppColor from 'themes/appColor';
@@ -20,7 +20,7 @@ import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
 
 const { Content } = Layout;
-const { Option } = Select;
+// const { Option } = Select;
 const { confirm } = Modal;
 
 var this_obj = null
@@ -204,7 +204,7 @@ class AssignUmpire extends Component {
 
     ///on status change assign/unassign
     onChangeStatus(index, record, umpireKey, statusText, userData) {
-        let umpireRecord = this_obj.props.location.state && this_obj.props.location.state.record
+        // let umpireRecord = this_obj.props.location.state && this_obj.props.location.state.record
 
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
         let umpireName = this_obj.props.location.state ? this_obj.props.location.state.record.firstName + " " + this_obj.props.location.state.record.lastName : null
@@ -264,7 +264,7 @@ class AssignUmpire extends Component {
     }
 
     headerView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        // let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">

@@ -1798,6 +1798,11 @@ const AppConstants = {
     affiliateIfApplicable: "Affiliate (if applicable)",
 
     userDetailsInvalid: "User Details Invalid",
+    pleaseInputAmount: "Please input amount",
+
+    cashReceived: "Cash Received",
+    retryPayment: "Retry Payment"
+
 };
 
 export default AppConstants;

@@ -3,11 +3,11 @@ import { message } from "antd";
 
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
+// import history from "util/history";
+// import { receiptImportResult } from "util/showImportResult";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
-import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
+// import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 import UmpireAxiosApi from "store/http/umpireHttp/umpireAxios";
 
 function* failSaga(result) {

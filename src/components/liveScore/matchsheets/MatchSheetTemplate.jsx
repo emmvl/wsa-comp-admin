@@ -206,7 +206,12 @@ const MatchSheetTemplate = (props) => {
         match,
     } = props;
 
-    const {team1players, team2players, umpires, organisation} = matchDetails;
+    const {
+        team1players,
+        team2players,
+        // umpires,
+        organisation
+    } = matchDetails;
 
     return (
         <View>

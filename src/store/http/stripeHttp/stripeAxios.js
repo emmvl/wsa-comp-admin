@@ -1,10 +1,14 @@
 // import { DataManager } from './../../Components';
 import http from "./stripeHttp";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    getOrganisationData
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
-import competitionHttp from "../competitionHttp/competitionHttp";
+// import competitionHttp from "../competitionHttp/competitionHttp";
 
 async function logout() {
     await localStorage.clear();
@@ -233,7 +237,7 @@ let AxiosApi = {
             membershipType,
             paymentStatus
         }
-        var url = `api/payment/summary`;
+        var url = `api/payment/summary?search=${searchValue}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
@@ -307,6 +311,50 @@ let AxiosApi = {
             paymentStatus
         }
         var url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}&search=${searchValue}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+        return Method.dataPostDownload(url, token, "dashboard", body);
+    },
+
+    async exportPaymentSummaryApi(offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentOption,
+        paymentMethod,
+        membershipType,
+        paymentStatus) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationId: organisationUniqueKey,
+            userId: parseInt(userId),
+            registrationId: registrationId,
+            paging: {
+                offset: offset,
+                limit: 10
+            },
+            yearId: parseInt(yearId),
+            competitionKey: competitionKey,
+            paymentFor: paymentFor,
+            dateFrom: dateFrom,
+            dateTo: dateTo,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType,
+            paymentStatus
+        }
+        var url = `/api/payment/summary/export?search=${searchValue}`;
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }

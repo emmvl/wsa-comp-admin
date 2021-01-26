@@ -28,15 +28,19 @@ import {
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import InputWithHead from "../../customComponents/InputWithHead";
-import ColorsArray from "../../util/colorsArray";
+// import ColorsArray from "../../util/colorsArray";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 
-const { Header, Footer, Content } = Layout;
+const {
+    // Header,
+    Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 let this_obj = null;
 
-const colors = JSON.parse(JSON.stringify(ColorsArray));
-const reverseColors = colors.reverse();
+// const colors = JSON.parse(JSON.stringify(ColorsArray));
+// const reverseColors = colors.reverse();
 
 const menu = (
     <Menu>

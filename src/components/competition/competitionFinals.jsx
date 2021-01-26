@@ -28,9 +28,13 @@ import {
 import {
     getOrganisationData,
     setOwn_competition,
-    getOwn_competition, getOwn_competitionStatus, setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
-    getGlobalYear, setGlobalYear
+    getOwn_competition,
+    getOwn_competitionStatus,
+    setOwn_competitionStatus,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
+    getGlobalYear,
+    setGlobalYear
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import { NavLink } from 'react-router-dom';
@@ -63,7 +67,7 @@ class CompetitionFinals extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -507,7 +511,11 @@ class CompetitionFinals extends Component {
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
         const { finalTypeRefId } = this.props.competitionFinalsState;
         let appState = this.props.appState;
-        let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
+        let {
+            // applyToData,
+            // extraTimeDrawData,
+            finalFixtureTemplateData
+        } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1
         return (
             <div>
@@ -862,7 +870,11 @@ class CompetitionFinals extends Component {
         // let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         // let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let appState = this.props.appState;
-        let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
+        let {
+            applyToData,
+            extraTimeDrawData,
+            // finalFixtureTemplateData
+        } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1
         // let detailsData = this.props.competitionFeesState
         return (

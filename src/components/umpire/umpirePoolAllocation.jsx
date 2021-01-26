@@ -38,7 +38,11 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
 
-const { Header, Footer, Content } = Layout;
+const { 
+    // Header, 
+    Footer, 
+    Content 
+} = Layout;
 const { Option } = Select;
 
 class UmpirePoolAllocation extends Component {

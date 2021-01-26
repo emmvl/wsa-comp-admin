@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    Input, Layout, Button, Table, Select, Menu, Pagination,
+    Input, Layout, Button, Table, Select, Menu, Pagination, Modal, Form,
 } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -148,6 +148,15 @@ const columns = [
         ),
     },
     {
+        title: 'Refunded Amount',
+        dataIndex: 'refundedAmount',
+        key: 'refundedAmount',
+        sorter: false,
+        render: (refundedAmount) => (
+            <span>{currencyFormat(refundedAmount)}</span>
+        ),
+    },
+    {
         title: "Action",
         dataIndex: "action",
         key: "action",
@@ -172,7 +181,7 @@ const columns = [
                         <span>{AppConstants.refundFullAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="3" onClick={() => this_obj.updateOrderStatusApi(record, 4)}>
+                    <Menu.Item key="3" onClick={() => this_obj.openPartialRefundModal(record.orderId)}>
                         <span>{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
@@ -202,6 +211,9 @@ class ShopOrderStatus extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            partialRefundModalVisible: false,
+            partialRefundAmount: 0,
+            partialRefundId: null,
         };
         this_obj = this;
     }
@@ -211,7 +223,11 @@ class ShopOrderStatus extends Component {
         const { orderStatusListActionObject } = this.props.shopOrderStatusState;
         this.referenceCalls();
         const {
-            yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
+            // yearRefId,
+            searchText,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
         } = this.state;
         const params = {
             limit: 10,
@@ -277,10 +293,13 @@ class ShopOrderStatus extends Component {
     /// /update order status api call
     updateOrderStatusApi = (record, actionValue) => {
         const payload = {
-            orderId: record.orderId,
+            orderId: record.orderId || this.state.partialRefundId,
             action: actionValue,
-            amount: record.total,
+            // amount: record.total,
         };
+        if (this.state.partialRefundAmount) {
+            payload.amount = this.state.partialRefundAmount
+        }
         this.props.updateOrderStatusAction(payload);
     }
 
@@ -397,19 +416,47 @@ class ShopOrderStatus extends Component {
         this.setState({ fulfilmentStatus: data.fulfilmentStatus });
     }
 
+    // Partial refund modal start
+    openPartialRefundModal = (id) => {
+        this.setState({
+            partialRefundId: id,
+            partialRefundModalVisible: true,
+        });
+    }
+
+    handleOk = () => {
+        this.setState({
+            partialRefundModalVisible: false,
+        });
+        this_obj.updateOrderStatusApi(this.state.partialRefundId, 4)
+    }
+
+    onPartialRefundAmountChange = (value) => {
+        this.setState({
+            partialRefundAmount: value,
+        })
+    }
+
+    handleCancel = () => {
+        this.setState({
+            partialRefundModalVisible: false,
+        });
+    };
+    // Partial refund modal end
+
     dropdownView = () => {
-        const paymentStatusData = [
-            { name: "Not Paid", value: "not paid" },
-            { name: "Paid", value: "paid" },
-            { name: "Refunded", value: "refunded" },
-            { name: "Partially refunded", value: "partially refunded" },
-        ];
-        const fulfilmentStatusData = [
-            { name: "To Be Sent", value: "to be sent" },
-            { name: "Awaiting Pickup", value: "awaiting pickup" },
-            { name: "In Transit", value: "in transit" },
-            { name: "Completed", value: "completed" },
-        ];
+        // const paymentStatusData = [
+        //     { name: "Not Paid", value: "not paid" },
+        //     { name: "Paid", value: "paid" },
+        //     { name: "Refunded", value: "refunded" },
+        //     { name: "Partially refunded", value: "partially refunded" },
+        // ];
+        // const fulfilmentStatusData = [
+        //     { name: "To Be Sent", value: "to be sent" },
+        //     { name: "Awaiting Pickup", value: "awaiting pickup" },
+        //     { name: "In Transit", value: "in transit" },
+        //     { name: "Completed", value: "completed" },
+        // ];
         const { ShopFulfilmentStatusArr, ShopPaymentStatus } = this.props.shopOrderStatusState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
@@ -548,6 +595,31 @@ class ShopOrderStatus extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
+                        <Modal
+                            title={AppConstants.refundPartialAmount}
+                            visible={this.state.partialRefundModalVisible}
+                            onFinishFailed={this.onFinishFailed}
+                            onCancel={this.handleCancel}
+                            onOk={this.handleOk}
+                        >
+                            <Form
+                                name="basic"
+                                onFinish={this.onFinish}
+                            >
+                                <Form.Item
+                                    label={AppConstants.amount}
+                                    name="amount"
+                                    type="number"
+                                    onChange={(event) => this.onPartialRefundAmountChange(event.target.value)}
+                                    rules={[{
+                                        required: true,
+                                        message: AppConstants.pleaseInputAmount,
+                                    }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Form>
+                        </Modal>
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>

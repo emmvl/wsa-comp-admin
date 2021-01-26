@@ -218,7 +218,7 @@ let AxiosApi = {
 
     //// Get Org Venue list
     async getOrgVenue(search) {
-        let userId = await getUserId()
+        // let userId = await getUserId()
         let url = null
         if (search.length > 0) {
             url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=${search}`

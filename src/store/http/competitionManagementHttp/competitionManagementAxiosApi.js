@@ -2,7 +2,11 @@ import competitionManagementHttp from "./competitionManagementHttp";
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import { 
+  getUserId, 
+  getAuthToken, 
+  // getOrganisationData 
+} from "../../../util/sessionStorage"
 
 async function logout() {
   await localStorage.clear();

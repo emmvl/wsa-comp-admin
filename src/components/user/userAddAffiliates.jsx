@@ -311,7 +311,7 @@ class UserAddAffiliates extends Component {
     contentView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let affiliate = this.props.userState.affiliate.affiliate;
-        const { stateList } = this.props.commonReducerState;
+        // const { stateList } = this.props.commonReducerState;
         if (affiliate.organisationTypeRefId === 0) {
             if (affiliateToData.organisationTypes != undefined && affiliateToData.organisationTypes.length > 0)
                 affiliate.organisationTypeRefId = affiliateToData.organisationTypes[0].id;

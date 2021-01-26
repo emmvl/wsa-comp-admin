@@ -5,33 +5,33 @@ import AppConstants from 'themes/appConstants';
 
 const { success } = Modal;
 
-const errLine = (key, error) => (
-    <div key={key}>
-        <div
-            style={{
-                minWidth: 'max-content',
-                color: 'red',
-            }}
-        >
-            {`${key}: `}
-        </div>
-        <div>{error.message.map((msg, index) => (<p key={index * index}>{msg}</p>))}</div>
-    </div>
-);
+// const errLine = (key, error) => (
+//     <div key={key}>
+//         <div
+//             style={{
+//                 minWidth: 'max-content',
+//                 color: 'red',
+//             }}
+//         >
+//             {`${key}: `}
+//         </div>
+//         <div>{error.message.map((msg, index) => (<p key={index * index}>{msg}</p>))}</div>
+//     </div>
+// );
 
-const showContent = (errors) => {
-    const keys = Object.keys(errors);
+// const showContent = (errors) => {
+//     const keys = Object.keys(errors);
 
-    return (
-        <div style={{ maxHeight: '200px', overflow: 'auto' }}>
-            {keys.length === 0 ? (
-                <h3>No issue is occurred.</h3>
-            ) : (
-                keys.map((key) => errLine(key, errors[key]))
-            )}
-        </div>
-    );
-};
+//     return (
+//         <div style={{ maxHeight: '200px', overflow: 'auto' }}>
+//             {keys.length === 0 ? (
+//                 <h3>No issue is occurred.</h3>
+//             ) : (
+//                 keys.map((key) => errLine(key, errors[key]))
+//             )}
+//         </div>
+//     );
+// };
 
 export const receiptImportResult = (result) => {
     const resData = result.data.data;

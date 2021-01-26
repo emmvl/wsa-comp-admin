@@ -15,7 +15,7 @@ import {
 import AppConstants from "../../themes/appConstants";
 import DashboardLayout from "../../pages/dashboardLayout";
 import StripeKeys from "./stripeKeys";
-import { getOrganisationData } from "../../util/sessionStorage";
+// import { getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { message } from "antd";
 import history from "../../util/history";

@@ -1,19 +1,23 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Modal, Descriptions } from 'antd';
-import AppConstants from "../../themes/appConstants";
+import { Layout, Table } from 'antd';
+// import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import InputWithHead from "../../customComponents/InputWithHead"
+// import InputWithHead from "../../customComponents/InputWithHead"
 import './liveScore.css';
 
-const { confirm } = Modal;
-const { Header, Footer, Content } = Layout;
+// const { confirm } = Modal;
+const {
+    // Header,
+    // Footer,
+    Content
+} = Layout;
 
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
+// function tableSort(a, b, key) {
+//     let stringA = JSON.stringify(a[key])
+//     let stringB = JSON.stringify(b[key])
+//     return stringA.localeCompare(stringB)
+// }
 
 const columns = [
     {
@@ -88,6 +92,7 @@ class LiveScoreSocialSheet extends Component {
                                     onError={ev => {
                                         ev.target.src = AppImages.squareImage;
                                     }}
+                                    alt=""
                                 />
                             </div>
                         </div>

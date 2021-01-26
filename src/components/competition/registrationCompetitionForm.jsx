@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import {
     Layout,
     Breadcrumb,
@@ -62,7 +62,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
-let this_Obj = null;
+// let this_Obj = null;
 
 const permissionObject = {
     compDetailDisable: false,
@@ -261,7 +261,7 @@ class RegistrationCompetitionForm extends Component {
             ],
             divisionState: false
         };
-        this_Obj = this;
+        // this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
@@ -271,7 +271,7 @@ class RegistrationCompetitionForm extends Component {
 
     componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
-        let competitionId = this.props.location.state ? this.props.location.state.id : null
+        // let competitionId = this.props.location.state ? this.props.location.state.id : null
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
             this.setState({ loading: false })
             if (!competitionFeesState.error) {
@@ -355,7 +355,7 @@ class RegistrationCompetitionForm extends Component {
 
     ////disable or enable particular fields
     setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
-        let hasRegistration = this.props.competitionFeesState.competitionDetailData.hasRegistration
+        // let hasRegistration = this.props.competitionFeesState.competitionDetailData.hasRegistration
         if (isPublished) {
             if (isRegClosed) {
                 let permissionObject = {
@@ -859,7 +859,7 @@ class RegistrationCompetitionForm extends Component {
     contentView = () => {
         let roundsArray = this.props.competitionManagementState.fixtureTemplate;
         let appState = this.props.appState
-        const { venueList, mainVenueList } = this.props.commonReducerState
+        // const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
         let compDetailDisable = this.state.permissionState.compDetailDisable
@@ -1422,7 +1422,7 @@ class RegistrationCompetitionForm extends Component {
     };
 
     render() {
-        let competitionId = this.props.location.state ? this.props.location.state.id : null
+        // let competitionId = this.props.location.state ? this.props.location.state.id : null
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout

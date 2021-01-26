@@ -1,19 +1,16 @@
 import React, {useState, Component } from "react";
 import {
     Layout,
-    Breadcrumb,
-    Select,
-    Checkbox,
+    // Select,
     Button,
-    DatePicker,
-    Input,
+    // Input,
     Radio,
     Form,
     message,
     Modal
 } from "antd";
-import moment from 'moment';
-import InputWithHead from "../../customComponents/InputWithHead";
+// import moment from 'moment';
+// import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -21,10 +18,10 @@ import {
     updateReviewInfoAction,
     getTeamMembersReviewAction
 } from '../../store/actions/userAction/userAction'
-import ValidationConstants from "../../themes/validationConstant";
-import AppImages from "../../themes/appImages";
+// import ValidationConstants from "../../themes/validationConstant";
+// import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import history from '../../util/history';
 import {isArrayNotEmpty} from '../../util/helpers';
@@ -39,9 +36,13 @@ import { loadStripe } from '@stripe/stripe-js';
 import StripeKeys from "../stripe/stripeKeys";
 
 const stripePromise = loadStripe(StripeKeys.publicKey);
-const { Header, Footer, Content } = Layout;
-const { Option } = Select;
-const { TextArea } = Input;
+const { 
+    // Header,
+    // Footer,
+    Content
+} = Layout;
+// const { Option } = Select;
+// const { TextArea } = Input;
 
 const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -91,9 +92,9 @@ var screenProps = null;
 const CheckoutForm = (props) => {
     const [error, setError] = useState(null);
     const [bankError, setBankError] = useState(null)
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [bankResult, setBankResult] = useState(false);
+    // const [name, setName] = useState(null);
+    // const [email, setEmail] = useState(null);
+    // const [bankResult, setBankResult] = useState(false);
     const [clientSecretKey, setClientKey] = useState("")
     const [regId, setRegId] = useState("")
     const [selectedPaymentOption, setUser] = useState({
@@ -431,16 +432,14 @@ class TeamMemberRegPayment extends Component {
             isArrayNotEmpty(teamMemberRegReviewList.compParticipants) ?
                 teamMemberRegReviewList.compParticipants : [] : [];
         let total = teamMemberRegReviewList != null ? teamMemberRegReviewList.total : null;
-        let shopProducts = teamMemberRegReviewList != null ?
-            isArrayNotEmpty(teamMemberRegReviewList.shopProducts) ?
-                teamMemberRegReviewList.shopProducts : [] : [];
+        // let shopProducts = teamMemberRegReviewList != null ? isArrayNotEmpty(teamMemberRegReviewList.shopProducts) ? teamMemberRegReviewList.shopProducts : [] : [];
         return (
             <div className="outline-style " style={{ padding: "36px 36px 22px 20px" }}>
                 <div className="product-text-common" style={{ fontSize: 21 }}>
                     {AppConstants.yourOrder}
                 </div>
                 {(compParticipants || []).map((item, index) => {
-                    let paymentOptionTxt = this.getPaymentOptionText(item.selectedOptions.paymentOptionRefId, item.isTeamRegistration)
+                    // let paymentOptionTxt = this.getPaymentOptionText(item.selectedOptions.paymentOptionRefId, item.isTeamRegistration)
                     return (
                         <div style={{ paddingBottom: 12 }} key={item.participantId}>
                             {item.isTeamRegistration == 1 ?

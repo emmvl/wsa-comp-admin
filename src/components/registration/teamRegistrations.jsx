@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { Layout, Breadcrumb, Table, Select, Pagination, Input, Button, Menu } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
-import Tooltip from "react-png-tooltip";
+// import Tooltip from "react-png-tooltip";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
@@ -414,12 +414,12 @@ class TeamRegistrations extends Component {
     dropdownView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
-        let paymentStatus = [
-            { id: 1, description: "Pending Competition Fee" },
-            { id: 2, description: "Pending Membership Fee" },
-            { id: 3, description: "Pending Registration Fee" },
-            { id: 4, description: "Registered" },
-        ];
+        // let paymentStatus = [
+        //     { id: 1, description: "Pending Competition Fee" },
+        //     { id: 2, description: "Pending Membership Fee" },
+        //     { id: 3, description: "Pending Registration Fee" },
+        //     { id: 4, description: "Registered" },
+        // ];
 
         if (affiliateToData.affiliatedTo !== undefined) {
             let obj = {
@@ -436,7 +436,7 @@ class TeamRegistrations extends Component {
         const competitions = this.props.registrationState.teamRegistrationTableData.competitionsList;
         const divisions = this.props.registrationState.teamRegistrationTableData.divisionList;
         const products = this.props.registrationState.teamRegistrationTableData.membershipProductList;
-        const roles = this.props.registrationState.teamRegistrationTableData.roles;
+        // const roles = this.props.registrationState.teamRegistrationTableData.roles;
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="fluid-width" style={{ marginRight: 55 }}>

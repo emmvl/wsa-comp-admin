@@ -14,7 +14,7 @@ class PlayerCommentModal extends React.Component {
             placeholder,
             name,
             handleBlur,
-            finalGradeId,
+            // finalGradeId,
             onChange,
             type,
             value,

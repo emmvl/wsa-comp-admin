@@ -262,7 +262,7 @@ const AxiosApi = {
 
     /// /get the competition fees all the data in one API
     async getAllCompetitionFeesDeatils(competitionId, sourceModule, affiliateOrgId) {
-        const userId = await getUserId();
+        // const userId = await getUserId();
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         // if (userId !== user_Id) {
@@ -574,6 +574,10 @@ const AxiosApi = {
     },
     getPlayersToPayList(payload) {
         const url = `api/playerstopay/list`;
+        return Method.dataPost(url, token, payload);
+    },
+    playersToPayRetryPayment(payload) {
+        const url = `api/playerstopay/pay`;
         return Method.dataPost(url, token, payload);
     },
     async exportRegistraion(params) {

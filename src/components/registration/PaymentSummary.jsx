@@ -28,7 +28,7 @@ import {
     getPaymentMethodsListAction,
 } from "store/actions/appAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getPaymentSummary, exportPaymentDashboardApi } from "store/actions/stripeAction/stripeAction";
+import { getPaymentSummary, exportPaymentSummaryApi } from "store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
@@ -386,7 +386,7 @@ class PaymentSummary extends Component {
 
         const year = getGlobalYear() ? getGlobalYear() : '-1';
 
-        this.props.exportPaymentDashboardApi(
+        this.props.exportPaymentSummaryApi(
             offset,
             sortBy,
             sortOrder,
@@ -769,7 +769,7 @@ class PaymentSummary extends Component {
                 </div>
 
                 <div className="row pb-2">
-                    <div className="col-sm-3">
+                    {/* <div className="col-sm-3">
                         <InputWithHead required="pt-0" heading={AppConstants.feeType} />
                         <Select
                             showSearch
@@ -786,7 +786,7 @@ class PaymentSummary extends Component {
                                 </Option>
                             ))}
                         </Select>
-                    </div>
+                    </div> */}
                     <div className="col-sm-3">
                         <InputWithHead required="pt-0" heading={AppConstants.paymentType} />
                         <Select
@@ -817,7 +817,7 @@ class PaymentSummary extends Component {
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             {this.props.appState.paymentMethods.map((paymentMethod) => (
-                                <Option key={`paymentMethod_${paymentMethod.id}`} value={paymentMethod.name}>
+                                <Option key={`paymentMethod_${paymentMethod.id}`} value={paymentMethod.id}>
                                     {paymentMethod.description}
                                 </Option>
                             ))}
@@ -938,7 +938,7 @@ function mapDispatchToProps(dispatch) {
         getPaymentOptionsListAction,
         getPaymentMethodsListAction,
         getPaymentSummary,
-        exportPaymentDashboardApi,
+        exportPaymentSummaryApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
     }, dispatch);

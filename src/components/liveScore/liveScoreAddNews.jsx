@@ -3,7 +3,7 @@ import {
     Layout,
     Breadcrumb,
     Select,
-    Input,
+    // Input,
     Button,
     DatePicker,
     TimePicker,
@@ -33,7 +33,12 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import {
+    EditorState,
+    ContentState,
+    // convertFromHTML,
+    convertToRaw
+} from 'draft-js';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
@@ -130,7 +135,7 @@ class LiveScoreAddNews extends Component {
     }
 
     EditorView = () => {
-        const { liveScoreNewsState } = this.props;
+        // const { liveScoreNewsState } = this.props;
         const { editorState } = this.state;
         return (
             <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
@@ -241,13 +246,13 @@ class LiveScoreAddNews extends Component {
         });
     };
 
-    onChangeExpiryDate(date) {
-        let { addEditNews } = this.props.liveScoreNewsState
-    }
+    // onChangeExpiryDate(date) {
+    //     // let { addEditNews } = this.props.liveScoreNewsState
+    // }
 
-    ///method to change time slots
-    onChangeTime(time, timeString) {
-    }
+    // ///method to change time slots
+    // onChangeTime(time, timeString) {
+    // }
 
     ////method to setimage
     setImage_1 = (data) => {
@@ -753,7 +758,7 @@ class LiveScoreAddNews extends Component {
 
         if (data.newExpiryDate && data.expire_time) {
             let expiry__Date = data.news_expire_date
-            let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
+            // let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
             let expiryTime = moment(data.expire_time).format("HH:mm")
             let postDate = moment(expiry__Date + " " + expiryTime);
 
@@ -806,8 +811,8 @@ class LiveScoreAddNews extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
+        // const { liveScoreNewsState } = this.props;
+        // let editData = liveScoreNewsState.addEditNews;
 
         return (
             <div className="fluid-width">

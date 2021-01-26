@@ -4,20 +4,20 @@ import { bindActionCreators } from 'redux';
 import { getCurrentYear } from 'util/permissions'
 import {
     Layout,
-    Input,
+    // Input,
     Select,
     Checkbox,
     DatePicker,
     Button,
-    Table,
-    Radio,
-    Tabs,
+    // Table,
+    // Radio,
+    // Tabs,
     Form,
-    Modal,
-    message,
+    // Modal,
+    // message,
     Breadcrumb,
 } from "antd";
-import Tooltip from 'react-png-tooltip'
+// import Tooltip from 'react-png-tooltip'
 import moment from "moment";
 
 import "./product.scss";
@@ -25,19 +25,19 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { getAllowTeamRegistrationTypeAction, membershipPaymentOptionAction } from '../../store/actions/commonAction/commonAction';
+// import { getAllowTeamRegistrationTypeAction, membershipPaymentOptionAction } from '../../store/actions/commonAction/commonAction';
 import {
 } from "../../store/actions/registrationAction/registration";
 import {
     getOnlyYearListAction,
 } from "../../store/actions/appAction";
-import history from "../../util/history";
+// import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
+// import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
-import { routePermissionForOrgLevel } from "../../util/permissions";
-import { captializedString } from "../../util/helpers";
+// import { routePermissionForOrgLevel } from "../../util/permissions";
+// import { captializedString } from "../../util/helpers";
 import { 
     updateMembershipFeeCapListAction,
     getMembershipCapListAction,
@@ -51,7 +51,7 @@ import { deepCopyFunction } from "../../util/helpers";
 const { Footer, Content } = Layout;
 const { Option } = Select;
 
-let this_Obj = null;
+// let this_Obj = null;
 
 class RegistrationMembershipCap extends Component {
     constructor(props) {
@@ -64,7 +64,7 @@ class RegistrationMembershipCap extends Component {
             getMembershipCapListOnLoad: false,
             updateMembershipFeeCapOnLoad: false
         };
-        this_Obj = this;
+        // this_Obj = this;
         this.formRef = React.createRef();
     }
 
@@ -317,8 +317,12 @@ class RegistrationMembershipCap extends Component {
                     <div className="d-flex">
                         <div className="membership-cap-heading font-18">{AppConstants.applyMembershipProducts}</div>
                         {membershipFeeCapList.length > 1 && (
-                            <img className="pointer membership-cap-cloase" src={AppImages.crossImage}
-                            onClick={() => this.addOrRemoveMembershipProductBox('remove',index)}/>
+                            <img
+                                className="pointer membership-cap-cloase"
+                                src={AppImages.crossImage}
+                                onClick={() => this.addOrRemoveMembershipProductBox('remove',index)}
+                                alt=""
+                            />
                         )}  
                     </div>
                     <Checkbox
@@ -410,8 +414,13 @@ class RegistrationMembershipCap extends Component {
                                 </div>
                                 {(item.feeCaps.length > 1) && (
                                     <div className="col-md-1">
-                                        <img className="mb-3 pointer" style={{width: 22}} src={AppImages.redCross}
-                                        onClick={() => this.addOrRemoveAnoterProduct("remove",index,feeCapIndex)} />
+                                        <img
+                                            className="mb-3 pointer"
+                                            style={{width: 22}}
+                                            src={AppImages.redCross}
+                                            onClick={() => this.addOrRemoveAnoterProduct("remove",index,feeCapIndex)}
+                                            alt=""
+                                        />
                                     </div>
                                 )}
                             </div>  

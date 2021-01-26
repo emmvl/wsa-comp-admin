@@ -85,7 +85,7 @@ import {
     liveScoreDoubleHeaderSaga,
     liveScoreAbandonMatchSaga,
 } from './liveScoreSaga/liveScoreBulkMatchSaga';
-import { liveScoreDashboardSaga, liveScoreSingleGameListSaga, liveScoreSingleGameRedeemPaySaga, liveScorePlayersToPayListSaga } from './liveScoreSaga/liveScoreDashboardSaga';
+import { liveScoreDashboardSaga, liveScoreSingleGameListSaga, liveScoreSingleGameRedeemPaySaga, liveScorePlayersToPayListSaga, liveScorePlayersToPayRetryPaymentSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreGamePositionSaga } from './liveScoreSaga/liveScoreGamePositionSaga';
 
 /// /*******************Live Score********************************************End
@@ -578,6 +578,8 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_LIST_LOAD, liveScoreSingleGameListSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_REDEEM_PAY_LOAD, liveScoreSingleGameRedeemPaySaga);
 
-    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_LIST_LOAD, liveScorePlayersToPayListSaga)
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_LIST_LOAD, liveScorePlayersToPayListSaga);
+
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_LOAD, liveScorePlayersToPayRetryPaymentSaga);
 
 }

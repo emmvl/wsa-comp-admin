@@ -11,22 +11,23 @@ import { bindActionCreators } from 'redux';
 import {
     getStripePayoutListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
-import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
+import {
+    getOrganisationData,
+    // getImpersonation
+} from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import moment from 'moment'
 import history from 'util/history'
 import { NavLink } from 'react-router-dom';
 
-
-
 const { Content } = Layout;
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
+// function tableSort(a, b, key) {
+//     let stringA = JSON.stringify(a[key])
+//     let stringB = JSON.stringify(b[key])
+//     return stringA.localeCompare(stringB)
+// }
 
 const columns = [
     {

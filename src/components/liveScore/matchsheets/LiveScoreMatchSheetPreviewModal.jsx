@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
     Modal,
 } from 'antd';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+// import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import './styles.css';
 

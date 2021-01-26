@@ -40,38 +40,38 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const membershipProducts = [
-    {
-        competitionMembershipProductTypeId: 1, name: "Competitive Player", competitionMembershipProductDivisionId: 1,
-        divisions: [{
-            competitionMembershipProductDivisionId: 1,
-            divisionName: "AR1",
-            fromDate: null,
-            toDate: null
-        }, {
-            competitionMembershipProductDivisionId: 5,
-            divisionName: "AR5",
-            fromDate: '1995-01-01',
-            toDate: '2020-12-31'
-        }], divisionName: "AR1", isPlayer: 1, isDisabled: false
-    },
-    {
-        competitionMembershipProductTypeId: 2, name: "Social Player", competitionMembershipProductDivisionId: 2,
-        divisions: [{
-            competitionMembershipProductDivisionId: 2,
-            divisionName: "AR2",
-            fromDate: null,
-            toDate: null
-        }, {
-            competitionMembershipProductDivisionId: 6,
-            divisionName: "AR6",
-            fromDate: '1995-01-01',
-            toDate: '2020-12-31'
-        }], divisionName: "AR2", isPlayer: 1, isDisabled: false
-    },
-    // {competitionMembershipProductTypeId: 3, name: "Coach", competitionMembershipProductDivisionId: 3, divisionName: "AR3",  isPlayer: 0, isDisabled: false },
-    // {competitionMembershipProductTypeId: 4, name: "Umpire", competitionMembershipProductDivisionId: 4, divisionName: "AR4",  isPlayer: 0, isDisabled: false }
-];
+// const membershipProducts = [
+//     {
+//         competitionMembershipProductTypeId: 1, name: "Competitive Player", competitionMembershipProductDivisionId: 1,
+//         divisions: [{
+//             competitionMembershipProductDivisionId: 1,
+//             divisionName: "AR1",
+//             fromDate: null,
+//             toDate: null
+//         }, {
+//             competitionMembershipProductDivisionId: 5,
+//             divisionName: "AR5",
+//             fromDate: '1995-01-01',
+//             toDate: '2020-12-31'
+//         }], divisionName: "AR1", isPlayer: 1, isDisabled: false
+//     },
+//     {
+//         competitionMembershipProductTypeId: 2, name: "Social Player", competitionMembershipProductDivisionId: 2,
+//         divisions: [{
+//             competitionMembershipProductDivisionId: 2,
+//             divisionName: "AR2",
+//             fromDate: null,
+//             toDate: null
+//         }, {
+//             competitionMembershipProductDivisionId: 6,
+//             divisionName: "AR6",
+//             fromDate: '1995-01-01',
+//             toDate: '2020-12-31'
+//         }], divisionName: "AR2", isPlayer: 1, isDisabled: false
+//     },
+//     // {competitionMembershipProductTypeId: 3, name: "Coach", competitionMembershipProductDivisionId: 3, divisionName: "AR3",  isPlayer: 0, isDisabled: false },
+//     // {competitionMembershipProductTypeId: 4, name: "Umpire", competitionMembershipProductDivisionId: 4, divisionName: "AR4",  isPlayer: 0, isDisabled: false }
+// ];
 
 class AppRegistrationForm extends Component {
     constructor(props) {
@@ -492,7 +492,7 @@ class AppRegistrationForm extends Component {
     }
 
     onChangeSetRegYourself = (e) => {
-        let registrationDetail = this.props.endUserRegistrationState.registrationDetail;
+        // let registrationDetail = this.props.endUserRegistrationState.registrationDetail;
         // let userRegistrations = registrationDetail.userRegistrations;
         //clearing up the existing participants
         let newUserRegistration = [];

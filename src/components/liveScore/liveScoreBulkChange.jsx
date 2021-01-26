@@ -103,7 +103,10 @@ class LiveScoreBulkChange extends Component {
 
     // initial view
     inital_screen = () => {
-        const { venueData, selected_Option } = this.props.liveScoreBulkMatchState;
+        const { 
+            venueData, 
+            // selected_Option 
+        } = this.props.liveScoreBulkMatchState;
         return (
             <div>
                 {/* date picker row */}
@@ -773,7 +776,7 @@ class LiveScoreBulkChange extends Component {
     doublwHeaderView() {
         const { roundList } = this.props.liveScoreBulkMatchState;
         const roundResult = isArrayNotEmpty(roundList) ? roundList : [];
-        const { doubleHeaderResult } = this.props.liveScoreBulkMatchState;
+        // const { doubleHeaderResult } = this.props.liveScoreBulkMatchState;
 
         return (
             <div>
@@ -829,7 +832,11 @@ class LiveScoreBulkChange extends Component {
         const { roundList } = this.props.liveScoreRoundState;
         const roundResult = isArrayNotEmpty(roundList) ? roundList : [];
         const {
-            abandonData, venueData, abandonCourtData, matchResult, mainCourtList,
+            abandonData,
+            venueData,
+            abandonCourtData,
+            // matchResult,
+            mainCourtList,
         } = this.props.liveScoreBulkMatchState;
 
         return (

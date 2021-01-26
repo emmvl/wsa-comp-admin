@@ -5,7 +5,7 @@ import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+// import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getYearAndCompetitionParticipateAction } from "../../store/actions/appAction";
@@ -22,8 +22,8 @@ import {
     getParticipating_competitionStatus,
     setParticipating_competitionStatus
 } from "../../util/sessionStorage"
-import PlayerCommentModal from "../../customComponents/playerCommentModal"
-import moment from "moment"
+// import PlayerCommentModal from "../../customComponents/playerCommentModal"
+// import moment from "moment"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;

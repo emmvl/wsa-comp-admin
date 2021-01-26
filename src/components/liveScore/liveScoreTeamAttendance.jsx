@@ -297,8 +297,8 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
-        let page = teamAttendanceListActionObject ? Math.floor(teamAttendanceListActionObject.body.paging.offset / 10) + 1 : 0;
+        // let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
+        // let page = teamAttendanceListActionObject ? Math.floor(teamAttendanceListActionObject.body.paging.offset / 10) + 1 : 0;
         let roundList = this.props.liveScoreTeamAttendanceState.roundList
         if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
             if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
@@ -316,7 +316,7 @@ class LiveScoreTeamAttendance extends Component {
 
 
     handleTablePagination = (page, roundName) => {
-        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
+        // let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
         let roundSelect = roundName ? roundName : this.state.selectedRound
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
@@ -422,19 +422,6 @@ class LiveScoreTeamAttendance extends Component {
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound , this.state.liveScoreCompIsParent , this.state.compOrgId)
-        }
-    }
-
-    checkUserId(record) {
-        if (record.userId == null) {
-            message.config({ duration: 1.5, maxCount: 1 })
-            message.warn(ValidationConstants.playerMessage)
-        } else {
-            history.push("/userPersonal", {
-                userId: record.userId,
-                screenKey: "livescore",
-                screen: "/matchDayPlayerList"
-            })
         }
     }
 

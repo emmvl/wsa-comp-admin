@@ -1,6 +1,10 @@
 // import { DataManager } from './../../Components';
 import http from "../http/http";
-import { getUserId, getAuthToken, getOrganisationData } from "../../util/sessionStorage"
+import {
+  // getUserId,
+  getAuthToken,
+  getOrganisationData
+} from "../../util/sessionStorage"
 import history from "../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
