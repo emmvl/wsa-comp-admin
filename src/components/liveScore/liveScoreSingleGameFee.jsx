@@ -17,7 +17,11 @@ import {
 // import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
-import { getLiveScoreCompetiton, getKeyForStateWideMessage, getOrganisationData } from '../../util/sessionStorage';
+import {
+    getLiveScoreCompetiton,
+    // getKeyForStateWideMessage,
+    getOrganisationData
+} from '../../util/sessionStorage';
 
 import { NavLink } from "react-router-dom";
 
@@ -247,16 +251,16 @@ class LiveScoreSingleGameFee extends Component {
             >
                 <div> {AppConstants.howManyGames}</div>
                 <InputWithHead
-                        placeholder={AppConstants.totalGames}
-                        value={this.state.gamesToPay}
-                        onChange={(e) => this.setState({ gamesToPay: e.target.value })}
-                    />
+                    placeholder={AppConstants.totalGames}
+                    value={this.state.gamesToPay}
+                    onChange={(e) => this.setState({ gamesToPay: e.target.value })}
+                />
             </Modal>
         )
     }
 
     headerView = () => {
-        let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
+        // let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div>
                 <Header className="form-header-view bg-transparent d-flex align-items-center">

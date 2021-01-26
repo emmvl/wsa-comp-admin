@@ -50,7 +50,16 @@ class CompetitionVenueModal extends React.Component {
     }
 
     render() {
-        const { modalTitle, handleVenueOK, onVenueCancel, onVenueBack, appState, onSelectValues, handleSearch, handleVenueNext } = this.props
+        const { 
+            modalTitle, 
+            handleVenueOK, 
+            onVenueCancel, 
+            onVenueBack, 
+            appState, 
+            onSelectValues, 
+            handleSearch, 
+            // handleVenueNext 
+        } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal

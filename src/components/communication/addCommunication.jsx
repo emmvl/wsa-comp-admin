@@ -3,7 +3,6 @@ import {
     Layout,
     Breadcrumb,
     Select,
-    Input,
     Button,
     DatePicker,
     TimePicker,
@@ -12,7 +11,6 @@ import {
     Spin,
     Checkbox,
     message,
-    AutoComplete,
     Radio
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -35,8 +33,16 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
-import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
+import {
+    EditorState,
+    ContentState,
+    // convertFromHTML,
+    convertToRaw
+} from 'draft-js';
+import {
+    getLiveScoreCompetiton,
+    // getKeyForStateWideMessage
+} from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ImageLoader from '../../customComponents/ImageLoader'
@@ -45,7 +51,7 @@ import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 import { getOrganisationData } from "../../util/sessionStorage";
 import { getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction } from "../../store/actions/userAction/userAction";
-import { isEmptyArray } from "formik";
+// import { isEmptyArray } from "formik";
 import { updateCommunicationModuleData } from '../../store/actions/communicationAction/communicationAction'
 
 const { Header, Footer, Content } = Layout;
@@ -152,7 +158,7 @@ class AddCommunication extends Component {
     }
 
     EditorView = () => {
-        const { liveScoreNewsState } = this.props;
+        // const { liveScoreNewsState } = this.props;
         const { editorState } = this.state;
         return (
             <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)", }}>
@@ -263,13 +269,13 @@ class AddCommunication extends Component {
         });
     };
 
-    onChangeExpiryDate(date) {
-        let { addEditNews } = this.props.liveScoreNewsState
-    }
+    // onChangeExpiryDate(date) {
+    //     let { addEditNews } = this.props.liveScoreNewsState
+    // }
 
     ///method to change time slots
-    onChangeTime(time, timeString) {
-    }
+    // onChangeTime(time, timeString) {
+    // }
 
     ////method to setimage
     setImage_1 = (data) => {
@@ -501,7 +507,7 @@ class AddCommunication extends Component {
         let expiryDate = news_expire_date
         let expiryTime = expire_time
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
-        let stateWideMsg = getKeyForStateWideMessage()
+        // let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="content-view pt-4">
                 <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
@@ -716,7 +722,7 @@ class AddCommunication extends Component {
         let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         let affiliateToData = isArrayNotEmpty(affiliateTo.affiliatedTo) ? affiliateTo.affiliatedTo : [];
         let userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
-        let uniqueValues = [];
+        // let uniqueValues = [];
         // if (affiliateToData.affiliatedTo != undefined) {
         //     let obj = {
         //         organisationId: getOrganisationData().organisationUniqueKey,
@@ -913,7 +919,7 @@ class AddCommunication extends Component {
 
         if (data.newExpiryDate && data.expire_time) {
             let expiry__Date = data.news_expire_date
-            let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
+            // let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
             let expiryTime = moment(data.expire_time).format("HH:mm")
             let postDate = moment(expiry__Date + " " + expiryTime);
 
@@ -959,8 +965,8 @@ class AddCommunication extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
+        // const { liveScoreNewsState } = this.props;
+        // let editData = liveScoreNewsState.addEditNews;
 
         return (
             <div className="fluid-width">
@@ -994,7 +1000,7 @@ class AddCommunication extends Component {
     };
 
     render() {
-        let stateWideMsg = getKeyForStateWideMessage()
+        // let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg">
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />

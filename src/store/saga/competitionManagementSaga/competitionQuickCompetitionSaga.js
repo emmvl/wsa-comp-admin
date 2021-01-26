@@ -4,14 +4,17 @@ import AxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
 import history from "../../../util/history";
 import { message } from "antd";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 import { getCurrentYear } from 'util/permissions'
 import { getGlobalYear } from "util/sessionStorage";
 
 
 function* failSaga(result) {
     console.log(result)
-    yield put({
+yield put({
         type: ApiConstants.API_QUICK_COMPETITION_FAIL,
         error: result,
         status: result.status

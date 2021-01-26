@@ -1,5 +1,8 @@
 import ApiConstants from '../../../themes/apiConstants';
-import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
+import {
+  isArrayNotEmpty,
+  // isNotNullOrEmptyString
+} from '../../../util/helpers';
 import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
 
@@ -27,7 +30,7 @@ const initialState = {
   getRoundsDrawsdata: [],
   spinLoad: false,
   drawOrganisations: [],
-  // colorsArray: [],
+  colorsArray: [],
   activeDrawsRoundsData: [],
   onActRndLoad: false,
   teamNames: null,
@@ -290,14 +293,14 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
     teamArray: teamArray,
   };
 }
-function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+// function getRandomColor() {
+//   var letters = '0123456789ABCDEF';
+//   var color = '#';
+//   for (var i = 0; i < 6; i++) {
+//     color += letters[Math.floor(Math.random() * 16)];
+//   }
+//   return color;
+// }
 
 function getFixtureColor(team) {
 
@@ -404,14 +407,14 @@ function checkVenueCourtNumber(mainCourtNumberArray, object) {
   return { status: false, index: -1 };
 }
 
-function checkSlots(slotsArray, slotObject) {
-  for (let i in slotsArray) {
-    if (isDateSame(slotsArray[i].fixtureTime, slotObject.matchDate)) {
-      return { status: true, index: i };
-    }
-  }
-  return { status: false, index: -1 };
-}
+// function checkSlots(slotsArray, slotObject) {
+//   for (let i in slotsArray) {
+//     if (isDateSame(slotsArray[i].fixtureTime, slotObject.matchDate)) {
+//       return { status: true, index: i };
+//     }
+//   }
+//   return { status: false, index: -1 };
+// }
 
 // function checkDateNotInArray(dateArray, date) {
 //   for (let i in dateArray) {
@@ -477,66 +480,66 @@ function setupGradesArray(gradesArray, gradeId) {
   return true;
 }
 
-function checkSlotsDateStatus(slotsArray, checkdate) {
-  let obj = {
-    status: true,
-    index: null
-  }
-  for (let i in slotsArray) {
-    if (slotsArray[i].matchDate == checkdate) {
-      if (slotsArray[i].drawsId == null) {
-        obj = {
-          status: false,
-          index: i
-        }
-      }
-      else {
-        obj = {
-          status: true,
-          index: i
-        }
-      }
-      break;
-    }
-    else {
-      obj = {
-        status: true,
-        index: i
-      }
-    }
-  }
-  return obj
-}
+// function checkSlotsDateStatus(slotsArray, checkdate) {
+//   let obj = {
+//     status: true,
+//     index: null
+//   }
+//   for (let i in slotsArray) {
+//     if (slotsArray[i].matchDate == checkdate) {
+//       if (slotsArray[i].drawsId == null) {
+//         obj = {
+//           status: false,
+//           index: i
+//         }
+//       }
+//       else {
+//         obj = {
+//           status: true,
+//           index: i
+//         }
+//       }
+//       break;
+//     }
+//     else {
+//       obj = {
+//         status: true,
+//         index: i
+//       }
+//     }
+//   }
+//   return obj
+// }
 
 
-function checkDrawsArrayFunc(allDrawsData) {
-  let drawsAllDateData = allDrawsData.dateNewArray
-  let drawsAllData = allDrawsData.draws
-  for (let i in drawsAllDateData) {
-    let nullStatus = false
-    let checkDrawsObject = null
-    let checkdate = drawsAllDateData[i].date
-    for (let j in drawsAllData) {
-      checkDrawsObject = checkSlotsDateStatus(drawsAllData[j].slotsArray, checkdate)
-      if (checkDrawsObject.status === false) {
+// function checkDrawsArrayFunc(allDrawsData) {
+//   let drawsAllDateData = allDrawsData.dateNewArray
+//   let drawsAllData = allDrawsData.draws
+//   for (let i in drawsAllDateData) {
+//     let nullStatus = false
+//     let checkDrawsObject = null
+//     let checkdate = drawsAllDateData[i].date
+//     for (let j in drawsAllData) {
+//       checkDrawsObject = checkSlotsDateStatus(drawsAllData[j].slotsArray, checkdate)
+//       if (checkDrawsObject.status === false) {
 
-      }
-      else {
-        nullStatus = true
-        break;
-      }
-    }
-    if (nullStatus === false) {
-      for (let j in drawsAllData) {
-        drawsAllData[j].slotsArray.splice(checkDrawsObject.index, 1)
-      }
-      drawsAllDateData.splice(i, 1)
-    }
-  }
-  allDrawsData.dateNewArray = drawsAllDateData
-  allDrawsData.draws = drawsAllData
-  return allDrawsData
-}
+//       }
+//       else {
+//         nullStatus = true
+//         break;
+//       }
+//     }
+//     if (nullStatus === false) {
+//       for (let j in drawsAllData) {
+//         drawsAllData[j].slotsArray.splice(checkDrawsObject.index, 1)
+//       }
+//       drawsAllDateData.splice(i, 1)
+//     }
+//   }
+//   allDrawsData.dateNewArray = drawsAllDateData
+//   allDrawsData.draws = drawsAllData
+//   return allDrawsData
+// }
 
 //// Swipe Array object - draws
 function swapedDrawsArrayFunc(
@@ -578,97 +581,97 @@ function swapedDrawsArrayFunc(
   return drawsArray;
 }
 
-function swapedFixtureArrayFunc(fixtureArray, fixtureSourceXIndex,
-  fixtureTargetXIndex,
-  fixtureSourceYIndex,
-  fixtureTargetYIndex,
-  sourceZIndex,
-  targetZIndex
-) {
+// function swapedFixtureArrayFunc(fixtureArray, fixtureSourceXIndex,
+//   fixtureTargetXIndex,
+//   fixtureSourceYIndex,
+//   fixtureTargetYIndex,
+//   sourceZIndex,
+//   targetZIndex
+// ) {
 
-  var fixtureSourceArray = JSON.parse(JSON.stringify(fixtureArray))
-  var fixtureTargetArray = JSON.parse(JSON.stringify(fixtureArray))
-  var fixtureSource = fixtureSourceArray[fixtureSourceYIndex];
-  var fixtureTarget = fixtureTargetArray[fixtureTargetYIndex];
+//   var fixtureSourceArray = JSON.parse(JSON.stringify(fixtureArray))
+//   var fixtureTargetArray = JSON.parse(JSON.stringify(fixtureArray))
+//   var fixtureSource = fixtureSourceArray[fixtureSourceYIndex];
+//   var fixtureTarget = fixtureTargetArray[fixtureTargetYIndex];
 
-  if (sourceZIndex === '0') {
-    if (targetZIndex === '0') {
-      fixtureArray[fixtureSourceYIndex].team1 =
-        fixtureTarget.team1;
-      fixtureArray[fixtureSourceYIndex].team1Name =
-        fixtureTarget.team1Name;
-      fixtureArray[fixtureSourceYIndex].team1Color =
-        fixtureTarget.team1Color
-    }
-    else {
+//   if (sourceZIndex === '0') {
+//     if (targetZIndex === '0') {
+//       fixtureArray[fixtureSourceYIndex].team1 =
+//         fixtureTarget.team1;
+//       fixtureArray[fixtureSourceYIndex].team1Name =
+//         fixtureTarget.team1Name;
+//       fixtureArray[fixtureSourceYIndex].team1Color =
+//         fixtureTarget.team1Color
+//     }
+//     else {
 
-      fixtureArray[fixtureSourceYIndex].team1 =
-        fixtureTarget.team2;
-      fixtureArray[fixtureSourceYIndex].team1Name =
-        fixtureTarget.team2Name;
-      fixtureArray[fixtureSourceYIndex].team1Color =
-        fixtureTarget.team2Color;
-    }
-  }
-  else {
-    if (targetZIndex === '0') {
-      fixtureArray[fixtureSourceYIndex].team2 =
-        fixtureTarget.team1;
-      fixtureArray[fixtureSourceYIndex].team2Name =
-        fixtureTarget.team1Name;
-      fixtureArray[fixtureSourceYIndex].team2Color =
-        fixtureTarget.team1Color;
+//       fixtureArray[fixtureSourceYIndex].team1 =
+//         fixtureTarget.team2;
+//       fixtureArray[fixtureSourceYIndex].team1Name =
+//         fixtureTarget.team2Name;
+//       fixtureArray[fixtureSourceYIndex].team1Color =
+//         fixtureTarget.team2Color;
+//     }
+//   }
+//   else {
+//     if (targetZIndex === '0') {
+//       fixtureArray[fixtureSourceYIndex].team2 =
+//         fixtureTarget.team1;
+//       fixtureArray[fixtureSourceYIndex].team2Name =
+//         fixtureTarget.team1Name;
+//       fixtureArray[fixtureSourceYIndex].team2Color =
+//         fixtureTarget.team1Color;
 
-    } else {
-      fixtureArray[fixtureSourceYIndex].team2 =
-        fixtureTarget.team2;
-      fixtureArray[fixtureSourceYIndex].team2Name =
-        fixtureTarget.team2Name;
-      fixtureArray[fixtureSourceYIndex].team2Color =
-        fixtureTarget.team2Color;
+//     } else {
+//       fixtureArray[fixtureSourceYIndex].team2 =
+//         fixtureTarget.team2;
+//       fixtureArray[fixtureSourceYIndex].team2Name =
+//         fixtureTarget.team2Name;
+//       fixtureArray[fixtureSourceYIndex].team2Color =
+//         fixtureTarget.team2Color;
 
-    }
-  }
+//     }
+//   }
 
-  if (targetZIndex === '0') {
-    if (sourceZIndex === '0') {
-      fixtureArray[fixtureTargetYIndex].team1 =
-        fixtureSource.team1;
-      fixtureArray[fixtureTargetYIndex].team1Name =
-        fixtureSource.team1Name;
-      fixtureArray[fixtureTargetYIndex].team1Color =
-        fixtureSource.team1Color;
+//   if (targetZIndex === '0') {
+//     if (sourceZIndex === '0') {
+//       fixtureArray[fixtureTargetYIndex].team1 =
+//         fixtureSource.team1;
+//       fixtureArray[fixtureTargetYIndex].team1Name =
+//         fixtureSource.team1Name;
+//       fixtureArray[fixtureTargetYIndex].team1Color =
+//         fixtureSource.team1Color;
 
-    } else {
-      fixtureArray[fixtureTargetYIndex].team1 =
-        fixtureSource.team2;
-      fixtureArray[fixtureTargetYIndex].team1Name =
-        fixtureSource.team2Name;
-      fixtureArray[fixtureTargetYIndex].team1Color =
-        fixtureSource.team2Color;
+//     } else {
+//       fixtureArray[fixtureTargetYIndex].team1 =
+//         fixtureSource.team2;
+//       fixtureArray[fixtureTargetYIndex].team1Name =
+//         fixtureSource.team2Name;
+//       fixtureArray[fixtureTargetYIndex].team1Color =
+//         fixtureSource.team2Color;
 
-    }
-  } else {
-    if (sourceZIndex === '0') {
-      fixtureArray[fixtureTargetYIndex].team2 =
-        fixtureSource.team1;
-      fixtureArray[fixtureTargetYIndex].team2Name =
-        fixtureSource.team1Name;
-      fixtureArray[fixtureTargetYIndex].team2Color =
-        fixtureSource.team1Color;
+//     }
+//   } else {
+//     if (sourceZIndex === '0') {
+//       fixtureArray[fixtureTargetYIndex].team2 =
+//         fixtureSource.team1;
+//       fixtureArray[fixtureTargetYIndex].team2Name =
+//         fixtureSource.team1Name;
+//       fixtureArray[fixtureTargetYIndex].team2Color =
+//         fixtureSource.team1Color;
 
-    } else {
-      fixtureArray[fixtureTargetYIndex].team2 =
-        fixtureSource.team2;
-      fixtureArray[fixtureTargetYIndex].team2Name =
-        fixtureSource.team2Name;
-      fixtureArray[fixtureTargetYIndex].team2Color =
-        fixtureSource.team2Color;
-    }
-  }
+//     } else {
+//       fixtureArray[fixtureTargetYIndex].team2 =
+//         fixtureSource.team2;
+//       fixtureArray[fixtureTargetYIndex].team2Name =
+//         fixtureSource.team2Name;
+//       fixtureArray[fixtureTargetYIndex].team2Color =
+//         fixtureSource.team2Color;
+//     }
+//   }
 
-  return fixtureArray
-}
+//   return fixtureArray
+// }
 
 ///  Swipe Array object - Edit
 function swapedDrawsEditArrayFunc(
@@ -682,10 +685,10 @@ function swapedDrawsEditArrayFunc(
 ) {
   var sourceArray = JSON.parse(JSON.stringify(drawsArray));
   var targetArray = JSON.parse(JSON.stringify(drawsArray));
-  var sourceItem =
-    sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
-  var targetItem =
-    targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
+  // var sourceItem =
+  //   sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
+  // var targetItem =
+  //   targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
 
   var source = sourceArray[sourceXIndex].slotsArray[sourceYIndex];
   var target = targetArray[targetXIndex].slotsArray[targetYIndex];

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Select, Breadcrumb, Button, Form, Modal, message } from 'antd';
+import { Layout, Select, Breadcrumb, Button, Form, Modal } from 'antd';
 
 import './shop.css';
 
@@ -160,7 +160,7 @@ class ShopSettings extends Component {
     };
 
     handlePlacesAutocomplete = (data) => {
-        const { stateList } = this.props.commonState;
+        // const { stateList } = this.props.commonState;
         const address = data;
         this.props.checkVenueDuplication(address);
 
@@ -179,9 +179,7 @@ class ShopSettings extends Component {
             validation: false
         });
 
-        const stateRefId = stateList.length > 0 && address.state
-            ? stateList.find((state) => state.name === address.state).name
-            : null;
+        // const stateRefId = stateList.length > 0 && address.state ? stateList.find((state) => state.name === address.state).name : null;
 
         this.formRef.current.setFieldsValue({
             state: address.state,

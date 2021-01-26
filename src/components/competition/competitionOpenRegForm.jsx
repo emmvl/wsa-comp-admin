@@ -56,7 +56,7 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId,
+    // getOwn_CompetitionFinalRefId,
     setOwn_CompetitionFinalRefId,
     setGlobalYear, getGlobalYear,
     getOrganisationData

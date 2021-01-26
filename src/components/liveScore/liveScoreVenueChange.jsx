@@ -132,7 +132,12 @@ class LiveScoreVenueChange extends Component {
 
     ////this method called after slecting Venue Change option from drop down
     venueChangeView() {
-        const { venueChangeData, venueData, courtData, mainCourtList } = this.props.liveScoreVenueChangeState
+        const {
+            // venueChangeData,
+            venueData,
+            courtData,
+            mainCourtList
+        } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtData) ? courtData : []
         return (
@@ -271,7 +276,12 @@ class LiveScoreVenueChange extends Component {
     }
 
     changeToView() {
-        const { venueChangeData, venueData, courtDataForChange, mainCourtList } = this.props.liveScoreVenueChangeState
+        const { 
+            // venueChangeData, 
+            venueData, 
+            courtDataForChange, 
+            mainCourtList 
+        } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtDataForChange) ? courtDataForChange : []
 

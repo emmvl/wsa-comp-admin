@@ -518,7 +518,7 @@ class Registration extends Component {
             this.setState({ visible: false });
         } else if (key == "ok") {
             const { selectedRow } = this.state;
-            const { pendingFee } = selectedRow;
+            // const { pendingFee } = selectedRow;
             const { amountToTransfer } = selectedRow;
             const { amount } = this.state;
             const totalAmt = Number(amountToTransfer) - Number(amount);

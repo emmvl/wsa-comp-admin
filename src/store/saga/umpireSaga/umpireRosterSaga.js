@@ -1,9 +1,9 @@
 import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
-import UserAxiosApi from "../../http/userHttp/userAxiosApi";
+// import UserAxiosApi from "../../http/userHttp/userAxiosApi";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
-import history from "../../../util/history";
+// import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {

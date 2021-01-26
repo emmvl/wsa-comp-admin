@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Button, Select, Breadcrumb, Form, Modal } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form } from 'antd';
 
 import './shop.css';
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import history from "../../util/history";
+// import history from "../../util/history";
 import { isArrayNotEmpty } from "../../util/helpers";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getOrderDetailsAction, clearOrderStatusReducer, updateOrderStatusAction } from '../../store/actions/shopAction/orderStatusAction';
@@ -17,7 +17,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-const { confirm } = Modal;
+// const { confirm } = Modal;
 
 const orderFulfilmentData = [
     { name: "To Be Sent", value: "To Be Sent" },
@@ -85,6 +85,7 @@ class OrderDetails extends Component {
                                         onError={ev => {
                                             ev.target.src = AppImages.squareImage;
                                         }}
+                                        alt=""
                                     />
                                 </div>
                                 <div className="w-50 d-flex align-items-center order-detail-prd-name-view">
@@ -160,12 +161,12 @@ class OrderDetails extends Component {
     };
 
     fulfilmentOnChange = (value) => {
-        let { orderDetails } = this.props.shopOrderStatusState
-        let payload = {
-            orderId: orderDetails.id,
-            action: value,
-            amount: orderDetails.orderGroup ? orderDetails.orderGroup.total : 0
-        }
+        // let { orderDetails } = this.props.shopOrderStatusState
+        // let payload = {
+        //     orderId: orderDetails.id,
+        //     action: value,
+        //     amount: orderDetails.orderGroup ? orderDetails.orderGroup.total : 0
+        // }
         // this.props.updateOrderStatusAction(payload)
     }
 

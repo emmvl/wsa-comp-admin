@@ -1,9 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 import moment from 'moment'
-import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from '../../../util/helpers';
 import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
-import AppConstants from "../../../themes/appConstants";
+// import AppConstants from "../../../themes/appConstants";
 import {reverseArray} from 'util/permissions'
 
 //dummy object

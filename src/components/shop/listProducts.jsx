@@ -15,7 +15,10 @@ import ShopSingleProductComponent from '../../customComponents/shopSingleProduct
 import { getProductListingAction, deleteProductAction, clearProductReducer } from '../../store/actions/shopAction/productAction'
 import { isArrayNotEmpty } from '../../util/helpers';
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { confirm } = Modal;
 
 class ListProducts extends Component {

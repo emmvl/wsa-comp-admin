@@ -260,7 +260,7 @@ class LiveScoreBanners extends Component {
     );
 
     render() {
-        const { bannerResult } = this.props.liveScoreBannerState;
+        // const { bannerResult } = this.props.liveScoreBannerState;
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
                 <DashboardLayout

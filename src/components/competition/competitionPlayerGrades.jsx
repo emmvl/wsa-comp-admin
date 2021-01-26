@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import {
-    Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown, message,
-} from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,10 +11,17 @@ import AppConstants from "../../themes/appConstants";
 import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
-    getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
-    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
-    playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction, exportPlayerGrades
+    getCompPartPlayerGradingAction,
+    clearReducerCompPartPlayerGradingAction,
+    addNewTeamAction,
+    onDragPlayerAction,
+    onSameTeamDragAction,
+    playerGradingComment,
+    deleteTeamAction,
+    addOrRemovePlayerForChangeDivisionAction,
+    changeDivisionPlayerAction,
+    commentListingAction,
+    exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwn_competition,
@@ -544,14 +549,14 @@ class CompetitionPlayerGrades extends Component {
                         playerId = unassignedPlayerData.players[source.index].playerId;
                     } else {
                         for (const i in assignedPlayerData) {
-                            if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            if (sourceTeamID == assignedPlayerData[i].teamId) {
                                 playerId = assignedPlayerData[i].players[source.index].playerId;
                             }
                         }
                     }
                 } else {
                     for (const i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                        if (sourceTeamID == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId;
                         }
                     }
@@ -819,8 +824,8 @@ class CompetitionPlayerGrades extends Component {
         const commentList = this.props.partPlayerGradingState.playerCommentList;
         const { commentLoad } = this.props.partPlayerGradingState;
         const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-        let colorPosition1;
-        let colorPosition2;
+        // let colorPosition1;
+        // let colorPosition2;
         const divisionData = this.props.registrationState.allDivisionsData.filter((x) => x.competitionMembershipProductDivisionId != null);
         const disableStatus = this.state.competitionStatus == 1;
         return (

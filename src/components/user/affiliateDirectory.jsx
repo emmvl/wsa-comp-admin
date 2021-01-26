@@ -7,7 +7,6 @@ import {
     Select,
     Menu,
     Pagination,
-    Modal,
     Input,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -29,7 +28,7 @@ import Loader from "../../customComponents/loader";
 
 const { Content } = Layout;
 const { Option } = Select;
-const { confirm } = Modal;
+// const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null;
 

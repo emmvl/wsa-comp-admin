@@ -151,6 +151,14 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("payment"),
     },
     {
+        title: AppConstants.governmentVoucher,
+        dataIndex: "governmentVoucherAmount",
+        key: "governmentVoucherAmount",
+        render: (governmentVoucherAmount, record) => currencyFormat(governmentVoucherAmount),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("governmentVoucherAmount"),
+    },
+    {
         title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
@@ -297,7 +305,7 @@ class PaymentDashboard extends Component {
         const {
             sortBy,
             sortOrder,
-            yearRefId,
+            // yearRefId,
             competitionUniqueKey,
             filterOrganisation,
             dateFrom,
@@ -458,12 +466,12 @@ class PaymentDashboard extends Component {
         const {
             sortBy,
             sortOrder,
-            yearRefId,
+            // yearRefId,
             competitionUniqueKey,
             filterOrganisation,
             dateFrom,
             dateTo,
-            searchText,
+            // searchText,
             feeType,
             paymentOption,
             paymentMethod,
@@ -588,11 +596,11 @@ class PaymentDashboard extends Component {
     dropdownView_1 = () => {
         const affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
-        const paymentStatus = [
-            { id: 1, description: AppConstants.pendingMembership },
-            { id: 2, description: AppConstants.pendingRegistrationFee },
-            { id: 3, description: AppConstants.registered },
-        ];
+        // const paymentStatus = [
+        //     { id: 1, description: AppConstants.pendingMembership },
+        //     { id: 2, description: AppConstants.pendingRegistrationFee },
+        //     { id: 3, description: AppConstants.registered },
+        // ];
 
         if (affiliateToData.affiliatedTo !== undefined) {
             const obj = {
@@ -737,11 +745,11 @@ class PaymentDashboard extends Component {
     dropdownView = () => {
         const affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
-        const paymentStatus = [
-            { id: 1, description: AppConstants.pendingMembership },
-            { id: 2, description: AppConstants.pendingRegistrationFee },
-            { id: 3, description: AppConstants.registered },
-        ];
+        // const paymentStatus = [
+        //     { id: 1, description: AppConstants.pendingMembership },
+        //     { id: 2, description: AppConstants.pendingRegistrationFee },
+        //     { id: 3, description: AppConstants.registered },
+        // ];
 
         if (affiliateToData.affiliatedTo !== undefined) {
             const obj = {

@@ -63,18 +63,18 @@ function arraymove(arr, fromIndex, toIndex) {
   return arr
 }
 
-function sortfunction(a, b) {
-  const bandA = a.competitionName;
-  const bandB = b.competitionName;
+// function sortfunction(a, b) {
+//   const bandA = a.competitionName;
+//   const bandB = b.competitionName;
 
-  let comparison = 0;
-  if (bandA > bandB) {
-    comparison = 1;
-  } else if (bandA < bandB) {
-    comparison = -1;
-  }
-  return comparison;
-}
+//   let comparison = 0;
+//   if (bandA > bandB) {
+//     comparison = 1;
+//   } else if (bandA < bandB) {
+//     comparison = -1;
+//   }
+//   return comparison;
+// }
 
 function filteredSettingArray(result) {
   let demographic = []

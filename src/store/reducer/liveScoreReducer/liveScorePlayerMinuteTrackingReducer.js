@@ -90,25 +90,25 @@ function getFilterPositionData(positionData) {
   return positionArray
 }
 
-function getPositionArry(mainArr, positionArray) {
-  let position = positionArray
-  for (let i in mainArr) {
-    for (let j in positionArray) {
-      if (mainArr[i].positionId != positionArray[j].id) {
-        let obj = {
-          "id": null,
-          "isPlaying": false,
-          "isVisible": false,
-          "name": null,
-        }
-        position.push(obj)
-        break;
-      }
-    }
-    break;
-  }
-  return position
-}
+// function getPositionArry(mainArr, positionArray) {
+//   let position = positionArray
+//   for (let i in mainArr) {
+//     for (let j in positionArray) {
+//       if (mainArr[i].positionId != positionArray[j].id) {
+//         let obj = {
+//           "id": null,
+//           "isPlaying": false,
+//           "isVisible": false,
+//           "name": null,
+//         }
+//         position.push(obj)
+//         break;
+//       }
+//     }
+//     break;
+//   }
+//   return position
+// }
 
 function getSelectedPosition(playerId, postArray, positionArray) {
   let selectedPosArr = []
@@ -175,14 +175,14 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
 
     case ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD:
 
-      let index = action.data.index
+      // let index = action.data.index
       let key = action.data.key
       let matchId = action.data.matchId
       let extraKey = action.data.extraKey
       let period = action.data.period
       let playerId = action.data.playerId
       let selectedData = action.data.selectedData
-      let team = action.data.team
+      // let team = action.data.team
       let playerdata = action.data.playerdata
       let trackDataRes = state.trackResultData
       // let positionDuration = action.data.positionDuration
@@ -194,8 +194,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
       let gameTimeTrack = action.data.gameTimeTrack
       let attndceRecrd = action.data.attndceRecrd
       let noOfSelectedPosition = null
-      let obj = {}
-
+      // let obj = {}
 
       let userId = localStorage.getItem("userId");
       let findData

@@ -1,11 +1,15 @@
 // import { DataManager } from './../../Components';
 import http from "./umpireHttp";
-import { getUserId, getAuthToken, getOrganisationData, getLiveScoreCompetiton } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    // getOrganisationData,
+    // getLiveScoreCompetiton
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
-import { isArrayNotEmpty } from "../../../util/helpers";
-
+// import { isArrayNotEmpty } from "../../../util/helpers";
 
 async function logout() {
     await localStorage.clear();
@@ -14,7 +18,6 @@ async function logout() {
 
 let token = getAuthToken();
 // let userId = getUserId();
-
 
 let UmpireAxiosApi = {
     umpirePaymentSettingsGet(data) {

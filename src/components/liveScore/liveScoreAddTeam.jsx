@@ -37,7 +37,13 @@ import Loader from '../../customComponents/loader'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
-import { isArrayNotEmpty, captializedString, regexNumberExpression, isImageFormatValid, isImageSizeValid } from '../../util/helpers';
+import {
+    // isArrayNotEmpty,
+    captializedString,
+    regexNumberExpression,
+    isImageFormatValid,
+    isImageSizeValid
+} from '../../util/helpers';
 import Tooltip from 'react-png-tooltip'
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
@@ -226,7 +232,13 @@ class LiveScoreAddTeam extends Component {
     }
 
     contentView = () => {
-        const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
+        const {
+            teamManagerData,
+            affilateList,
+            divisionList,
+            managerType,
+            // logoUrl
+        } = this.props.liveScoreTeamState
         // let name = teamManagerData.name
         let alias = teamManagerData ? teamManagerData.alias : null
         return (
@@ -405,8 +417,8 @@ class LiveScoreAddTeam extends Component {
     };
 
     managerExistingRadioBtnView() {
-        let grade = this.state.managerData
-        const { selectedManager } = this.props.liveScoreTeamState
+        // let grade = this.state.managerData
+        // const { selectedManager } = this.props.liveScoreTeamState
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div>
@@ -454,7 +466,10 @@ class LiveScoreAddTeam extends Component {
     }
 
     onChangeNumber = (number) => {
-        const { selectedManager, teamManagerData } = this.props.liveScoreTeamState
+        const {
+            // selectedManager,
+            teamManagerData
+        } = this.props.liveScoreTeamState
         if (number.length === 10) {
             this.setState({
                 hasError: false
@@ -474,7 +489,7 @@ class LiveScoreAddTeam extends Component {
     }
 
     managerNewRadioBtnView() {
-        const { teamManagerData } = this.props.liveScoreTeamState
+        // const { teamManagerData } = this.props.liveScoreTeamState
         let hasError = this.state.hasError
         return (
             <div>
@@ -628,8 +643,8 @@ class LiveScoreAddTeam extends Component {
             const {
                 name,
                 alias,
-                logoUrl,
-                teamLogo,
+                // logoUrl,
+                // teamLogo,
                 divisionId,
                 organisationId,
                 userIds,
@@ -639,7 +654,7 @@ class LiveScoreAddTeam extends Component {
                 email,
                 teamUniqueKey,
             } = this.props.liveScoreTeamState.teamManagerData
-            let isCheked = this.props.liveScoreTeamState
+            // let isCheked = this.props.liveScoreTeamState
             let usersArray = JSON.stringify(userIds)
             if (this.props.liveScoreTeamState.managerType === 'existing') {
                 const formData = new FormData();

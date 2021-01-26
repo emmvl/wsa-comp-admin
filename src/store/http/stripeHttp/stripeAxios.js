@@ -1,10 +1,14 @@
 // import { DataManager } from './../../Components';
 import http from "./stripeHttp";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    getOrganisationData
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
-import competitionHttp from "../competitionHttp/competitionHttp";
+// import competitionHttp from "../competitionHttp/competitionHttp";
 
 async function logout() {
     await localStorage.clear();

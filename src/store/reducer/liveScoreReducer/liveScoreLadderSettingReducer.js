@@ -1,7 +1,7 @@
 import ApiConstants from '../../../themes/apiConstants'
 import liveScoreLadderSettingModal from '../../objectModel/liveScoreLadderSettingModal'
-import { stat } from 'fs';
-import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
+// import { stat } from 'fs';
+// import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 import { deepCopyFunction} from '../../../util/helpers';
 const initialState = {
     onLoad: false,
@@ -29,56 +29,52 @@ function getResultValues(data, matchData) {
 }
 
 
-function matchPostArray(id, data) {
+// function matchPostArray(id, data) {
 
-    let object = {
-        status: false,
-        result: null,
-    }
+//     let object = {
+//         status: false,
+//         result: null,
+//     }
 
-    for (let i in data) {
-        if (data[i].resultTypeId == id) {
-            object = {
-                status: true,
-                result: data[i],
-            }
-            break
-        }
+//     for (let i in data) {
+//         if (data[i].resultTypeId == id) {
+//             object = {
+//                 status: true,
+//                 result: data[i],
+//             }
+//             break
+//         }
 
-    }
+//     }
 
-    return object
-}
+//     return object
+// }
 
+// function setPostData(selectedData, matcheResults, compId) {
+//     let postArray = []
+//     let object = null
+//     for (let i in matcheResults) {
+//         let postResultObject = matchPostArray(matcheResults[i].id, selectedData)
+//         if (postResultObject.status) {
+//             object = {
+//                 competitionId: postResultObject.result.competitionId,
+//                 resultTypeId: postResultObject.result.resultTypeId,
+//                 points: postResultObject.result.points,
+//             }
+//         } else {
+//             object = {
+//                 competitionId: compId,
+//                 resultTypeId: matcheResults[i].id,
+//                 points: 0,
+//             }
 
-function setPostData(selectedData, matcheResults, compId) {
-    let postArray = []
-    let object = null
-    for (let i in matcheResults) {
-        let postResultObject = matchPostArray(matcheResults[i].id, selectedData)
-        if (postResultObject.status) {
-            object = {
-                competitionId: postResultObject.result.competitionId,
-                resultTypeId: postResultObject.result.resultTypeId,
-                points: postResultObject.result.points,
-            }
-        } else {
-            object = {
-                competitionId: compId,
-                resultTypeId: matcheResults[i].id,
-                points: 0,
-            }
+//         }
 
-        }
+//         postArray.push(object)
+//     }
 
-        postArray.push(object)
-    }
-
-    return postArray
-}
-
-
-
+//     return postArray
+// }
 
 function disableAddedDivisions(ladders, divisions) {
     resetDivisionDisabled(ladders, divisions);

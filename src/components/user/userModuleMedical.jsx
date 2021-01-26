@@ -1,22 +1,22 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Button } from 'antd';
+import { Layout, Breadcrumb, Button } from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import InputWithHead from "../../customComponents/InputWithHead";
+// import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+// import AppImages from "../../themes/appImages";
 import history from '../../util/history'
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
-import { getOrganisationData } from "../../util/sessionStorage";
+// import { getOrganisationData } from "../../util/sessionStorage";
 import {getUserModuleMedicalInfoAction} from "../../store/actions/userAction/userAction";
-import moment from 'moment';
+// import moment from 'moment';
 
 const { Header, Footer, Content } = Layout;
-const { Option } = Select;
-const { SubMenu } = Menu;
-let this_Obj = null;
+// const { Option } = Select;
+// const { SubMenu } = Menu;
+// let this_Obj = null;
 
 class UserModuleMedical extends Component{
     constructor(props) {
@@ -25,8 +25,8 @@ class UserModuleMedical extends Component{
             userId: 0,
             loading: false,
         }
-        this_Obj = this;
-        let userId = 877;
+        // this_Obj = this;
+        // let userId = 877;
     }
 
     componentDidMount(){

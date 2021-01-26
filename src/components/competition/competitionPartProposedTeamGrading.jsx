@@ -36,7 +36,11 @@ import {
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import AppUniqueId from "../../themes/appUniqueId";
 
-const { Header, Footer, Content } = Layout;
+const {
+    // Header,
+    Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 let this_obj = null;
 const { SubMenu } = Menu;

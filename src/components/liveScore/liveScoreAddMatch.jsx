@@ -51,8 +51,8 @@ import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/live
 import { isArrayNotEmpty, captializedString } from '../../util/helpers';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction';
 import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction';
-import { entityTypes } from '../../util/entityTypes';
-import { refRoleTypes } from '../../util/refRoles';
+// import { entityTypes } from '../../util/entityTypes';
+// import { refRoleTypes } from '../../util/refRoles';
 import { umpireListAction, newUmpireListAction } from "../../store/actions/umpireAction/umpireAction";
 
 const { Footer, Content, Header } = Layout;
@@ -256,7 +256,7 @@ class LiveScoreAddMatch extends Component {
 
     ////set initial value for all validated fields
     setInitialFieldValue(data, start_date, start_time, displayTime) {
-        const formated_date = moment(start_date).format("DD-MM-YYYY");
+        // const formated_date = moment(start_date).format("DD-MM-YYYY");
         const time_formate = moment(displayTime).format("HH:mm");
 
         this.formRef.current.setFieldsValue({
@@ -469,7 +469,10 @@ class LiveScoreAddMatch extends Component {
     }
 
     abandonMatchView() {
-        const { addEditMatch, abandoneReason } = this.props.liveScoreMatchState;
+        const {
+            // addEditMatch,
+            abandoneReason
+        } = this.props.liveScoreMatchState;
         return (
             <Modal
                 visible={this.state.abandonVisible}
@@ -619,15 +622,37 @@ class LiveScoreAddMatch extends Component {
     //// Form View
     contentView = () => {
         const {
-            addEditMatch, divisionList, roundList, teamResult, recordUmpireType, scorer1, scorer2, umpire1Name, umpire2Name, umpire1TextField, umpire2TextField, umpire1Orag, umpire2Orag, umpireReserve, umpireCoach, umpire1NameOrgId, umpireReserveId,
+            addEditMatch,
+            divisionList,
+            roundList,
+            teamResult,
+            recordUmpireType,
+            scorer1,
+            scorer2,
+            // umpire1Name,
+            // umpire2Name,
+            umpire1TextField,
+            umpire2TextField,
+            umpire1Orag,
+            umpire2Orag,
+            umpireReserve,
+            umpireCoach,
+            // umpire1NameOrgId, 
+            // umpireReserveId,
         } = this.props.liveScoreMatchState;
         const {
-            venueData, clubListData, coachList, umpireList, newUmpireList, umpire1NameMainId, umpire2NameMainId,
+            venueData, 
+            clubListData, 
+            coachList, 
+            // umpireList, 
+            newUmpireList, 
+            umpire1NameMainId, 
+            umpire2NameMainId,
         } = this.props.liveScoreMatchState;
         const { scorerListResult } = this.props.liveScoreState;
         // const { umpireList, coachList, } = this.props.umpireState
-        const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
-        const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
+        // const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
+        // const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
         return (
@@ -1205,7 +1230,7 @@ class LiveScoreAddMatch extends Component {
             staticMatchData, // static match data
             start_date,
             start_time,
-            start_post_date,
+            // start_post_date,
             umpire1Orag,
             umpire1TextField,
             umpire2Orag,

@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import {
+    EditorState,
+    ContentState,
+    // convertFromHTML,
+    convertToRaw
+} from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 
@@ -101,7 +106,7 @@ class AddProduct extends Component {
     //////post the product details
     addProductPostAPI = (values) => {
         let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
-        let description = JSON.parse(JSON.stringify(productDetailData.description))
+        // let description = JSON.parse(JSON.stringify(productDetailData.description))
         let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
@@ -629,7 +634,12 @@ class AddProduct extends Component {
 
     ////////Image content view
     imageView = () => {
-        const { urls, files, isDragging, allDisabled } = this.state;
+        const {
+            urls,
+            // files,
+            isDragging,
+            allDisabled
+        } = this.state;
         const dropCss = urls.length > 0 ? "dragDropLeft" : "dragDropCenter";
         const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
         return (
@@ -671,7 +681,12 @@ class AddProduct extends Component {
 
     ////////Image content view for non edit
     imageNonEditView = () => {
-        const { urls, files, isDragging, allDisabled } = this.state;
+        const {
+            urls,
+            // files,
+            isDragging,
+            allDisabled
+        } = this.state;
         const dropCss = urls.length > 0 ? 'dragDropLeft' : 'dragDropCenter';
         const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
         return (
