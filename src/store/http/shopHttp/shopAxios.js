@@ -113,6 +113,25 @@ let AxiosApi = {
         return Method.dataGetDownload(url, token, "orderSummary");
     },
 
+    // export order status  API
+    async exportOrderStatus(params) {
+        const orgItem = await getOrganisationData();
+        const { organisationUniqueKey } = orgItem;
+        const {
+            limit,
+            offset,
+            search,
+            year,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
+            order,
+            sorterBy,
+        } = params;
+        const url = `/order/export/status?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&order=${order}&sorterBy=${sorterBy}`;
+        return Method.dataGetDownload(url, token, "orderStatus");
+    },
+
     /////// //order status status listing get API
     async getOrderStatusListing(params) {
         let orgItem = await getOrganisationData()
@@ -138,7 +157,7 @@ let AxiosApi = {
     /////// ///order status status listing get API 
     getPurchasesListing(params) {
         let { limit, offset, userId, order, sorterBy } = params
-        var url = `order/statusList?limit=${limit}&offset=${offset}&search=&year=-1&paymentStatus=-1&fulfilmentStatus=-1&product=All&order=${order}&sorterBy=${sorterBy}&userId=${userId}`;;
+        var url = `/order/statusList?limit=${limit}&offset=${offset}&search=&year=-1&paymentStatus=-1&fulfilmentStatus=-1&product=All&order=${order}&sorterBy=${sorterBy}&userId=${userId}`;;
         return Method.dataGet(url, token);
     },
 

@@ -13,7 +13,12 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from '../../store/actions/appAction';
-import { getOrderStatusListingAction, updateOrderStatusAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
+import {
+    getOrderStatusListingAction,
+    updateOrderStatusAction,
+    getReferenceOrderStatus,
+    exportOrderStatusAction,
+} from "../../store/actions/shopAction/orderStatusAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 
@@ -361,6 +366,28 @@ class ShopOrderStatus extends Component {
         }
     }
 
+    handleTableExport = () => {
+        const {
+            yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
+        } = this_obj.state;
+        const { orderStatusCurrentPage } = this.props.shopOrderStatusState;
+        const params = {
+            limit: 10,
+            offset: orderStatusCurrentPage
+                ? 10 * (orderStatusCurrentPage - 1)
+                : 0,
+            search: searchText,
+            year: yearRefId,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
+            order: "",
+            sorterBy: "",
+        };
+
+        this.props.exportOrderStatusAction(params);
+    }
+
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view mt-4 pt-2 orderSpace">
             <div className="fluid-width">
@@ -395,6 +422,22 @@ class ShopOrderStatus extends Component {
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <Button className="primary-add-comp-form" type="primary">
                                     {AppConstants.addOrder}
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="col-sm pt-1">
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                <Button className="primary-add-comp-form" type="primary" onClick={this.handleTableExport}>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <img
+                                                src={AppImages.export}
+                                                alt=""
+                                                className="export-image"
+                                            />
+                                            {AppConstants.export}
+                                        </div>
+                                    </div>
                                 </Button>
                             </div>
                         </div>
@@ -635,6 +678,7 @@ function mapDispatchToProps(dispatch) {
         getOrderStatusListingAction,
         updateOrderStatusAction,
         getReferenceOrderStatus,
+        exportOrderStatusAction,
     }, dispatch);
 }
 
