@@ -76,13 +76,6 @@ class UmpirePoolAllocation extends Component {
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
         this.props.getRefBadgeData();
-
-        // let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-        // if (JSON.parse(getUmpireCompetitonData())) {
-        //     this.setState({
-        //         compOrgId: competitionOrganisation.id,
-        //     })
-        // }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -617,7 +610,7 @@ class UmpirePoolAllocation extends Component {
                                                 >
                                                     <div className="row flex-nowrap">
                                                         {this.umpireLineView(umpireItem, umpireIndex)}
-                                                        <div className="col-sm d-flex justify-content-center align-items-center px-0">
+                                                        <div className="col-sm d-flex justify-content-center align-items-center pl-2 pr-4 flex-grow-0">
                                                             <Menu
                                                                 className="action-triple-dot-submenu"
                                                                 theme="light"
@@ -626,7 +619,7 @@ class UmpirePoolAllocation extends Component {
                                                             >
                                                                 <Menu.SubMenu
                                                                     key="sub1"
-                                                                    style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                                                                    className="border-bottom-0 m-0"
                                                                     title={
                                                                         <img
                                                                             className="dot-image"
@@ -678,18 +671,18 @@ class UmpirePoolAllocation extends Component {
                                             
         return (
             <>
-                {this.umpireLineCellView(umpireIndex + 1)}
+                {this.umpireLineCellView(umpireIndex + 1, 'flex-shrink-1 flex-grow-0 pl-4')}
                 {this.umpireLineCellView(`${firstName} ${lastName}`)}
-                {this.umpireLineCellView(rank)}
-                {this.umpireLineCellView(umpireBadge ? umpireBadge : '-')}
+                {this.umpireLineCellView(rank ? rank : 'No rank')}
+                {this.umpireLineCellView(umpireBadge ? umpireBadge : 'No Accreditation')}
                 {this.umpireLineCellView(yearsUmpired && yearsUmpired > 1 ? yearsUmpired + ' Years' : 0 + ' Year')}
-                {this.umpireLineCellView(`${matchesCount} ${AppConstants.games}`)}
+                {this.umpireLineCellView(`${matchesCount ? matchesCount : 0} ${AppConstants.games}`)}
             </>
         )
     }
 
-    umpireLineCellView = data => (
-        <div className="col-sm d-flex justify-content-flex-start align-items-center px-3">
+    umpireLineCellView = (data, additionalClass) => (
+        <div className={`col-sm d-flex justify-content-flex-start align-items-center px-3 ${additionalClass ? additionalClass : ''}`}>
             <span className="player-grading-haeding-player-name-text pointer">
                 {data}
             </span>
