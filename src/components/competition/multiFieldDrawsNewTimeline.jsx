@@ -2098,14 +2098,20 @@ class MultifieldDrawsNewTimeline extends Component {
                                         return (
                                             <div
                                                 key={"slot" + fieldItemDateIndex}
-                                                style={{ width: '100%', height: '100%' }}
+                                                className='position-relative'
+                                                style={{ 
+                                                    width: `calc(100%) - ${prevDaysWidth}`,
+                                                    height: '100%' 
+                                                }}
                                             >
                                                 <div
                                                     id={courtData.venueCourtId}
                                                     className="box unavailable-draws align-items-center"
                                                     style={{
                                                         left: prevDaysWidth,
-                                                        top: topMargin,
+                                                        // top: topMargin,
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
                                                         width: diffDayScheduleTime,
                                                         cursor: 'not-allowed',
                                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
