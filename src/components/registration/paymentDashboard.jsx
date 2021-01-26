@@ -132,14 +132,6 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
-        title: AppConstants.governmentVoucher,
-        dataIndex: "governmentVoucherAmount",
-        key: "governmentVoucherAmount",
-        render: (governmentVoucherAmount, record) => currencyFormat(governmentVoucherAmount),
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("governmentVoucherAmount"),
-    },
-    {
         title: AppConstants.portion,
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
@@ -157,6 +149,14 @@ const columns = [
         key: "paymentMethod",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("payment"),
+    },
+    {
+        title: AppConstants.governmentVoucher,
+        dataIndex: "governmentVoucherAmount",
+        key: "governmentVoucherAmount",
+        render: (governmentVoucherAmount, record) => currencyFormat(governmentVoucherAmount),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("governmentVoucherAmount"),
     },
     {
         title: AppConstants.status,

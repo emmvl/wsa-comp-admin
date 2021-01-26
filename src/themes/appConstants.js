@@ -1685,7 +1685,7 @@ const AppConstants = {
     paymentType: 'Payment Type',
     membershipType: 'Membership type',
     totalFeeIncGst: 'Total Fee (inc GST)',
-    governmentVoucher: "Government Voucher",
+    governmentVoucher: "Govt. Voucher",
     portion: 'Portion',
     redeemVoucher: 'Redeem Voucher',
     cashPaymentReceived: 'Cash Payment received',
