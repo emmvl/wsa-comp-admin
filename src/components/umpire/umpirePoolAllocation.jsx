@@ -615,9 +615,9 @@ class UmpirePoolAllocation extends Component {
                                                     {...provided.dragHandleProps}
                                                     className="player-grading-draggable-view"
                                                 >
-                                                    <div className="row">
+                                                    <div className="row flex-nowrap">
                                                         {this.umpireLineView(umpireItem, umpireIndex)}
-                                                        <div className="col-sm d-flex justify-content-center align-items-center">
+                                                        <div className="col-sm d-flex justify-content-center align-items-center px-0">
                                                             <Menu
                                                                 className="action-triple-dot-submenu"
                                                                 theme="light"
@@ -669,24 +669,27 @@ class UmpirePoolAllocation extends Component {
     }
 
     umpireLineView = (umpireItem, umpireIndex) => {
+        const { accreditationLevelUmpireRefId, firstName, lastName, yearsUmpired, matchesCount, rank } = umpireItem;
+
         const { badgeData } = this.props.appState;
         const umpireBadgesData = isArrayNotEmpty(badgeData) ? badgeData : [];
 
-        const umpireBadge = umpireBadgesData.find(badgeItem => badgeItem.id === umpireItem.accreditationLevelUmpireRefId)?.description;
-
+        const umpireBadge = umpireBadgesData.find(badgeItem => badgeItem.id === accreditationLevelUmpireRefId)?.description;
+                                            
         return (
             <>
                 {this.umpireLineCellView(umpireIndex + 1)}
-                {this.umpireLineCellView(`${umpireItem.firstName} ${umpireItem.lastName}`)}
-                {this.umpireLineCellView(umpireBadge)}
-                {this.umpireLineCellView(umpireItem.years)}
-                {this.umpireLineCellView(`${umpireItem.matches} ${AppConstants.games}`)}
+                {this.umpireLineCellView(`${firstName} ${lastName}`)}
+                {this.umpireLineCellView(rank)}
+                {this.umpireLineCellView(umpireBadge ? umpireBadge : '-')}
+                {this.umpireLineCellView(yearsUmpired && yearsUmpired > 1 ? yearsUmpired + ' Years' : 0 + ' Year')}
+                {this.umpireLineCellView(`${matchesCount} ${AppConstants.games}`)}
             </>
         )
     }
 
     umpireLineCellView = data => (
-        <div className="col-sm d-flex justify-content-flex-start align-items-center">
+        <div className="col-sm d-flex justify-content-flex-start align-items-center px-3">
             <span className="player-grading-haeding-player-name-text pointer">
                 {data}
             </span>
