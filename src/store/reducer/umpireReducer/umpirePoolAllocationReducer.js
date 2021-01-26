@@ -35,7 +35,6 @@ function umpirePoolAllocationState(state = initialState, action) {
             };
 
         case ApiConstants.API_SAVE_UMPIRE_POOL_DATA_SUCCESS:
-            // state.umpirePoolData.push(action.result)
             return {
                 ...state,
                 onLoad: false,
@@ -86,14 +85,11 @@ function umpirePoolAllocationState(state = initialState, action) {
             };
     
         case ApiConstants.API_DELETE_UMPIRE_POOL_DATA_SUCCESS:
-            const umpirePoolDatanew = state.umpirePoolData.filter(poolItem => poolItem.id !== action.result);
-
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
                 deletedUmpirePoolId: action.result,
-                // umpirePoolData: umpirePoolDatanew
             };
 
         case ApiConstants.API_UMPIRE_POOL_ALLOCATION_FAIL:
