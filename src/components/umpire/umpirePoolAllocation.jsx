@@ -364,20 +364,7 @@ class UmpirePoolAllocation extends Component {
     }
 
     handleOkUpdatePool = () => {
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        const { umpirePoolIdToUpdate, umpireForAction, assignedData, selectedComp } = this.state;
-        // const umpireId = umpireForAction.id;
-
-        // const body = {
-        //     umpireId
-        // };
-
-        // this.props.updateUmpirePoolData({
-        //     compId: selectedComp,
-        //     orgId: organisationId,
-        //     umpirePoolId: umpirePoolIdToUpdate,
-        //     body
-        // });
+        const { umpirePoolIdToUpdate, umpireForAction, assignedData } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -418,8 +405,7 @@ class UmpirePoolAllocation extends Component {
     }
     
     handleOkRemoveUmpireFromPool = (e) => {
-        const { selectedComp, assignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { assignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -429,17 +415,6 @@ class UmpirePoolAllocation extends Component {
                 poolDataItem.umpires.splice(indexToRemove, 1);
             }
         });
-
-        // const body = assignedDataCopy.map(dataItem => ({
-        //     id: dataItem.id,
-        //     umpires: dataItem.umpires.map(umpire => umpire.id)
-        // }));
-
-        // this.props.updateUmpirePoolManyData({
-        //     compId: selectedComp,
-        //     orgId: organisationId,
-        //     body,
-        // });
 
         this.setState({
             removeUmpireFromPoolModalVisible: false,
@@ -705,8 +680,8 @@ class UmpirePoolAllocation extends Component {
                 className="add-membership-type-modal"
                 title={AppConstants.addPool}
                 visible={this.state.savePoolModalVisible}
-                onOk={() => this.handleOkSavePool()}
-                onCancel={() => this.handleCancelSavePool()}
+                onOk={this.handleOkSavePool}
+                onCancel={this.handleCancelSavePool}
             >
                 <div>
                     <InputWithHead
@@ -741,12 +716,7 @@ class UmpirePoolAllocation extends Component {
 
         const umpirePoolDataToAdd = assignedData.filter(poolDataItem => {
             const hasUmpire = poolDataItem.umpires.some(umpireItem => umpireItem.id === umpireForAction?.id);
-
-            if (hasUmpire) {
-                return false;
-            } else {
-                return true;
-            }
+            return !hasUmpire;
         });
 
         return (
@@ -754,8 +724,8 @@ class UmpirePoolAllocation extends Component {
                 className="add-membership-type-modal"
                 title={AppConstants.addUmpireToPool}
                 visible={updatePoolModalVisible}
-                onOk={() => this.handleOkUpdatePool()}
-                onCancel={() => this.handleCancelUpdatePool()}
+                onOk={this.handleOkUpdatePool}
+                onCancel={this.handleCancelUpdatePool}
                 okButtonProps={{ disabled: !umpirePoolIdToUpdate }}
             >
                 {umpireForAction && 
@@ -785,8 +755,8 @@ class UmpirePoolAllocation extends Component {
                 className="add-membership-type-modal"
                 title={AppConstants.removeFromPool}
                 visible={removeUmpireFromPoolModalVisible}
-                onOk={() => this.handleOkRemoveUmpireFromPool()}
-                onCancel={() => this.handleCancelRemoveUmpireFromPool()}
+                onOk={this.handleOkRemoveUmpireFromPool}
+                onCancel={this.handleCancelRemoveUmpireFromPool}
             >
                 {umpireForAction && 
                     <div>
@@ -805,8 +775,8 @@ class UmpirePoolAllocation extends Component {
                 className="add-membership-type-modal"
                 title={AppConstants.removeFromAllPools}
                 visible={moveToUnassignModalVisible}
-                onOk={() => this.handleOkMoveToUnassigned()}
-                onCancel={() => this.handleCancelMoveToUnassigned()}
+                onOk={this.handleOkMoveToUnassigned}
+                onCancel={this.handleCancelMoveToUnassigned}
             >
                 {umpireForAction && 
                     <div>
