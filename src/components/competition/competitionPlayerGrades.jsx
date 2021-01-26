@@ -549,14 +549,14 @@ class CompetitionPlayerGrades extends Component {
                         playerId = unassignedPlayerData.players[source.index].playerId;
                     } else {
                         for (const i in assignedPlayerData) {
-                            if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            if (sourceTeamID == assignedPlayerData[i].teamId) {
                                 playerId = assignedPlayerData[i].players[source.index].playerId;
                             }
                         }
                     }
                 } else {
                     for (const i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                        if (sourceTeamID == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId;
                         }
                     }
