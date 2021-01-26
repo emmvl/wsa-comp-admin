@@ -1186,39 +1186,39 @@ export function* getTeamMembersReviewSaga(action) {
   }
 }
 
-function* addChildSaga(action) {
-  try {
-    const result = yield call(UserAxiosApi.addChild, action.payload);
+// function* addChildSaga(action) {
+//   try {
+//     const result = yield call(UserAxiosApi.addChild, action.payload);
 
-    if (result.status === 1 || result.status === 4) {
-      yield put({
-        type: ApiConstants.API_ADD_CHILD_SUCCESS,
-      });
-      history.goBack();
-    } else {
-      yield call(failSaga, result);
-    }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
-}
+//     if (result.status === 1 || result.status === 4) {
+//       yield put({
+//         type: ApiConstants.API_ADD_CHILD_SUCCESS,
+//       });
+//       history.goBack();
+//     } else {
+//       yield call(failSaga, result);
+//     }
+//   } catch (error) {
+//     yield call(errorSaga, error);
+//   }
+// }
 
-function* addParentSaga(action) {
-  try {
-    const result = yield call(UserAxiosApi.addParent, action.payload);
+// function* addParentSaga(action) {
+//   try {
+//     const result = yield call(UserAxiosApi.addParent, action.payload);
 
-    if (result.status === 1 || result.status === 4) {
-      yield put({
-        type: ApiConstants.API_ADD_PARENT_SUCCESS,
-      });
-      history.goBack();
-    } else {
-      yield call(failSaga, result);
-    }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
-}
+//     if (result.status === 1 || result.status === 4) {
+//       yield put({
+//         type: ApiConstants.API_ADD_PARENT_SUCCESS,
+//       });
+//       history.goBack();
+//     } else {
+//       yield call(failSaga, result);
+//     }
+//   } catch (error) {
+//     yield call(errorSaga, error);
+//   }
+// }
 
 function* findPossibleMergeSaga(action) {
   try {

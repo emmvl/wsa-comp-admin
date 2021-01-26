@@ -1,5 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 
 let obj = {
     competitionFormatId: 0,
@@ -145,7 +148,7 @@ function addCompetitionFormatDivision(data, key) {
 function getCompetitionFormatDivisions(data) {
     let compFormatDivisions = data.competionFormatDivisions;
     if (isArrayNotEmpty(compFormatDivisions)) {
-        let disabledArray = [];
+        // let disabledArray = [];
         for (let item in compFormatDivisions) {
             let divisionsArray = [];
             let divisions = data.divisions;

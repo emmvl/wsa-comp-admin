@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
+// import history from "../../../util/history";
 import { deepCopyFunction, isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const membershipCapListDefObj = {
@@ -365,7 +365,7 @@ function getNewProdcutData(productArr, valueData) {
 
 /// for check product exist in Array or not
 function checkExistngProductId(productArr, id) {
-  let status = false;
+  // let status = false;
   for (let i in productArr) {
     if (productArr[i] === id) {
       return true;
@@ -493,8 +493,9 @@ function feesDataObject(allMembershipData, membershipProductName) {
   let feesApiData = allMembershipData.membershipproductfee.membershipFees;
   let data = membershipTypesSelected;
   for (let i in data) {
+    let feesTableObject = null;
     if (feesApiData == null) {
-      var feesTableObject = {
+      feesTableObject = {
         casualFee: 0,
         casualGst: 0,
         seasonalFee: 0,
@@ -523,7 +524,7 @@ function feesDataObject(allMembershipData, membershipProductName) {
         
         feesTableData.push(feesApiData[mappedMembershipTypeIndex]);
       } else {
-        var feesTableObject = {
+        feesTableObject = {
           casualFee: 0,
           casualGst: 0,
           seasonalFee: 0,
@@ -533,8 +534,7 @@ function feesDataObject(allMembershipData, membershipProductName) {
           membershipProductFeesId: 0,
           membershipProductTypeRefName: data[i].membershipProductTypeRefName,
           membershipProductFeesTypeRefId: 1,
-          membershipProductTypeMappingId:
-            data[i].membershipProductTypeMappingId,
+          membershipProductTypeMappingId: data[i].membershipProductTypeMappingId,
           editableIndex: parseInt(i)
         };
         feesTableData.push(feesTableObject);
@@ -560,37 +560,37 @@ function discountDataObject(data) {
 
 }
 
-function updatedSettingsData(result) {
-  let updatedAdvanceSettings = []
-  let updatedDemographic = []
-  let updatedNetballQuestions = []
-  let updatedOtherQuestions = []
+// function updatedSettingsData(result) {
+//   let updatedAdvanceSettings = []
+//   let updatedDemographic = []
+//   let updatedNetballQuestions = []
+//   let updatedOtherQuestions = []
 
-  if (result) {
-    for (let i in result) {
-      if (result[i] == 13 || result[i] == 14
-        || result[i] == 15 || result[i] == 16) {
-        updatedDemographic.push(result[i])
-      } else if (result[i] == 7 || result[i] == 6 || result[i] == 10) {
-        updatedNetballQuestions.push(result[i])
-      }
-      else if (result[i] == 8 || result[i] == 9 ||
-        result[i] == 12 || result[i] == 11) {
-        updatedOtherQuestions.push(result[i])
-      }
-      else if (result[i] == 2 || result[i] == 17 ||
-        result[i] == 18 || result[i] == 3 || result[i] == 4) {
-        updatedAdvanceSettings.push(result[i])
-      }
-    }
-  }
-  return {
-    updatedAdvanceSettings,
-    updatedDemographic,
-    updatedNetballQuestions,
-    updatedOtherQuestions,
-  }
-}
+//   if (result) {
+//     for (let i in result) {
+//       if (result[i] == 13 || result[i] == 14
+//         || result[i] == 15 || result[i] == 16) {
+//         updatedDemographic.push(result[i])
+//       } else if (result[i] == 7 || result[i] == 6 || result[i] == 10) {
+//         updatedNetballQuestions.push(result[i])
+//       }
+//       else if (result[i] == 8 || result[i] == 9 ||
+//         result[i] == 12 || result[i] == 11) {
+//         updatedOtherQuestions.push(result[i])
+//       }
+//       else if (result[i] == 2 || result[i] == 17 ||
+//         result[i] == 18 || result[i] == 3 || result[i] == 4) {
+//         updatedAdvanceSettings.push(result[i])
+//       }
+//     }
+//   }
+//   return {
+//     updatedAdvanceSettings,
+//     updatedDemographic,
+//     updatedNetballQuestions,
+//     updatedOtherQuestions,
+//   }
+// }
 
 /////function to check membership types in the membership product section tab in membership fees
 function getDefaultMembershipType(data) {
@@ -1043,7 +1043,7 @@ function registration(state = initialState, action) {
       };
 
     case ApiConstants.REG_FORM_UPDATE_MEMBERSHIP_CATEGORY:
-      let selectedKeyArr = state.selectedProductName;
+      // let selectedKeyArr = state.selectedProductName;
       let categoryData = state.membershipProductTypes;
       let updatedTypesData = getNewProdcutData(
         categoryData,

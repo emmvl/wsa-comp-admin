@@ -1,6 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isEmptyArray } from "formik";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 import { deepCopyFunction} from '../../../util/helpers';
 
 let obj = {
@@ -78,7 +81,7 @@ function ladderFormatReducer(state = initialState, action) {
             let oldData = state.ladderFormats;
             let updatedValue = action.updatedData;
             let getKey = action.key;
-            let index = action
+            // let index = action
             if(getKey == "ladderFormat"){
                 state.ladderFormats = updatedValue;
             }
@@ -168,7 +171,7 @@ function setLadderDivisions(ladderFormats, defaultDivisions)
     if(isArrayNotEmpty(ladderFormatData))
     {
        
-        let disabledArray = [];
+        // let disabledArray = [];
         for(let item in ladderFormatData)
         {
             let divisionsArray = [];

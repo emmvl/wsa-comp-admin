@@ -166,7 +166,7 @@ export function* publishGradeTeamSummarySaga(action) {
             message.success(result.result.data.message)
         }
         else if (result.status === 4) {
-            let res = JSON.parse(JSON.stringify(result));
+            // let res = JSON.parse(JSON.stringify(result));
             yield put({
                 type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL,
                 error: result,

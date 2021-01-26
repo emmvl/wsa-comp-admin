@@ -1,4 +1,4 @@
-import { put, call, takeEvery, take } from "redux-saga/effects";
+import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
 import AppConstants from "themes/appConstants";

@@ -3,8 +3,8 @@ import { message } from "antd";
 
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
+// import history from "util/history";
+// import { receiptImportResult } from "util/showImportResult";
 import UmpireAxiosApi from "store/http/umpireHttp/umpireAxios";
 
 function* failSaga(result) {

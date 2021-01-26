@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { liveScore_formateDate } from '../../themes/dateformate'
+// import { liveScore_formateDate } from '../../themes/dateformate'
 
 function getMatchListSettings(data) {
 

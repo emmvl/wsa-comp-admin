@@ -42,23 +42,23 @@ const initialState = {
 
 }
 
-function getTeamObj(teamSelectId, teamArr) {
-    let teamObj = []
-    let obj = ''
-    for (let i in teamArr) {
-        for (let j in teamSelectId) {
-            if (teamSelectId[j] == teamArr[i].id) {
-                obj = {
-                    name: teamArr[i].name,
-                    id: teamArr[i].id
-                }
-                teamObj.push(obj)
-                break;
-            }
-        }
-    }
-    return teamObj;
-}
+// function getTeamObj(teamSelectId, teamArr) {
+//     let teamObj = []
+//     let obj = ''
+//     for (let i in teamArr) {
+//         for (let j in teamSelectId) {
+//             if (teamSelectId[j] == teamArr[i].id) {
+//                 obj = {
+//                     name: teamArr[i].name,
+//                     id: teamArr[i].id
+//                 }
+//                 teamObj.push(obj)
+//                 break;
+//             }
+//         }
+//     }
+//     return teamObj;
+// }
 
 function getPlayerObj(playerSelectesId, playerArray) {
     let playerObj = []

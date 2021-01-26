@@ -1,4 +1,4 @@
-import AppConstants from "themes/appConstants";
+// import AppConstants from "themes/appConstants";
 import ApiConstants from "../../../themes/apiConstants";
 
 function liveScoreDashboardListAction(competitionID, startDay, currentTime, competitionOrganisationId,liveScoreCompIsParent) {
