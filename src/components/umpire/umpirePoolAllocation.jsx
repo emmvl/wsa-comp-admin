@@ -149,17 +149,27 @@ class UmpirePoolAllocation extends Component {
             this.setState({unassignedData: unassignedUmpires, assignedData: umpirePoolData });
         }
 
+        // handle state after pool delete
+
         if (!!deletedUmpirePoolId && deletedUmpirePoolId !== prevProps.umpirePoolAllocationState.deletedUmpirePoolId) {
             const assignedDataFiltered = assignedData.filter(dataItem => dataItem.id !== deletedUmpirePoolId);
 
-            this.setState({ assignedData: assignedDataFiltered });
+            this.setState({ 
+                assignedData: assignedDataFiltered, 
+                unassignedData: prevState.unassignedData
+            });
         }
+
+        // handle state after pool add
 
         if (!!newUmpirePool && newUmpirePool !== prevProps.umpirePoolAllocationState.newUmpirePool) {
             const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
             assignedDataCopy.push(newUmpirePool);
 
-            this.setState({ assignedData: assignedDataCopy });
+            this.setState({ 
+                assignedData: assignedDataCopy,
+                unassignedData: prevState.unassignedData
+            });
         }
     }
 
