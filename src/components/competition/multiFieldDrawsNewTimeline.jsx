@@ -1911,7 +1911,7 @@ class MultifieldDrawsNewTimeline extends Component {
         let topMargin = 2;
         const date = [];
 
-        const { isFilterSchedule } = this.state;
+        const { isFilterSchedule, isAxisInverted } = this.state;
 
         const { dateNewArray } = dateItem;
 
@@ -2025,7 +2025,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     </div>
                 </div>
                 <div
-                    className="main-canvas Draws"
+                    className={`main-canvas Draws ${isAxisInverted ? 'd-flex' : ''}`}
                     id="draws-field"
                     onDragOver={e => this.drawsFieldMove(e)}
                     onMouseMove={e => this.drawsFieldMove(e)}
@@ -2051,18 +2051,27 @@ class MultifieldDrawsNewTimeline extends Component {
                         let diffDayScheduleTime = 0;
 
                         return (
-                            <div key={"court" + index} style={{ height: 70, display: 'flex', alignItems: 'center' }}>
-                                    <div
-                                        className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
-                                        style={{
-                                            width: 95,
-                                            height: 48,
-                                        }}
-                                    >
-                                        <span className="venueCourt-text">
-                                            {courtData.venueShortName + '-' + courtData.venueCourtNumber}
-                                        </span>
-                                    </div>
+                            <div 
+                                key={"court" + index} 
+                                style={{ 
+                                    height: isAxisInverted ? 'unset' : 70,
+                                    width: isAxisInverted ? 70 : 'unset',
+                                    display: 'flex', 
+                                    alignItems: 'center' 
+                                }}
+                            >
+                                <div
+                                    className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
+                                    style={{
+                                        width: 95,
+                                        height: 48,
+                                    }}
+                                >
+                                    <span className="venueCourt-text">
+                                        {courtData.venueShortName + '-' + courtData.venueCourtNumber}
+                                    </span>
+                                </div>
+
                                 {date.map((fieldItemDate, fieldItemDateIndex) => {
                                     // for check the schedule of the day
                                     const { startDayTime, endDayTime } = this.getStartAndEndDayTime(fieldItemDate, dateNewArray);
@@ -2144,14 +2153,15 @@ class MultifieldDrawsNewTimeline extends Component {
                                         >
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
-                                                className={'box white-bg-timeline day-box'}
+                                                className={`box white-bg-timeline day-box ${isAxisInverted ? 'position-relative' : ''}`}
                                                 style={{
                                                     minWidth: 'unset',
                                                     left: prevDaysWidth,
                                                     overflow: 'visible',
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
-                                                    width: diffDayScheduleTime,
+                                                    width: isAxisInverted ? 70 : diffDayScheduleTime,
+                                                    height: isAxisInverted ? diffDayScheduleTime : 70,
                                                     borderRadius: '0px',
                                                     transform: 'translate(0, 10px)',
                                                     ...dayBg
