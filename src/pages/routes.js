@@ -46,6 +46,7 @@ import RegistrationCompetitionForm from 'components/competition/registrationComp
 import AppRegistrationForm from 'components/registration/appRegistrationForm';
 import deRegistration from 'components/registration/deRegistration';
 import PaymentDashboard from 'components/registration/paymentDashboard';
+import PaymentSummary from 'components/registration/PaymentSummary';
 import ProductAdd from 'components/registration/productAdd';
 import ProductAddRegistration from 'components/registration/productAddRegistration';
 import ProductRegistrationClub from 'components/registration/productRegistrationClub';
@@ -56,7 +57,7 @@ import RegistrationCompetitionFee from 'components/registration/registrationComp
 import RegistrationCompetitionList from 'components/registration/registrationCompetitionList';
 import RegistrationForm from 'components/registration/registrationForm';
 import RegistrationFormList from 'components/registration/registrationFormList';
-import RegistrationInvoice from 'components/registration/registrationInvoice';
+// import RegistrationInvoice from 'components/registration/registrationInvoice';
 import RegistrationList from 'components/registration/registrationList';
 import RegistrationMainDashboard from 'components/registration/registrationMainDashboard';
 import RegistrationMembershipFee from 'components/registration/registrationMembershipFee';
@@ -65,6 +66,7 @@ import RegistrationMembershipCap from 'components/registration/registrationMembe
 import RegistrationPayments from 'components/registration/registrationPayments';
 import RegistrationPayoutTransaction from 'components/registration/registrationPayoutTransactions';
 import RegistrationSettlements from 'components/registration/registrationSettlements';
+import RegistrationRefunds from 'components/registration/registrationRefunds';
 import TeamRegistrations from 'components/registration/teamRegistrations';
 
 import AddUmpire from 'components/umpire/addUmpire';
@@ -78,10 +80,11 @@ import UmpirePayment from 'components/umpire/umpirePayments';
 import UmpirePaymentSetting from 'components/umpire/umpirePaymentSettings';
 import UmpirePayout from 'components/umpire/umpirePayout';
 import UmpirePoolAllocation from 'components/umpire/umpirePoolAllocation';
-import UmpireRoaster from 'components/umpire/umpireRoaster';
+import UmpireRoster from 'components/umpire/umpireRoster';
 import UmpireSetting from 'components/umpire/umpireSetting';
 
 import AffiliateDirectory from 'components/user/affiliateDirectory';
+import NetSetGo from 'components/user/netSetGo';
 import PlayWithFriend from 'components/user/playWithFriend';
 import ReferFriend from 'components/user/referFriend';
 import Spectator from 'components/user/spectator';
@@ -92,6 +95,7 @@ import UserDashboard from 'components/user/userDashboard';
 import UserEditAffiliates from 'components/user/userEditAffiliates';
 import userModuleMedical from 'components/user/userModuleMedical';
 import UserModulePersonalDetail from 'components/user/userModulePersonalDetail';
+import UserSubmittedRegistrationData from 'components/user/userSubmittedRegistrationData';
 import UserOurOrganization from 'components/user/userOurOragnization';
 import UserProfileEdit from 'components/user/userProfileEdit';
 import UserTextualDashboard from 'components/user/userTextualDashboard';
@@ -154,7 +158,8 @@ import LiveScoreTeamView from 'components/liveScore/liveScoreTeamView';
 import LiveScoreUmpireImport from 'components/liveScore/liveScoreUmpireImport';
 import LiveScoreUmpireList from 'components/liveScore/liveScoreUmpireList';
 import LiveScoreVenueChange from 'components/liveScore/liveScoreVenueChange';
-
+import LiveScoreSingleGameFee from 'components/liveScore/liveScoreSingleGameFee';
+import OrgBecsSetup from 'components/registration/orgBecsSetup';
 import Stripe from 'components/stripe/stripe';
 
 import AddProduct from 'components/shop/addProduct';
@@ -168,12 +173,17 @@ import ShopSettings from 'components/shop/shopSettings';
 import Account from 'pages/Account';
 import HelpAndSupport from 'pages/Support';
 
-import { routeAdminRole, routeUmpireRole, routeFinanceRole } from './routeAccess';
-import NotFound from './404';
-
 import CommunicationList from 'components/communication/communicationList';
 import AddCommunication from 'components/communication/addCommunication';
 import CommunicationView from 'components/communication/communictionView';
+import MergeUserMatches from 'components/user/mergeUserMatches';
+import MergeUserDetail from 'components/user/mergeUserDetail';
+import AddTeamMember from 'components/user/addTeamMember';
+import TeamMemberRegPayment from 'components/user/teamMemberRegPayment';
+import RegistrationInvoiceNew from 'components/registration/registrationInvoiceNew';
+
+import { routeAdminRole, routeUmpireRole, routeFinanceRole } from './routeAccess';
+import NotFound from './404';
 
 class Routes extends React.Component {
     constructor(props) {
@@ -422,6 +432,24 @@ class Routes extends React.Component {
                         : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
+                    path="/submittedRegData"
+                    component={this.haveAccess(userRoleId, '/submittedRegData')
+                        ? lazyLoad(UserSubmittedRegistrationData)
+                        : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/mergeUserMatches"
+                    component={this.haveAccess(userRoleId, '/userPersonal')
+                        ? lazyLoad(MergeUserMatches)
+                        : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/mergeUserDetail"
+                    component={this.haveAccess(userRoleId, '/userPersonal')
+                        ? lazyLoad(MergeUserDetail)
+                        : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
                     path="/userMedical"
                     component={this.haveAccess(userRoleId, '/userMedical') ? lazyLoad(userModuleMedical) : lazyLoad(NotFound)}
                 />
@@ -442,6 +470,10 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationPayments"
                     component={this.haveAccess(userRoleId, '/registrationPayments') ? lazyLoad(RegistrationPayments) : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/orgBecsSetup"
+                    component={this.haveAccess(userRoleId, '/registrationPayments') ? lazyLoad(OrgBecsSetup) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/umpireAllocation"
@@ -497,7 +529,7 @@ class Routes extends React.Component {
                     path="/registrationMembershipList"
                     component={this.haveAccess(userRoleId, '/registrationMembershipList') ? lazyLoad(RegistrationMembershipList) : lazyLoad(NotFound)}
                 />
-                 <PrivateRoute
+                <PrivateRoute
                     path="/registrationMembershipCap"
                     component={this.haveAccess(userRoleId, '/registrationMembershipCap') ? lazyLoad(RegistrationMembershipCap) : lazyLoad(NotFound)}
                 />
@@ -739,6 +771,11 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
+                    path="/netSetGo"
+                    component={this.haveAccess(userRoleId, '/netSetGo') ? lazyLoad(NetSetGo) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
                     path="/playWithFriend"
                     component={this.haveAccess(userRoleId, '/playWithFriend') ? lazyLoad(PlayWithFriend) : lazyLoad(NotFound)}
                 />
@@ -750,12 +787,12 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/spectator"
-                    component={this.haveAccess(userRoleId, '/referFriend') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/spectator') ? lazyLoad(Spectator) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
                     path="/invoice"
-                    component={this.haveAccess(userRoleId, '/invoice') ? lazyLoad(RegistrationInvoice) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/invoice') ? lazyLoad(RegistrationInvoiceNew) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -766,6 +803,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationSettlements"
                     component={this.haveAccess(userRoleId, '/registrationSettlements') ? lazyLoad(RegistrationSettlements) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/registrationRefunds"
+                    component={this.haveAccess(userRoleId, '/registrationSettlements') ? lazyLoad(RegistrationRefunds) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -812,7 +854,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/umpireRoster"
-                    component={this.haveAccess(userRoleId, '/umpireRoster') ? lazyLoad(UmpireRoaster) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/umpireRoster') ? lazyLoad(UmpireRoster) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -838,6 +880,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/paymentDashboard"
                     component={this.haveAccess(userRoleId, '/paymentDashboard') ? lazyLoad(PaymentDashboard) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/paymentSummary"
+                    component={this.haveAccess(userRoleId, '/paymentSummary') ? lazyLoad(PaymentSummary) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute
@@ -951,6 +998,11 @@ class Routes extends React.Component {
                     component={this.haveAccess(userRoleId, '/multifieldDraws') ? lazyLoad(deRegistration) : lazyLoad(NotFound)}
                 />
 
+                <PrivateRoute
+                    path="/matchDaySingleGameFee"
+                    component={this.haveAccess(userRoleId, '/matchDaySingleGameFee') ? lazyLoad(LiveScoreSingleGameFee) : lazyLoad(NotFound)}
+                />
+
                 <PrivateRoute path="/communication" component={lazyLoad(CommunicationBanner)} />
 
                 <PrivateRoute
@@ -963,6 +1015,20 @@ class Routes extends React.Component {
                 <PrivateRoute path="/addCommunication" component={lazyLoad(AddCommunication)} />
 
                 <PrivateRoute path="/communicationView" component={lazyLoad(CommunicationView)} />
+
+                <PrivateRoute
+                    path="/addTeamMember"
+                    component={this.haveAccess(userRoleId, '/addTeamMember')
+                        ? lazyLoad(AddTeamMember)
+                        : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/teamMemberRegPayment"
+                    component={this.haveAccess(userRoleId, '/teamMemberRegPayment')
+                        ? lazyLoad(TeamMemberRegPayment)
+                        : lazyLoad(NotFound)}
+                />
 
                 <Route path="/" component={lazyLoad(NotFound)} />
 

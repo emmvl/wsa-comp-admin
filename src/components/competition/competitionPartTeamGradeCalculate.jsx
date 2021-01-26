@@ -10,12 +10,13 @@ import AppImages from 'themes/appImages';
 import AppUniqueId from 'themes/appUniqueId';
 import history from 'util/history';
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
-    getOwn_competitionStatus, setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_competitionStatus,
+    setOwn_competitionStatus,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from 'store/actions/appAction';
 import {
@@ -102,29 +103,31 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.appState !== this.props.appState) {
-            let competitionList = this.props.appState.own_CompetitionArr
+            const competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let storedCompetitionId = getOwn_competition();
-                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
+                    const storedCompetitionId = getOwn_competition();
+                    const competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId;
-                    let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId;
                     if (storedCompetitionId != undefined && storedCompetitionId !== "undefined") {
-                        let compIndex = competitionList.findIndex(x => x.competitionId == competitionId)
-                        statusRefId = competitionList[compIndex].statusRefId;
-                        finalTypeRefId = competitionList[compIndex].finalTypeRefId
+                        const compIndex = competitionList.findIndex(x => x.competitionId == competitionId);
+                        if (compIndex > -1) {
+                            statusRefId = competitionList[compIndex].statusRefId;
+                            finalTypeRefId = competitionList[compIndex].finalTypeRefId;
+                        }
                     }
-                    setOwn_competition(competitionId)
-                    setOwn_competitionStatus(statusRefId)
-                    setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
-                    this.props.getTeamGradingSummaryAction(yearId, competitionId)
+                    setOwn_competition(competitionId);
+                    setOwn_competitionStatus(statusRefId);
+                    setOwn_CompetitionFinalRefId(finalTypeRefId);
+                    const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
+                    this.props.getTeamGradingSummaryAction(yearId, competitionId);
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId,
-                        yearRefId: JSON.parse(yearId)
-                    })
+                        yearRefId: JSON.parse(yearId),
+                    });
                 }
             }
         }
@@ -152,10 +155,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
     }
 
     componentDidMount() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -174,7 +177,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-                // setOwnCompetitionYear(1)
             }
         }
     }
@@ -225,12 +227,12 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 )}
                             </NavLink>
                         ) : (
-                            grades.teamCount !== null && (
-                                <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
-                                    {grades.teamCount}
-                                </Tag>
-                            )
-                        )}
+                                grades.teamCount !== null && (
+                                    <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
+                                        {grades.teamCount}
+                                    </Tag>
+                                )
+                            )}
                     </div>
                 )
             };
@@ -272,7 +274,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         </CustomTooltip>
                     </div>
                     <div
-                        className="col-sm w-100 d-flex flex-row justify-content-end align-items-center"
+                        className="col-sm w-100 d-flex flex-row justify-content-end align-items-center mr-22"
                     >
                         <div className="row">
                             <div className="col-sm">
@@ -319,7 +321,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
     };
 
     onYearChange = (yearId) => {
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined);
         setOwn_CompetitionFinalRefId(undefined)
@@ -374,10 +376,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div className="w-ft d-flex flex-row justify-content-center" style={{ marginRight: 50 }}>
+                            <div className="w-ft d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
-                                    id={AppUniqueId.teamGradingYCompetition_dpdn}
+                                    id={AppUniqueId.teamGradingCompetition_dpdn}
                                     name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     value={JSON.parse(JSON.stringify(firstTimeCompId))}
@@ -436,8 +438,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
     };
 
     contentView = () => {
-        const { columns, data, addGradeVisible, updateGradeName, getDataLoading } = this.state;
-        const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
+        const { columns, addGradeVisible, updateGradeName, getDataLoading } = this.state;
+        const { ownTeamGradingSummaryGetData } = this.props.ownTeamGradingState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">

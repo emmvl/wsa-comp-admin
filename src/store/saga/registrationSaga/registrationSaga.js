@@ -204,7 +204,7 @@ export function* regSaveMembershipProductDiscountSaga(action) {
         result: result.result.data,
         status: result.status
       });
-      message.success(result.result.data.message);
+      // message.success(result.result.data.message);
     } else {
       yield call(failSaga, result)
     }
@@ -313,6 +313,40 @@ export function* exportTeamRegistrationsSaga(action) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+export function* getMembershipFeeCapListSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getMembershipFeeCapList,action.organisationUniqueKey,action.yearRefId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+export function* updateMembershipFeeCapSaga(action) {
+  try {
+    const result = yield call(AxiosApi.updateMembershipFeeCap,action.organisationUniqueKey,action.yearRefId,action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS,
         result: result.result.data,
         status: result.status
       });

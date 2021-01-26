@@ -2,12 +2,14 @@ import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 import history from "util/history";
 import ApiConstants from "themes/apiConstants";
+import AppConstants from 'themes/appConstants'
 import { setAuthToken } from "util/sessionStorage";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi";
 import CommonAxiosApi from "store/http/axiosApi";
 import livescoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import registrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi"
 
-function* failSaga(result) {
+function* failSaga(result, key) {
   yield put({
     type: ApiConstants.API_USER_FAIL,
     error: result,
@@ -19,11 +21,14 @@ function* failSaga(result) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error(result.result.data.message);
+    key ?
+      message.error(AppConstants.errorInTFAReset)
+      :
+      message.error(result.result.data.message);
   }, 800);
 }
 
-function* errorSaga(error) {
+function* errorSaga(error, key) {
   yield put({
     type: ApiConstants.API_USER_ERROR,
     error: error,
@@ -35,7 +40,10 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error("Something went wrong.");
+    key ?
+      message.error(AppConstants.errorInTFAReset)
+      :
+      message.error("Something went wrong.");
   }, 800);
 }
 
@@ -97,11 +105,20 @@ function* getAffiliatesListingSaga(action) {
     const result = yield call(UserAxiosApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
+      if (action.payload.paging.limit == -1) {
+        yield put({
+          type: ApiConstants.API_AFFILIATES_IMPERSONATION_LISTING_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      }
+      else {
+        yield put({
+          type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      }
     } else {
       yield call(failSaga, result);
     }
@@ -362,6 +379,60 @@ function* getUserModuleRegistrationDataSaga(action) {
   }
 }
 
+function* getUserModuleTeamMembersDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleTeamMembersData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* getUserModuleTeamRegistrationDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleTeamRegistrationData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* getUserModuleOtherRegistrationDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleOtherRegistrationData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get the User Module Activity Player
 function* getUserModuleActivityPlayerSaga(action) {
   try {
@@ -574,6 +645,44 @@ function* exportOrgRegQuestionsSaga(action) {
   } catch (error) {
     yield call(errorSaga, error);
   }
+}
+
+// Export User Registration Data
+function* exportUserRegDataSaga(action) {
+    try {
+        const result = yield call(UserAxiosApi.exportUserRegData, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            //  message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+// Get Submitted Registration Data
+export function* getSubmittedRegDataSaga(action) {
+    try {
+        const result = yield call(UserAxiosApi.getSubmittedRegData, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_SUBMITTED_REG_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            //  message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
 }
 
 // Get the Affiliate Directory
@@ -790,10 +899,10 @@ export function* impersonationSaga(action) {
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
         status: result.status,
-        impersonationAccess:action.payload.access
+        impersonationAccess: action.payload.access,
       });
       if (action.payload.access == false) {
-        history.push('/homeDashboard')
+        history.push('/homeDashboard');
       }
     } else {
       yield call(failSaga, result);
@@ -915,7 +1024,6 @@ function* getCoachSaga(action) {
   }
 }
 
-
 // Get the umpire Activity Data
 function* getUmpireActivityListSaga(action) {
   try {
@@ -972,10 +1080,10 @@ function* getSpectatorListSaga(action) {
   }
 }
 
-function* registrationResendEmailSaga(action){
+function* registrationResendEmailSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.registrationResendEmail, action.teamId,action.userId);
-    
+    const result = yield call(UserAxiosApi.registrationResendEmail, action.teamId, action.userId);
+
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_SUCCESS,
@@ -990,6 +1098,162 @@ function* registrationResendEmailSaga(action){
   }
 }
 
+function* userResetTFASaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.resetTfaApi, action.Id);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.Api_RESET_TFA_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+      message.success(AppConstants.tfaSuccessfullyReset);
+    } else {
+      yield call(failSaga, result, "TfaError");
+    }
+  } catch (error) {
+    yield call(errorSaga, error, "TfaError");
+  }
+}
+
+function* getNetSetGoListSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getNetSetGoList, action.payload, action.sortBy, action.sortOrder);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_NETSETGO_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+export function* teamMembersSaveSaga(action) {
+  try {
+    const result = yield call(registrationAxiosApi.teamMembersSave, action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_TEAM_MEMBERS_SAVE_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+export function* getTeamMembersSaga(action) {
+  try {
+    const result = yield call(registrationAxiosApi.getTeamMembers, action.teamMemberRegId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_TEAM_MEMBERS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+export function* getTeamMembersReviewSaga(action) {
+  try {
+    const result = yield call(registrationAxiosApi.getTeamMembersReview, action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+// function* addChildSaga(action) {
+//   try {
+//     const result = yield call(UserAxiosApi.addChild, action.payload);
+
+//     if (result.status === 1 || result.status === 4) {
+//       yield put({
+//         type: ApiConstants.API_ADD_CHILD_SUCCESS,
+//       });
+//       history.goBack();
+//     } else {
+//       yield call(failSaga, result);
+//     }
+//   } catch (error) {
+//     yield call(errorSaga, error);
+//   }
+// }
+
+// function* addParentSaga(action) {
+//   try {
+//     const result = yield call(UserAxiosApi.addParent, action.payload);
+
+//     if (result.status === 1 || result.status === 4) {
+//       yield put({
+//         type: ApiConstants.API_ADD_PARENT_SUCCESS,
+//       });
+//       history.goBack();
+//     } else {
+//       yield call(failSaga, result);
+//     }
+//   } catch (error) {
+//     yield call(errorSaga, error);
+//   }
+// }
+
+function* findPossibleMergeSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.findPossibleMerge, action.payload);
+
+    if (result.status === 1 || result.status === 4) {
+      yield put({
+        type: ApiConstants.API_POSSIBLE_MATCH_SUCCESS,
+        payload: result.result.data,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* updateTeamMembersSaga(action) {
+  try {
+    const result = yield call(registrationAxiosApi.updateTeamMembers, action.data);
+
+    if (result.status === 1 || result.status === 4) {
+      yield put({
+        type: ApiConstants.API_TEAM_MEMBER_UPDATE_SUCCESS,
+        result: result.status == 1 ? result.result.data : result.result.data.message,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -1007,6 +1271,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD, getUserModulePersonalByCompDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, getUserModuleMedicalInfoSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_REGISTRATION_LOAD, getUserModuleRegistrationDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD, getUserModuleTeamRegistrationDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD, getUserModuleOtherRegistrationDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD, getUserModuleActivityPlayerSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD, getUserModuleActivityParentSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD, getUserModuleActivityScorerSaga);
@@ -1018,6 +1284,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, deleteOrgPhotosSaga);
   yield takeEvery(ApiConstants.API_DELETE_ORG_CONTACT_LOAD, deleteOrgContactSaga);
   yield takeEvery(ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD, exportOrgRegQuestionsSaga);
+  yield takeEvery(ApiConstants.API_EXPORT_USER_REG_DATA_LOAD, exportUserRegDataSaga);
+  yield takeEvery(ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD, getSubmittedRegDataSaga);
   yield takeEvery(ApiConstants.API_AFFILIATE_DIRECTORY_LOAD, getAffiliateDirectorySaga);
   yield takeEvery(ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD, exportAffiliateDirectorySaga);
   yield takeEvery(ApiConstants.API_USER_PROFILE_UPDATE_LOAD, updateUserProfileSaga);
@@ -1040,4 +1308,13 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
   yield takeEvery(ApiConstants.API_GET_SPECTATOR_LIST_LOAD, getSpectatorListSaga);
   yield takeEvery(ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD, registrationResendEmailSaga);
+  yield takeEvery(ApiConstants.Api_RESET_TFA_LOAD, userResetTFASaga);
+  yield takeEvery(ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD, getUserModuleTeamMembersDataSaga);
+  yield takeEvery(ApiConstants.API_GET_NETSETGO_LIST_LOAD, getNetSetGoListSaga);
+  yield takeEvery(ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD, teamMembersSaveSaga);
+  yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_LOAD, getTeamMembersSaga);
+  yield takeEvery(ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD, getTeamMembersReviewSaga);
+  yield takeEvery(ApiConstants.API_POSSIBLE_MATCH_LOAD, findPossibleMergeSaga);
+  yield takeEvery(ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD, updateTeamMembersSaga);
+
 }

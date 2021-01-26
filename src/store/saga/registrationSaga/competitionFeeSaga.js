@@ -120,6 +120,7 @@ function* getAllCompetitionFeesDetailsSaga(action) {
                         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_SUCCESS,
                         result: result.result.data,
                         status: result.status,
+                        isEdit:action.isEdit
                     });
                 } else {
                     yield call(failSaga, result);
@@ -167,6 +168,7 @@ function* saveCompetitionFeesDetailsSaga(action) {
                 type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
+                isEdit:action.isEdit
             });
             message.success(result.result.data.message);
         } else {
@@ -255,6 +257,24 @@ function* getSeasonalFeeDefaultSaga(action) {
             });
         } else {
             yield call(failSaga, seasonalPaymentOption);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+// per match payment options from the reference table
+function* getPerMatchFeeOptionsDefaultSaga(action) {
+    try {
+        const perMatchOptions = yield call(AxiosApi.getPerMatchOption, action);
+        if (perMatchOptions.status === 1) {
+            yield put({
+                type: ApiConstants.GET_PER_MATCH_FEE_OPTIONS_API_SUCCESS,
+                perMatchOptionResult: perMatchOptions.result.data,
+                status: perMatchOptions.status,
+            });
+        } else {
+            yield call(failSaga, perMatchOptions);
         }
     } catch (error) {
         yield call(errorSaga, error);
@@ -447,6 +467,7 @@ export default function* rootCompetitionFeeSaga() {
     yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_DIVISION_TAB_LOAD, saveCompetitionFeesDivisionSaga);
     yield takeEvery(ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD, getCasualFeeDefaultSaga);
     yield takeEvery(ApiConstants.GET_SEASONAL_FEE_DETAIL_API_LOAD, getSeasonalFeeDefaultSaga);
+    yield takeEvery(ApiConstants.GET_PER_MATCH_FEE_OPTIONS_API_LOAD, getPerMatchFeeOptionsDefaultSaga);
     yield takeEvery(ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD, postPaymentOptionSaga);
     yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_SECTION_LOAD, saveCompetitionFeesSectionSaga);
     yield takeEvery(ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD, postCompetitionDiscountSaga);

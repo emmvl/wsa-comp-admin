@@ -1,11 +1,15 @@
 // import { DataManager } from './../../Components';
 import http from "./umpireHttp";
-import { getUserId, getAuthToken, getOrganisationData, getLiveScoreCompetiton } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    // getOrganisationData,
+    // getLiveScoreCompetiton
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
-import { isArrayNotEmpty } from "../../../util/helpers";
-
+// import { isArrayNotEmpty } from "../../../util/helpers";
 
 async function logout() {
     await localStorage.clear();
@@ -15,14 +19,32 @@ async function logout() {
 let token = getAuthToken();
 // let userId = getUserId();
 
-
 let UmpireAxiosApi = {
+    umpirePaymentSettingsGet(data) {
+        const { competitionId, organisationId } = data;
+        const url = `/competitions/${competitionId}/umpires/payment/settings?organisationId=${organisationId}`;
+        return Method.dataGet(url, token);
+    },
 
+    umpireAllocationSettingsPost(data) {
+        const competitionId = JSON.stringify(data.competitionId);
+        const organisationId = JSON.stringify(data.organisationId);
+        const url = `/competitions/${competitionId}/umpires/settings/allocation?organisationId=${organisationId}`;
+        return Method.dataPost(url, token, data.body);
+    },
 
-};
+    umpireAllocationSettingsGet(competitionId) {
+        const url = `/competitions/${competitionId}/umpires/settings/allocation`;
+        return Method.dataGet(url, token);
+    },
 
-
-
+    umpirePaymentSettingsPost(data) {
+        const competitionId = JSON.stringify(data.competitionId);
+        const organisationId = JSON.stringify(data.organisationId);
+        const url = `/competitions/${competitionId}/umpires/payment/settings/${data.type}?organisationId=${organisationId}`
+        return Method.dataPost(url, token, data.body);
+    }
+}
 
 const Method = {
     async dataPost(newurl, authorization, body) {
@@ -260,7 +282,6 @@ const Method = {
 
                 .then(result => {
                     if (result.status === 200) {
-                        console.log("*************" + JSON.stringify(result.data));
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;

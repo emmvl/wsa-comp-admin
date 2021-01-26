@@ -1,14 +1,20 @@
 import React, { Component } from "react";
-import { Layout, Input, Button, Table, message } from 'antd';
+import { Layout, Button, Table, message, Pagination, Menu } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreDashboardListAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import { liveScoreDashboardListAction, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import {
+    // getCompetitonId,
+    getLiveScoreCompetiton,
+    getOrganisationData,
+    // getLiveScoreUmpireCompition
+} from '../../util/sessionStorage'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
@@ -17,7 +23,9 @@ import { isArrayNotEmpty, teamListDataCheck } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import ValidationConstants from "../../themes/validationConstant";
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import { checkLivScoreCompIsParent } from 'util/permissions'
+import { checkLivScoreCompIsParent } from 'util/permissions';
+import Loader from '../../customComponents/loader';
+
 
 const { Content } = Layout;
 let this_obj = null;
@@ -35,13 +43,13 @@ function checkSorting(a, b, key) {
     }
 }
 
-function getFirstName(incidentPlayers) {
-    return incidentPlayers ? incidentPlayers[0].player.firstName : ""
-}
+// function getFirstName(incidentPlayers) {
+//     return incidentPlayers ? incidentPlayers[0].player.firstName : ""
+// }
 
-function getLastName(incidentPlayers) {
-    return incidentPlayers ? incidentPlayers[0].player.lastName : ""
-}
+// function getLastName(incidentPlayers) {
+//     return incidentPlayers ? incidentPlayers[0].player.lastName : ""
+// }
 
 function setMatchResult(record) {
     if (record.team1ResultId !== null) {
@@ -530,41 +538,74 @@ const columnsPlayersToPay = [
     },
     {
         title: "Division",
-        dataIndex: 'division',
-        key: 'division',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
         sorter: (a, b) => checkSorting(a, b, "division"),
     },
     {
         title: "Grade",
-        dataIndex: 'grade',
-        key: 'grade',
+        dataIndex: 'gradeName',
+        key: 'gradeName',
         sorter: (a, b) => checkSorting(a, b, "grade"),
     },
     {
         title: "Team",
-        dataIndex: 'team',
-        key: 'team',
+        dataIndex: 'teamName',
+        key: 'teamName',
         sorter: (a, b) => checkSorting(a, b, "team"),
     },
     {
-        title: "Payment Required",
-        dataIndex: 'payReq',
-        key: 'payReq',
+        title: "Status",
+        dataIndex: 'status',
+        key: 'status',
         sorter: (a, b, payReq) => checkSorting(a, b, payReq),
     },
+    {
+        title: "Payment Method",
+        dataIndex: 'paymentMethod',
+        key: 'paymentMethod',
+        sorter: (a, b, payMethod) => checkSorting(a, b, payMethod),
+    },
+    {
+        title: "Action",
+        dataIndex: 'action',
+        key: 'action',
+        render: (data, record) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
+            >
+                <Menu.SubMenu key="sub1" style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                    title={<img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />}
+                >
+                    <Menu.Item key="1">
+                        <span>{AppConstants.cashReceived}</span>
+                    </Menu.Item>
+                    {(record.processType == "Instalment" || record.processType == "Per Match") &&
+                        <Menu.Item key="2" onClick={() => this_obj.retryPayment(record)}>
+                            <span>{AppConstants.retryPayment}</span>
+                        </Menu.Item>
+                    }
+                </Menu.SubMenu>
+                
+            </Menu>
+        )
+    }
 ];
 
-const playerTopay = [
-    {
-        firstName: "Sam",
-        lastName: "Ham",
-        linked: "Cromer Netball Club",
-        division: "11B",
-        team: "WSA 1",
-        grade: "A",
-        payReq: "Voucher redemption"
-    }
-]
+// const playerTopay = [
+//     {
+//         firstName: "Sam",
+//         lastName: "Ham",
+//         linked: "Cromer Netball Club",
+//         division: "11B",
+//         team: "WSA 1",
+//         grade: "A",
+//         payReq: "Voucher redemption"
+//     }
+// ]
 
 class LiveScoreDashboard extends Component {
     constructor(props) {
@@ -572,14 +613,17 @@ class LiveScoreDashboard extends Component {
         this.state = {
             incidents: "incidents",
             liveScoreCompIsParent: false,
-            compOrgId: 0
+            compOrgId: 0,
+            onload: false,
+            page: 1,
+            retryPaymentLoad: false,
         }
         this_obj = this
         this.props.initializeCompData()
     }
 
     componentDidMount() {
-        let competitionID = getCompetitonId()
+        // let competitionID = getCompetitonId()
         let startDay = this.getStartofDay()
         let currentTime = moment.utc().format()
 
@@ -587,6 +631,7 @@ class LiveScoreDashboard extends Component {
             const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
             checkLivScoreCompIsParent().then((value) => {
+                this.getPlayersToPayList(1);
                 this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
                 this.setState({
                     liveScoreCompIsParent: value,
@@ -600,7 +645,39 @@ class LiveScoreDashboard extends Component {
         }
     }
 
+    componentDidUpdate() {
+        if(this.state.onload == true && this.props.liveScoreDashboardState.onPlayersToPayLoad == false){
+            this.getPlayersToPayList(this.state.page)
+            this.setState({ onload : false})
+        }
+        if(this.state.retryPaymentLoad == true && this.props.liveScoreDashboardState.onRetryPaymentLoad == false){
+            if(this.props.liveScoreDashboardState.retryPaymentSuccess){
+                message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
+            }
+            this.getPlayersToPayList(this.state.page);
+            this.setState({ retryPaymentLoad: false })
+        }
+    }
 
+    getPlayersToPayList = (page) => {
+        const { organisationUniqueKey } = getOrganisationData();
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+        let payload = {
+            competitionId: uniqueKey,
+            organisationId: organisationUniqueKey,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0),
+            },
+        }
+        this.props.liveScorePlayersToPayListAction(payload);
+    }
+
+    handleTablePage = (page, key) => {
+        if(key=="playerToPay"){
+            this.setState({onload: true, page: page})
+        }
+    }
 
     checkUserId(record) {
         if (record.player.userId == null) {
@@ -628,6 +705,19 @@ class LiveScoreDashboard extends Component {
         return a
     }
 
+    retryPayment = (record) => {
+        let payload = {
+            processType: record.processType,
+            userRegUniqueKey: record.userRegUniqueKey,
+            participantId: record.participantId,
+            divisionId: record.divisionId
+        }
+
+
+        this.setState({ retryPaymentLoad: true })
+        this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+    }
+
     ////////participatedView view for competition
     incidenceView = () => {
         const { dashboardIncidentList } = this.props.liveScoreDashboardState
@@ -640,7 +730,7 @@ class LiveScoreDashboard extends Component {
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardIncidentList" + record.id + index}
+                        rowKey={(record) => "dashboardIncidentList" + record.id}
                     />
                 </div>
             </div>
@@ -733,7 +823,7 @@ class LiveScoreDashboard extends Component {
                         columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
                         dataSource={dashboardMatchList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardMatchList" + record.id + index}
+                        rowKey={(record) => "dashboardMatchList" + record.id}
                     />
                 </div>
             </div>
@@ -809,7 +899,7 @@ class LiveScoreDashboard extends Component {
                         columns={columnActiveNews}
                         dataSource={dashboardNewsList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardNewsList" + record.id + index}
+                        rowKey={(record) => "dashboardNewsList" + record.id}
                     />
                 </div>
             </div>
@@ -819,7 +909,7 @@ class LiveScoreDashboard extends Component {
     playersToPayHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3 d-flex align-items-center">
+               <div className="col-sm d-flex align-items-center">
                     <span className="home-dash-left-text">{AppConstants.playersToPay}</span>
                     <div className="mt-n10">
                         <Tooltip>
@@ -827,13 +917,28 @@ class LiveScoreDashboard extends Component {
                         </Tooltip>
                     </div>
                 </div>
+                {this.state.liveScoreCompIsParent &&
+                    <div className="col-sm text-right">
+                        <NavLink
+                            to={{
+                                pathname: '/matchDaySingleGameFee',
+                                state: { key: 'dashboard', item: null }
+                            }}
+                            className="text-decoration-none"
+                        >
+                            <Button className="primary-add-comp-form" type="primary">
+                                {AppConstants.singleGameFees}
+                            </Button>
+                        </NavLink>
+                    </div>
+                }
             </div>
         )
     }
 
     ////////ownedView view for competition
     playersToPayView = () => {
-        const { dashboardMatchList } = this.props.liveScoreDashboardState
+        const { playersToPayList, liveScorePlayerstoPayListTotalCount } = this.props.liveScoreDashboardState
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
@@ -842,9 +947,18 @@ class LiveScoreDashboard extends Component {
                         loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table"
                         columns={columnsPlayersToPay}
-                        dataSource={playerTopay}
+                        dataSource={playersToPayList}
                         pagination={false}
-                        rowKey={(record, index) => "playerTopay" + record.id + index}
+                        rowKey={(record) => "playerTopay" + record.id}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination pb-5"
+                        defaultCurrent={1}
+                        total={liveScorePlayerstoPayListTotalCount}
+                        showSizeChanger={false}
+                        onChange={(page) => this.handleTablePage(page, "playerToPay")}
                     />
                 </div>
             </div>
@@ -875,13 +989,14 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
+                <Loader visible={this.props.liveScoreDashboardState.onPlayersToPayLoad} />
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
                     <Content>
                         {this.addNewsView()}
                         {this.matchView()}
-                        {/* {this.playersToPayView()} */}
+                        {this.playersToPayView()}
                         {this.incidenceView()}
                     </Content>
                 </Layout>
@@ -891,7 +1006,7 @@ class LiveScoreDashboard extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData }, dispatch);
+    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction }, dispatch);
 }
 
 function mapStateToProps(state) {

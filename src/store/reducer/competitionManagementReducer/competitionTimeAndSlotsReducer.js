@@ -1,20 +1,23 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 import AppConstants from "../../../themes/appConstants";
 
-const initailTimeSlotObj = {
-    startTime: "00:00",
-    sortOrder: null,
-    "competitionTimeslotsEntity": [{
-        "competitionVenueTimeslotEntityId": 0,
-        "venuePreferenceTypeRefId": '',
-        "venuePreferenceEntityId": '',
+// const initailTimeSlotObj = {
+//     startTime: "00:00",
+//     sortOrder: null,
+//     "competitionTimeslotsEntity": [{
+//         "competitionVenueTimeslotEntityId": 0,
+//         "venuePreferenceTypeRefId": '',
+//         "venuePreferenceEntityId": '',
 
-    }
-    ],
-    "timeSlotEntityManualkey": [],
-    "timeSlotEntityGradeKey": []
-}
+//     }
+//     ],
+//     "timeSlotEntityManualkey": [],
+//     "timeSlotEntityGradeKey": []
+// }
 const postTimeSlot = {
     mainTimeRotationID: null,
     competitionUniqueKey: null,
@@ -106,7 +109,7 @@ function getTimeslotPerVenuePerDay(timeslotData) {
     let updatedtimeSlotArr = []
     for (let i in timeslotData) {
         let matchUpdatedTimeSlot = timeslotData[i]
-        let competitionTimeslotsEntityArr = timeslotData[i].competitionTimeslotsEntity
+        // let competitionTimeslotsEntityArr = timeslotData[i].competitionTimeslotsEntity
         let timeSlotStatusData = checkTimeSlotStatus(matchUpdatedTimeSlot, updatedtimeSlotArr)
         if (timeSlotStatusData.status) {
             let timeslotUpdatedArrayValue = {
@@ -145,7 +148,7 @@ function getTimeslotAllVenuePerDay(timeslotData) {
     let allVenuetimeSlotArr = []
     for (let i in timeslotData) {
         let matchUpdatedTimeSlot = timeslotData[i]
-        let competitionTimeslotsEntityArrdata = timeslotData[i].competitionTimeslotsEntity
+        // let competitionTimeslotsEntityArrdata = timeslotData[i].competitionTimeslotsEntity
         let timeSlotStatusData = checkTimeSlotStatus(matchUpdatedTimeSlot, allVenuetimeSlotArr)
         if (timeSlotStatusData.status) {
             let timeslotUpdatedArrayValue = {
@@ -273,7 +276,7 @@ function getTimeSlotEntity(data, id) {
 
 // time Slot entity key
 function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index,) {
-    let modifiedEntityKeyArray = []
+    // let modifiedEntityKeyArray = []
     let modifiedEntityArray = []
     for (let j in value) {
         let matchTimeSlot = timeSlotEntity(value[j], selectedEntityArray[index].competitionTimeslotsEntityInfo)
@@ -381,22 +384,22 @@ function updatedResultData(data, result) {
 
 
 ///get Rotation Data
-function getRotationData(data) {
-    let RotationData = []
-    if (isArrayNotEmpty(data)) {
-        for (let i in data) {
-            data[i]["isSelected"] = false
-            if (data[i].subReferences !== null) {
-                let subReferencesData = data[i].subReferences
-                for (let j in subReferencesData) {
-                    subReferencesData[j]['isSelected'] = false
-                }
-            }
-        }
-        RotationData = data
-    }
-    return RotationData
-}
+// function getRotationData(data) {
+//     let RotationData = []
+//     if (isArrayNotEmpty(data)) {
+//         for (let i in data) {
+//             data[i]["isSelected"] = false
+//             if (data[i].subReferences !== null) {
+//                 let subReferencesData = data[i].subReferences
+//                 for (let j in subReferencesData) {
+//                     subReferencesData[j]['isSelected'] = false
+//                 }
+//             }
+//         }
+//         RotationData = data
+//     }
+//     return RotationData
+// }
 
 
 /// get venue Data
@@ -562,7 +565,7 @@ function CompetitionTimeSlots(state = initialState, action) {
             const timeSlotGenerationWithHelpMsg = getTimeSlotGenerationWithHelpMsg(refData.TimeslotGeneration, state.timeSlotGenerationHelpMessage)
             state.allrefernceData = action.result
             let venueData = getVenueData(refData.ApplyToVenue)
-            let timeSlotGeneration = getVenueData(refData.TimeslotGeneration)
+            // let timeSlotGeneration = getVenueData(refData.TimeslotGeneration)
             state.applyVenue = venueData
             state.timeSlotRotation = timeSlotRotationWithHelpMsg
             state.timeSlotGeneration = timeSlotGenerationWithHelpMsg
@@ -671,19 +674,6 @@ function CompetitionTimeSlots(state = initialState, action) {
             }
             return { ...state }
 
-
-        // case ApiConstants.API_TIME_SLOT_INIT_SUCCESS:
-
-        //     console.log('refernce called')
-        //     state.allrefernceData = action.result
-        //     let venueData = getVenueData(action.result.ApplyToVenue)
-        //     let timeSlotGeneration = getVenueData(action.result.TimeslotGeneration)
-        //     // let rotationData = getRotationData(action.result.TimeslotRotation)
-        //     state.applyVenue = venueData
-        //     state.timeSlotRotation = action.result.TimeslotRotation
-        //     state.timeSlotGeneration = timeSlotGeneration
-        //     state.weekDays = action.result.Day
-        //     return { ...state }
 
         case ApiConstants.Api_ADD_REMOVE_TIME_SLOT_TABLE:
             if (action.key === "addTimeSlotManual") {

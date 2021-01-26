@@ -14,7 +14,7 @@ class PlayerCommentModal extends React.Component {
             placeholder,
             name,
             handleBlur,
-            finalGradeId,
+            // finalGradeId,
             onChange,
             type,
             value,
@@ -26,16 +26,16 @@ class PlayerCommentModal extends React.Component {
                     {...this.props}
                     className="add-membership-type-modal"
                     title={modalTitle}
-                    // cancelButtonProps={{ style: { display: finalGradeId !== null && 'none' } }}
+                // cancelButtonProps={{ style: { display: finalGradeId !== null && 'none' } }}
                 >
                     <div style={{ overflow: "auto", minHeight: 50, maxHeight: 200, padding: 10 }}>
                         <Loader visible={commentLoad} />
                         {commentList.map((commentItem) => (
                             <div className="col-sm pl-0 pb-2">
-                                <span style={{ fontSize: 18, paddingRight: 2 }} className="comment-heading font-weight-bold">
+                                <span style={{ paddingRight: 2 }} className="comment-heading font-weight-bold">
                                     {commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}
                                 </span>
-                                <span style={{ fontSize: 18, paddingRight: 2 }} className="comment-heading font-weight-bold">
+                                <span style={{ paddingRight: 2 }} className="comment-heading font-weight-bold">
                                     {"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}
                                 </span>
                                 <span className="comment-heading">{commentItem.comment}</span>

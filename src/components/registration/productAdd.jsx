@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Input, Select, Checkbox, Tree, DatePicker, Button, Table } from 'antd';
 import './product.scss';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 
@@ -419,7 +419,6 @@ class ProductAdd extends Component {
 
     ///setting the available from date
     dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
         console.log(date)
     }
 

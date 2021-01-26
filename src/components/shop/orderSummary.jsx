@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input, Layout, Button, Table, Select, Menu, Pagination } from 'antd';
+import { Input, Layout, Button, Table, Select, Pagination } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { isEmptyArray } from "formik";
@@ -15,11 +15,11 @@ import { getOrderSummaryListingAction, exportOrderSummaryAction } from "../../st
 import { currencyFormat } from "../../util/currencyFormat";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Content } = Layout
-const { SubMenu } = Menu
+// const { SubMenu } = Menu
 const { Option } = Select
 let this_obj = null;
 
@@ -74,13 +74,15 @@ const columns = [
         key: 'name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (name, record) =>
-            // <NavLink to={{
-            //     pathname: `/userPersonal`,
-            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
-            // }}>
-            <span className="input-heading-add-another pt-0">{name}</span>
-        // </NavLink>
+        render: (name, record) => (
+            <NavLink to={{
+                pathname: `/userPersonal`,
+                state: { userId: record.userId, screenKey: 'orderSummary', screen: "/orderSummary" },
+            }}
+            >
+                <span className="input-heading-add-another pt-0">{name}</span>
+            </NavLink>
+        ),
     },
     {
         title: 'Affiliate',
@@ -143,7 +145,7 @@ class OrderSummary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: -1,
+            yearRefId: null,
             affiliateOrgId: -1,
             postcode: "",
             searchText: "",
@@ -156,15 +158,18 @@ class OrderSummary extends Component {
     }
 
     async componentDidMount() {
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         let { orderSummaryListingActionObject } = this.props.shopOrderSummaryState
         this.referenceCalls()
         if (orderSummaryListingActionObject) {
+            orderSummaryListingActionObject.params.year = JSON.parse(yearId)
             let params = orderSummaryListingActionObject.params
             this.props.getOrderSummaryListingAction(params)
             await this.setState({
                 offset: params.offset,
                 searchText: params.search,
-                yearRefId: params.year,
+                // yearRefId: params.year,
+                yearRefId: JSON.parse(yearId),
                 postcode: params.postcode,
                 affiliateOrgId: params.affiliate,
                 paymentMethod: params.paymentMethod,
@@ -172,6 +177,7 @@ class OrderSummary extends Component {
                 sortBy: params.sorterBy,
             })
         } else {
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.handleTableList(1);
         }
     }
@@ -183,12 +189,21 @@ class OrderSummary extends Component {
     }
 
     handleTableList = (page) => {
-        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod, sortOrder, sortBy } = this.state
+        let {
+            // yearRefId,
+            affiliateOrgId,
+            postcode,
+            searchText,
+            paymentMethod,
+            sortOrder,
+            sortBy
+        } = this.state
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         let params = {
             limit: 10,
             offset: (page ? (10 * (page - 1)) : 0),
             search: searchText,
-            year: yearRefId,
+            year: this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(yearId),
             postcode: postcode,
             affiliate: affiliateOrgId,
             paymentMethod: paymentMethod,
@@ -201,12 +216,15 @@ class OrderSummary extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
             this.handleTableList(1);
         } else if (key === "affiliateOrgId") {
             await this.setState({ affiliateOrgId: value });
             this.handleTableList(1);
         } else if (key === "postcode") {
-            const regex = /,/gi;
+            // const regex = /,/gi;
             let canCall = false;
             let newVal = value.toString().split(',');
             newVal.map((x, index) => {
@@ -460,7 +478,7 @@ class OrderSummary extends Component {
                         columns={columns}
                         dataSource={orderSummaryListingData}
                         pagination={false}
-                        rowKey={(record, index) => "orderSummaryListingData" + record.id + index}
+                        rowKey={(record) => "orderSummaryListingData" + record.id}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -500,7 +518,7 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAffiliateToOrganisationAction,
         exportOrderSummaryAction,
-    }, dispatch)
+    }, dispatch);
 }
 
 function mapStatToProps(state) {

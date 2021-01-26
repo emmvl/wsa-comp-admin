@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import { getUmpireCompetiton, getUmpireCompetitonData, getOrganisationData } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
-import history from "../../util/history";
+// import history from "../../util/history";
 import {
     umpireListAction,
     updateAddUmpireData,
@@ -484,8 +484,15 @@ class AddUmpire extends Component {
     );
 
     onSaveClick = () => {
-        const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId, umpireListResult, umpireListData } = this.props.umpireState
-        let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
+        const {
+            umpireData,
+            affiliateId,
+            umpireRadioBtn,
+            exsitingUmpireId,
+            // umpireListResult,
+            umpireListData
+        } = this.props.umpireState
+        // let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
 
         if (umpireRadioBtn === 'new') {
             if (umpireData.mobileNumber.length !== 10) {

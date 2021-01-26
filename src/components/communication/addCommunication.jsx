@@ -3,7 +3,6 @@ import {
     Layout,
     Breadcrumb,
     Select,
-    Input,
     Button,
     DatePicker,
     TimePicker,
@@ -12,7 +11,6 @@ import {
     Spin,
     Checkbox,
     message,
-    AutoComplete,
     Radio
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -35,9 +33,17 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
-import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import {
+    EditorState,
+    ContentState,
+    // convertFromHTML,
+    convertToRaw
+} from 'draft-js';
+import {
+    getLiveScoreCompetiton,
+    // getKeyForStateWideMessage
+} from '../../util/sessionStorage';
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import { NavLink } from "react-router-dom";
@@ -45,7 +51,7 @@ import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 import { getOrganisationData } from "../../util/sessionStorage";
 import { getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction } from "../../store/actions/userAction/userAction";
-import { isEmptyArray } from "formik";
+// import { isEmptyArray } from "formik";
 import { updateCommunicationModuleData } from '../../store/actions/communicationAction/communicationAction'
 
 const { Header, Footer, Content } = Layout;
@@ -152,7 +158,7 @@ class AddCommunication extends Component {
     }
 
     EditorView = () => {
-        const { liveScoreNewsState } = this.props;
+        // const { liveScoreNewsState } = this.props;
         const { editorState } = this.state;
         return (
             <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)", }}>
@@ -263,16 +269,16 @@ class AddCommunication extends Component {
         });
     };
 
-    onChangeExpiryDate(date) {
-        let { addEditNews } = this.props.liveScoreNewsState
-    }
+    // onChangeExpiryDate(date) {
+    //     let { addEditNews } = this.props.liveScoreNewsState
+    // }
 
     ///method to change time slots
-    onChangeTime(time, timeString) {
-    }
+    // onChangeTime(time, timeString) {
+    // }
 
     ////method to setimage
-    setImage = (data) => {
+    setImage_1 = (data) => {
         this.setState({ imageSelection: null, image: null })
         this.props.liveScoreUpdateNewsAction(null, "newsImage")
 
@@ -291,6 +297,27 @@ class AddCommunication extends Component {
 
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
             // this.props.liveScoreUpdateNewsAction(data.files[0], "newsImage")
+        }
+    };
+
+    setImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]), imageTimeout: 2000, crossImageIcon: false })
+            setTimeout(() => {
+                this.setState({ imageTimeout: null, crossImageIcon: true })
+            }, 2000);
         }
     };
 
@@ -480,12 +507,12 @@ class AddCommunication extends Component {
         let expiryDate = news_expire_date
         let expiryTime = expire_time
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
-        let stateWideMsg = getKeyForStateWideMessage()
+        // let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="content-view pt-4">
                 <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
                     <InputWithHead
-                        required="required-field pt-0 pb-1"
+                        required="required-field pt-0"
                         heading={AppConstants.newsTitle}
                         placeholder={AppConstants.enterNewsTitle}
                         name="newsTitle"
@@ -497,7 +524,7 @@ class AddCommunication extends Component {
                     />
                 </Form.Item>
                 <InputWithHead
-                    required="pb-0"
+                    // required=""
                     heading={AppConstants.newsBody}
                 // value={editData.body}
                 />
@@ -506,7 +533,7 @@ class AddCommunication extends Component {
 
                 <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
                     <InputWithHead
-                        required="required-field pb-1 pt-4"
+                        required="required-field pt-4"
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
@@ -532,13 +559,14 @@ class AddCommunication extends Component {
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
-                                onChange={(event) => {
-                                    this.setImage(event.target, 'evt.target')
-                                    this.setState({ imageTimeout: 2000, crossImageIcon: false })
-                                    setTimeout(() => {
-                                        this.setState({ imageTimeout: null, crossImageIcon: true })
-                                    }, 2000);
-                                }}
+                                // onChange={(event) => {
+                                //     this.setImage(event.target, 'evt.target')
+                                //     this.setState({ imageTimeout: 2000, crossImageIcon: false })
+                                //     setTimeout(() => {
+                                //         this.setState({ imageTimeout: null, crossImageIcon: true })
+                                //     }, 2000);
+                                // }}
+                                onChange={(evt) => this.setImage(evt.target)}
                                 onClick={(event) => {
                                     event.target.value = null
                                 }}
@@ -559,6 +587,9 @@ class AddCommunication extends Component {
                                 )}
                             </div>
                         </div>
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.newsVideo} />
@@ -606,7 +637,7 @@ class AddCommunication extends Component {
                 {/* News expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryDate} />
+                        <InputWithHead heading={AppConstants.newsExpiryDate} />
                         <DatePicker
                             // size="large"
                             style={{ width: '100%' }}
@@ -619,7 +650,7 @@ class AddCommunication extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryTime} />
+                        <InputWithHead heading={AppConstants.newsExpiryTime} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}
@@ -691,7 +722,7 @@ class AddCommunication extends Component {
         let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         let affiliateToData = isArrayNotEmpty(affiliateTo.affiliatedTo) ? affiliateTo.affiliatedTo : [];
         let userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
-        let uniqueValues = [];
+        // let uniqueValues = [];
         // if (affiliateToData.affiliatedTo != undefined) {
         //     let obj = {
         //         organisationId: getOrganisationData().organisationUniqueKey,
@@ -888,7 +919,7 @@ class AddCommunication extends Component {
 
         if (data.newExpiryDate && data.expire_time) {
             let expiry__Date = data.news_expire_date
-            let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
+            // let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
             let expiryTime = moment(data.expire_time).format("HH:mm")
             let postDate = moment(expiry__Date + " " + expiryTime);
 
@@ -934,8 +965,8 @@ class AddCommunication extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
+        // const { liveScoreNewsState } = this.props;
+        // let editData = liveScoreNewsState.addEditNews;
 
         return (
             <div className="fluid-width">
@@ -969,7 +1000,7 @@ class AddCommunication extends Component {
     };
 
     render() {
-        let stateWideMsg = getKeyForStateWideMessage()
+        // let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg">
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />

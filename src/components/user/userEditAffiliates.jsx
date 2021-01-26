@@ -36,7 +36,7 @@ import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+// const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 class UserEditAffiliates extends Component {
     constructor(props) {
@@ -558,7 +558,7 @@ class UserEditAffiliates extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-name"
-                        required="required-field pt-0 pb-0"
+                        required="required-field pt-0"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
@@ -634,7 +634,7 @@ class UserEditAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-firstName"
-                                required="required-field pt-0 pb-0"
+                                required="required-field pt-0"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(e) =>
@@ -669,7 +669,7 @@ class UserEditAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-lastName"
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 onChange={(e) =>
@@ -692,7 +692,7 @@ class UserEditAffiliates extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-email"
-                                required="required-field pt-0 pb-0"
+                                required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
                                 disabled={!item.isSameUser}

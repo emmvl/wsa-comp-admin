@@ -13,9 +13,10 @@ import history from 'util/history';
 import { checkRegistrationType, getCurrentYear } from 'util/permissions';
 import {
     getPrevUrl,
-    setOwnCompetitionYear,
     setOwn_competition,
     clearCompetitionStorage,
+    setGlobalYear,
+    getGlobalYear
 } from 'util/sessionStorage';
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from 'store/actions/appAction';
 import {
@@ -192,26 +193,26 @@ const columnsOwned = [
                     </Menu>
                 </div>
             ) : (
-                <div onClick={(e) => e.stopPropagation()}>
-                    <Menu
-                        className="action-triple-dot-submenu"
-                        theme="light"
-                        mode="horizontal"
-                        style={{ lineHeight: '25px' }}
-                    >
-                        <SubMenu
-                            key="sub1"
-                            title={
-                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                            }
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: '25px' }}
                         >
-                            <Menu.Item key="1" onClick={() => this_Obj.deleteCompetition('show', record)}>
-                                <span>{AppConstants.delete}</span>
-                            </Menu.Item>
-                        </SubMenu>
-                    </Menu>
-                </div>
-            )
+                            <SubMenu
+                                key="sub1"
+                                title={
+                                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                                }
+                            >
+                                <Menu.Item key="1" onClick={() => this_Obj.deleteCompetition('show', record)}>
+                                    <span>{AppConstants.delete}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    </div>
+                )
         ),
     },
 ];
@@ -268,11 +269,11 @@ class CompetitionDashboard extends Component {
     }
 
     getYearRefId = (yearList) => {
-        let storedYearID = localStorage.getItem('yearId');
+        let storedYearID = getGlobalYear();
         let yearRefId;
         if (storedYearID == null || storedYearID == 'null') {
             yearRefId = getCurrentYear(yearList)
-            localStorage.setItem('yearId', yearRefId)
+            setGlobalYear(yearRefId)
         } else {
             yearRefId = storedYearID;
         }
@@ -319,15 +320,18 @@ class CompetitionDashboard extends Component {
     };
 
     onYearClick = (yearId) => {
-        localStorage.setItem('yearId', yearId);
+        setGlobalYear(yearId)
         this.setState({ year: yearId })
         this.props.competitionDashboardAction(yearId);
     };
 
     dropdownView = () => {
-        const { yearList, selectedYear } = this.props.appState;
-        let storedYearID = localStorage.getItem('yearId');
-        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
+        const {
+            yearList,
+            // selectedYear
+        } = this.props.appState;
+        // let storedYearID = localStorage.getItem('yearId');
+        // let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         return (
             <div className="comp-player-grades-header-drop-down-view" style={{ marginTop: 15 }}>
                 <div className="row">
@@ -411,7 +415,7 @@ class CompetitionDashboard extends Component {
     };
 
     openModel = (props) => {
-        let competitionId = this.props.competitionFeesState.competitionId;
+        // let competitionId = this.props.competitionFeesState.competitionId;
         let this_ = this;
         confirm({
             title: 'Do you want to add registration?',
@@ -441,11 +445,11 @@ class CompetitionDashboard extends Component {
 
     onRegistrationCompScreen = () => {
         this.props.clearCompReducerDataAction("all");
-        history.push("/registrationCompetitionFee", { id: null });
+        history.push("/registrationCompetitionFee", { id: null, isEdit: false });
     };
 
     dropdownButtonView = () => {
-        const { yearList, selectedYear } = this.props.appState;
+        // const { yearList, selectedYear } = this.props.appState;
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -468,12 +472,12 @@ class CompetitionDashboard extends Component {
     };
 
     compScreenDeciderCheck = (record, key) => {
-        let storedYearID = localStorage.getItem("yearId");
-        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
+        // let storedYearID = localStorage.getItem("yearId");
+        // let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         if (key === "own") {
             history.push("/competitionOpenRegForm", { id: record.competitionId, screenKey: "compDashboard" });
             setOwn_competition(record.competitionId)
-            setOwnCompetitionYear(selectedYearId)
+            // setGlobalYear(selectedYearId)
         } else {
             history.push("/registrationCompetitionForm", { id: record.competitionId });
         }
@@ -531,22 +535,22 @@ class CompetitionDashboard extends Component {
                 {this.state.statusRefId === 0 ? (
                     <p>{AppConstants.compDeleteConfirm.replace("(COMP_NAME)", this.state.competitionName)}</p>
                 ) : (
-                    <div>
-                        <p>
-                            {AppConstants.deletePublishToLsMsg
-                                .replace("(COMP_NAME)", this.state.competitionName)
-                                .replace("(COMP_NAME)", this.state.competitionName)}
-                        </p>
-                        <Radio.Group
-                            className="reg-competition-radio customize-radio-text"
-                            onChange={(e) => this.onChangeSetValue(e.target.value)}
-                            value={this.state.onDeleteTargetValue}
-                        >
-                            <Radio value={1}>{AppConstants.both}</Radio>
-                            <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
-                        </Radio.Group>
-                    </div>
-                )}
+                        <div>
+                            <p>
+                                {AppConstants.deletePublishToLsMsg
+                                    .replace("(COMP_NAME)", this.state.competitionName)
+                                    .replace("(COMP_NAME)", this.state.competitionName)}
+                            </p>
+                            <Radio.Group
+                                className="reg-competition-radio customize-radio-text"
+                                onChange={(e) => this.onChangeSetValue(e.target.value)}
+                                value={this.state.onDeleteTargetValue}
+                            >
+                                <Radio value={1}>{AppConstants.both}</Radio>
+                                <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
+                            </Radio.Group>
+                        </div>
+                    )}
             </Modal>
         </div>
     );

@@ -3,7 +3,7 @@ import {
     Layout,
     Breadcrumb,
     Select,
-    Input,
+    // Input,
     Button,
     DatePicker,
     TimePicker,
@@ -33,9 +33,14 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import {
+    EditorState,
+    ContentState,
+    // convertFromHTML,
+    convertToRaw
+} from 'draft-js';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import { NavLink } from "react-router-dom";
@@ -130,7 +135,7 @@ class LiveScoreAddNews extends Component {
     }
 
     EditorView = () => {
-        const { liveScoreNewsState } = this.props;
+        // const { liveScoreNewsState } = this.props;
         const { editorState } = this.state;
         return (
             <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
@@ -241,16 +246,16 @@ class LiveScoreAddNews extends Component {
         });
     };
 
-    onChangeExpiryDate(date) {
-        let { addEditNews } = this.props.liveScoreNewsState
-    }
+    // onChangeExpiryDate(date) {
+    //     // let { addEditNews } = this.props.liveScoreNewsState
+    // }
 
-    ///method to change time slots
-    onChangeTime(time, timeString) {
-    }
+    // ///method to change time slots
+    // onChangeTime(time, timeString) {
+    // }
 
     ////method to setimage
-    setImage = (data) => {
+    setImage_1 = (data) => {
         this.setState({ imageSelection: null, image: null })
         this.props.liveScoreUpdateNewsAction(null, "newsImage")
 
@@ -267,8 +272,42 @@ class LiveScoreAddNews extends Component {
                 editData.newsImage = ''
             }
 
-            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
+            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]), imageTimeout: 2000, crossImageIcon: false })
             // this.props.liveScoreUpdateNewsAction(data.files[0], "newsImage")
+        }
+    };
+
+    setImage = (data) => {
+
+        // this.setState({ imageSelection: null, image: null })
+        this.props.liveScoreUpdateNewsAction(null, "newsImage")
+
+        const { liveScoreNewsState } = this.props;
+        let editData = liveScoreNewsState.addEditNews;
+
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+
+            if (this.state.isEdit) {
+                editData.newsImage = ''
+            }
+            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]), imageTimeout: 2000, crossImageIcon: false })
+            setTimeout(() => {
+                this.setState({ imageTimeout: null, crossImageIcon: true })
+            }, 2000);
+
+
         }
     };
 
@@ -520,13 +559,14 @@ class LiveScoreAddNews extends Component {
                                 type="file"
                                 id="user-pic"
                                 className="d-none"
-                                onChange={(event) => {
-                                    this.setImage(event.target, 'evt.target')
-                                    this.setState({ imageTimeout: 2000, crossImageIcon: false })
-                                    setTimeout(() => {
-                                        this.setState({ imageTimeout: null, crossImageIcon: true })
-                                    }, 2000);
-                                }}
+                                // onChange={(event) => {
+                                //     this.setImage(event.target, 'evt.target')
+                                //     this.setState({ imageTimeout: 2000, crossImageIcon: false })
+                                //     setTimeout(() => {
+                                //         this.setState({ imageTimeout: null, crossImageIcon: true })
+                                //     }, 2000);
+                                // }}
+                                onChange={(evt) => this.setImage(evt.target)}
                                 onClick={(event) => {
                                     event.target.value = null
                                 }}
@@ -547,6 +587,9 @@ class LiveScoreAddNews extends Component {
                                 )}
                             </div>
                         </div>
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.newsVideo} />
@@ -715,7 +758,7 @@ class LiveScoreAddNews extends Component {
 
         if (data.newExpiryDate && data.expire_time) {
             let expiry__Date = data.news_expire_date
-            let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
+            // let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
             let expiryTime = moment(data.expire_time).format("HH:mm")
             let postDate = moment(expiry__Date + " " + expiryTime);
 
@@ -768,8 +811,8 @@ class LiveScoreAddNews extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
+        // const { liveScoreNewsState } = this.props;
+        // let editData = liveScoreNewsState.addEditNews;
 
         return (
             <div className="fluid-width">
@@ -803,6 +846,11 @@ class LiveScoreAddNews extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
@@ -827,6 +875,7 @@ class LiveScoreAddNews extends Component {
                         autoComplete="off"
                         onFinish={this.onSaveButton}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
                     >
                         <Content>
                             <div className="formView">{this.contentView()}</div>

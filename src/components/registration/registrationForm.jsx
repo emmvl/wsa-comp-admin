@@ -88,9 +88,9 @@ const columns = [
         width: "25%",
     },
     {
-        title: "Registration Lock",
+        title: AppConstants.lockRegistrationsImmediately,
         dataIndex: "registrationLock",
-        width: "15%",
+        width: 120,
         key: "registrationLock",
         filterDropdown: true,
         filterIcon: () => (
@@ -100,30 +100,41 @@ const columns = [
                 </CustomTooltip>
             </div>
         ),
-        render: (registrationLock, record, index) => (
-            <Checkbox
-                className="single-checkbox mt-1"
-                checked={record.registrationLock == null ? false : record.registrationLock}
-                onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
-            />
-        )
+        render: (registrationLock, record, index) => {
+            return (
+                <div>
+                    {(record.isPlaying == 1 || record.isIndividualRegistration == 1) &&
+                        <Checkbox
+                            className="single-checkbox mt-1"
+                            checked={record.registrationLock == null ? false : record.registrationLock}
+                            onChange={e => this_Obj.getRegistrationLock(e.target.checked, record, index)}
+                        />
+                    }
+                </div>
+            )
+        }
     },
 
     {
-        title:"Registration Cap",
+        title: "Registration Cap",
         dataIndex: "registrationType",
-        key:"registrationCap",
-        render: (registrationCap, record, index) =>  {
+        key: "registrationCap",
+        render: (registrationCap, record, index) => {
             return (
-                <InputWithHead
-                    style={{width: "70%"}}
-                    placeholder=" "
-                    onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
-                    value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
-                    />
+                <div>
+                    {(record.isPlaying == 1 || record.isIndividualRegistration == 1) &&
+                        <InputWithHead
+                            style={{ width: "70%" }}
+                            placeholder=" "
+                            type={"number"}
+                            min="0"
+                            onChange={(e) => this_Obj.props.updateRegistrationForm(e.target.value > 0 ? e.target.value : null, "membershipProductTypes", record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap", index, record)}
+                            value={record.isIndividualRegistration == 1 ? record.registrationCap : record.teamRegistrationCap}
+                        />
+                    }
+                </div>
             )
         }
-
     }
 ];
 
@@ -244,7 +255,7 @@ class RegistrationForm extends Component {
         return (
             <div>
                 <a>
-                    <Mailto email="" subject={AppConstants.hardshipCode} body={body}>
+                    <Mailto email="" subject={AppConstants.singleUseDiscountSubject} body={body}>
                         <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
                             {AppConstants.email}
                         </span>
@@ -386,7 +397,7 @@ class RegistrationForm extends Component {
         let allMemberProductArr = this.props.registrationState.selectedMemberShipType
         let matchIndexValue = allMemberProductArr.findIndex(x => x.membershipProductId == record.membershipProductId)
         if (matchIndexValue > -1) {
-            this.props.updateProductSelection(matchIndexValue, key, record.isSelected, record.registrationLock)
+            this.props.updateProductSelection(matchIndexValue, key, record.isSelected, record.registrationLock, record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap")
         }
 
     }
@@ -560,7 +571,7 @@ class RegistrationForm extends Component {
         let fillteredProduct = this.props.registrationState.selectedProductName !== 0 ? this.props.registrationState.selectedProductName : []
         let productList = this.props.registrationState.membershipProductTypes.length !== 0 ? this.props.registrationState.membershipProductTypes : [];
         let venueList = this.props.appState.venueList.length !== 0 ? this.props.appState.venueList : [];
-        let dateOpen = this.regOpenDate()
+        // let dateOpen = this.regOpenDate()
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
@@ -639,7 +650,7 @@ class RegistrationForm extends Component {
                     </div>
                 </div>
 
-                <InputWithHead heading={AppConstants.membershipProduct} />
+                <InputWithHead required={"required-field"} heading={AppConstants.membershipProduct} />
                 <Select
                     mode="multiple"
                     className="reg-form-multiple-select"
@@ -657,6 +668,7 @@ class RegistrationForm extends Component {
                 </Select>
 
                 {this.props.registrationState.selectedMemberShipType.map((item) => (
+                    item != undefined &&
                     <div className="inside-container-view">
                         <span className="form-heading pt-2 pl-2">
                             {item.membershipProductName}
@@ -1140,15 +1152,20 @@ class RegistrationForm extends Component {
 
     ///advance  setting view
     advancedSettingView = () => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+        // let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
-        let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
+        // let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
         let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
-        let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
-        const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
+        // let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
+        const { 
+            selectedInvitees, 
+            // selectedDemographic, 
+            // SelectedOtherQuestions, 
+            selectedNetballQuestions 
+        } = this.props.registrationState
         let isPublished = false; // this.state.isPublished // CM-1513
         let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
-        let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
+        // let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
 
         return (
             <div className="discount-view pt-5">
@@ -1475,7 +1492,7 @@ class RegistrationForm extends Component {
         // let isPublished = this.state.isPublished;
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
+                <span className="form-heading pb-2">{AppConstants.singleUseDiscount}</span>
                 {hardShipCodesList.map((item) => (
                     <div>
                         <div className="d-flex" style={{ marginTop: "13px" }}>
@@ -1594,6 +1611,11 @@ class RegistrationForm extends Component {
         )
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         const { isHardshipEnabled } = this.props.registrationState.registrationFormData[0];
         return (
@@ -1612,6 +1634,7 @@ class RegistrationForm extends Component {
                         autoComplete="off"
                         onFinish={this.registrationSubmit}
                         noValidate="noValidate"
+                        onFinishFailed={this.onFinishFailed}
                     >
                         {/* {this.dropdownView()} */}
                         <Content>

@@ -103,7 +103,10 @@ class LiveScoreBulkChange extends Component {
 
     // initial view
     inital_screen = () => {
-        const { venueData, selected_Option } = this.props.liveScoreBulkMatchState;
+        const { 
+            venueData, 
+            // selected_Option 
+        } = this.props.liveScoreBulkMatchState;
         return (
             <div>
                 {/* date picker row */}
@@ -130,7 +133,7 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
-                                defaultOpenValue={moment("00:00", "hh:mm A")}
+                                defaultValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
                                 minuteStep={15}
@@ -140,7 +143,7 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
-                                defaultOpenValue={moment("00:00", "hh:mm A")}
+                                defaultValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
                                 minuteStep={15}
@@ -300,7 +303,7 @@ class LiveScoreBulkChange extends Component {
                     <div className="col-sm" style={{ marginTop: 5 }}>
                         <TimePicker
                             className="comp-venue-time-timepicker w-100"
-                            defaultOpenValue={moment("00:00", "HH:mm")}
+                            defaultValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "optionalTime")}
                             onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'optionalTime')}
@@ -358,14 +361,14 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="startTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
                                     placeholder="Select Time"
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
                                     onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
-                                    // value={pushBackData.startTime}
+                                // value={pushBackData.startTime}
                                 />
                             </Form.Item>
                         </div>
@@ -394,14 +397,14 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
                                     placeholder="Select Time"
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                     onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
-                                    // value={pushBackData.endTime}
+                                // value={pushBackData.endTime}
                                 />
                             </Form.Item>
                         </div>
@@ -502,7 +505,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="forwardTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, 'startTime')}
                                     onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
                                     format="HH:mm"
@@ -538,7 +541,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="forwardEndTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                     onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
                                     format="HH:mm"
@@ -644,7 +647,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endMatchTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "hh:mm")}
+                                    defaultValue={moment("00:00", "hh:mm")}
                                     format="hh:mm"
                                     // minuteStep={15}
                                     placeholder="Select Time"
@@ -680,7 +683,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     placeholder="Select Time"
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
@@ -773,7 +776,7 @@ class LiveScoreBulkChange extends Component {
     doublwHeaderView() {
         const { roundList } = this.props.liveScoreBulkMatchState;
         const roundResult = isArrayNotEmpty(roundList) ? roundList : [];
-        const { doubleHeaderResult } = this.props.liveScoreBulkMatchState;
+        // const { doubleHeaderResult } = this.props.liveScoreBulkMatchState;
 
         return (
             <div>
@@ -829,7 +832,11 @@ class LiveScoreBulkChange extends Component {
         const { roundList } = this.props.liveScoreRoundState;
         const roundResult = isArrayNotEmpty(roundList) ? roundList : [];
         const {
-            abandonData, venueData, abandonCourtData, matchResult, mainCourtList,
+            abandonData,
+            venueData,
+            abandonCourtData,
+            // matchResult,
+            mainCourtList,
         } = this.props.liveScoreBulkMatchState;
 
         return (
@@ -850,14 +857,14 @@ class LiveScoreBulkChange extends Component {
                                         showTime={false}
                                         name="registrationOepn"
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
-                                        // value={abandonData.startDate}
+                                    // value={abandonData.startDate}
                                     />
                                 </Form.Item>
                             </div>
                             <div className="col-sm" style={{ marginTop: 5 }}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
                                     placeholder="Select Time"
@@ -884,14 +891,14 @@ class LiveScoreBulkChange extends Component {
                                         showTime={false}
                                         name="registrationOepn"
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
-                                        // value={abandonData.endDate}
+                                    // value={abandonData.endDate}
                                     />
                                 </Form.Item>
                             </div>
                             <div className="col-sm" style={{ marginTop: 5 }}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    defaultValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
                                     placeholder="Select Time"

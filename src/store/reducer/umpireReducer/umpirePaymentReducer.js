@@ -121,7 +121,7 @@ function umpirePaymentState(state = initialState, action) {
                     }
 
                     if (data) {
-                        if (umpirePaymentArr[i].paymentStatus == "unpaid") {
+                        if (umpirePaymentArr[i].paymentStatus === "unpaid") {
                             state.umpireDataPayement.push(umpirePaymentArr[i])
                         }
                     } else {
@@ -186,7 +186,7 @@ function umpirePaymentState(state = initialState, action) {
                     let postData = state.paymentTransferPostData
                     let userId = action.data.allData.userId
                     for (let i in postData) {
-                        if (postData[i].userId == userId) {
+                        if (postData[i].userId === userId) {
                             postData.splice(i, 1);
                             break;
                         }
@@ -196,7 +196,7 @@ function umpirePaymentState(state = initialState, action) {
 
 
                 for (let i in umpirePaymentArr) {
-                    if (i == index) {
+                    if (i === index) {
                         umpirePaymentArr[i]["selectedValue"] = data
                     }
                 }
@@ -219,13 +219,13 @@ function umpirePaymentState(state = initialState, action) {
                 let paymentData = state.umpirePaymentList
                 if (data) {
                     for (let i in paymentData) {
-                        if (i == index) {
+                        if (i === index) {
                             paymentData[i][key] = data
                         }
                     }
                 } else {
                     for (let i in paymentData) {
-                        if (i == index) {
+                        if (i === index) {
                             paymentData[i][key] = data
                         }
                     }

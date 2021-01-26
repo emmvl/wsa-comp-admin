@@ -12,16 +12,16 @@ import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
 import { getUmpirePaymentData, updateUmpirePaymentData, umpirePaymentTransferData } from '../../store/actions/umpireAction/umpirePaymentAction'
 import {
-    getUmpireCompetiton,
+    // getUmpireCompetiton,
     setUmpireCompition,
     getOrganisationData,
     setUmpireCompitionData,
-    getUmpireCompetitonData,
-    getLiveScoreUmpireCompition,
-    getLiveScoreUmpireCompitionData,
+    // getUmpireCompetitonData,
+    // getLiveScoreUmpireCompition,
+    // getLiveScoreUmpireCompitionData,
     setLiveScoreUmpireCompition,
     setLiveScoreUmpireCompitionData,
-    getPrevUrl,
+    // getPrevUrl,
 } from 'util/sessionStorage';
 import './umpire.css';
 import Loader from '../../customComponents/loader';
@@ -208,7 +208,7 @@ class UmpirePayments extends Component {
             loading: false,
             competitionUniqueKey: null,
             year: "2019",
-            roasterLoad: false,
+            rosterLoad: false,
             compArray: [],
             sortBy: null,
             sortOrder: null,
@@ -218,7 +218,16 @@ class UmpirePayments extends Component {
         this_obj = this
     }
 
+    isBecsSetupDone = () => {
+        const orgData = getOrganisationData();
+        const becsMandateId = orgData ? orgData.stripeBecsMandateId : null;
+        return becsMandateId;
+    }
+
     async componentDidMount() {
+        if (!this.isBecsSetupDone()) {
+            this.props.history.push("/orgBecsSetup");
+        }
         let { organisationId, } = JSON.parse(localStorage.getItem("setOrganisationData"))
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS")
         const { umpirePaymentObject } = this.props.umpirePaymentState
@@ -245,7 +254,7 @@ class UmpirePayments extends Component {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
-                let compData = compList.length > 0 && compList[0]
+                // let compData = compList.length > 0 && compList[0]
 
                 // if (getUmpireCompetiton()) {
                 //     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
@@ -375,7 +384,7 @@ class UmpirePayments extends Component {
                         columns={columns}
                         dataSource={umpirePaymentList}
                         pagination={false}
-                        rowKey={(record, index) => `umpirePayments${record.matchId}${index}`}
+                        rowKey={(record) => `umpirePayments${record.matchId}`}
                     />
                 </div>
 
@@ -534,75 +543,12 @@ class UmpirePayments extends Component {
         this.props.exportFilesAction(url);
     };
 
-    dropdownView_1 = () => {
-        const { paymentStatus } = this.props.umpirePaymentState
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
-                <div className="fluid-width">
-                    <div className="row">
-                        {/* competition List */}
-                        <div className="col-sm-3">
-                            <div className="reg-filter-col-cont">
-                                <span className="year-select-heading">{AppConstants.competition}:</span>
-                                <Select
-                                    className="year-select reg-filter-select1 ml-3"
-                                    style={{ minWidth: 200 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
-                                    value={this.state.selectedComp}
-                                >
-                                    {competition.map((item) => (
-                                        <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="col-sm-8">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex align-items-center justify-content-end">
-                                <Button
-                                    type="primary"
-                                    className="primary-add-comp-form"
-                                    onClick={this.onExport}
-                                >
-                                    <div className="row">
-                                        <div className="col-sm">
-                                            <img
-                                                className="export-image"
-                                                src={AppImages.export}
-                                                alt=""
-                                            />
-                                            {AppConstants.export}
-                                        </div>
-                                    </div>
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile d-flex flex-column align-items-end justify-content-end align-content-center"
-                                style={{ paddingRight: 35 }}
-                            >
-                                <Checkbox
-                                    className="single-checkbox"
-                                    checked={paymentStatus}
-                                    onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
-                                >
-                                    All
-                                </Checkbox>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { paymentStatus } = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
             <div className="comp-player-grades-header-drop-down-view comp">
                 <div className="fluid-width">
@@ -632,6 +578,7 @@ class UmpirePayments extends Component {
                                 type="primary"
                                 className="primary-add-comp-form button-margin-top-ump-payment mr-5"
                                 onClick={this.onExport}
+                                disabled={isCompetitionAvailable}
                             >
                                 <div className="row">
                                     <div className="col-sm">
@@ -745,7 +692,10 @@ class UmpirePayments extends Component {
     }
 
     render() {
-        const { umpirePaymentList, umpirePaymentObject } = this.props.umpirePaymentState
+        const {
+            umpirePaymentList,
+            // umpirePaymentObject
+        } = this.props.umpirePaymentState
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />

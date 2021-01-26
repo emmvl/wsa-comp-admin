@@ -1,5 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString, deepCopyFunction } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString,
+    // deepCopyFunction
+} from "../../../util/helpers";
 import AppConstants from "../../../themes/appConstants";
 ////Venue Constraints List Object /////////////Start
 
@@ -159,7 +163,7 @@ function generateCourtData(courtData) {
         if (isArrayNotEmpty(courtDetails)) {
             for (let j in courtDetails) {
                 let object = {
-                    vId: courtData[i].venueId ? courtData[i].venueId :courtData[i].id,
+                    vId: courtData[i].venueId ? courtData[i].venueId : courtData[i].id,
                     lat: courtDetails[j].lat,
                     lng: courtDetails[j].lng,
                     courtNumber: courtDetails[j].courtNumber,
@@ -175,16 +179,16 @@ function generateCourtData(courtData) {
     return courtselectedArr
 }
 
-function clearVenueFromCourtPreferences(state){
-    let venueIds  = state.selectedVenueId;
+function clearVenueFromCourtPreferences(state) {
+    let venueIds = state.selectedVenueId;
     let courtPreferences = state.venueConstrainstData.courtPreferences;
     let courtsNotValid = courtPreferences.filter(x => !venueIds.some(y => x.venueId === y));
-    if(courtsNotValid){
-        for(let court of courtsNotValid){
+    if (courtsNotValid) {
+        for (let court of courtsNotValid) {
             // court.venueId = null;
             // court.venueCourtId = null;
             let index = courtPreferences.indexOf(court);
-            courtPreferences.splice(index,1);
+            courtPreferences.splice(index, 1);
         }
     }
 }
@@ -238,36 +242,36 @@ function checkSelectedVenuesList(selectedVenue, venueList) {
     return selectedVenuesList
 }
 
-function getVenueObj(venueObj) {
+// function getVenueObj(venueObj) {
 
-    let venueArr = []
+//     let venueArr = []
 
-    // for (let i in venueObj.venues) {
-    //     let venueobj = {
-    //         "competitionVenueId": venueObj.venues[i].competitionVenueId,
-    //         "venueId": venueObj.venues[i].venueId
-    //     }
-    //     venueArr.push(venueobj)
-    // }
+//     // for (let i in venueObj.venues) {
+//     //     let venueobj = {
+//     //         "competitionVenueId": venueObj.venues[i].competitionVenueId,
+//     //         "venueId": venueObj.venues[i].venueId
+//     //     }
+//     //     venueArr.push(venueobj)
+//     // }
 
 
 
-    let objData = {
-        competitionUniqueKey: "",
-        yearRefId: "",
-        organisationId: 1,
-        venues: [],
-        "nonPlayingDates": [],
-        "venueConstraintId": 0,
-        "courtRotationRefId": 8,
-        "homeTeamRotationRefId": 1,
-        "courtPreferences": [],
-        // "courtDivisionPref": [],
-        // "courtGradePref": []
-    }
+//     let objData = {
+//         competitionUniqueKey: "",
+//         yearRefId: "",
+//         organisationId: 1,
+//         venues: [],
+//         "nonPlayingDates": [],
+//         "venueConstraintId": 0,
+//         "courtRotationRefId": 8,
+//         "homeTeamRotationRefId": 1,
+//         "courtPreferences": [],
+//         // "courtDivisionPref": [],
+//         // "courtGradePref": []
+//     }
 
-    return objData
-}
+//     return objData
+// }
 
 function getSelectedCourt(courtVenueId, checkSelectedCourts) {
     let courtObject = {
@@ -331,9 +335,9 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
     for (let i in selectedCourts) {
         let selectedCourtListId = getSelectedCourt(selectedCourts[i].venueCourtId, allCourtsList)
 
-        let entitiesArray = selectedCourts[i].entities
+        // let entitiesArray = selectedCourts[i].entities
         let divisionId = getEnitityIdArray(selectedCourts[i].entities)
-        let gradesId = getEnitityIdArray([])
+        // let gradesId = getEnitityIdArray([])
         let venuCourtObj = null
 
         let venuCourtObjPost = null
@@ -411,43 +415,43 @@ function createEntityObject(action, courtPreferencesPost, evenRotation, venuePre
 }
 
 //update venue court preference object
-function getUpdatedCourtPreferences(updatedCourtsArray, courtPreferencesPost, selectedCourtId) {
-    let statusArray
-    if (selectedCourtId.length > 0) {
-        if (updatedCourtsArray.length > 0) {
-            for (let i in selectedCourtId) {
-                statusArray = checkVenueID(selectedCourtId[i], updatedCourtsArray)
-                let postStausArray = checkVenueID(selectedCourtId[i], courtPreferencesPost)
-                if (statusArray.status) {
-                    delete updatedCourtsArray[i]
-                }
-                if (postStausArray.status) {
-                    delete courtPreferencesPost[i]
-                }
-            }
+// function getUpdatedCourtPreferences(updatedCourtsArray, courtPreferencesPost, selectedCourtId) {
+//     let statusArray
+//     if (selectedCourtId.length > 0) {
+//         if (updatedCourtsArray.length > 0) {
+//             for (let i in selectedCourtId) {
+//                 statusArray = checkVenueID(selectedCourtId[i], updatedCourtsArray)
+//                 let postStausArray = checkVenueID(selectedCourtId[i], courtPreferencesPost)
+//                 if (statusArray.status) {
+//                     delete updatedCourtsArray[i]
+//                 }
+//                 if (postStausArray.status) {
+//                     delete courtPreferencesPost[i]
+//                 }
+//             }
 
 
-        }
-    }
-    return { updatedCourtsArray, courtPreferencesPost }
-}
+//         }
+//     }
+//     return { updatedCourtsArray, courtPreferencesPost }
+// }
 // check checkTimeSlotStatus
-function checkVenueID(courtID, updatedCourtsArray) {
-    let obj = {
-        status: false,
-        index: null
-    }
-    for (let i in updatedCourtsArray) {
-        if (courtID !== updatedCourtsArray[i].venueCourtId) {
-            obj = {
-                status: true,
-                index: [i]
-            }
-            break;
-        }
-    }
-    return obj
-}
+// function checkVenueID(courtID, updatedCourtsArray) {
+//     let obj = {
+//         status: false,
+//         index: null
+//     }
+//     for (let i in updatedCourtsArray) {
+//         if (courtID !== updatedCourtsArray[i].venueCourtId) {
+//             obj = {
+//                 status: true,
+//                 index: [i]
+//             }
+//             break;
+//         }
+//     }
+//     return obj
+// }
 
 function getCourtRotationHelpMsg(data, helpMsg) {
     for (let i in data) {
@@ -456,15 +460,12 @@ function getCourtRotationHelpMsg(data, helpMsg) {
     return data;
 }
 
-function getHomeTeamRotationHelpMsg(data, helpMsg) {
-    for (let i in data) {
-        data[i]['helpMsg'] = helpMsg[i]
-    }
-    return data;
-}
-
-
-
+// function getHomeTeamRotationHelpMsg(data, helpMsg) {
+//     for (let i in data) {
+//         data[i]['helpMsg'] = helpMsg[i]
+//     }
+//     return data;
+// }
 
 function VenueTimeState(state = initialState, action) {
 
@@ -550,7 +551,7 @@ function VenueTimeState(state = initialState, action) {
             state.onLoad = false
             state.onVenueSuccess = false
 
-            const homeTeamRotationHelpMsg = getHomeTeamRotationHelpMsg(action.commResult.HomeTeamRotation, state.homeTeamRotationHelpMsg)
+            // const homeTeamRotationHelpMsg = getHomeTeamRotationHelpMsg(action.commResult.HomeTeamRotation, state.homeTeamRotationHelpMsg)
             state.courtRotation = courtRotationHelpMsg
             return {
                 ...state,
@@ -562,7 +563,6 @@ function VenueTimeState(state = initialState, action) {
 
 
         case ApiConstants.API_UPDATE_VENUE_TIME_DATA:
-
 
             if (action.key == "remove") {
                 let expandedRowKeyRemove = action.index + 1;
@@ -597,6 +597,8 @@ function VenueTimeState(state = initialState, action) {
 
 
             }
+
+            let court_obj = null
             if (action.index === 'Venue') {
                 let upDateData = state.venuData
                 if (action.key === "affiliate") {
@@ -616,7 +618,7 @@ function VenueTimeState(state = initialState, action) {
             }
             else if (action.index === 'addGameAndCourt') {
                 let setKey = generateTableKey(state.venuData.venueCourts)
-                var court_obj = {
+                court_obj = {
                     key: setKey.toString(),
                     venueCourtId: "",
                     courtNumber: setKey,
@@ -645,7 +647,7 @@ function VenueTimeState(state = initialState, action) {
                         let name = venueCourtData[i].name;
                         let lat = venueCourtData[i].latitude;
                         let lng = venueCourtData[i].longitude;
-                        var court_obj = {
+                        court_obj = {
                             key: setKey.toString(),
                             venueCourtId: "",
                             courtNumber: setKey,
@@ -1057,7 +1059,7 @@ function VenueTimeState(state = initialState, action) {
             }
 
             else {
-                let venueConstrainstDetails = state.venueConstrainstData
+                // let venueConstrainstDetails = state.venueConstrainstData
                 if (action.contentType === 'addCourtPreferences') {
                     let venuCourtObj = {
                         "venueConstraintCourtPreferenceId": 0,
@@ -1098,29 +1100,8 @@ function VenueTimeState(state = initialState, action) {
                 status: action.status
             };
 
-        ////get common data for rotation radio button on own competition venue and times
-        // case ApiConstants.API_GET_COMMON_REF_DATA_SUCCESS:
-
-        //     // for (let i in action.result.CourtRotation) {
-        //     //     action.result.CourtRotation[i]["selectedPrefrence"] = null
-        //     // }
-        //     state.courtRotation = getCourtRotation(action.result.CourtRotation)
-        //     state.evenRotation = action.result.CourtRotation[0].subReferences[0].id
-        //     state.radioButton = action.result.CourtRotation[2].id
-        //     state.allocateToSameCourt = action.result.CourtRotation[1].subReferences[0].id
-        //     console.log(state.evenRotation)
-        //     return {
-        //         ...state,
-        //         onLoad: false,
-        //         homeTeamRotation: action.result.HomeTeamRotation
-        //     };
-
-
-
         ////Year and competition seletion
         case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-            // state.venueConstrainstData['yearRefId'] = action.selectedYearId
-
             return {
                 ...state,
                 onLoad: false,
@@ -1129,7 +1110,6 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_LIST:
-            // state.venueConstrainstData['competitionUniqueKey'] = action.data
             state.competitionUniqueKey = action.data
             return {
                 ...state,
@@ -1173,7 +1153,7 @@ function VenueTimeState(state = initialState, action) {
             if (venueDataByIdRes != null && venueDataByIdRes != "") {
                 venueDataByIdRes["expandedRowKeys"] = [];
                 let courts = venueDataByIdRes.venueCourts;
-                let isVenueMapped = venueDataByIdRes["isVenueMapped"];
+                // let isVenueMapped = venueDataByIdRes["isVenueMapped"];
                 if (isArrayNotEmpty(courts)) {
                     for (let i in courts) {
                         let key = Number(i) + 1;

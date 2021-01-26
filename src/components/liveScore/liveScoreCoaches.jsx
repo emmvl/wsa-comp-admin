@@ -214,7 +214,13 @@ class LiveScoreCoaches extends Component {
     /// Handle Page change
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        let { sortBy, sortOrder, searchText, competitionId, compOrgId } = this.state
+        let {
+            sortBy,
+            sortOrder,
+            searchText,
+            // competitionId,
+            compOrgId
+        } = this.state
         this.setState({
             offset
         })
@@ -224,7 +230,7 @@ class LiveScoreCoaches extends Component {
     contentView = () => {
         const { coachesResult, currentPage, totalCount } = this.props.liveScoreCoachState
         let couchesList = isArrayNotEmpty(coachesResult) ? coachesResult : []
-        let teamList = isArrayNotEmpty(coachesResult) ? coachesResult : []
+        // let teamList = isArrayNotEmpty(coachesResult) ? coachesResult : []
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -344,7 +350,7 @@ class LiveScoreCoaches extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value, offset: 0 })
         let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (e.target.value == null || e.target.value === "") {
@@ -356,7 +362,7 @@ class LiveScoreCoaches extends Component {
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         const code = e.keyCode || e.which;
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // const { id } = JSON.parse(getLiveScoreCompetiton())
         let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (code === 13) { // 13 is the enter keycode
             this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
@@ -365,7 +371,7 @@ class LiveScoreCoaches extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {

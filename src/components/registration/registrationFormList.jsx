@@ -18,8 +18,12 @@ import {
 import moment from "moment"
 import Tooltip from 'react-png-tooltip'
 import { getCurrentYear } from "util/permissions"
+import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
 
@@ -93,12 +97,10 @@ const columns = [
         dataIndex: 'userRegistrationUrl',
         key: 'userRegistrationUrl',
         render: (userRegistrationUrl, record) => {
-            // let userRegistration_Url = "https://netball-registration-dev.worldsportaction.com/userRegistration?organisationId=0b3ae01e-885d-40ef-9a07-a94c870133e1&competitionId=17dce919-c961-4aeb-8c30-043a154d75c3"
-            let userRegistration_Url = null
             return (
                 record.status == "Published" &&
                 <span className="d-flex justify-content-center w-50">
-                    <a className="user-reg-link" href={userRegistration_Url} target='_blank'>
+                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank'>
                         <img className="dot-image pointer"
                             src={AppImages.docsIcon}
                             alt="" width="25" height="25" />
@@ -172,7 +174,7 @@ class RegistrationFormList extends Component {
     async componentDidUpdate(nextProps) {
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let mainYearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList)
                 const { regFormListAction } = this.props.dashboardState
                 let page = 1
                 let sortBy = this.state.sortBy
@@ -189,6 +191,7 @@ class RegistrationFormList extends Component {
 
                 } else {
                     this.handleMembershipTableList(1, mainYearRefId)
+                    setGlobalYear(mainYearRefId)
                     await this.setState({
                         yearRefId: mainYearRefId, allyearload: false
                     })
@@ -252,6 +255,7 @@ class RegistrationFormList extends Component {
 
     onYearChange = (yearRefId) => {
         this.setState({ yearRefId });
+        setGlobalYear(yearRefId)
         this.handleMembershipTableList(1, yearRefId);
     }
 

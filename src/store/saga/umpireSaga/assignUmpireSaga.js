@@ -40,7 +40,7 @@ function* errorSaga(error) {
 /////get the umpire assign list
 export function* getAssignUmpireListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.getAssignUmpiresList, action.competitionId, action.body)
+        const result = yield call(LiveScoreAxiosApi.getAssignUmpiresList, action.competitionId, action.body , action.userId)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_SUCCESS,

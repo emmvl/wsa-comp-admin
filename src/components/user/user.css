@@ -29,6 +29,16 @@
   margin-top: 20px;
 }
 
+.submit-reg-data-loading-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    font-size: 29px;
+    color: orange;
+}
+
 .user-affiliate-contacts-text {
   display: flex;
   align-content: flex-start;
@@ -290,6 +300,7 @@
   height: 30px;
   border-radius: 5px;
   background-image: var(--app-gradient-right);
+  padding: inherit;
 }
 
 .search-flex {
@@ -315,4 +326,9 @@
 
 .user-delete-text {
   padding: 23px;
+}
+
+.single-checkbox span {
+  font-size: 13px;
+  color: var(--app-4c4c6d);
 }

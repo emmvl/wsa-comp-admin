@@ -61,7 +61,20 @@ class DivisionGradeModal extends React.Component {
     }
 
     render() {
-        const { checkvalue, changeDivision, changeTeam, division, modalTitle, onDivisionBack, onCancel, addDivision, addGrade, removegrade, changegrade, removeDivision } = this.props
+        const { 
+            // checkvalue,
+            changeDivision,
+            changeTeam,
+            division,
+            modalTitle,
+            onDivisionBack,
+            onCancel,
+            addDivision,
+            addGrade,
+            removegrade,
+            changegrade,
+            removeDivision
+        } = this.props
         return (
             <div className="bg-danger">
                 <Modal

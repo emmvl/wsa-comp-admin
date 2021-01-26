@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
 import moment from "moment";
-
+import { isImageFormatValid, isImageSizeValid } from "util/helpers";
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { getOrganisationData, setOrganisationData } from "util/sessionStorage";
@@ -81,23 +81,23 @@ function Profile(props) {
 
     const setImage = useCallback((data) => {
         if (data.files[0] !== undefined) {
-            const files = data.files[0].type.split("image/");
-            const fileType = files[1];
-
-            if (data.files[0].size > AppConstants.logo_size) {
-                message.error(AppConstants.logoImageSize);
-                return;
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
             }
-
-            if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
-                setUser({
-                    ...user,
-                    photoUrl: URL.createObjectURL(data.files[0]),
-                    photo: data.files[0],
-                });
-            } else {
-                message.error(AppConstants.logoType);
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
             }
+            setUser({
+                ...user,
+                photoUrl: URL.createObjectURL(data.files[0]),
+                photo: data.files[0],
+            });
         }
     }, [user, setUser]);
 
@@ -125,7 +125,16 @@ function Profile(props) {
                             id="user-pic"
                             className="d-none"
                             onChange={(evt) => setImage(evt.target)}
+                            onClick={(event) => {
+                                event.target.value = null
+                            }}
                         />
+
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        <span className="image-size-format-text">
+                            {AppConstants.imageSizeFormatText}
+                        </span>
                     </div>
 
                     <InputWithHead

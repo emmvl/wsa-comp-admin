@@ -28,7 +28,7 @@ class TimeSlotModal extends React.Component {
             removetimeSlotDay,
             changeDay,
             removeStartTime,
-            UpdateTimeSlotsDataManual,
+            // UpdateTimeSlotsDataManual,
             handleTimeslotNext,
             onTimslotBack,
             onTimeslotLoad,

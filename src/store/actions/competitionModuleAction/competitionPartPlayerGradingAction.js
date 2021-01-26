@@ -71,7 +71,8 @@ function onDragPlayerAction(competitionId, teamId, player, source, destination) 
         competitionId,
         teamId,
         player,
-        source, destination
+        source,
+        destination,
     }
     return action
 }

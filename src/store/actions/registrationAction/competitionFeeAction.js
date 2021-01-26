@@ -21,25 +21,27 @@ function regCompetitionListDeleteAction(competitionId) {
 }
 
 /////get the competition fees all the data in one API
-function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId, yearRefId) {
+function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId, yearRefId,isEdit) {
     return {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId,
         hasRegistration,
         sourceModule,
         affiliateOrgId,
-        yearRefId
+        yearRefId,
+        isEdit
     };
 }
 
 /////save the competition fees details
-function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule, affiliateOrgId) {
+function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule, affiliateOrgId,isEdit) {
     return {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD,
         payload,
         logoOrgId,
         sourceModule,
-        affiliateOrgId
+        affiliateOrgId,
+        isEdit
     };
 }
 
@@ -152,6 +154,12 @@ function instalmentDateAction(value, key, subKey) {
 function paymentSeasonalFee() {
     return {
         type: ApiConstants.GET_SEASONAL_FEE_DETAIL_API_LOAD,
+    };
+}
+
+function paymentPerMatch() {
+    return {
+        type: ApiConstants.GET_PER_MATCH_FEE_OPTIONS_API_LOAD,
     };
 }
 
@@ -309,6 +317,7 @@ export {
     updatePaymentFeeOption,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     competitionPaymentApi,
     addRemoveCompFeeDiscountAction,
     add_editcompetitionFeeDeatils,

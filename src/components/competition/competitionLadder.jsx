@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Table, Modal } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Modal } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,10 +13,10 @@ import history from "../../util/history";
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction, } from "../../store/actions/appAction";
 import Loader from '../../customComponents/loader';
 import {
-    getOrganisationData, setOwnCompetitionYear,
-    getOwnCompetitionYear,
+    getOrganisationData,
     setOwn_competition,
-    getOwn_competition
+    getOwn_competition,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
@@ -43,7 +43,7 @@ class CompetitionLadder extends Component {
     }
 
     componentDidMount() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
@@ -62,7 +62,7 @@ class CompetitionLadder extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            // setOwnCompetitionYear(1)
+
         }
     }
 
@@ -112,7 +112,7 @@ class CompetitionLadder extends Component {
     }
 
     onYearChange(yearId) {
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId })

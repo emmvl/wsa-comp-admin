@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import {
     Layout,
     Breadcrumb,
@@ -16,7 +16,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -32,6 +32,7 @@ import {
     addRemoveDivisionAction,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     add_editcompetitionFeeDeatils,
     competitionDiscountTypesAction,
     regCompetitionListDeleteAction,
@@ -51,7 +52,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationData } from "../../util/sessionStorage"
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage"
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
 import { getCurrentYear } from "util/permissions";
@@ -61,7 +62,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
-let this_Obj = null;
+// let this_Obj = null;
 
 const permissionObject = {
     compDetailDisable: false,
@@ -79,7 +80,7 @@ class RegistrationCompetitionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: localStorage.year,
+            yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -260,7 +261,7 @@ class RegistrationCompetitionForm extends Component {
             ],
             divisionState: false
         };
-        this_Obj = this;
+        // this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
@@ -270,7 +271,7 @@ class RegistrationCompetitionForm extends Component {
 
     componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
-        let competitionId = this.props.location.state ? this.props.location.state.id : null
+        // let competitionId = this.props.location.state ? this.props.location.state.id : null
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
             this.setState({ loading: false })
             if (!competitionFeesState.error) {
@@ -324,16 +325,17 @@ class RegistrationCompetitionForm extends Component {
         }
         if (nextProps.appState.yearList !== this.props.appState.yearList) {
             if (this.props.appState.yearList.length > 0) {
-                let yearRefId = getCurrentYear(this.props.appState.yearList)
+                let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
                 this.getMembershipDetails(yearRefId)
                 this.setDetailsFieldValue()
+                setGlobalYear(yearRefId)
             }
         }
 
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let mainYearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList)
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
 
                 this.getMembershipDetails(mainYearRefId)
@@ -346,13 +348,14 @@ class RegistrationCompetitionForm extends Component {
                     yearRefId: mainYearRefId
                 });
                 this.setDetailsFieldValue(mainYearRefId)
+                setGlobalYear(mainYearRefId)
             }
         }
     }
 
     ////disable or enable particular fields
     setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
-        let hasRegistration = this.props.competitionFeesState.competitionDetailData.hasRegistration
+        // let hasRegistration = this.props.competitionFeesState.competitionDetailData.hasRegistration
         if (isPublished) {
             if (isRegClosed) {
                 let permissionObject = {
@@ -427,19 +430,21 @@ class RegistrationCompetitionForm extends Component {
 
     ////all the api calls
     apiCalls = (competitionId) => {
-        this.props.getOnlyYearListAction()
-        this.props.getDefaultCompFeesLogoAction()
-        this.props.competitionDiscountTypesAction()
+        this.props.getOnlyYearListAction();
+        this.props.getDefaultCompFeesLogoAction();
+        this.props.competitionDiscountTypesAction();
         this.props.competitionFeeInit();
-        this.props.paymentFeeDeafault()
-        this.props.paymentSeasonalFee()
-        this.props.getCommonDiscountTypeTypeAction()
+        this.props.paymentFeeDeafault();
+        this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
+        this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
     }
 
     setYear = (e) => {
+        setGlobalYear(e)
         this.setState({ yearRefId: e })
         this.getMembershipDetails(e)
     }
@@ -600,10 +605,6 @@ class RegistrationCompetitionForm extends Component {
         }
     }
 
-    onChange(checkedValues) {
-        // console.log("checked = ", checkedValues);
-    }
-
     divisionTableDataOnchange(checked, record, index, keyword) {
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword)
         this.setState({ divisionState: true })
@@ -662,24 +663,44 @@ class RegistrationCompetitionForm extends Component {
         );
     };
 
+    // setImage = (data) => {
+    //     if (data.files[0] !== undefined) {
+    //         let files_ = data.files[0].type.split("image/")
+    //         let fileType = files_[1]
+
+    //         if (data.files[0].size > AppConstants.logo_size) {
+    //             message.error(AppConstants.logoImageSize);
+    //             return
+    //         }
+
+    //         if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+    //             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+    //             this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+    //             this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+    //         } else {
+    //             message.error(AppConstants.logoType);
+    //             return
+    //         }
+    //     }
+    // };
+
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            let files_ = data.files[0].type.split("image/")
-            let fileType = files_[1]
-
-            if (data.files[0].size > AppConstants.logo_size) {
-                message.error(AppConstants.logoImageSize);
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
                 return
             }
-
-            if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
-                this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-                this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-                this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
-            } else {
-                message.error(AppConstants.logoType);
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
                 return
             }
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+            this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+            this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
         }
     };
 
@@ -699,7 +720,7 @@ class RegistrationCompetitionForm extends Component {
         if (key === "name") {
             array[index].name = data
         } else {
-            array[index].nonPlayingDate = data
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD")
         }
         this.props.add_editcompetitionFeeDeatils(array, "nonPlayingDates")
     }
@@ -838,7 +859,7 @@ class RegistrationCompetitionForm extends Component {
     contentView = () => {
         let roundsArray = this.props.competitionManagementState.fixtureTemplate;
         let appState = this.props.appState
-        const { venueList, mainVenueList } = this.props.commonReducerState
+        // const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
         let compDetailDisable = this.state.permissionState.compDetailDisable
@@ -846,7 +867,7 @@ class RegistrationCompetitionForm extends Component {
             <div className="content-view pt-4">
 
                 <InputWithHead
-                    required="required-field pb-0"
+                    required="required-field"
                     heading={AppConstants.year}
                 />
 
@@ -872,7 +893,7 @@ class RegistrationCompetitionForm extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-compName"
-                        required="required-field pb-0"
+                        required="required-field"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
@@ -882,7 +903,7 @@ class RegistrationCompetitionForm extends Component {
                         })}
                     />
                 </Form.Item>
-                <InputWithHead required="required-field pb-0" heading={AppConstants.competitionLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.competitionLogo} />
 
                 <div className="fluid-width">
                     <div className="row">
@@ -908,6 +929,9 @@ class RegistrationCompetitionForm extends Component {
                                 type="file"
                                 id="user-pic"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -939,6 +963,9 @@ class RegistrationCompetitionForm extends Component {
                             )}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <InputWithHead heading={AppConstants.description} />
@@ -952,7 +979,7 @@ class RegistrationCompetitionForm extends Component {
                 />
 
                 <div style={{ marginTop: 15 }}>
-                    <InputWithHead required="required-field pb-0" heading={AppConstants.venue} />
+                    <InputWithHead required="required-field" heading={AppConstants.venue} />
                     <Form.Item
                         name='selectedVenues'
                         rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
@@ -1113,31 +1140,37 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_days} className="col-sm">
                             <InputWithHead
                                 auto_complete="new-days"
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
-                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-hours"
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
-                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-mins"
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
                                 disabled={compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
@@ -1156,7 +1189,7 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_min_players} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-minNumber"
                                 placeholder={AppConstants.minNumber}
@@ -1165,7 +1198,7 @@ class RegistrationCompetitionForm extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_max_players} className="col-sm" >
                             <InputWithHead
                                 auto_complete="new-maxNumber"
                                 placeholder={AppConstants.maxNumber}
@@ -1383,8 +1416,13 @@ class RegistrationCompetitionForm extends Component {
         this.setDetailsFieldValue()
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
-        let competitionId = this.props.location.state ? this.props.location.state.id : null
+        // let competitionId = this.props.location.state ? this.props.location.state.id : null
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
@@ -1397,9 +1435,11 @@ class RegistrationCompetitionForm extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
-                        onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name);
-                        }}
+                        // onFinishFailed={(err) => {
+                        //     this.formRef.current.scrollToField(err.errorFields[0].name)
+                        //     this.onFinishFailed()
+                        // }}
+                        onFinishFailed={this.onFinishFailed}
                         initialValues={{ yearRefId: this.state.yearRefId, competitionTypeRefId: 1, competitionFormatId: 1 }}
                         noValidate="noValidate"
                     >
@@ -1445,6 +1485,7 @@ function mapDispatchToProps(dispatch) {
         addRemoveDivisionAction,
         paymentFeeDeafault,
         paymentSeasonalFee,
+        paymentPerMatch,
         add_editcompetitionFeeDeatils,
         competitionDiscountTypesAction,
         getCommonDiscountTypeTypeAction,

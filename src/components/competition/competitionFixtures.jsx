@@ -8,12 +8,11 @@ import CompetitionSwappable from '../../customComponents/quickCompetitionCompone
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     setDraws_division_grade,
     getDraws_division_grade,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage"
 import {
     getYearAndCompetitionOwnAction,
@@ -58,8 +57,8 @@ class CompetitionFixtures extends Component {
             }
             if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
                 if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
+                    let yearRefId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.own_YearArr)
+                    setGlobalYear(yearRefId)
                     this.setState({ yearRefId: yearRefId })
                 }
             }
@@ -83,7 +82,7 @@ class CompetitionFixtures extends Component {
     }
 
     apiCalls() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
@@ -114,7 +113,7 @@ class CompetitionFixtures extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            // setOwnCompetitionYear(1)
+
         }
     }
 
@@ -141,7 +140,7 @@ class CompetitionFixtures extends Component {
 
     onYearChange = yearId => {
         this.props.clearFixtureData("grades")
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionDivisionGradeId: null });
         this.props.getYearAndCompetitionOwnAction(
@@ -170,11 +169,11 @@ class CompetitionFixtures extends Component {
     onSwap(source, target, round_Id, draws) {
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
-        let sourceXIndex = sourceIndexArray[0];
+        // let sourceXIndex = sourceIndexArray[0];
         let sourceYIndex = sourceIndexArray[1];
         let sourceZIndex = sourceIndexArray[2];
         let sourceID = sourceIndexArray[3];
-        let targetXIndex = targetIndexArray[0];
+        // let targetXIndex = targetIndexArray[0];
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
         let targetID = targetIndexArray[3];
@@ -317,7 +316,7 @@ class CompetitionFixtures extends Component {
     }
 
     dragableView = () => {
-        var dateMargin = 25;
+        // var dateMargin = 25;
         var dayMargin = 25;
         let topMargin = 0;
         let getStaticDrawsData = [{
@@ -840,8 +839,8 @@ class CompetitionFixtures extends Component {
                                                             {slotObject.homeTeamName}
                                                         </span>
                                                     ) : (
-                                                        <span>N/A</span>
-                                                    )}
+                                                            <span>N/A</span>
+                                                        )}
                                                 </CompetitionSwappable>
                                             </div>
                                         </div>

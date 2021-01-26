@@ -2,7 +2,11 @@ import moment from 'moment';
 
 import AppConstants from '../themes/appConstants';
 import history from './history';
-import { getOrganisationData, getLiveScoreCompetiton } from './sessionStorage';
+import {
+    getOrganisationData,
+    getLiveScoreCompetiton,
+    getUmpireCompetitonData
+} from './sessionStorage';
 
 const organisationTypeRefIdObject = {
     [AppConstants.national]: 1,
@@ -167,6 +171,14 @@ function reverseArray(array) {
     return isSortedArray;
 }
 
+async function checkUmpireCompIsParent() {
+    const orgItem = await getOrganisationData();
+    const umpireCompetition = await getUmpireCompetitonData();
+    const organisationId = orgItem ? orgItem.organisationId : 0;
+    const umpireCompetitionOrgId = umpireCompetition ? JSON.parse(umpireCompetition).organisationId : 0;
+    return (umpireCompetitionOrgId === organisationId);
+}
+
 export {
     checkOrganisationLevel,
     checkUserRole,
@@ -178,4 +190,5 @@ export {
     getUserRoleId,
     getCurrentYear,
     reverseArray,
+    checkUmpireCompIsParent
 };

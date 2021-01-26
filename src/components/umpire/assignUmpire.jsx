@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Layout, Table, Pagination, Select, Modal } from 'antd';
+import { Layout, Table, Pagination, Modal } from 'antd';
 
 import AppConstants from 'themes/appConstants';
 import AppColor from 'themes/appColor';
@@ -20,7 +20,7 @@ import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
 
 const { Content } = Layout;
-const { Option } = Select;
+// const { Option } = Select;
 const { confirm } = Modal;
 
 var this_obj = null
@@ -166,6 +166,7 @@ class AssignUmpire extends Component {
             columns: column,
             loading: false,
             selectedComp: null,
+            userId : null
         };
         this_obj = this
     }
@@ -174,6 +175,10 @@ class AssignUmpire extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
+        
+        let userId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.id : 0 : 0;
+        // let userId = localStorage.getItem("userId");
+        this.setState({userId})
     }
 
     componentDidUpdate(nextProps) {
@@ -191,7 +196,7 @@ class AssignUmpire extends Component {
                         offset: 0
                     }
                 }
-                this.props.getAssignUmpireListAction(firstComp, body)
+                this.props.getAssignUmpireListAction(firstComp, body , this.state.userId)
                 this.setState({ selectedComp: firstComp, loading: false })
             }
         }
@@ -199,7 +204,7 @@ class AssignUmpire extends Component {
 
     ///on status change assign/unassign
     onChangeStatus(index, record, umpireKey, statusText, userData) {
-        let umpireRecord = this_obj.props.location.state && this_obj.props.location.state.record
+        // let umpireRecord = this_obj.props.location.state && this_obj.props.location.state.record
 
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
         let umpireName = this_obj.props.location.state ? this_obj.props.location.state.record.firstName + " " + this_obj.props.location.state.record.lastName : null
@@ -255,11 +260,11 @@ class AssignUmpire extends Component {
             },
         };
         this.setState({ selectedComp: compID });
-        this.props.getAssignUmpireListAction(compID, body);
+        this.props.getAssignUmpireListAction(compID, body , this.state.userId);
     }
 
     headerView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        // let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -314,7 +319,7 @@ class AssignUmpire extends Component {
                 offset,
             },
         };
-        this.props.getAssignUmpireListAction(this.state.selectedComp, body)
+        this.props.getAssignUmpireListAction(this.state.selectedComp, body , this.state.userId)
     }
 
     ////////tableView view for all the umpire assigned matches list
@@ -329,6 +334,7 @@ class AssignUmpire extends Component {
                         columns={this.state.columns}
                         dataSource={assignUmpireList}
                         pagination={false}
+                        rowKey={(record) => "assignUmpire" + record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

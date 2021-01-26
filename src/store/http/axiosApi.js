@@ -1,6 +1,10 @@
 // import { DataManager } from './../../Components';
 import http from "../http/http";
-import { getUserId, getAuthToken, getOrganisationData } from "../../util/sessionStorage"
+import {
+  // getUserId,
+  getAuthToken,
+  getOrganisationData
+} from "../../util/sessionStorage"
 import history from "../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
@@ -100,6 +104,24 @@ let AxiosApi = {
   /////get the common year list reference
   getYearList() {
     var url = `/common/reference/year`;
+    return Method.dataGet(url, token);
+  },
+
+  /////get fee types
+  getFeeList() {
+    var url = `/common/reference/FinanceFeeType`;
+    return Method.dataGet(url, token);
+  },
+
+  /////get payment options
+  getPaymentOptionsList() {
+    var url = `/common/reference/PaymentOptions`;
+    return Method.dataGet(url, token);
+  },
+
+  /////get payment methods
+  getPaymentMethodsList() {
+    var url = `/common/reference/PaymentMethod`;
     return Method.dataGet(url, token);
   },
 
@@ -240,6 +262,12 @@ let AxiosApi = {
   //seasonal PaymentOption
   getSeasonalPayment() {
     var url = "/common/reference/SeasonalPaymentOption";
+    return Method.dataGet(url, token)
+  },
+
+  //per match PaymentOption
+  getPerMatchOption() {
+    var url = "/common/reference/PerMatchPaymentOption";
     return Method.dataGet(url, token)
   },
 

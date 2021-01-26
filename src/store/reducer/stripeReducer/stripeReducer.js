@@ -1,7 +1,11 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString,
+    isNullOrUndefined
+} from "../../../util/helpers";
 import { setOrganisationData, getOrganisationData } from "../../../util/sessionStorage";
-import AppConstants from "../../../themes/appConstants";
+// import AppConstants from "../../../themes/appConstants";
 
 const initialState = {
     onLoad: false,
@@ -16,6 +20,9 @@ const initialState = {
     stripePayoutList: [],
     stripePayoutListTotalCount: 1,
     stripePayoutListPage: 1,
+    stripeRefundList: [],
+    stripeRefundListTotalCount: 1,
+    stripeRefundListPage: 1,
     stripeTransactionPayoutList: [],
     stripeTransactionPayoutListTotalCount: 1,
     stripeTransactionPayoutListPage: 1,
@@ -28,64 +35,117 @@ const initialState = {
     paymentListTotalCount: 1,
     paymentDashboardListAction: null,
     paymentCompetitionList: [],
+    invoiceId: null,
+    transactionId: null,
+    getAffiliteDetailData: [],
+    invoiceData: null,
 }
 
 
 //for making charity roundup array
-function getCharityRoundUpArray(allData) {
-    let getCharityRoundUpArray = []
-    let feesAllData = allData[0].fees
-    for (let i in feesAllData) {
-        let charityObj = {
-            competitionId: feesAllData[i].competitionDetail.competitionId,
-            competitionName: feesAllData[i].competitionDetail.competitionName,
-            charityTitle: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail[0].roundUpName : "N/A",
-            roundUpDescription: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail[0].roundUpDescription : "N/A",
-            charityDetail: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail : [],
-        }
-        let competitionIdIndex = getCharityRoundUpArray.findIndex(x => x.competitionId == feesAllData[i].competitionDetail.competitionId)
-        if (competitionIdIndex === -1) {
-            getCharityRoundUpArray.push(charityObj)
-        }
+// function getCharityRoundUpArray(allData) {
+//     let getCharityRoundUpArray = []
+//     let feesAllData = allData[0].fees
+//     for (let i in feesAllData) {
+//         let charityObj = {
+//             competitionId: feesAllData[i].competitionDetail.competitionId,
+//             competitionName: feesAllData[i].competitionDetail.competitionName,
+//             charityTitle: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail[0].roundUpName : "N/A",
+//             roundUpDescription: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail[0].roundUpDescription : "N/A",
+//             charityDetail: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail : [],
+//         }
+//         let competitionIdIndex = getCharityRoundUpArray.findIndex(x => x.competitionId == feesAllData[i].competitionDetail.competitionId)
+//         if (competitionIdIndex === -1) {
+//             getCharityRoundUpArray.push(charityObj)
+//         }
 
-    }
-    let charityNoneObject = {
-        competitionId: 0,
-        competitionName: "None",
-        charityTitle: "None",
-        roundUpDescription: "",
-        charityDetail: [],
-    }
-    getCharityRoundUpArray.push(charityNoneObject)
-    return getCharityRoundUpArray
-}
+//     }
+//     let charityNoneObject = {
+//         competitionId: 0,
+//         competitionName: "None",
+//         charityTitle: "None",
+//         roundUpDescription: "",
+//         charityDetail: [],
+//     }
+//     getCharityRoundUpArray.push(charityNoneObject)
+//     return getCharityRoundUpArray
+// }
 
-//for calculating subtotal 
-function calculateSubTotal(allData) {
-    let fees_All_Data = allData[0].fees
-    let resultData = {
-        invoiceSubtotal: 0,
-        invoiceGstTotal: 0
-    }
-    for (let i in fees_All_Data) {
+//for calculating subtotal
+// function calculateSubTotal(allData) {
+//     let fees_All_Data = allData[0].fees
+//     let resultData = {
+//         invoiceSubtotal: 0,
+//         invoiceGstTotal: 0
+//     }
+//     for (let i in fees_All_Data) {
 
-        if (fees_All_Data[i].totalAmount.affiliateFees && fees_All_Data[i].totalAmount.affiliateGst) {
-            resultData.invoiceSubtotal = Number(resultData.invoiceSubtotal) + Number(fees_All_Data[i].totalAmount.affiliateFees) +
-                Number(fees_All_Data[i].totalAmount.competitionFees) + Number(fees_All_Data[i].totalAmount.membershipFees)
+//         if (fees_All_Data[i].totalAmount.affiliateFees && fees_All_Data[i].totalAmount.affiliateGst) {
+//             resultData.invoiceSubtotal = Number(resultData.invoiceSubtotal) + Number(fees_All_Data[i].totalAmount.affiliateFees) +
+//                 Number(fees_All_Data[i].totalAmount.competitionFees) + Number(fees_All_Data[i].totalAmount.membershipFees)
 
-            resultData.invoiceGstTotal = Number(resultData.invoiceGstTotal) + Number(fees_All_Data[i].totalAmount.affiliateGst) +
-                Number(fees_All_Data[i].totalAmount.competitionGst) + Number(fees_All_Data[i].totalAmount.membershipGst)
-        }
-        else {
-            resultData.invoiceSubtotal = Number(resultData.invoiceSubtotal) +
-                Number(fees_All_Data[i].totalAmount.competitionFees) + Number(fees_All_Data[i].totalAmount.membershipFees)
+//             resultData.invoiceGstTotal = Number(resultData.invoiceGstTotal) + Number(fees_All_Data[i].totalAmount.affiliateGst) +
+//                 Number(fees_All_Data[i].totalAmount.competitionGst) + Number(fees_All_Data[i].totalAmount.membershipGst)
+//         }
+//         else {
+//             resultData.invoiceSubtotal = Number(resultData.invoiceSubtotal) +
+//                 Number(fees_All_Data[i].totalAmount.competitionFees) + Number(fees_All_Data[i].totalAmount.membershipFees)
 
-            resultData.invoiceGstTotal = Number(resultData.invoiceGstTotal) +
-                Number(fees_All_Data[i].totalAmount.competitionGst) + Number(fees_All_Data[i].totalAmount.membershipGst)
-        }
+//             resultData.invoiceGstTotal = Number(resultData.invoiceGstTotal) +
+//                 Number(fees_All_Data[i].totalAmount.competitionGst) + Number(fees_All_Data[i].totalAmount.membershipGst)
+//         }
 
-    }
-    return resultData
+//     }
+//     return resultData
+// }
+
+function getAffiliteDetailArray(allData) {
+    let getAffiliteDetailArray = []
+    let orgMap = new Map();
+    allData.compParticipants.map((item) => {
+        item.membershipProducts.map((mem) => {
+            if (isNullOrUndefined(mem.fees.membershipFee)) {
+                let key = mem.fees.membershipFee.organisationId;
+                if (orgMap.get(key) == undefined) {
+                    let obj = {
+                        organisationId: mem.fees.membershipFee.organisationId,
+                        organisationName: mem.fees.membershipFee.name,
+                        organiationEmailId: mem.fees.membershipFee.emailId,
+                        organiationPhoneNo: mem.fees.membershipFee.phoneNo
+                    }
+                    getAffiliteDetailArray.push(obj);
+                    orgMap.set(key, obj);
+                }
+            }
+            if (isNullOrUndefined(mem.fees.affiliateFee)) {
+                let key = mem.fees.affiliateFee.organisationId;
+                if (orgMap.get(key) == undefined) {
+                    let obj = {
+                        organisationId: mem.fees.affiliateFee.organisationId,
+                        organisationName: mem.fees.affiliateFee.name,
+                        organiationEmailId: mem.fees.affiliateFee.emailId,
+                        organiationPhoneNo: mem.fees.affiliateFee.phoneNo
+                    }
+                    getAffiliteDetailArray.push(obj);
+                    orgMap.set(key, obj);
+                }
+            }
+            if (isNullOrUndefined(mem.fees.competitionOrganisorFee)) {
+                let key = mem.fees.competitionOrganisorFee.organisationId;
+                if (orgMap.get(key) == undefined) {
+                    let obj = {
+                        organisationId: mem.fees.competitionOrganisorFee.organisationId,
+                        organisationName: mem.fees.competitionOrganisorFee.name,
+                        organiationEmailId: mem.fees.competitionOrganisorFee.emailId,
+                        organiationPhoneNo: mem.fees.competitionOrganisorFee.phoneNo
+                    }
+                    getAffiliteDetailArray.push(obj);
+                    orgMap.set(key, obj);
+                }
+            }
+        });
+    });
+    return getAffiliteDetailArray
 }
 
 
@@ -100,14 +160,16 @@ function stripe(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onExportLoad: false
             };
         case ApiConstants.API_STRIPE_API_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onExportLoad: false
             };
 
 
@@ -196,6 +258,21 @@ function stripe(state = initialState, action) {
                 error: null
             };
 
+        case ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_STRIPE_REFUND_LIST_API_SUCCESS:
+            let refundListData = action.result
+            return {
+                ...state,
+                stripeRefundList: isArrayNotEmpty(refundListData.refunds) ? refundListData.refunds : [],
+                stripeRefundListTotalCount: refundListData.totalCount,
+                stripeRefundListPage: action.page,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
         /////stripe single payout transaction list
         case ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD:
             return { ...state, onLoad: true, error: null };
@@ -213,6 +290,27 @@ function stripe(state = initialState, action) {
             };
 
         ///get invoice
+        // case ApiConstants.API_GET_INVOICE_LOAD:
+        //     return {
+        //         ...state,
+        //         onLoad: true,
+        //         error: null,
+
+        //     }
+
+        // case ApiConstants.API_GET_INVOICE_SUCCESS:
+        //     let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
+        //     let charityRoundUpData = getCharityRoundUpArray(invoicedata)
+        //     let calculateSubTotalData = calculateSubTotal(invoicedata)
+        //     state.subTotalFees = calculateSubTotalData.invoiceSubtotal
+        //     state.subTotalGst = calculateSubTotalData.invoiceGstTotal
+        //     state.charityRoundUpFilter = charityRoundUpData
+        //     state.getInvoicedata = action.result
+        //     return {
+        //         ...state,
+        //         onLoad: false,
+        //     }
+        ///get invoice
         case ApiConstants.API_GET_INVOICE_LOAD:
             return {
                 ...state,
@@ -222,19 +320,14 @@ function stripe(state = initialState, action) {
             }
 
         case ApiConstants.API_GET_INVOICE_SUCCESS:
-            let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
-            let charityRoundUpData = getCharityRoundUpArray(invoicedata)
-            let calculateSubTotalData = calculateSubTotal(invoicedata)
-            state.subTotalFees = calculateSubTotalData.invoiceSubtotal
-            state.subTotalGst = calculateSubTotalData.invoiceGstTotal
-            state.charityRoundUpFilter = charityRoundUpData
-            state.getInvoicedata = action.result
+            state.invoiceData = action.result
+            state.getAffiliteDetailData = getAffiliteDetailArray(action.result)
             return {
                 ...state,
                 onLoad: false,
             }
 
-        ///payment listing 
+        ///payment listing
         case ApiConstants.API_PAYMENT_TYPE_LIST_LOAD:
             return { ...state, onLoad: true, paymentDashboardListAction: action }
 
@@ -258,10 +351,71 @@ function stripe(state = initialState, action) {
                 ...state,
                 onExportLoad: false,
             }
+        case ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD: {
+            return {
+                ...state, onExportLoad: true,
+            };
+        }
+        case ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_SUCCESS: {
+            return {
+                ...state, onExportLoad: false,
+            };
+        }
 
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.paymentDashboardListAction = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.API_GET_INVOICE_STATUS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                error: null,
+
+            }
+
+        case ApiConstants.API_GET_INVOICE_STATUS_SUCCESS:
+            let getInvoiceStatusSuccessData = action.result.data
+            state.invoiceId = getInvoiceStatusSuccessData ? getInvoiceStatusSuccessData.invoiceId : 0
+            state.transactionId = getInvoiceStatusSuccessData ? getInvoiceStatusSuccessData.transactionId ?
+                getInvoiceStatusSuccessData.transactionId : 0 : 0
+            return {
+                ...state,
+                onLoad: false,
+                error: null,
+            }
+        case ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD:
+            return { ...state, onExportLoad: true }
+
+        case ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_SUCCESS:
+            return {
+                ...state,
+                onExportLoad: false,
+            }
+        
+        case ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD:
+            return { ...state, onLoad: true, paymentDashboardListAction: action }
+
+        case ApiConstants.API_PAYMENT_SUMMARY_LIST_SUCCESS:
+            let paymentSummary = action.result;
+            return {
+                ...state, onLoad: false,
+                paymentSummaryList: paymentSummary.paymentSummary,
+                paymentCompetitionList: paymentSummary.competitionList,
+                paymentSummaryListTotalCount: paymentSummary.page.totalCount,
+                paymentSummaryListPage: paymentSummary.page
+                    ? paymentSummary.page.currentPage
+                    : 1,
+            }
+
+        case ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD:
+            return { ...state, onExportLoad: true }
+
+        case ApiConstants.API_EXPORT_PAYMENT_SUMMARY_SUCCESS:
+            return {
+                ...state,
+                onExportLoad: false,
+            }
 
         default:
             return state;

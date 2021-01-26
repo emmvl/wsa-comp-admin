@@ -31,6 +31,8 @@ import shopSettingSaga from './shopSaga/shopSettingSaga';
 
 import umpireDashboardSaga from './umpireSaga/umpireDashboardSaga';
 
+import umpireSettingsSaga from './umpireSaga/umpireSettingsSaga';
+
 import {
     getRegistrationFormSaga,
     regMembershipFeeListSaga,
@@ -46,6 +48,8 @@ import {
     getDivisionsListSaga,
     getTeamRegistrationsSaga,
     exportTeamRegistrationsSaga,
+    getMembershipFeeCapListSaga,
+    updateMembershipFeeCapSaga
 } from './registrationSaga/registrationSaga';
 
 /// /**************************Live Score***************************Start
@@ -81,7 +85,7 @@ import {
     liveScoreDoubleHeaderSaga,
     liveScoreAbandonMatchSaga,
 } from './liveScoreSaga/liveScoreBulkMatchSaga';
-import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
+import { liveScoreDashboardSaga, liveScoreSingleGameListSaga, liveScoreSingleGameRedeemPaySaga, liveScorePlayersToPayListSaga, liveScorePlayersToPayRetryPaymentSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreGamePositionSaga } from './liveScoreSaga/liveScoreGamePositionSaga';
 
 /// /*******************Live Score********************************************End
@@ -169,17 +173,22 @@ import { liveScoreChangeVenueSaga } from './liveScoreSaga/liveScoreVenueChangeSa
 import { getLiveScoreFixtureCompSaga } from './liveScoreSaga/liveScoreFixtureCompSaga';
 
 import * as umpireCompSaga from './umpireSaga/umpireCompetitionSaga';
-import * as umpireRoasterSaga from './umpireSaga/umpireRoasterSaga';
+import * as umpireRosterSaga from './umpireSaga/umpireRosterSaga';
 import * as umpireSaga from './umpireSaga/umpireSaga';
 import * as assignUmpireSaga from './umpireSaga/assignUmpireSaga';
 import * as competitionQuickSaga from './competitionManagementSaga/competitionQuickCompetitionSaga';
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 
-import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga';
+import {
+    getInnerHorizontalCompSaga
+} from './liveScoreSaga/liveScoreInnerHorizontalSaga';
 
-import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga';
+import {
+    liveScorePositionTrackSaga
+} from './liveScoreSaga/liveScorePositionTrackSaga';
 import rootCompetitionMultiDrawSaga from './competitionManagementSaga/competitionMultiDrawsSaga';
 import umpirePaymentSaga from './umpireSaga/umpirePaymentSaga';
+import umpirePoolAllocationSaga from './umpireSaga/umpirePoolAllocationSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -220,6 +229,7 @@ export default function* rootSaga() {
 
         // Umpire
         fork(umpireDashboardSaga),
+        fork(umpireSettingsSaga),
 
         // User
         fork(userSaga),
@@ -229,6 +239,9 @@ export default function* rootSaga() {
 
         // Umpire Payment Saga
         fork(umpirePaymentSaga),
+
+        //Umpire Pool Allocation Saga
+        fork(umpirePoolAllocationSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
@@ -451,6 +464,7 @@ export default function* rootSaga() {
 
     /// / Umpire Module
     yield takeEvery(ApiConstants.API_UMPIRE_LIST_LOAD, umpireSaga.umpireListSaga);
+    yield takeEvery(ApiConstants.API_NEW_UMPIRE_LIST_LOAD, umpireSaga.newUmpireListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga);
     yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireSaga.getAffiliateSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireSaga.umpireSearchSaga);
@@ -458,8 +472,8 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga);
     yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga);
     yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga);
-    yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga);
-    yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD, umpireRoasterSaga.umpireActionPerofomSaga);
+    yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_LIST_LOAD, umpireRosterSaga.umpireRosterListSaga);
+    yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_LOAD, umpireRosterSaga.umpireActionPerofomSaga);
 
     /// ///assign umpire get list
     yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga);
@@ -554,4 +568,16 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD, competitionQuickSaga.updateGrid_DivisionSaga);
     yield takeEvery(ApiConstants.API_UPDATE_STATUS_VENUE_LOAD, competitionQuickSaga.updateGrid_VenueSaga);
     yield takeEvery(ApiConstants.API_EXPORT_PLAYER_GRADES_LOAD, playerGradingExport)
+    yield takeEvery(ApiConstants.API_GET_EXPORT_REGISTRATION_LOAD, endUserRegSaga.exportRegistrationSaga)
+
+    yield takeEvery(ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD, getMembershipFeeCapListSaga)
+    yield takeEvery(ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD, updateMembershipFeeCapSaga)
+
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_LIST_LOAD, liveScoreSingleGameListSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_SINGLE_GAME_REDEEM_PAY_LOAD, liveScoreSingleGameRedeemPaySaga);
+
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_LIST_LOAD, liveScorePlayersToPayListSaga);
+
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_LOAD, liveScorePlayersToPayRetryPaymentSaga);
+
 }

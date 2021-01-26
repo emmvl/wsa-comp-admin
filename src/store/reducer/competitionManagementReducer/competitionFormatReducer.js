@@ -1,5 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 
 let obj = {
     competitionFormatId: 0,
@@ -14,7 +17,7 @@ let obj = {
     noOfRounds: 0,
     enhancedRoundRobinRefId: 0,
     competitionTypeRefId: 0,
-    roundInDays: 0,
+    roundInDays: 7,
     roundInHours: 0,
     roundInMins: 0,
     competionFormatDivisions: [],
@@ -39,16 +42,15 @@ function competitionFormatReducer(state = initialState, action) {
             let data = action.result;
             let isAllDivisionChecked = false
             getCompetitionFormatDivisions(data);
-           if(data.competionFormatDivisions.length == 1 || !isArrayNotEmpty(data.competionFormatDivisions))
-           {
-               if(isArrayNotEmpty(data.competionFormatDivisions)){
-                    if(data.competionFormatDivisions[0].selectedDivisions.length == 0)
+            if (data.competionFormatDivisions.length == 1 || !isArrayNotEmpty(data.competionFormatDivisions)) {
+                if (isArrayNotEmpty(data.competionFormatDivisions)) {
+                    if (data.competionFormatDivisions[0].selectedDivisions.length == 0)
                         isAllDivisionChecked = true;
-               }
-               else{
+                }
+                else {
                     isAllDivisionChecked = true;
-               }
-           }
+                }
+            }
             return {
                 ...state,
                 onLoad: false,
@@ -72,27 +74,25 @@ function competitionFormatReducer(state = initialState, action) {
             let oldData = state.competitionFormatList;
             let updatedValue = action.updatedData;
             let getKey = action.key;
-            if(getKey === "addCompetitionFormatDivisions")
-            {
+            if (getKey === "addCompetitionFormatDivisions") {
                 addCompetitionFormatDivision(updatedValue);
                 getCompetitionFormatDivisions(updatedValue);
             }
-            else if(getKey =="allDivision")
-            {
+            else if (getKey == "allDivision") {
                 state.isAllDivisionChecked = updatedValue;
             }
-			else if(getKey == "nonPlayingDates"){
+            else if (getKey == "nonPlayingDates") {
                 oldData[getKey].push(updatedValue)
             }
-            else if(getKey == "nonPlayingDataRemove"){
-                oldData.nonPlayingDates.splice(updatedValue,1);
+            else if (getKey == "nonPlayingDataRemove") {
+                oldData.nonPlayingDates.splice(updatedValue, 1);
             }
-            else if(getKey == "nonPlayingUpdateDates"){
+            else if (getKey == "nonPlayingUpdateDates") {
                 let index = updatedValue.index;
                 let key = updatedValue.key;
                 oldData.nonPlayingDates[index][key] = updatedValue.data;
             }
-            else{
+            else {
                 oldData[getKey] = updatedValue;
             }
 
@@ -119,9 +119,7 @@ function competitionFormatReducer(state = initialState, action) {
     }
 }
 
-function addCompetitionFormatDivision(data, key){
-
-    //console.log("###" + JSON.stringify(data));
+function addCompetitionFormatDivision(data, key) {
     let compFormatDivisionObj = {
         competitionFormatTemplateId: -(data.competionFormatDivisions.length),
         matchDuration: 0,
@@ -133,33 +131,29 @@ function addCompetitionFormatDivision(data, key){
         selectedDivisions: []
     }
     let divisions = data.divisions;
-    for(let item in divisions)
-    {
+    for (let item in divisions) {
         let divisionsObj = {
             competitionFormatDivisionId: 0,
             competitionMembershipProductDivisionId: divisions[item].competitionMembershipProductDivision,
             isChecked: false,
             isDisabled: false,
-            divisionsName:divisions[item].divisionName
+            divisionsName: divisions[item].divisionName
         }
         compFormatDivisionObj.divisions.push(divisionsObj);
     }
     data.competionFormatDivisions.push(compFormatDivisionObj);
-   // this.state.competitionFormatList[key] = data.competionFormatDivisions;
+    // this.state.competitionFormatList[key] = data.competionFormatDivisions;
 }
 
-function getCompetitionFormatDivisions(data)
-{
+function getCompetitionFormatDivisions(data) {
     let compFormatDivisions = data.competionFormatDivisions;
-    if(isArrayNotEmpty(compFormatDivisions))
-    {
-        let disabledArray = [];
-        for(let item in compFormatDivisions)
-        {
+    if (isArrayNotEmpty(compFormatDivisions)) {
+        // let disabledArray = [];
+        for (let item in compFormatDivisions) {
             let divisionsArray = [];
             let divisions = data.divisions;
 
-            for(let div in divisions){
+            for (let div in divisions) {
                 let divisionsObj = {
                     competitionFormatDivisionId: 0,
                     competitionMembershipProductDivisionId: divisions[div].competitionMembershipProductDivision,
@@ -168,32 +162,29 @@ function getCompetitionFormatDivisions(data)
                     divisionsName: divisions[div].divisionName
                 }
                 let itemDivisions = compFormatDivisions[item].divisions;
-                for(let compDivision in itemDivisions)
-                {
-                    if(itemDivisions[compDivision].competitionMembershipProductDivisionId ===
-                        divisions[div].competitionMembershipProductDivision){
-                            divisionsObj.competitionFormatDivisionId = itemDivisions[compDivision].competitionFormatDivisionId;
-                            divisionsObj.competitionMembershipProductDivisionId = itemDivisions[compDivision].competitionMembershipProductDivisionId;
-                            divisionsObj.isChecked = true;
+                for (let compDivision in itemDivisions) {
+                    if (itemDivisions[compDivision].competitionMembershipProductDivisionId ===
+                        divisions[div].competitionMembershipProductDivision) {
+                        divisionsObj.competitionFormatDivisionId = itemDivisions[compDivision].competitionFormatDivisionId;
+                        divisionsObj.competitionMembershipProductDivisionId = itemDivisions[compDivision].competitionMembershipProductDivisionId;
+                        divisionsObj.isChecked = true;
                     }
                 }
                 divisionsArray.push(divisionsObj);
             }
             compFormatDivisions[item].divisions = divisionsArray;
         }
-        for(let item in compFormatDivisions){
+        for (let item in compFormatDivisions) {
             let itemDivisions = compFormatDivisions[item].divisions;
-            let competitionFormatTemplateId =  compFormatDivisions[item].competitionFormatTemplateId;
-            let remainingFormatDiv =  compFormatDivisions.
-                    filter(x=>x.competitionFormatTemplateId!= competitionFormatTemplateId);
+            let competitionFormatTemplateId = compFormatDivisions[item].competitionFormatTemplateId;
+            let remainingFormatDiv = compFormatDivisions.
+                filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
-            for(let remDiv in remainingFormatDiv)
-            {
+            for (let remDiv in remainingFormatDiv) {
                 let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;
-                for(let i in selectedDivisions){
-                    for(let j in itemDivisions){
-                        if(itemDivisions[j].competitionMembershipProductDivisionId === selectedDivisions[i])
-                        {
+                for (let i in selectedDivisions) {
+                    for (let j in itemDivisions) {
+                        if (itemDivisions[j].competitionMembershipProductDivisionId === selectedDivisions[i]) {
                             itemDivisions[j].isDisabled = true;
                         }
                     }

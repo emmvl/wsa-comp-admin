@@ -4,6 +4,14 @@
     padding-bottom: 56px;
 }
 
+.goBtn{
+    margin-bottom: 2px;
+}
+
+.paddingBottom80px {
+    padding-bottom: 80px;
+}
+
 .formLineHeight .ant-form-item-control {
     line-height: 10px;
 }
@@ -692,11 +700,18 @@ a.collapsed i {
     .comp-buttons-view .save-draft-text {
         margin-right: 20px;
     }
+
+    .goBtn{
+        margin-top: 2px;
+    }
 }
 
 @media (max-width: 767px) {
     .paddingBottom56px {
         padding-bottom: 5px;
+    }
+    .goBtn{
+        margin-top: 2px;
     }
 
     .multiDrawRow {
@@ -988,4 +1003,19 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
     border-radius: 12px;
     padding: 15px;
     width: 40%;
+}
+
+.font-18{
+    font-size: 18px;
+}
+
+.add-team-member-action-txt{
+    cursor: pointer;
+    color: var(--app-color);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.pointer{
+    cursor: pointer;
 }

@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import {
+    EditorState,
+    ContentState,
+    // convertFromHTML,
+    convertToRaw
+} from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 
@@ -25,7 +30,7 @@ import {
     clearProductReducer,
 } from '../../store/actions/shopAction/productAction';
 import InputWithHead from '../../customComponents/InputWithHead';
-import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid, isImageSizeValid } from '../../util/helpers';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from '../../util/permissions';
@@ -101,7 +106,7 @@ class AddProduct extends Component {
     //////post the product details
     addProductPostAPI = (values) => {
         let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
-        let description = JSON.parse(JSON.stringify(productDetailData.description))
+        // let description = JSON.parse(JSON.stringify(productDetailData.description))
         let orgData = getOrganisationData() ? getOrganisationData() : null;
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
@@ -326,7 +331,16 @@ class AddProduct extends Component {
     handleFiles = (file) => {
         if (file) {
             let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
             let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
             if (isSuccess) {
                 let reader = new FileReader();
                 reader.onloadend = () => {
@@ -352,6 +366,9 @@ class AddProduct extends Component {
                 className="d-none"
                 onChange={(e) => this.onChange(e)}
                 accept="image/*"
+                onClick={(event) => {
+                    event.target.value = null
+                }}
             />
             <Button
                 onClick={(e) => { document.getElementById('getImage').click(); e.stopPropagation(); }}
@@ -532,7 +549,7 @@ class AddProduct extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-0 pt-3"
+                        required="required-field pt-3"
                         heading={AppConstants.title}
                         placeholder={AppConstants.enterTitle}
                         onChange={(e) =>
@@ -617,7 +634,12 @@ class AddProduct extends Component {
 
     ////////Image content view
     imageView = () => {
-        const { urls, files, isDragging, allDisabled } = this.state;
+        const {
+            urls,
+            // files,
+            isDragging,
+            allDisabled
+        } = this.state;
         const dropCss = urls.length > 0 ? "dragDropLeft" : "dragDropCenter";
         const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
         return (
@@ -644,6 +666,9 @@ class AddProduct extends Component {
                                 )}
                         </>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                     {urls.length > 0 && (
                         <div className="d-flex justify-content-end w-100">
                             {this.getImage()}
@@ -656,7 +681,12 @@ class AddProduct extends Component {
 
     ////////Image content view for non edit
     imageNonEditView = () => {
-        const { urls, files, isDragging, allDisabled } = this.state;
+        const {
+            urls,
+            // files,
+            isDragging,
+            allDisabled
+        } = this.state;
         const dropCss = urls.length > 0 ? 'dragDropLeft' : 'dragDropCenter';
         const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
         return (
@@ -689,6 +719,7 @@ class AddProduct extends Component {
                                 placeholder={AppConstants.price}
                                 prefix="$"
                                 onChange={(e) =>
+
                                     this.props.onChangeProductDetails(
                                         e.target.value,
                                         'price'
@@ -696,6 +727,8 @@ class AddProduct extends Component {
                                 }
                                 value={productDetailData.price}
                                 type="number"
+                                min={0}
+
                                 disabled={this.state.allDisabled}
                             />
                         </div>
@@ -712,6 +745,7 @@ class AddProduct extends Component {
                                         'cost'
                                     )
                                 }
+                                min={0}
                                 value={productDetailData.cost}
                                 type="number"
                                 disabled={this.state.allDisabled}
@@ -823,7 +857,7 @@ class AddProduct extends Component {
                             >
                                 <InputNumber
                                     style={{ width: 90 }}
-                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    formatter={value => `${value}`.replace(/\B(?=(\d{4})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
                                     onChange={(quantity) => this.props.onChangeProductDetails(
                                         quantity,
@@ -832,6 +866,7 @@ class AddProduct extends Component {
                                     placeholder={AppConstants.quantity}
                                     min={0}
                                     type="number"
+                                    value={productDetailData.quantity}
                                     disabled={this.state.allDisabled}
                                 />
                             </Form.Item>
@@ -964,7 +999,7 @@ class AddProduct extends Component {
                                             <span className="input-heading">{AppConstants.quantity}</span>
                                             <InputNumber
                                                 style={{ width: 90 }}
-                                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                formatter={(value) => `${value}`.replace(/\B(?=(\d{4})+(?!\d))/g, ',')}
                                                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                                                 placeholder={AppConstants.quantity}
                                                 min={0}
@@ -1010,7 +1045,7 @@ class AddProduct extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.shipping}</span>
                 <div className="row pt-1">
-                    <div className="col-sm-4">
+                    {/* <div className="col-sm-4">
                         <Checkbox
                             className="single-checkbox mt-3"
                             checked={productDetailData.deliveryType === "shipping"}
@@ -1019,7 +1054,7 @@ class AddProduct extends Component {
                         >
                             {AppConstants.shipping}
                         </Checkbox>
-                    </div>
+                    </div> */}
                     <div className="col-sm-8">
                         <Checkbox
                             className="single-checkbox mt-3"
@@ -1213,6 +1248,12 @@ class AddProduct extends Component {
         </div>
     );
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
+
     render() {
         return (
             <div className="fluid-width">
@@ -1223,6 +1264,7 @@ class AddProduct extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.addProductPostAPI}
+                        onFinishFailed={this.onFinishFailed}
                         noValidate="noValidate"
                     >
                         <Content >

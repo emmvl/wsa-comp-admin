@@ -3,11 +3,12 @@ import { message } from "antd";
 
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
+// import history from "util/history";
+// import { receiptImportResult } from "util/showImportResult";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
-import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
+// import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
+import UmpireAxiosApi from "store/http/umpireHttp/umpireAxios";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_UMPIRE_FAIL });
@@ -96,9 +97,47 @@ function* umpirePaymenExportSaga(action) {
     }
 }
 
+function* umpirePaymentSettingsGetSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.umpirePaymentSettingsGet, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+function* umpirePaymentSettingsSaveSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.umpirePaymentSettingsPost, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.settingsUpdatedMessage);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
 
 export default function* rootUmpirePaymentSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_PAYMENT_DATA_LOAD, umpirePaymentListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_LOAD, umpirePaymentTransferSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_EXPORT_FILE_LOAD, umpirePaymenExportSaga);
+    yield takeEvery(ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD, umpirePaymentSettingsGetSaga);
+    yield takeEvery(ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD, umpirePaymentSettingsSaveSaga);
 }

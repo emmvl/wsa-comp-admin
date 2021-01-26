@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal } from "antd";
+import {
+    Layout,
+    Breadcrumb,
+    Button,
+    Table,
+    Select,
+    Menu,
+    Pagination,
+    // Modal
+} from "antd";
 import "./product.scss";
 // import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,15 +22,14 @@ import { registrationChangeType } from "../../store/actions/commonAction/commonA
 import { currencyFormat } from "../../util/currencyFormat";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
-import { getOrganisationData } from "util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
 import history from "../../util/history";
 
 // const { confirm } = Modal;
 const { Content } = Layout;
 const { Option } = Select;
 // const { SubMenu } = Menu;
-let this_Obj = null;
-
+// let this_Obj = null;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -289,29 +297,31 @@ class RegistrationChange extends Component {
             searchText: '',
             competition: 'All',
             type: 'All',
-            yearRefId: -1,
+            yearRefId: null,
             competitionId: "-1",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             regChangeTypeRefId: -1,
 
         };
-        this_Obj = this;
+        // this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
     componentDidMount() {
+        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        this.setState({ yearRefId })
         this.props.registrationChangeType();
         this.handleRegChangeList(1);
     }
 
     handleRegChangeList = (page) => {
         const {
-            yearRefId,
+            // yearRefId,
             competitionId,
             organisationId,
             regChangeTypeRefId
         } = this.state;
-
+        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1
         let filter = {
             organisationId,
             yearRefId,
@@ -343,11 +353,22 @@ class RegistrationChange extends Component {
     );
 
     onChangeDropDownValue = async (value, key) => {
-        await this.setState({
-            [key]: value,
-        });
+        if (key === 'yearRefId') {
+            await this.setState({
+                'yearRefId': value,
+            });
+            if (value != -1) {
+                setGlobalYear(value)
+            }
+            this.handleRegChangeList(1);
+        }
+        else {
+            await this.setState({
+                [key]: value,
+            });
 
-        this.handleRegChangeList(1);
+            this.handleRegChangeList(1);
+        }
     };
 
     dropdownView = () => {

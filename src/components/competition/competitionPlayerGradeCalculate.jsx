@@ -5,7 +5,7 @@ import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+// import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
@@ -16,13 +16,13 @@ import {
     playerSummaryCommentAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage"
 // import PlayerCommentModal from "../../customComponents/playerCommentModal";
 // import moment from "moment"
@@ -127,7 +127,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     this.props.getCompPartPlayerGradingSummaryAction(yearId, competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
@@ -135,7 +135,7 @@ class CompetitionPlayerGradeCalculate extends Component {
             if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
                 if (this.props.appState.own_YearArr.length > 0) {
                     let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
+                    setGlobalYear(yearRefId)
                     this.setState({ yearRefId: yearRefId })
                 }
             }
@@ -151,10 +151,10 @@ class CompetitionPlayerGradeCalculate extends Component {
     }
 
     apiCalls = () => {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -173,7 +173,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-                setOwnCompetitionYear(1)
+
             }
         }
     }
@@ -206,7 +206,7 @@ class CompetitionPlayerGradeCalculate extends Component {
     }
 
     onYearChange = (yearId) => {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)

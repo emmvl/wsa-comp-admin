@@ -33,14 +33,14 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getOrganisationData } from '../../util/sessionStorage';
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
-import ApiConstants from "themes/apiConstants";
+// import ApiConstants from "themes/apiConstants";
 import { getCurrentYear } from "util/permissions";
 
 const { Header, Footer } = Layout;
@@ -123,7 +123,14 @@ class LiveScoreSettingsView extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            const { competitionName, shortName, competitionLogo, scoring, recordUmpireType, gameTimeTrackingType } = this.props.liveScoreSetting.form
+            const {
+                competitionName,
+                shortName,
+                // competitionLogo,
+                scoring,
+                // recordUmpireType,
+                gameTimeTrackingType
+            } = this.props.liveScoreSetting.form
             this.formRef.current.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
@@ -165,7 +172,22 @@ class LiveScoreSettingsView extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]),timeout:2000 })
+            setTimeout(() => {
+                this.setState({ timeout: null })
+            }, 2000);
             const imgData = URL.createObjectURL(data.files[0])
             this.props.onChangeSettingForm({ key: 'competitionLogo', data: data.files[0] })
             this.props.onChangeSettingForm({ key: 'Logo', data: imgData })
@@ -191,8 +213,8 @@ class LiveScoreSettingsView extends Component {
     }
 
     ////method to change time
-    onChangeTime(time, timeString) {
-    }
+    // onChangeTime(time, timeString) {
+    // }
 
     tabCallBack = (key) => {
         this.setState({ competitionTabKey: key })
@@ -213,7 +235,7 @@ class LiveScoreSettingsView extends Component {
     }
 
     handleSubmit = values => {
-        const arrayOfVenue = this.props.liveScoreSetting.form.allVenue.map(data => data.id)
+        // const arrayOfVenue = this.props.liveScoreSetting.form.allVenue.map(data => data.id)
         const {
             id,
             competitionName,
@@ -238,16 +260,16 @@ class LiveScoreSettingsView extends Component {
             buzzerEnabled,
             warningBuzzerEnabled,
             recordUmpire,
-            affiliateSelected,
-            anyOrgSelected,
-            otherSelected,
+            // affiliateSelected,
+            // anyOrgSelected,
+            // otherSelected,
             invitedTo,
-            invitedOrganisation,
+            // invitedOrganisation,
             lineupSelection,
             borrowedPlayer,
             gamesBorrowedThreshold,
             linkedCompetitionId,
-            premierCompLink,
+            // premierCompLink,
             yearRefId,
             invitedAnyAssoc,
             invitedAnyClub,
@@ -265,8 +287,8 @@ class LiveScoreSettingsView extends Component {
         let clubValue = null
         let selectionValue = null
 
-        let arr_1 = radioSelectionArr.sort()
-        let arr_2 = invitedTo.sort()
+        // let arr_1 = radioSelectionArr.sort()
+        // let arr_2 = invitedTo.sort()
 
         if (JSON.stringify(radioSelectionArr) === JSON.stringify(invitedTo)) {
             invitedToValue = false
@@ -274,10 +296,8 @@ class LiveScoreSettingsView extends Component {
             invitedToValue = true
         }
 
-
-        let sortedArr = invitedAnyAssoc.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
-        let sortedArr_1 = invitedAnyAssocArr.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
-
+        // let sortedArr = invitedAnyAssoc.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
+        // let sortedArr_1 = invitedAnyAssocArr.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
 
         if (invitedAnyAssoc.length > 0) {
             if (JSON.stringify(invitedAnyAssocArr) === JSON.stringify(invitedAnyAssoc)) {
@@ -302,8 +322,8 @@ class LiveScoreSettingsView extends Component {
         }
         localStorage.setItem("yearId", yearRefId)
 
-        const umpire = record1.includes("recordUmpire")
-        const umpirenum = umpire ? 1 : 0
+        // const umpire = record1.includes("recordUmpire")
+        // const umpirenum = umpire ? 1 : 0
         const gameTimeTracking = record1.includes("gameTimeTracking")
         const positionTracking = record1.includes("positionTracking")
         const recordGoalAttempts = record1.includes("recordGoalAttempts")
@@ -501,9 +521,35 @@ class LiveScoreSettingsView extends Component {
     }
 
     contentView = () => {
-        const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId, disabled } = this.props.liveScoreSetting
-        let grade = this.state.venueData
+        const {
+            // competitionName,
+            // competitionLogo,
+            // scoring,
+            days,
+            hours,
+            minutes,
+            lineupSelectionDays,
+            lineupSelectionHours,
+            lineupSelectionMins,
+            record1,
+            venue,
+            Logo
+        } = this.props.liveScoreSetting.form
+        const {
+            // loader,
+            buzzerEnabled,
+            warningBuzzerEnabled,
+            // recordUmpire,
+            lineupSelection,
+            // gameborrowed,
+            // minutesBorrowed,
+            premierCompLink,
+            borrowedPlayer,
+            gamesBorrowedThreshold,
+            linkedCompetitionId,
+            disabled
+        } = this.props.liveScoreSetting
+        // let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [
             { label: 'Game Time Tracking', value: "gameTimeTracking" },
@@ -514,8 +560,8 @@ class LiveScoreSettingsView extends Component {
             { label: 'Centre Pass Enabled', value: "centrePassEnabled" },
             { label: 'Incidents Enabled', value: "incidentsEnabled" },
         ];
-        const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
-        const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
+        // const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
+        // const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
@@ -523,7 +569,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name='competition_name' rules={[{ required: true, message: ValidationConstants.competitionField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field "
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => {
@@ -546,7 +592,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name="short_name" rules={[{ required: true, message: ValidationConstants.shortField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field "
                         heading={AppConstants.short_Name}
                         placeholder={AppConstants.short_Name}
                         name="shortName"
@@ -595,10 +641,13 @@ class LiveScoreSettingsView extends Component {
                                 name="imageFile"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
-                                    this.setState({ timeout: 2000 })
-                                    setTimeout(() => {
-                                        this.setState({ timeout: null })
-                                    }, 2000);
+                                    // this.setState({ timeout: 2000 })
+                                    // setTimeout(() => {
+                                    //     this.setState({ timeout: null })
+                                    // }, 2000);
+                                }}
+                                onClick={(event) => {
+                                    event.target.value = null
                                 }}
                             />
                         </div>
@@ -612,11 +661,14 @@ class LiveScoreSettingsView extends Component {
                             </Checkbox>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 {/* venue multi selection */}
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field "
                     heading={AppConstants.venues}
                 />
                 <div>
@@ -700,7 +752,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Record Umpire dropdown view */}
                 <InputWithHead
-                    required="required-field pb-1"
+                    required="required-field"
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.recordUmpireMsg}
                     marginTop={5}
@@ -733,7 +785,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            required="required-field pb-1"
+                            required="required-field"
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.recordMsg}
                             marginTop={5}
@@ -759,7 +811,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            required="required-field pb-1"
+                            required="required-field"
                             marginTop={5}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.reportMsg}
@@ -791,7 +843,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._days}
                             placeholder={AppConstants._days}
@@ -804,7 +856,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._hours}
                             placeholder={AppConstants._hours}
@@ -818,7 +870,7 @@ class LiveScoreSettingsView extends Component {
 
                     <div className="col-sm">
                         <InputWithHead
-                            required="pt-0 pb-1"
+                            required="pt-0"
                             // conceptulHelp conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants._minutes}
                             placeholder={AppConstants._minutes}
@@ -1002,7 +1054,7 @@ class LiveScoreSettingsView extends Component {
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.timerMsg}
                     marginTop={5}
-                    required="required-field pb-1"
+                    required="required-field"
                     heading={AppConstants.timer}
                 />
                 {/* <div className="contextualHelp-RowDirection">
@@ -1158,7 +1210,24 @@ class LiveScoreSettingsView extends Component {
     };
 
     regInviteesView = () => {
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked, invitedTo, anyOrgArray, radioSelectionArr, invitedAnyAssocArr, invitedAnyClubArr, invitedAnyAssoc, invitedAnyClub } = this.props.liveScoreSetting
+        const {
+            affiliateSelected,
+            anyOrgSelected,
+            otherSelected,
+            // nonSelected,
+            affiliateNonSelected,
+            anyOrgNonSelected,
+            registrationInvitees,
+            associationChecked,
+            clubChecked,
+            // invitedTo,
+            // anyOrgArray,
+            // radioSelectionArr,
+            // invitedAnyAssocArr,
+            // invitedAnyClubArr,
+            // invitedAnyAssoc,
+            // invitedAnyClub
+        } = this.props.liveScoreSetting
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
         let disabledComponent = ((this.state.isEdit === 'edit' || this.state.edit === 'edit') && this.state.onOkClick)
@@ -1415,6 +1484,11 @@ class LiveScoreSettingsView extends Component {
         );
     };
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         let local_Id = this.state.screenName === 'umpireDashboard' ? null : getLiveScoreCompetiton()
         return (
@@ -1440,7 +1514,8 @@ class LiveScoreSettingsView extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.handleSubmit}
-                        onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
+                        // onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
+                        onFinishFailed={this.onFinishFailed}
                         className="login-form"
                         noValidate="noValidate"
                     >

@@ -92,14 +92,12 @@ let userHttpApi = {
   },
 
   async getVenueOrganisation(key) {
-    console.log(key);
     let userId = await getUserId();
     let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
     let url = `api/organisation?userId=${userId}`;
     if (key) {
       url += `&organisationUniqueKey=${organisationUniqueKey}`
     }
-    console.log(url);
     return Method.dataGet(url, token)
   },
 
@@ -173,6 +171,22 @@ let userHttpApi = {
     const url = `api/user/registration`;
     return Method.dataPost(url, token, payload);
   },
+
+  getUserModuleTeamMembersData(payload) {
+    const url = `/api/user/registration/team`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserModuleTeamRegistrationData(payload) {
+    const url = `api/user/registration/teamdetails`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserModuleOtherRegistrationData(payload) {
+    const url = `api/user/registration/yourdetails`;
+    return Method.dataPost(url, token, payload);
+  },
+
 
   getUserModuleActivityPlayer(payload) {
     const url = `api/user/activity/player`;
@@ -286,6 +300,16 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "RegistrationQuestions");
   },
 
+  exportUserRegData(payload) {
+    const url = `api/export/registration/data`;
+    return Method.dataPostDownload(url, token, payload, "UserRegistrationData");
+  },
+
+  async getSubmittedRegData(payload) {
+    const url = `api/user/registration/registrationForm`;
+    return Method.dataPost(url, token, payload);
+  },
+
   async affiliateDirectory(payload, sortBy, sortOrder) {
     let url;
 
@@ -331,13 +355,23 @@ let userHttpApi = {
     return Method.dataGet(url, localStorage.token);
   },
 
+  newUmpireList(data) {
+    let url = null;
+    if (data.isCompParent !== true) {
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`;
+    }
+    else {
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`
+    }
+    return Method.dataGet(url, localStorage.token);
+  },
+
   updateUserProfile(payload) {
     const url = `api/userprofile/update?section=${payload.section}&organisationId=${payload.organisationId}`;
     return Method.dataPost(url, token, payload);
   },
 
   updateBannerCount(payload) {
-    console.log(payload);
     const { organisationId } = getOrganisationData();
     const url = `api/bannerCount?organisationId=${organisationId}`;
     return Method.dataPost(url, token, payload);
@@ -346,7 +380,6 @@ let userHttpApi = {
   async getBannerCount(orgId) {
     const { organisationId } = getOrganisationData();
     const url = `api/bannerCount?organisationId=${organisationId}`;
-    console.log(url);
     return Method.dataGet(url, token)
   },
 
@@ -426,8 +459,7 @@ let userHttpApi = {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     } else if (data.offset != null) {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
-    }
-    else {
+    } else {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
 
@@ -438,13 +470,10 @@ let userHttpApi = {
     return Method.dataGet(url, localStorage.token);
   },
   umpireSearch(data) {
-    console.log(data, 'umpireSearch')
-    let url = null
+    let url = null;
     if (data.userName) {
       url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}`;
-
     } else {
-
       url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`;
     }
     return Method.dataGet(url, token);
@@ -453,13 +482,37 @@ let userHttpApi = {
     const url = `users/dashboard/spectator`;
     return Method.dataPost(url, token, payload);
   },
-  registrationResendEmail(teamId, userId) {
-    let payload = {
-      teamId: teamId,
-      userId: userId
+  getNetSetGoList(payload, sortBy, sortOrder) {
+    let url;
+    if (sortBy && sortOrder) {
+      url = `api/user/dashboard/netsetgo?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    } else {
+      url = `api/user/dashboard/netsetgo`;
     }
+    return Method.dataPost(url, token, payload);
+  },
+  registrationResendEmail(teamId, userId) {
+    const payload = { teamId, userId };
     const url = `api/users/registration/resendmail`;
     return Method.dataPost(url, token, payload);
+  },
+  async resetTfaApi(userId) {
+    const url = `/users/profile/reset/tfa?userId=${userId}`;
+    return Method.dataPost(url, token);
+  },
+
+  addChild(payload) {
+    const url = `/users/admin/child/create?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    return Method.dataPost(url, token, {childUser: payload.body});
+  },
+
+  addParent(payload) {
+    const url = `/users/admin/parent/create?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
+    return Method.dataPost(url, token, {parentUser: payload.body});
+  },
+
+  findPossibleMerge(payload) {
+    return Method.dataPost('userMerge/find', token, payload);
   },
 };
 

@@ -1,5 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 import ColorsArray from '../../../util/colorsArray';
 
 const initialState = {
@@ -77,11 +80,11 @@ function updatedAssignData(assignArr, source, destination) {
     let updatedplayerAssignData = unassignedListDataFormation(JSON.parse(JSON.stringify(assignArr)))
     return {
         updatedplayerAssignData,
-        assignArr
+        assignArr: sortTeamsAndPlayers(assignArr)
     }
 }
 ///sort unassign players
-function sortUnassignPlayer(unassignPlayer){
+function sortUnassignedPlayers(unassignPlayer){
 let players = unassignPlayer.players
 if(players.length >0){
 const sortAlphaNumPlayers = (a, b) => a.playerName.localeCompare(b.playerName, 'en', { numeric: true })
@@ -91,7 +94,7 @@ return unassignPlayer
 }
 
 //sort Assign players
-function sortAssignTeamAndPLayer(assignTeam){
+function sortTeamsAndPlayers(assignTeam){
     if(assignTeam.length > 0){
        for(let i in assignTeam){
            let players = assignTeam[i].players
@@ -231,8 +234,8 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             let updatedPlayers = updateColor(JSON.parse(JSON.stringify(partPlayerGradingListData)))
             state.AllPartPlayerGradingListData = JSON.parse(JSON.stringify(updatedPlayers))
             let teamData = unassignedListDataFormation(JSON.parse(JSON.stringify(updatedPlayers)));
-            state.unassignedPartPlayerGradingListData = sortUnassignPlayer(teamData.unassignedPartPlayerGradingListData)
-            state.assignedPartPlayerGradingListData =sortAssignTeamAndPLayer(teamData.assignedPartPlayerGradingListData)
+            state.unassignedPartPlayerGradingListData = sortUnassignedPlayers(teamData.unassignedPartPlayerGradingListData)
+            state.assignedPartPlayerGradingListData = sortTeamsAndPlayers(teamData.assignedPartPlayerGradingListData)
             return {
                 ...state,
                 onLoad: false,
@@ -277,7 +280,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
             state.assignedPartPlayerGradingListData.push(newobj)
             state.AllPartPlayerGradingListData.push(newobj)
-            let sortData=  sortAssignTeamAndPLayer(state.assignedPartPlayerGradingListData)
+            let sortData=  sortTeamsAndPlayers(state.assignedPartPlayerGradingListData)
             return {
                 ...state,
                 onLoad: false,
@@ -289,10 +292,13 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
         case ApiConstants.API_DRAG_NEW_TEAM_LOAD:
             let assignData = JSON.parse(JSON.stringify(state.AllPartPlayerGradingListData))
             let sourceData = updatedAssignData(assignData, action.source, action.destination)
-            state.AllPartPlayerGradingListData = sourceData.assignArr
-            state.unassignedPartPlayerGradingListData = sortUnassignPlayer(sourceData.updatedplayerAssignData.unassignedPartPlayerGradingListData)
-            state.assignedPartPlayerGradingListData = sortAssignTeamAndPLayer(sourceData.updatedplayerAssignData.assignedPartPlayerGradingListData)
-            return { ...state, onLoad: true }
+            return {
+                ...state,
+                AllPartPlayerGradingListData: sourceData.assignArr,
+                unassignedPartPlayerGradingListData: sortUnassignedPlayers(sourceData.updatedplayerAssignData.unassignedPartPlayerGradingListData),
+                assignedPartPlayerGradingListData: sortTeamsAndPlayers(sourceData.updatedplayerAssignData.assignedPartPlayerGradingListData),
+                onLoad: true
+            }
 
         case ApiConstants.API_DRAG_NEW_TEAM_SUCCESS:
 
@@ -307,8 +313,8 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             let assignPLayerSameTeam = JSON.parse(JSON.stringify(state.AllPartPlayerGradingListData))
             let assignedPLayerSameTeam = updatedAssignData(assignPLayerSameTeam, action.source, action.destination)
             state.AllPartPlayerGradingListData = assignedPLayerSameTeam.assignArr
-            state.unassignedPartPlayerGradingListData = sortUnassignPlayer(assignedPLayerSameTeam.updatedplayerAssignData.unassignedPartPlayerGradingListData)
-            state.assignedPartPlayerGradingListData = sortAssignTeamAndPLayer(assignedPLayerSameTeam.updatedplayerAssignData.assignedPartPlayerGradingListData)
+            state.unassignedPartPlayerGradingListData = sortUnassignedPlayers(assignedPLayerSameTeam.updatedplayerAssignData.unassignedPartPlayerGradingListData)
+            state.assignedPartPlayerGradingListData = sortTeamsAndPlayers(assignedPLayerSameTeam.updatedplayerAssignData.assignedPartPlayerGradingListData)
             return { ...state }
 
 
@@ -411,11 +417,11 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
 
         case ApiConstants.UPDATE_PLAYER_GRADING_DATA:
             if (action.key === "assigned") {
-                let asssignPlayers =  sortAssignTeamAndPLayer(action.data)
+                let asssignPlayers =  sortTeamsAndPlayers(action.data)
                 state.assignedPartPlayerGradingListData = asssignPlayers
             }
             else if (action.key == "unAssigned") {
-                state.unassignedPartPlayerGradingListData = sortUnassignPlayer(action.data);
+                state.unassignedPartPlayerGradingListData = sortUnassignedPlayers(action.data);
             }
             return { ...state }
 

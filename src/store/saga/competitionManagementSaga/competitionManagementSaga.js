@@ -1,7 +1,7 @@
 import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
-import CompManagementAxiosApi from "../../http/competitionManagementHttp/competitionManagementAxiosApi" 																										
+// import CompManagementAxiosApi from "../../http/competitionManagementHttp/competitionManagementAxiosApi" 																										
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_COMPETITION_FAIL });

@@ -129,7 +129,7 @@ class LiveScoreUmpireImport extends Component {
             <div className="col-sm mt-10">
                 <div className="row">
                     <div className="reg-add-save-button">
-                        {this.state.screenName === "umpireRoaster" ? (
+                        {this.state.screenName === "umpireRoster" ? (
                             <Button type="primary" className="primary-add-comp-form">
                                 {AppConstants.upload}
                             </Button>

@@ -50,7 +50,16 @@ class CompetitionVenueModal extends React.Component {
     }
 
     render() {
-        const { modalTitle, handleVenueOK, onVenueCancel, onVenueBack, appState, onSelectValues, handleSearch, handleVenueNext } = this.props
+        const { 
+            modalTitle, 
+            handleVenueOK, 
+            onVenueCancel, 
+            onVenueBack, 
+            appState, 
+            onSelectValues, 
+            handleSearch, 
+            // handleVenueNext 
+        } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -73,7 +82,7 @@ class CompetitionVenueModal extends React.Component {
                     >
                         <div className="inside-container-view mt-3">
                             <div className="col-sm division">
-                                <InputWithHead required="required-field pb-0 pt-0" heading={AppConstants.venue} />
+                                <InputWithHead required="required-field pb-2 pt-0" heading={AppConstants.venue} />
                                 <Form.Item name="selectedVenues" rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                                     <Select
                                         mode="multiple"

@@ -118,9 +118,9 @@ class UmpireDivisions extends Component {
         this.setState({ umpPool: data.umpirePool })
     }
 
-    badgeView(badgeDat) {
+    badgeView(badgeDat, index) {
         return (
-            <div className="row pt-3">
+            <div className="row pt-3" key={'badgeDat' + index}>
                 <div className='col-sm-3 division-table-field-view'>
                     <InputWithHead heading={badgeDat.description} />
                 </div>
@@ -159,8 +159,8 @@ class UmpireDivisions extends Component {
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
 
-                {badge.map((item) => (
-                    this.badgeView(item)
+                {badge.map((item, index) => (
+                    this.badgeView(item, index)
                 ))}
 
                 <div className="row pt-3">
@@ -186,7 +186,7 @@ class UmpireDivisions extends Component {
     }
 
     contentView_1 = () => {
-        const { badgeData } = this.props.appState
+        // const { badgeData } = this.props.appState
 
         return (
             <div className="content-view pt-5">

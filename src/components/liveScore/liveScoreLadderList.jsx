@@ -8,9 +8,9 @@ import { bindActionCreators } from 'redux';
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
 import { liveScoreLaddersListAction, updateLadderSetting } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from '../../util/helpers'
-import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import { NavLink } from 'react-router-dom';
 import { checkLivScoreCompIsParent } from "../../util/permissions";
 
@@ -262,7 +262,7 @@ class LiveScoreLadderList extends Component {
                         className="home-dashboard-table"
                         columns={columns} dataSource={DATA}
                         pagination={false}
-                        rowKey={(record, index) => record.rank + index}
+                        rowKey={(record) => 'ladderList' + record.rank}
                     />
                 </div>
                 {/* <div className="d-flex justify-content-end">

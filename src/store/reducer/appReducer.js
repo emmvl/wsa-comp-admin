@@ -3,6 +3,7 @@ import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
 // import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import AppConstants from "../../themes/appConstants";
 import { reverseArray } from 'util/permissions'
+import { clearCompetitionLocalStorage } from "util/sessionStorage";
 
 const initialState = {
   onLoad: false,
@@ -10,6 +11,9 @@ const initialState = {
   result: null,
   status: 0,
   yearList: [],
+  feeTypes: [],
+  paymentOptions: [],
+  paymentMethods: [],
   productValidityList: [],
   competitionTypeList: [],
   membershipProductFeesTypes: [],
@@ -49,7 +53,7 @@ const initialState = {
   allCompetitionTypeList: [],
   badgeData: [],
   filterBadgeArr: [],
-  accreditation:[]
+  accreditation: []
 };
 
 function arraymove(arr, fromIndex, toIndex) {
@@ -59,18 +63,18 @@ function arraymove(arr, fromIndex, toIndex) {
   return arr
 }
 
-function sortfunction(a, b) {
-  const bandA = a.competitionName;
-  const bandB = b.competitionName;
+// function sortfunction(a, b) {
+//   const bandA = a.competitionName;
+//   const bandB = b.competitionName;
 
-  let comparison = 0;
-  if (bandA > bandB) {
-    comparison = 1;
-  } else if (bandA < bandB) {
-    comparison = -1;
-  }
-  return comparison;
-}
+//   let comparison = 0;
+//   if (bandA > bandB) {
+//     comparison = 1;
+//   } else if (bandA < bandB) {
+//     comparison = -1;
+//   }
+//   return comparison;
+// }
 
 function filteredSettingArray(result) {
   let demographic = []
@@ -189,6 +193,30 @@ function appState(state = initialState, action) {
         status: action.status
       };
 
+    case ApiConstants.API_FEE_TYPE_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        feeTypes: action.result,
+        status: action.status
+      };
+
+    case ApiConstants.API_PAYMENT_OPTIONS_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        paymentOptions: action.result,
+        status: action.status
+      };
+
+    case ApiConstants.API_PAYMENT_METHODS_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        paymentMethods: action.result,
+        status: action.status
+      };
+  
     /////get the common membership product validity type list reference
     case ApiConstants.API_PRODUCT_VALIDITY_LIST_LOAD:
       return { ...state, onLoad: true };
@@ -519,6 +547,7 @@ function appState(state = initialState, action) {
         state.participate_CompetitionArr = []
       }
       else if (action.key === "all") {
+        clearCompetitionLocalStorage()
         state.participate_CompetitionArr = []
         state.own_CompetitionArr = []
         state.all_own_CompetitionArr = []
@@ -607,7 +636,7 @@ function appState(state = initialState, action) {
     case ApiConstants.API_GET_REF_BADGE_SUCCESS:
       let filterBadgeData = getFilterBadgeData(action.result)
       state.filterBadgeArr = filterBadgeData
-      state.accreditation=action.result
+      state.accreditation = action.result
       return {
         ...state,
         onLoad: false,

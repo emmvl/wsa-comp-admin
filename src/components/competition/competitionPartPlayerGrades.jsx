@@ -19,8 +19,7 @@ import {
     changeDivisionPlayerAction, commentListingAction, exportPlayerGrades,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
-    setParticipatingYear,
-    getParticipatingYear,
+    setGlobalYear, getGlobalYear,
     setParticipating_competition,
     getParticipating_competition,
     getParticipating_competitionStatus,
@@ -29,15 +28,19 @@ import {
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import InputWithHead from "../../customComponents/InputWithHead";
-import ColorsArray from "../../util/colorsArray";
+// import ColorsArray from "../../util/colorsArray";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 
-const { Header, Footer, Content } = Layout;
+const {
+    // Header,
+    Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 let this_obj = null;
 
-const colors = JSON.parse(JSON.stringify(ColorsArray));
-const reverseColors = colors.reverse();
+// const colors = JSON.parse(JSON.stringify(ColorsArray));
+// const reverseColors = colors.reverse();
 
 const menu = (
     <Menu>
@@ -86,7 +89,7 @@ class CompetitionPartPlayerGrades extends Component {
                     const { statusRefId } = competitionList[0];
                     setParticipating_competition(competitionId);
                     setParticipating_competitionStatus(statusRefId);
-                    const yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear();
+                    const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
                     this.props.getDivisionsListAction(yearId, competitionId);
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) });
                 }
@@ -116,7 +119,7 @@ class CompetitionPartPlayerGrades extends Component {
     }
 
     componentDidMount() {
-        const yearId = getParticipatingYear();
+        const yearId = getGlobalYear();
         const storedCompetitionId = getParticipating_competition();
         const storedCompetitionStatus = getParticipating_competitionStatus();
         const propsData = this.props.appState.participate_YearArr.length > 0 ? this.props.appState.participate_YearArr : undefined;
@@ -136,7 +139,6 @@ class CompetitionPartPlayerGrades extends Component {
             });
         } else {
             this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition');
-            setParticipatingYear(1);
         }
     }
 
@@ -156,7 +158,7 @@ class CompetitionPartPlayerGrades extends Component {
                         <span>{AppConstants.playerGradingMsg}</span>
                     </Tooltip>
                 </div>
-                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100">
+                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100 mr-22">
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile">
@@ -248,7 +250,7 @@ class CompetitionPartPlayerGrades extends Component {
     )
 
     onYearChange = (yearId) => {
-        setParticipatingYear(yearId);
+        setGlobalYear(yearId);
         setParticipating_competition(undefined);
         setParticipating_competitionStatus(undefined);
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData");
@@ -639,10 +641,10 @@ class CompetitionPartPlayerGrades extends Component {
                                                                     </span>
                                                                 </NavLink>
                                                             ) : (
-                                                                <span className="player-grading-player-name-text pointer">
-                                                                    {playerItem.playerName}
-                                                                </span>
-                                                            )}
+                                                                    <span className="player-grading-player-name-text pointer">
+                                                                        {playerItem.playerName}
+                                                                    </span>
+                                                                )}
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-end flex-wrap">
                                                             {/* <div className="col-sm">
@@ -849,10 +851,10 @@ class CompetitionPartPlayerGrades extends Component {
                                                             </span>
                                                         </NavLink>
                                                     ) : (
-                                                        <span className="player-grading-player-name-text pointer">
-                                                            {playerItem.playerName}
-                                                        </span>
-                                                    )}
+                                                            <span className="player-grading-player-name-text pointer">
+                                                                {playerItem.playerName}
+                                                            </span>
+                                                        )}
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-end flex-wrap">
                                                     {/* <div className="col-sm">
@@ -925,7 +927,8 @@ class CompetitionPartPlayerGrades extends Component {
                 <PlayerCommentModal
                     visible={this.state.modalVisible}
                     modalTitle={AppConstants.add_edit_comment}
-                    onOK={this.handleModalOk}
+                    onOk={() => this.handleModalOk()}
+                    // onOK={this.handleModalOk}
                     onCancel={this.handleModalCancel}
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}

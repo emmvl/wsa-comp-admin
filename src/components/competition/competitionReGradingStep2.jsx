@@ -5,7 +5,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 
-const { Header, Footer, Content } = Layout;
+const { Footer, Content } = Layout;
 const { Option } = Select;
 
 const columns = [

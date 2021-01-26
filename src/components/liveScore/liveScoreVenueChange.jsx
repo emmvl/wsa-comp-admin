@@ -132,7 +132,12 @@ class LiveScoreVenueChange extends Component {
 
     ////this method called after slecting Venue Change option from drop down
     venueChangeView() {
-        const { venueChangeData, venueData, courtData, mainCourtList } = this.props.liveScoreVenueChangeState
+        const {
+            // venueChangeData,
+            venueData,
+            courtData,
+            mainCourtList
+        } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtData) ? courtData : []
         return (
@@ -168,13 +173,13 @@ class LiveScoreVenueChange extends Component {
                             <Form.Item name="startTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "hh:mm")}
+                                    // defaultValue={moment("00:00", "hh:mm")}
                                     format="hh:mm"
                                     use12Hours={false}
                                     placeholder="Select Time"
                                     onChange={(startTime) => this.props.liveScoreUpdateVenueChange(startTime, "startTime")}
                                     onBlur={(e) => this.props.liveScoreUpdateVenueChange(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
-                                    // value={venueChangeData.startTime}
+                                // value={venueChangeData.startTime}
                                 />
                             </Form.Item>
                         </div>
@@ -205,12 +210,12 @@ class LiveScoreVenueChange extends Component {
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker w-100"
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    // defaultValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     placeholder="Select Time"
                                     onChange={(endTime) => this.props.liveScoreUpdateVenueChange(endTime, "endTime")}
                                     onBlur={(e) => this.props.liveScoreUpdateVenueChange(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
-                                    // value={venueChangeData.endTime}
+                                // value={venueChangeData.endTime}
                                 />
                             </Form.Item>
                         </div>
@@ -244,6 +249,7 @@ class LiveScoreVenueChange extends Component {
                 <InputWithHead required="required-field pb-1" heading={AppConstants.court} />
                 <Form.Item name="courts" rules={[{ required: true, message: ValidationConstants.court }]} className="form-conr space">
                     <Select
+                        showSearch
                         mode="multiple"
                         className="w-100"
                         style={{ paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
@@ -270,7 +276,12 @@ class LiveScoreVenueChange extends Component {
     }
 
     changeToView() {
-        const { venueChangeData, venueData, courtDataForChange, mainCourtList } = this.props.liveScoreVenueChangeState
+        const { 
+            // venueChangeData, 
+            venueData, 
+            courtDataForChange, 
+            mainCourtList 
+        } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtDataForChange) ? courtDataForChange : []
 
@@ -306,6 +317,7 @@ class LiveScoreVenueChange extends Component {
                     <Form.Item name="courtTo" rules={[{ required: true, message: ValidationConstants.court }]}>
                         <Select
                             // mode='multiple'
+                            showSearch
                             className="w-100"
                             style={{ paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectCourt}

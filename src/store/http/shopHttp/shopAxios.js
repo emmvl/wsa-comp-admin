@@ -1,6 +1,10 @@
 // import { DataManager } from './../../Components';
 import http from "./shopHttp";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    getOrganisationData
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
@@ -94,7 +98,17 @@ let AxiosApi = {
     async exportOrderSummary(params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
-        let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
+        let {
+            limit,
+            offset,
+            search,
+            year,
+            postcode,
+            // affiliate,
+            paymentMethod,
+            order,
+            sorterBy
+        } = params
         var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGetDownload(url, token, "orderSummary");
     },

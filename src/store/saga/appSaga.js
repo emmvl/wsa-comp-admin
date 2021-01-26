@@ -9,7 +9,7 @@ import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosA
 import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi.js";
 import { getCurrentYear } from "util/permissions";
-import { setOwnCompetitionYear, setParticipatingYear } from "util/sessionStorage";
+import { setGlobalYear, } from "util/sessionStorage";
 
 // Get the common year list reference
 function* getOnlyYearListSaga(action) {
@@ -430,7 +430,6 @@ function* getOnlyYearAndCompetitionListSaga(action) {
     } : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      //console.log("!!!!!!!!!!" + JSON.stringify(result.result.data));
       let yearId = action.yearId == null ? -1 : action.yearId
       const resultCompetition = yield call(RegistrationAxiosApi.getAllCompetitionList, yearId);
 
@@ -470,7 +469,7 @@ function* getOwnYearAndCompetitionListSaga(action) {
 
     if (result.status === 1) {
       let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
-      setOwnCompetitionYear(yearId)
+      setGlobalYear(yearId)
       const resultCompetition = yield call(RegistrationAxiosApi.getOwnCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {
@@ -507,7 +506,7 @@ function* getParticipateYearAndCompetitionListSaga(action) {
 
     if (result.status === 1) {
       let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
-      setParticipatingYear(yearId)
+      setGlobalYear(yearId)
       const resultCompetition = yield call(RegistrationAxiosApi.getParticipateCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {
@@ -641,6 +640,87 @@ function* getRefBadgeSaga(action) {
   }
 }
 
+// Get the common fee type
+function* getFeeTypeSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getFeeList, action);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_FEE_TYPE_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+// Get the common payment options
+function* getPaymentOptionsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getPaymentOptionsList, action);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_OPTIONS_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+// Get the common payment methods
+function* getPaymentMethodsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getPaymentMethodsList, action);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PAYMENT_METHODS_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
 export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_YEAR_LIST_LOAD, getYearListSaga);
   yield takeEvery(ApiConstants.API_ONLY_YEAR_LIST_LOAD, getOnlyYearListSaga);
@@ -662,4 +742,7 @@ export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga);
   yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga);
   yield takeEvery(ApiConstants.API_GET_REF_BADGE_LOAD, getRefBadgeSaga);
+  yield takeEvery(ApiConstants.API_FEE_TYPE_LIST_LOAD, getFeeTypeSaga);
+  yield takeEvery(ApiConstants.API_PAYMENT_OPTIONS_LIST_LOAD, getPaymentOptionsSaga);
+  yield takeEvery(ApiConstants.API_PAYMENT_METHODS_LIST_LOAD, getPaymentMethodsSaga);
 }

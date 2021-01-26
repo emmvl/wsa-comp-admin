@@ -1,7 +1,23 @@
 import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+// import history from "../../../util/history";
+import { deepCopyFunction, isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
+const membershipCapListDefObj = {
+  "membershipCapId": 0,
+  "organisationId": '',
+  "isAllMembershipProduct": 0,
+  "productsInfo": [],
+  "products": [],
+  "productsTemp": [],
+  "feeCaps": [
+      {
+          "membershipFeeCapId": 0,
+          "dobFrom": null,
+          "dobTo": null,
+          "amount": null
+      }
+  ]
+}
 
 const newObjvalue = {
   orgRegistrationId: 0,
@@ -99,7 +115,11 @@ const initialState = {
   },
   teamRegListAction: null,
   regMembershipListAction: null,
-  canInviteSend: 0
+  canInviteSend: 0,
+  membershipFeeCapList: [],
+  membershipFeeCapListCopy: [],
+  updateMembershipFeeCapOnLoad: false,
+  isAllMembershipProductChanged: false
 };
 
 
@@ -345,7 +365,7 @@ function getNewProdcutData(productArr, valueData) {
 
 /// for check product exist in Array or not
 function checkExistngProductId(productArr, id) {
-  let status = false;
+  // let status = false;
   for (let i in productArr) {
     if (productArr[i] === id) {
       return true;
@@ -473,8 +493,9 @@ function feesDataObject(allMembershipData, membershipProductName) {
   let feesApiData = allMembershipData.membershipproductfee.membershipFees;
   let data = membershipTypesSelected;
   for (let i in data) {
+    let feesTableObject = null;
     if (feesApiData == null) {
-      var feesTableObject = {
+      feesTableObject = {
         casualFee: 0,
         casualGst: 0,
         seasonalFee: 0,
@@ -497,9 +518,13 @@ function feesDataObject(allMembershipData, membershipProductName) {
       );
       if (mappedMembershipTypeIndex > -1) {
         feesApiData[mappedMembershipTypeIndex]["editableIndex"] = parseInt(i);
+
+        //developed by
+        feesApiData[mappedMembershipTypeIndex].validityDays = feesApiData[mappedMembershipTypeIndex].validityDays == 0 ? null : feesApiData[mappedMembershipTypeIndex].validityDays;
+        
         feesTableData.push(feesApiData[mappedMembershipTypeIndex]);
       } else {
-        var feesTableObject = {
+        feesTableObject = {
           casualFee: 0,
           casualGst: 0,
           seasonalFee: 0,
@@ -509,8 +534,7 @@ function feesDataObject(allMembershipData, membershipProductName) {
           membershipProductFeesId: 0,
           membershipProductTypeRefName: data[i].membershipProductTypeRefName,
           membershipProductFeesTypeRefId: 1,
-          membershipProductTypeMappingId:
-            data[i].membershipProductTypeMappingId,
+          membershipProductTypeMappingId: data[i].membershipProductTypeMappingId,
           editableIndex: parseInt(i)
         };
         feesTableData.push(feesTableObject);
@@ -536,37 +560,37 @@ function discountDataObject(data) {
 
 }
 
-function updatedSettingsData(result) {
-  let updatedAdvanceSettings = []
-  let updatedDemographic = []
-  let updatedNetballQuestions = []
-  let updatedOtherQuestions = []
+// function updatedSettingsData(result) {
+//   let updatedAdvanceSettings = []
+//   let updatedDemographic = []
+//   let updatedNetballQuestions = []
+//   let updatedOtherQuestions = []
 
-  if (result) {
-    for (let i in result) {
-      if (result[i] == 13 || result[i] == 14
-        || result[i] == 15 || result[i] == 16) {
-        updatedDemographic.push(result[i])
-      } else if (result[i] == 7 || result[i] == 6 || result[i] == 10) {
-        updatedNetballQuestions.push(result[i])
-      }
-      else if (result[i] == 8 || result[i] == 9 ||
-        result[i] == 12 || result[i] == 11) {
-        updatedOtherQuestions.push(result[i])
-      }
-      else if (result[i] == 2 || result[i] == 17 ||
-        result[i] == 18 || result[i] == 3 || result[i] == 4) {
-        updatedAdvanceSettings.push(result[i])
-      }
-    }
-  }
-  return {
-    updatedAdvanceSettings,
-    updatedDemographic,
-    updatedNetballQuestions,
-    updatedOtherQuestions,
-  }
-}
+//   if (result) {
+//     for (let i in result) {
+//       if (result[i] == 13 || result[i] == 14
+//         || result[i] == 15 || result[i] == 16) {
+//         updatedDemographic.push(result[i])
+//       } else if (result[i] == 7 || result[i] == 6 || result[i] == 10) {
+//         updatedNetballQuestions.push(result[i])
+//       }
+//       else if (result[i] == 8 || result[i] == 9 ||
+//         result[i] == 12 || result[i] == 11) {
+//         updatedOtherQuestions.push(result[i])
+//       }
+//       else if (result[i] == 2 || result[i] == 17 ||
+//         result[i] == 18 || result[i] == 3 || result[i] == 4) {
+//         updatedAdvanceSettings.push(result[i])
+//       }
+//     }
+//   }
+//   return {
+//     updatedAdvanceSettings,
+//     updatedDemographic,
+//     updatedNetballQuestions,
+//     updatedOtherQuestions,
+//   }
+// }
 
 /////function to check membership types in the membership product section tab in membership fees
 function getDefaultMembershipType(data) {
@@ -771,14 +795,20 @@ function registration(state = initialState, action) {
       let onChangeIndex = data.findIndex(
         data => data.editableIndex == recordId
       );
-      data[onChangeIndex][key] = action.value;
+      if(key === "casualGst" || key === "seasonalGst"){
+        let gst = Number(action.value);
+        data[onChangeIndex][key] = gst > 0 ? gst : 0;
+      }
+      else{
+        data[onChangeIndex][key] = Number(action.value);
+      }
       if (key === "casualFee") {
         let casualGst = Number((action.value) / 10).toFixed(2)
-        data[onChangeIndex]["casualGst"] = casualGst
+        data[onChangeIndex]["casualGst"] = casualGst > 0 ? casualGst : 0;
       }
       if (key === "seasonalFee") {
         let seasonalGst = Number((action.value) / 10).toFixed(2)
-        data[onChangeIndex]["seasonalGst"] = seasonalGst
+        data[onChangeIndex]["seasonalGst"] = seasonalGst > 0 ? seasonalGst : 0;
       }
       return {
         ...state,
@@ -907,9 +937,16 @@ function registration(state = initialState, action) {
             }
             break;
           }
+          state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected = true
           state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-          state.registrationFormData[0][action.key][action.membershipProductTypeIndex][action.subKey] = action.updatedData;
-    
+          let sample = state.registrationFormData[0][action.key].find(x => x.id == action.getMembershipproductItem.id)
+          if(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex].isSelected && !sample){
+            state.registrationFormData[0][action.key].push(state.selectedMemberShipType[index][action.key][action.membershipProductTypeIndex])
+          }
+          else{
+            sample[action.subKey] = action.updatedData;
+          }
+              
       }
       else {
         let oldData = state.registrationFormData;
@@ -1006,7 +1043,7 @@ function registration(state = initialState, action) {
       };
 
     case ApiConstants.REG_FORM_UPDATE_MEMBERSHIP_CATEGORY:
-      let selectedKeyArr = state.selectedProductName;
+      // let selectedKeyArr = state.selectedProductName;
       let categoryData = state.membershipProductTypes;
       let updatedTypesData = getNewProdcutData(
         categoryData,
@@ -1054,8 +1091,11 @@ function registration(state = initialState, action) {
 
     ///membership fees radip apply fees on change
     case ApiConstants.ON_CHANGE_RADIO_APPLY_FEES_MEMBERSHIP_FEES:
-      console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
+      // console.log("state.membershipProductFeesTableData",state.membershipProductFeesTableData)
       if(action.key){
+        if(action.key == "isNeedExtendedDate" && action.radioApplyId == false){
+          state.membershipProductFeesTableData.membershipFees[action.feesIndex].extendEndDate = null;
+        }
         state.membershipProductFeesTableData.membershipFees[action.feesIndex][action.key] = action.radioApplyId;
       }else{
         state.membershipProductFeesTableData.membershipFees[action.feesIndex].membershipProductFeesTypeRefId = action.radioApplyId;
@@ -1132,8 +1172,12 @@ function registration(state = initialState, action) {
       let getFormValue = state.registrationFormData;
       let tableValue = action.tableKey;
       let matchIndexKey = action.matchkey;
+      let subKey = action.subKey;
       productsData[matchIndexKey].membershipProductTypes[tableValue].isSelected = action.isSelected;
       productsData[matchIndexKey].membershipProductTypes[tableValue].registrationLock = action.registrationLock;
+      if(!action.isSelected){
+        productsData[matchIndexKey].membershipProductTypes[tableValue][subKey] = null;        
+      }
       let selectedArray = makeFinalProductArr(productsData, state.defaultMembershipProduct);
       getFormValue[0].membershipProductTypes = selectedArray;
       state.selectedMemberShipType = productsData;
@@ -1252,6 +1296,82 @@ function registration(state = initialState, action) {
       state.teamRegListAction = null
       state.regMembershipListAction = null
       return { ...state, onLoad: false };
+    
+    case ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_LOAD:
+      return{...state,onLoad: true}  
+    
+    case ApiConstants.API_GET_MEMBERSHIP_FEE_CAP_LIST_SUCCESS:
+      let membershipCapListTemp = [];
+      if(isArrayNotEmpty(action.result)){
+        membershipCapListTemp = action.result;
+        for(let item of membershipCapListTemp){
+          item["productsInfo"] = [];
+          item["productsTemp"] = deepCopyFunction(item.products);
+          for(let product of item.products){
+            item.productsInfo.push(product.membershipProductId);
+          }
+        }
+      }else{
+        membershipCapListTemp[0] = membershipCapListDefObj;
+      }
+      return{
+        ...state,
+        status: action.status,
+        membershipFeeCapList: membershipCapListTemp,
+        membershipFeeCapListCopy: deepCopyFunction(membershipCapListTemp),
+        onLoad: false
+      }  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_LOAD:
+      return{...state,updateMembershipFeeCapOnLoad: true}  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS:
+      return{
+        ...state,
+        status: action.status,
+        updateMembershipFeeCapOnLoad: false
+      }  
+
+    case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
+      if(action.key == 'membershipFeeCapList'){
+        state.membershipFeeCapList = action.value;
+      }else if(action.key == 'isAllMembershipProductChanged'){
+        state.isAllMembershipProductChanged = action.value;
+      }else if(action.key == 'productsInfo'){
+        let productList = action.value;
+        state.membershipFeeCapList[action.index].productsInfo = productList;
+        // console.log("state.membershipFeeCapList[action.index].productsTemp",state.membershipFeeCapList[action.index].productsTemp);
+        // console.log("state.membershipFeeCapList[action.index].productsInfo",state.membershipFeeCapList[action.index].productsInfo);
+        state.membershipFeeCapList[action.index].products = [];
+        for(let product of productList){
+          let existingProductTemp = state.membershipFeeCapList[action.index].productsTemp.find(x => x.membershipProductId == product)
+          let obj = {
+            "membershipCapProductId": existingProductTemp ? existingProductTemp.membershipCapProductId : 0,
+            "membershipProductId": product
+          }
+          state.membershipFeeCapList[action.index].products.push(obj);
+          state.membershipFeeCapList[action.index].productsTemp.push(obj);
+        }
+        // console.log("state.membershipFeeCapList[action.index].products",state.membershipFeeCapList[action.index].products)
+      }else if(action.key == 'feeCaps'){
+        state.membershipFeeCapList[action.index][action.key][action.subIndex][action.subKey] = action.value;
+      }else if(action.key == "isAllMembershipProduct"){
+        if(action.value == 1){
+          state.membershipFeeCapList = [];
+          state.membershipFeeCapList[0] = deepCopyFunction(state.membershipFeeCapListCopy[action.index]);
+          state.membershipFeeCapList[0].products = [];
+          state.membershipFeeCapList[0].productsInfo = [];
+          state.membershipFeeCapList[0][action.key] = action.value;
+        }else{
+          state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
+        }
+        state.isAllMembershipProductChanged = true;
+      }else{
+        state.membershipFeeCapList[action.index][action.key] = action.value;
+      }
+      return{
+        ...state
+      }
 
     default:
       return state;

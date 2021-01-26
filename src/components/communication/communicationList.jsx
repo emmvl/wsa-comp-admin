@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination } from "antd";
+import { Layout, Button, Table, Breadcrumb } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -9,8 +9,12 @@ import { bindActionCreators } from 'redux';
 import { liveScoreNewsListAction } from '../../store/actions/LiveScoreAction/liveScoreNewsAction'
 import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate'
 import AppImages from "../../themes/appImages";
-import history from "../../util/history";
-import { getKeyForStateWideMessage, getLiveScoreCompetiton, getOrganisationData } from "../../util/sessionStorage"
+// import history from "../../util/history";
+import {
+    getKeyForStateWideMessage,
+    // getLiveScoreCompetiton,
+    // getOrganisationData
+} from "../../util/sessionStorage"
 
 const { Content } = Layout;
 

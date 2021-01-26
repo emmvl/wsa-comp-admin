@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import {
-    Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown, message,
-} from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,19 +11,25 @@ import AppConstants from "../../themes/appConstants";
 import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
-    getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
-    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
-    playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction, exportPlayerGrades
+    getCompPartPlayerGradingAction,
+    clearReducerCompPartPlayerGradingAction,
+    addNewTeamAction,
+    onDragPlayerAction,
+    onSameTeamDragAction,
+    playerGradingComment,
+    deleteTeamAction,
+    addOrRemovePlayerForChangeDivisionAction,
+    changeDivisionPlayerAction,
+    commentListingAction,
+    exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
     setOwn_CompetitionFinalRefId,
+    getGlobalYear, setGlobalYear
 } from "../../util/sessionStorage";
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
@@ -85,7 +89,7 @@ class CompetitionPlayerGrades extends Component {
                     const { competitionId } = competitionList[0];
                     const { statusRefId } = competitionList[0];
                     const { finalTypeRefId } = competitionList[0];
-                    const yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear();
+                    const yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear();
                     setOwn_competition(competitionId);
                     setOwn_competitionStatus(statusRefId);
                     setOwn_CompetitionFinalRefId(finalTypeRefId);
@@ -94,8 +98,8 @@ class CompetitionPlayerGrades extends Component {
                     this.setState({
                         firstTimeCompId: competitionId, competitionStatus: statusRefId, compLoad: false, yearRefId: JSON.parse(yearId),
                     });
-                }else{
-                    this.props.getDivisionsListAction(this.state.yearRefId, this.state.firstTimeCompId); 
+                } else {
+                    this.props.getDivisionsListAction(this.state.yearRefId, this.state.firstTimeCompId);
                 }
             }
         }
@@ -125,13 +129,13 @@ class CompetitionPlayerGrades extends Component {
     }
 
     componentDidMount() {
-        const yearId = getOwnCompetitionYear();
+        const yearId = getGlobalYear();
         const storedCompetitionId = getOwn_competition();
         const storedCompetitionStatus = getOwn_competitionStatus();
         const propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined;
         const compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
-        if(!fromReplicate){
+        if (!fromReplicate) {
             if (storedCompetitionId && yearId && propsData && compData) {
                 this.setState({
                     yearRefId: JSON.parse(yearId),
@@ -148,9 +152,8 @@ class CompetitionPlayerGrades extends Component {
                 });
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
-                // setOwnCompetitionYear(1)
             }
-        }else{
+        } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -176,7 +179,7 @@ class CompetitionPlayerGrades extends Component {
                         <span>{AppConstants.playerGradingMsg}</span>
                     </Tooltip>
                 </div>
-                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100">
+                <div className="col-sm d-flex flex-row align-items-center justify-content-end w-100 mr-22">
                     <div className="row">
                         <div className="col-sm">
                             <div className="comp-dashboard-botton-view-mobile">
@@ -270,7 +273,7 @@ class CompetitionPlayerGrades extends Component {
     )
 
     onYearChange = (yearId) => {
-        setOwnCompetitionYear(yearId);
+        setGlobalYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined);
         setOwn_CompetitionFinalRefId(undefined);
@@ -546,14 +549,14 @@ class CompetitionPlayerGrades extends Component {
                         playerId = unassignedPlayerData.players[source.index].playerId;
                     } else {
                         for (const i in assignedPlayerData) {
-                            if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            if (sourceTeamID == assignedPlayerData[i].teamId) {
                                 playerId = assignedPlayerData[i].players[source.index].playerId;
                             }
                         }
                     }
                 } else {
                     for (const i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                        if (sourceTeamID == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId;
                         }
                     }
@@ -679,10 +682,10 @@ class CompetitionPlayerGrades extends Component {
                                                                     </span>
                                                                 </NavLink>
                                                             ) : (
-                                                                <span className="player-grading-player-name-text pointer">
-                                                                    {playerItem.playerName}
-                                                                </span>
-                                                            )}
+                                                                    <span className="player-grading-player-name-text pointer">
+                                                                        {playerItem.playerName}
+                                                                    </span>
+                                                                )}
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-end flex-wrap">
                                                             {/* <div className="col-sm">
@@ -821,8 +824,8 @@ class CompetitionPlayerGrades extends Component {
         const commentList = this.props.partPlayerGradingState.playerCommentList;
         const { commentLoad } = this.props.partPlayerGradingState;
         const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-        let colorPosition1;
-        let colorPosition2;
+        // let colorPosition1;
+        // let colorPosition2;
         const divisionData = this.props.registrationState.allDivisionsData.filter((x) => x.competitionMembershipProductDivisionId != null);
         const disableStatus = this.state.competitionStatus == 1;
         return (
@@ -891,10 +894,10 @@ class CompetitionPlayerGrades extends Component {
                                                             </span>
                                                         </NavLink>
                                                     ) : (
-                                                        <span className="player-grading-player-name-text pointer">
-                                                            {playerItem.playerName}
-                                                        </span>
-                                                    )}
+                                                            <span className="player-grading-player-name-text pointer">
+                                                                {playerItem.playerName}
+                                                            </span>
+                                                        )}
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-end flex-wrap">
                                                     {/* <div className="col-sm">
@@ -973,7 +976,7 @@ class CompetitionPlayerGrades extends Component {
                 <PlayerCommentModal
                     visible={this.state.modalVisible}
                     modalTitle={AppConstants.add_edit_comment}
-                    onOK={this.handleModalOk}
+                    onOk={() => this.handleModalOk()}
                     onCancel={this.handleModalCancel}
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}

@@ -61,7 +61,7 @@ function getAffiliateToOrganisationAction(organisationId, searchText) {
     return {
         type: ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD,
         payload: organisationId,
-        searchText
+        searchText,
     };
 }
 
@@ -150,6 +150,20 @@ function getUserModulePersonalByCompetitionAction(payload) {
 function getUserModuleRegistrationAction(payload) {
     return {
         type: ApiConstants.API_USER_MODULE_REGISTRATION_LOAD,
+        payload,
+    };
+}
+
+function getUserModuleTeamRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD,
+        payload,
+    };
+}
+
+function getUserModuleOtherRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD,
         payload,
     };
 }
@@ -243,6 +257,22 @@ function exportOrgRegQuestionAction(payload) {
     };
 }
 
+/* Export User Registration Data */
+function getSubmittedRegData(payload) {
+    return {
+        type: ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD,
+        payload,
+    };
+}
+
+/* Export User Registration Data */
+function exportUserRegData(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_USER_REG_DATA_LOAD,
+        payload,
+    };
+}
+
 /* Affiliate Directory Listing */
 function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
     return {
@@ -267,6 +297,22 @@ function userProfileUpdateAction(data) {
         data,
     };
 }
+
+
+function addChildAction(body, userId, sameEmail) {
+    return {
+        type: ApiConstants.API_ADD_CHILD_LOAD,
+        payload: { body, userId, sameEmail },
+    };
+}
+
+function addParentAction(body, userId, sameEmail) {
+    return {
+        type: ApiConstants.API_ADD_PARENT_LOAD,
+        payload: { body, userId, sameEmail },
+    };
+}
+
 
 function userPhotoUpdateAction(payload, userDetail) {
     return {
@@ -416,13 +462,91 @@ function getSpectatorListAction(payload, sortBy, sortOrder) {
     };
 }
 
-function registrationResendEmailAction(teamId,userId){
-    const action = {
+function registrationResendEmailAction(teamId, userId) {
+    return {
         type: ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD,
         teamId,
-        userId
-    } 
-    return action;
+        userId,
+    };
+}
+
+function resetTfaAction(Id) {
+    return {
+        type: ApiConstants.Api_RESET_TFA_LOAD,
+        Id,
+    };
+}
+
+function addUsersToBeCompared(users) {
+    return {
+        type: ApiConstants.ADD_USERS_TO_BE_MERGED,
+        payload: users,
+    };
+}
+
+function getUserModuleTeamMembersAction(payload) {
+    return {
+        type: ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD,
+        payload,
+    };
+}
+
+function getNetSetGoActionList(payload, sortBy, sortOrder) {
+    return {
+        type: ApiConstants.API_GET_NETSETGO_LIST_LOAD,
+        payload,
+        sortBy,
+        sortOrder,
+    };
+}
+
+function teamMemberSaveUpdateAction(data, key, index, subIndex) {
+    return {
+        type: ApiConstants.TEAM_MEMBER_SAVE_UPDATE_ACTION,
+        data,
+        key,
+        index,
+        subIndex,
+    };
+}
+
+function teamMembersSaveAction(payload) {
+    return {
+        type: ApiConstants.API_TEAM_MEMBERS_SAVE_LOAD,
+        payload,
+    };
+}
+
+function getTeamMembersAction(teamMemberRegId) {
+    return {
+        type: ApiConstants.API_GET_TEAM_MEMBERS_LOAD,
+        teamMemberRegId,
+    };
+}
+
+function updateReviewInfoAction(value, key, index, subkey, subIndex) {
+    return {
+        type: ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO,
+        value,
+        key,
+        index,
+        subkey,
+        subIndex,
+    };
+}
+
+function getTeamMembersReviewAction(payload) {
+    return {
+        type: ApiConstants.API_GET_TEAM_MEMBERS_REVIEW_LOAD,
+        payload,
+    };
+}
+
+function teamMemberUpdateAction(data) {
+    return {
+        type: ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD,
+        data,
+    };
 }
 
 export {
@@ -444,6 +568,8 @@ export {
     getUserModulePersonalDetailsAction,
     getUserModuleMedicalInfoAction,
     getUserModuleRegistrationAction,
+    getUserModuleTeamRegistrationAction,
+    getUserModuleOtherRegistrationAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleActivityPlayerAction,
     getUserModuleActivityParentAction,
@@ -479,5 +605,19 @@ export {
     updateBannerAction,
     clearListAction,
     getSpectatorListAction,
-    registrationResendEmailAction
+    registrationResendEmailAction,
+    resetTfaAction,
+    addUsersToBeCompared,
+    getUserModuleTeamMembersAction,
+    getNetSetGoActionList,
+    addChildAction,
+    addParentAction,
+    teamMemberSaveUpdateAction,
+    teamMembersSaveAction,
+    getTeamMembersAction,
+    updateReviewInfoAction,
+    getTeamMembersReviewAction,
+    teamMemberUpdateAction,
+    exportUserRegData,
+    getSubmittedRegData,
 };

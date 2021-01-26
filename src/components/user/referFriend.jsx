@@ -1,22 +1,25 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, DatePicker } from "antd";
+import { Layout, Breadcrumb, Table, Select, Pagination } from "antd";
 import './user.css';
-import moment from 'moment';
+// import moment from 'moment';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+// import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 import { getUserReferFriendAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { Option } = Select;
-const { confirm } = Modal;
-const { SubMenu } = Menu;
+// const { confirm } = Modal;
+// const { SubMenu } = Menu;
 let this_Obj = null
 
 const listeners = (key) => ({
@@ -117,7 +120,7 @@ class ReferFriend extends Component {
         super(props);
         this.state = {
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearRefId: null,
             pageNo: 1,
             sortBy: null,
             sortOrder: null
@@ -126,7 +129,7 @@ class ReferFriend extends Component {
     }
 
     async componentDidMount() {
-
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         const { userReferFriendListAction } = this.props.userState
 
         this.referenceCalls();
@@ -138,13 +141,14 @@ class ReferFriend extends Component {
             let offset = userReferFriendListAction.payload.paging.offset
             sortBy = userReferFriendListAction.sortBy
             sortOrder = userReferFriendListAction.sortOrder
-            let yearRefId = userReferFriendListAction.payload.yearRefId
+            let yearRefId = JSON.parse(yearId)
 
             pageNo = Math.floor(offset / 10) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleFriendTableList(pageNo);
         } else {
+            this.setState({ yearRefId: JSON.parse(yearId) })
             this.handleFriendTableList(1);
         }
     }
@@ -153,13 +157,14 @@ class ReferFriend extends Component {
     }
 
     handleFriendTableList = (page) => {
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page
         })
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
-            yearRefId: this.state.yearRefId,
+            yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -175,6 +180,9 @@ class ReferFriend extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === "yearRefId")
             await this.setState({ yearRefId: value });
+        if (value != -1) {
+            setGlobalYear(value)
+        }
 
         this.handleFriendTableList(1);
     }

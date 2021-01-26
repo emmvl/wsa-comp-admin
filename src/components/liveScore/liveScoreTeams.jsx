@@ -10,7 +10,12 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { getTeamsWithPagination } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
-import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } from '../../util/sessionStorage';
+import {
+    getLiveScoreCompetiton,
+    // setOwnCompetitionYear,
+    setOwn_competition,
+    setGlobalYear
+} from '../../util/sessionStorage';
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
@@ -47,7 +52,7 @@ const columns = [
         dataIndex: 'logoUrl',
         key: 'logoUrl',
         sorter: false,
-        render: (logoUrl) => logoUrl ? <img style={{ height: 60, width: 80 }} src={logoUrl} /> : <span>{AppConstants.noImage}</span>,
+        render: (logoUrl) => logoUrl ? <img style={{ height: 60, width: 80 }} src={logoUrl} alt="" /> : <span>{AppConstants.noImage}</span>,
     },
     {
         title: 'Team Name',
@@ -233,7 +238,8 @@ class LiveScoreTeam extends Component {
             const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
             compKey = uniqueKey
         }
-        setOwnCompetitionYear(yearRefId);
+        // setOwnCompetitionYear(yearRefId);
+        setGlobalYear(yearRefId);
         setOwn_competition(compKey);
         history.push('/competitionPartTeamGradeCalculate');
     }
@@ -355,7 +361,7 @@ class LiveScoreTeam extends Component {
                         columns={columns}
                         dataSource={teamData}
                         pagination={false}
-                        rowKey={(record, index) => "teamData" + record.id + index}
+                        rowKey={(record) => "teamData" + record.id}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -372,7 +378,7 @@ class LiveScoreTeam extends Component {
     };
 
     render() {
-        const { screenKey } = this.props.liveScoreTeamState
+        // const { screenKey } = this.props.liveScoreTeamState
 
         return (
             <div className="fluid-width default-bg">

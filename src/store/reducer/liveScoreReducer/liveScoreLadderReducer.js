@@ -103,10 +103,10 @@ function liveScoreLaddersReducer(state = initialState, action) {
             let key = action.data.key
             let data = action.data.data
             let index = action.data.index
-
+            let obj = null;
 
             if (key === "addLadderAdjustment") {
-                var obj = {
+                obj = {
                     teamLadderId: 0,
                     teamId: null,
                     points: '',
@@ -114,7 +114,7 @@ function liveScoreLaddersReducer(state = initialState, action) {
                 }
                 state.ladderData.push(obj)
             } else if (key === 'refresh') {
-                var obj = {
+                obj = {
                     teamLadderId: 0,
                     teamId: null,
                     points: '',

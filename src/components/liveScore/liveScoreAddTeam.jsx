@@ -7,6 +7,7 @@ import {
     Button,
     Radio,
     Form,
+    message
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -36,7 +37,13 @@ import Loader from '../../customComponents/loader'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
-import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
+import {
+    // isArrayNotEmpty,
+    captializedString,
+    regexNumberExpression,
+    isImageFormatValid,
+    isImageSizeValid
+} from '../../util/helpers';
 import Tooltip from 'react-png-tooltip'
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
@@ -156,12 +163,34 @@ class LiveScoreAddTeam extends Component {
         })
     }
 
-    setImage = (data) => {
+    setImage_1 = (data) => {
         if (data.files[0] !== undefined) {
             let profileImage = URL.createObjectURL(data.files[0])
             this.setState({ image: data.files[0], profileImage: profileImage })
             this.props.liveScoreAddTeamform({ key: 'logoUrl', data: profileImage })
-            // this.props.liveScoreAddTeamform({ key: 'teamLogo', data: data.files[0] })
+        }
+    };
+
+    setImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
+                return
+            }
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
+            }
+            let profileImage = URL.createObjectURL(data.files[0])
+            this.setState({ image: data.files[0], profileImage: profileImage, timeout: 2000 })
+            this.props.liveScoreAddTeamform({ key: 'logoUrl', data: profileImage })
+            setTimeout(() => {
+                this.setState({ timeout: null })
+            }, 2000);
         }
     };
 
@@ -203,7 +232,13 @@ class LiveScoreAddTeam extends Component {
     }
 
     contentView = () => {
-        const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
+        const {
+            teamManagerData,
+            affilateList,
+            divisionList,
+            managerType,
+            // logoUrl
+        } = this.props.liveScoreTeamState
         // let name = teamManagerData.name
         let alias = teamManagerData ? teamManagerData.alias : null
         return (
@@ -211,7 +246,7 @@ class LiveScoreAddTeam extends Component {
                 <Form.Item name="teamName" rules={[{ required: true, message: ValidationConstants.teamName }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pt-0 pb-0"
+                        required="required-field pt-0 "
                         heading={AppConstants.teamName}
                         placeholder={AppConstants.enterTeamName}
                         onChange={(event) => {
@@ -254,12 +289,16 @@ class LiveScoreAddTeam extends Component {
                                 type="file"
                                 id="user-pic"
                                 className="d-none"
-                                onChange={(evt) => {
-                                    this.setImage(evt.target)
-                                    this.setState({ timeout: 2000 })
-                                    setTimeout(() => {
-                                        this.setState({ timeout: null })
-                                    }, 2000);
+                                // onChange={(evt) => {
+                                //     this.setImage(evt.target)
+                                //     this.setState({ timeout: 2000 })
+                                //     setTimeout(() => {
+                                //         this.setState({ timeout: null })
+                                //     }, 2000);
+                                // }}
+                                onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
                                 }}
                             />
                             <span className="form-err">{this.state.imageError}</span>
@@ -278,6 +317,9 @@ class LiveScoreAddTeam extends Component {
                             </Checkbox>
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
                 <div className="row">
@@ -375,8 +417,8 @@ class LiveScoreAddTeam extends Component {
     };
 
     managerExistingRadioBtnView() {
-        let grade = this.state.managerData
-        const { selectedManager } = this.props.liveScoreTeamState
+        // let grade = this.state.managerData
+        // const { selectedManager } = this.props.liveScoreTeamState
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div>
@@ -424,7 +466,10 @@ class LiveScoreAddTeam extends Component {
     }
 
     onChangeNumber = (number) => {
-        const { selectedManager, teamManagerData } = this.props.liveScoreTeamState
+        const {
+            // selectedManager,
+            teamManagerData
+        } = this.props.liveScoreTeamState
         if (number.length === 10) {
             this.setState({
                 hasError: false
@@ -444,7 +489,7 @@ class LiveScoreAddTeam extends Component {
     }
 
     managerNewRadioBtnView() {
-        const { teamManagerData } = this.props.liveScoreTeamState
+        // const { teamManagerData } = this.props.liveScoreTeamState
         let hasError = this.state.hasError
         return (
             <div>
@@ -598,8 +643,8 @@ class LiveScoreAddTeam extends Component {
             const {
                 name,
                 alias,
-                logoUrl,
-                teamLogo,
+                // logoUrl,
+                // teamLogo,
                 divisionId,
                 organisationId,
                 userIds,
@@ -609,7 +654,7 @@ class LiveScoreAddTeam extends Component {
                 email,
                 teamUniqueKey,
             } = this.props.liveScoreTeamState.teamManagerData
-            let isCheked = this.props.liveScoreTeamState
+            // let isCheked = this.props.liveScoreTeamState
             let usersArray = JSON.stringify(userIds)
             if (this.props.liveScoreTeamState.managerType === 'existing') {
                 const formData = new FormData();

@@ -40,7 +40,7 @@ export default class SortableImage extends React.PureComponent {
     itemRenderer = (item, index) => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
-                <img src={item.image} width="160" height="160" style={{ margin: 10 }} onClick={(e) => e.stopPropagation()} />
+                <img src={item.image} width="160" height="160" style={{ margin: 10 }} onClick={(e) => e.stopPropagation()} alt="" />
                 <div className="red-remove-cross-img-div pt-0" style={{ cursor: 'pointer' }}>
                     <img
                         className="dot-image"

@@ -39,7 +39,7 @@ function* errorSaga(error) {
 // Get the Division list
 function* liveScoreDivisionSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey, action.sortBy, action.sortOrder);
+    const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey, action.sortBy, action.sortOrder ,action.isParent , action.compOrgId);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS,

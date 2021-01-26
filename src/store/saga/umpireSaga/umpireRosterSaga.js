@@ -1,9 +1,9 @@
 import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
-import UserAxiosApi from "../../http/userHttp/userAxiosApi";
+// import UserAxiosApi from "../../http/userHttp/userAxiosApi";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
-import history from "../../../util/history";
+// import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
@@ -29,9 +29,9 @@ function* errorSaga(error) {
     message.error(AppConstants.somethingWentWrong);
 }
 
-export function* umpireRoasterListSaga(action) {
+export function* umpireRosterListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.umpireRoasterList,
+        const result = yield call(LiveScoreAxiosApi.umpireRosterList,
             action.competitionID,
             action.status,
             action.refRoleId,
@@ -41,7 +41,7 @@ export function* umpireRoasterListSaga(action) {
 
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_UMPIRE_ROASTER_LIST_SUCCESS,
+                type: ApiConstants.API_UMPIRE_ROSTER_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -55,12 +55,12 @@ export function* umpireRoasterListSaga(action) {
 
 export function* umpireActionPerofomSaga(action) {
     try {
-        const result = yield call(action.data.status === 'DELETE' ? LiveScoreAxiosApi.umpireRoasterDeleteAction : LiveScoreAxiosApi.umpireRoasterActionPerform,
+        const result = yield call(action.data.status === 'DELETE' ? LiveScoreAxiosApi.umpireRosterDeleteAction : LiveScoreAxiosApi.umpireRosterActionPerform,
             action.data);
 
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_SUCCESS,
+                type: ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

@@ -1,34 +1,38 @@
 import React, { Component } from "react";
 import {
-    Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination,
+    Layout, Breadcrumb, Button, Table,
 } from 'antd';
 import './product.scss';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
+// import moment from 'moment';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import InputWithHead from "../../customComponents/InputWithHead";
+// import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import {
-    getTransactionPayoutListAction,
+    getTransactionPayoutListAction, exportPayoutTransaction,
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
-import Loader from '../../customComponents/loader';
+// import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from '../../themes/dateformate';
+// import { SearchOutlined } from "@ant-design/icons";
 
-const { Header, Content } = Layout;
-const { Option } = Select;
-const { SubMenu } = Menu;
+const {
+    // Header,
+    Content
+} = Layout;
+// const { Option } = Select;
+// const { SubMenu } = Menu;
 
 /// //function to sort table column
-function tableSort(a, b, key) {
-    const stringA = JSON.stringify(a[key]);
-    const stringB = JSON.stringify(b[key]);
-    return stringA.localeCompare(stringB);
-}
+// function tableSort(a, b, key) {
+//     const stringA = JSON.stringify(a[key]);
+//     const stringB = JSON.stringify(b[key]);
+//     return stringA.localeCompare(stringB);
+// }
 
 const columns = [
     {
@@ -96,14 +100,42 @@ class RegistrationPayoutTransaction extends Component {
         return stripeAccountID
     }
 
+    onExport = () => {
+        this.props.exportPayoutTransaction(this.props.location.state ? this.props.location.state.id : null);
+    }
+
     /// ////view for breadcrumb
     headerView = () => (
-        <div className="comp-player-grades-header-view-design">
+        <div className="comp-player-grades-header-drop-down-view">
             <div className="row">
                 <div className="col-sm d-flex align-content-center">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.transactions}</Breadcrumb.Item>
                     </Breadcrumb>
+                </div>
+                <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
+                    <div className="row">
+                        <div className="col-sm pt-1">
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                <Button
+                                    onClick={() => this.onExport()}
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                >
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <img
+                                                src={AppImages.export}
+                                                alt=""
+                                                className="export-image"
+                                            />
+                                            {AppConstants.export}
+                                        </div>
+                                    </div>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -213,6 +245,7 @@ class RegistrationPayoutTransaction extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getTransactionPayoutListAction,
+        exportPayoutTransaction,
     }, dispatch);
 }
 

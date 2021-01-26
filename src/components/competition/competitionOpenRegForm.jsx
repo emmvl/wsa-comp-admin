@@ -16,7 +16,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString } from "../../util/helpers"
+import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -32,6 +32,7 @@ import {
     addRemoveDivisionAction,
     paymentFeeDeafault,
     paymentSeasonalFee,
+    paymentPerMatch,
     add_editcompetitionFeeDeatils,
     competitionDiscountTypesAction,
     regCompetitionListDeleteAction,
@@ -51,18 +52,17 @@ import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom"
 import {
-    setOwnCompetitionYear,
-    getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId,
-    setOwn_CompetitionFinalRefId
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
+    setGlobalYear, getGlobalYear,
+    getOrganisationData
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationData } from "../../util/sessionStorage"
 import CustomToolTip from 'react-png-tooltip'
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
@@ -360,8 +360,7 @@ class CompetitionOpenRegForm extends Component {
                         competitionStatus = competitionTypeList[0].competitionStatus
                         finalTypeRefId = competitionTypeList[0].finalTypeRefId
                     }
-
-                    let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
+                    let yearRefId = getGlobalYear() ? getGlobalYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
 
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, yearRefId)
                     if (competitionStatus == 2) {
@@ -395,10 +394,10 @@ class CompetitionOpenRegForm extends Component {
                         loading: false
                     });
                     let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
-                    await setOwnCompetitionYear(this.state.yearRefId)
+                    await setGlobalYear(this.state.yearRefId)
                     await setOwn_competition(this.props.competitionFeesState.competitionId);
                     await setOwn_competitionStatus(this.state.statusRefId);
-                    history.push("/competitionPlayerGrades",{fromReplicate: fromReplicate});
+                    history.push("/competitionPlayerGrades", { fromReplicate: fromReplicate });
                 } else {
                     this.setState({
                         loading: false
@@ -507,10 +506,10 @@ class CompetitionOpenRegForm extends Component {
     }
 
     getRefernce() {
-        let yearId = getOwnCompetitionYear()
+        let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
@@ -531,7 +530,6 @@ class CompetitionOpenRegForm extends Component {
                 });
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-                // setOwnCompetitionYear(1)
             }
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
@@ -544,12 +542,13 @@ class CompetitionOpenRegForm extends Component {
 
     ////all the api calls
     apiCalls = (competitionId) => {
-        this.props.getDefaultCompFeesLogoAction()
-        this.props.competitionDiscountTypesAction()
+        this.props.getDefaultCompFeesLogoAction();
+        this.props.competitionDiscountTypesAction();
         this.props.competitionFeeInit();
-        this.props.paymentFeeDeafault()
-        this.props.paymentSeasonalFee()
-        this.props.getCommonDiscountTypeTypeAction()
+        this.props.paymentFeeDeafault();
+        this.props.paymentSeasonalFee();
+        this.props.paymentPerMatch();
+        this.props.getCommonDiscountTypeTypeAction();
         this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
@@ -745,7 +744,7 @@ class CompetitionOpenRegForm extends Component {
 
     // year change and get competition lost
     onYearChange(yearId) {
-        setOwnCompetitionYear(yearId)
+        setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
@@ -768,7 +767,7 @@ class CompetitionOpenRegForm extends Component {
             setOwn_CompetitionFinalRefId(finalTypeRefId)
         }
         this.props.clearCompReducerDataAction("all")
-        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule,null,this.state.yearRefId)
+        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule, null, this.state.yearRefId)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
@@ -822,23 +821,43 @@ class CompetitionOpenRegForm extends Component {
         );
     };
 
+    // setImage = (data) => {
+    //     if (data.files[0] !== undefined) {
+    //         let files_ = data.files[0].type.split("image/")
+    //         let fileType = files_[1]
+
+    //         if (data.files[0].size > AppConstants.logo_size) {
+    //             message.error(AppConstants.logoImageSize);
+    //             return
+    //         }
+
+    //         if (fileType === 'jpeg' || fileType === 'png' || fileType === 'gif') {
+    //             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+    //             this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+    //             this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+    //         } else {
+    //             message.error(AppConstants.logoType);
+    //         }
+    //     }
+    // };
+
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            let files_ = data.files[0].type.split("image/")
-            let fileType = files_[1]
-
-            if (data.files[0].size > AppConstants.logo_size) {
-                message.error(AppConstants.logoImageSize);
+            let file = data.files[0]
+            let extension = file.name.split('.').pop().toLowerCase();
+            let imageSizeValid = isImageSizeValid(file.size)
+            let isSuccess = isImageFormatValid(extension);
+            if (!isSuccess) {
+                message.error(AppConstants.logo_Image_Format);
                 return
             }
-
-            if (fileType === 'jpeg' || fileType === 'png' || fileType === 'gif') {
-                this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-                this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-                this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
-            } else {
-                message.error(AppConstants.logoType);
+            if (!imageSizeValid) {
+                message.error(AppConstants.logo_Image_Size);
+                return
             }
+            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+            this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+            this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
         }
     };
 
@@ -858,7 +877,7 @@ class CompetitionOpenRegForm extends Component {
         if (key === "name") {
             array[index].name = data
         } else {
-            array[index].nonPlayingDate = data
+            array[index].nonPlayingDate = moment(data).format("YYYY-MM-DD")
         }
 
         this.props.add_editcompetitionFeeDeatils(array, "nonPlayingDates")
@@ -975,7 +994,7 @@ class CompetitionOpenRegForm extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-1"
+                        required="required-field"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
@@ -986,7 +1005,7 @@ class CompetitionOpenRegForm extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead required="required-field pb-0" heading={AppConstants.competitionLogo} />
+                <InputWithHead required="required-field" heading={AppConstants.competitionLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -1011,6 +1030,9 @@ class CompetitionOpenRegForm extends Component {
                                 id="user-pic"
                                 className="d-none"
                                 onChange={(evt) => this.setImage(evt.target)}
+                                onClick={(event) => {
+                                    event.target.value = null
+                                }}
                             />
                         </div>
                         <div className="col-sm d-flex justify-content-center align-items-start flex-column">
@@ -1041,9 +1063,12 @@ class CompetitionOpenRegForm extends Component {
                             )}
                         </div>
                     </div>
+                    <span className="image-size-format-text">
+                        {AppConstants.imageSizeFormatText}
+                    </span>
                 </div>
 
-                <InputWithHead required="pb-1" heading={AppConstants.description} />
+                <InputWithHead heading={AppConstants.description} />
 
                 <TextArea
                     placeholder={AppConstants.addShortNotes_registering}
@@ -1054,7 +1079,7 @@ class CompetitionOpenRegForm extends Component {
                 />
 
                 <div>
-                    <InputWithHead required="required-field pb-1" heading={AppConstants.venue} />
+                    <InputWithHead required="required-field" heading={AppConstants.venue} />
                     <Form.Item
                         name="selectedVenues"
                         rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
@@ -1146,7 +1171,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.compStartDate} required="required-field pb-1" />
+                            <InputWithHead heading={AppConstants.compStartDate} required="required-field" />
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
                                     size="default"
@@ -1160,7 +1185,7 @@ class CompetitionOpenRegForm extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.compCloseDate} required="required-field pb-1" />
+                            <InputWithHead heading={AppConstants.compCloseDate} required="required-field" />
                             <Form.Item
                                 name="endDate"
                                 rules={[{ required: true, message: ValidationConstants.endDateIsRequired }]}
@@ -1200,7 +1225,7 @@ class CompetitionOpenRegForm extends Component {
                         </Form.Item>
                     </div>
                 )}
-                <InputWithHead heading={AppConstants.timeBetweenRounds} required="pb-1" />
+                <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.time_rounds_days} className="col-sm">
@@ -1210,6 +1235,8 @@ class CompetitionOpenRegForm extends Component {
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
                                 disabled={disabledStatus || compDetailDisable}
+                                heading={AppConstants._days}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_hrs} className="col-sm">
@@ -1219,6 +1246,8 @@ class CompetitionOpenRegForm extends Component {
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
                                 disabled={disabledStatus || compDetailDisable}
+                                heading={AppConstants._hours}
+                                required={'pt-0'}
                             />
                         </div>
                         <div id={AppUniqueId.time_rounds_mins} className="col-sm">
@@ -1228,12 +1257,14 @@ class CompetitionOpenRegForm extends Component {
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
                                 disabled={disabledStatus || compDetailDisable}
+                                heading={AppConstants._minutes}
+                                required={'pt-0'}
                             />
                         </div>
                     </div>
                 </div>
                 <div className="inside-container-view pt-4">
-                    <InputWithHead heading={AppConstants.nonPlayingDates} required="pb-1" />
+                    <InputWithHead heading={AppConstants.nonPlayingDates} />
                     {detailsData.competitionDetailData.nonPlayingDates && detailsData.competitionDetailData.nonPlayingDates.map((item, index) =>
                         this.nonPlayingDateView(item, index))
                     }
@@ -1243,7 +1274,7 @@ class CompetitionOpenRegForm extends Component {
                         </span>
                     </a>
                 </div>
-                <InputWithHead heading={AppConstants.playerInEachTeam} required="pb-1" />
+                <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
                         <div id={AppUniqueId.team_min_players} className="col-sm">
@@ -1385,7 +1416,6 @@ class CompetitionOpenRegForm extends Component {
                 }
             },
             onCancel() {
-                // console.log('Cancel');
             },
         });
     }
@@ -1436,8 +1466,10 @@ class CompetitionOpenRegForm extends Component {
                                     </Tooltip>
                                     {tabKey == "2" && (
                                         <Button
-                                            onClick={() => this.setState({ nextButtonClicked: true,
-                                                statusRefId: tabKey == "2" ? 2 : 1 })}
+                                            onClick={() => this.setState({
+                                                nextButtonClicked: true,
+                                                statusRefId: tabKey == "2" ? 2 : 1
+                                            })}
                                             className="publish-button"
                                             type="primary"
                                             htmlType="submit"
@@ -1473,8 +1505,10 @@ class CompetitionOpenRegForm extends Component {
                                         </Tooltip>
                                         {tabKey == "2" && (
                                             <Button
-                                                onClick={() => this.setState({ nextButtonClicked: true ,
-                                                    statusRefId: tabKey == "2" ? 2 : 1})}
+                                                onClick={() => this.setState({
+                                                    nextButtonClicked: true,
+                                                    statusRefId: tabKey == "2" ? 2 : 1
+                                                })}
                                                 htmlType="submit"
                                                 className="publish-button"
                                                 type="primary"
@@ -1499,6 +1533,11 @@ class CompetitionOpenRegForm extends Component {
         this.setDetailsFieldValue()
     }
 
+    onFinishFailed = (errorInfo) => {
+        message.config({ maxCount: 1, duration: 1.5 })
+        message.error(ValidationConstants.plzReviewPage)
+    };
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1511,6 +1550,7 @@ class CompetitionOpenRegForm extends Component {
                         onFinish={this.saveAPIsActionCall}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name)
+                            this.onFinishFailed()
                         }}
                         initialValues={{
                             competitionTypeRefId: 1,
@@ -1562,6 +1602,7 @@ function mapDispatchToProps(dispatch) {
         addRemoveDivisionAction,
         paymentFeeDeafault,
         paymentSeasonalFee,
+        paymentPerMatch,
         add_editcompetitionFeeDeatils,
         competitionDiscountTypesAction,
         getCommonDiscountTypeTypeAction,

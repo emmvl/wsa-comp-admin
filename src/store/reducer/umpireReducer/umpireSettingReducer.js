@@ -4,60 +4,64 @@ const settingsChecked = {
     coachChecked: true,
     reserveChecked: true,
 }
-var compOrgDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
 const initialState = {
     onLoad: false,
     error: null,
     result: [],
     status: 0,
+    allocationSettingsData: null,
+
+
     defaultChecked: settingsChecked,
     allocateViaPool: false,
     manuallyAllocate: false,
     compOrganiser: true,
     affiliateOrg: false,
-    compOrgDiv: compOrgDivObj,
-    selectAllDiv: true,
-    compOrgDivisionSelected: [],
+    noUmpire: false,
 };
 function umpireSettingState(state = initialState, action) {
 
     switch (action.type) {
-        case ApiConstants.API_UMPIRE_SETTINGS_DATA_UPDATE:
+        
+        case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+            
+        case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                allocationSettingsData: action.result,
+                onLoad: false,
+            };
 
-            let data = action.data.data
-            let key = action.data.key
+        case ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+                
+        case ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                allocationSettingsData: action.result,
+                onLoad: false,
+            };
 
-            if (key === 'allocateViaPool' || key === 'manuallyAllocate') {
-
-                if (key === 'allocateViaPool') {
-                    state[key] = data
-                    state['manuallyAllocate'] = false
-
-                } else if (key === 'manuallyAllocate') {
-                    state[key] = data
-                    state['allocateViaPool'] = false
-                }
-            }
-            else if (key === 'compOrganiser') {
-                state[key] = data
-                // state['affiliateOrg'] = false
-
-            } else if (key === 'affiliateOrg') {
-                state[key] = data
-                // state['compOrganiser'] = false
-            }
-            else if (key === 'selectAllDiv') {
-                state[key] = data
-            }
-            else if (key === 'compOrgDivisionSelected') {
-                state[key] = data
-            }
-            else {
-                state.defaultChecked[key] = data
-            }
+        case ApiConstants.API_UMPIRE_FAIL:
             return {
                 ...state,
                 onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+        case ApiConstants.API_UMPIRE_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
             };
 
         default:

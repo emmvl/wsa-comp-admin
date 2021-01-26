@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Breadcrumb, Input, Icon } from 'antd';
+import { Layout, Select } from 'antd';
 import './shop.css';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+// import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Loader from '../../customComponents/loader';
-import history from "../../util/history";
+// import Loader from '../../customComponents/loader';
+// import history from "../../util/history";
 import Chart from "chart.js";
 
-const { Header, Footer, Content } = Layout;
+const {
+    // Header,
+    Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 
 
@@ -25,7 +29,6 @@ class ShopDashboard extends Component {
         this.chartRefCompititions = React.createRef();
 
     }
-
 
     componentDidMount() {
         this.compititionChart()
@@ -55,9 +58,9 @@ class ShopDashboard extends Component {
     }
 
     headerView = () => {
-        let product = [{
-            id: 1, name: "T-Shirt"
-        }]
+        // let product = [{
+        //     id: 1, name: "T-Shirt"
+        // }]
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4"style={{ paddingTop:'0px'}}>
                 <div className="fluid-width">

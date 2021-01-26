@@ -12,7 +12,6 @@ import {
     searchVenueList,
     clearFilter,
 } from "../../store/actions/appAction";
-import InputWithHead from "../../customComponents/InputWithHead";
 import ValidationConstants from "../../themes/validationConstant";
 import TimeSlotModal from "../../customComponents/timeslotModal"
 import CompetitionModal from "../../customComponents/competitionModal"
@@ -30,6 +29,7 @@ import { quickCompetitionInit } from "../../store/actions/commonAction/commonAct
 import { getDayName, getTime } from '../../themes/dateformate';
 import { captializedString } from "../../util/helpers";
 import AppUniqueId from "../../themes/appUniqueId";
+import { setGlobalYear } from "util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -83,8 +83,12 @@ class CompetitionQuickCompetition extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
                     let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: yearId });
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: JSON.parse(yearId) });
                     this.props.getQuickCompetitionAction(competitionId)
+                }
+                if (this.props.quickCompetitionState.quick_CompetitionYearArr.length > 0) {
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
+                    this.setState({ yearRefId: JSON.parse(yearId) });
                 }
             }
             let selectedCompetition = this.props.quickCompetitionState.selectedCompetition
@@ -94,7 +98,7 @@ class CompetitionQuickCompetition extends Component {
                     this.props.updateCompetition("", "allData")
                     let competitionId = selectedCompetition;
                     this.props.getQuickCompetitionAction(competitionId)
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId });
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: this.state.yearRefId ? this.state.yearRefId : JSON.parse(yearId) });
                 }
             }
         }
@@ -199,6 +203,7 @@ class CompetitionQuickCompetition extends Component {
 
     //change selected year
     onYearChange(yearRefId) {
+        setGlobalYear(yearRefId)
         this.props.updateCompetition("", "allData")
         this.setState({
             yearRefId, firstTimeCompId: ""
@@ -313,11 +318,10 @@ class CompetitionQuickCompetition extends Component {
     //close competition modal and call create competition
     closeCompModal = () => {
         const { competitionName, competitionDate, yearId } = this.props.quickCompetitionState
-        this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
+        this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : JSON.parse(yearId), competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
             modalButtonPressed: "save"
-            // visibleCompModal: false
         })
     }
 
@@ -586,9 +590,9 @@ class CompetitionQuickCompetition extends Component {
 
     /////form content view
     contentView = () => {
-        let appState = this.props.appState
-        let quickCompetitionState = this.props.quickCompetitionState
-        let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
+        // let appState = this.props.appState
+        // let quickCompetitionState = this.props.quickCompetitionState
+        // let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
 
         return (
             <div className="comp-draw-content-view mt-0">
@@ -756,8 +760,8 @@ class CompetitionQuickCompetition extends Component {
                                                                 {slotObject.divisionName + "-" + slotObject.gradeName}
                                                             </span>
                                                         ) : (
-                                                            <span>Free</span>
-                                                        )}
+                                                                <span>Free</span>
+                                                            )}
                                                     </CompetitionSwappable>
                                                 </div>
                                             </Tooltip>

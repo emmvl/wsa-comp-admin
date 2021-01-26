@@ -9,7 +9,7 @@ import { getRefBadgeData } from '../../store/actions/appAction'
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import ValidationConstants from "themes/validationConstant";
-import { entityTypes } from "util/entityTypes";
+// import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
@@ -47,7 +47,7 @@ function checkUmpireUserRoll(rolesArr, key) {
     let isUmpire = "NO"
     if (isArrayNotEmpty(rolesArr)) {
         for (let i in rolesArr) {
-            if (rolesArr[i].roleId == key) {
+            if (rolesArr[i].roleId === key) {
                 isUmpire = "YES"
 
             }
@@ -265,7 +265,7 @@ class Umpire extends Component {
     }
 
     async componentDidUpdate(nextProps) {
-        const { sortBy, sortOrder } = this.state;
+        // const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
@@ -379,7 +379,7 @@ class Umpire extends Component {
                         columns={columns}
                         dataSource={umpireListResult}
                         pagination={false}
-                        rowKey={(record, index) => "umpireListResult" + record.id + index}
+                        rowKey={(record) => "umpireListResult" + record.id}
                     />
                 </div>
 
@@ -503,7 +503,7 @@ class Umpire extends Component {
     headerView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : [];
         let { isCompParent } = this.state
-        console.log("isCompParent", isCompParent)
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -519,7 +519,7 @@ class Umpire extends Component {
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <NavLink to="/addUmpire" className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button disabled={isCompetitionAvailable} className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addUmpire}
                                             </Button>
                                         </NavLink>
@@ -532,6 +532,7 @@ class Umpire extends Component {
                                             className="primary-add-comp-form"
                                             type="primary"
                                             onClick={this.onExport}
+                                            disabled={isCompetitionAvailable}
                                         >
                                             <div className="row">
                                                 <div className="col-sm">

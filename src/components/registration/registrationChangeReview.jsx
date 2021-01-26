@@ -275,11 +275,11 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
         reviewSaveData["userId"] = regChangeReviewData.userId;
         reviewSaveData["invoices"] = invoices;
-        let obj = {
-            stateApproved: this.state.deRegData.stateApproved,
-            compOrganiserApproved: this.state.deRegData.compOrganiserApproved,
-            affiliateApproved: this.state.deRegData.affiliateApproved
-        }
+        // let obj = {
+        //     stateApproved: this.state.deRegData.stateApproved,
+        //     compOrganiserApproved: this.state.deRegData.compOrganiserApproved,
+        //     affiliateApproved: this.state.deRegData.affiliateApproved
+        // }
         // reviewSaveData["approvals"] = obj;
         let isFromOrg = 1;
         if (regChangeReviewData.regChangeTypeRefId == 2) {

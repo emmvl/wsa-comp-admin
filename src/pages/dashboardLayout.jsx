@@ -14,6 +14,7 @@ import {
     setPrevUrl,
     setImpersonation,
 } from "util/sessionStorage";
+import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
 import { clearHomeDashboardData } from "store/actions/homeAction/homeAction";
 import {
     getAffiliatesListingAction,
@@ -23,11 +24,9 @@ import {
     onOrganisationChangeAction,
     getUreAction,
 } from "store/actions/userAction/userAction";
+import { clearDataOnCompChangeAction } from "store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from "customComponents/loader";
-import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
-import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
-import { getUserId } from 'util/sessionStorage';
 
 const { Option } = Select;
 
@@ -43,35 +42,32 @@ class DashboardLayout extends React.Component {
             impersonationAffiliateOrgId: null,
             impersonationOrgData: null,
             logout: false,
-            userRoleId: getUserRoleId()
+            userRoleId: getUserRoleId(),
         };
-
     }
 
     async componentDidUpdate(nextProps) {
         if (this.props.userState !== nextProps.userState) {
             if (this.props.userState.onLoad === false && this.state.dataOnload === true) {
-                let organisationData = this.props.userState.getUserOrganisation;
+                const organisationData = this.props.userState.getUserOrganisation;
 
                 if (organisationData.length > 0) {
-                    const impersonationRole = this.props.userState.userRoleEntity
-                        .find((role) => role.roleId === 10);
+                    const impersonationRole = this.props.userState.userRoleEntity.find((role) => role.roleId === 10);
                     const isImpersonation = !!impersonationRole;
 
-                    const entityId = impersonationRole ?.entityId;
+                    const entityId = impersonationRole?.entityId;
 
-                    let presetOrganisation = organisationData
-                        .find((org) => org.organisationId === entityId);
+                    const presetOrganisation = organisationData.find((org) => org.organisationId === entityId);
 
-                    let orgData = presetOrganisation ? presetOrganisation : getOrganisationData();
-                    let organisationItem = orgData ? orgData : organisationData[0];
+                    const orgData = presetOrganisation || getOrganisationData();
+                    const organisationItem = orgData || organisationData[0];
 
                     await setOrganisationData(organisationItem);
                     this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
-                    setImpersonation(isImpersonation ? true : false)
-                    this.setState({
+                    setImpersonation(!!isImpersonation);
+                    await this.setState({
                         dataOnload: false,
-                        impersonationOrgData: isImpersonation ? orgData : null,
+                        // impersonationOrgData: isImpersonation ? orgData : null,
                         impersonationAffiliateOrgId: isImpersonation ? entityId : null,
                     });
                 }
@@ -89,7 +85,6 @@ class DashboardLayout extends React.Component {
                         impersonationOrgData: impersonationAffiliate,
                         impersonationAffiliateOrgId: this.state.impersonationAffiliateOrgId,
                     });
-
 
                     if (!this.props.userState.impersonationLoad) {
                         history.push("/");
@@ -116,11 +111,10 @@ class DashboardLayout extends React.Component {
             }
 
             if (this.props.userState.userRoleEntity !== nextProps.userState.userRoleEntity) {
-                const isImpersonation = this.props.userState.userRoleEntity
-                    .findIndex((role) => role.roleId === 10) > -1;
+                const isImpersonation = this.props.userState.userRoleEntity.findIndex((role) => role.roleId === 10) > -1;
 
                 const orgData = await getOrganisationData();
-                setImpersonation(isImpersonation ? true : false)
+                setImpersonation(!!isImpersonation);
                 this.setState({
                     impersonationOrgData: isImpersonation ? orgData : null,
                 });
@@ -134,12 +128,16 @@ class DashboardLayout extends React.Component {
     }
 
     setOrganisationKey = () => {
-        let organisationData = getOrganisationData();
+        const organisationData = getOrganisationData();
         if (!organisationData) {
-            this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction();
+            if (this.props.userState.getUserOrganisation.length === 0) {
+                this.props.getUserOrganisationAction();
+            }
             this.setState({ dataOnload: true });
         } else {
-            this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction();
+            if (this.props.userState.getUserOrganisation.length === 0) {
+                this.props.getUserOrganisationAction();
+            }
             this.setState({ dataOnload: true });
         }
     }
@@ -151,7 +149,7 @@ class DashboardLayout extends React.Component {
                 access: false,
             });
 
-            this.setState({
+            await this.setState({
                 impersonationOrgData: null,
                 impersonationAffiliateOrgId: null,
                 impersonationLoad: true,
@@ -175,7 +173,7 @@ class DashboardLayout extends React.Component {
         }
     };
 
-    changeId = menuName => {
+    changeId = (menuName) => {
         switch (menuName) {
             case AppConstants.home:
                 return AppConstants.home_icon;
@@ -184,7 +182,7 @@ class DashboardLayout extends React.Component {
         }
     };
 
-    menuImageChange = menuName => {
+    menuImageChange = (menuName) => {
         switch (menuName) {
             case AppConstants.home:
                 return AppImages.homeIcon;
@@ -239,7 +237,7 @@ class DashboardLayout extends React.Component {
         window.location.reload();
     }
 
-    setFullStory = (organisationData) => {
+    setFullStory = (/* organisationData */) => {
         // if (organisationData != null) {
         //   let exOrgData = getOrganisationData();
         //   if (exOrgData == null || organisationData.organisationUniqueKey !== exOrgData.organisationUniqueKey) {
@@ -267,14 +265,16 @@ class DashboardLayout extends React.Component {
 
     handleImpersonationModal = (button) => {
         if (button === "ok") {
-            this.setState({ openImpersonationModal: false });
-            const orgData = this.props.userState.affiliateList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId);
+            const orgData = this.props.userState.impersonationList.find(
+                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+            );
             if (orgData) {
                 this.props.impersonationAction({
                     orgId: orgData.affiliateOrgId,
                     access: true,
                 });
             }
+            this.setState({ openImpersonationModal: false });
         } else {
             this.setState({ openImpersonationModal: false });
         }
@@ -286,9 +286,9 @@ class DashboardLayout extends React.Component {
 
     userProfileDropdown = () => {
         const { menuName } = this.props;
-        let userData = this.props.userState.getUserOrganisation;
-        let selectedOrgData = getOrganisationData();
-        let userImage = (selectedOrgData && selectedOrgData.photoUrl)
+        const userData = this.props.userState.getUserOrganisation;
+        const selectedOrgData = getOrganisationData();
+        const userImage = (selectedOrgData && selectedOrgData.photoUrl)
             ? selectedOrgData.photoUrl
             : AppImages.defaultUser;
 
@@ -314,14 +314,14 @@ class DashboardLayout extends React.Component {
                             <div className="media-body">
                                 {selectedOrgData && (
                                     <span className="user-name">
-                                        {selectedOrgData.firstName + " " + selectedOrgData.lastName}
+                                        {`${selectedOrgData.firstName} ${selectedOrgData.lastName}`}
                                     </span>
                                 )}
 
                                 <span className="user-name-btm pt-3">
                                     {selectedOrgData && (
                                         <span style={{ textTransform: "capitalize" }}>
-                                            {selectedOrgData.name + " " + "(" + selectedOrgData.userRole + ")"}
+                                            {`${selectedOrgData.name} (${selectedOrgData.userRole})`}
                                         </span>
                                     )}
                                 </span>
@@ -332,10 +332,9 @@ class DashboardLayout extends React.Component {
                     {userData.length > 0 && (
                         <div className="acc-help-support-list-view">
                             {userData.map((item, index) => (
-                                <li key={"user" + index}>
+                                <li key={`user${index}`}>
                                     <a onClick={() => this.onOrganisationChange(item)}>
-                                        <span
-                                            style={{ textTransform: "capitalize" }}>{item.name + " " + "(" + item.userRole + ")"}</span>
+                                        <span style={{ textTransform: "capitalize" }}>{`${item.name} (${item.userRole})`}</span>
                                     </a>
                                 </li>
                             ))}
@@ -351,8 +350,7 @@ class DashboardLayout extends React.Component {
                             </li>
                         )}
                         <li className={menuName === AppConstants.account ? "active" : ""}>
-                            <NavLink id={AppConstants.acct_settings_label} to="/account/profile">Account
-                                Settings</NavLink>
+                            <NavLink id={AppConstants.acct_settings_label} to="/account/profile">Account Settings</NavLink>
                         </li>
                         <li>
                             <NavLink id={AppConstants.help_support_label} to="/support">Help & Support</NavLink>
@@ -360,9 +358,9 @@ class DashboardLayout extends React.Component {
                     </div>
 
                     <li className="acc-help-support-list-view">
-                    <NavLink to={{ pathname: '/userPersonal', state: { userId: getUserId() } }}>
-                        {AppConstants.myProfile}
-                    </NavLink>
+                        <NavLink to={{ pathname: process.env.REACT_APP_USER_REGISTRATION_URL }} target="_blank">
+                            {AppConstants.myProfile}
+                        </NavLink>
                     </li>
 
                     <li className="log-out">
@@ -374,22 +372,19 @@ class DashboardLayout extends React.Component {
     };
 
     render() {
-        let menuName = this.props.menuName;
-        const { userRoleId } = this.state
+        const { menuName } = this.props;
+        const { userRoleId } = this.state;
         return (
             <>
                 {this.state.impersonationOrgData && (
                     <div className="col-sm-12 d-flex impersonation-bar">
-                        You are impersonating access to {this.state.impersonationOrgData.name}.
+                        {`You are impersonating access to ${this.state.impersonationOrgData.name}.`}
                         <a onClick={this.endImpersonation}>End access</a>
                     </div>
                 )}
 
                 <header
-                    className={`site-header ${this.state.impersonationLoad && this.state.impersonationOrgData
-                        ? "impersonation-site-header"
-                        : ""
-                        }`}
+                    className={`site-header ${this.state.impersonationLoad && this.state.impersonationOrgData ? "impersonation-site-header" : ""}`}
                 >
                     <div className="header-wrap">
                         <div className="row m-0-res">
@@ -399,8 +394,10 @@ class DashboardLayout extends React.Component {
                                         <img src={AppImages.netballLogo1} alt="" />
                                     </NavLink>
 
-                                    <div className="col-sm dashboard-layout-menu-heading-view"
-                                        onClick={this.props.onMenuHeadingClick}>
+                                    <div
+                                        className="col-sm dashboard-layout-menu-heading-view"
+                                        onClick={this.props.onMenuHeadingClick}
+                                    >
                                         <span id={this.props.menuId} className="dashboard-layout-menu-heading">
                                             {this.props.menuHeading}
                                         </span>
@@ -418,8 +415,11 @@ class DashboardLayout extends React.Component {
                                                             type="button"
                                                             data-toggle="dropdown"
                                                         >
-                                                            <img id={this.changeId(menuName)}
-                                                                src={this.menuImageChange(menuName)} alt="" />
+                                                            <img
+                                                                id={this.changeId(menuName)}
+                                                                src={this.menuImageChange(menuName)}
+                                                                alt=""
+                                                            />
                                                         </button>
                                                     )}
 
@@ -432,9 +432,10 @@ class DashboardLayout extends React.Component {
                                                                 </NavLink>
                                                             </div>
                                                         </li>
-
-                                                        <li className={menuName === AppConstants.user ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'user') ? 'visible' : 'none' }}>
+                                                        <li
+                                                            className={menuName === AppConstants.user ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'user') ? 'visible' : 'none' }}
+                                                        >
                                                             <div className="user-menu menu-wrap">
                                                                 <NavLink to="/userTextualDashboard">
                                                                     <span className="icon" />
@@ -442,42 +443,55 @@ class DashboardLayout extends React.Component {
                                                                 </NavLink>
                                                             </div>
                                                         </li>
-                                                        <li className={menuName === AppConstants.registration ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'registration') ? 'visible' : 'none' }}>
-                                                            <div id={AppConstants.registration_icon}
-                                                                className="registration-menu menu-wrap">
-                                                                <NavLink to={"/registrationDashboard"}>
-                                                                    <span id={AppConstants.registrations_label}
-                                                                        className="icon" />
+                                                        <li
+                                                            className={menuName === AppConstants.registration ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'registration') ? 'visible' : 'none' }}
+                                                        >
+                                                            <div
+                                                                id={AppConstants.registration_icon}
+                                                                onClick={() => this.props.clearDataOnCompChangeAction()}
+                                                                className="registration-menu menu-wrap"
+                                                            >
+                                                                <NavLink to="/registrationDashboard">
+                                                                    <span id={AppConstants.registrations_label} className="icon" />
                                                                     {AppConstants.registration}
                                                                 </NavLink>
                                                             </div>
                                                         </li>
 
-                                                        <li className={menuName === AppConstants.competitions ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'competitions') ? 'visible' : 'none' }}>
-                                                            <div id={AppConstants.competition_icon}
-                                                                className="competitions-menu menu-wrap">
+                                                        <li
+                                                            className={menuName === AppConstants.competitions ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'competitions') ? 'visible' : 'none' }}
+                                                        >
+                                                            <div
+                                                                id={AppConstants.competition_icon}
+                                                                className="competitions-menu menu-wrap"
+                                                            >
                                                                 <NavLink to="/competitionDashboard">
-                                                                    <span id={AppConstants.competitions_label}
-                                                                        className="icon" />
+                                                                    <span id={AppConstants.competitions_label} className="icon" />
                                                                     {AppConstants.competitions}
                                                                 </NavLink>
                                                             </div>
                                                         </li>
 
-                                                        <li className={menuName === AppConstants.liveScores ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'liveScores') ? 'visible' : 'none' }}>
-                                                            <div className="lives-cores menu-wrap"
-                                                                onClick={() => this.props.clearDataOnCompChangeAction()}>
+                                                        <li
+                                                            className={menuName === AppConstants.liveScores ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'liveScores') ? 'visible' : 'none' }}
+                                                        >
+                                                            <div
+                                                                className="lives-cores menu-wrap"
+                                                                onClick={() => this.props.clearDataOnCompChangeAction()}
+                                                            >
                                                                 <NavLink to="/matchDayCompetitions">
                                                                     <span className="icon" />
                                                                     {AppConstants.matchDay}
                                                                 </NavLink>
                                                             </div>
                                                         </li>
-                                                        <li className={menuName === AppConstants.Communication ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'events') ? 'visible' : 'none' }}>
+                                                        <li
+                                                            className={menuName === AppConstants.Communication ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'events') ? 'visible' : 'none' }}
+                                                        >
                                                             <div className="events-menu menu-wrap">
                                                                 {/* <NavLink to="/communication"> */}
                                                                 <NavLink to="/communicationList">
@@ -487,8 +501,10 @@ class DashboardLayout extends React.Component {
                                                             </div>
                                                         </li>
 
-                                                        <li className={menuName === AppConstants.shop ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'shop') ? 'visible' : 'none' }}>
+                                                        <li
+                                                            className={menuName === AppConstants.shop ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'shop') ? 'visible' : 'none' }}
+                                                        >
                                                             <div className="shop-menu menu-wrap">
                                                                 <NavLink to="/orderSummary">
                                                                     <span className="icon" />
@@ -497,8 +513,10 @@ class DashboardLayout extends React.Component {
                                                             </div>
                                                         </li>
 
-                                                        <li className={menuName === AppConstants.umpires ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'umpires') ? 'visible' : 'none' }}>
+                                                        <li
+                                                            className={menuName === AppConstants.umpires ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'umpires') ? 'visible' : 'none' }}
+                                                        >
                                                             <div className="umpires-menu menu-wrap">
                                                                 <NavLink to="/umpireDashboard">
                                                                     <span className="icon" />
@@ -507,10 +525,14 @@ class DashboardLayout extends React.Component {
                                                             </div>
                                                         </li>
 
-                                                        <li className={menuName === AppConstants.finance ? "active" : ""}
-                                                            style={{ display: showRoleLevelPermission(userRoleId, 'finance') ? 'visible' : 'none' }}>
-                                                            <div className="finance-menu menu-wrap"
-                                                                onClick={() => this.props.clearDataOnCompChangeAction()}>
+                                                        <li
+                                                            className={menuName === AppConstants.finance ? "active" : ""}
+                                                            style={{ display: showRoleLevelPermission(userRoleId, 'finance') ? 'visible' : 'none' }}
+                                                        >
+                                                            <div
+                                                                className="finance-menu menu-wrap"
+                                                                onClick={() => this.props.clearDataOnCompChangeAction()}
+                                                            >
                                                                 <NavLink to="/paymentDashboard">
                                                                     <span className="icon" />
                                                                     {AppConstants.finance}
@@ -547,14 +569,11 @@ class DashboardLayout extends React.Component {
                             onChange={this.handleImpersonationOrg}
                             placeholder="Organisation"
                             showSearch
-                            filterOption={(input, data) =>
-                                data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            loading={this.props.userState.onLoad}
+                            filterOption={(input, data) => data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            loading={this.props.userState.onImpersonationLoad}
                         >
-                            {(this.props.userState.affiliateList || []).map((affiliate) => (
-                                <Option key={'organization_' + affiliate.affiliateOrgId}
-                                    value={affiliate.affiliateOrgId}>
+                            {(this.props.userState.impersonationList || []).map((affiliate) => (
+                                <Option key={`organization_${affiliate.affiliateOrgId}`} value={affiliate.affiliateOrgId}>
                                     {affiliate.affiliateName}
                                 </Option>
                             ))}

@@ -72,7 +72,7 @@ function tableSort(key) {
         compId: this_obj.state.selectedComp,
         divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
         venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
-        orgId: this_obj.state.orgId,
+        orgId: this_obj.state.org_Id,
         roundId: this_obj.state.round === "All" ? "" : Array.isArray(this_obj.state.round) ? this_obj.state.round : [this_obj.state.round],
         pageData: body,
         sortBy,
@@ -117,7 +117,7 @@ function checkUmpireType(umpireArray, key) {
 function checkUmpireReserve(reserveArray, key) {
     let object = null;
     for (let i in reserveArray) {
-        if (reserveArray[i].roleId == key) {
+        if (reserveArray[i].roleId === key) {
             object = reserveArray[i]
             break
         }
@@ -618,18 +618,18 @@ class UmpireDashboard extends Component {
             compArray: [],
             competitionObj: null,
             liveScoreUmpire: (props.location && props.location.state && props.location.state.liveScoreUmpire) ? props.location.state.liveScoreUmpire : null,
-            isParticipateInCompetition: (props.location && props.location.state && props.location.state.isParticiapte) ? props.location.state.isParticiapte : false,
+            isParticipateInCompetition: (props.location && props.location.state && props.location.state.isParticipate) ? props.location.state.isParticipate : false,
             round: "All",
             offsetData: 0,
             sortBy: null,
             sortOrder: null,
+            org_Id: null
 
         };
         this_obj = this;
     }
 
     async componentDidMount() {
-        console.log(this.state.liveScoreUmpire)
         const prevUrl = getPrevUrl();
         const { umpireDashboardListActionObject } = this.props.umpireDashboardState
         // let offsetData = this.state.offsetData
@@ -639,9 +639,9 @@ class UmpireDashboard extends Component {
             let offsetData = umpireDashboardListActionObject.pageData.paging.offset
             sortBy = umpireDashboardListActionObject.sortBy
             sortOrder = umpireDashboardListActionObject.sortOrder
-            let division = umpireDashboardListActionObject.divisionId == "" ? "All" : umpireDashboardListActionObject.divisionId
-            let round = umpireDashboardListActionObject.roundId == "" ? "All" : umpireDashboardListActionObject.roundId
-            let venue = umpireDashboardListActionObject.venueId == "" ? "All" : umpireDashboardListActionObject.venueId
+            let division = umpireDashboardListActionObject.divisionId === "" ? "All" : umpireDashboardListActionObject.divisionId
+            let round = umpireDashboardListActionObject.roundId === "" ? "All" : umpireDashboardListActionObject.roundId
+            let venue = umpireDashboardListActionObject.venueId === "" ? "All" : umpireDashboardListActionObject.venueId
             await this.setState({ division, round, venue, offsetData, sortBy, sortOrder });
             // page = Math.floor(offset / 10) + 1;
         }
@@ -668,6 +668,9 @@ class UmpireDashboard extends Component {
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
+                        this.setState({
+                            org_Id: compData.organisationId
+                        })
                         firstComp = JSON.parse(getLiveScoreUmpireCompition());
                         compData = JSON.parse(getLiveScoreUmpireCompitionData());
                         setUmpireCompition(firstComp);
@@ -675,10 +678,16 @@ class UmpireDashboard extends Component {
                     } else {
                         firstComp = JSON.parse(getUmpireCompetiton());
                         compData = JSON.parse(getUmpireCompetitonData());
+                        this.setState({
+                            org_Id: compData.organisationId
+                        })
                     }
                 } else {
                     setUmpireCompition(firstComp);
                     setUmpireCompitionData(JSON.stringify(compData));
+                    this.setState({
+                        org_Id: compData.organisationId
+                    })
                 }
 
                 if (firstComp !== false) {
@@ -686,7 +695,7 @@ class UmpireDashboard extends Component {
                         let compId = JSON.parse(getLiveScoreUmpireCompition());
                         this.props.getUmpireDashboardVenueList(compId);
 
-                        const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData());
+                        const { uniqueKey, organisationId } = JSON.parse(getLiveScoreUmpireCompitionData());
                         let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
 
                         this.setState({
@@ -696,11 +705,11 @@ class UmpireDashboard extends Component {
                             compArray: compList,
                             venueLoad: true,
                             competitionObj: compObjData,
+                            org_Id: organisationId
                         });
                     } else {
                         this.props.getUmpireDashboardVenueList(firstComp);
                         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-
                         this.setState({
                             selectedComp: firstComp,
                             loading: false,
@@ -736,7 +745,7 @@ class UmpireDashboard extends Component {
                     compId: this.state.selectedComp,
                     divisionId: this.state.division === "All" ? "" : this.state.division,
                     venueId: this.state.venue === "All" ? "" : this.state.venue,
-                    orgId: this.state.orgId,
+                    orgId: this.state.org_Id,
                     roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
                     pageData: body,
                     sortBy,
@@ -783,7 +792,7 @@ class UmpireDashboard extends Component {
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: this.state.venue === "All" ? "" : this.state.venue,
-            orgId: this.state.orgId,
+            orgId: this.state.org_Id,
             roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
             pageData: body,
             sortBy,
@@ -805,7 +814,7 @@ class UmpireDashboard extends Component {
                         // columns={columnsInvite}
                         dataSource={umpireListResult}
                         pagination={false}
-                        rowKey={(record, index) => "umpireListResult" + record.id + index}
+                        rowKey={(record) => "umpireListResult" + record.id}
                     />
                 </div>
 
@@ -877,7 +886,7 @@ class UmpireDashboard extends Component {
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: venueId === "All" ? "" : venueId,
-            orgId: this.state.orgId,
+            orgId: this.state.org_Id,
             roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
             pageData: body,
             sortBy,
@@ -902,7 +911,7 @@ class UmpireDashboard extends Component {
                 compId: this.state.selectedComp,
                 divisionId: divisionId === "All" ? "" : divisionId,
                 venueId: this.state.venue === "All" ? "" : this.state.venue,
-                orgId: this.state.orgId,
+                orgId: this.state.org_Id,
                 roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
                 pageData: body,
                 sortBy,
@@ -931,7 +940,7 @@ class UmpireDashboard extends Component {
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: this.state.venue === "All" ? "" : this.state.venue,
-            orgId: this.state.orgId,
+            orgId: this.state.org_Id,
             roundId: roundId === "All" ? "" : allRoundIds,
             pageData: body,
             sortBy,
@@ -946,81 +955,87 @@ class UmpireDashboard extends Component {
         this.props.exportFilesAction(url);
     };
 
-    headerView = () => (
-        <div className="comp-player-grades-header-drop-down-view mt-4">
-            <div className="fluid-width">
-                <div className="row">
-                    <div className="col-sm pt-1 d-flex align-content-center">
-                        <span className="form-heading">
-                            {AppConstants.dashboard}
-                        </span>
-                    </div>
+    headerView = () => {
+        let isCompetitionAvailable = this.state.selectedComp ? false : true
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-4">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm pt-1 d-flex align-content-center">
+                            <span className="form-heading">
+                                {AppConstants.dashboard}
+                            </span>
+                        </div>
 
-                    <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
-                        <div className="row">
-                            {/*
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink to="/addUmpire" className="text-decoration-none">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.addUmpire}
-                                        </Button>
-                                    </NavLink>
-                                </div>
-                            </div>
-                            */}
-
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button
-                                        type="primary"
-                                        className="primary-add-comp-form"
-                                        onClick={this.onExport}
-                                    >
-                                        <div className="row">
-                                            <div className="col-sm">
-                                                <img
-                                                    className="export-image"
-                                                    src={AppImages.export}
-                                                    alt=""
-                                                />
-                                                {AppConstants.export}
-                                            </div>
+                        <div className="col-sm-8 w-100 d-flex flex-row align-items-center justify-content-end">
+                            <div className="row">
+                                {/*
+                                    <div className="col-sm pt-1">
+                                        <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                            <NavLink to="/addUmpire" className="text-decoration-none">
+                                                <Button className="primary-add-comp-form" type="primary">
+                                                    + {AppConstants.addUmpire}
+                                                </Button>
+                                            </NavLink>
                                         </div>
-                                    </Button>
-                                </div>
-                            </div>
+                                    </div>
+                                    */}
 
-                            <div className="col-sm pt-1">
-                                <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <NavLink
-                                        className="text-decoration-none"
-                                        to={{
-                                            pathname: "/umpireImport",
-                                            state: { screenName: "umpireDashboard" }
-                                        }}
-                                    >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                <div className="col-sm pt-1">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <Button
+                                            type="primary"
+                                            disabled={isCompetitionAvailable}
+                                            className="primary-add-comp-form"
+                                            onClick={this.onExport}
+                                        >
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
                                                         className="export-image"
-                                                        src={AppImages.import}
+                                                        src={AppImages.export}
                                                         alt=""
                                                     />
-                                                    {AppConstants.import}
+                                                    {AppConstants.export}
                                                 </div>
                                             </div>
                                         </Button>
-                                    </NavLink>
+                                    </div>
+                                </div>
+
+                                <div className="col-sm pt-1">
+                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                        <NavLink
+                                            className="text-decoration-none"
+                                            to={{
+                                                pathname: "/umpireImport",
+                                                state: { screenName: "umpireDashboard" }
+                                            }}
+                                        >
+                                            <Button disabled={isCompetitionAvailable} className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            className="export-image"
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
+                                                </div>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        )
+
+    }
+
 
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
@@ -1031,7 +1046,6 @@ class UmpireDashboard extends Component {
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : [];
         let roundList = isArrayNotEmpty(umpireRoundList) ? umpireRoundList : [];
         let umpireType = this.state.competitionObj ? this.state.competitionObj.recordUmpireType : null;
-        console.log(competition, "********-*")
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">

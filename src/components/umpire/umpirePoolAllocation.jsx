@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Checkbox, Button, Select, Modal } from 'antd';
+import {
+    Layout,
+    Button,
+    Select, 
+    Modal,
+} from 'antd';
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -11,18 +16,31 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AppImages from "../../themes/appImages";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import { 
+    getUmpireCompetitonData,
+    // getUmpireCompId,
+    // setUmpireCompId, 
+    setUmpireCompitionData 
+} from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { checkUmpireCompIsParent } from "util/permissions";
+import { getUmpirePoolData, saveUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction"
+import InputWithHead from "../../customComponents/InputWithHead";
+import Loader from '../../customComponents/loader'
 
-const { Header, Footer, Content } = Layout;
+const { 
+    // Header, 
+    Footer, 
+    Content 
+} = Layout;
 const { Option } = Select;
-let this_obj = null;
+// let this_obj = null;
 
 class UmpirePoolAllocation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newTeam: "",
+            newPool: "",
             visible: false,
             modalVisible: false,
             comment: null,
@@ -44,9 +62,13 @@ class UmpirePoolAllocation extends Component {
             ],
             unassignedData: [
                 { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
-            ]
+            ],
+            compOrgId: 0,
+            compIsParent: false,
+            orgId: null,
+            allCompetition: null
         }
-        this_obj = this;
+        // this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
@@ -55,6 +77,18 @@ class UmpirePoolAllocation extends Component {
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
 
+        // let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+        // if (JSON.parse(getUmpireCompetitonData())) {
+        //     this.setState({
+        //         compOrgId: competitionOrganisation.id,
+        //     })
+        // }
+
+        checkUmpireCompIsParent().then((value) => {
+            this.setState({
+                compIsParent: value
+            })
+        })
     }
 
     componentDidUpdate(nextProps) {
@@ -62,16 +96,21 @@ class UmpirePoolAllocation extends Component {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
+                let orgId = compList.length > 0 && compList[0].competitionOrganisation.orgId
 
-                if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
-                } else {
-                    setUmpireCompId(firstComp)
+                // if (getUmpireCompId()) {
+                //     let compId = JSON.parse(getUmpireCompId())
+                //     firstComp = compId
+                // } else {
+                //     setUmpireCompId(firstComp)
+                // }
+
+                if (JSON.parse(getUmpireCompetitonData())) {
+                    this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, allCompetition: compList })
             }
         }
     }
@@ -86,59 +125,7 @@ class UmpirePoolAllocation extends Component {
                                 {AppConstants.umpirePools}
                             </span>
                         </div>
-
-                        {/* <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
-                            <div className="row">
-                                <div className="col-sm pt-1">
-                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.import}
-                                                </div>
-                                            </div>
-                                        </Button>
-                                    </div>
-                                </div>
-                                <div className="col-sm pt-1">
-                                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.importTeams}
-                                                </div>
-                                            </div>
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
-                    {/* <div className="mt-5 d-flex w-ft">
-                        <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
-                            <span className="year-select-heading">{AppConstants.competition}:</span>
-                            <Select
-                                className="year-select"
-                                style={{ minWidth: 160 }}
-                                onChange={(comp) => this.onChangeComp({ comp })}
-                                value={this.state.selectedComp}
-                            >
-                                {competition.map((item) => (
-                                    <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
-                                ))}
-                            </Select>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         );
@@ -146,9 +133,26 @@ class UmpirePoolAllocation extends Component {
 
     onChangeComp = (compID) => {
         let selectedComp = compID.comp
-        setUmpireCompId(selectedComp)
         let compKey = compID.competitionUniqueKey
-        this.setState({ selectedComp, competitionUniqueKey: compKey })
+        let compeList = this.state.allCompetition
+        let orgId = null
+        let selectedCompData = null
+        for (let i in compeList) {
+            if (compeList[i].id === selectedComp) {
+                orgId = compeList[i]?.competitionOrganisation?.orgId
+                selectedCompData = compeList[i]
+            }
+        }
+
+        // setUmpireCompId(selectedComp)
+        setUmpireCompitionData(JSON.stringify(selectedCompData))
+        checkUmpireCompIsParent().then((value) => {
+            this.setState({
+                compIsParent: value
+            })
+        })
+        this.props.getUmpirePoolData({ orgId: orgId ? orgId : 0, compId: selectedComp })
+        this.setState({ selectedComp, competitionUniqueKey: compKey, orgId: orgId ? orgId : 0 })
     }
 
     dropdownView = () => {
@@ -180,10 +184,10 @@ class UmpirePoolAllocation extends Component {
 
     onDragEnd = result => {
         const { source, destination } = result;
-        let assignedPlayerData = this.state.assignedData
-        let unassignedPlayerData = this.state.unassignedData
+        let assignedPlayerData = this.state.assignedData;
+        let unassignedPlayerData = this.state.unassignedData;
 
-        let playerId
+        let playerId = null
         // dropped outside the list
         if (!destination) {
             return;
@@ -195,18 +199,18 @@ class UmpirePoolAllocation extends Component {
 
             if (teamId !== null) {
                 if (sourceTeamID == null) {
-                    playerId = unassignedPlayerData[source.index].playerId
+                    playerId = unassignedPlayerData[source.index].playerId;
                 } else {
                     for (let i in assignedPlayerData) {
                         if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                            playerId = assignedPlayerData[i].players[source.index].playerId
+                            playerId = assignedPlayerData[i].players[source.index].playerId;
                         }
                     }
                 }
             } else {
                 for (let i in assignedPlayerData) {
                     if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        playerId = assignedPlayerData[i].players[source.index].playerId
+                        playerId = assignedPlayerData[i].players[source.index].playerId;
                     }
                 }
             }
@@ -220,15 +224,15 @@ class UmpirePoolAllocation extends Component {
         this.setState({
             modalVisible: true, comment: "", playerId: player.playerId,
             teamID
-        })
+        });
     }
 
     handleDeleteTeamCancel = () => {
         this.setState({ deleteModalVisible: false });
     }
 
-    onClickDeleteTeam = async (teamItem, teamIndex) => {
-        await this.setState({ teamID: teamItem.teamId, deleteModalVisible: true });
+    onClickDeleteTeam = async (umpireItem, umpireIndex) => {
+        await this.setState({ teamID: umpireItem.teamId, deleteModalVisible: true });
     }
 
     // model cancel for disappear a model
@@ -244,12 +248,13 @@ class UmpirePoolAllocation extends Component {
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
         let commentList = []
-        let assignedData = this.state.assignedData
+        const { umpirePoolData } = this.props.umpirePoolAllocationState
+        // let assignedData = this.state.assignedData
 
         return (
             <div className="d-flex flex-column">
-                {assignedData.map((teamItem, teamIndex) => (
-                    <Droppable key={"assignedData" + teamIndex} droppableId={`${teamItem.teamId}`}>
+                {umpirePoolData.map((umpireItem, umpireIndex) => (
+                    <Droppable key={"assignedData" + umpireIndex} droppableId={`${umpireItem.id}`}>
                         {(provided, snapshot) => (
                             <div
                                 ref={provided.innerRef}
@@ -257,15 +262,15 @@ class UmpirePoolAllocation extends Component {
                             >
                                 <div className="player-grading-droppable-heading-view">
                                     <div className="row">
-                                        <Checkbox
+                                        {/* <Checkbox
                                             className="single-checkbox mt-1 check-box-player"
                                             checked={this.state.assignedcheckbox}
                                             onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
-                                        />
+                                        /> */}
                                         <div className="col-sm d-flex align-items-center">
-                                            <span className="player-grading-haeding-team-name-text">{teamItem.teamName}</span>
+                                            <span className="player-grading-haeding-team-name-text">{umpireItem.name}</span>
                                             <span className="player-grading-haeding-player-count-text ml-2">
-                                                {teamItem.players.length > 1 ? teamItem.players.length + " Umpires" : teamItem.players.length + " Umpire"}
+                                                {umpireItem.umpires.length > 1 ? umpireItem.umpires.length + " Umpires" : umpireItem.umpires.length + " Umpire"}
                                             </span>
                                         </div>
                                         <div className="col-sm d-flex justify-content-end">
@@ -275,20 +280,20 @@ class UmpirePoolAllocation extends Component {
                                                 alt=""
                                                 height="20"
                                                 width="20"
-                                                onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
+                                                onClick={() => this.onClickDeleteTeam(umpireItem, umpireIndex)}
                                             />
-                                            <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
+                                            <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${umpireIndex}`} role="button" aria-expanded="false" aria-controls={umpireIndex}>
                                                 <i className="fa fa-angle-down" style={{ color: "#ff8237" }} aria-hidden="true" />
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="collapse" id={teamIndex}>
-                                    {teamItem.players.map((playerItem, playerIndex) => (
+                                <div className="collapse" id={umpireIndex}>
+                                    {umpireItem.umpires.map((umpireItem, umpireIndex) => (
                                         <Draggable
-                                            key={JSON.stringify(playerItem.playerId)}
-                                            draggableId={JSON.stringify(playerItem.playerId)}
-                                            index={playerIndex}
+                                            key={JSON.stringify(umpireItem.id)}
+                                            draggableId={JSON.stringify(umpireItem.id)}
+                                            index={umpireIndex}
                                         >
                                             {(provided, snapshot) => (
                                                 <div
@@ -298,30 +303,30 @@ class UmpirePoolAllocation extends Component {
                                                     className="player-grading-draggable-view"
                                                 >
                                                     <div className="row">
-                                                        <Checkbox
+                                                        {/* <Checkbox
                                                             checked={this.state.assignedcheckbox}
                                                             className="single-checkbox mt-0 check-box-player"
                                                             onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
                                                         >
-                                                        </Checkbox>
+                                                        </Checkbox> */}
                                                         <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {playerItem.rank}{" "}{playerItem.playerName}
+                                                                {umpireItem.rank}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{umpireItem.name}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {playerItem.Badge}
+                                                                {umpireItem.Badge}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {playerItem.years}
+                                                                {umpireItem.years}
                                                             </span>
                                                         </div>
                                                         <div className="col-sm d-flex justify-content-center align-items-center">
                                                             <span className="player-grading-haeding-player-name-text pointer">
-                                                                {playerItem.matches}
+                                                                {umpireItem.matches} {AppConstants.games}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -361,6 +366,65 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
+    // model visible
+    addUmpirePool = () => {
+        this.setState({ visible: true });
+    }
+
+    // model ok button
+    handleOk = (e) => {
+        if (this.state.newPool.length > 0) {
+
+            let poolObj = {
+                name: this.state.newPool,
+                umpires: []
+            }
+
+            this.props.saveUmpirePoolData({
+                compId: this.state.selectedComp,
+                orgId: this.state.orgId,
+                poolObj: poolObj
+
+            });
+        }
+        this.setState({
+            visible: false,
+            newPool: "",
+        });
+    };
+
+    // model cancel for disappear a model
+    handleCancel = (e) => {
+        this.setState({
+            visible: false,
+            newPool: "",
+        });
+    };
+
+    poolModalView = () => {
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.addPool}
+                visible={this.state.visible}
+                onOk={() => this.handleOk()}
+                onCancel={() => this.handleCancel()}
+            >
+                <div>
+                    <InputWithHead
+                        auto_complete="off"
+                        required="pt-0 mt-0"
+                        heading={AppConstants.addPool}
+                        placeholder={AppConstants.pleaseEnterPoolName}
+                        onChange={(e) => this.setState({ newPool: e.target.value })}
+                        value={this.state.newPool}
+                    />
+                </div>
+
+            </Modal>
+        )
+    }
+
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         let commentList = []
@@ -372,12 +436,12 @@ class UmpirePoolAllocation extends Component {
                         <div ref={provided.innerRef} className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">
                                 <div className="row">
-                                    <Checkbox
+                                    {/* <Checkbox
                                         className="single-checkbox mt-1 check-box-player"
                                         checked={this.state.unassignedcheckbox}
                                         onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
                                     >
-                                    </Checkbox>
+                                    </Checkbox> */}
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-2">
@@ -385,17 +449,22 @@ class UmpirePoolAllocation extends Component {
                                         </span>
                                     </div>
                                     <div className="col-sm d-flex justify-content-end">
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button
+                                            className="primary-add-comp-form"
+                                            type="primary"
+                                            disabled={!this.state.compIsParent}
+                                            onClick={this.addUmpirePool}
+                                        >
                                             + {AppConstants.umpirePools}
                                         </Button>
                                     </div>
                                 </div>
                             </div>
-                            {unassignedData && unassignedData.map((playerItem, playerIndex) => (
+                            {unassignedData && unassignedData.map((playerItem, umpireIndex) => (
                                 <Draggable
                                     key={JSON.stringify(playerItem.playerId)}
                                     draggableId={JSON.stringify(playerItem.playerId)}
-                                    index={playerIndex}
+                                    index={umpireIndex}
                                 >
                                     {(provided, snapshot) => (
                                         <div
@@ -405,15 +474,15 @@ class UmpirePoolAllocation extends Component {
                                             className="player-grading-draggable-view"
                                         >
                                             <div className="row">
-                                                <Checkbox
+                                                {/* <Checkbox
                                                     checked={this.state.unassignedcheckbox}
                                                     onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
                                                     className="single-checkbox mt-0 check-box-player"
                                                 >
-                                                </Checkbox>
+                                                </Checkbox> */}
                                                 <div className="col-sm d-flex justify-content-flex-start align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.rank}{" "}{playerItem.playerName}
+                                                        {playerItem.rank}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{playerItem.playerName}
                                                     </span>
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
@@ -428,7 +497,7 @@ class UmpirePoolAllocation extends Component {
                                                 </div>
                                                 <div className="col-sm d-flex justify-content-center align-items-center">
                                                     <span className="player-grading-haeding-player-name-text pointer">
-                                                        {playerItem.matches}
+                                                        {playerItem.matches} {AppConstants.games}
                                                     </span>
                                                 </div>
                                             </div>
@@ -461,7 +530,6 @@ class UmpirePoolAllocation extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <DragDropContext
-                    // onDragEnd={console.log('value')}
                 >
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}
@@ -507,12 +575,14 @@ class UmpirePoolAllocation extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="5" />
+                <Loader visible={this.props.umpirePoolAllocationState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
 
                     <Content>
                         {this.contentView()}
+                        {this.poolModalView()}
                     </Content>
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
@@ -523,13 +593,16 @@ class UmpirePoolAllocation extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        umpireCompetitionListAction
+        umpireCompetitionListAction,
+        getUmpirePoolData,
+        saveUmpirePoolData,
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        umpireCompetitionState: state.UmpireCompetitionState
+        umpireCompetitionState: state.UmpireCompetitionState,
+        umpirePoolAllocationState: state.UmpirePoolAllocationState
     }
 }
 

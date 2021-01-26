@@ -1,11 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 //////get the umpire assign list
-function getAssignUmpireListAction(competitionId, body) {
+function getAssignUmpireListAction(competitionId, body , userId) {
     const action = {
         type: ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD,
         competitionId,
-        body
+        body,
+        userId
     };
     return action;
 }
