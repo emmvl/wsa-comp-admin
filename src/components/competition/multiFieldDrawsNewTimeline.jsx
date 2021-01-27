@@ -1898,25 +1898,8 @@ class MultifieldDrawsNewTimeline extends Component {
         return timeAllDayScheduleHours;
     }
 
-    draggableView = (dateItem) => {
-        let disabledStatus = this.state.competitionStatus == 1;
-        let dayMargin = 25;
-        let topMargin = 2;
-        const date = [];
-
-        const { isFilterSchedule, isAxisInverted } = this.state;
-
-        const { dateNewArray } = dateItem;
-
-        dateNewArray.forEach(item => {
-            const dateNew = this.getDate(item.date);
-
-            if (dateNew !== date[date.length - 1]) {
-                date.push(dateNew);
-            }
-        });
-
-        // for days vertical dashed lines style
+    defineDayBg = () => {
+        const { isAxisInverted } = this.state;
 
         let backgroundSize = '';
         let backgroundImage = '';
@@ -1948,7 +1931,30 @@ class MultifieldDrawsNewTimeline extends Component {
             backgroundSize,
             backgroundImage,
             backgroundPosition,
-        }
+        };
+
+        return dayBgAvailable;
+    }
+
+    draggableView = (dateItem) => {
+        let disabledStatus = this.state.competitionStatus == 1;
+        let dayMargin = 25;
+        let topMargin = 2;
+        const date = [];
+
+        const { isFilterSchedule, isAxisInverted } = this.state;
+
+        const { dateNewArray } = dateItem;
+
+        dateNewArray.forEach(item => {
+            const dateNew = this.getDate(item.date);
+
+            if (dateNew !== date[date.length - 1]) {
+                date.push(dateNew);
+            }
+        });
+        
+        const dayBgAvailable = this.defineDayBg();
 
         return (
             <>
