@@ -1936,6 +1936,79 @@ class MultifieldDrawsNewTimeline extends Component {
         return dayBgAvailable;
     }
 
+    dayHorizontalHead = (date, dateNewArray, dayMargin) => {
+        return (
+            <div className="draws-x-head d-flex" style={{ marginLeft: 34 }}>
+                {date.map((itemDate, index) => {
+                    // for drawing days position
+                    const newTimeAllDayScheduleHours = [
+                        ...this.getDraggableViewHeaderData(
+                            itemDate,
+                            dateNewArray
+                        ),
+                    ];
+
+                    if (index < date.length - 1) {
+                        newTimeAllDayScheduleHours.pop();
+                    }
+
+                    return newTimeAllDayScheduleHours.map(
+                        (itemTime, indexTime) => {
+                            if (index !== 0 || indexTime !== 0) {
+                                dayMargin += ONE_HOUR_IN_MIN * ONE_MIN_WIDTH;
+                            }
+                            if (index === 0 && indexTime === 0) {
+                                dayMargin = 0;
+                            }
+
+                            return (
+                                <div
+                                    key={"time" + index + indexTime}
+                                    className="d-flex flex-column"
+                                    style={{
+                                        left: dayMargin,
+                                        fontSize: 11,
+                                        width: ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
+                                    }}
+                                >
+                                    <span className="draws-x-head-text">
+                                        {!indexTime
+                                            ? moment(itemDate + itemTime).format("DD MMM, ddd")
+                                            : moment(itemDate + itemTime).format("ddd")
+                                        }
+                                    </span>
+                                    <span className="draws-x-head-text">
+                                        {itemTime.slice(-5)}
+                                    </span>
+                                </div>
+                            );
+                        }
+                    );
+                })}
+            </div>
+        );
+    }
+
+    courtHorizontalHead = (dateItem) => {
+        return (
+            <>
+                {dateItem.draws && dateItem.draws.map((courtData, index) => {
+                    return (
+                        <div
+                            key={"court" + index} 
+                            className="d-flex justify-content-center"
+                            style={{ width: 70 }}
+                        >
+                            <span className="draws-x-head-text">
+                                {courtData.venueShortName + '-' + courtData.venueCourtNumber}
+                            </span>
+                        </div>
+                    )
+                })}
+            </>
+        )
+    }
+
     draggableView = (dateItem) => {
         let disabledStatus = this.state.competitionStatus == 1;
         let dayMargin = 25;
@@ -1964,78 +2037,16 @@ class MultifieldDrawsNewTimeline extends Component {
                         width: 'fit-content',
                     }}
                 >
-                    <div className="table-head-wrap">
-                        {/* Day name list */}
-                        <div className="tablehead-row" style={{ marginLeft: 34, height: 40 }}>
-                            {date.map((itemDate, index) => {
-                                // for drawing days position
-                                const newTimeAllDayScheduleHours = [...this.getDraggableViewHeaderData(itemDate, dateNewArray)];
-
-                                if (index < date.length - 1) {
-                                    newTimeAllDayScheduleHours.pop();
-                                }
-
-                                return newTimeAllDayScheduleHours.map((itemTime, indexTime) => {
-                                    if (index !== 0 || indexTime !== 0) {
-                                        dayMargin += ONE_HOUR_IN_MIN * ONE_MIN_WIDTH;
-                                    }
-                                    if (index === 0 && indexTime === 0) {
-                                        dayMargin = 0;
-                                    }
-
-                                    return (
-                                        <span
-                                            key={"time" + index + indexTime}
-                                            style={{
-                                                left: dayMargin,
-                                                fontSize: 11,
-                                                minWidth: ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
-                                            }}
-                                        >
-                                            {!indexTime ? moment(itemDate + itemTime).format('DD MMM, ddd') : moment(itemDate + itemTime).format('ddd')}
-                                        </span>
-                                    )
-                                })
-                            })}
+                    {/* Horizontal head */}
+                    {isAxisInverted ?    
+                        <div className="table-head-wrap d-flex position-relative" style={{ left: 64 }}>
+                            {this.courtHorizontalHead(dateItem)}
                         </div>
-
-                        {/* Times list */}
-                        <div className="tablehead-row" style={{ marginLeft: 34, height: 40 }}>
-                            {date.map((itemDate, index) => {
-                                // for drawing time position
-                                const timeAllDayScheduleHours = this.getDraggableViewHeaderData(itemDate, dateNewArray);
-                                const newTimeAllDayScheduleHours = [...timeAllDayScheduleHours];
-
-                                if (index < date.length - 1) {
-                                    newTimeAllDayScheduleHours.pop();
-                                }
-
-                                const diffHeaderTime = moment(itemDate + timeAllDayScheduleHours[1]).diff(moment(itemDate + timeAllDayScheduleHours[0]), 'minutes') * ONE_MIN_WIDTH;
-
-                                return newTimeAllDayScheduleHours.map((itemTimeMock, indexTimeMock) => {
-                                    if (index !== 0 || indexTimeMock !== 0) {
-                                        dayMargin += diffHeaderTime;
-                                    }
-                                    if (index === 0 && indexTimeMock === 0) {
-                                        dayMargin = 45;
-                                    }
-
-                                    return (
-                                        <span
-                                            key={"time" + index + indexTimeMock}
-                                            style={{
-                                                left: dayMargin,
-                                                fontSize: 11,
-                                                minWidth: 'unset',
-                                            }}
-                                        >
-                                            {itemTimeMock.slice(-5)}
-                                        </span>
-                                    )
-                                })
-                            })}
+                        : 
+                        <div className="table-head-wrap">
+                            {this.dayHorizontalHead(date, dateNewArray, dayMargin)}
                         </div>
-                    </div>
+                    }
                 </div>
                 <div
                     className={`main-canvas Draws ${isAxisInverted ? 'd-flex' : ''}`}

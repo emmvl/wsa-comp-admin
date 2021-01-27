@@ -1026,3 +1026,16 @@
     align-self: center;
     text-align: left;
 }
+
+.draws-x-head-text {
+    color: var(--app-9b9bad);
+    line-height: 40px;
+    font-size: 13px;
+    font-family: "Inter-Medium";
+    text-align: center;
+}
+  
+.draws-x-head{
+    position: relative;
+    margin: 0 30px;
+}
