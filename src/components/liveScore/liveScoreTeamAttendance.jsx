@@ -369,7 +369,7 @@ class LiveScoreTeamAttendance extends Component {
             if (this.state.selectStatus === 'All') {
                 url = AppConstants.teamAttendanceExport + this.state.competitionId + `&competitionOrganisationId=${this.state.compOrgId}`
             } else {
-                url = AppConstants.teamAttendanceExport + this.state.competitionId + `&status=${this.state.selectStatus}` + `&competitionOrganisationId=${this.state.compOrgId}`
+                url = AppConstants.teamAttendanceExport + this.state.competitionId + `&status=${this.state.selectStatus}&competitionOrganisationId=${this.state.compOrgId}`
             }
     
         }

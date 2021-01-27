@@ -1780,7 +1780,7 @@ class AppRegistrationForm extends Component {
                                         {this.parentGuardianView(item, index)}
                                     </div>
                                 )}
-                                {regSetting.last_captain === 1 || regSetting.played_before === 1 && (
+                                {(regSetting.last_captain === 1 || regSetting.played_before === 1) && (
                                     <div className="mb-20">
                                         {this.additionalPersonalInfoView(item, index)}
                                     </div>

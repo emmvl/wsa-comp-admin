@@ -44,7 +44,7 @@ function isUmpireCoachCheck(data, key) {
     if (data.userRoleEntities) {
         let checkCoach = data.userRoleEntities
         for (let i in checkCoach) {
-            if (checkCoach[i].roleId == key) {
+            if (checkCoach[i].roleId === key) {
                 return true
             }
         }
@@ -58,7 +58,7 @@ function createUmpireArray(result) {
     for (let i in result) {
         let userRoleCheck = result[i].userRoleEntities
         for (let j in userRoleCheck) {
-            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
+            if (userRoleCheck[j].roleId === 15 || userRoleCheck[j].roleId === 19) {
                 umpireArray.push(result[i])
                 break
             }
@@ -72,7 +72,7 @@ function createUmpireCoachArray(result) {
     for (let i in result) {
         let userRoleCheck = result[i].userRoleEntities
         for (let j in userRoleCheck) {
-            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 20) {
+            if (userRoleCheck[j].roleId === 15 || userRoleCheck[j].roleId === 20) {
                 umpireArray.push(result[i])
                 break
             }
@@ -87,7 +87,7 @@ function createCoachArray(result) {
     for (let i in result) {
         let userRole = result[i].userRoleEntities
         for (let j in userRole) {
-            if (userRole[j].roleId == 20) {
+            if (userRole[j].roleId === 20) {
                 coachArray.push(result[i])
                 break
             }

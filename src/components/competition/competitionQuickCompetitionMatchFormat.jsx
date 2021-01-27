@@ -190,7 +190,7 @@ class QuickCompetitionMatchFormat extends Component {
             [`matchTypeRefId`]: formatList.matchTypeRefId,
         });
 
-        (competitionFormatDivision || []).map((item, index) => {
+        (competitionFormatDivision || []).forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`matchDuration${index}`]: item.matchDuration,
                 [`mainBreak${index}`]: item.mainBreak,

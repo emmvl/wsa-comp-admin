@@ -279,7 +279,7 @@ function checkUmpireType(umpireArray, key) {
 
     let object = null;
     for (let i in umpireArray) {
-        if (umpireArray[i].sequence == key) {
+        if (umpireArray[i].sequence === key) {
             object = umpireArray[i];
         }
     }
@@ -289,7 +289,7 @@ function checkUmpireType(umpireArray, key) {
 function checkUmpireRole(rosterArray, key) {
     let rosterkey = null;
     for (let i in rosterArray) {
-        if (rosterArray[i].roleId == key) {
+        if (rosterArray[i].roleId === key) {
             rosterkey = rosterArray[i].userId
             break
         }
@@ -309,7 +309,7 @@ function createCoachArray(result) {
         let userRole = result[i].userRoleEntities
         let linkedEntity = result[i].linkedEntity
         for (let j in userRole) {
-            if (userRole[j].roleId == 20) {
+            if (userRole[j].roleId === 20) {
 
                 for (let k in linkedEntity) {
                     let obj = {
@@ -330,7 +330,7 @@ function createCoachArray(result) {
 function getAccreditationValue(accreditationArray, accreditationValue) {
     if (accreditationArray) {
         for (let i in accreditationArray) {
-            if (accreditationArray[i].id == accreditationValue) {
+            if (accreditationArray[i].id === accreditationValue) {
                 return accreditationArray[i].description
             }
         }
@@ -344,7 +344,7 @@ function createUmpireArray(result, accreditationArr) {
         let userRoleCheck = result[i].userRoleEntities
         let linkedEntity = result[i].linkedEntity
         for (let j in userRoleCheck) {
-            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
+            if (userRoleCheck[j].roleId === 15 || userRoleCheck[j].roleId === 19) {
 
                 for (let k in linkedEntity) {
                     let accreditationBadge = getAccreditationValue(accreditationArr, result[i].accreditationLevelUmpireRefId)
@@ -534,7 +534,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                     let d_oldTime = moment(state.start_time).format('HH:mm').split(':')
                     let d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2], d_oldTime[0], d_oldTime[1]]).utc().format();
                     state.matchData.startTime = d_newTime;
-                    if (d_newTime != 'Invalid date') {
+                    if (d_newTime !== 'Invalid date') {
                         state.updateUmpireFetchCall = true;
                     }
                 }
@@ -546,7 +546,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                     let t_time = moment(action.data).format('HH:mm').split(':');
                     let t_newTime = moment([t_date[0], t_date[1] - 1, t_date[2], t_time[0], t_time[1]]).utc().format();
                     state.matchData.startTime = t_newTime;
-                    if (t_newTime != 'Invalid date') {
+                    if (t_newTime !== 'Invalid date') {
                         state.updateUmpireFetchCall = true;
                     }
                 }
@@ -735,7 +735,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                     state.matchData["extraTimeWinByGoals"] = null;
                 }
             }
-            else if (action.key == 'matchDuration' || action.key == 'mainBreakDuration') {
+            else if (action.key === 'matchDuration' || action.key === 'mainBreakDuration') {
                 state[action.key] = action.data;
                 state.addEditMatch[action.key] = action.data;
                 state.matchData[action.key] = action.data;

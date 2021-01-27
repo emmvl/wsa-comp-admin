@@ -63,22 +63,22 @@ export function* getCompetitionDrawsSaga(action) {
 ////get rounds in the competition draws
 export function* getDrawsRoundsSaga(action) {
     try {
-        const result = action.competitionId != "-1" ? yield call(CompetitionAxiosApi.getDrawsRounds,
+        const result = action.competitionId !== "-1" ? yield call(CompetitionAxiosApi.getDrawsRounds,
             action.yearRefId, action.competitionId) : {
                 status: 1, result: []
             };
         if (result.status === 1) {
             const date = new Date()
-            const startDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD");
-            const endDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD")
+            const startDate = action.competitionId !== "-1" ? null : moment(date).format("YYYY-MM-DD");
+            const endDate = action.competitionId !== "-1" ? null : moment(date).format("YYYY-MM-DD")
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
                 const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);
                 if (division_Result.status === 1) {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                        result: action.competitionId != "-1" ? result.result.data : [],
-                        dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
+                        result: action.competitionId !== "-1" ? result.result.data : [],
+                        dateRangeResult: action.competitionId !== "-1" ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
                         division_Result: division_Result.result.data,
                         status: result.status,
@@ -86,8 +86,8 @@ export function* getDrawsRoundsSaga(action) {
                 } else {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                        result: action.competitionId != "-1" ? result.result.data : [],
-                        dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
+                        result: action.competitionId !== "-1" ? result.result.data : [],
+                        dateRangeResult: action.competitionId !== "-1" ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
                         division_Result: [],
                         status: result.status,
@@ -97,8 +97,8 @@ export function* getDrawsRoundsSaga(action) {
             else {
                 yield put({
                     type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                    result: action.competitionId != "-1" ? result.result.data : [],
-                    dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
+                    result: action.competitionId !== "-1" ? result.result.data : [],
+                    dateRangeResult: action.competitionId !== "-1" ? [] : result.result.data,
                     Venue_Result: [],
                     division_Result: [],
                     status: result.status,

@@ -102,8 +102,8 @@ const initialState = {
 function getAffiliteDetailArray(allData) {
     let getAffiliteDetailArray = []
     let orgMap = new Map();
-    allData.compParticipants.map((item) => {
-        item.membershipProducts.map((mem) => {
+    allData.compParticipants.forEach((item) => {
+        item.membershipProducts.forEach((mem) => {
             if (isNullOrUndefined(mem.fees.membershipFee)) {
                 let key = mem.fees.membershipFee.organisationId;
                 if (orgMap.get(key) == undefined) {

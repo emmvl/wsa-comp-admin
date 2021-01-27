@@ -64,7 +64,17 @@ function shopOrderStatusState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+        // export order status  API
+        case ApiConstants.API_GET_EXPORT_ORDER_STATUS_LOAD:
+            return { ...state, onLoad: true, error: null };
 
+        case ApiConstants.API_GET_EXPORT_ORDER_STATUS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
 
         //// /////order status listing  get API
         case ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD:
@@ -90,7 +100,7 @@ function shopOrderStatusState(state = initialState, action) {
             let allData = state.orderStatusListingData
             let updatedOrderStatus = action.result
             let orderId = updatedOrderStatus ? updatedOrderStatus.id : 0
-            let orderStatusIndex = allData.findIndex(x => x.orderId == orderId)
+            let orderStatusIndex = allData.findIndex(x => x.orderId === orderId)
             if (orderStatusIndex > -1) {
                 state.orderStatusListingData[orderStatusIndex].paymentStatus = updatedOrderStatus.paymentStatus
                 state.orderStatusListingData[orderStatusIndex].fulfilmentStatus = updatedOrderStatus.fulfilmentStatus

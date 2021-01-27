@@ -376,11 +376,12 @@ class LiveScoreSettingsView extends Component {
             formData.append('lineupSelectionEnabled', lineupSelection)
             formData.append('lineupSelectionTime', lineUpSelectionTime)
         }
-        let invitedToArr = invitedTo.filter(function (item, index) {
-            if (invitedTo.indexOf(item) == index) {
-                return item;
-            }
-        });
+        // let invitedToArr = invitedTo.filter(function (item, index) {
+        //     if (invitedTo.indexOf(item) == index) {
+        //         return item;
+        //     }
+        // });
+        let invitedToArr = invitedTo.slice(0);
         formData.append('invitedTo', JSON.stringify(invitedToArr))
         if (invitedAnyAssoc.length > 0) {
             formData.append('invitedAnyAssoc', JSON.stringify(invitedAnyAssoc))

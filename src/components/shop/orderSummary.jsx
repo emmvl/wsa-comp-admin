@@ -227,7 +227,7 @@ class OrderSummary extends Component {
             // const regex = /,/gi;
             let canCall = false;
             let newVal = value.toString().split(',');
-            newVal.map((x, index) => {
+            newVal.forEach((x) => {
                 if (Number(x.length) % 4 === 0 && x.length > 0) {
                     canCall = true;
                 } else {

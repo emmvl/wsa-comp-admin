@@ -260,7 +260,7 @@ class LiveScoreGoalList extends Component {
         let url = '';
         if(this.state.liveScoreCompIsParent !== true)
         {
-            url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}` + `&competitionOrganisationId=${this.state.compOrgId}`
+            url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}&competitionOrganisationId=${this.state.compOrgId}`
         }
         else{
             url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`

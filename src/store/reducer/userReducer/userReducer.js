@@ -364,7 +364,7 @@ function getUpdatedTeamMemberObj(competition) {
     const teamMemberTemp = deepCopyFunction(teamMemberObj);
     teamMemberTemp.membershipProductTypes = [];
     const filteredTeamMembershipProducts = competition.membershipProducts.filter(
-      (x) => x.isTeamRegistration == 1 && x.allowTeamRegistrationTypeRefId == 1,
+      (x) => x.isTeamRegistration === 1 && x.allowTeamRegistrationTypeRefId === 1,
     );
     for (let product of filteredTeamMembershipProducts) {
       const obj = {
@@ -453,8 +453,8 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_AFFILIATES_LISTING_LOAD:
       return {
         ...state,
-        onLoad: action.payload.paging.limit != -1,
-        onImpersonationLoad: action.payload.paging.limit == -1,
+        onLoad: action.payload.paging.limit !== -1,
+        onImpersonationLoad: action.payload.paging.limit === -1,
         userAffiliateListAction: action,
       };
 
@@ -1299,7 +1299,7 @@ function userReducer(state = initialState, action) {
       if (action.key === "teamMembersSave") {
         state.teamMembersSave = action.data;
       } else if (action.key === "teamMember") {
-        if (action.index == undefined) {
+        if (action.index === undefined) {
           updateTeamMembersSave(state);
           state.addTeamMember = true;
         } else {
@@ -1364,7 +1364,7 @@ function userReducer(state = initialState, action) {
           let totalVal = reviewData.total.total;
           let transactionVal = 0;
           let targetVal = 0;
-          if (action.value == 1) {
+          if (action.value === 1) {
             if (type === "International_CC") {
               transactionVal = (totalVal * 3.0 / 100) + 0.30;
             }
@@ -1394,6 +1394,8 @@ function userReducer(state = initialState, action) {
       } catch (ex) {
         console.log("Error in UPDATE_TEAM_MEMBER_REVIEW_INFO::" + ex);
       }
+      return { ...state };
+
     case ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD:
       return { ...state, onTeamUpdateLoad: true };
 
@@ -1414,7 +1416,7 @@ function getUserRole(userRoleData) {
   let userRole = false;
 
   for (let i in userRoleData) {
-    if (userRoleData[i].roleId == 15 || userRoleData[i].roleId == 20) {
+    if (userRoleData[i].roleId === 15 || userRoleData[i].roleId === 20) {
 
       userRole = true;
       break;
@@ -1446,8 +1448,8 @@ function checkSelectedCharity(selected, data) {
       isSelected: false,
     };
     if (selected) {
-      let filteredRes = selected.find(x => x.charityRoundUpRefId == data[i].id);
-      if (filteredRes != null && filteredRes != undefined) {
+      let filteredRes = selected.find(x => x.charityRoundUpRefId === data[i].id);
+      if (filteredRes !== null && filteredRes !== undefined) {
         obj.id = filteredRes.id;
         obj.charityRoundUpRefId = filteredRes.charityRoundUpRefId;
         obj.isSelected = true;

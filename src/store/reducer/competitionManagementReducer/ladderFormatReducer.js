@@ -37,15 +37,15 @@ function ladderFormatReducer(state = initialState, action) {
             let ladderFormatData = action.result;
             let ladderSchemeDefaults = ladderFormatData.ladderSchemeDefaults;
             let isAllDivisionChecked = false
-            if(ladderFormatData.ladderFormats.length  == 0)
+            if(ladderFormatData.ladderFormats.length === 0)
             {
                 setLadderFormats(ladderFormatData.ladderFormats, ladderFormatData.ladderSchemeDefaults,
                     ladderFormatData.divisions);
             }
             else {
-                if(ladderFormatData.ladderFormats.length == 1)
+                if(ladderFormatData.ladderFormats.length === 1)
                 {
-                    if(ladderFormatData.ladderFormats[0].selectedDivisions.length == 0)
+                    if(ladderFormatData.ladderFormats[0].selectedDivisions.length === 0)
                     {
                         isAllDivisionChecked = true;
                     }
@@ -82,16 +82,16 @@ function ladderFormatReducer(state = initialState, action) {
             let updatedValue = action.updatedData;
             let getKey = action.key;
             // let index = action
-            if(getKey == "ladderFormat"){
+            if(getKey === "ladderFormat"){
                 state.ladderFormats = updatedValue;
             }
-            else if(getKey == "ladderFormatAdd")
+            else if(getKey === "ladderFormatAdd")
             {
                 setLadderFormats(state.ladderFormats, state.ladderSchemeDefaults,
                     state.defaultDivisions);
                 setLadderDivisions(state.ladderFormats,state.defaultDivisions);
             }
-            else if(getKey =="allDivision")
+            else if(getKey === "allDivision")
             {
                 state.isAllDivisionChecked = updatedValue;
             }
@@ -127,13 +127,13 @@ function setLadderFormats(ladderFormats, ladderSchemeDefaults, defaultDivisions)
     if(!isEmptyArray(ladderSchemeDefaults))
     {
         let index = 0;
-        let itemArr = ladderFormats.filter(x=>x.ladderSchemeId!= 0);
+        let itemArr = ladderFormats.filter(x => x.ladderSchemeId !== 0);
         if(!isEmptyArray(itemArr))
         {
             for(let i in ladderSchemeDefaults)
             {
-                let checkValPresent =  itemArr.filter(x=>x.ladderSchemeId == ladderSchemeDefaults[i].ladderSchemeId);
-                if(checkValPresent == null || checkValPresent == undefined || checkValPresent == ""){
+                let checkValPresent = itemArr.filter(x=>x.ladderSchemeId === ladderSchemeDefaults[i].ladderSchemeId);
+                if(!checkValPresent.length){
                     index = i;
                     break;
                 }
@@ -145,7 +145,7 @@ function setLadderFormats(ladderFormats, ladderSchemeDefaults, defaultDivisions)
         let clonedSchemeDefaults = deepCopyFunction(ladderSchemeDefaults);
         let firstItem = clonedSchemeDefaults[index];
     
-        if(firstItem!= undefined && firstItem!= null && firstItem!= null)
+        if(firstItem !== undefined && firstItem !== null)
         {
             let obj = {
                 ladderFormatId: 0,
@@ -200,9 +200,8 @@ function setLadderDivisions(ladderFormats, defaultDivisions)
         }
         for(let item in ladderFormatData){
             let itemDivisions = ladderFormatData[item].divisions;
-            let schemeName =  ladderFormatData[item].schemeName;
-            let remainingFormatDiv =  ladderFormatData.
-                    filter(x=>x.schemeName!= schemeName);
+            let schemeName = ladderFormatData[item].schemeName;
+            let remainingFormatDiv = ladderFormatData.filter(x=>x.schemeName!= schemeName);
             for(let remDiv in remainingFormatDiv)
             {
                 let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;

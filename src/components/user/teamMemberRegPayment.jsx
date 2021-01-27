@@ -297,7 +297,7 @@ const CheckoutForm = (props) => {
                                                                 <div id="bank-name"></div>
                                                                 <div id="error-message" className=" pl-4 card-errors" role="alert">{bankError}</div>
                                                                 <div class="col pt-3" id="mandate-acceptance">
-                                                                    {AppConstants.stripeMandate1} <a> </a>
+                                                                    {AppConstants.stripeMandate1}
                                                                     <a href="https://stripe.com/au-becs-dd-service-agreement/legal"
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"

@@ -517,7 +517,7 @@ class CompetitionProposedTeamGrading extends Component {
         let isError = false;
 
         if (buttonClicked === "submit") {
-            finalTeamGradingData.map((item) => {
+            finalTeamGradingData.forEach((item) => {
                 if ((item.finalGradeId == 0 || item.finalGradeId == null || item.finalGradeId == "" ||
                     item.finalGradeId == undefined) && item.actionType != "IsActive") {
                     isError = true
@@ -526,12 +526,11 @@ class CompetitionProposedTeamGrading extends Component {
         }
 
         if (!isError) {
-            finalTeamGradingData.map((item) => {
+            finalTeamGradingData.forEach((item) => {
                 let obj = finalGrades.find(x => x.gradeRefId == item.finalGradeId);
                 item['finalGradeRefId'] = obj != undefined ? obj.id : null
                 item["gradeRefId"] = obj != undefined ? obj.gradeRefId : null
                 delete item['finalGradeId']
-                return item
             })
             let payload = {
                 yearRefId: this.state.yearRefId,

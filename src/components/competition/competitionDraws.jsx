@@ -61,7 +61,7 @@ import ValidationConstants from '../../themes/validationConstant';
 import moment from 'moment';
 import LegendComponent from '../../customComponents/legendComponent';
 import AllLegendComponent from '../../customComponents/allCompetitionLegendComponent'
-import { isArrayNotEmpty } from '../../util/helpers';
+// import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
 
