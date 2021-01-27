@@ -98,7 +98,7 @@ class LiveScoreLadderAdjustment extends Component {
     setInitalFiledValue() {
         const { ladderData } = this.props.liveScoreLadderState
         let data = isArrayNotEmpty(ladderData) ? ladderData : [];
-        data.map((item, index) => {
+        data.forEach((item, index) => {
             let teamId = `teamId${index}`
             let points = `points${index}`
             let adjustmentReason = `adjustmentReason${index}`

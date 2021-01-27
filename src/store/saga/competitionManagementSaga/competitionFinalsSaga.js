@@ -49,7 +49,7 @@ export function* saveCompetitionFinalsSaga(action) {
                 result: result.result.data,
                 status: result.status
             });
-        }else if(result.status == 4){
+        }else if(result.status === 4){
             yield put({
                 type: ApiConstants.API_SAVE_COMPETITION_FINALS_SUCCESS,
                 result: result.result.data.message,

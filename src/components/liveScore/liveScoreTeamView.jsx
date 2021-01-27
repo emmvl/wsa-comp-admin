@@ -222,7 +222,11 @@ class LiveScoreTeamView extends Component {
     profileImageView = () => {
         // let data = this.state.data
         let data = this.props.location ? this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null : null
-        const { teamData, managerData, managerList } = this.props.liveScoreTeamState
+        const {
+            teamData,
+            // managerData,
+            managerList
+        } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
         // const { mobileNumber, email } = managerData ? managerData : ''
 
@@ -329,7 +333,7 @@ class LiveScoreTeamView extends Component {
     }
 
     addPlayerView() {
-        const { teamData, managerData, } = this.props.liveScoreTeamState
+        // const { teamData, managerData, } = this.props.liveScoreTeamState
         // const { name, logoUrl, id } = teamData ? teamData : ''
         // const { mobileNumber, email } = managerData ? managerData : ''
         const { userRoleId } = this.state

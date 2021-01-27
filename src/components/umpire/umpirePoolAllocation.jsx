@@ -69,7 +69,6 @@ class UmpirePoolAllocation extends Component {
             allCompetition: null
         }
         // this_obj = this;
-        this.onDragEnd = this.onDragEnd.bind(this);
     }
 
     componentDidMount() {
@@ -182,43 +181,43 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
-    onDragEnd = result => {
-        const { source, destination } = result;
-        let assignedPlayerData = this.state.assignedData;
-        let unassignedPlayerData = this.state.unassignedData;
+    // onDragEnd = result => {
+    //     const { source, destination } = result;
+    //     let assignedPlayerData = this.state.assignedData;
+    //     let unassignedPlayerData = this.state.unassignedData;
 
-        let playerId = null
-        // dropped outside the list
-        if (!destination) {
-            return;
-        }
+    //     // let playerId = null
+    //     // dropped outside the list
+    //     if (!destination) {
+    //         return;
+    //     }
 
-        if (source.droppableId !== destination.droppableId) {
-            let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
-            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
+    //     if (source.droppableId !== destination.droppableId) {
+    //         let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+    //         let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
 
-            if (teamId !== null) {
-                if (sourceTeamID == null) {
-                    playerId = unassignedPlayerData[source.index].playerId;
-                } else {
-                    for (let i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                            playerId = assignedPlayerData[i].players[source.index].playerId;
-                        }
-                    }
-                }
-            } else {
-                for (let i in assignedPlayerData) {
-                    if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        playerId = assignedPlayerData[i].players[source.index].playerId;
-                    }
-                }
-            }
-            // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
-        } else {
-            // this.props.onSameTeamDragAction(source, destination)
-        }
-    };
+    //         if (teamId !== null) {
+    //             if (sourceTeamID == null) {
+    //                 playerId = unassignedPlayerData[source.index].playerId;
+    //             } else {
+    //                 for (let i in assignedPlayerData) {
+    //                     if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+    //                         playerId = assignedPlayerData[i].players[source.index].playerId;
+    //                     }
+    //                 }
+    //             }
+    //         } else {
+    //             for (let i in assignedPlayerData) {
+    //                 if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+    //                     playerId = assignedPlayerData[i].players[source.index].playerId;
+    //                 }
+    //             }
+    //         }
+    //         // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
+    //     } else {
+    //         // this.props.onSameTeamDragAction(source, destination)
+    //     }
+    // };
 
     onClickComment = (player, teamID) => {
         this.setState({

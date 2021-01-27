@@ -15,7 +15,8 @@ const initialState = {
     yearRefId: null,
     actionBoxList: null,
     actionBoxPage: 1,
-    actionBoxTotalCount: 1
+    actionBoxTotalCount: 1,
+    pageSize: 10,
 };
 
 
@@ -43,7 +44,7 @@ function homeReducer(state = initialState, action) {
                 state.liveScoreCompetitionCount = null
                 state.registrationCompetitionCount = null
             }
-            if (action.key == 'yearChange') {
+            if (action.key === 'yearChange') {
                 state.userCount = ""
                 state.registrationCount = ""
                 state.liveScoreCompetitionCount = ""
@@ -75,6 +76,18 @@ function homeReducer(state = initialState, action) {
                 ...state,
                 yearRefId: action.year
             }
+        
+        case ApiConstants.SET_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize
+            }
+
+        case ApiConstants.SET_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                actionBoxPage: action.pageNum
+            }
 
         case ApiConstants.API_GET_ACTION_BOX_LOAD:
             return { ...state, onActionBoxLoad: true, error: null }
@@ -85,7 +98,7 @@ function homeReducer(state = initialState, action) {
                 ...state,
                 onActionBoxLoad: false,
                 actionBoxList: actionData.actions!= null ? actionData.actions : [],
-                actionBoxPage: actionData.page ? actionData.page.currentPage : 1,
+                // actionBoxPage: actionData.page ? actionData.page.currentPage : 1,
                 actionBoxTotalCount: actionData.page ? actionData.page.totalCount: 1,
             }
 

@@ -45,7 +45,7 @@ function* errorSaga(error) {
 export function* competitonWithTimeSlots(action) {
     try {
         const refResult = yield call(CommonAxiosApi.getCommonTimeSlotInit)
-        if (refResult.status == 1) {
+        if (refResult.status === 1) {
             const result = yield call(CompetitionAxiosApi.getTimeSlotData, action.year, action.competitionId);
             if (result.status === 1) {
                 yield put({

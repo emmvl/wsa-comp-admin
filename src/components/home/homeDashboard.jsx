@@ -25,6 +25,8 @@ import {
     getUserCount,
     clearHomeDashboardData,
     setHomeDashboardYear,
+    setPageSize,
+    setPageNum,
     getActionBoxAction,
     updateActionBoxAction,
 } from 'store/actions/homeAction/homeAction';
@@ -348,17 +350,26 @@ class HomeDashboard extends Component {
         this.props.getUserCount(yearRefId);
     };
 
-    handleActionBoxList = (page) => {
+    handleActionBoxList = (pageNum) => {
+        this.refreshActionBoxList(pageNum);
+    };
+
+    handleShowSizeChange = async (pageNum, pageSize) => {
+        await this.props.setPageSize(pageSize);
+        this.refreshActionBoxList(1);
+    }
+
+    refreshActionBoxList = async (pageNum) => {
+        await this.props.setPageNum(pageNum);
         const payload = {
             organisationId: this.state.organisationId,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0),
+                limit: this.props.homeDashboardState.pageSize,
+                offset: (pageNum ? (this.props.homeDashboardState.pageSize * (pageNum - 1)) : 0),
             },
         };
-
         this.props.getActionBoxAction(payload);
-    };
+    }
 
     showConfirm = async (e) => {
         await this.setState({
@@ -398,7 +409,8 @@ class HomeDashboard extends Component {
 
     // actionboxView for table
     actionboxView = () => {
-        const { actionBoxList, actionBoxPage, actionBoxTotalCount } = this.props.homeDashboardState;
+        const { actionBoxList, actionBoxPage, actionBoxTotalCount, pageSize } = this.props.homeDashboardState;
+
         return (
             <div>
                 {this.actionboxHeadingView()}
@@ -418,9 +430,12 @@ class HomeDashboard extends Component {
                         <Pagination
                             className="antd-pagination action-box-pagination"
                             current={actionBoxPage}
-                            showSizeChanger={false}
+                            defaultCurrent={actionBoxPage}
+                            defaultPageSize={pageSize}
+                            showSizeChanger
                             total={actionBoxTotalCount}
                             onChange={this.handleActionBoxList}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -505,7 +520,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => history.push('/userTextualDashboard')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -534,7 +551,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => (userRoleId == 2) && history.push('/registration')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -566,7 +585,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => userRoleId == 2 && history.push('/competitionDashboard')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -597,7 +618,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => userRoleId == 2 && history.push('/matchDayCompetitions')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -713,6 +736,8 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         clearHomeDashboardData,
         setHomeDashboardYear,
+        setPageSize,
+        setPageNum,
         getActionBoxAction,
         updateActionBoxAction,
     }, dispatch);

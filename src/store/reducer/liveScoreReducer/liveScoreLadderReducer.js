@@ -27,7 +27,7 @@ function createLadderRank(array) {
 
 function createLadderAdjustments(array){
     let adjArr = [];
-    array.map((x, index)=>{
+    array.forEach(x => {
         if(isArrayNotEmpty(x.adjustments)){
             adjArr = [...adjArr, ...x.adjustments];
         }

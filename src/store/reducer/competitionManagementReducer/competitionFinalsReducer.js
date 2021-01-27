@@ -65,17 +65,17 @@ function competitionFinalsReducer(state = initialState, action) {
             let getKey = action.key;
             let index = action.index;
             let subIndex = action.subIndex;
-            if(action.key.venueList == "venueList")
+            if(action.key.venueList === "venueList")
             {
                 state.competitionVenuesList = []
-                updatedValue.map((id)=>{
+                updatedValue.forEach((id)=>{
                     let obj={
                         venueId:id,
                         competitionVenueId:0,
                     }
                     state.competitionVenuesList.push(obj)
                 })
-            }else if(subIndex != undefined){
+            }else if(subIndex !== undefined){
                 oldData[index].whoPlaysWho[subIndex][getKey] = updatedValue;
             }
             else{

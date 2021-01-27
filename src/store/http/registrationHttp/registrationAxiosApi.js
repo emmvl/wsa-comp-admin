@@ -300,7 +300,7 @@ const AxiosApi = {
     async saveCompetitionFeesDivisionAction(payload, competitionId, affiliateOrgId) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        const sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
+        const sourceModule = payload.sourceModule !== undefined ? payload.sourceModule : "REG";
         const url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
@@ -614,7 +614,7 @@ const Method = {
                             status: 1,
                             result,
                         });
-                    } if (result.status == 212) {
+                    } if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result,
@@ -633,9 +633,9 @@ const Method = {
                 .catch((err) => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 const unauthorizedStatus = err.response.status;
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout();
                                     message.error(ValidationConstants.messageStatus401);
                                 }
@@ -678,7 +678,7 @@ const Method = {
                             status: 1,
                             result,
                         });
-                    } if (result.status == 212) {
+                    } if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result,
@@ -697,9 +697,9 @@ const Method = {
                 .catch((err) => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 const unauthorizedStatus = err.response.status;
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout();
                                     message.error(ValidationConstants.messageStatus401);
                                 }
@@ -740,7 +740,7 @@ const Method = {
                             status: 1,
                             result,
                         });
-                    } if (result.status == 212) {
+                    } if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result,
@@ -759,9 +759,9 @@ const Method = {
                 .catch((err) => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 const unauthorizedStatus = err.response.status;
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout();
                                     message.error(ValidationConstants.messageStatus401);
                                 }

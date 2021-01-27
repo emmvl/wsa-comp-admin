@@ -42,9 +42,9 @@ function competitionFormatReducer(state = initialState, action) {
             let data = action.result;
             let isAllDivisionChecked = false
             getCompetitionFormatDivisions(data);
-            if (data.competionFormatDivisions.length == 1 || !isArrayNotEmpty(data.competionFormatDivisions)) {
+            if (data.competionFormatDivisions.length === 1 || !isArrayNotEmpty(data.competionFormatDivisions)) {
                 if (isArrayNotEmpty(data.competionFormatDivisions)) {
-                    if (data.competionFormatDivisions[0].selectedDivisions.length == 0)
+                    if (data.competionFormatDivisions[0].selectedDivisions.length === 0)
                         isAllDivisionChecked = true;
                 }
                 else {
@@ -78,16 +78,16 @@ function competitionFormatReducer(state = initialState, action) {
                 addCompetitionFormatDivision(updatedValue);
                 getCompetitionFormatDivisions(updatedValue);
             }
-            else if (getKey == "allDivision") {
+            else if (getKey === "allDivision") {
                 state.isAllDivisionChecked = updatedValue;
             }
-            else if (getKey == "nonPlayingDates") {
+            else if (getKey === "nonPlayingDates") {
                 oldData[getKey].push(updatedValue)
             }
-            else if (getKey == "nonPlayingDataRemove") {
+            else if (getKey === "nonPlayingDataRemove") {
                 oldData.nonPlayingDates.splice(updatedValue, 1);
             }
-            else if (getKey == "nonPlayingUpdateDates") {
+            else if (getKey === "nonPlayingUpdateDates") {
                 let index = updatedValue.index;
                 let key = updatedValue.key;
                 oldData.nonPlayingDates[index][key] = updatedValue.data;
@@ -177,8 +177,7 @@ function getCompetitionFormatDivisions(data) {
         for (let item in compFormatDivisions) {
             let itemDivisions = compFormatDivisions[item].divisions;
             let competitionFormatTemplateId = compFormatDivisions[item].competitionFormatTemplateId;
-            let remainingFormatDiv = compFormatDivisions.
-                filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
+            let remainingFormatDiv = compFormatDivisions.filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
             for (let remDiv in remainingFormatDiv) {
                 let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;

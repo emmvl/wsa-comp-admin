@@ -32,7 +32,7 @@ function LiveScoreVenueChange(state = initialState, action) {
             if (action.key === "venueId") {
                 state.venueChangeData[action.key] = action.data
                 state.venueChangeData['courtId'] = []
-                let index = state.venueData.findIndex(x => x.venueId == action.data)
+                let index = state.venueData.findIndex(x => x.venueId === action.data)
                 if (index > -1) {
                     let courts = state.venueData[index].venueCourts
                     state.courtData = courts
@@ -44,7 +44,7 @@ function LiveScoreVenueChange(state = initialState, action) {
                 state.venueChangeData[action.key] = action.data
                 state.venueChangeData['changeToCourtId'] = []
 
-                let index = state.venueData.findIndex(x => x.venueId == action.data)
+                let index = state.venueData.findIndex(x => x.venueId === action.data)
                 if (index > -1) {
                     let courts = state.venueData[index].venueCourts
                     state.courtDataForChange = courts
@@ -112,20 +112,12 @@ function LiveScoreVenueChange(state = initialState, action) {
         }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_FAIL:
-
             return {
                 ...state,
                 onLoad: false
             }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_ERROR:
-
-            return {
-                ...state,
-                onLoad: false
-            }
-
-
             return {
                 ...state,
                 onLoad: false

@@ -47,7 +47,7 @@ const initialState = {
 //     let obj = ''
 //     for (let i in teamArr) {
 //         for (let j in teamSelectId) {
-//             if (teamSelectId[j] == teamArr[i].id) {
+//             if (teamSelectId[j] === teamArr[i].id) {
 //                 obj = {
 //                     name: teamArr[i].name,
 //                     id: teamArr[i].id
@@ -65,7 +65,7 @@ function getPlayerObj(playerSelectesId, playerArray) {
     let obj = ''
     for (let i in playerArray) {
         for (let j in playerSelectesId) {
-            if (playerSelectesId[j] == playerArray[i].id) {
+            if (playerSelectesId[j] === playerArray[i].id) {
                 obj = {
                     'name': playerArray[i].firstName + " " + playerArray[i].lastName,
                     'id': playerArray[i].id
@@ -108,7 +108,7 @@ function getMediaUrl(mediaArray, mediaType) {
     for (let i in mediaArray) {
         var str = mediaArray[i].mediaType;
         var res = str.split("/", 1);
-        if (mediaType == res[0]) {
+        if (mediaType === res[0]) {
             url = mediaArray[i].mediaUrl
         }
     }
@@ -119,7 +119,7 @@ function deleteSelectedMedia(mediaArray, mediaType) {
     for (let i in mediaArray) {
         let str = mediaArray[i].mediaType;
         let res = str.split("/", 1);
-        if (mediaType == res[0]) {
+        if (mediaType === res[0]) {
             mediaArray.splice(i, 1)
             break;
         }
@@ -240,7 +240,7 @@ function liveScoreIncidentState(state = initialState, action) {
             } else {
                 state.incidentData[action.key] = action.data
             }
-
+            break;
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
             return { ...state, onLoad: true };
 

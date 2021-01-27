@@ -57,8 +57,8 @@ function unassignedListDataFormation(data, ) {
 }
 
 function updatedAssignData(assignArr, source, destination) {
-    let match_Index = assignArr.findIndex(x => x.teamId == null)
-    if (match_Index == -1) {
+    let match_Index = assignArr.findIndex(x => x.teamId === null)
+    if (match_Index === -1) {
         let unassignedPartPlayerGradingList = {
             teamId: null,
             teamName: "Unassigned",
@@ -67,14 +67,14 @@ function updatedAssignData(assignArr, source, destination) {
         }
         assignArr.push(unassignedPartPlayerGradingList)
     }
-    let sourceTeam = source.droppableId == 0 ? null : JSON.parse(source.droppableId)
-    let destinationTeam = destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+    let sourceTeam = source.droppableId === 0 ? null : JSON.parse(source.droppableId)
+    let destinationTeam = destination.droppableId === 0 ? null : JSON.parse(destination.droppableId)
     let swapPlayer
-    let matchSourceIndex = assignArr.findIndex(x => x.teamId == sourceTeam)
+    let matchSourceIndex = assignArr.findIndex(x => x.teamId === sourceTeam)
     swapPlayer = assignArr[matchSourceIndex].players[source.index]
     assignArr[matchSourceIndex].playerCount = parseInt(assignArr[matchSourceIndex].playerCount) - 1
     assignArr[matchSourceIndex].players.splice(source.index, 1)
-    let matchDestinationIndex = assignArr.findIndex(x => x.teamId == destinationTeam)
+    let matchDestinationIndex = assignArr.findIndex(x => x.teamId === destinationTeam)
     assignArr[matchDestinationIndex].playerCount = parseInt(assignArr[matchDestinationIndex].playerCount) + 1
     assignArr[matchDestinationIndex].players.splice(destination.index, 0, swapPlayer)
     let updatedplayerAssignData = unassignedListDataFormation(JSON.parse(JSON.stringify(assignArr)))
@@ -116,10 +116,9 @@ function getPositionColor(position) {
     if (index !== -1) {
         color = teamColorTempArray[index].colorCode;
     } else {
+        const checkColorMatching = (color) => (x) => x.colorCode === color;
         for (var i in colorsArray) {
-            let colorIndex = teamColorTempArray.findIndex(
-                (x) => x.colorCode === colorsArray[i]
-            );
+            let colorIndex = teamColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
             if (colorIndex === -1) {
                 positionColorArray.push({ position: position, colorCode: colorsArray[i] });
                 color = colorsArray[i];
@@ -180,7 +179,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_SUCCESS:
             let partPlayerSummaryListData = isArrayNotEmpty(action.result) ? action.result : []
             let finalPartPlayerSummaryListData = []
-            partPlayerSummaryListData.map((item) => {
+            partPlayerSummaryListData.forEach((item) => {
                 if (item.minimumPlayers) {
                     item["noOfTeams"] = Math.floor(item["playerCount"] / item.minimumPlayers)
                     item["extraPlayers"] = item["playerCount"] % item.minimumPlayers
@@ -200,7 +199,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
         //////competition part player grade calculate player grading summary data on Change table input
         case ApiConstants.ONCHANGE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_DATA:
             let onChangePartPlayerData = JSON.parse(JSON.stringify(state.getCompPartPlayerGradingSummaryData))
-            if (action.key == "minimumPlayers") {
+            if (action.key === "minimumPlayers") {
                 onChangePartPlayerData[action.index]["minimumPlayers"] = action.value
                 onChangePartPlayerData[action.index]["noOfTeams"] = action.value.length !== 0 ? (Math.floor(onChangePartPlayerData[action.index]["playerCount"] / action.value)) : 0
                 onChangePartPlayerData[action.index]["extraPlayers"] = action.value.length !== 0 ? (onChangePartPlayerData[action.index]["playerCount"] % action.value) : 0
@@ -326,8 +325,8 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         case ApiConstants.API_PLAYER_GRADING_COMMENT_SUCCESS:
-            if (action.teamIndex == null) {
-                let matchIndex = state.unassignedPartPlayerGradingListData.players.findIndex(x => x.playerId == action.playerId)
+            if (action.teamIndex === null) {
+                let matchIndex = state.unassignedPartPlayerGradingListData.players.findIndex(x => x.playerId === action.playerId)
                 if (matchIndex > -1) {
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].comments = action.comment
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedBy = action.result.message.commentsCreatedBy
@@ -336,7 +335,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 }
             }
             else {
-                let assignMatchIndex = state.assignedPartPlayerGradingListData[action.teamIndex].players.findIndex(x => x.playerId == action.playerId)
+                let assignMatchIndex = state.assignedPartPlayerGradingListData[action.teamIndex].players.findIndex(x => x.playerId === action.playerId)
                 if (assignMatchIndex > -1) {
                     state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].comments = action.comment
                     state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].isCommentsAvailable = 1
@@ -351,7 +350,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return { ...state, onLoad: true, error: null }
 
         case ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_SUCCESS:
-            let matchindexData = state.getCompPartPlayerGradingSummaryData.findIndex(x => x.competitionMembershipProductDivisionId == action.divisionId)
+            let matchindexData = state.getCompPartPlayerGradingSummaryData.findIndex(x => x.competitionMembershipProductDivisionId === action.divisionId)
             if (matchindexData > -1) {
                 state.getCompPartPlayerGradingSummaryData[matchindexData].comments = action.comment
                 state.getCompPartPlayerGradingSummaryData[matchindexData].commentsCreatedBy = action.result.message.commentsCreatedBy
@@ -389,7 +388,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             if (action.key === "player") {
                 state.playerImportData = [];
             }
-            else if (action.key == "team") {
+            else if (action.key === "team") {
                 state.teamsImportData = [];
             }
             return {

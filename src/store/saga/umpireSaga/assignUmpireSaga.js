@@ -21,7 +21,7 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    if (error.status == 400) {
+    if (error.status === 400) {
 
         message.config({
             duration: 1.5,

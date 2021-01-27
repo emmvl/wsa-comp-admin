@@ -29,7 +29,7 @@ function checkGradesValue(gradeId, gradingData) {
         result: null
     }
     for (let j in gradingData) {
-        if (gradingData[j].sortOrder == gradeId) {
+        if (gradingData[j].sortOrder === gradeId) {
 
             object = {
                 status: true,
@@ -120,15 +120,15 @@ function compare(a, b) {
 function sortOrderArray(ownTeamGradingSummaryData) {
     let sortOrderArray = []
     if (ownTeamGradingSummaryData.length > 0) {
-        ownTeamGradingSummaryData.map((item) => {
+        ownTeamGradingSummaryData.forEach((item) => {
             let grades = item.grades
-            grades.map((gradeItem) => {
-                let sortOrder = (gradeItem.sortOrder == null) ? null : parseInt(gradeItem.sortOrder);
+            grades.forEach((gradeItem) => {
+                let sortOrder = (gradeItem.sortOrder === null) ? null : parseInt(gradeItem.sortOrder);
                 sortOrderArray.indexOf(sortOrder) === -1 && sortOrderArray.push(sortOrder)
             })
         })
         sortOrderArray.sort(sortOrder(true))
-        if (sortOrderArray[0] == -1) {
+        if (sortOrderArray[0] === -1) {
             sortOrderArray.shift()
             sortOrderArray.push(-1);
         }
@@ -200,7 +200,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             let teamGradingData = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [];
             let registrationInvitees = isArrayNotEmpty(finalTeamGradingData.registrationInvitees) ? finalTeamGradingData.registrationInvitees : [];
             if (isArrayNotEmpty(teamGradingData)) {
-                teamGradingData.map((item, index) => {
+                teamGradingData.forEach((item) => {
                     item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1 : 0;
                 });
             }
@@ -220,24 +220,24 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_OWN_PROPOSED_TEAM_GRADING_DATA:
             let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData));
             let finalGrades = state.compFinalTeamGradingFinalGradesData;
-            let obj = finalGrades.find(x => x.gradeRefId == action.value);
+            let obj = finalGrades.find(x => x.gradeRefId === action.value);
             if (action.key === "sortOrder") {
-                //finalGradingOnChangeData[action.index][action.key] = action.value == 1 ? action.value - 1 : action.value + 1;
+                //finalGradingOnChangeData[action.index][action.key] = action.value === 1 ? action.value - 1 : action.value + 1;
                 let oldval = finalGradingOnChangeData[action.index][action.key];
                 finalGradingOnChangeData[action.index][action.key] = (oldval > action.value) ? action.value - 1 : action.value + 1;
                 finalGradingOnChangeData.sort(compare);
-                finalGradingOnChangeData.map((x, index) => {
+                finalGradingOnChangeData.forEach((x, index) => {
                     x.sortOrder = index + 1;
                 })
             }
             else if (action.key === "actionType") {
-                if (action.value == "IsActive") {
+                if (action.value === "IsActive") {
                     finalGradingOnChangeData[action.index][action.key] = action.value;
                     finalGradingOnChangeData[action.index]["isActive"] = 0;
                     finalGradingOnChangeData[action.index]["delIndicationMsg"] = "Marked as deleted";
                     finalGradingOnChangeData[action.index]["sortOrder"] = finalGradingOnChangeData.length + 1;
                     finalGradingOnChangeData.sort(compare);
-                    finalGradingOnChangeData.map((x, index) => {
+                    finalGradingOnChangeData.forEach((x, index) => {
                         x.sortOrder = index + 1;
                     })
                 }
@@ -249,7 +249,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
             else {
                 finalGradingOnChangeData[action.index][action.key] = action.value
-                if (action.key == "finalGradeId") {
+                if (action.key === "finalGradeId") {
                     finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
                 }
             }
@@ -276,14 +276,14 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
         //////// /clear competition  team grading reducer data
         case ApiConstants.OWN_COMP_TEAM_GRADING_CLEARING_PARTICULAR_REDUCER_DATA:
-            if (action.key == "finalTeamGrading") {
+            if (action.key === "finalTeamGrading") {
                 state.getCompOwnProposedTeamGradingData = []
                 state.compFinalTeamGradingFinalGradesData = []
             }
-            if (action.key == "getPartProposedTeamGradingData") {
+            if (action.key === "getPartProposedTeamGradingData") {
                 state.getPartProposedTeamGradingData = []
             }
-            if (action.key == "ownTeamGradingSummaryGetData") {
+            if (action.key === "ownTeamGradingSummaryGetData") {
                 state.ownTeamGradingSummaryGetData = []
                 state.finalsortOrderArray = []
             }
@@ -315,7 +315,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             if (action.key === "proposedGradeRefId") {
                 partProposedTeamGradingOnchangeData[action.index]["proposedGradeRefId"] = action.value
             }
-            if (action.key == "teamName") {
+            if (action.key === "teamName") {
                 partProposedTeamGradingOnchangeData[action.index]["teamName"] = action.value
             }
             state.getPartProposedTeamGradingData = partProposedTeamGradingOnchangeData
@@ -388,9 +388,9 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         ////////competition own team grading summary listing  data on Change table
         case ApiConstants.ONCHANGE_COMPETITION_TEAM_GRADING_SUMMARY_DATA:
             let ownTeamGradingSummaryGetTableData = JSON.parse(JSON.stringify(state.ownTeamGradingSummaryGetData))
-            if (action.key == "ownTeamGradingSummaryGetData") {
-                ownTeamGradingSummaryGetTableData.length > 0 && ownTeamGradingSummaryGetTableData.map((item, index) => {
-                    let gradeIndex = item.grades.findIndex(x => x.competitionDivisionGradeId == action.index)
+            if (action.key === "ownTeamGradingSummaryGetData") {
+                ownTeamGradingSummaryGetTableData.length > 0 && ownTeamGradingSummaryGetTableData.forEach((item) => {
+                    let gradeIndex = item.grades.findIndex(x => x.competitionDivisionGradeId === action.index)
                     if (gradeIndex >= 0) {
                         let gradesParameter = `grades${gradeIndex}`
                         item[gradesParameter].gradeName = action.value
@@ -423,7 +423,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             return { ...state, onLoad: true, error: null }
 
         case ApiConstants.API_TEAM_GRADING_COMMENT_SUCCESS:
-            let gradingIndex = state.getCompOwnProposedTeamGradingData.findIndex(x => x.teamId == action.teamId)
+            let gradingIndex = state.getCompOwnProposedTeamGradingData.findIndex(x => x.teamId === action.teamId)
             if (gradingIndex > -1) {
                 state.getCompOwnProposedTeamGradingData[gradingIndex].responseComments = action.comment
                 state.getCompOwnProposedTeamGradingData[gradingIndex].responseCommentsCreatedBy = action.result.message.responseCommentsCreatedBy
@@ -439,7 +439,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             return { ...state, onLoad: true }
 
         case ApiConstants.API_PART_TEAM_GRADING_COMMENT_SUCCESS:
-            let partTeamIndex = state.getPartProposedTeamGradingData.findIndex(x => x.teamId == action.teamId)
+            let partTeamIndex = state.getPartProposedTeamGradingData.findIndex(x => x.teamId === action.teamId)
             if (partTeamIndex > -1) {
                 state.getPartProposedTeamGradingData[partTeamIndex].comments = action.comment
                 state.getPartProposedTeamGradingData[partTeamIndex].commentsCreatedBy = action.result.message.commentsCreatedBy

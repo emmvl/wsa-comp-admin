@@ -365,10 +365,10 @@ class LiveScoreMatchDetails extends Component {
 
         if (player) {
             attendance = Array(4).fill(null).map((_, index) => ({
-                teamId: player ?.teamId,
+                teamId: player?.teamId,
                 matchId: this.state.matchId,
-                playerId: player ?.playerId,
-                positionId: player ?.lineup ?.positionId,
+                playerId: player?.playerId,
+                positionId: player?.lineup?.positionId,
                 isBorrowed: borrowed,
                 isPlaying: true,
                 verifiedBy: null,
@@ -452,12 +452,12 @@ class LiveScoreMatchDetails extends Component {
             ? trackingList.find((data) => data.playerId === playerId && data.period === period)
             : null;
 
-        return trackingData ?.duration || 0;
+        return trackingData?.duration || 0;
     };
 
     exportAttendance = (team, teamId) => {
         const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
-        const filteredAttendance = teamAttendance.filter((att) => !!att ?.positionId);
+        const filteredAttendance = teamAttendance.filter((att) => !!att?.positionId);
 
         if (this.state.minutesTrackingData.length > 0) {
             this.props.liveScorePlayerMinuteRecordAction(this.state.minutesTrackingData);
@@ -2551,7 +2551,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                    // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
+                                    // onClick={() => this.exportAttendance('team1', match[0]?.team1?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2570,7 +2570,7 @@ class LiveScoreMatchDetails extends Component {
                         <div>
                             {this.state.teamAttendance && (
                                 <div className="col-12">
-                                    {this.teamPlayersStatus(team1PlayersData, 'team1', match[0] ?.team1 ?.id)}
+                                    {this.teamPlayersStatus(team1PlayersData, 'team1', match[0]?.team1?.id)}
                                 </div>
                             )}
                             {!this.state.teamAttendance && (
@@ -2614,7 +2614,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                    // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
+                                    // onClick={() => this.exportAttendance('team2', match[0]?.team2?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2632,7 +2632,7 @@ class LiveScoreMatchDetails extends Component {
                         <div>
                             {this.state.teamAttendance ? (
                                 <div className="col-12">
-                                    {this.teamPlayersStatus(team2PlayersData, 'team2', match[0] ?.team2 ?.id)}
+                                    {this.teamPlayersStatus(team2PlayersData, 'team2', match[0]?.team2?.id)}
                                 </div>
                             ) : (
                                     <div className="col-12">
@@ -2648,7 +2648,7 @@ class LiveScoreMatchDetails extends Component {
                                 )}
                         </div>
                     </div>
-                    {this.footerView('team2', match[0] ?.team2 ?.id)}
+                    {this.footerView('team2', match[0]?.team2?.id)}
                 </div>
             </div>
         )
@@ -2732,11 +2732,11 @@ class LiveScoreMatchDetails extends Component {
                 attendance: null,
                 attended: false,
                 lineup: null,
-                name: `${borrowedPlayer ?.firstName || ''} ${borrowedPlayer ?.lastName || ''}`,
-                photoUrl: borrowedPlayer ?.profilePicture,
-                playerId: borrowedPlayer ?.playerId,
-                team: borrowedPlayer ?.team ?.name,
-                teamId: borrowedPlayer ?.team ?.id,
+                name: `${borrowedPlayer?.firstName || ''} ${borrowedPlayer?.lastName || ''}`,
+                photoUrl: borrowedPlayer?.profilePicture,
+                playerId: borrowedPlayer?.playerId,
+                team: borrowedPlayer?.team?.name,
+                teamId: borrowedPlayer?.team?.id,
             };
 
             if (this.state.addPlayerModal === 'team1') {

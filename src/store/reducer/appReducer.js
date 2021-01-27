@@ -423,7 +423,7 @@ function appState(state = initialState, action) {
       competitionResult.unshift(competitionobject)
 
       let arr = [];
-      if (!yearResult.find(x => x.id == -1)) {
+      if (!yearResult.find(x => x.id === -1)) {
         arr.push(yearobject);
       }
 
@@ -610,7 +610,7 @@ function appState(state = initialState, action) {
     //update status ref id
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
       let publishCompetitionid = action.competitionId
-      let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId == publishCompetitionid)
+      let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId === publishCompetitionid)
       state.own_CompetitionArr[publishedCompIndex].statusRefId = action.result.statusRefId
       return {
         ...state,
