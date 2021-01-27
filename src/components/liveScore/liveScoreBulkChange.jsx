@@ -133,7 +133,6 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
-                                defaultValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
                                 minuteStep={15}
@@ -143,7 +142,6 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
-                                defaultValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
                                 minuteStep={15}
@@ -303,7 +301,6 @@ class LiveScoreBulkChange extends Component {
                     <div className="col-sm" style={{ marginTop: 5 }}>
                         <TimePicker
                             className="comp-venue-time-timepicker w-100"
-                            defaultValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "optionalTime")}
                             onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'optionalTime')}
@@ -994,7 +991,7 @@ class LiveScoreBulkChange extends Component {
                         <Select
                             className="w-100"
                             style={{ paddingRight: 1, minWidth: 182 }}
-                            onChange={selectReason => this.setState({ selectReason })}
+                            // onChange={selectReason => this.setState({ selectReason })}
                             placeholder={AppConstants.selectReason}
                             onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}
                             // value={abandonData.resultType ? abandonData.resultType : []}

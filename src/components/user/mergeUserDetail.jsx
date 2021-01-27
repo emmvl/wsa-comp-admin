@@ -226,11 +226,7 @@ const MatchesDetailView = () => {
         checkFullSelection()
     })
 
-    const {
-        UserState: {
-            usersToBeMerged: usersToBeMerged
-        },
-    } = useSelector((state) => state);
+    const { usersToBeMerged } = useSelector(state => state.UserState);
     const master = usersToBeMerged[0];
     const second = usersToBeMerged[1];
     

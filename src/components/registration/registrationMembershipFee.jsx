@@ -945,7 +945,7 @@ class RegistrationMembershipFee extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         //onChange={e => this.membershipFeeApplyRadio(e.target.value)}
-                        defaultValue={data ?.paymentOptionRefId}
+                        defaultValue={data?.paymentOptionRefId}
                     //disabled={this.state.membershipIsUsed}
                     >
                         {this.props.commonReducerState.membershipPaymentOptions.map((item) => (
@@ -1567,7 +1567,7 @@ class RegistrationMembershipFee extends Component {
     };
 
     tabCallBack = key => {
-        let productId = this.props.registrationState.membershipProductId
+        // let productId = this.props.registrationState.membershipProductId
         // if (productId !== null && productId.length > 0) {
         this.setState({ membershipTabKey: key });
         let data = this.props.registrationState.membershipProductFeesTableData

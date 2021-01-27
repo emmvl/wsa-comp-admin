@@ -175,7 +175,7 @@ const columns = [
         key: 'selectedValue',
         render: (selectedValue, record, index) => {
             return (
-                (record.user && record.user.stripeAccountId || record.paymentStatus === 'paid') ? (
+                ((record.user && record.user.stripeAccountId) || record.paymentStatus === 'paid') ? (
                     <Checkbox
                         className="single-checkbox"
                         checked={selectedValue}

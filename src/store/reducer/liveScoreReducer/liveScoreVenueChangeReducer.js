@@ -112,20 +112,12 @@ function LiveScoreVenueChange(state = initialState, action) {
         }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_FAIL:
-
             return {
                 ...state,
                 onLoad: false
             }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_ERROR:
-
-            return {
-                ...state,
-                onLoad: false
-            }
-
-
             return {
                 ...state,
                 onLoad: false

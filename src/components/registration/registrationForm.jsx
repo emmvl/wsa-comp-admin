@@ -50,7 +50,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const Mailto = ({ email, subject, body, children }) => {
     return (
-        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank">{children}</a>
+        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank" rel="noopener noreferrer">{children}</a>
     );
 };
 
@@ -284,7 +284,7 @@ class RegistrationForm extends Component {
             registrationCloseDate: registrationFormData.registrationCloseDate !== '' ? moment(registrationFormData.registrationCloseDate, "YYYY-MM-DD") : null,
             email: registrationFormData.replyEmail !== '' ? registrationFormData.replyEmail : ""
         });
-        disclaimerData.map((item, index) => {
+        disclaimerData.forEach((item, index) => {
             let disclaimerText = `disclaimerText${index}`
             let disclaimerLink = `disclaimerLink${index}`
             this.formRef.current.setFieldsValue({
@@ -607,7 +607,7 @@ class RegistrationForm extends Component {
                                 name="registrationOpenDate"
                                 format="DD-MM-YYYY"
                                 showTime={false}
-                                disabledDate={this.disabledDate}
+                                // disabledDate={this.disabledDate}
                                 disabledTime={this.disabledTime}
                                 //disabled={isPublished}
                                 disabledDate={d => !d || d.isAfter(closeDate)
@@ -634,7 +634,7 @@ class RegistrationForm extends Component {
                             <DatePicker
                                 // size="large"
                                 className="w-100"
-                                disabledDate={this.disabledDate}
+                                // disabledDate={this.disabledDate}
                                 placeholder="dd-mm-yyyy"
                                 onChange={(e) => this.dateChange(e, "registrationCloseDate")}
                                 name={"registrationCloseDate"}
@@ -1075,7 +1075,7 @@ class RegistrationForm extends Component {
             }
         }
 
-        if (upcomingData.includes("2") && upcomingData.includes("3") || upcomingData.includes("3") && upcomingData.includes("4") || upcomingData.includes("2") && upcomingData.includes("4")) {
+        if ((upcomingData.includes("2") && upcomingData.includes("3")) || (upcomingData.includes("3") && upcomingData.includes("4")) || (upcomingData.includes("2") && upcomingData.includes("4"))) {
             let selectedIndex = selectedInvitees.findIndex(x => x == "4")
             if (selectedIndex > -1) {
                 let index = upcomingData.findIndex(x => x == "4")
@@ -1598,7 +1598,7 @@ class RegistrationForm extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
                                     <div>
-                                        <a className="user-reg-link" href={formDataValue.userRegistrationUrl} target='_blank'>
+                                        <a className="user-reg-link" href={formDataValue.userRegistrationUrl} target='_blank' rel="noopener noreferrer">
                                             {formDataValue.userRegistrationUrl}
                                         </a>
                                     </div>

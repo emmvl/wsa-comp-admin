@@ -245,7 +245,7 @@ class RegistrationInvoice extends Component {
             < div className="row" >
                 <div className="col-md-3 col-8 pb-0 pr-0 pl-0 " >
                     <InputWithHead
-                        heading={mOrganisationName + " - " + membershipProductName + " Membership Fees" + " - " + mTypeName}
+                        heading={mOrganisationName + " - " + membershipProductName + " Membership Fees - " + mTypeName}
                         required="pr-3 justify-content-start"
                     />
                 </div>
@@ -392,7 +392,7 @@ class RegistrationInvoice extends Component {
                             </div>
                             <div className="col-sm invoice-description" >
                                 <InputWithHead
-                                    heading={'$' + "0.00"}
+                                    heading={'$0.00'}
                                     required={"input-align-right"}
                                 />
                             </div>
@@ -529,7 +529,7 @@ class RegistrationInvoice extends Component {
                             <div className="col-sm invoice-description" >
                                 {affiliateDetail &&
                                     <InputWithHead
-                                        heading={'$' + "0.00"}
+                                        heading={'$0.00'}
                                         required={"input-align-right"}
                                     />
                                 }
@@ -657,14 +657,14 @@ class RegistrationInvoice extends Component {
                                                                 :
                                                                 mem.divisionName ?
                                                                     mem.membershipTypeName == "Player - NetSetGo" ?
-                                                                    regName + " - " + typeName + " " + "T Shirt" + " - " + mem.firstName + " " + mem.lastName
+                                                                    regName + " - " + typeName + " T Shirt - " + mem.firstName + " " + mem.lastName
                                                                     + " - " + tShirtName + ", " + item.competitionName + " - "+ mem.divisionName
                                                                     :
                                                                     regName + " - " + typeName + " " + mem.firstName + " " + mem.lastName
                                                                     + ", " + item.competitionName + " - "+ mem.divisionName
                                                                     :
                                                                     mem.membershipTypeName == "Player - NetSetGo" ?
-                                                                    regName + " - " + typeName + " " + "T Shirt" + " - " + mem.firstName + " " + mem.lastName
+                                                                    regName + " - " + typeName + " T Shirt - " + mem.firstName + " " + mem.lastName
                                                                     + " - " + tShirtName + ", " + item.competitionName
                                                                     :
                                                                     regName + " - " + typeName + " " + mem.firstName + " " + mem.lastName
@@ -875,7 +875,7 @@ class RegistrationInvoice extends Component {
         let {invoiceData} = this.props.stripeState;
         let shopProducts = invoiceData!= null ? invoiceData.shopProducts : []
         let totalAmount = 0;
-        (shopProducts || []).map((x) =>{
+        (shopProducts || []).forEach((x) =>{
             totalAmount += x.totalAmt;
         })
         return(
@@ -885,7 +885,7 @@ class RegistrationInvoice extends Component {
                     <div className="col-md-3 col-8 pb-0 pr-0 pl-0 " >
                         {item.productName &&
                             <InputWithHead
-                                heading={item.organisationName + " - " + item.productName + " - " + item.variantName +'('+ item.optionName+')' + " - Shop Product Fees"}
+                                heading={item.organisationName + " - " + item.productName + " - " + item.variantName +'('+ item.optionName+') - Shop Product Fees'}
                                 required="pr-3 justify-content-start"
                             />
                         }

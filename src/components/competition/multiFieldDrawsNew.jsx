@@ -1261,7 +1261,7 @@ class MultifieldDrawsNew extends Component {
                         </div>
                     )}
                 {filterEnable && this.venueLeftView()}
-                {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
+                {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || (filterEnable && this.competitionLeftView())}
                 {filterEnable && this.divisionLeftView()}
                 {filterEnable && this.organisationLeftView()}
             </div>

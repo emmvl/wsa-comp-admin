@@ -59,6 +59,15 @@ function updateOrderFullfilmentStatus(key,value){
     }
 }
 
+// export order summary  API
+function exportOrderStatusAction(params) {
+    const action = {
+        type: ApiConstants.API_GET_EXPORT_ORDER_STATUS_LOAD,
+        params,
+    };
+    return action;
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
@@ -66,7 +75,6 @@ export {
     clearOrderStatusReducer,
     getPurchasesListingAction,
     getReferenceOrderStatus,
-    updateOrderFullfilmentStatus
-}
-
-
+    updateOrderFullfilmentStatus,
+    exportOrderStatusAction,
+};

@@ -45,8 +45,10 @@ var fixtureColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
 var legendsArray = [];
-let colorsArrayDup = [...colorsArray];
+// let colorsArrayDup = [...colorsArray];
 let allColorsArray = colorsArray
+
+export const checkColorMatching = (color) => (x) => x.colorCode === color;
 
 function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
   let newArray = currentLegends
@@ -157,7 +159,7 @@ function structureDrawsData(data, key) {
   let sortMainCourtNumberArray = [];
   if (data) {
     if (isArrayNotEmpty(data)) {
-      data.map((object) => {
+      data.forEach((object) => {
         dateArray = setupDateObjectArray(dateArray, object)
         // if (checkDateNotInArray(dateArray, object.matchDate)) {
         //   let dateObject = checkOutOfRound(object)
@@ -312,9 +314,7 @@ function getFixtureColor(team) {
     color = teamColorTempArray[index].colorCode;
   } else {
     for (var i in colorsArray) {
-      let colorIndex = teamColorTempArray.findIndex(
-        (x) => x.colorCode === colorsArray[i]
-      );
+      let colorIndex = teamColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
       if (colorIndex === -1) {
         fixtureColorArray.push({ team: team, colorCode: colorsArray[i] });
         color = colorsArray[i];
@@ -348,9 +348,7 @@ function getCompGradeColor(gradeId, competitionUniqueKey) {
     }
     else {
       for (var i in allColorsArray) {
-        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(
-          (x) => x.colorCode === allColorsArray[i]
-        );
+        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(checkColorMatching(allColorsArray[i]));
         if (colorIndex === -1) {
           gradeCompColorArray[compIndex].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[i] });
           compGradeColor = allColorsArray[i];
@@ -362,9 +360,7 @@ function getCompGradeColor(gradeId, competitionUniqueKey) {
   } else {
     gradeCompColorArray.unshift({ competitionUniqueKey: competitionUniqueKey, newGradesArray: [] })
     for (var j in allColorsArray) {
-      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(
-        (x) => x.colorCode === allColorsArray[j]
-      );
+      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(checkColorMatching(allColorsArray[i]));
       if (colorIndex === -1) {
         gradeCompColorArray[0].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[j] })
         compGradeColor = allColorsArray[j];
@@ -385,9 +381,7 @@ function getGradeColor(gradeId) {
     color = gradeColorTempArray[index].colorCode;
   } else {
     for (var i in colorsArray) {
-      let colorIndex = gradeColorTempArray.findIndex(
-        (x) => x.colorCode === colorsArray[i]
-      );
+      let colorIndex = gradeColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
       if (colorIndex === -1) {
         gradeColorArray.push({ gradeId: gradeId, colorCode: colorsArray[i] });
         color = colorsArray[i];
@@ -829,10 +823,8 @@ function CompetitionDraws(state = initialState, action) {
       } catch (ex) {
         console.log("exception:", ex)
       }
-
-
-
-    /////get rounds in the competition draws
+      return { ...state };
+      /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD:
       return { ...state, onLoad: true, updateLoad: true, error: null, drawOrganisations: [] };
 
@@ -1097,7 +1089,7 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, divisionLoad: false };
 
     case ApiConstants.API_GET_FIXTURE_LOAD:
-      colorsArrayDup = [...colorsArray]
+      // colorsArrayDup = [...colorsArray]
       return {
         ...state,
         onLoad: true,
@@ -1124,7 +1116,7 @@ function CompetitionDraws(state = initialState, action) {
 
     /// Update draws reducer ceses
     case ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD:
-      colorsArrayDup = [...colorsArray]
+      // colorsArrayDup = [...colorsArray]
 
       return {
         ...state,

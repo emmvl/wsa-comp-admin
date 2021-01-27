@@ -53,10 +53,10 @@
         "react-scripts": "^3.4.4",
         "redux": "^4.0.5",
         "redux-saga": "^1.1.3",
+        "redux-thunk": "^2.3.0",
         "tawkto-react": "^1.0.11",
         "use-places-autocomplete": "^1.3.10",
-        "yup": "^0.27.0",
-        "redux-thunk": "^2.3.0"
+        "yup": "^0.27.0"
     },
     "devDependencies": {
         "babel-eslint": "^10.1.0",

@@ -269,7 +269,7 @@ function drawsDataStructure(drawsData) {
     let sortMainCourtNumberArray = [];
     if (drawsData) {
         if (isArrayNotEmpty(drawsData)) {
-            drawsData.map((object) => {
+            drawsData.forEach((object) => {
                 dateArray = setupDateObjectArray(dateArray, object)
                 if (setupGradesArray(gradeArray, object.competitionDivisionGradeId)) {
                     gradeArray.push(object.competitionDivisionGradeId);
@@ -311,10 +311,9 @@ function getGradeColor(gradeId) {
     if (index !== -1) {
         color = gradeColorTempArray[index].colorCode;
     } else {
+        const checkColorMatching = (color) => (x) => x.colorCode === color;
         for (var i in colorsArray) {
-            let colorIndex = gradeColorTempArray.findIndex(
-                (x) => x.colorCode === colorsArray[i]
-            );
+            let colorIndex = gradeColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
             if (colorIndex === -1) {
                 gradeColorArray.push({ gradeId: gradeId, colorCode: colorsArray[i] });
                 color = colorsArray[i];

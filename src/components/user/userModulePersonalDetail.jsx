@@ -213,7 +213,7 @@ const columns = [
                         <span>View</span>
                     </Menu.Item>
                     {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
-                        <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
+                        <Menu.Item key="2" onClick={() => history.push("/deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
@@ -1718,9 +1718,9 @@ class UserModulePersonalDetail extends Component {
     generateCompInfo = (competitions, yearRefId) => {
         const teams = [];
         const divisions = [];
-        (competitions || []).map((item, index) => {
+        (competitions || []).forEach((item) => {
             if (item.teams != null && item.teams.length > 0) {
-                (item.teams || []).map((i, ind) => {
+                (item.teams || []).forEach((i) => {
                     const obj = {
                         teamId: i.teamId,
                         teamName: i.teamName,
@@ -1730,7 +1730,7 @@ class UserModulePersonalDetail extends Component {
             }
 
             if (item.divisions != null && item.divisions.length > 0) {
-                (item.divisions || []).map((j, ind) => {
+                (item.divisions || []).forEach((j) => {
                     const div = {
                         divisionId: j.divisionId,
                         divisionName: j.divisionName,
@@ -1787,7 +1787,7 @@ class UserModulePersonalDetail extends Component {
             );
 
             if (competition.teams != null && competition.teams.length > 0) {
-                (competition.teams || []).map((i, ind) => {
+                (competition.teams || []).forEach((i) => {
                     const obj = {
                         teamId: i.teamId,
                         teamName: i.teamName,
@@ -1797,7 +1797,7 @@ class UserModulePersonalDetail extends Component {
             }
 
             if (competition.divisions != null && competition.divisions.length > 0) {
-                (competition.divisions || []).map((j, ind) => {
+                (competition.divisions || []).forEach((j) => {
                     const div = {
                         divisionId: j.divisionId,
                         divisionName: j.divisionName,

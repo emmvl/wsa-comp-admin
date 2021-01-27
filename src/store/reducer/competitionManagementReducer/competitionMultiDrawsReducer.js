@@ -44,12 +44,14 @@ const initialState = {
 };
 var gradeColorArray = [];
 var gradeCompColorArray = []
-var fixtureColorArray = [];
+// var fixtureColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
 var legendsArray = [];
 // let colorsArrayDup = [...colorsArray];
 let allColorsArray = colorsArray
+
+export const checkColorMatching = (color) => (x) => x.colorCode === color;
 
 function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
   let newArray = currentLegends
@@ -184,7 +186,7 @@ if(data.length >0 && venuesData){
 }
   if (data) {
     if (isArrayNotEmpty(data)) {
-      data.map((object) => {
+      data.forEach((object) => {
         dateArray = setupDateObjectArray(dateArray, object)
         // if (checkDateNotInArray(dateArray, object.matchDate)) {
         //   let dateObject = checkOutOfRound(object)
@@ -432,9 +434,7 @@ function getCompGradeColor(gradeId, competitionUniqueKey) {
     }
     else {
       for (var i in allColorsArray) {
-        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(
-          (x) => x.colorCode === allColorsArray[i]
-        );
+        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(checkColorMatching(allColorsArray[i]));
         if (colorIndex === -1) {
           gradeCompColorArray[compIndex].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[i] });
           compGradeColor = allColorsArray[i];
@@ -446,9 +446,7 @@ function getCompGradeColor(gradeId, competitionUniqueKey) {
   } else {
     gradeCompColorArray.unshift({ competitionUniqueKey: competitionUniqueKey, newGradesArray: [] })
     for (var j in allColorsArray) {
-      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(
-        (x) => x.colorCode === allColorsArray[j]
-      );
+      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(checkColorMatching(allColorsArray[j]));
       if (colorIndex === -1) {
         gradeCompColorArray[0].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[j] })
         compGradeColor = allColorsArray[j];
@@ -469,9 +467,7 @@ function getGradeColor(gradeId) {
     color = gradeColorTempArray[index].colorCode;
   } else {
     for (var i in colorsArray) {
-      let colorIndex = gradeColorTempArray.findIndex(
-        (x) => x.colorCode === colorsArray[i]
-      );
+      let colorIndex = gradeColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
       if (colorIndex === -1) {
         gradeColorArray.push({ gradeId: gradeId, colorCode: colorsArray[i] });
         color = colorsArray[i];
@@ -565,36 +561,36 @@ function setupGradesArray(gradesArray, gradeId) {
   return true;
 }
 
-function checkSlotsDateStatus(slotsArray, checkdate) {
-  let obj = {
-    status: true,
-    index: null
-  }
-  for (let i in slotsArray) {
-    if (slotsArray[i].matchDate == checkdate) {
-      if (slotsArray[i].drawsId == null) {
-        obj = {
-          status: false,
-          index: i
-        }
-      }
-      else {
-        obj = {
-          status: true,
-          index: i
-        }
-      }
-      break;
-    }
-    else {
-      obj = {
-        status: true,
-        index: i
-      }
-    }
-  }
-  return obj
-}
+// function checkSlotsDateStatus(slotsArray, checkdate) {
+//   let obj = {
+//     status: true,
+//     index: null
+//   }
+//   for (let i in slotsArray) {
+//     if (slotsArray[i].matchDate == checkdate) {
+//       if (slotsArray[i].drawsId == null) {
+//         obj = {
+//           status: false,
+//           index: i
+//         }
+//       }
+//       else {
+//         obj = {
+//           status: true,
+//           index: i
+//         }
+//       }
+//       break;
+//     }
+//     else {
+//       obj = {
+//         status: true,
+//         index: i
+//       }
+//     }
+//   }
+//   return obj
+// }
 
 // function checkDrawsArrayFunc(allDrawsData) {
 //   let drawsAllDateData = allDrawsData.dateNewArray
@@ -960,9 +956,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       } catch (ex) {
         console.log("exception:", ex)
       }
-
-
-
+      return { ...state };
     /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_LOAD:
       return { ...state, onLoad: true, updateLoad: true, error: null, drawOrganisations: [] };

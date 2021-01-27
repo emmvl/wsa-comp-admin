@@ -111,7 +111,7 @@ function liveScoreScorerState(state = initialState, action) {
                 id: null
             }
             if (!liveScoreCompIsParent) {
-                state.allTeamData = teamsArray.filter(item => item ?.linkedCompetitionOrganisation ?.id == compOrgId);
+                state.allTeamData = teamsArray.filter(item => item?.linkedCompetitionOrganisation?.id == compOrgId);
             } else {
                 state.allTeamData = teamsArray;
             }

@@ -329,7 +329,7 @@ class CompetitionPartProposedTeamGrading extends Component {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
         let isError = false;
         if (buttonClicked === "submit") {
-            proposedTeamGradingData.map((item) => {
+            proposedTeamGradingData.forEach((item) => {
                 if ((item.proposedGradeRefId == 0 || item.proposedGradeRefId == null || item.proposedGradeRefId == "" ||
                     item.proposedGradeRefId == undefined)) {
                     isError = true

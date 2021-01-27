@@ -100,7 +100,7 @@ const columns = [
             return (
                 record.status == "Published" &&
                 <span className="d-flex justify-content-center w-50">
-                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank'>
+                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank' rel="noopener noreferrer">
                         <img className="dot-image pointer"
                             src={AppImages.docsIcon}
                             alt="" width="25" height="25" />

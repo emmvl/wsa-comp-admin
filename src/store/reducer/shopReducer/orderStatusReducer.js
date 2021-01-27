@@ -64,7 +64,17 @@ function shopOrderStatusState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+        // export order status  API
+        case ApiConstants.API_GET_EXPORT_ORDER_STATUS_LOAD:
+            return { ...state, onLoad: true, error: null };
 
+        case ApiConstants.API_GET_EXPORT_ORDER_STATUS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
 
         //// /////order status listing  get API
         case ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD:
