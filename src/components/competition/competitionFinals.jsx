@@ -208,11 +208,11 @@ class CompetitionFinals extends Component {
         let finalsList = Object.assign(this.props.competitionFinalsState.competitionFinalsList);
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let venueListId = []
-        venueList.map((item) => {
+        venueList.forEach((item) => {
             venueListId.push(item.venueId);
         });
 
-        (finalsList || []).map((item, index) => {
+        (finalsList || []).forEach((item, index) => {
             if (item.whoPlaysWho) {
                 for (let i = 0; i < item.whoPlaysWho.length; i++) {
                     if (item.whoPlaysWho[i].noOfPools == 2) {
@@ -898,7 +898,7 @@ class CompetitionFinals extends Component {
                             {(applyToData || []).map((app) => (
                                 <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
                             ))}
-                            <Radio key={'applyTo_' + "0"} value={0}>{AppConstants.none}</Radio>
+                            <Radio key={'applyTo_0'} value={0}>{AppConstants.none}</Radio>
                         </Radio.Group>
                     </Form.Item>
                     {data.applyToRefId !== '-1' && (

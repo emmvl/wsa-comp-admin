@@ -87,7 +87,7 @@ class LiveScoreLadderSettings extends Component {
 
     onSaveClick() {
         const { ladders } = this.props.ladderSettingState;
-        ladders.map((item, index) => {
+        ladders.forEach((item, index) => {
             if (item.ladderFormatId < 0) {
                 item.ladderFormatId = 0;
             }
@@ -275,6 +275,7 @@ class LiveScoreLadderSettings extends Component {
                                 className="user-reg-link"
                                 href={process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
                                 target='_blank'
+                                rel="noopener noreferrer"
                             >
                                 {process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
                             </a>
@@ -298,6 +299,7 @@ class LiveScoreLadderSettings extends Component {
                                 className="user-reg-link"
                                 href={process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
                                 target='_blank'
+                                rel="noopener noreferrer"
                             >
                                 {process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
                             </a>

@@ -510,17 +510,9 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     getNextEventForSwap = (data, date, eventIndex) => {
-        const dataFiltered = data
-            .filter(slot => this.getDate(slot.matchDate) === date);
+        const dataFiltered = data.filter(slot => this.getDate(slot.matchDate) === date);
 
-        const nextEvent = data
-            .find((slot, index) => {
-                if (index > eventIndex && slot.drawsId && dataFiltered.includes(slot)) {
-                    return slot;
-                }
-            }
-            );
-
+        const nextEvent = data.find((slot, index) => (index > eventIndex && slot.drawsId && dataFiltered.includes(slot)));
         return nextEvent;
     }
 
@@ -1051,6 +1043,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     if (isStartTimeCondition || isEndTimeCondition || isSlotEventInside) {
                         return true;
                     }
+                    return;
                 });
 
             if (isCourtDataSlotBusy) {
@@ -1711,7 +1704,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         </div>
                     )}
                 {filterEnable && this.venueLeftView()}
-                {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
+                {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || (filterEnable && this.competitionLeftView())}
                 {filterEnable && this.divisionLeftView()}
                 {filterEnable && this.organisationLeftView()}
             </div>
@@ -2169,7 +2162,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         <span className="text-overflow">{AppConstants.unavailable}</span>
                                                     </div>
                                                 }
-                                                {unavailableWidth.map((width, widthIndex) => {
+                                                {unavailableWidth.forEach((width, widthIndex) => {
                                                     if (width) {
                                                         return (
                                                             <div

@@ -44,7 +44,7 @@ function sortArrayByDate(dateArray) {
 function formatDateTime(startDate, startTime, ) {
     let endDate = moment(startDate).format("DD-MMM-YYYY")
     let endTime = moment(startTime).format("HH:mm")
-    let date_time = endDate + " " + endTime + " " + "UTC"
+    let date_time = endDate + " " + endTime + " UTC"
     var dt = new Date(date_time);
     let formatedValue = dt.toISOString()
 

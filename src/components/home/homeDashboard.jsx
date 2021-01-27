@@ -505,7 +505,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => history.push('/userTextualDashboard')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -534,7 +536,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => (userRoleId == 2) && history.push('/registration')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -566,7 +570,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => userRoleId == 2 && history.push('/competitionDashboard')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -597,7 +603,9 @@ class HomeDashboard extends Component {
                                     className="col-sm-2 d-flex align-items-center justify-content-end"
                                     onClick={() => userRoleId == 2 && history.push('/matchDayCompetitions')}
                                 >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
+                                    <div className="view-more-btn pt-0 pointer ml-auto">
+                                        <i className="fa fa-angle-right" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

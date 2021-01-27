@@ -935,26 +935,25 @@ function removeDirect(affiliateArray) {
 function createInviteesPostArray(selectedInvitees, getInvitees) {
     let invitessObjectArr = []
     if (isArrayNotEmpty(getInvitees)) {
-        for (let i in getInvitees) {
-            let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
-            let inviteesObject = null
-            if (selectedInviteesArray.status) {
-                inviteesObject = {
-                    "inviteesId": selectedInviteesArray.result.inviteesId,
-                    "registrationInviteesRefId": selectedInvitees,
-                    "inviteesOrg": isArrayNotEmpty(selectedInviteesArray.result.inviteesOrg) ? selectedInviteesArray.result.inviteesOrg : []
-                }
-            } else {
-                inviteesObject = {
-                    "inviteesId": 0,
-                    "registrationInviteesRefId": selectedInvitees,
-                    "inviteesOrg": []
-                }
+        // for (let i in getInvitees) {
+        let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
+        let inviteesObject = null
+        if (selectedInviteesArray.status) {
+            inviteesObject = {
+                "inviteesId": selectedInviteesArray.result.inviteesId,
+                "registrationInviteesRefId": selectedInvitees,
+                "inviteesOrg": isArrayNotEmpty(selectedInviteesArray.result.inviteesOrg) ? selectedInviteesArray.result.inviteesOrg : []
             }
-
-            invitessObjectArr.push(inviteesObject)
-            break;
+        } else {
+            inviteesObject = {
+                "inviteesId": 0,
+                "registrationInviteesRefId": selectedInvitees,
+                "inviteesOrg": []
+            }
         }
+
+        invitessObjectArr.push(inviteesObject)
+        // }
     } else {
         let invitees_Object = {
             "inviteesId": 0,
@@ -1111,7 +1110,7 @@ function childFeesMapping(getFeeData) {
         let parentFeesList = isArrayNotEmpty(mainFeeArray[i].fees) ? mainFeeArray[i].fees : []
         let childrenFeesList = isArrayNotEmpty(mainFeeArray[i].childFees) ? isArrayNotEmpty(mainFeeArray[i].childFees)
             ? mainFeeArray[i].childFees : [] : []
-        childrenFeesList.map((childItem, childIndex) => {
+        childrenFeesList.forEach((childItem, childIndex) => {
             childItem['affiliateFee'] = childItem.Fees
             childItem['affiliateGst'] = childItem.GST
             childItem['affNominationFees'] = childItem.nominationFees
@@ -2166,7 +2165,7 @@ function competitionFees(state = initialState, action) {
             let membershipProductobj = state.defaultCompFeesMembershipProduct[action.index];
             membershipProductobj.competitionMembershipProductId = null;
             let membershipProductTypesList = membershipProductobj.membershipProductTypes;
-            membershipProductTypesList.map((item) => {
+            membershipProductTypesList.forEach((item) => {
                 item.competitionMembershipProductId = null;
                 item.competitionMembershipProductTypeId = 0;
             });

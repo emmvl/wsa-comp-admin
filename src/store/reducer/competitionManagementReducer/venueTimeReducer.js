@@ -944,8 +944,7 @@ function VenueTimeState(state = initialState, action) {
                 else {
                     if (action.key === "competitionMembershipProductDivisionId") {
 
-                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                            competitionMembershipProductDivisionId == action.data);
+                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == action.data);
                         if (division != null && division != undefined) {
                             let grades = division.grades;
                             state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
@@ -973,8 +972,7 @@ function VenueTimeState(state = initialState, action) {
                     }
                     else if (action.key == "mpinitial") {
                         let matchPreference = state.venueConstrainstData.matchPreference[action.index];
-                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                            competitionMembershipProductDivisionId == matchPreference.competitionMembershipProductDivisionId);
+                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == matchPreference.competitionMembershipProductDivisionId);
 
                         if (division != null && division != undefined) {
                             let grades = division.grades;
@@ -999,8 +997,7 @@ function VenueTimeState(state = initialState, action) {
                 // let matchPreference = state.venueConstrainstData.matchPreference;
                 if (action.key === "competitionMembershipProductDivisionId") {
 
-                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                        competitionMembershipProductDivisionId == action.data).grades;
+                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == action.data).grades;
                     if (division != null && division != undefined) {
                         let grades = division.grades;
                         state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
@@ -1030,8 +1027,7 @@ function VenueTimeState(state = initialState, action) {
                 }
                 else if (action.key == "ldinitial") {
                     let lockedDraw = state.venueConstrainstData.lockedDraws[action.index];
-                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                        competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
+                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
 
                     if (division != null && division != undefined) {
                         let grades = division.grades;

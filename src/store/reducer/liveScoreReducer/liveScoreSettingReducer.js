@@ -145,11 +145,11 @@ function getanyOrgArray(data) {
         if (data[i].inviteesRefId)
             arr.push(data[i].inviteesRefId)
     }
-    let filteredArr = arr.filter(function (item, index) {
-        if (arr.indexOf(item) == index)
-            return item;
-    });
-    return filteredArr
+    // let filteredArr = arr.filter(function (item, index) {
+    //     if (arr.indexOf(item) == index)
+    //         return item;
+    // });
+    return arr
 }
 
 function getCheckBoxSelection(compInvitess) {

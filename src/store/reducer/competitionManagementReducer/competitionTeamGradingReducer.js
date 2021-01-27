@@ -120,9 +120,9 @@ function compare(a, b) {
 function sortOrderArray(ownTeamGradingSummaryData) {
     let sortOrderArray = []
     if (ownTeamGradingSummaryData.length > 0) {
-        ownTeamGradingSummaryData.map((item) => {
+        ownTeamGradingSummaryData.forEach((item) => {
             let grades = item.grades
-            grades.map((gradeItem) => {
+            grades.forEach((gradeItem) => {
                 let sortOrder = (gradeItem.sortOrder == null) ? null : parseInt(gradeItem.sortOrder);
                 sortOrderArray.indexOf(sortOrder) === -1 && sortOrderArray.push(sortOrder)
             })
@@ -200,7 +200,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             let teamGradingData = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [];
             let registrationInvitees = isArrayNotEmpty(finalTeamGradingData.registrationInvitees) ? finalTeamGradingData.registrationInvitees : [];
             if (isArrayNotEmpty(teamGradingData)) {
-                teamGradingData.map((item, index) => {
+                teamGradingData.forEach((item) => {
                     item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1 : 0;
                 });
             }
@@ -226,7 +226,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 let oldval = finalGradingOnChangeData[action.index][action.key];
                 finalGradingOnChangeData[action.index][action.key] = (oldval > action.value) ? action.value - 1 : action.value + 1;
                 finalGradingOnChangeData.sort(compare);
-                finalGradingOnChangeData.map((x, index) => {
+                finalGradingOnChangeData.forEach((x, index) => {
                     x.sortOrder = index + 1;
                 })
             }
@@ -237,7 +237,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                     finalGradingOnChangeData[action.index]["delIndicationMsg"] = "Marked as deleted";
                     finalGradingOnChangeData[action.index]["sortOrder"] = finalGradingOnChangeData.length + 1;
                     finalGradingOnChangeData.sort(compare);
-                    finalGradingOnChangeData.map((x, index) => {
+                    finalGradingOnChangeData.forEach((x, index) => {
                         x.sortOrder = index + 1;
                     })
                 }
@@ -389,7 +389,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_TEAM_GRADING_SUMMARY_DATA:
             let ownTeamGradingSummaryGetTableData = JSON.parse(JSON.stringify(state.ownTeamGradingSummaryGetData))
             if (action.key == "ownTeamGradingSummaryGetData") {
-                ownTeamGradingSummaryGetTableData.length > 0 && ownTeamGradingSummaryGetTableData.map((item, index) => {
+                ownTeamGradingSummaryGetTableData.length > 0 && ownTeamGradingSummaryGetTableData.forEach((item) => {
                     let gradeIndex = item.grades.findIndex(x => x.competitionDivisionGradeId == action.index)
                     if (gradeIndex >= 0) {
                         let gradesParameter = `grades${gradeIndex}`

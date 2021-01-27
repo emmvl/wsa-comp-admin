@@ -20,7 +20,7 @@ import {
     liveScoreDeleteNewsAction,
 } from '../../store/actions/LiveScoreAction/liveScoreNewsAction';
 import Loader from '../../customComponents/loader';
-import { getKeyForStateWideMessage } from '../../util/sessionStorage';
+// import { getKeyForStateWideMessage } from '../../util/sessionStorage';
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;

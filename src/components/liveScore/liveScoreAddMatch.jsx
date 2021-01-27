@@ -181,19 +181,18 @@ class LiveScoreAddMatch extends Component {
 
             if (this.state.isEdit) {
                 let isLineUpEnable = null;
-                let match_status = null;
+                // let match_status = null;
                 this.props.liveScoreAddEditMatchAction(this.state.matchId);
                 this.props.ladderSettingGetMatchResultAction();
                 this.props.liveScoreUpdateMatchAction('', "clearData");
-
                 if (this.state.umpireKey === 'umpire') {
                     const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData());
                     isLineUpEnable = lineupSelectionEnabled;
-                    match_status = status;
+                    // match_status = status;
                 } else {
                     const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton());
                     isLineUpEnable = lineupSelectionEnabled;
-                    match_status = status;
+                    // match_status = status;
                 }
 
                 if (isLineUpEnable == 1) {

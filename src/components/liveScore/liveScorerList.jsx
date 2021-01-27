@@ -257,9 +257,9 @@ class LiveScorerList extends Component {
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
         let url = ""
         if(!this.state.liveScoreCompIsParent){
-            url = AppConstants.scorerExport + 6 + `&roleId=${4}` + `&entityId=${compOrgId}`
+            url = AppConstants.scorerExport + 6 + `&roleId=${4}&entityId=${compOrgId}`
         }else{
-            url = AppConstants.scorerExport + 1 + `&roleId=${4}` + `&entityId=${id}`
+            url = AppConstants.scorerExport + 1 + `&roleId=${4}&entityId=${id}`
         }
         this.props.exportFilesAction(url)
     }
