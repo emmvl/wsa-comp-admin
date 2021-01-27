@@ -94,7 +94,7 @@ function getPointsValue(point_1, point_2, reporting) {
 
     let division = 0
 
-    if (point2 == 0) {
+    if (point2 === 0) {
         division = 0
     } else {
         division = point1 / point2

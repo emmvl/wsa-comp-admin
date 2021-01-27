@@ -19,7 +19,7 @@ const initialState = {
 function getResultValues(data, matchData) {
     for (let i in matchData) {
         for (let j in data) {
-            if (data[j].resultTypeId == matchData[i].id) {
+            if (data[j].resultTypeId === matchData[i].id) {
                 matchData[i]["points"] = data[j].points
                 break;
             }
@@ -37,7 +37,7 @@ function getResultValues(data, matchData) {
 //     }
 
 //     for (let i in data) {
-//         if (data[i].resultTypeId == id) {
+//         if (data[i].resultTypeId === id) {
 //             object = {
 //                 status: true,
 //                 result: data[i],
@@ -81,7 +81,7 @@ function disableAddedDivisions(ladders, divisions) {
     for (let item in ladders) {
         let itemDivisions = ladders[item].divisions;
         let ladderFormatId = ladders[item].ladderFormatId;
-        let remainingFormatDiv = ladders.filter(x => x.ladderFormatId != ladderFormatId);
+        let remainingFormatDiv = ladders.filter(x => x.ladderFormatId !== ladderFormatId);
 
         for (let remDiv in remainingFormatDiv) {
             let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;
@@ -89,7 +89,7 @@ function disableAddedDivisions(ladders, divisions) {
                 for (let j in itemDivisions) {
                     if (itemDivisions[j].divisionId === selectedDivisions[i]) {
                         itemDivisions[j].isDisabled = true;
-                        let division = divisions.find(x => x.divisionId == itemDivisions[j].divisionId);
+                        let division = divisions.find(x => x.divisionId === itemDivisions[j].divisionId);
                         division["isDisabled"] = true;
                     }
                 }

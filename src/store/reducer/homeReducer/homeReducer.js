@@ -43,7 +43,7 @@ function homeReducer(state = initialState, action) {
                 state.liveScoreCompetitionCount = null
                 state.registrationCompetitionCount = null
             }
-            if (action.key == 'yearChange') {
+            if (action.key === 'yearChange') {
                 state.userCount = ""
                 state.registrationCount = ""
                 state.liveScoreCompetitionCount = ""

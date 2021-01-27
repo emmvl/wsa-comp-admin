@@ -95,8 +95,8 @@ function postSwapedDrawsArrayFunc(drawsArray,
     let postSourceArray = JSON.parse(JSON.stringify(drawsArray));
     let postTargetArray = JSON.parse(JSON.stringify(drawsArray));
     if (sourcedrawsId !== null && targetdrawsId !== null) {
-        let postSourceIndex = postSourceArray.findIndex((x) => x.drawsId == sourcedrawsId)
-        let postTargetIndex = postTargetArray.findIndex((x) => x.drawsId == targetdrawsId);
+        let postSourceIndex = postSourceArray.findIndex(x => x.drawsId === sourcedrawsId)
+        let postTargetIndex = postTargetArray.findIndex(x => x.drawsId === targetdrawsId);
         let postTarget = JSON.parse(JSON.stringify(postTargetArray[postTargetIndex]))
         let postSource = JSON.parse(JSON.stringify(postSourceArray[postSourceIndex]))
         // drawsArray[postSourceIndex].drawsId = postTarget.drawsId
@@ -114,7 +114,7 @@ function postSwapedDrawsArrayFunc(drawsArray,
     }
     else {
         if (sourcedrawsId == null) {
-            let freeTargetIndex = postTargetArray.findIndex((x) => x.drawsId == targetdrawsId);
+            let freeTargetIndex = postTargetArray.findIndex(x => x.drawsId === targetdrawsId);
             drawsArray[freeTargetIndex].matchDate = freeObject.matchDate
             drawsArray[freeTargetIndex].startTime = freeObject.startTime
             drawsArray[freeTargetIndex].endTime = freeObject.endTime
@@ -122,7 +122,7 @@ function postSwapedDrawsArrayFunc(drawsArray,
             drawsArray[freeTargetIndex].isLocked = 1
         }
         if (targetdrawsId == null) {
-            let freeSourceIndex = postSourceArray.findIndex((x) => x.drawsId == sourcedrawsId);
+            let freeSourceIndex = postSourceArray.findIndex(x => x.drawsId === sourcedrawsId);
             drawsArray[freeSourceIndex].matchDate = freeObject.matchDate
             drawsArray[freeSourceIndex].startTime = freeObject.startTime
             drawsArray[freeSourceIndex].endTime = freeObject.endTime
@@ -207,11 +207,11 @@ function setupDateObjectArray(dateArray, drawObject) {
     var tempDateArray = JSON.parse(JSON.stringify(dateArray))
     let defaultDateObject = {
         date: drawObject.matchDate,
-        notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
+        notInDraw: drawObject.outOfCompetitionDate === 1 || drawObject.outOfRoundDate === 1
     }
     for (let i in dateArray) {
         if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
-            if (tempDateArray[i].notInDraw == false) {
+            if (tempDateArray[i].notInDraw === false) {
                 tempDateArray[i] = defaultDateObject
             }
             return tempDateArray;
@@ -236,7 +236,7 @@ function sortDateArray(dateArray) {
     let inDrawsArray = []
     let outDrawsArray = []
     for (let i in dateArray) {
-        if (dateArray[i].notInDraw == false) {
+        if (dateArray[i].notInDraw === false) {
             inDrawsArray.push(dateArray[i])
         }
         else {
@@ -349,7 +349,7 @@ function mapSlotObjectsWithTimeSlots(
     return mainCourtNumberArray;
 }
 function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, venueId) {
-    let timeIndex = drawsArray.findIndex((x) => x.matchDate == matchDate)
+    let timeIndex = drawsArray.findIndex((x) => x.matchDate === matchDate)
     let startTime = drawsArray[timeIndex].startTime
     let endTime = drawsArray[timeIndex].endTime
     for (let i in drawsArray) {
@@ -399,7 +399,7 @@ function sortCompArray(compListData) {
 
 
 
-//set comeptitionvenue object
+//set competitionvenue object
 function createCompetitionVenuesData(value) {
     let VenueObject = {
         "competitionVenueId": 0,
@@ -598,19 +598,19 @@ function QuickCompetitionState(state = initialState, action) {
                 }
                 state.division[action.index].grades.push(gradeObject)
             }
-            if (action.key == "removeDivision") {
+            if (action.key === "removeDivision") {
                 state.division.splice(action.index, 1)
             }
-            if (action.key == "removeGrade") {
+            if (action.key === "removeGrade") {
                 state.division[action.index].grades.splice(action.gradeIndex, 1)
             }
-            if (action.key == "divisionName") {
+            if (action.key === "divisionName") {
                 state.division[action.index].divisionName = action.value
             }
-            if (action.key == "noOfTeams") {
+            if (action.key === "noOfTeams") {
                 state.division[action.index].grades[action.gradeIndex].noOfTeams = action.value
             }
-            if (action.key == "gradeName") {
+            if (action.key === "gradeName") {
                 state.division[action.index].grades[action.gradeIndex].gradeName = action.value
             }
             if (action.key === "swap") {
@@ -747,7 +747,7 @@ function QuickCompetitionState(state = initialState, action) {
         case ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS:
             state.updateStatus = action.updateStatus
             let AllCompListArr = JSON.parse(JSON.stringify(state.quick_CompetitionArr))
-            let changeCompIndex = AllCompListArr.findIndex((x) => x.competitionId == action.competitionId)
+            let changeCompIndex = AllCompListArr.findIndex(x => x.competitionId === action.competitionId)
             AllCompListArr[changeCompIndex].competitionName = action.competitionName
             let newSortCompData = sortCompArray(AllCompListArr)
             state.quick_CompetitionArr = newSortCompData
@@ -808,14 +808,14 @@ function QuickCompetitionState(state = initialState, action) {
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_INVITATIONS:
             if (action.key === "selectedTeamPlayer") {
                 state.selectedTeamPlayer = action.value
-                if (action.value == 1) {
+                if (action.value === 1) {
                     state.importModalVisible = true
 
                 } else {
                     state.importModalVisible = false
                 }
             }
-            if (action.key == "importModalVisible") {
+            if (action.key === "importModalVisible") {
                 state.importModalVisible = false
                 state.teamsImportData = []
             }
@@ -911,8 +911,8 @@ function QuickCompetitionState(state = initialState, action) {
         case ApiConstants.API_MERGE_COMPETITION_PROCESS_SUCCESS:
             let selectedCompetitionId = action.result.competitionId
             let selectedCompetitionName = action.result.competitionName
-            let matchSelectedCompetitionIndex = state.quick_CompetitionArr.findIndex((x) => x.competitionId == selectedCompetitionId)
-            if (matchSelectedCompetitionIndex == -1) {
+            let matchSelectedCompetitionIndex = state.quick_CompetitionArr.findIndex(x => x.competitionId === selectedCompetitionId)
+            if (matchSelectedCompetitionIndex === -1) {
                 let competitionUniquekey = {
                     competitionId: selectedCompetitionId,
                     competitionName: selectedCompetitionName

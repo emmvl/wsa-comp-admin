@@ -32,7 +32,7 @@ function* errorSaga(error) {
 export function* getLiveScoreFixtureCompSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.getFixtureCompList, action.orgId)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_SUCCESS,
                 result: result.result.data,
