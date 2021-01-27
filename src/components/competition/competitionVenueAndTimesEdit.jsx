@@ -293,7 +293,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     setVenuCourtFormFields = () => {
         let venueData = this.props.venueTimeState.venuData;
-        venueData.venueCourts.map((item, index) => {
+        venueData.venueCourts.forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`venueCourtName${index}`]: item.venueCourtName,
                 [`lat${index}`]: item.lat,
@@ -309,13 +309,13 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     setVenueOrganisation = () => {
-        let venueData = this.props.venueTimeState.venuData;
+        // let venueData = this.props.venueTimeState.venuData;
         // let isVenueMapped = venueData.isVenueMapped;
         // let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.affiliateList;
         let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         if (venueOrganisation != null && venueOrganisation.length > 0) {
-            venueOrganisation.map((item, index) => {
+            venueOrganisation.forEach((item) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);
                 // if (affiliate != null && affiliate != undefined) {
                 //     item["isDisabled"] = isVenueMapped;
@@ -1102,8 +1102,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                 return;
             }
 
-            venuData.venueCourts.map((item, index) => {
-                (item.availabilities || []).map((avItem, avIndex) => {
+            venuData.venueCourts.forEach((item) => {
+                (item.availabilities || []).forEach((avItem) => {
                     if (avItem.startTime > avItem.endTime) {
                         hasError = true;
                     }
@@ -1115,7 +1115,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 return;
             }
 
-            venuData.gameDays.map((item, index) => {
+            venuData.gameDays.forEach((item) => {
                 if (item.startTime > item.endTime) {
                     hasError = true;
                     // break;

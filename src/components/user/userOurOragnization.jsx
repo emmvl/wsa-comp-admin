@@ -258,7 +258,7 @@ class UserOurOrganization extends Component {
     }
 
     updateContactFormFields = (contacts) => {
-        contacts.map((item, index) => {
+        contacts.forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`firstName${index}`]: item.firstName,
                 [`lastName${index}`]: item.lastName,
@@ -269,7 +269,7 @@ class UserOurOrganization extends Component {
                 this.setState({ isSameUserEmailId: item.email });
             }
             let permissions = item.permissions;
-            permissions.map((perm) => {
+            permissions.forEach((perm) => {
                 this.formRef.current.setFieldsValue({
                     [`permissions${index}`]: perm.roleId,
                 });

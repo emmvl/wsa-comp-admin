@@ -259,7 +259,7 @@ class CompetitionFormat extends Component {
             [`matchTypeRefId`]: formatList.matchTypeRefId
         });
 
-        (competitionFormatDivision || []).map((item, index) => {
+        (competitionFormatDivision || []).forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`matchDuration${index}`]: item.matchDuration,
                 [`mainBreak${index}`]: item.mainBreak,
@@ -538,12 +538,12 @@ class CompetitionFormat extends Component {
                         />
                     </div>
                     <div className="col-sm-2 transfer-image-view" onClick={() => !disabledStatus ? this.removeNonPlaying(index) : null}>
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -829,7 +829,7 @@ class CompetitionFormat extends Component {
                         </div>
                     </div>
                 </div>
-                {data.IsQuickCompetition == 1 && (
+                {data.IsQuickCompetition != 1 && (
                     <div className="inside-container-view pt-4">
                         <InputWithHead
                             auto_complete="new-nonPlayingDate"
@@ -839,11 +839,11 @@ class CompetitionFormat extends Component {
                             ? nonPlayingDates.map((item, index) => this.nonPlayingDateView(item, index))
                             : null
                         }
-                        <a>
+                        <div>
                             <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another">
                                 + {AppConstants.addAnotherNonPlayingDate}
                             </span>
-                        </a>
+                        </div>
                     </div>
                 )}
                 {(data.competionFormatDivisions || []).map((item, index) => (

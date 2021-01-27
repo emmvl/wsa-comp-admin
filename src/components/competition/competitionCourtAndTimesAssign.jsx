@@ -522,12 +522,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </div>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-view pb-4">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, 'competitionVenueTimeslotsDayTimedelete')}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span id={AppUniqueId.timeslotGenerationRemove_btn} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>
@@ -979,12 +979,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </div>
                     {data.length > 1 && (
                         <div className="col-sm-2 delete-image-timeSlot-view">
-                            <a className="transfer-image-view">
+                            <div className="transfer-image-view pt-0 pointer ml-auto">
                                 <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
                                     <i className="fa fa-trash-o" aria-hidden="true" />
                                 </span>
                                 <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                            </a>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -1076,12 +1076,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </Form.Item>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-timeSlot-view pt-3">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>
@@ -1144,12 +1144,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </Form.Item>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-timeSlot-view pt-2">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>
@@ -1301,12 +1301,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </div>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-timeSlot-view">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>

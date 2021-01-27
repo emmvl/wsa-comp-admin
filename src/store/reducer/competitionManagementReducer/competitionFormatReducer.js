@@ -177,8 +177,7 @@ function getCompetitionFormatDivisions(data) {
         for (let item in compFormatDivisions) {
             let itemDivisions = compFormatDivisions[item].divisions;
             let competitionFormatTemplateId = compFormatDivisions[item].competitionFormatTemplateId;
-            let remainingFormatDiv = compFormatDivisions.
-                filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
+            let remainingFormatDiv = compFormatDivisions.filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
             for (let remDiv in remainingFormatDiv) {
                 let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;

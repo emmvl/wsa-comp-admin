@@ -240,7 +240,7 @@ function liveScoreIncidentState(state = initialState, action) {
             } else {
                 state.incidentData[action.key] = action.data
             }
-
+            break;
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
             return { ...state, onLoad: true };
 

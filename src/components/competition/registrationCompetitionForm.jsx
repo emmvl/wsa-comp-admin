@@ -484,7 +484,7 @@ class RegistrationCompetitionForm extends Component {
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
-        discountData.map((item, index) => {
+        discountData.forEach((item, index) => {
             let competitionMembershipProductTypeId = `competitionMembershipProductTypeId${index}`
             let membershipProductUniqueKey = `membershipProductUniqueKey${index}`
             this.formRef.current.setFieldsValue({
@@ -498,8 +498,8 @@ class RegistrationCompetitionForm extends Component {
     setDivisionFormFields = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
-        divisionArray.map((item, index) => {
-            item.divisions.map((divItem, divIndex) => {
+        divisionArray.forEach((item, index) => {
+            item.divisions.forEach((divItem, divIndex) => {
                 let divisionName = `divisionName${index}${divIndex}`
                 let genderRefId = `genderRefId${index}${divIndex}`
                 let fromDate = `fromDate${index}${divIndex}`
@@ -841,6 +841,7 @@ class RegistrationCompetitionForm extends Component {
                     case 2: return AppUniqueId.comp_type2
                     default: break;
                 }
+                break;
 
             case "competitionFormat":
                 switch (data) {
@@ -850,8 +851,10 @@ class RegistrationCompetitionForm extends Component {
                     case 4: return AppUniqueId.comp_format4
                     default: break;
                 }
+                break;
 
-            default: break;
+            default:
+                break;
         }
     }
 

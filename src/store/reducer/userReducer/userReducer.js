@@ -1394,6 +1394,8 @@ function userReducer(state = initialState, action) {
       } catch (ex) {
         console.log("Error in UPDATE_TEAM_MEMBER_REVIEW_INFO::" + ex);
       }
+      return { ...state };
+
     case ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD:
       return { ...state, onTeamUpdateLoad: true };
 

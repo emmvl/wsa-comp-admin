@@ -337,7 +337,7 @@ class CompetitionPlayerGrades extends Component {
             const teamItem = assignedData[teamIndex];
             teamItem.isChecked = checked;
 
-            (teamItem.players || []).map((item, ind) => {
+            (teamItem.players || []).forEach((item) => {
                 item.isChecked = checked;
             });
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
@@ -346,7 +346,7 @@ class CompetitionPlayerGrades extends Component {
             console.log('onChangeParentDivCheckbox', this.props.partPlayerGradingState)
             unassignedData.isChecked = checked;
 
-            (unassignedData.players || []).map((item, ind) => {
+            (unassignedData.players || []).forEach((item) => {
                 item.isChecked = checked;
             });
             this.props.addOrRemovePlayerForChangeDivisionAction(unassignedData, key);
@@ -361,7 +361,7 @@ class CompetitionPlayerGrades extends Component {
             teamItem.players[playerIndex].isChecked = checked;
 
             let flag = true;
-            (teamItem.players || []).map((item, ind) => {
+            (teamItem.players || []).forEach((item) => {
                 if (!item.isChecked) {
                     flag = false;
                 }
@@ -378,7 +378,7 @@ class CompetitionPlayerGrades extends Component {
             unassignedData.players[playerIndex].isChecked = checked;
 
             let flag = true;
-            (unassignedData.players || []).map((item, ind) => {
+            (unassignedData.players || []).forEach((item) => {
                 if (!item.isChecked) {
                     flag = false;
                 }
@@ -405,14 +405,14 @@ class CompetitionPlayerGrades extends Component {
             const assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
 
             if (assignedData != null && assignedData.length > 0) {
-                (assignedData || []).map((team, index) => {
+                (assignedData || []).forEach(team => {
                     if (team.isChecked) {
                         const obj = {
                             teamId: team.teamId,
                         };
                         res.teams.push(obj);
                     }
-                    (team.players || []).map((item, pIndex) => {
+                    (team.players || []).forEach(item => {
                         if (item.isChecked) {
                             const obj = {
                                 playerId: item.playerId,
@@ -426,7 +426,7 @@ class CompetitionPlayerGrades extends Component {
             const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
 
             if (unassignedData != null && unassignedData.players.length > 0) {
-                (unassignedData.players || []).map((item, index) => {
+                (unassignedData.players || []).forEach(item => {
                     if (item.isChecked) {
                         const obj = {
                             playerId: item.playerId,

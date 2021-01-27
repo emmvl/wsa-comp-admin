@@ -81,8 +81,7 @@ function disableAddedDivisions(ladders, divisions) {
     for (let item in ladders) {
         let itemDivisions = ladders[item].divisions;
         let ladderFormatId = ladders[item].ladderFormatId;
-        let remainingFormatDiv = ladders.
-            filter(x => x.ladderFormatId != ladderFormatId);
+        let remainingFormatDiv = ladders.filter(x => x.ladderFormatId != ladderFormatId);
 
         for (let remDiv in remainingFormatDiv) {
             let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;
@@ -174,7 +173,7 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
                 let ladder = state.ladders[action.index];
                 if (action.data) {
                     let arr = [];
-                    state.divisions.map((item) => {
+                    state.divisions.forEach((item) => {
                         arr.push(item.divisionId);
                     })
                     ladder.selectedDivisions = [];

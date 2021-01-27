@@ -200,9 +200,8 @@ function setLadderDivisions(ladderFormats, defaultDivisions)
         }
         for(let item in ladderFormatData){
             let itemDivisions = ladderFormatData[item].divisions;
-            let schemeName =  ladderFormatData[item].schemeName;
-            let remainingFormatDiv =  ladderFormatData.
-                    filter(x=>x.schemeName!= schemeName);
+            let schemeName = ladderFormatData[item].schemeName;
+            let remainingFormatDiv = ladderFormatData.filter(x=>x.schemeName!= schemeName);
             for(let remDiv in remainingFormatDiv)
             {
                 let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;

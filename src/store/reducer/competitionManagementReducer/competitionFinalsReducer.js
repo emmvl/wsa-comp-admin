@@ -68,7 +68,7 @@ function competitionFinalsReducer(state = initialState, action) {
             if(action.key.venueList == "venueList")
             {
                 state.competitionVenuesList = []
-                updatedValue.map((id)=>{
+                updatedValue.forEach((id)=>{
                     let obj={
                         venueId:id,
                         competitionVenueId:0,

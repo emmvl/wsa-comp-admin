@@ -116,10 +116,9 @@ function getPositionColor(position) {
     if (index !== -1) {
         color = teamColorTempArray[index].colorCode;
     } else {
+        const checkColorMatching = (color) => (x) => x.colorCode === color;
         for (var i in colorsArray) {
-            let colorIndex = teamColorTempArray.findIndex(
-                (x) => x.colorCode === colorsArray[i]
-            );
+            let colorIndex = teamColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
             if (colorIndex === -1) {
                 positionColorArray.push({ position: position, colorCode: colorsArray[i] });
                 color = colorsArray[i];
@@ -180,7 +179,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_SUCCESS:
             let partPlayerSummaryListData = isArrayNotEmpty(action.result) ? action.result : []
             let finalPartPlayerSummaryListData = []
-            partPlayerSummaryListData.map((item) => {
+            partPlayerSummaryListData.forEach((item) => {
                 if (item.minimumPlayers) {
                     item["noOfTeams"] = Math.floor(item["playerCount"] / item.minimumPlayers)
                     item["extraPlayers"] = item["playerCount"] % item.minimumPlayers

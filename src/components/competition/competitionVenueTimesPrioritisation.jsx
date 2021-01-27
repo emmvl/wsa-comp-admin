@@ -48,6 +48,7 @@ import {
 import Loader from '../../customComponents/loader'
 import CustomTooltip from 'react-png-tooltip'
 import AppUniqueId from "../../themes/appUniqueId";
+// import { before } from "lodash";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -681,7 +682,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     default:
                         break;
                 }
-
+                break;
             case "subPref1":
                 switch (data) {
                     case 2:
@@ -693,7 +694,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     default:
                         break;
                 }
-
+                break;
             case "subPref2":
                 switch (data) {
                     case 6:
@@ -703,7 +704,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     default:
                         break;
                 }
-
+                break;
             case "homeTeamRotation":
                 switch (data) {
                     case 1:
@@ -713,7 +714,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     default:
                         break;
                 }
-
+                break;
             default:
                 break;
         }
