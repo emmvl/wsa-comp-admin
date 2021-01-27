@@ -1937,9 +1937,9 @@ class MultifieldDrawsNewTimeline extends Component {
         }
 
         const horizontalDashedBg = {
-            backgroundImage: `linear-gradient(right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%),
-                            linear-gradient(bottom, rgba(170,170,170,1) 0%, rgba(170,170,170,0) 2%, rgba(170,170,170,0) 100%)`,
-            backgroundSize: '5px 60px'
+            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%),' +
+                            'linear-gradient(to bottom, rgba(170,170,170,1) 0%, rgba(170,170,170,0) 2%, rgba(170,170,170,0) 100%)',
+            backgroundSize: `5px ${ONE_MIN_WIDTH * 30}px`
         }
 
         const dayBgAvailable = isAxisInverted ? {
@@ -2123,14 +2123,14 @@ class MultifieldDrawsNewTimeline extends Component {
                                             >
                                                 <div
                                                     id={courtData.venueCourtId}
-                                                    className="box unavailable-draws align-items-center"
+                                                    className="box-draws unavailable-draws align-items-center"
                                                     style={{
-                                                        // top: topMargin,
                                                         left: isAxisInverted ? 0 : prevDaysWidth,
                                                         top: isAxisInverted ? prevDaysWidth : '50%',
                                                         width: isAxisInverted ? 48 : diffDayScheduleTime,
+                                                        minWidth: 48,
                                                         height: isAxisInverted ? diffDayScheduleTime : 48,
-                                                        transform: 'translateY(-50%)',
+                                                        transform: isAxisInverted ? 'translateX(-50%)' : 'translateY(-50%)',
                                                         cursor: 'not-allowed',
                                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                                                     }}
@@ -2162,10 +2162,10 @@ class MultifieldDrawsNewTimeline extends Component {
                                         >
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
-                                                className={`box white-bg-timeline day-box ${isAxisInverted ? 'position-relative' : ''}`}
+                                                className={`box-draws white-bg-timeline day-box ${isAxisInverted ? 'position-absolute' : ''}`}
                                                 style={{
                                                     minWidth: 'unset',
-                                                    left: isAxisInverted ? 0 : prevDaysWidth,
+                                                    // left: isAxisInverted ? '50%' : prevDaysWidth,
                                                     top: isAxisInverted ? prevDaysWidth : '50%',
                                                     overflow: 'visible',
                                                     whiteSpace: 'nowrap',
@@ -2197,7 +2197,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                             >
                                                 {timeRestrictionsSchedule.isUnavailable &&
                                                     <div
-                                                        className="box unavailable-draws align-items-center"
+                                                        className="box-draws unavailable-draws align-items-center"
                                                         style={{
                                                             width: '100%',
                                                             background: 'transparent',
@@ -2210,7 +2210,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     if (width) {
                                                         return (
                                                             <div
-                                                                className="box unavailable-draws position-absolute align-items-center h-100"
+                                                                className="box-draws unavailable-draws position-absolute align-items-center h-100"
                                                                 style={{
                                                                     right: widthIndex ? 0 : 'auto',
                                                                     left: widthIndex ? 'auto' : 0,
@@ -2238,7 +2238,14 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         const endTimeEvent = moment(fieldItemDate + slotObject.endTime);
                                                         const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes') * ONE_MIN_WIDTH;
                                                         return (
-                                                            <div key={"slot" + slotIndex}>
+                                                            <div 
+                                                                key={"slot" + slotIndex}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    left: isAxisInverted ? 0 : diffTimeStartEvent,
+                                                                    top: isAxisInverted ? diffTimeStartEvent : 0,
+                                                                }}
+                                                            >
                                                                 <div
                                                                     id={slotObject.drawsId}
                                                                     onMouseDown={this.slotObjectMouseDown}
@@ -2250,11 +2257,11 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                     }}
                                                                     onMouseEnter={e => this.slotObjectMouseEnter(e, slotObject)}
                                                                     onMouseLeave={this.slotObjectMouseLeave}
-                                                                    className={'box purple-bg'}
+                                                                    className={'box-draws purple-bg'}
                                                                     style={{
                                                                         backgroundColor: this.checkColor(slotObject),
-                                                                        left: isAxisInverted ? 0 : diffTimeStartEvent,
-                                                                        top: isAxisInverted ? diffTimeStartEvent : 0,
+                                                                        // left: isAxisInverted ? 0 : diffTimeStartEvent,
+                                                                        // top: isAxisInverted ? diffTimeStartEvent : 0,
                                                                         overflow: 'hidden',
                                                                         whiteSpace: 'nowrap',
                                                                         cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
@@ -2353,20 +2360,27 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                                                 {slotObject.drawsId !== null && (
                                                                     <div
-                                                                        className="box-exception"
+                                                                        // className="box-exception"
+                                                                        className="position-absolute"
                                                                         style={{
-                                                                            left: diffTimeStartEvent,
-                                                                            top: 48,
+                                                                            // left: diffTimeStartEvent,
+                                                                            top: isAxisInverted ? '50%' : 48,
+                                                                            left: isAxisInverted ? 48 : '50%',
+                                                                            transform: isAxisInverted ? 'translateY(-50%)' : 'translateX(-50%)',
                                                                             overflow: 'hidden',
                                                                             whiteSpace: 'nowrap',
-                                                                            minWidth: diffTimeEventDuration,
+                                                                            minWidth: 16,
                                                                         }}
                                                                     >
                                                                         {!timeRestrictionsSchedule.isUnavailable && !isDayInPast && <Menu
                                                                             className="action-triple-dot-draws"
                                                                             theme="light"
                                                                             mode="horizontal"
-                                                                            style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
+                                                                            style={{ 
+                                                                                lineHeight: '16px', 
+                                                                                borderBottom: 0, 
+                                                                                cursor: disabledStatus && "no-drop",
+                                                                            }}
                                                                         >
                                                                             <SubMenu
                                                                                 disabled={disabledStatus}
@@ -2391,6 +2405,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                                         alt=""
                                                                                                         width="16"
                                                                                                         height="10"
+                                                                                                        style={{ 
+                                                                                                            transform: isAxisInverted ? 'rotate(-90deg)' : 'none' 
+                                                                                                        }}
                                                                                                     />
                                                                                                 )}
                                                                                         </div>
