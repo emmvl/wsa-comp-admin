@@ -997,3 +997,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.draggable-wrap.draw-data-table {
+    overflow-x: auto;
+    overflow-y: auto;
+    position: relative;
+  }

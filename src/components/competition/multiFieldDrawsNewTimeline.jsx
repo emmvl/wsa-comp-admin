@@ -1936,6 +1936,20 @@ class MultifieldDrawsNewTimeline extends Component {
             }
         }
 
+        const horizontalDashedBg = {
+            backgroundImage: `linear-gradient(right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%),
+                            linear-gradient(bottom, rgba(170,170,170,1) 0%, rgba(170,170,170,0) 2%, rgba(170,170,170,0) 100%)`,
+            backgroundSize: '5px 60px'
+        }
+
+        const dayBgAvailable = isAxisInverted ? {
+            ...horizontalDashedBg,
+        } : {
+            backgroundSize,
+            backgroundImage,
+            backgroundPosition,
+        }
+
         return (
             <>
                 <div
@@ -2079,7 +2093,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                         prevDaysWidth += diffDayScheduleTime;
                                     }
                                     if (fieldItemDateIndex === 0) {
-                                        prevDaysWidth = 75;
+                                        prevDaysWidth = 0;
                                     }
 
                                     if (fieldItemDateIndex === date.length - 1) {
@@ -2103,18 +2117,20 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 className='position-relative'
                                                 style={{ 
                                                     width: `calc(100%) - ${prevDaysWidth}`,
-                                                    height: '100%' 
+                                                    height: '100%', 
+                                                    left: 75,
                                                 }}
                                             >
                                                 <div
                                                     id={courtData.venueCourtId}
                                                     className="box unavailable-draws align-items-center"
                                                     style={{
-                                                        left: prevDaysWidth,
                                                         // top: topMargin,
-                                                        top: '50%',
+                                                        left: isAxisInverted ? 0 : prevDaysWidth,
+                                                        top: isAxisInverted ? prevDaysWidth : '50%',
+                                                        width: isAxisInverted ? 48 : diffDayScheduleTime,
+                                                        height: isAxisInverted ? diffDayScheduleTime : 48,
                                                         transform: 'translateY(-50%)',
-                                                        width: diffDayScheduleTime,
                                                         cursor: 'not-allowed',
                                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                                                     }}
@@ -2132,31 +2148,32 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                     const dayBg = timeRestrictionsSchedule.isUnavailable ? {
                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
-                                    } : {
-                                            backgroundSize,
-                                            backgroundImage,
-                                            backgroundPosition,
-                                        };
+                                    } : dayBgAvailable;
 
                                     return (
                                         <div
                                             key={"slot" + fieldItemDateIndex}
                                             className='position-relative'
-                                            style={{ width: `calc(100%) - ${prevDaysWidth}`, height: '100%' }}
+                                            style={{ 
+                                                width: `calc(100%) - ${prevDaysWidth}`, 
+                                                height: '100%',
+                                                left: 75,
+                                            }}
                                         >
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
                                                 className={`box white-bg-timeline day-box ${isAxisInverted ? 'position-relative' : ''}`}
                                                 style={{
                                                     minWidth: 'unset',
-                                                    left: prevDaysWidth,
+                                                    left: isAxisInverted ? 0 : prevDaysWidth,
+                                                    top: isAxisInverted ? prevDaysWidth : '50%',
                                                     overflow: 'visible',
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
-                                                    width: isAxisInverted ? 70 : diffDayScheduleTime,
-                                                    height: isAxisInverted ? diffDayScheduleTime : 70,
+                                                    width: isAxisInverted ? 48 : diffDayScheduleTime,
+                                                    height: isAxisInverted ? diffDayScheduleTime : 48,
                                                     borderRadius: '0px',
-                                                    transform: 'translate(0, 10px)',
+                                                    transform: isAxisInverted ? 'translateX(-50%)' : 'translateY(-50%)',
                                                     ...dayBg
                                                 }}
                                                 onDragOver={e => {
@@ -2236,13 +2253,14 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                     className={'box purple-bg'}
                                                                     style={{
                                                                         backgroundColor: this.checkColor(slotObject),
-                                                                        left: diffTimeStartEvent,
+                                                                        left: isAxisInverted ? 0 : diffTimeStartEvent,
+                                                                        top: isAxisInverted ? diffTimeStartEvent : 0,
                                                                         overflow: 'hidden',
                                                                         whiteSpace: 'nowrap',
                                                                         cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
-                                                                        width: diffTimeEventDuration,
-                                                                        minWidth: diffTimeEventDuration,
-                                                                        height: 48,
+                                                                        width: isAxisInverted ? 48 : diffTimeEventDuration,
+                                                                        minWidth: isAxisInverted ? 48 : diffTimeEventDuration,
+                                                                        height: isAxisInverted ? diffTimeEventDuration : 48,
                                                                         opacity: isDayInPast ? 0.7 : 1,
                                                                     }}
                                                                 >
