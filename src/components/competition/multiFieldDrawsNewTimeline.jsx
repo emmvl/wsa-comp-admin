@@ -1936,9 +1936,17 @@ class MultifieldDrawsNewTimeline extends Component {
         return dayBgAvailable;
     }
 
-    dayHorizontalHead = (date, dateNewArray, dayMargin) => {
+    dayHeadView = (date, dateNewArray, dayMargin) => {
+        const { isAxisInverted } = this.state;
+
         return (
-            <div className="draws-x-head d-flex" style={{ marginLeft: 34 }}>
+            <div 
+                className={`draws-x-head d-flex ${isAxisInverted ? 'flex-column' : ''}`} 
+                style={{ 
+                    margin: isAxisInverted ? 0 : '0 0 0 34px',
+                    top: isAxisInverted ? -8 : 0,
+                }}
+            >
                 {date.map((itemDate, index) => {
                     // for drawing days position
                     const newTimeAllDayScheduleHours = [
@@ -1964,11 +1972,12 @@ class MultifieldDrawsNewTimeline extends Component {
                             return (
                                 <div
                                     key={"time" + index + indexTime}
-                                    className="d-flex flex-column"
+                                    className={`d-flex ${isAxisInverted ? 'justify-content-end' : 'flex-column'}`}
                                     style={{
                                         left: dayMargin,
                                         fontSize: 11,
                                         width: ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
+                                        height: ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
                                     }}
                                 >
                                     <span className="draws-x-head-text">
@@ -1989,9 +1998,14 @@ class MultifieldDrawsNewTimeline extends Component {
         );
     }
 
-    courtHorizontalHead = (dateItem) => {
+    courtHorizontalHeadView = (dateItem) => {
         return (
-            <>
+            <div 
+                className="table-head-wrap d-flex position-relative" 
+                style={{
+                    left: 180,
+                }}
+            >
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
                     return (
                         <div
@@ -2005,8 +2019,23 @@ class MultifieldDrawsNewTimeline extends Component {
                         </div>
                     )
                 })}
-            </>
+            </div>
         )
+    }
+
+    unavailableTextView = () => {
+        const { isAxisInverted } = this.state;
+        
+        return (
+            <span 
+                className={isAxisInverted ? '' : 'text-overflow'}
+                style={{
+                    transform: isAxisInverted ? 'rotate(-90deg)' : 'none',
+                }}
+            >
+                {AppConstants.unavailable}
+            </span>
+        );
     }
 
     draggableView = (dateItem) => {
@@ -2039,14 +2068,13 @@ class MultifieldDrawsNewTimeline extends Component {
                 >
                     {/* Horizontal head */}
                     {isAxisInverted ?    
-                        <div className="table-head-wrap d-flex position-relative" style={{ left: 64 }}>
-                            {this.courtHorizontalHead(dateItem)}
-                        </div>
+                        this.courtHorizontalHeadView(dateItem)
                         : 
                         <div className="table-head-wrap">
-                            {this.dayHorizontalHead(date, dateNewArray, dayMargin)}
+                            {this.dayHeadView(date, dateNewArray, dayMargin)}
                         </div>
                     }
+
                 </div>
                 <div
                     className={`main-canvas Draws ${isAxisInverted ? 'd-flex' : ''}`}
@@ -2058,6 +2086,10 @@ class MultifieldDrawsNewTimeline extends Component {
                     onMouseUp={this.drawsFieldUp}
                     onTouchEnd={this.drawsFieldUp}
                 >
+
+                    {isAxisInverted &&    
+                        this.dayHeadView(date, dateNewArray, dayMargin)
+                    }
                     <div
                         id="draggableTooltip"
                         className="unavailable-draws"
@@ -2084,17 +2116,19 @@ class MultifieldDrawsNewTimeline extends Component {
                                     alignItems: 'center' 
                                 }}
                             >
-                                <div
-                                    className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
-                                    style={{
-                                        width: 95,
-                                        height: 48,
-                                    }}
-                                >
-                                    <span className="venueCourt-text">
-                                        {courtData.venueShortName + '-' + courtData.venueCourtNumber}
-                                    </span>
-                                </div>
+                                {!isAxisInverted && 
+                                    <div
+                                        className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
+                                        style={{
+                                            width: 95,
+                                            height: 48,
+                                        }}
+                                    >
+                                        <span className="venueCourt-text">
+                                            {courtData.venueShortName + '-' + courtData.venueCourtNumber}
+                                        </span>
+                                    </div>
+                                }
 
                                 {date.map((fieldItemDate, fieldItemDateIndex) => {
                                     // for check the schedule of the day
@@ -2142,14 +2176,22 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     id={courtData.venueCourtId}
                                                     className="box-draws unavailable-draws align-items-center"
                                                     style={{
-                                                        left: isAxisInverted ? 0 : prevDaysWidth,
-                                                        top: isAxisInverted ? prevDaysWidth : '50%',
-                                                        width: isAxisInverted ? 48 : diffDayScheduleTime,
                                                         minWidth: 48,
-                                                        height: isAxisInverted ? diffDayScheduleTime : 48,
-                                                        transform: isAxisInverted ? 'translateX(-50%)' : 'translateY(-50%)',
                                                         cursor: 'not-allowed',
                                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
+                                                        ...(isAxisInverted ? {
+                                                            left: 0,
+                                                            top: prevDaysWidth,
+                                                            width: 48,
+                                                            height: diffDayScheduleTime,
+                                                            transform: 'translateX(-50%)',
+                                                        } : {
+                                                            left: prevDaysWidth,
+                                                            top: '50%',
+                                                            width: diffDayScheduleTime,
+                                                            height: 48,
+                                                            transform: 'translateY(-50%)',
+                                                        })
                                                     }}
                                                     onDragOver={() => {
                                                         if (this.state.dragDayTarget) {
@@ -2157,7 +2199,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         }
                                                     }}
                                                 >
-                                                    <span className="text-overflow">{AppConstants.unavailable}</span>
+                                                    {this.unavailableTextView()}
                                                 </div>
                                             </div>
                                         )
@@ -2182,16 +2224,24 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 className={`box-draws white-bg-timeline day-box ${isAxisInverted ? 'position-absolute' : ''}`}
                                                 style={{
                                                     minWidth: 'unset',
-                                                    // left: isAxisInverted ? '50%' : prevDaysWidth,
-                                                    top: isAxisInverted ? prevDaysWidth : '50%',
                                                     overflow: 'visible',
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
-                                                    width: isAxisInverted ? 48 : diffDayScheduleTime,
-                                                    height: isAxisInverted ? diffDayScheduleTime : 48,
                                                     borderRadius: '0px',
-                                                    transform: isAxisInverted ? 'translateX(-50%)' : 'translateY(-50%)',
-                                                    ...dayBg
+                                                    ...dayBg,
+                                                    ...(isAxisInverted ?
+                                                        {
+                                                            top: prevDaysWidth,
+                                                            width: 48,
+                                                            height: diffDayScheduleTime,
+                                                            transform: 'translateX(-50%)',
+                                                        } : {
+                                                            top: '50%',
+                                                            width: diffDayScheduleTime,
+                                                            height: 48,
+                                                            transform: 'translateY(-50%)',
+                                                        })
+                                                    // left: isAxisInverted ? '50%' : prevDaysWidth,
                                                 }}
                                                 onDragOver={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
@@ -2212,34 +2262,34 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         this.dayLineDragEnd(e)
                                                 }}
                                             >
-                                                {timeRestrictionsSchedule.isUnavailable &&
-                                                    <div
-                                                        className="box-draws unavailable-draws align-items-center"
-                                                        style={{
-                                                            width: '100%',
-                                                            background: 'transparent',
-                                                        }}
-                                                    >
-                                                        <span className="text-overflow">{AppConstants.unavailable}</span>
-                                                    </div>
-                                                }
-                                                {unavailableWidth.forEach((width, widthIndex) => {
+                                                {timeRestrictionsSchedule.isUnavailable && this.unavailableTextView()}
+
+                                                {unavailableWidth.map((width, widthIndex) => {
                                                     if (width) {
                                                         return (
                                                             <div
-                                                                className="box-draws unavailable-draws position-absolute align-items-center h-100"
+                                                                className="box-draws unavailable-draws position-absolute align-items-center"
                                                                 style={{
-                                                                    right: widthIndex ? 0 : 'auto',
-                                                                    left: widthIndex ? 'auto' : 0,
-                                                                    top: 0,
-                                                                    width,
-                                                                    minWidth: width,
                                                                     background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
+                                                                    ...(isAxisInverted ?
+                                                                        {
+                                                                            bottom: widthIndex ? 0 : 'auto',
+                                                                            top: widthIndex ? 'auto' : 0,
+                                                                            left: 0,
+                                                                            height: width,
+                                                                            minHeight: width,
+                                                                            width: '100%',
+                                                                        } : {
+                                                                            right: widthIndex ? 0 : 'auto',
+                                                                            left: widthIndex ? 'auto' : 0,
+                                                                            top: 0,
+                                                                            width,
+                                                                            minWidth: width,
+                                                                            height: '100%',
+                                                                        })
                                                                 }}
                                                             >
-                                                                <span className="text-overflow">
-                                                                    {AppConstants.unavailable}
-                                                                </span>
+                                                                {this.unavailableTextView()}
                                                             </div>
                                                         )
                                                     }

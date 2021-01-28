@@ -1028,8 +1028,9 @@
 }
 
 .draws-x-head-text {
+    display: inline-block;
+    height: 40px;
     color: var(--app-9b9bad);
-    line-height: 40px;
     font-size: 13px;
     font-family: "Inter-Medium";
     text-align: center;
