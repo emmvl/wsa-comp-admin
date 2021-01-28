@@ -265,6 +265,14 @@ function getSubmittedRegData(payload) {
     };
 }
 
+/* Transfer User Registration */
+function transferUserRegistration(payload) {
+    return {
+        type: ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD,
+        payload,
+    };
+}
+
 /* Export User Registration Data */
 function exportUserRegData(payload) {
     return {
@@ -620,4 +628,5 @@ export {
     teamMemberUpdateAction,
     exportUserRegData,
     getSubmittedRegData,
+    transferUserRegistration,
 };

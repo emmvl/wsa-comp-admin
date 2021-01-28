@@ -356,7 +356,8 @@ const initialState = {
   teamMemberUpdate: null,
   teamMemberDeletion: false,
   addTeamMember: false,
-  userSubmittedRegData: []
+  userSubmittedRegData: [],
+  onTransferUserRegistrationLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -953,6 +954,17 @@ function userReducer(state = initialState, action) {
               status: action.status,
               error: null
           };
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
+          console.log('2');
+          return {...state, onTransferUserRegistrationLoad: true}
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
+          return {
+              ...state,
+              onTransferUserRegistrationLoad: false,
+              status: action.status,
+          }
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
