@@ -21,7 +21,7 @@ function* errorSaga(error) {
     error,
     status: error.status,
   });
-  if (error.status == 400) {
+  if (error.status === 400) {
     message.config({
       duration: 1.5,
       maxCount: 1,
@@ -41,7 +41,7 @@ function* errorSaga(error) {
 export function* liveScorePositionTrackSaga(action) {
   try {
     const result = yield call(LiveScoreAxiosApi.liveScorePositionTrackList, action.data);
-    if (result.status == 1) {
+    if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_SUCCESS,
         result: result.result.data,

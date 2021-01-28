@@ -92,6 +92,17 @@ function liveScoreDashboardsReducer(state = initialState, action) {
                 retryPaymentSuccess: action.result.success,
             };
 
+            case ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_LOAD:
+                return { ...state, onRetryPaymentLoad: true };
+    
+            case ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_SUCCESS:
+                return {
+                    ...state,
+                    onRetryPaymentLoad: false,
+                    retryPaymentMessage: action.result.message,
+                    retryPaymentSuccess: action.result.success,
+                };
+
         default:
             return state;
     };

@@ -60,12 +60,12 @@ function assignUmpireState(state = initialState, action) {
                 rosterId: responseData.roster.id
             }
             state.assignUmpireList[action.index][action.umpireKey] = obj
-            if(action.sameUmpire){
-                if(action.umpireKey == "user1"){
-                state.assignUmpireList[action.index]["user2"] = null  
+            if(action.sameUmpire) {
+                if(action.umpireKey === "user1") {
+                    state.assignUmpireList[action.index]["user2"] = null  
                 }
-                else{
-                state.assignUmpireList[action.index]["user1"] = null  
+                else {
+                    state.assignUmpireList[action.index]["user1"] = null  
                 }
             }
             return {

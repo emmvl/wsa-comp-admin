@@ -100,7 +100,7 @@ function shopOrderStatusState(state = initialState, action) {
             let allData = state.orderStatusListingData
             let updatedOrderStatus = action.result
             let orderId = updatedOrderStatus ? updatedOrderStatus.id : 0
-            let orderStatusIndex = allData.findIndex(x => x.orderId == orderId)
+            let orderStatusIndex = allData.findIndex(x => x.orderId === orderId)
             if (orderStatusIndex > -1) {
                 state.orderStatusListingData[orderStatusIndex].paymentStatus = updatedOrderStatus.paymentStatus
                 state.orderStatusListingData[orderStatusIndex].fulfilmentStatus = updatedOrderStatus.fulfilmentStatus

@@ -30,13 +30,13 @@ export function* liveScorePostSaga({ payload }) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
 
-        if (payload.screenName == 'umpireDashboard') {
+        if (payload.screenName === 'umpireDashboard') {
             setUmpireCompitionData(JSON.stringify(result.result.data))
         } else {
             localStorage.setItem("LiveScoreCompetition", JSON.stringify(result.result.data))
             if (getLiveScoreUmpireCompitionData()) {
                 const { id } = JSON.parse(getLiveScoreUmpireCompitionData())
-                if (payload.competitionId == id) {
+                if (payload.competitionId === id) {
                     setLiveScoreUmpireCompition(result.result.data.id);
                     setUmpireCompitionData(JSON.stringify(result.result.data))
                 }
@@ -55,7 +55,7 @@ export function* liveScorePostSaga({ payload }) {
             });
             message.success(payload.isEdit === 'edit' ? 'Successfully Updated' : 'Successfully Saved')
 
-            if (payload.screenName == 'umpireDashboard') {
+            if (payload.screenName === 'umpireDashboard') {
                 history.push('/umpireDashboard')
             } else {
                 history.push(payload.settingView && '/matchDayDashboard')

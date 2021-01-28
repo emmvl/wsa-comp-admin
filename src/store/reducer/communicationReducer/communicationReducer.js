@@ -51,14 +51,14 @@ function communicationModuleState(state = initialState, action) {
         case ApiConstants.API_UPDATE_COMMUNICATION_DATA:
             let data = action.data.data
             let key = action.data.key
-            if (key == 'allOrg' || key == 'indivisualOrg') {
-                if (key == 'allOrg') {
+            if (key === 'allOrg' || key === 'indivisualOrg') {
+                if (key === 'allOrg') {
                     state[key] = data
                     state['indivisualOrg'] = false
                     state.orgId = null
                     state.orgName = ""
                 }
-                if (key == 'indivisualOrg') {
+                if (key === 'indivisualOrg') {
                     state[key] = data
                     state['allOrg'] = false
                     state.affiliateTo = []

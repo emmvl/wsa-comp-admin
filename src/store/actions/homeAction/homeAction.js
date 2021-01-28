@@ -18,9 +18,24 @@ function clearHomeDashboardData(key) {
 
 function setHomeDashboardYear(year) {
     const action = {
-
         type: ApiConstants.setHomeDashboardYearKey,
         year
+    }
+    return action
+}
+
+function setPageSize(pageSize) {
+    const action = {
+        type: ApiConstants.SET_PAGE_SIZE,
+        pageSize
+    }
+    return action
+}
+
+function setPageNum(pageNum) {
+    const action = {
+        type: ApiConstants.SET_PAGE_CURRENT_NUMBER,
+        pageNum
     }
     return action
 }
@@ -50,5 +65,7 @@ export {
     clearHomeDashboardData,
     setHomeDashboardYear,
     getActionBoxAction,
-    updateActionBoxAction
+    updateActionBoxAction,
+    setPageSize,
+    setPageNum,
 }
