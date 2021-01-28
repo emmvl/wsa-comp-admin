@@ -872,7 +872,14 @@ class MultifieldDrawsNewTimeline extends Component {
 
     drawsFieldMove = e => {
         const { draggableElMouseX, draggableElMouseY } = !!this.state.draggableElMouse && this.state.draggableElMouse;
-        const { dragDayTimeRestrictions, tooltipSwappableTime, dragDayTarget, ePageHoverTooltip, hoverTooltipFunc, isDragging } = this.state;
+        const { 
+            dragDayTimeRestrictions, 
+            tooltipSwappableTime, 
+            dragDayTarget, 
+            ePageHoverTooltip, 
+            hoverTooltipFunc, 
+            isDragging
+        } = this.state;
 
         const parent = e.currentTarget;
         const boundsParent = parent.getBoundingClientRect();
@@ -919,7 +926,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     dayLineDragMove = (e, startDayDate, courtDataSlotsTarget, timeRestrictionsSchedule) => {
-        const { draggableEventObject, tooltipSwappableTime, dragDayTarget } = this.state;
+        const { draggableEventObject, tooltipSwappableTime, dragDayTarget, isAxisInverted } = this.state;
 
         if (dragDayTarget !== e.currentTarget) {
             this.setState({
@@ -935,11 +942,15 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const targetCourtId = e.currentTarget.id.split(':')[0];
 
-        const { draggableElMouseX } = this.state.draggableElMouse;
+        const { draggableElMouseX, draggableElMouseY } = this.state.draggableElMouse;
 
         if (targetCourtId) {
             const bounds = e.currentTarget.getBoundingClientRect();
-            const draggableElXStart = Math.trunc(((e.pageX - bounds.left - draggableElMouseX) / ONE_MIN_WIDTH));
+
+            const draggableElXStart = isAxisInverted ? 
+                Math.trunc(((e.pageY - bounds.top - draggableElMouseY) / ONE_MIN_WIDTH))
+                : 
+                Math.trunc(((e.pageX - bounds.left - draggableElMouseX) / ONE_MIN_WIDTH));
 
             const newTime = startDayDate.clone().add(draggableElXStart, 'minutes');
 
@@ -2025,7 +2036,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
     unavailableTextView = () => {
         const { isAxisInverted } = this.state;
-        
+
         return (
             <span 
                 className={isAxisInverted ? '' : 'text-overflow'}
