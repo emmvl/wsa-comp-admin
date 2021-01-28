@@ -1028,6 +1028,7 @@
 }
 
 .draws-x-head-text {
+    flex-shrink: 0;
     display: inline-block;
     height: 40px;
     color: var(--app-9b9bad);

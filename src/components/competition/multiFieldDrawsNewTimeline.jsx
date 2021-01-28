@@ -2124,7 +2124,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                     height: isAxisInverted ? 'unset' : 70,
                                     width: isAxisInverted ? 70 : 'unset',
                                     display: 'flex', 
-                                    alignItems: 'center' 
+                                    alignItems: 'center',
+                                    ...(isAxisInverted && {position: 'relative'})
                                 }}
                             >
                                 {!isAxisInverted && 
@@ -2176,7 +2177,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                         return (
                                             <div
                                                 key={"slot" + fieldItemDateIndex}
-                                                className='position-relative'
+                                                className={isAxisInverted ? 'position-absolute' : 'position-relative'}
                                                 style={{ 
                                                     width: `calc(100%) - ${prevDaysWidth}`,
                                                     height: '100%', 
@@ -2223,7 +2224,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     return (
                                         <div
                                             key={"slot" + fieldItemDateIndex}
-                                            className='position-relative'
+                                            className={isAxisInverted ? 'position-absolute' : 'position-relative'}
                                             style={{ 
                                                 width: `calc(100%) - ${prevDaysWidth}`, 
                                                 height: '100%',
