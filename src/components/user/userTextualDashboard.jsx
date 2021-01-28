@@ -70,10 +70,10 @@ const columns = [
         key: 'role',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (role) => (
+        render: (role) =>(
             <div>
-                {(role || []).map((item) => (
-                    <div key={item.roleId}>{item.role}</div>
+                {(role || []).map((item, index) => (
+                    <div key={'role' + index}>{item.role}</div>
                 ))}
             </div>
         ),

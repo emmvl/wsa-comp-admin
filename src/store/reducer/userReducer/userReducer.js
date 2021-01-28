@@ -684,7 +684,7 @@ function userReducer(state = initialState, action) {
         userDashboardTextualTotalCount: textualData.page.totalCount,
         competitions: isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
         organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
-        roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
+        roles: isArrayNotEmpty(textualData.roles) ? textualData.roles.sort((a, b) => a.description > b.description  ? 1 : -1) : [],
         userDashboardCounts: textualData.counts,
         status: action.status
       };
