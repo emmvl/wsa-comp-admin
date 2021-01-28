@@ -1223,7 +1223,7 @@ class UserProfileEdit extends Component {
         // actual function to call saving a child / parent
         const addChildOrParent = async () => {
             // if match is not selected, save the user data from the form
-            const userToAdd = selectedMatch || this.state.userData;
+            const userToAdd = {...this.state.userData, ...selectedMatch};
             const { userId } = this.props.history.location.state.userData;
             const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
 
@@ -1258,6 +1258,7 @@ class UserProfileEdit extends Component {
         };
 
         const onCancel = () => {
+            this.confirmOpend = false;
             this.setState({ isPossibleMatchShow: false });
         };
 
@@ -1349,6 +1350,7 @@ class UserProfileEdit extends Component {
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
+            data.dateOfBirth = moment(data.dateOfBirth).format("YYYY-MM-DD");
             const { status, result: { data: possibleMatches } } = await UserAxiosApi.findPossibleMerge(data);
             if ([1, 4].includes(status)) {
                 this.setState({ isPossibleMatchShow: true, possibleMatches });
