@@ -1952,8 +1952,8 @@ class MultifieldDrawsNewTimeline extends Component {
 
         return (
             <div 
-                className={`draws-x-head d-flex ${isAxisInverted ? 'flex-column' : ''}`} 
-                style={{ 
+                className={`draws-x-head d-flex ${isAxisInverted ? 'flex-column align-items-end' : ''}`} 
+                style={{
                     margin: isAxisInverted ? 0 : '0 0 0 34px',
                     top: isAxisInverted ? -8 : 0,
                 }}
@@ -1987,8 +1987,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                     style={{
                                         left: dayMargin,
                                         fontSize: 11,
-                                        width: ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
-                                        height: ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
+                                        width: isAxisInverted ? 'fit-content' : ONE_HOUR_IN_MIN * ONE_MIN_WIDTH,
+                                        height: isAxisInverted ? ONE_HOUR_IN_MIN * ONE_MIN_WIDTH : 'fit-content',
                                     }}
                                 >
                                     <span className="draws-x-head-text">
@@ -1998,7 +1998,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                         }
                                     </span>
                                     <span className="draws-x-head-text">
-                                        {itemTime.slice(-5)}
+                                        {isAxisInverted ? `, ${itemTime.slice(-5)}` : itemTime.slice(-5)}
                                     </span>
                                 </div>
                             );
@@ -2014,7 +2014,7 @@ class MultifieldDrawsNewTimeline extends Component {
             <div 
                 className="table-head-wrap d-flex position-relative" 
                 style={{
-                    left: 180,
+                    left: 175,
                 }}
             >
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
