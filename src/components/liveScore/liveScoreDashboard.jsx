@@ -7,7 +7,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreDashboardListAction, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import { liveScoreDashboardListAction, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction, liveScorePlayersToCashReceivedAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
 import {
     // getCompetitonId,
@@ -580,7 +580,7 @@ const columnsPlayersToPay = [
                 <Menu.SubMenu key="sub1" style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                     title={<img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />}
                 >
-                    <Menu.Item key="1">
+                    <Menu.Item key="1" onClick={() => this_obj.cashReceived(record)}>
                         <span>{AppConstants.cashReceived}</span>
                     </Menu.Item>
                     {(record.processType == "Instalment" || record.processType == "Per Match") &&
@@ -708,14 +708,27 @@ class LiveScoreDashboard extends Component {
     retryPayment = (record) => {
         let payload = {
             processType: record.processType,
-            userRegUniqueKey: record.userRegUniqueKey,
-            participantId: record.participantId,
+            registrationUniqueKey: record.registrationUniqueKey,
+            userId: record.userId,
             divisionId: record.divisionId
         }
 
 
         this.setState({ retryPaymentLoad: true })
         this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+    }
+
+    cashReceived = (record) => {
+        let payload = {
+            processType: record.processType,
+            registrationUniqueKey: record.registrationUniqueKey,
+            userId: record.userId,
+            divisionId: record.divisionId
+        }
+
+
+        this.setState({ retryPaymentLoad: true })
+        this.props.liveScorePlayersToCashReceivedAction(payload);
     }
 
     ////////participatedView view for competition
@@ -989,7 +1002,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
-                <Loader visible={this.props.liveScoreDashboardState.onPlayersToPayLoad} />
+                <Loader visible={this.props.liveScoreDashboardState.onPlayersToPayLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
@@ -1006,7 +1019,7 @@ class LiveScoreDashboard extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction }, dispatch);
+    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction, liveScorePlayersToCashReceivedAction }, dispatch);
 }
 
 function mapStateToProps(state) {

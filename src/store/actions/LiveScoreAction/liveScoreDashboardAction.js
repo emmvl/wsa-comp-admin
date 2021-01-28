@@ -50,11 +50,21 @@ function liveScorePlayersToPayRetryPaymentAction(payload){
     return action;
 }
 
+function liveScorePlayersToCashReceivedAction(payload){
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_LOAD,
+        payload
+    }
+
+    return action;
+}
+
 
 export {
     liveScoreDashboardListAction,
     liveScoreSingleGameListAction,
     liveScoreSingleGameRedeemPayAction,
     liveScorePlayersToPayListAction,
-    liveScorePlayersToPayRetryPaymentAction
+    liveScorePlayersToPayRetryPaymentAction,
+    liveScorePlayersToCashReceivedAction
 }

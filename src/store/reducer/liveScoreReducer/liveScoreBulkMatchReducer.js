@@ -268,7 +268,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 }
                 if (action.key === "venueId") {
                     new_object[action.key] = action.data
-                    let index = state.venueData.findIndex(x => x.venueId == action.data)
+                    let index = state.venueData.findIndex(x => x.venueId === action.data)
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.pushCourtData = courts
@@ -284,7 +284,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
 
                 if (action.key === "venueId") {
                     new_object[action.key] = action.data
-                    let index = state.venueData.findIndex(x => x.venueId == action.data)
+                    let index = state.venueData.findIndex(x => x.venueId === action.data)
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.bringCourtData = courts
@@ -302,7 +302,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 let new_object = state.endMatchData
                 if (action.key === "venueId") {
                     new_object[action.key] = action.data
-                    let index = state.venueData.findIndex(x => x.venueId == action.data)
+                    let index = state.venueData.findIndex(x => x.venueId === action.data)
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.endCourtData = courts
@@ -317,7 +317,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 let new_object = state.abandonData
                 new_object[action.key] = action.data
                 if (action.key === "venueId") {
-                    let index = state.venueData.findIndex(x => x.venueId == action.data)
+                    let index = state.venueData.findIndex(x => x.venueId === action.data)
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.abandonCourtData = courts

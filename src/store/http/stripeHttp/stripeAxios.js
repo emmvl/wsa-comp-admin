@@ -411,7 +411,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -434,9 +434,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -483,7 +483,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -506,9 +506,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -554,7 +554,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -577,9 +577,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -631,7 +631,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -654,9 +654,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -708,7 +708,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -731,9 +731,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }

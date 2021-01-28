@@ -41,7 +41,7 @@ export function* getUmpireCompSaga(action) {
             action.isumpiredCompsOnly,
             action.isParticipateInCompetition
         )
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_UMPIRE_COMPETITION_LIST_SUCCESS,
                 result: result.result.data,

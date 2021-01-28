@@ -58,7 +58,7 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
   for (let i in drawsArray) {
     for (let j in drawsArray[i].slotsArray) {
       let competitionName = drawsArray[i].slotsArray[j].competitionName
-      let compIndex = currentLegends.findIndex((x) => x.competitionName == competitionName)
+      let compIndex = currentLegends.findIndex((x) => x.competitionName === competitionName)
       if (compIndex === -1) {
         let color = drawsArray[i].slotsArray[j].colorCode
         if (color !== "#999999") {
@@ -66,7 +66,7 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
           // let index = currentLegends.findIndex((x) => x.colorCode === color)
           let object = {
             colorCode: color,
-            gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+            gradeName: color === "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
             divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
             competitionDivisionGradeId: drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
             "checked": true
@@ -82,7 +82,7 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
         let getIndex = newArray[compIndex].legendArray.findIndex((x) => x.colorCode === color)
         let object = {
           colorCode: color,
-          gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+          gradeName: color === "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
           divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
           competitionDivisionGradeId: drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
           "checked": true
@@ -106,7 +106,7 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
       let index = currentLegends.findIndex((x) => x.colorCode === color)
       let object = {
         colorCode: color,
-        gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+        gradeName: color === "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
         divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
@@ -378,7 +378,7 @@ function pushColorDivision(division, drawsResultData) {
       for (let k in draws) {
         let slots = draws[k].slotsArray
         for (let l in slots) {
-          if (slots[l].competitionDivisionGradeId == divisionGradeId) {
+          if (slots[l].competitionDivisionGradeId === divisionGradeId) {
             let newDivisionobject = {
               divisionId: division[i].division,
               competitionDivisionGradeId: division[i].competitionDivisionGradeId,
@@ -425,10 +425,10 @@ function allcompetitionDrawsData(data) {
 
 function getCompGradeColor(gradeId, competitionUniqueKey) {
   let gradeColorCompTempArray = JSON.parse(JSON.stringify(gradeCompColorArray));
-  let compIndex = gradeColorCompTempArray.findIndex((x) => x.competitionUniqueKey == competitionUniqueKey);
+  let compIndex = gradeColorCompTempArray.findIndex((x) => x.competitionUniqueKey === competitionUniqueKey);
   var compGradeColor = lightGray;
   if (compIndex !== -1) {
-    let compGradeIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex((x) => x.gradeId == gradeId);
+    let compGradeIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex((x) => x.gradeId === gradeId);
     if (compGradeIndex !== -1) {
       compGradeColor = gradeColorCompTempArray[compIndex].newGradesArray[compGradeIndex].colorCode
     }
@@ -518,7 +518,7 @@ function sortDateArray(dateArray) {
   let inDrawsArray = []
   let outDrawsArray = []
   for (let i in dateArray) {
-    if (dateArray[i].notInDraw == false) {
+    if (dateArray[i].notInDraw === false) {
       inDrawsArray.push(dateArray[i])
     }
     else {
@@ -535,11 +535,11 @@ function setupDateObjectArray(dateArray, drawObject) {
   let defaultDateObject = {
     date: drawObject.matchDate,
     endTime: drawObject.endTime,
-    notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
+    notInDraw: drawObject.outOfCompetitionDate === 1 || drawObject.outOfRoundDate === 1
   }
   for (let i in dateArray) {
     if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
-      if (tempDateArray[i].notInDraw == false) {
+      if (tempDateArray[i].notInDraw === false) {
         tempDateArray[i] = defaultDateObject
       }
       return tempDateArray;
@@ -567,8 +567,8 @@ function setupGradesArray(gradesArray, gradeId) {
 //     index: null
 //   }
 //   for (let i in slotsArray) {
-//     if (slotsArray[i].matchDate == checkdate) {
-//       if (slotsArray[i].drawsId == null) {
+//     if (slotsArray[i].matchDate === checkdate) {
+//       if (slotsArray[i].drawsId === null) {
 //         obj = {
 //           status: false,
 //           index: i
@@ -923,7 +923,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       try {
         let resultData;
         let singleCompetitionDivision
-        if (action.competitionId == "-1" || action.dateRangeCheck) {
+        if (action.competitionId === "-1" || action.dateRangeCheck) {
           let allCompetiitonDraws = action.result
           
           resultData = allcompetitionDrawsData(allCompetiitonDraws)
@@ -939,14 +939,14 @@ function CompetitionMultiDraws(state = initialState, action) {
 
         state.publishStatus = action.result.drawsPublish
         state.isTeamInDraw = action.result.isTeamNotInDraws
-        // state.drawDivisions  = action.competitionId == "-1" || action.dateRangeCheck ? resultData.data ? resultData.data.legendsArray : [] : []
+        // state.drawDivisions  = action.competitionId === "-1" || action.dateRangeCheck ? resultData.data ? resultData.data.legendsArray : [] : []
         // let singleCompetitionDivision = action.competitionId != "-1" || !action.dateRangeChec && pushColorDivision(JSON.parse(JSON.stringify(state.divisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
         state.divisionGradeNameList = singleCompetitionDivision ? singleCompetitionDivision : []
         state.drawsCompetitionArray = state.drawDivisions.length > 0 ? getCompetitionArray(JSON.parse(JSON.stringify(state.drawDivisions))) : []
         let orgData = updateAllOrganisations(JSON.parse(JSON.stringify(action.result.organisations)), true)
         return {
           ...state,
-          getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
+          getRoundsDrawsdata: action.competitionId === "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
           drawOrganisations: orgData,
           onLoad: false,
           error: null,
@@ -1139,7 +1139,7 @@ function CompetitionMultiDraws(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:
       let resultDataNew
-      if (action.competitionId == "-1" || action.dateRangeCheck) {
+      if (action.competitionId === "-1" || action.dateRangeCheck) {
         let allCompetiitonDraws = action.getResult;
         resultDataNew = allcompetitionDrawsData(allCompetiitonDraws)
       }
@@ -1153,7 +1153,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       let orgDataNew = JSON.parse(JSON.stringify(action.getResult.organisations))
       return {
         ...state,
-        getRoundsDrawsdata: action.competitionId == "-1"|| action.dateRangeCheck ?  [resultDataNew.data] : resultDataNew.roundsdata,
+        getRoundsDrawsdata: action.competitionId === "-1"|| action.dateRangeCheck ?  [resultDataNew.data] : resultDataNew.roundsdata,
         drawOrganisations: orgDataNew,
         onLoad: false,
         error: null,
@@ -1255,14 +1255,14 @@ function CompetitionMultiDraws(state = initialState, action) {
     case ApiConstants.API_UPDATE_MULTI_DRAWS_LOCK_SUCCESS:
       let getDrawsArray = state.getRoundsDrawsdata
       if (action.key === "all") {
-        let updatetLockValueIndex = getDrawsArray[0].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
-        let updateslotsIndex = getDrawsArray[0].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+        let updatetLockValueIndex = getDrawsArray[0].draws.findIndex((x) => x.venueCourtId === action.venueCourtId)
+        let updateslotsIndex = getDrawsArray[0].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId === action.drawsId)
         getDrawsArray[0].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
         state.getRoundsDrawsdata = getDrawsArray
       } else {
         let getDrawsArrayIndex = getDrawsArray.findIndex((x) => x.roundId === action.roundId)
-        let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
-        let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+        let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId === action.venueCourtId)
+        let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId === action.drawsId)
         getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
         state.getRoundsDrawsdata = getDrawsArray
       }
@@ -1320,7 +1320,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       if (action.key === "competition") {
         state.drawsCompetitionArray[action.index].checked = action.value
       }
-      if (action.key == "division") {
+      if (action.key === "division") {
         state.drawDivisions[action.index].legendArray[action.subIndex].checked = action.value
       }
       if (action.key === 'allCompetitionVenues') {
@@ -1337,7 +1337,7 @@ function CompetitionMultiDraws(state = initialState, action) {
         state.drawOrganisations = allOrganisations
 
       }
-      if (action.key == "organisation") {
+      if (action.key === "organisation") {
         state.drawOrganisations[action.index].checked = action.value
       }
       if (action.key === "allDivisionChecked") {
