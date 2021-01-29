@@ -161,7 +161,8 @@ function stripe(state = initialState, action) {
                 onLoad: false,
                 error: action.error,
                 status: action.status,
-                onExportLoad: false
+                onExportLoad: false,
+                refundAmountLoad: false
             };
         case ApiConstants.API_STRIPE_API_ERROR:
             return {
@@ -169,7 +170,8 @@ function stripe(state = initialState, action) {
                 onLoad: false,
                 error: action.error,
                 status: action.status,
-                onExportLoad: false
+                onExportLoad: false,
+                refundAmountLoad: false
             };
 
 
@@ -424,6 +426,8 @@ function stripe(state = initialState, action) {
             return {
                 ...state,
                 refundAmountLoad: false,
+                error: null,
+                status: action.status
             }
 
         default:

@@ -291,7 +291,8 @@ class PaymentDashboard extends Component {
     }
 
     componentDidUpdate() {
-        if(this.state.onLoad == true && this.props.paymentState.refundAmountLoad == false){
+        if(this.state.onLoad == true && this.props.paymentState.refundAmountLoad == false && 
+                this.props.paymentState.status == 1){
             this.handlePaymentTableList(1, this.state.userId, this.state.regId, this.state.searchText);
             this.setState({onLoad: false})
         }

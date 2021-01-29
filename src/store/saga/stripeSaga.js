@@ -424,6 +424,10 @@ function* partialRefundAmountSaga(action) {
             result: result.result.data,
             status: result.status,
         });
+        message.config({
+          duration: 4.0,
+          maxCount: 1
+      })
         message.success(result.result.data.message)
     } else {
         yield call(failSaga, result)
