@@ -87,8 +87,7 @@ class UmpirePoolAllocation extends Component {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = competitionList.length > 0 && competitionList[0].id
-                let orgId = competitionList.length > 0 && competitionList[0].competitionOrganisation.orgId
+                let firstComp = competitionList.length > 0 && competitionList[0].id;
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
@@ -98,7 +97,7 @@ class UmpirePoolAllocation extends Component {
                 }
 
                 if (JSON.parse(getUmpireCompetitonData())) {
-                    this.props.getUmpirePoolData({ orgId: orgId, compId: firstComp })
+                    this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp })
                 }
 
                 const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
