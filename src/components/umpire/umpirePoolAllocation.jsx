@@ -9,7 +9,8 @@ import {
     Modal,
     Menu,
     message,
- } from 'antd';
+    Pagination
+} from 'antd';
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -125,7 +126,7 @@ class UmpirePoolAllocation extends Component {
         }
 
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
-            this.props.getUmpireList({ organisationId, competitionId: this.state.selectedComp });
+            this.props.getUmpireList({ organisationId, competitionId: this.state.selectedComp, offset: 0 });
         }
 
         if ((this.props.umpireState.onLoad !== prevProps.umpireState.onLoad
@@ -467,6 +468,14 @@ class UmpirePoolAllocation extends Component {
         });
     };
 
+    handlePageChange = page => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const compId = JSON.parse(getUmpireCompId());
+
+        const offset = !!page ? 10 * (page - 1) : 0;
+
+        this.props.getUmpireList({ organisationId, competitionId: compId, offset: offset });
+    };
 
     // save new data
     handleSave = () => {
@@ -789,6 +798,7 @@ class UmpirePoolAllocation extends Component {
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         const { unassignedData, isOrganiserView } = this.state;
+        const { currentPage_Data, totalCount_Data } = this.props.umpireState;
 
         return (
             <div>
@@ -840,6 +850,20 @@ class UmpirePoolAllocation extends Component {
                         </div>
                     )}
                 </Droppable>
+                <div className="comp-dashboard-botton-view-mobile">
+                    <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
+
+                    <div className="d-flex justify-content-end">
+                        <Pagination
+                            className="antd-pagination"
+                            current={currentPage_Data}
+                            total={totalCount_Data}
+                            defaultPageSize={10}
+                            onChange={this.handlePageChange}
+                            showSizeChanger={false}
+                        />
+                    </div>
+                </div>
             </div>
         )
     }
@@ -882,7 +906,6 @@ class UmpirePoolAllocation extends Component {
     }
 
     render() {
-        // console.log('this.props.umpirePoolAllocationState.onLoad', this.props.umpirePoolAllocationState.onLoad)
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />

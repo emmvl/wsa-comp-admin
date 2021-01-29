@@ -21,8 +21,8 @@ let token = getAuthToken();
 
 let UmpireAxiosApi = {
     umpireListGet(data) {
-        const { competitionId, organisationId } = data;
-        const url = `/competitions/${competitionId}/umpires?organisationId=${organisationId}`;
+        const { competitionId, organisationId, offset } = data;
+        const url = `/competitions/${competitionId}/umpires?organisationId=${organisationId}&offset=${offset}&limit=${10}`;
         return Method.dataGet(url, token);
     },
 
