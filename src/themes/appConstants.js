@@ -1776,6 +1776,7 @@ const AppConstants = {
     removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
 
     yourOrder: "Your Order",
+    submitButtonPressDescription: "You must press SUBMIT to complete your Registration.",
 
     paymentSummary: 'Payment Summary',
     nominationFeesPaid: 'Nomination Fees Paid',
