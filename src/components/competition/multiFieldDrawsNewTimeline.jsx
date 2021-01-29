@@ -991,11 +991,17 @@ class MultifieldDrawsNewTimeline extends Component {
             isDragging: false,
         });
 
+        if (!stateVenueId) {
+            message.error(AppConstants.timeNotAllowed);
+            return
+        }
+
         if (targetCourtId && stateVenueId) {
             const refTimeFormatted = this.dragTimeRef.current.format('YYYY-MM-DD HH:mm');
             const startTimeNew = moment(refTimeFormatted);
 
             if (startTimeNew.isBefore(dragDayTimeRestrictions.startTime)) {
+                message.error(AppConstants.timeNotAllowed);
                 return
             }
 
@@ -1005,10 +1011,12 @@ class MultifieldDrawsNewTimeline extends Component {
             const endTimeNew = this.dragTimeEndRef.current;
 
             if (endTimeNew.isAfter(dragDayTimeRestrictions.endTime)) {
+                message.error(AppConstants.timeNotAllowed);
                 return;
             }
 
             if (draggableEventObject.matchDate === newTimeWithDateFormatted && targetCourtId.toString() === stateVenueId) {
+                message.error(AppConstants.timeNotAllowed);
                 return;
             }
 
@@ -1059,6 +1067,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 });
 
             if (isCourtDataSlotBusy) {
+                message.error(AppConstants.timeNotAllowed);
                 return;
             }
 
@@ -2014,7 +2023,7 @@ class MultifieldDrawsNewTimeline extends Component {
             <div 
                 className="table-head-wrap d-flex position-relative" 
                 style={{
-                    left: 175,
+                    left: 180,
                 }}
             >
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
@@ -2192,7 +2201,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     className="box-draws unavailable-draws align-items-center"
                                                     style={{
                                                         minWidth: 48,
-                                                        cursor: 'not-allowed',
+                                                        // cursor: 'not-allowed',
                                                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                                                         ...(isAxisInverted ? {
                                                             left: 0,
@@ -2213,6 +2222,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                             this.setState({ dragDayTarget: null })
                                                         }
                                                     }}
+                                                    onDragEnd={e => this.dayLineDragEnd(e)}
                                                 >
                                                     {this.unavailableTextView()}
                                                 </div>
@@ -2243,6 +2253,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
                                                     borderRadius: '0px',
+                                                    left: 0,
                                                     ...dayBg,
                                                     ...(isAxisInverted ?
                                                         {
@@ -2256,7 +2267,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                                             height: 48,
                                                             transform: 'translateY(-50%)',
                                                         })
-                                                    // left: isAxisInverted ? '50%' : prevDaysWidth,
                                                 }}
                                                 onDragOver={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
@@ -2286,6 +2296,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                 className="box-draws unavailable-draws position-absolute align-items-center"
                                                                 style={{
                                                                     background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
+                                                                    cursor: 'not-allowed',
                                                                     ...(isAxisInverted ?
                                                                         {
                                                                             bottom: widthIndex ? 0 : 'auto',
