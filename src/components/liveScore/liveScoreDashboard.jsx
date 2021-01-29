@@ -617,6 +617,7 @@ class LiveScoreDashboard extends Component {
             onload: false,
             page: 1,
             retryPaymentLoad: false,
+            competitionUniqueKey: null
         }
         this_obj = this
         this.props.initializeCompData()
@@ -630,12 +631,14 @@ class LiveScoreDashboard extends Component {
         if (getLiveScoreCompetiton()) {
             const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            let uniqueKey = competitionOrganisation ? competitionOrganisation.uniqueKey : null;
             checkLivScoreCompIsParent().then((value) => {
                 this.getPlayersToPayList(1);
                 this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
                 this.setState({
                     liveScoreCompIsParent: value,
-                    compOrgId: compOrgId
+                    compOrgId: compOrgId,
+                    competitionUniqueKey: uniqueKey
                 })
             })
 
@@ -707,10 +710,11 @@ class LiveScoreDashboard extends Component {
 
     retryPayment = (record) => {
         let payload = {
-            processType: record.processType,
+            processTypeName: record.processTypeName,
             registrationUniqueKey: record.registrationUniqueKey,
             userId: record.userId,
-            divisionId: record.divisionId
+            divisionId: record.divisionId,
+            competitionId: this.state.competitionUniqueKey
         }
 
 
@@ -720,10 +724,11 @@ class LiveScoreDashboard extends Component {
 
     cashReceived = (record) => {
         let payload = {
-            processType: record.processType,
+            processTypeName: record.processTypeName,
             registrationUniqueKey: record.registrationUniqueKey,
             userId: record.userId,
-            divisionId: record.divisionId
+            divisionId: record.divisionId,
+            competitionId: this.state.competitionUniqueKey
         }
 
 
