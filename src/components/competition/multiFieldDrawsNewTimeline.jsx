@@ -981,20 +981,22 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
-    dayLineDragEnd = (e) => {
+    handleDragEnd = (e) => {
         const targetCourtId = +e.currentTarget.id.split(':')[0];
         const stateVenueId = this.state.dragDayTarget?.id.split(':')[0];
 
         const { draggableEventObject, dragDayTimeRestrictions } = this.state;
 
+        // console.log('targetCourtId && stateVenueId', targetCourtId, stateVenueId)
+
         this.setState({
             isDragging: false,
         });
 
-        if (!stateVenueId) {
-            message.error(AppConstants.timeNotAllowed);
-            return
-        }
+        // if (!stateVenueId) {
+        //     message.error(AppConstants.timeNotAllowed);
+        //     return
+        // }
 
         if (targetCourtId && stateVenueId) {
             const refTimeFormatted = this.dragTimeRef.current.format('YYYY-MM-DD HH:mm');
@@ -1939,19 +1941,20 @@ class MultifieldDrawsNewTimeline extends Component {
             }
         }
 
-        const horizontalDashedBg = {
-            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%),' +
-                            'linear-gradient(to bottom, rgba(170,170,170,1) 0%, rgba(170,170,170,0) 2%, rgba(170,170,170,0) 100%)',
-            backgroundSize: `5px ${ONE_MIN_WIDTH * 30}px`
-        }
-
-        const dayBgAvailable = isAxisInverted ? {
-            ...horizontalDashedBg,
-        } : {
+        const verticalDashedBg = {
             backgroundSize,
             backgroundImage,
             backgroundPosition,
-        };
+        }
+
+        const horizontalDashedBg = {
+            backgroundImage: 
+                'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%),' +
+                'linear-gradient(to bottom, rgba(170,170,170,1) 0%, rgba(170,170,170,0) 3%, rgba(170,170,170,0) 100%)',
+            backgroundSize: `5px ${ONE_MIN_WIDTH * 30}px`
+        }
+
+        const dayBgAvailable = isAxisInverted ? horizontalDashedBg : verticalDashedBg;
 
         return dayBgAvailable;
     }
@@ -2058,6 +2061,53 @@ class MultifieldDrawsNewTimeline extends Component {
         );
     }
 
+    unavailableDayView = (courtData, fieldItemDateIndex, diffDayScheduleTime, prevDaysWidth) => {
+        const { isAxisInverted } = this.state;
+
+        return (
+            <div
+                key={"slot" + fieldItemDateIndex}
+                className={isAxisInverted ? 'position-absolute' : 'position-relative'}
+                style={{ 
+                    width: `calc(100%) - ${prevDaysWidth}`,
+                    height: '100%', 
+                    left: isAxisInverted ? '50%' : 75,
+                }}
+            >
+                <div
+                    id={courtData.venueCourtId}
+                    className="box-draws unavailable-draws align-items-center"
+                    style={{
+                        minWidth: 48,
+                        cursor: 'not-allowed',
+                        background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
+                        ...(isAxisInverted ? {
+                            left: 0,
+                            top: prevDaysWidth,
+                            width: 48,
+                            height: diffDayScheduleTime,
+                            transform: 'translateX(-50%)',
+                        } : {
+                            left: prevDaysWidth,
+                            top: '50%',
+                            width: diffDayScheduleTime,
+                            height: 48,
+                            transform: 'translateY(-50%)',
+                        })
+                    }}
+                    onDragOver={() => {
+                        if (this.state.dragDayTarget) {
+                            this.setState({ dragDayTarget: null })
+                        }
+                    }}
+                    onDragEnd={e => this.handleDragEnd(e)}
+                >
+                    {this.unavailableTextView()}
+                </div>
+            </div>
+        );
+    }
+
     draggableView = (dateItem) => {
         let disabledStatus = this.state.competitionStatus == 1;
         let dayMargin = 25;
@@ -2107,9 +2157,8 @@ class MultifieldDrawsNewTimeline extends Component {
                     onTouchEnd={this.drawsFieldUp}
                 >
 
-                    {isAxisInverted &&    
-                        this.dayHeadView(date, dateNewArray, dayMargin)
-                    }
+                    {isAxisInverted && this.dayHeadView(date, dateNewArray, dayMargin)}
+
                     <div
                         id="draggableTooltip"
                         className="unavailable-draws"
@@ -2129,14 +2178,15 @@ class MultifieldDrawsNewTimeline extends Component {
                         return (
                             <div 
                                 key={"court" + index} 
-                                style={{ 
-                                    height: isAxisInverted ? 'unset' : 70,
-                                    width: isAxisInverted ? 70 : 'unset',
+                                style={{
                                     display: 'flex', 
                                     alignItems: 'center',
-                                    ...(isAxisInverted && {
+                                    ...(isAxisInverted ? {
                                         position: 'relative',
                                         left: 15,
+                                        width: 70,
+                                    } : {
+                                        height: 70
                                     })
                                 }}
                             >
@@ -2186,48 +2236,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                     // render for the whole unavailable day for court based on venue schedule
                                     if (!timeRestrictionsSchedule) {
-                                        return (
-                                            <div
-                                                key={"slot" + fieldItemDateIndex}
-                                                className={isAxisInverted ? 'position-absolute' : 'position-relative'}
-                                                style={{ 
-                                                    width: `calc(100%) - ${prevDaysWidth}`,
-                                                    height: '100%', 
-                                                    left: isAxisInverted ? '50%' : 75,
-                                                }}
-                                            >
-                                                <div
-                                                    id={courtData.venueCourtId}
-                                                    className="box-draws unavailable-draws align-items-center"
-                                                    style={{
-                                                        minWidth: 48,
-                                                        // cursor: 'not-allowed',
-                                                        background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
-                                                        ...(isAxisInverted ? {
-                                                            left: 0,
-                                                            top: prevDaysWidth,
-                                                            width: 48,
-                                                            height: diffDayScheduleTime,
-                                                            transform: 'translateX(-50%)',
-                                                        } : {
-                                                            left: prevDaysWidth,
-                                                            top: '50%',
-                                                            width: diffDayScheduleTime,
-                                                            height: 48,
-                                                            transform: 'translateY(-50%)',
-                                                        })
-                                                    }}
-                                                    onDragOver={() => {
-                                                        if (this.state.dragDayTarget) {
-                                                            this.setState({ dragDayTarget: null })
-                                                        }
-                                                    }}
-                                                    onDragEnd={e => this.dayLineDragEnd(e)}
-                                                >
-                                                    {this.unavailableTextView()}
-                                                </div>
-                                            </div>
-                                        )
+                                        return this.unavailableDayView(courtData, fieldItemDateIndex, diffDayScheduleTime, prevDaysWidth);
                                     }
 
                                     const dayBg = timeRestrictionsSchedule.isUnavailable ? {
@@ -2275,7 +2284,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 }}
                                                 onDragEnd={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
-                                                        this.dayLineDragEnd(e)
+                                                        this.handleDragEnd(e)
                                                 }}
                                                 onTouchMove={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
@@ -2284,7 +2293,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 }}
                                                 onTouchEnd={e => {
                                                     if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
-                                                        this.dayLineDragEnd(e)
+                                                        this.handleDragEnd(e)
                                                 }}
                                             >
                                                 {timeRestrictionsSchedule.isUnavailable && this.unavailableTextView()}
@@ -2335,8 +2344,13 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                 key={"slot" + slotIndex}
                                                                 style={{
                                                                     position: 'absolute',
-                                                                    left: isAxisInverted ? 0 : diffTimeStartEvent,
-                                                                    top: isAxisInverted ? diffTimeStartEvent : 0,
+                                                                    ...(isAxisInverted ? {
+                                                                        left: 0,
+                                                                        top: diffTimeStartEvent,
+                                                                    } : {
+                                                                        left: diffTimeStartEvent,
+                                                                        top: 0,
+                                                                    })
                                                                 }}
                                                             >
                                                                 <div
@@ -2353,15 +2367,19 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                     className={'box-draws purple-bg'}
                                                                     style={{
                                                                         backgroundColor: this.checkColor(slotObject),
-                                                                        // left: isAxisInverted ? 0 : diffTimeStartEvent,
-                                                                        // top: isAxisInverted ? diffTimeStartEvent : 0,
                                                                         overflow: 'hidden',
                                                                         whiteSpace: 'nowrap',
                                                                         cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
-                                                                        width: isAxisInverted ? 48 : diffTimeEventDuration,
-                                                                        minWidth: isAxisInverted ? 48 : diffTimeEventDuration,
-                                                                        height: isAxisInverted ? diffTimeEventDuration : 48,
                                                                         opacity: isDayInPast ? 0.7 : 1,
+                                                                        ...(isAxisInverted ? {
+                                                                            width: 48,
+                                                                            minWidth: 48,
+                                                                            height: diffTimeEventDuration,
+                                                                        } : {
+                                                                            width: diffTimeEventDuration,
+                                                                            minWidth: diffTimeEventDuration,
+                                                                            height: 48,
+                                                                        })
                                                                     }}
                                                                 >
                                                                     {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
@@ -2456,13 +2474,18 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                         // className="box-exception"
                                                                         className="position-absolute"
                                                                         style={{
-                                                                            // left: diffTimeStartEvent,
-                                                                            top: isAxisInverted ? '50%' : 48,
-                                                                            left: isAxisInverted ? 48 : '50%',
-                                                                            transform: isAxisInverted ? 'translateY(-50%)' : 'translateX(-50%)',
                                                                             overflow: 'hidden',
                                                                             whiteSpace: 'nowrap',
                                                                             minWidth: 16,
+                                                                            ...(isAxisInverted ? {
+                                                                                top: '50%',
+                                                                                left: 48,
+                                                                                transform: 'translateY(-50%)',
+                                                                            } : {
+                                                                                top: 48,
+                                                                                left: '50%',
+                                                                                transform: 'translateX(-50%)',
+                                                                            })
                                                                         }}
                                                                     >
                                                                         {!timeRestrictionsSchedule.isUnavailable && !isDayInPast && <Menu
