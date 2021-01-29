@@ -126,7 +126,7 @@ class UmpirePoolAllocation extends Component {
         }
 
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
-            this.props.getUmpireList(this.state.selectedComp);
+            this.props.getUmpireList({ organisationId, competitionId: this.state.selectedComp });
         }
 
         if ((this.props.umpireState.onLoad !== prevProps.umpireState.onLoad
