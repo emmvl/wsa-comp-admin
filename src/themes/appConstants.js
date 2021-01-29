@@ -1788,6 +1788,7 @@ const AppConstants = {
     poolRemovedSuccessMsg: "Pool was removed succesfully",
 
     yourOrder: "Your Order",
+    submitButtonPressDescription: "You must press SUBMIT to complete your Registration.",
 
     paymentSummary: 'Payment Summary',
     nominationFeesPaid: 'Nomination Fees Paid',

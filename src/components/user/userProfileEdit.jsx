@@ -51,28 +51,27 @@ const columns = [
         title: AppConstants.id,
         dataIndex: "id",
         key: "key",
-    },
-    {
-        title: AppConstants.name,
-        dataIndex: "name",
-        key: "name",
-    },
-    {
+    }, {
+        title: AppConstants.firstName,
+        dataIndex: "firstName",
+        key: "firstName",
+    }, {
+        title: AppConstants.lastName,
+        dataIndex: "lastName",
+        key: "lastName",
+    }, {
         title: AppConstants.dateOfBirth,
         dataIndex: "dob",
         key: "dob",
-    },
-    {
+    }, {
         title: AppConstants.emailAdd,
         dataIndex: "email",
         key: "email",
-    },
-    {
+    }, {
         title: AppConstants.contactNumber,
         dataIndex: "mobile",
         key: "mobile",
-    },
-    {
+    }, {
         title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
@@ -101,7 +100,7 @@ class UserProfileEdit extends Component {
                 street1: "",
                 street2: "",
                 suburb: "",
-                stateRefId: 1,
+                stateRefId: 0,
                 postalCode: "",
                 statusRefId: 0,
                 emergencyFirstName: "",
@@ -1198,6 +1197,7 @@ class UserProfileEdit extends Component {
 
     // possible matches view
     // ideally this should be separate from the user profile view
+
     possibleMatchesDetailView = (matches) => {
         let selectedMatch = null;
 
@@ -1213,8 +1213,9 @@ class UserProfileEdit extends Component {
         const dataSource = matches.map((u) => ({
             key: u.id,
             id: u.id,
-            name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
-            dob: u.dateOfBirth,
+            firstName: u.firstName,
+            lastName: u.lastname,
+            dob: moment(u.dateOfBirth).format('DD/MM/YYYY'),
             email: u.email,
             mobile: u.mobileNumber,
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
@@ -1223,7 +1224,7 @@ class UserProfileEdit extends Component {
         // actual function to call saving a child / parent
         const addChildOrParent = async () => {
             // if match is not selected, save the user data from the form
-            const userToAdd = selectedMatch || this.state.userData;
+            const userToAdd = {...this.state.userData, ...selectedMatch};
             const { userId } = this.props.history.location.state.userData;
             const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
 
@@ -1258,6 +1259,7 @@ class UserProfileEdit extends Component {
         };
 
         const onCancel = () => {
+            this.confirmOpend = false;
             this.setState({ isPossibleMatchShow: false });
         };
 
@@ -1349,6 +1351,7 @@ class UserProfileEdit extends Component {
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
+            data.dateOfBirth = moment(data.dateOfBirth).format("YYYY-MM-DD");
             const { status, result: { data: possibleMatches } } = await UserAxiosApi.findPossibleMerge(data);
             if ([1, 4].includes(status)) {
                 this.setState({ isPossibleMatchShow: true, possibleMatches });
