@@ -839,7 +839,7 @@ class UmpirePoolAllocation extends Component {
                                             {...provided.dragHandleProps}
                                             className="player-grading-draggable-view"
                                         >
-                                            <div className="row">
+                                            <div className="row flex-nowrap">
                                                 {this.umpireLineView(umpireItem, umpireIndex)}
                                             </div>
                                         </div>
