@@ -987,23 +987,21 @@ class MultifieldDrawsNewTimeline extends Component {
 
         const { draggableEventObject, dragDayTimeRestrictions } = this.state;
 
-        // console.log('targetCourtId && stateVenueId', targetCourtId, stateVenueId)
-
         this.setState({
             isDragging: false,
         });
 
-        // if (!stateVenueId) {
-        //     message.error(AppConstants.timeNotAllowed);
-        //     return
-        // }
+        if (!stateVenueId) {
+            message.error(AppConstants.notAllowed);
+            return
+        }
 
         if (targetCourtId && stateVenueId) {
             const refTimeFormatted = this.dragTimeRef.current.format('YYYY-MM-DD HH:mm');
             const startTimeNew = moment(refTimeFormatted);
 
             if (startTimeNew.isBefore(dragDayTimeRestrictions.startTime)) {
-                message.error(AppConstants.timeNotAllowed);
+                message.error(AppConstants.notAllowed);
                 return
             }
 
@@ -1013,12 +1011,12 @@ class MultifieldDrawsNewTimeline extends Component {
             const endTimeNew = this.dragTimeEndRef.current;
 
             if (endTimeNew.isAfter(dragDayTimeRestrictions.endTime)) {
-                message.error(AppConstants.timeNotAllowed);
+                message.error(AppConstants.notAllowed);
                 return;
             }
 
             if (draggableEventObject.matchDate === newTimeWithDateFormatted && targetCourtId.toString() === stateVenueId) {
-                message.error(AppConstants.timeNotAllowed);
+                message.error(AppConstants.notAllowed);
                 return;
             }
 
@@ -1069,7 +1067,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 });
 
             if (isCourtDataSlotBusy) {
-                message.error(AppConstants.timeNotAllowed);
+                message.error(AppConstants.notAllowed);
                 return;
             }
 

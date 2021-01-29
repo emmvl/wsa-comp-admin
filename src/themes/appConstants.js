@@ -1572,7 +1572,7 @@ const AppConstants = {
     showOnlyScheduledMatches: 'Show only scheduled matches',
     showByDivision: 'Show by Division/Grade',
     invertAxis: 'Invert Axis',
-    timeNotAllowed: 'This time is not allowed',
+    notAllowed: 'Not allowed',
     uploadBankAccount: 'Upload Bank Account',
     editBankAccount: 'Edit Bank Account',
     theyAlreadyTakenCourt: 'They have already taken the court for training, grading or a competition game',
