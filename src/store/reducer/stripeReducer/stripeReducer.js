@@ -416,6 +416,15 @@ function stripe(state = initialState, action) {
                 ...state,
                 onExportLoad: false,
             }
+        
+        case ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD:
+            return { ...state, refundAmountLoad: true }
+
+        case ApiConstants.API_PARTIAL_REFUND_AMOUNT_SUCCESS:
+            return {
+                ...state,
+                refundAmountLoad: false,
+            }
 
         default:
             return state;

@@ -388,6 +388,11 @@ let AxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
+    partialRefundAmountApi(payload) {
+        let url = "/api/partial/refund"
+        return Method.dataPost(url, token, payload)
+    }
+
 };
 
 const Method = {

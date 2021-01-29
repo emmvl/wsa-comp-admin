@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-    Layout, Table, Select, Menu, Pagination, Button, DatePicker, Tag, Input,
+    Layout, Table, Select, Menu, Pagination, Button, DatePicker, Tag, Input,Modal
 } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
@@ -23,7 +23,7 @@ import {
     getPaymentMethodsListAction,
 } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
-import { getPaymentList, exportPaymentDashboardApi } from "../../store/actions/stripeAction/stripeAction";
+import { getPaymentList, exportPaymentDashboardApi, partialRefundAmountAction } from "../../store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "../../store/actions/registrationAction/endUserRegistrationAction";
 import InputWithHead from "../../customComponents/InputWithHead";
 
@@ -173,35 +173,49 @@ const columns = [
         title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
-        render: (isUsed, record) => (
-            <Menu
-                className="action-triple-dot-submenu "
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <SubMenu
-                    key="sub1"
-                    style={{ borderBottomStyle: "solid", borderBottom: 0 }}
-                    title={(
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    )}
-                >
-                    <Menu.Item key="1">
-                        <span>{AppConstants.redeemVoucher}</span>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <span>{AppConstants.cashPaymentReceived}</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        ),
+        render: (isUsed, record) => {
+            return(
+                <div>
+                    {record.affiliatePortion > 0 ?
+                        <Menu
+                            className="action-triple-dot-submenu "
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <SubMenu
+                                key="sub1"
+                                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                                title={(
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                    />
+                                )}
+                            >
+                                <Menu.Item key="1">
+                                    <span>{AppConstants.redeemVoucher}</span>
+                                </Menu.Item>
+                                <Menu.Item key="2">
+                                    <span>{AppConstants.cashPaymentReceived}</span>
+                                </Menu.Item>
+                                <Menu.Item key="3" onClick={() =>this_Obj.refundPopUp(record)}>
+                                    <span>{AppConstants.refund}</span>
+                                </Menu.Item>
+    
+                            </SubMenu>
+                        </Menu>
+                        :
+                        null
+                    }
+                    
+                </div>
+            )
+            
+        },
     },
 ];
 
@@ -230,7 +244,12 @@ class PaymentDashboard extends Component {
             status: -1,
             searchText: '',
             membershipType: -1,
-            paymentStatus: -1
+            paymentStatus: -1,
+            showRefundModalVisible: false,
+            refundRecord: null,
+            refundAmount: null,
+            showMaximumAmountPopup: false,
+            showValidAmountVisible: false,
         };
         this_Obj = this;
     }
@@ -268,6 +287,13 @@ class PaymentDashboard extends Component {
             const regId = registrationId != null ? registrationId : '-1';
 
             this.handlePaymentTableList(1, userId, regId, this.state.searchText);
+        }
+    }
+
+    componentDidUpdate() {
+        if(this.state.onLoad == true && this.props.paymentState.refundAmountLoad == false){
+            this.handlePaymentTableList(1, this.state.userId, this.state.regId, this.state.searchText);
+            this.setState({onLoad: false})
         }
     }
 
@@ -388,6 +414,77 @@ class PaymentDashboard extends Component {
             );
         }
     };
+
+    refundPopUp = (record) => {
+        this.setState({showRefundModalVisible: true, refundRecord: record})
+    }
+
+    refundAmountCall = () => {
+        let amount = Number(this.state.refundAmount);
+        let affiliatePortion = Number(this.state.refundRecord.affiliatePortion)
+        if(amount <= 0){
+            this.setState({showRefundModalVisible:false, refundAmount:null, showValidAmountVisible: true})
+        }
+        else if(amount <= affiliatePortion){
+            let payload = {
+                transactionId: this.state.refundRecord.transactionId,
+                amount: amount
+            }
+            this.props.partialRefundAmountAction(payload);
+            this.setState({showRefundModalVisible:false, refundAmount:null, onLoad: true})
+        }
+        else{
+            this.setState({showMaximumAmountPopup : true, showRefundModalVisible:false, refundAmount:null})
+        }
+    }
+
+    validAmountPopup = () => {
+        return(
+            <Modal
+                title={AppConstants.warning}
+                visible={this.state.showValidAmountVisible}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                onCancel={() =>this.setState({showValidAmountVisible: false})}
+                onOk={() =>this.setState({showValidAmountVisible: false})}
+            >
+            {AppConstants.enterValidAmount}
+            </Modal>
+        )
+    }
+
+    maximumAmountPopup = () => {
+        return(
+            <Modal
+                title={AppConstants.warning}
+                visible={this.state.showMaximumAmountPopup}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                onCancel={() =>this.setState({showMaximumAmountPopup: false})}
+                onOk={() =>this.setState({showMaximumAmountPopup: false})}
+            >
+            {AppConstants.maximumAmountPopupTxt}
+            </Modal>
+        )
+
+    }
+
+    refundAmountModalPopUp = () => {
+        return (
+            <Modal
+                title={AppConstants.partialRefund}
+                visible={this.state.showRefundModalVisible}
+                onCancel={() =>this.setState({showRefundModalVisible: false, refundRecord: null})}
+                onOk={() => this.refundAmountCall()}
+            >
+                <InputWithHead
+                style={{width: "30%"}}
+                value={this.state.refundAmount} 
+                onChange={(e) => this.setState({refundAmount: e.target.value})}
+                heading={AppConstants.enterRefundAmount}
+                placeholder={AppConstants.enterAmount}
+                />
+            </Modal>
+        );
+    }
 
     headerView = () => {
         const tagName = this.state.userInfo != null ? `${this.state.userInfo.firstName} ${this.state.userInfo.lastName}` : null;
@@ -987,12 +1084,15 @@ class PaymentDashboard extends Component {
                     menuName={AppConstants.finance}
                 />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="1" />
-                <Loader visible={this.props.paymentState.onExportLoad} />
+                <Loader visible={this.props.paymentState.onExportLoad || this.props.paymentState.refundAmountLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
                         {this.contentView()}
                     </Content>
+                    {this.refundAmountModalPopUp()}
+                    {this.maximumAmountPopup()}
+                    {this.validAmountPopup()}
                 </Layout>
             </div>
         );
@@ -1009,6 +1109,7 @@ function mapDispatchToProps(dispatch) {
         exportPaymentDashboardApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
+        partialRefundAmountAction
     }, dispatch);
 }
 
