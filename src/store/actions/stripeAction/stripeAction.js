@@ -271,6 +271,14 @@ function exportPaymentSummaryApi(
     }
 }
 
+function partialRefundAmountAction(payload) {
+    const action = {
+        type: ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD,
+        payload,
+    }
+    return action
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -288,4 +296,5 @@ export {
     exportPayoutTransaction,
     getPaymentSummary,
     exportPaymentSummaryApi,
+    partialRefundAmountAction
 };

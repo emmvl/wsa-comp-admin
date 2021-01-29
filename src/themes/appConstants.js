@@ -1790,7 +1790,14 @@ const AppConstants = {
     pleaseInputAmount: "Please input amount",
 
     cashReceived: "Cash Received",
-    retryPayment: "Retry Payment"
+    retryPayment: "Retry Payment",
+
+    refund: "Refund",
+    maximumAmountPopupTxt: "Refund cannot be processed since the requested amount is more than the applicable amount.",
+    enterRefundAmount: "Please enter the amount to be Refunded.",
+    enterAmount: "Enter the Amount",
+    partialRefund: "Partial Refund",
+    enterValidAmount: "Please enter valid amount",
 
 };
 
