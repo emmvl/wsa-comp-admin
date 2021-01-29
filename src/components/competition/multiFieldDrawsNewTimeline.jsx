@@ -2023,7 +2023,7 @@ class MultifieldDrawsNewTimeline extends Component {
             <div 
                 className="table-head-wrap d-flex position-relative" 
                 style={{
-                    left: 180,
+                    left: 160,
                 }}
             >
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
@@ -2136,7 +2136,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     alignItems: 'center',
                                     ...(isAxisInverted && {
                                         position: 'relative',
-                                        left: 40,
+                                        left: 15,
                                     })
                                 }}
                             >
