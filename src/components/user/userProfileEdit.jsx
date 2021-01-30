@@ -313,7 +313,7 @@ class UserProfileEdit extends Component {
                 data.disabilityTypeRefId = null;
             }
         } else if (key === "dateOfBirth") {
-            value = (moment(value).format("MM-DD-YYYY"));
+            value = value && (moment(value).format("YYYY-MM-DD"));
         } else if (key === "email" && this.state.section === "address") {
             if (data.userId == getUserId()) {
                 this.setState({ isSameUserEmailChanged: true });
@@ -926,7 +926,7 @@ class UserProfileEdit extends Component {
                                         onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationUmpireExpiryDate")}
                                         format="DD-MM-YYYY"
                                         showTime={false}
-                                        // value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
+                                        value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
                                         disabledDate={(d) => !d || d.isSameOrBefore(new Date())}
                                     />
                                 </Form.Item>
@@ -958,7 +958,7 @@ class UserProfileEdit extends Component {
                                         onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationCoachExpiryDate")}
                                         format="DD-MM-YYYY"
                                         showTime={false}
-                                        // value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
+                                        value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
                                         disabledDate={(d) => !d || d.isSameOrBefore(new Date())}
                                     />
                                 </Form.Item>
@@ -1351,7 +1351,6 @@ class UserProfileEdit extends Component {
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
-            data.dateOfBirth = moment(data.dateOfBirth).format("YYYY-MM-DD");
             const { status, result: { data: possibleMatches } } = await UserAxiosApi.findPossibleMerge(data);
             if ([1, 4].includes(status)) {
                 this.setState({ isPossibleMatchShow: true, possibleMatches });
