@@ -104,6 +104,7 @@ function getPaymentList(
     paymentMethod,
     membershipType,
     paymentStatus,
+    discountMethod
 ) {
     return {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
@@ -123,6 +124,7 @@ function getPaymentList(
         paymentMethod,
         membershipType,
         paymentStatus,
+        discountMethod
     };
 }
 
@@ -164,6 +166,7 @@ function exportPaymentDashboardApi(
     paymentMethod,
     membershipType,
     paymentStatus,
+    discountMethod
 ) {
     return {
         type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
@@ -183,6 +186,7 @@ function exportPaymentDashboardApi(
         paymentMethod,
         membershipType,
         paymentStatus,
+        discountMethod
     }
 }
 

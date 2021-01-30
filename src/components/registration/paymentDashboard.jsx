@@ -21,6 +21,7 @@ import {
     getFeeTypeAction,
     getPaymentOptionsListAction,
     getPaymentMethodsListAction,
+    getDiscountMethodListAction
 } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getPaymentList, exportPaymentDashboardApi, partialRefundAmountAction } from "../../store/actions/stripeAction/stripeAction";
@@ -144,11 +145,12 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
     },
     {
-        title: AppConstants.paymentMethod,
-        dataIndex: "paymentMethod",
-        key: "paymentMethod",
+        title: AppConstants.discount,
+        dataIndex: "discount",
+        key: "discount",
+        render: (discount, record) => currencyFormat(discount),
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("payment"),
+        onHeaderCell: ({ dataIndex }) => listeners("discount"),
     },
     {
         title: AppConstants.governmentVoucher,
@@ -250,6 +252,7 @@ class PaymentDashboard extends Component {
             refundAmount: null,
             showMaximumAmountPopup: false,
             showValidAmountVisible: false,
+            discountMethod: -1,
         };
         this_Obj = this;
     }
@@ -304,6 +307,7 @@ class PaymentDashboard extends Component {
         this.props.getFeeTypeAction();
         this.props.getPaymentOptionsListAction();
         this.props.getPaymentMethodsListAction();
+        this.props.getDiscountMethodListAction();
         this.props.endUserRegDashboardListAction({
             organisationUniqueKey: this.state.organisationUniqueKey,
             yearRefId: 1,
@@ -343,6 +347,7 @@ class PaymentDashboard extends Component {
             paymentMethod,
             membershipType,
             offset,
+            discountMethod,
         } = this.state;
         const year = getGlobalYear() ? getGlobalYear() : '-1';
 
@@ -362,6 +367,7 @@ class PaymentDashboard extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
+            discountMethod,
         );
     }
 
@@ -383,6 +389,7 @@ class PaymentDashboard extends Component {
                 this.state.paymentOption,
                 this.state.paymentMethod,
                 this.state.membershipType,
+                this.state.discountMethod,
             );
         }
     }
@@ -398,6 +405,7 @@ class PaymentDashboard extends Component {
                 this.state.feeType,
                 this.state.paymentType,
                 this.state.paymentMethod,
+                this.state.discountMethod
             );
         }
     };
@@ -412,6 +420,7 @@ class PaymentDashboard extends Component {
                 this.state.feeType,
                 this.state.paymentType,
                 this.state.paymentMethod,
+                this.state.discountMethod,
             );
         }
     };
@@ -574,7 +583,8 @@ class PaymentDashboard extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
+            discountMethod
         } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         let year = getGlobalYear() ? getGlobalYear() : '-1'
@@ -600,7 +610,8 @@ class PaymentDashboard extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
+            discountMethod
         );
     };
 
@@ -682,6 +693,14 @@ class PaymentDashboard extends Component {
             );
         } else if (key == "paymentStatus") {
             await this.setState({ paymentStatus: value });
+            this.handlePaymentTableList(
+                1,
+                -1,
+                "-1",
+                this.state.searchText
+            );
+        } else if (key="discountMethod") {
+            await this.setState({ discountMethod: value });
             this.handlePaymentTableList(
                 1,
                 -1,
@@ -953,7 +972,7 @@ class PaymentDashboard extends Component {
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             {this.props.appState.feeTypes.map((feeType) => (
-                                <Option key={`feeType_${feeType.id}`} value={feeType.name}>
+                                <Option key={`feeType_${feeType.id}`} value={feeType.id}>
                                     {feeType.description}
                                 </Option>
                             ))}
@@ -1016,6 +1035,24 @@ class PaymentDashboard extends Component {
                 </div>
 
                 <div className="row pb-5">
+                    <div className="col-sm-3 pt-2">
+                        <InputWithHead required="pt-0" heading={AppConstants.discount} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select w-100"
+                            style={{ paddingRight: 1, minWidth: 160 }}
+                            onChange={(discountMethod) => this.onChangeDropDownValue(discountMethod, "discountMethod")}
+                            value={this.state.discountMethod}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {this.props.appState.discountMethod.map((discountMethod) => (
+                                <Option key={`discountMethod_${discountMethod.id}`} value={discountMethod.id}>
+                                    {discountMethod.description}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
                     <div className="col-sm-3 pt-2">
                         <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                         <DatePicker
@@ -1110,7 +1147,8 @@ function mapDispatchToProps(dispatch) {
         exportPaymentDashboardApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
-        partialRefundAmountAction
+        partialRefundAmountAction,
+        getDiscountMethodListAction
     }, dispatch);
 }
 
