@@ -140,11 +140,11 @@ const columns = [
         key: "paidByUsers",
         render: (paidBy, record, index) => (
             <div>
-                {(record.paidByUsers || []).map((item, index) => (
+                {(record.paidByUsers || []).map((item, pbu_index) => (
 
-                    record.userId == item.paidByUserId ? <div>Self</div>
+                    record.userId == item.paidByUserId ? <div key={'user_' + pbu_index}>Self</div>
                         : (
-                            <div>
+                            <div key={'user_' + pbu_index}>
                                 <NavLink
                                     to={{
                                         pathname: `/userPersonal`,
