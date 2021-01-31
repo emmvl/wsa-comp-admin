@@ -36,7 +36,7 @@ import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+// const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 class UserEditAffiliates extends Component {
     constructor(props) {
@@ -242,7 +242,7 @@ class UserEditAffiliates extends Component {
     };
 
     updateContactFormFields = (contacts) => {
-        contacts.map((item, index) => {
+        contacts.forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`firstName${index}`]: item.firstName,
                 [`lastName${index}`]: item.lastName,
@@ -254,7 +254,7 @@ class UserEditAffiliates extends Component {
                 this.setState({ isSameUserEmailId: item.email });
             }
             let permissions = item.permissions;
-            permissions.map((perm, permIndex) => {
+            permissions.forEach((perm, permIndex) => {
                 this.formRef.current.setFieldsValue({
                     [`permissions${index}`]: perm.roleId,
                 });
@@ -807,6 +807,7 @@ class UserEditAffiliates extends Component {
                                             className="user-reg-link"
                                             href={affiliate.termsAndConditions}
                                             target="_blank"
+                                            rel='noopener noreferrer'
                                         >
                                             {affiliate.termsAndConditionsFile}
                                         </a>

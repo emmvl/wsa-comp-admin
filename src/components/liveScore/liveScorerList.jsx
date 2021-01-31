@@ -16,11 +16,14 @@ import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
 import { teamListDataCheck } from "../../util/helpers";
 
-function getName(item) {
-    return item.name;
-}
+// function getName(item) {
+//     return item.name;
+// }
 
-const { Content, Footer } = Layout;
+const {
+    Content,
+    // Footer
+} = Layout;
 
 let _this = null;
 
@@ -254,9 +257,9 @@ class LiveScorerList extends Component {
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
         let url = ""
         if(!this.state.liveScoreCompIsParent){
-            url = AppConstants.scorerExport + 6 + `&roleId=${4}` + `&entityId=${compOrgId}`
+            url = AppConstants.scorerExport + 6 + `&roleId=${4}&entityId=${compOrgId}`
         }else{
-            url = AppConstants.scorerExport + 1 + `&roleId=${4}` + `&entityId=${id}`
+            url = AppConstants.scorerExport + 1 + `&roleId=${4}&entityId=${id}`
         }
         this.props.exportFilesAction(url)
     }
@@ -390,7 +393,7 @@ class LiveScorerList extends Component {
 
     contentView = () => {
         let { liveScoreScorerState } = this.props;
-        const { scorerListResult, scorerListCurrentPage, scorerListTotalCount } = this.props.liveScoreScorerState
+        const { scorerListResult, scorerListCurrentPage, scorerListTotalCount } = liveScoreScorerState
         let dataSource = scorerListResult ? scorerListResult : []
         return (
             <div className="comp-dash-table-view mt-4">
@@ -400,7 +403,7 @@ class LiveScorerList extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
-                        loading={this.props.liveScoreScorerState.onLoad}
+                        loading={liveScoreScorerState.onLoad}
                         rowKey={(record) => "scorerData" + record.id}
                     />
                 </div>

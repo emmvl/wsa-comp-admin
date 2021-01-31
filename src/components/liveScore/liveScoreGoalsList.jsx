@@ -12,7 +12,7 @@ import AppImages from "../../themes/appImages";
 import { liveScoreGoalListAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
-import { liveScore_formateDateTime } from '../../themes/dateformate'
+// import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 
@@ -260,7 +260,7 @@ class LiveScoreGoalList extends Component {
         let url = '';
         if(this.state.liveScoreCompIsParent !== true)
         {
-            url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}` + `&competitionOrganisationId=${this.state.compOrgId}`
+            url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}&competitionOrganisationId=${this.state.compOrgId}`
         }
         else{
             url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`

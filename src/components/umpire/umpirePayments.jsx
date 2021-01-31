@@ -12,16 +12,16 @@ import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
 import { getUmpirePaymentData, updateUmpirePaymentData, umpirePaymentTransferData } from '../../store/actions/umpireAction/umpirePaymentAction'
 import {
-    getUmpireCompetiton,
+    // getUmpireCompetiton,
     setUmpireCompition,
     getOrganisationData,
     setUmpireCompitionData,
-    getUmpireCompetitonData,
-    getLiveScoreUmpireCompition,
-    getLiveScoreUmpireCompitionData,
+    // getUmpireCompetitonData,
+    // getLiveScoreUmpireCompition,
+    // getLiveScoreUmpireCompitionData,
     setLiveScoreUmpireCompition,
     setLiveScoreUmpireCompitionData,
-    getPrevUrl,
+    // getPrevUrl,
 } from 'util/sessionStorage';
 import './umpire.css';
 import Loader from '../../customComponents/loader';
@@ -175,7 +175,7 @@ const columns = [
         key: 'selectedValue',
         render: (selectedValue, record, index) => {
             return (
-                (record.user && record.user.stripeAccountId || record.paymentStatus === 'paid') ? (
+                ((record.user && record.user.stripeAccountId) || record.paymentStatus === 'paid') ? (
                     <Checkbox
                         className="single-checkbox"
                         checked={selectedValue}
@@ -254,7 +254,7 @@ class UmpirePayments extends Component {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
-                let compData = compList.length > 0 && compList[0]
+                // let compData = compList.length > 0 && compList[0]
 
                 // if (getUmpireCompetiton()) {
                 //     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
@@ -692,7 +692,10 @@ class UmpirePayments extends Component {
     }
 
     render() {
-        const { umpirePaymentList, umpirePaymentObject } = this.props.umpirePaymentState
+        const {
+            umpirePaymentList,
+            // umpirePaymentObject
+        } = this.props.umpirePaymentState
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />

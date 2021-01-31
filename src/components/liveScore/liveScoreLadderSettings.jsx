@@ -22,8 +22,6 @@ import history from "../../util/history";
 const { Header, Footer } = Layout;
 const { Option } = Select;
 
-let _this = ""
-
 class LiveScoreLadderSettings extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +32,6 @@ class LiveScoreLadderSettings extends Component {
             ladderIndex: null,
             saveLoad: false
         };
-        _this = this
     }
 
     componentDidMount() {
@@ -90,7 +87,7 @@ class LiveScoreLadderSettings extends Component {
 
     onSaveClick() {
         const { ladders } = this.props.ladderSettingState;
-        ladders.map((item, index) => {
+        ladders.forEach((item, index) => {
             if (item.ladderFormatId < 0) {
                 item.ladderFormatId = 0;
             }
@@ -240,7 +237,7 @@ class LiveScoreLadderSettings extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        const { postData } = this.props.ladderSettingState
+        // const { postData } = this.props.ladderSettingState
 
         return (
             <div className="fluid-width">
@@ -278,6 +275,7 @@ class LiveScoreLadderSettings extends Component {
                                 className="user-reg-link"
                                 href={process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
                                 target='_blank'
+                                rel="noopener noreferrer"
                             >
                                 {process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
                             </a>
@@ -301,6 +299,7 @@ class LiveScoreLadderSettings extends Component {
                                 className="user-reg-link"
                                 href={process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
                                 target='_blank'
+                                rel="noopener noreferrer"
                             >
                                 {process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
                             </a>

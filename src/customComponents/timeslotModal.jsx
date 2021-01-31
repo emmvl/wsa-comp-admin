@@ -28,7 +28,7 @@ class TimeSlotModal extends React.Component {
             removetimeSlotDay,
             changeDay,
             removeStartTime,
-            UpdateTimeSlotsDataManual,
+            // UpdateTimeSlotsDataManual,
             handleTimeslotNext,
             onTimslotBack,
             onTimeslotLoad,
@@ -105,11 +105,11 @@ class TimeSlotModal extends React.Component {
                                 </div>
                                 {timeslots.length > 1 && (
                                     <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => removetimeSlotDay(index)}>
-                                        <a className="transfer-image-view">
+                                        <div className="transfer-image-view pt-0 pointer ml-auto">
                                             <span className="user-remove-btn">
                                                 <i className="fa fa-trash-o" aria-hidden="true" />
                                             </span>
-                                        </a>
+                                        </div>
                                     </div>
                                 )}
                             </div>

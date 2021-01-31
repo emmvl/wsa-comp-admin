@@ -36,7 +36,11 @@ import {
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import AppUniqueId from "../../themes/appUniqueId";
 
-const { Header, Footer, Content } = Layout;
+const {
+    // Header,
+    Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 let this_obj = null;
 const { SubMenu } = Menu;
@@ -325,7 +329,7 @@ class CompetitionPartProposedTeamGrading extends Component {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
         let isError = false;
         if (buttonClicked === "submit") {
-            proposedTeamGradingData.map((item) => {
+            proposedTeamGradingData.forEach((item) => {
                 if ((item.proposedGradeRefId == 0 || item.proposedGradeRefId == null || item.proposedGradeRefId == "" ||
                     item.proposedGradeRefId == undefined)) {
                     isError = true

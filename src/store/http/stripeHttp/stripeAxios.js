@@ -1,10 +1,14 @@
 // import { DataManager } from './../../Components';
 import http from "./stripeHttp";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    getOrganisationData
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
-import competitionHttp from "../competitionHttp/competitionHttp";
+// import competitionHttp from "../competitionHttp/competitionHttp";
 
 async function logout() {
     await localStorage.clear();
@@ -160,11 +164,12 @@ let AxiosApi = {
         dateFrom,
         dateTo,
         searchValue,
-        feeType,
+        feeTypeRefId,
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus
+        paymentStatus,
+        discountMethod
     ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -181,11 +186,12 @@ let AxiosApi = {
             paymentFor: paymentFor,
             dateFrom: dateFrom,
             dateTo: dateTo,
-            feeType,
+            feeTypeRefId,
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
+            discountMethod
         }
         var url = `/api/payments/transactions?search=${searchValue}`;
         if (sortBy && sortOrder) {
@@ -284,7 +290,8 @@ let AxiosApi = {
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus) {
+        paymentStatus,
+        discountMethod) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -304,7 +311,8 @@ let AxiosApi = {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
+            discountMethod
         }
         var url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}&search=${searchValue}`;
         if (sortBy && sortOrder) {
@@ -384,6 +392,11 @@ let AxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
+    partialRefundAmountApi(payload) {
+        let url = "/api/partial/refund"
+        return Method.dataPost(url, token, payload)
+    }
+
 };
 
 const Method = {
@@ -407,7 +420,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -430,9 +443,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -479,7 +492,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -502,9 +515,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -550,7 +563,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -573,9 +586,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -627,7 +640,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -650,9 +663,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -704,7 +717,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -727,9 +740,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }

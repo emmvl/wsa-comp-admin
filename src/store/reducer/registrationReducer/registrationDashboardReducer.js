@@ -27,7 +27,7 @@ function generateOwnedRegistrations(dashboardList) {
         for (let i in ownedCompetitions) {
             let ownDivisionList = ownedCompetitions[i].divisions
             if (isArrayNotEmpty(ownDivisionList)) {
-                ownDivisionList.map((item, index) => {
+                ownDivisionList.forEach((item, index) => {
                     item.color = index <= 38 ? ColorsArray[index] : "#a3a3b1";
                 })
             }
@@ -45,7 +45,7 @@ function generateParticipatingInRegistrations(dashboardList) {
         for (let i in participatingComptitions) {
             let divisionList = participatingComptitions[i].divisions
             if (isArrayNotEmpty(divisionList)) {
-                divisionList.map((item, index) => {
+                divisionList.forEach((item, index) => {
                     item.color = index <= 38 ? ColorsArray[index] : "#a3a3b1";
                 })
             }

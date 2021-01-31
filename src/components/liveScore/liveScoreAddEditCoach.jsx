@@ -82,7 +82,7 @@ class LiveScoreAddEditCoach extends Component {
 
     setInitalFiledValue() {
         const { coachdata, teamId } = this.props.liveScoreCoachState
-        let data = this.state.tableRecord
+        // let data = this.state.tableRecord
         this.formRef.current.setFieldsValue({
             'First Name': coachdata.firstName,
             'Last Name': coachdata.lastName,
@@ -146,7 +146,7 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     contentViewForEditCoach = () => {
-        const { coachRadioBtn } = this.props.liveScoreCoachState
+        // const { coachRadioBtn } = this.props.liveScoreCoachState
         return (
             <div>
                 {this.coachNewRadioBtnView()}
@@ -180,7 +180,11 @@ class LiveScoreAddEditCoach extends Component {
 
     coachNewRadioBtnView() {
         let hasError = this.state.hasError
-        const { coachdata, teamId, teamResult } = this.props.liveScoreCoachState
+        const {
+            // coachdata,
+            // teamId,
+            teamResult
+        } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         return (
             <div className="content-view pt-4">
@@ -299,11 +303,16 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     coachExistingRadioButton() {
-        const { coachdata, teamId, teamResult, coachesResult } = this.props.liveScoreCoachState
+        const {
+            // coachdata,
+            // teamId,
+            teamResult,
+            // coachesResult
+        } = this.props.liveScoreCoachState
         const { managerListResult, onLoadSearch } = this.props.liveScoreMangerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
-        let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
+        // let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
         return (
             <div className="content-view pt-4">
                 <div className="row">

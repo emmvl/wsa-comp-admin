@@ -26,12 +26,10 @@ const tagManagerArgs = {
     gtmId: process.env.REACT_APP_GTM_ID,
 
 };
-
-const tawkTo = require('tawkto-react');
-
-const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c';
+// const tawkTo = require('tawkto-react');
+// const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c';
 const userData = {
-    name: getOrganisationData() ? getOrganisationData().firstName + " " + getOrganisationData().lastName + " " + "|" + " " + getOrganisationData().name : "",
+    name: getOrganisationData() ? getOrganisationData().firstName + " " + getOrganisationData().lastName + " | " + getOrganisationData().name : "",
     email: getOrganisationData() ? getOrganisationData().userEmail : "",
 }
 

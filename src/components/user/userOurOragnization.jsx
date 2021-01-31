@@ -258,7 +258,7 @@ class UserOurOrganization extends Component {
     }
 
     updateContactFormFields = (contacts) => {
-        contacts.map((item, index) => {
+        contacts.forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`firstName${index}`]: item.firstName,
                 [`lastName${index}`]: item.lastName,
@@ -269,7 +269,7 @@ class UserOurOrganization extends Component {
                 this.setState({ isSameUserEmailId: item.email });
             }
             let permissions = item.permissions;
-            permissions.map((perm) => {
+            permissions.forEach((perm) => {
                 this.formRef.current.setFieldsValue({
                     [`permissions${index}`]: perm.roleId,
                 });
@@ -678,6 +678,7 @@ class UserOurOrganization extends Component {
                                         style={{
                                             borderRadius: 60
                                         }}
+                                        alt=""
                                     />
                                 </label>
                             </div>
@@ -840,11 +841,10 @@ class UserOurOrganization extends Component {
                                 required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
-                                disabled={!item.isSameUser}
+                                disabled={!item.isSameUser || !this.state.isEditable}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index)}
                                 // value={item.email}
                                 value={item.email}
-                                disabled={!this.state.isEditable}
                             />
                         </Form.Item>
                         {(item.isSameUser && this.state.isSameUserEmailChanged) && (

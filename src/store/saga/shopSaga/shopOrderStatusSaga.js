@@ -38,7 +38,7 @@ function* errorSaga(error) {
   }, 800);
 }
 
-// //order status status listing get API 
+// //order status status listing get API
 function* getOrderStatusListingSaga(action) {
   try {
     const result = yield call(AxiosApi.getOrderStatusListing, action.params);
@@ -57,7 +57,7 @@ function* getOrderStatusListingSaga(action) {
   }
 }
 
-// ////////update order status API  
+// ////////update order status API
 function* updateOrderStatusSaga(action) {
   try {
     const result = yield call(AxiosApi.updateOrderStatus, action.payload);
@@ -95,7 +95,7 @@ function* getOrderDetailsSaga(action) {
   }
 }
 
-// ////// ///purchases listing get API 
+// ////// ///purchases listing get API
 function* getPurchasesListingSaga(action) {
   try {
     const result = yield call(AxiosApi.getPurchasesListing, action.params);
@@ -114,7 +114,7 @@ function* getPurchasesListingSaga(action) {
   }
 }
 
-// ////// ///purchases listing get API 
+// ////// ///purchases listing get API
 function* getOrderStatusReferenceSaga(action) {
   try {
     const result = yield call(commonAxiosApi.getRefOrderStatus, action.keys);
@@ -133,10 +133,33 @@ function* getOrderStatusReferenceSaga(action) {
   }
 }
 
+
+// export order status  API
+function* exportOrderStatusSaga(action) {
+    console.log('###-action')
+
+    try {
+        const result = yield call(AxiosApi.exportOrderStatus, action.params);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_EXPORT_ORDER_STATUS_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 export default function* rootShopOrderStatusSaga() {
   yield takeEvery(ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD, getOrderStatusListingSaga);
   yield takeEvery(ApiConstants.API_UPDATE_ORDER_STATUS_LOAD, updateOrderStatusSaga);
   yield takeEvery(ApiConstants.API_GET_ORDER_DETAILS_LOAD, getOrderDetailsSaga);
   yield takeEvery(ApiConstants.API_GET_PURCHASES_LISTING_LOAD, getPurchasesListingSaga);
-  yield takeEvery(ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD,getOrderStatusReferenceSaga)
+  yield takeEvery(ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD, getOrderStatusReferenceSaga);
+  yield takeEvery(ApiConstants.API_GET_EXPORT_ORDER_STATUS_LOAD, exportOrderStatusSaga);
 }

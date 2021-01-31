@@ -70,7 +70,7 @@ const LiveScoreAxiosApi = {
 
     liveScoreGetDivision(data, compKey, sortBy, sortOrder, isParent, compOrgId) {
         let url = null;
-        if (isParent !== true && compOrgId != undefined) {
+        if (isParent !== true && compOrgId !== undefined) {
             if (compKey) {
                 url = `/division?competitionKey=${compKey}&competitionOrganisationIds=${compOrgId}`;
             } else {
@@ -234,7 +234,7 @@ const LiveScoreAxiosApi = {
 
     liveScoreRound(competitionID, divisionId, isParent, compOrgId) {
         let url;
-        if (isParent !== true && compOrgId != undefined) {
+        if (isParent !== true && compOrgId !== undefined) {
             if (divisionId) {
                 url = `/round?competitionId=${competitionID}&divisionId=${divisionId}&competitionOrganisationIds=${compOrgId}`;
             } else {
@@ -883,8 +883,8 @@ const LiveScoreAxiosApi = {
             grade: gradeName,
             competitionId,
             id: divisionId,
-            positionTracking: positionTracking == 'null' ? null : positionTracking,
-            recordGoalAttempts: recordGoalAttempts == 'null' ? null : recordGoalAttempts,
+            positionTracking: positionTracking === 'null' ? null : positionTracking,
+            recordGoalAttempts: recordGoalAttempts === 'null' ? null : recordGoalAttempts,
         };
         const url = '/division';
         return Method.dataPost(url, token, body);

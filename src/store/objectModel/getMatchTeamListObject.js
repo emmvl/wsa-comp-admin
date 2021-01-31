@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { liveScore_formateDate } from '../../themes/dateformate'
+// import { liveScore_formateDate } from '../../themes/dateformate'
 
 function getMatchListSettings(data) {
 
@@ -30,8 +30,8 @@ function getData(data) {
         type: data.type === 'FOUR_QUARTERS' ? 'Quarters' : data.type === 'TWO_HALVES' ? 'Halves' : data.type === 'SINGLE' ? 'Single' : data.type,
         matchDuration: data.matchDuration,
         breakDuration: data.breakDuration,
-        qtrBreak: data.type == "FOUR_QUARTERS" ? data.breakDuration : "",
-        mainBreakDuration: data.type == "FOUR_QUARTERS" ? data.mainBreakDuration : data.breakDuration,
+        qtrBreak: data.type === "FOUR_QUARTERS" ? data.breakDuration : "",
+        mainBreakDuration: data.type === "FOUR_QUARTERS" ? data.mainBreakDuration : data.breakDuration,
         extraTimeDuration: data.extraTimeDuration,
         scorerStatus: data.scorerStatus,
         mnbMatchId: data.mnbMatchId,

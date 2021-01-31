@@ -1,6 +1,10 @@
 // import { DataManager } from './../../Components';
 import http from "./shopHttp";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import {
+    // getUserId,
+    getAuthToken,
+    getOrganisationData
+} from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
@@ -94,9 +98,38 @@ let AxiosApi = {
     async exportOrderSummary(params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
-        let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
+        let {
+            limit,
+            offset,
+            search,
+            year,
+            postcode,
+            // affiliate,
+            paymentMethod,
+            order,
+            sorterBy
+        } = params
         var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGetDownload(url, token, "orderSummary");
+    },
+
+    // export order status  API
+    async exportOrderStatus(params) {
+        const orgItem = await getOrganisationData();
+        const { organisationUniqueKey } = orgItem;
+        const {
+            limit,
+            offset,
+            search,
+            year,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
+            order,
+            sorterBy,
+        } = params;
+        const url = `/order/export/status?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&order=${order}&sorterBy=${sorterBy}`;
+        return Method.dataGetDownload(url, token, "orderStatus");
     },
 
     /////// //order status status listing get API
@@ -124,7 +157,7 @@ let AxiosApi = {
     /////// ///order status status listing get API 
     getPurchasesListing(params) {
         let { limit, offset, userId, order, sorterBy } = params
-        var url = `order/statusList?limit=${limit}&offset=${offset}&search=&year=-1&paymentStatus=-1&fulfilmentStatus=-1&product=All&order=${order}&sorterBy=${sorterBy}&userId=${userId}`;;
+        var url = `/order/statusList?limit=${limit}&offset=${offset}&search=&year=-1&paymentStatus=-1&fulfilmentStatus=-1&product=All&order=${order}&sorterBy=${sorterBy}&userId=${userId}`;;
         return Method.dataGet(url, token);
     },
 

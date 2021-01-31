@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal } from "antd";
+import {
+    Layout,
+    Breadcrumb,
+    Button,
+    Table,
+    Select,
+    Menu,
+    Pagination,
+    // Modal
+} from "antd";
 import "./product.scss";
 // import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -20,8 +29,7 @@ import history from "../../util/history";
 const { Content } = Layout;
 const { Option } = Select;
 // const { SubMenu } = Menu;
-let this_Obj = null;
-
+// let this_Obj = null;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -295,7 +303,7 @@ class RegistrationChange extends Component {
             regChangeTypeRefId: -1,
 
         };
-        this_Obj = this;
+        // this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 

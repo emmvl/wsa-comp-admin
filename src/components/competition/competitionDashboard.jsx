@@ -326,9 +326,12 @@ class CompetitionDashboard extends Component {
     };
 
     dropdownView = () => {
-        const { yearList, selectedYear } = this.props.appState;
-        let storedYearID = localStorage.getItem('yearId');
-        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
+        const {
+            yearList,
+            // selectedYear
+        } = this.props.appState;
+        // let storedYearID = localStorage.getItem('yearId');
+        // let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         return (
             <div className="comp-player-grades-header-drop-down-view" style={{ marginTop: 15 }}>
                 <div className="row">
@@ -412,7 +415,7 @@ class CompetitionDashboard extends Component {
     };
 
     openModel = (props) => {
-        let competitionId = this.props.competitionFeesState.competitionId;
+        // let competitionId = this.props.competitionFeesState.competitionId;
         let this_ = this;
         confirm({
             title: 'Do you want to add registration?',
@@ -446,7 +449,7 @@ class CompetitionDashboard extends Component {
     };
 
     dropdownButtonView = () => {
-        const { yearList, selectedYear } = this.props.appState;
+        // const { yearList, selectedYear } = this.props.appState;
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -469,8 +472,8 @@ class CompetitionDashboard extends Component {
     };
 
     compScreenDeciderCheck = (record, key) => {
-        let storedYearID = localStorage.getItem("yearId");
-        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
+        // let storedYearID = localStorage.getItem("yearId");
+        // let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         if (key === "own") {
             history.push("/competitionOpenRegForm", { id: record.competitionId, screenKey: "compDashboard" });
             setOwn_competition(record.competitionId)

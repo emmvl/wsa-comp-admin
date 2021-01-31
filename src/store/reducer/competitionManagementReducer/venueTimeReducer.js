@@ -1,5 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString, deepCopyFunction } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString,
+    // deepCopyFunction
+} from "../../../util/helpers";
 import AppConstants from "../../../themes/appConstants";
 ////Venue Constraints List Object /////////////Start
 
@@ -238,36 +242,36 @@ function checkSelectedVenuesList(selectedVenue, venueList) {
     return selectedVenuesList
 }
 
-function getVenueObj(venueObj) {
+// function getVenueObj(venueObj) {
 
-    let venueArr = []
+//     let venueArr = []
 
-    // for (let i in venueObj.venues) {
-    //     let venueobj = {
-    //         "competitionVenueId": venueObj.venues[i].competitionVenueId,
-    //         "venueId": venueObj.venues[i].venueId
-    //     }
-    //     venueArr.push(venueobj)
-    // }
+//     // for (let i in venueObj.venues) {
+//     //     let venueobj = {
+//     //         "competitionVenueId": venueObj.venues[i].competitionVenueId,
+//     //         "venueId": venueObj.venues[i].venueId
+//     //     }
+//     //     venueArr.push(venueobj)
+//     // }
 
 
 
-    let objData = {
-        competitionUniqueKey: "",
-        yearRefId: "",
-        organisationId: 1,
-        venues: [],
-        "nonPlayingDates": [],
-        "venueConstraintId": 0,
-        "courtRotationRefId": 8,
-        "homeTeamRotationRefId": 1,
-        "courtPreferences": [],
-        // "courtDivisionPref": [],
-        // "courtGradePref": []
-    }
+//     let objData = {
+//         competitionUniqueKey: "",
+//         yearRefId: "",
+//         organisationId: 1,
+//         venues: [],
+//         "nonPlayingDates": [],
+//         "venueConstraintId": 0,
+//         "courtRotationRefId": 8,
+//         "homeTeamRotationRefId": 1,
+//         "courtPreferences": [],
+//         // "courtDivisionPref": [],
+//         // "courtGradePref": []
+//     }
 
-    return objData
-}
+//     return objData
+// }
 
 function getSelectedCourt(courtVenueId, checkSelectedCourts) {
     let courtObject = {
@@ -331,9 +335,9 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
     for (let i in selectedCourts) {
         let selectedCourtListId = getSelectedCourt(selectedCourts[i].venueCourtId, allCourtsList)
 
-        let entitiesArray = selectedCourts[i].entities
+        // let entitiesArray = selectedCourts[i].entities
         let divisionId = getEnitityIdArray(selectedCourts[i].entities)
-        let gradesId = getEnitityIdArray([])
+        // let gradesId = getEnitityIdArray([])
         let venuCourtObj = null
 
         let venuCourtObjPost = null
@@ -411,43 +415,43 @@ function createEntityObject(action, courtPreferencesPost, evenRotation, venuePre
 }
 
 //update venue court preference object
-function getUpdatedCourtPreferences(updatedCourtsArray, courtPreferencesPost, selectedCourtId) {
-    let statusArray
-    if (selectedCourtId.length > 0) {
-        if (updatedCourtsArray.length > 0) {
-            for (let i in selectedCourtId) {
-                statusArray = checkVenueID(selectedCourtId[i], updatedCourtsArray)
-                let postStausArray = checkVenueID(selectedCourtId[i], courtPreferencesPost)
-                if (statusArray.status) {
-                    delete updatedCourtsArray[i]
-                }
-                if (postStausArray.status) {
-                    delete courtPreferencesPost[i]
-                }
-            }
+// function getUpdatedCourtPreferences(updatedCourtsArray, courtPreferencesPost, selectedCourtId) {
+//     let statusArray
+//     if (selectedCourtId.length > 0) {
+//         if (updatedCourtsArray.length > 0) {
+//             for (let i in selectedCourtId) {
+//                 statusArray = checkVenueID(selectedCourtId[i], updatedCourtsArray)
+//                 let postStausArray = checkVenueID(selectedCourtId[i], courtPreferencesPost)
+//                 if (statusArray.status) {
+//                     delete updatedCourtsArray[i]
+//                 }
+//                 if (postStausArray.status) {
+//                     delete courtPreferencesPost[i]
+//                 }
+//             }
 
 
-        }
-    }
-    return { updatedCourtsArray, courtPreferencesPost }
-}
+//         }
+//     }
+//     return { updatedCourtsArray, courtPreferencesPost }
+// }
 // check checkTimeSlotStatus
-function checkVenueID(courtID, updatedCourtsArray) {
-    let obj = {
-        status: false,
-        index: null
-    }
-    for (let i in updatedCourtsArray) {
-        if (courtID !== updatedCourtsArray[i].venueCourtId) {
-            obj = {
-                status: true,
-                index: [i]
-            }
-            break;
-        }
-    }
-    return obj
-}
+// function checkVenueID(courtID, updatedCourtsArray) {
+//     let obj = {
+//         status: false,
+//         index: null
+//     }
+//     for (let i in updatedCourtsArray) {
+//         if (courtID !== updatedCourtsArray[i].venueCourtId) {
+//             obj = {
+//                 status: true,
+//                 index: [i]
+//             }
+//             break;
+//         }
+//     }
+//     return obj
+// }
 
 function getCourtRotationHelpMsg(data, helpMsg) {
     for (let i in data) {
@@ -456,15 +460,12 @@ function getCourtRotationHelpMsg(data, helpMsg) {
     return data;
 }
 
-function getHomeTeamRotationHelpMsg(data, helpMsg) {
-    for (let i in data) {
-        data[i]['helpMsg'] = helpMsg[i]
-    }
-    return data;
-}
-
-
-
+// function getHomeTeamRotationHelpMsg(data, helpMsg) {
+//     for (let i in data) {
+//         data[i]['helpMsg'] = helpMsg[i]
+//     }
+//     return data;
+// }
 
 function VenueTimeState(state = initialState, action) {
 
@@ -550,7 +551,7 @@ function VenueTimeState(state = initialState, action) {
             state.onLoad = false
             state.onVenueSuccess = false
 
-            const homeTeamRotationHelpMsg = getHomeTeamRotationHelpMsg(action.commResult.HomeTeamRotation, state.homeTeamRotationHelpMsg)
+            // const homeTeamRotationHelpMsg = getHomeTeamRotationHelpMsg(action.commResult.HomeTeamRotation, state.homeTeamRotationHelpMsg)
             state.courtRotation = courtRotationHelpMsg
             return {
                 ...state,
@@ -562,7 +563,6 @@ function VenueTimeState(state = initialState, action) {
 
 
         case ApiConstants.API_UPDATE_VENUE_TIME_DATA:
-
 
             if (action.key == "remove") {
                 let expandedRowKeyRemove = action.index + 1;
@@ -597,6 +597,8 @@ function VenueTimeState(state = initialState, action) {
 
 
             }
+
+            let court_obj = null
             if (action.index === 'Venue') {
                 let upDateData = state.venuData
                 if (action.key === "affiliate") {
@@ -616,7 +618,7 @@ function VenueTimeState(state = initialState, action) {
             }
             else if (action.index === 'addGameAndCourt') {
                 let setKey = generateTableKey(state.venuData.venueCourts)
-                var court_obj = {
+                court_obj = {
                     key: setKey.toString(),
                     venueCourtId: "",
                     courtNumber: setKey,
@@ -645,7 +647,7 @@ function VenueTimeState(state = initialState, action) {
                         let name = venueCourtData[i].name;
                         let lat = venueCourtData[i].latitude;
                         let lng = venueCourtData[i].longitude;
-                        var court_obj = {
+                        court_obj = {
                             key: setKey.toString(),
                             venueCourtId: "",
                             courtNumber: setKey,
@@ -942,8 +944,7 @@ function VenueTimeState(state = initialState, action) {
                 else {
                     if (action.key === "competitionMembershipProductDivisionId") {
 
-                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                            competitionMembershipProductDivisionId == action.data);
+                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == action.data);
                         if (division != null && division != undefined) {
                             let grades = division.grades;
                             state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
@@ -971,8 +972,7 @@ function VenueTimeState(state = initialState, action) {
                     }
                     else if (action.key == "mpinitial") {
                         let matchPreference = state.venueConstrainstData.matchPreference[action.index];
-                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                            competitionMembershipProductDivisionId == matchPreference.competitionMembershipProductDivisionId);
+                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == matchPreference.competitionMembershipProductDivisionId);
 
                         if (division != null && division != undefined) {
                             let grades = division.grades;
@@ -997,8 +997,7 @@ function VenueTimeState(state = initialState, action) {
                 // let matchPreference = state.venueConstrainstData.matchPreference;
                 if (action.key === "competitionMembershipProductDivisionId") {
 
-                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                        competitionMembershipProductDivisionId == action.data).grades;
+                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == action.data).grades;
                     if (division != null && division != undefined) {
                         let grades = division.grades;
                         state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
@@ -1028,8 +1027,7 @@ function VenueTimeState(state = initialState, action) {
                 }
                 else if (action.key == "ldinitial") {
                     let lockedDraw = state.venueConstrainstData.lockedDraws[action.index];
-                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
-                        competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
+                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
 
                     if (division != null && division != undefined) {
                         let grades = division.grades;
@@ -1057,7 +1055,7 @@ function VenueTimeState(state = initialState, action) {
             }
 
             else {
-                let venueConstrainstDetails = state.venueConstrainstData
+                // let venueConstrainstDetails = state.venueConstrainstData
                 if (action.contentType === 'addCourtPreferences') {
                     let venuCourtObj = {
                         "venueConstraintCourtPreferenceId": 0,
@@ -1151,7 +1149,7 @@ function VenueTimeState(state = initialState, action) {
             if (venueDataByIdRes != null && venueDataByIdRes != "") {
                 venueDataByIdRes["expandedRowKeys"] = [];
                 let courts = venueDataByIdRes.venueCourts;
-                let isVenueMapped = venueDataByIdRes["isVenueMapped"];
+                // let isVenueMapped = venueDataByIdRes["isVenueMapped"];
                 if (isArrayNotEmpty(courts)) {
                     for (let i in courts) {
                         let key = Number(i) + 1;

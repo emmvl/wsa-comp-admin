@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input, Layout, Button, Table, Select, Menu, Pagination } from 'antd';
+import { Input, Layout, Button, Table, Select, Pagination } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { isEmptyArray } from "formik";
@@ -19,7 +19,7 @@ import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/se
 import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Content } = Layout
-const { SubMenu } = Menu
+// const { SubMenu } = Menu
 const { Option } = Select
 let this_obj = null;
 
@@ -189,7 +189,15 @@ class OrderSummary extends Component {
     }
 
     handleTableList = (page) => {
-        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod, sortOrder, sortBy } = this.state
+        let {
+            // yearRefId,
+            affiliateOrgId,
+            postcode,
+            searchText,
+            paymentMethod,
+            sortOrder,
+            sortBy
+        } = this.state
         let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         let params = {
             limit: 10,
@@ -216,10 +224,10 @@ class OrderSummary extends Component {
             await this.setState({ affiliateOrgId: value });
             this.handleTableList(1);
         } else if (key === "postcode") {
-            const regex = /,/gi;
+            // const regex = /,/gi;
             let canCall = false;
             let newVal = value.toString().split(',');
-            newVal.map((x, index) => {
+            newVal.forEach((x) => {
                 if (Number(x.length) % 4 === 0 && x.length > 0) {
                     canCall = true;
                 } else {

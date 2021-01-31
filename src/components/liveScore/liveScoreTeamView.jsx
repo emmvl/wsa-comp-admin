@@ -16,12 +16,15 @@ import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
-import { getOrganisationData, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import {
+    // getOrganisationData,
+    getLiveScoreCompetiton
+} from '../../util/sessionStorage'
 import { getUserRoleId, checkLivScoreCompIsParent } from '../../util/permissions'
 
 const { Content } = Layout;
 const { confirm } = Modal;
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 
 var _this;
 
@@ -219,9 +222,13 @@ class LiveScoreTeamView extends Component {
     profileImageView = () => {
         // let data = this.state.data
         let data = this.props.location ? this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null : null
-        const { teamData, managerData, managerList } = this.props.liveScoreTeamState
+        const {
+            teamData,
+            // managerData,
+            managerList
+        } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
-        const { mobileNumber, email } = managerData ? managerData : ''
+        // const { mobileNumber, email } = managerData ? managerData : ''
 
         let managerDataList = isArrayNotEmpty(managerList) ? managerList : []
         let coachData = isArrayNotEmpty(data && data.coaches) ? data.coaches : []
@@ -326,9 +333,9 @@ class LiveScoreTeamView extends Component {
     }
 
     addPlayerView() {
-        const { teamData, managerData, } = this.props.liveScoreTeamState
-        const { name, logoUrl, id } = teamData ? teamData : ''
-        const { mobileNumber, email } = managerData ? managerData : ''
+        // const { teamData, managerData, } = this.props.liveScoreTeamState
+        // const { name, logoUrl, id } = teamData ? teamData : ''
+        // const { mobileNumber, email } = managerData ? managerData : ''
         const { userRoleId } = this.state
         let roleId = (userRoleId == 11 || userRoleId == 13)
         return (

@@ -103,7 +103,10 @@ class LiveScoreBulkChange extends Component {
 
     // initial view
     inital_screen = () => {
-        const { venueData, selected_Option } = this.props.liveScoreBulkMatchState;
+        const { 
+            venueData, 
+            // selected_Option 
+        } = this.props.liveScoreBulkMatchState;
         return (
             <div>
                 {/* date picker row */}
@@ -130,7 +133,6 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
-                                defaultValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
                                 minuteStep={15}
@@ -140,7 +142,6 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker w-100"
-                                defaultValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
                                 minuteStep={15}
@@ -300,7 +301,6 @@ class LiveScoreBulkChange extends Component {
                     <div className="col-sm" style={{ marginTop: 5 }}>
                         <TimePicker
                             className="comp-venue-time-timepicker w-100"
-                            defaultValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "optionalTime")}
                             onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'optionalTime')}
@@ -773,7 +773,7 @@ class LiveScoreBulkChange extends Component {
     doublwHeaderView() {
         const { roundList } = this.props.liveScoreBulkMatchState;
         const roundResult = isArrayNotEmpty(roundList) ? roundList : [];
-        const { doubleHeaderResult } = this.props.liveScoreBulkMatchState;
+        // const { doubleHeaderResult } = this.props.liveScoreBulkMatchState;
 
         return (
             <div>
@@ -829,7 +829,11 @@ class LiveScoreBulkChange extends Component {
         const { roundList } = this.props.liveScoreRoundState;
         const roundResult = isArrayNotEmpty(roundList) ? roundList : [];
         const {
-            abandonData, venueData, abandonCourtData, matchResult, mainCourtList,
+            abandonData,
+            venueData,
+            abandonCourtData,
+            // matchResult,
+            mainCourtList,
         } = this.props.liveScoreBulkMatchState;
 
         return (
@@ -987,7 +991,7 @@ class LiveScoreBulkChange extends Component {
                         <Select
                             className="w-100"
                             style={{ paddingRight: 1, minWidth: 182 }}
-                            onChange={selectReason => this.setState({ selectReason })}
+                            // onChange={selectReason => this.setState({ selectReason })}
                             placeholder={AppConstants.selectReason}
                             onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}
                             // value={abandonData.resultType ? abandonData.resultType : []}

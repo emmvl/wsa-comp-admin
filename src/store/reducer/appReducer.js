@@ -53,7 +53,8 @@ const initialState = {
   allCompetitionTypeList: [],
   badgeData: [],
   filterBadgeArr: [],
-  accreditation: []
+  accreditation: [],
+  discountMethod: [],
 };
 
 function arraymove(arr, fromIndex, toIndex) {
@@ -63,18 +64,18 @@ function arraymove(arr, fromIndex, toIndex) {
   return arr
 }
 
-function sortfunction(a, b) {
-  const bandA = a.competitionName;
-  const bandB = b.competitionName;
+// function sortfunction(a, b) {
+//   const bandA = a.competitionName;
+//   const bandB = b.competitionName;
 
-  let comparison = 0;
-  if (bandA > bandB) {
-    comparison = 1;
-  } else if (bandA < bandB) {
-    comparison = -1;
-  }
-  return comparison;
-}
+//   let comparison = 0;
+//   if (bandA > bandB) {
+//     comparison = 1;
+//   } else if (bandA < bandB) {
+//     comparison = -1;
+//   }
+//   return comparison;
+// }
 
 function filteredSettingArray(result) {
   let demographic = []
@@ -423,7 +424,7 @@ function appState(state = initialState, action) {
       competitionResult.unshift(competitionobject)
 
       let arr = [];
-      if (!yearResult.find(x => x.id == -1)) {
+      if (!yearResult.find(x => x.id === -1)) {
         arr.push(yearobject);
       }
 
@@ -610,7 +611,7 @@ function appState(state = initialState, action) {
     //update status ref id
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
       let publishCompetitionid = action.competitionId
-      let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId == publishCompetitionid)
+      let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId === publishCompetitionid)
       state.own_CompetitionArr[publishedCompIndex].statusRefId = action.result.statusRefId
       return {
         ...state,
@@ -642,6 +643,14 @@ function appState(state = initialState, action) {
         onLoad: false,
         badgeData: action.result,
         status: action.status,
+      };
+
+    case ApiConstants.API_GET_DISCOUNT_METHOD_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        discountMethod: action.result,
+        status: action.status
       };
 
     default:

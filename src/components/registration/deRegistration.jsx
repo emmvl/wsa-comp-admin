@@ -17,12 +17,10 @@ import {
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-let this_Obj = null;
 
 class DeRegistration extends Component {
     constructor(props) {
         super(props);
-        this_Obj = this;
         this.state = {
             registrationOption: 0,
             userId: 0,
@@ -116,7 +114,10 @@ class DeRegistration extends Component {
 
     ///checkDeRegistrationOption
     checkDeRegistrationOption = (subItem, selectedOption) => {
-        const { saveData, deRegistionOther } = this.props.deRegistrationState
+        const {
+            saveData,
+            // deRegistionOther
+        } = this.props.deRegistrationState
         if (subItem.id == 5 && selectedOption == 5) {
             return (
                 <div className="ml-5">
@@ -167,7 +168,10 @@ class DeRegistration extends Component {
 
     //checkTransferOption
     checkTransferOption = (subItem, selectedOption) => {
-        const { saveData, transferOther } = this.props.deRegistrationState
+        const {
+            saveData,
+            // transferOther
+        } = this.props.deRegistrationState
         if (subItem.id == 3 && selectedOption == 3) {
             return (
                 <div className="ml-5">

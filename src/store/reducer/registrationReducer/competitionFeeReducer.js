@@ -608,110 +608,110 @@ function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, s
 
 
 // for  updated selected Casual fee array
-function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key, instalmentDates) {
-    if (value.length == 0) {
-        instalmentDates = [];
-    }
-    for (let i in value) {
-        if (allDataCasualFee.length > 0) {
-            for (let j in allDataCasualFee) {
-                if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
-                    if (allDataCasualFee[j].feesTypeRefId == key) {
-                        let object = {
-                            "subOptions": [],
-                            "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
-                            "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
-                            "paymentOptionId": allDataCasualFee[j].paymentOptionId
-                        }
-                        getUpdatedCasualFeeArr.push(object)
-                        break
-                    } else {
-                        if (value[i] == 5 || value[i] == 1) {
-                        } else {
-                            let object = {
-                                "subOptions": [],
-                                "feesTypeRefId": key,
-                                "paymentOptionRefId": value[i],
-                                "paymentOptionId": 0
-                            }
-                            getUpdatedCasualFeeArr.push(object)
-                            break
-                        }
-                    }
-                } else {
-                    if (value[i] == 5 || value[i] == 1) {
-                    } else {
-                        let object = {
-                            "subOptions": [],
-                            "feesTypeRefId": key,
-                            "paymentOptionRefId": value[i],
-                            "paymentOptionId": 0
-                        }
-                        getUpdatedCasualFeeArr.push(object)
-                        break
-                    }
-                }
-            }
-        } else {
-            if (value[i] == 5 || value[i] == 1) {
-            } else {
-                let object = {
-                    "subOptions": [],
-                    "feesTypeRefId": key,
-                    "paymentOptionRefId": value[i],
-                    "paymentOptionId": 0,
-                }
-                getUpdatedCasualFeeArr.push(object)
-                //break
-            }
-        }
-    }
-    return { getUpdatedCasualFeeArr, instalmentDates }
-}
+// function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key, instalmentDates) {
+//     if (value.length == 0) {
+//         instalmentDates = [];
+//     }
+//     for (let i in value) {
+//         if (allDataCasualFee.length > 0) {
+//             for (let j in allDataCasualFee) {
+//                 if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
+//                     if (allDataCasualFee[j].feesTypeRefId == key) {
+//                         let object = {
+//                             "subOptions": [],
+//                             "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
+//                             "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
+//                             "paymentOptionId": allDataCasualFee[j].paymentOptionId
+//                         }
+//                         getUpdatedCasualFeeArr.push(object)
+//                         break
+//                     } else {
+//                         if (value[i] == 5 || value[i] == 1) {
+//                         } else {
+//                             let object = {
+//                                 "subOptions": [],
+//                                 "feesTypeRefId": key,
+//                                 "paymentOptionRefId": value[i],
+//                                 "paymentOptionId": 0
+//                             }
+//                             getUpdatedCasualFeeArr.push(object)
+//                             break
+//                         }
+//                     }
+//                 } else {
+//                     if (value[i] == 5 || value[i] == 1) {
+//                     } else {
+//                         let object = {
+//                             "subOptions": [],
+//                             "feesTypeRefId": key,
+//                             "paymentOptionRefId": value[i],
+//                             "paymentOptionId": 0
+//                         }
+//                         getUpdatedCasualFeeArr.push(object)
+//                         break
+//                     }
+//                 }
+//             }
+//         } else {
+//             if (value[i] == 5 || value[i] == 1) {
+//             } else {
+//                 let object = {
+//                     "subOptions": [],
+//                     "feesTypeRefId": key,
+//                     "paymentOptionRefId": value[i],
+//                     "paymentOptionId": 0,
+//                 }
+//                 getUpdatedCasualFeeArr.push(object)
+//                 //break
+//             }
+//         }
+//     }
+//     return { getUpdatedCasualFeeArr, instalmentDates }
+// }
 
-function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
-    for (let i in value) {
-        if (allDataCasualFee.length > 0) {
-            for (let j in allDataCasualFee) {
-                if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
-                    let object = {
-                        "subOptions": [],
-                        "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
-                        "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
-                        "paymentOptionId": allDataCasualFee[j].paymentOptionId
-                    }
-                    getUpdatedCasualFeeArr.push(object)
-                    break
-                } else {
-                    if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
-                    } else {
-                        let object = {
-                            "subOptions": [],
-                            "feesTypeRefId": key,
-                            "paymentOptionRefId": value[i],
-                            "paymentOptionId": 0
-                        }
-                        getUpdatedCasualFeeArr.push(object)
-                        break
-                    }
-                }
-            }
-        } else {
-            if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
-            } else {
-                let object = {
-                    "subOptions": [],
-                    "feesTypeRefId": key,
-                    "paymentOptionRefId": value[i],
-                    "paymentOptionId": 0
-                }
-                getUpdatedCasualFeeArr.push(object)
-                //break
-            }
-        }
-    }
-    return getUpdatedCasualFeeArr
-}
+// function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
+//     for (let i in value) {
+//         if (allDataCasualFee.length > 0) {
+//             for (let j in allDataCasualFee) {
+//                 if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
+//                     let object = {
+//                         "subOptions": [],
+//                         "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
+//                         "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
+//                         "paymentOptionId": allDataCasualFee[j].paymentOptionId
+//                     }
+//                     getUpdatedCasualFeeArr.push(object)
+//                     break
+//                 } else {
+//                     if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
+//                     } else {
+//                         let object = {
+//                             "subOptions": [],
+//                             "feesTypeRefId": key,
+//                             "paymentOptionRefId": value[i],
+//                             "paymentOptionId": 0
+//                         }
+//                         getUpdatedCasualFeeArr.push(object)
+//                         break
+//                     }
+//                 }
+//             }
+//         } else {
+//             if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
+//             } else {
+//                 let object = {
+//                     "subOptions": [],
+//                     "feesTypeRefId": key,
+//                     "paymentOptionRefId": value[i],
+//                     "paymentOptionId": 0
+//                 }
+//                 getUpdatedCasualFeeArr.push(object)
+//                 //break
+//             }
+//         }
+//     }
+//     return getUpdatedCasualFeeArr
+// }
 
 //// selected venues id for display
 function checkSelectedVenue(details, venues) {
@@ -935,26 +935,25 @@ function removeDirect(affiliateArray) {
 function createInviteesPostArray(selectedInvitees, getInvitees) {
     let invitessObjectArr = []
     if (isArrayNotEmpty(getInvitees)) {
-        for (let i in getInvitees) {
-            let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
-            let inviteesObject = null
-            if (selectedInviteesArray.status) {
-                inviteesObject = {
-                    "inviteesId": selectedInviteesArray.result.inviteesId,
-                    "registrationInviteesRefId": selectedInvitees,
-                    "inviteesOrg": isArrayNotEmpty(selectedInviteesArray.result.inviteesOrg) ? selectedInviteesArray.result.inviteesOrg : []
-                }
-            } else {
-                inviteesObject = {
-                    "inviteesId": 0,
-                    "registrationInviteesRefId": selectedInvitees,
-                    "inviteesOrg": []
-                }
+        // for (let i in getInvitees) {
+        let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
+        let inviteesObject = null
+        if (selectedInviteesArray.status) {
+            inviteesObject = {
+                "inviteesId": selectedInviteesArray.result.inviteesId,
+                "registrationInviteesRefId": selectedInvitees,
+                "inviteesOrg": isArrayNotEmpty(selectedInviteesArray.result.inviteesOrg) ? selectedInviteesArray.result.inviteesOrg : []
             }
-
-            invitessObjectArr.push(inviteesObject)
-            break;
+        } else {
+            inviteesObject = {
+                "inviteesId": 0,
+                "registrationInviteesRefId": selectedInvitees,
+                "inviteesOrg": []
+            }
         }
+
+        invitessObjectArr.push(inviteesObject)
+        // }
     } else {
         let invitees_Object = {
             "inviteesId": 0,
@@ -1111,7 +1110,7 @@ function childFeesMapping(getFeeData) {
         let parentFeesList = isArrayNotEmpty(mainFeeArray[i].fees) ? mainFeeArray[i].fees : []
         let childrenFeesList = isArrayNotEmpty(mainFeeArray[i].childFees) ? isArrayNotEmpty(mainFeeArray[i].childFees)
             ? mainFeeArray[i].childFees : [] : []
-        childrenFeesList.map((childItem, childIndex) => {
+        childrenFeesList.forEach((childItem, childIndex) => {
             childItem['affiliateFee'] = childItem.Fees
             childItem['affiliateGst'] = childItem.GST
             childItem['affNominationFees'] = childItem.nominationFees
@@ -1209,7 +1208,7 @@ function createProductFeeArr(data) {
     // let creatorId = data.competitiondetail.competitionCreator
     // let userId = getUserId();
     let creatorId = data.competitiondetail.competitionCreatorOrgUniqueKey;
-    let statusRefId = data.competitiondetail.statusRefId;
+    // let statusRefId = data.competitiondetail.statusRefId;
     let orgData = getOrganisationData()
     let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
     let feesOwner = creatorId !== (organisationUniqueKey) ? false : true
@@ -1768,14 +1767,14 @@ function createProductFeeArr(data) {
 }
 
 /////addd membership product key to the division tab
-function competitionMembershipProduct_Id(array, key) {
-    let keyValue = null
-    let index = array.findIndex(x => x.membershipProductUniqueKey == key)
-    if (index > -1) {
-        keyValue = array[index].competitionMembershipProductId
-    }
-    return keyValue
-}
+// function competitionMembershipProduct_Id(array, key) {
+//     let keyValue = null
+//     let index = array.findIndex(x => x.membershipProductUniqueKey == key)
+//     if (index > -1) {
+//         keyValue = array[index].competitionMembershipProductId
+//     }
+//     return keyValue
+// }
 
 ///// check selected discount membership product
 function checkDiscountProduct(discountStateData, selectedDiscount) {
@@ -1803,23 +1802,23 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
 // }
 
 // adding object to seasonal payemnt
-function getSeasonalOptions(datalist) {
-    let paymentOptions = datalist.filter(x => x.id != 9);
-    let instalmentDates = [];
-    paymentOptions.map((item) => {
-        let subReferences = item.subReferences
-        if (subReferences.length > 0) {
-            for (let i = 0; i < subReferences.length; i++) {
-                subReferences[i]["instalmentDates"] = instalmentDates
-            }
-        }
-    })
-    return paymentOptions;
-}
+// function getSeasonalOptions(datalist) {
+//     let paymentOptions = datalist.filter(x => x.id != 9);
+//     let instalmentDates = [];
+//     paymentOptions.map((item) => {
+//         let subReferences = item.subReferences
+//         if (subReferences.length > 0) {
+//             for (let i = 0; i < subReferences.length; i++) {
+//                 subReferences[i]["instalmentDates"] = instalmentDates
+//             }
+//         }
+//     })
+//     return paymentOptions;
+// }
 
-function getPerMatchPaymentOptions(datalist) {
-    return datalist.filter(x => x.id = 2);
-}
+// function getPerMatchPaymentOptions(datalist) {
+//     return datalist.filter(x => x.id = 2);
+// }
 
 function addInstalmentDate(selectedSeasonalInstalmentDatesArray) {
     let newInstalmentDateObj = {
@@ -1853,18 +1852,18 @@ function addSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray)
     selectedSeasonalTeamInstalmentDatesArray.push(newInstalmentDateObj);
 }
 
-function removeSeasonalTeamInstalmentDate(removeObj) {
-    let selectedSeasonalTeamInstalmentDatesArray = removeObj.selectedSeasonalTeamInstalmentDatesArray;
-    let selectedSeasonalTeamInstalmentDatesArrayItem = removeObj.selectedSeasonalTeamInstalmentDatesArrayItem;
-    let index = selectedSeasonalTeamInstalmentDatesArray.indexOf(selectedSeasonalTeamInstalmentDatesArrayItem);
-    selectedSeasonalTeamInstalmentDatesArray.splice(index, 1);
-}
+// function removeSeasonalTeamInstalmentDate(removeObj) {
+//     let selectedSeasonalTeamInstalmentDatesArray = removeObj.selectedSeasonalTeamInstalmentDatesArray;
+//     let selectedSeasonalTeamInstalmentDatesArrayItem = removeObj.selectedSeasonalTeamInstalmentDatesArrayItem;
+//     let index = selectedSeasonalTeamInstalmentDatesArray.indexOf(selectedSeasonalTeamInstalmentDatesArrayItem);
+//     selectedSeasonalTeamInstalmentDatesArray.splice(index, 1);
+// }
 
-function updateSeasonalTeamInstalmentDate(value) {
-    let seasonalTeamInstalmentDate = value.seasonalTeamInstalmentDate;
-    let selectedSeasonalTeamInstalmentDatesArrayItem = value.selectedSeasonalTeamInstalmentDatesArrayItem;
-    selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate = seasonalTeamInstalmentDate;
-}
+// function updateSeasonalTeamInstalmentDate(value) {
+//     let seasonalTeamInstalmentDate = value.seasonalTeamInstalmentDate;
+//     let selectedSeasonalTeamInstalmentDatesArrayItem = value.selectedSeasonalTeamInstalmentDatesArrayItem;
+//     selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate = seasonalTeamInstalmentDate;
+// }
 
 function competitionFees(state = initialState, action) {
     switch (action.type) {
@@ -2166,7 +2165,7 @@ function competitionFees(state = initialState, action) {
             let membershipProductobj = state.defaultCompFeesMembershipProduct[action.index];
             membershipProductobj.competitionMembershipProductId = null;
             let membershipProductTypesList = membershipProductobj.membershipProductTypes;
-            membershipProductTypesList.map((item) => {
+            membershipProductTypesList.forEach((item) => {
                 item.competitionMembershipProductId = null;
                 item.competitionMembershipProductTypeId = 0;
             });
@@ -2642,7 +2641,7 @@ function competitionFees(state = initialState, action) {
                     state.competitionFeesData[action.parentIndex]["isIndividualReg"] = false
             }
             if (action.key === "isTeamSeasonal" || action.key === "isTeamCasual") {
-                let isCasual = state.competitionFeesData[action.parentIndex]["isTeamCasual"];
+                // let isCasual = state.competitionFeesData[action.parentIndex]["isTeamCasual"];
                 let isSeasonal = state.competitionFeesData[action.parentIndex]["isTeamSeasonal"];
                 // if (isSeasonal && isCasual)
                 //     state.competitionFeesData[action.parentIndex]["isTeamReg"] = true

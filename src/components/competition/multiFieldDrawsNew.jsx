@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal, Radio } from "antd";
+import { Layout, Button, Tooltip, Menu, Select, DatePicker, Checkbox, message, Spin, Modal, Radio } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
 import { NavLink } from 'react-router-dom';
 import DrawsPublishModel from '../../customComponents/drawsPublishModel'
-import _ from "lodash";
+// import _ from "lodash";
 import loadjs from 'loadjs';
 import moment from 'moment';
 import AppImages from "../../themes/appImages";
@@ -14,7 +14,10 @@ import Swappable from '../../customComponents/SwappableComponent';
 import { isArrayNotEmpty } from '../../util/helpers';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getDayName, getTime } from '../../themes/dateformate';
+import {
+    // getDayName,
+    getTime
+} from '../../themes/dateformate';
 import Loader from '../../customComponents/loader';
 import {
     getCompetitionDrawsAction,
@@ -47,11 +50,14 @@ import {
     getDraws_round,
     getDraws_roundTime,
     setDraws_division_grade,
-    getDraws_division_grade,
+    // getDraws_division_grade,
     getOrganisationData,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
+    setLiveScoreUmpireCompition,
+    setLiveScoreUmpireCompitionData
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import './draws.scss';
@@ -80,16 +86,16 @@ const { confirm } = Modal;
 //     { name: "NSW State Age", checked: true },
 //     { name: "NWA Winter", checked: true },
 // ]
-const divisionStaticData = [{
-    name: "Monday Night Social", divisionArr: [
-        { name: "Junior-A", checked: true, color: "#ff8237" }, { name: "Junior-B", checked: true, color: "#6AD672" }, { name: "Opens-A", checked: true, color: "#0556DE" }, { name: "Opens-A", checked: false, color: "#FD2F90" },
-        { name: "Junior-A", checked: true, color: "#F77927" }, { name: "Junior-B", checked: true, color: "#000000" }, { name: "Opens-A", checked: true, color: "#000000" }, { name: "Opens-A", checked: false, color: "#000000" }
-    ]
-}, {
-    name: "NSW State Age", divisionArr: [
-        { name: "Junior-A", checked: true, color: "#000000" }, { name: "Junior-B", checked: true, color: "#000000" }, { name: "Opens-A", checked: true, color: "#000000" }, { name: "Opens-A", checked: false, color: "#000000" }
-    ]
-}]
+// const divisionStaticData = [{
+//     name: "Monday Night Social", divisionArr: [
+//         { name: "Junior-A", checked: true, color: "#ff8237" }, { name: "Junior-B", checked: true, color: "#6AD672" }, { name: "Opens-A", checked: true, color: "#0556DE" }, { name: "Opens-A", checked: false, color: "#FD2F90" },
+//         { name: "Junior-A", checked: true, color: "#F77927" }, { name: "Junior-B", checked: true, color: "#000000" }, { name: "Opens-A", checked: true, color: "#000000" }, { name: "Opens-A", checked: false, color: "#000000" }
+//     ]
+// }, {
+//     name: "NSW State Age", divisionArr: [
+//         { name: "Junior-A", checked: true, color: "#000000" }, { name: "Junior-B", checked: true, color: "#000000" }, { name: "Opens-A", checked: true, color: "#000000" }, { name: "Opens-A", checked: false, color: "#000000" }
+//     ]
+// }]
 
 class MultifieldDrawsNew extends Component {
     constructor(props) {
@@ -147,10 +153,10 @@ class MultifieldDrawsNew extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let userState = this.props.userState
+        // let userState = this.props.userState
         let competitionModuleState = this.props.competitionModuleState;
         let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
-        let drawOrganisations = this.props.drawsState.drawOrganisations
+        // let drawOrganisations = this.props.drawsState.drawOrganisations
         let venueData = this.props.drawsState.competitionVenues;
         let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
         let changeStatus = this.props.drawsState.changeStatus
@@ -341,7 +347,7 @@ class MultifieldDrawsNew extends Component {
         let yearId = getGlobalYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0
             ? this.props.appState.own_YearArr
             : undefined;
@@ -357,7 +363,7 @@ class MultifieldDrawsNew extends Component {
         let venueData = this.props.drawsState.competitionVenues.length > 0
             ? this.props.drawsState.competitionVenues
             : undefined;
-        let competitionDivisionGradeId = getDraws_division_grade();
+        // let competitionDivisionGradeId = getDraws_division_grade();
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -648,7 +654,7 @@ class MultifieldDrawsNew extends Component {
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
-        let newDate = new Date()
+        // let newDate = new Date()
         this.props.clearMultiDraws('rounds');
         if (competitionId == -1 || this.state.filterDates) {
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all", true, this.state.startDate, this.state.endDate);
@@ -1165,7 +1171,10 @@ class MultifieldDrawsNew extends Component {
     ///////left side view for organisation listing with checkbox
     organisationLeftView = () => {
         let { drawOrganisations } = this.props.drawsState
-        let { showAllOrg, allOrgChecked } = this.state
+        let {
+            showAllOrg,
+            // allOrgChecked
+        } = this.state
         return (
             <>
                 <div className="row">
@@ -1252,7 +1261,7 @@ class MultifieldDrawsNew extends Component {
                         </div>
                     )}
                 {filterEnable && this.venueLeftView()}
-                {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
+                {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || (filterEnable && this.competitionLeftView())}
                 {filterEnable && this.divisionLeftView()}
                 {filterEnable && this.organisationLeftView()}
             </div>
@@ -1372,9 +1381,7 @@ class MultifieldDrawsNew extends Component {
         var dateMargin = 25;
         var dayMargin = 25;
         let topMargin = 0;
-        let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray)
-            ? this.props.drawsState.legendsArray
-            : [];
+        // let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : [];
         return (
             <>
                 <div className="scroll-bar pb-4" style={{ width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140, minWidth: 1080 }}>

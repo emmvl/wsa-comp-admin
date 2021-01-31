@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Tag, Modal } from "antd";
+import { Layout, Button, Table, Select, Tag } from "antd";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -294,7 +294,10 @@ class RegistrationMainDashboard extends Component {
     }
 
     dropdownView = () => {
-        const { yearList, selectedYear } = this.props.appState
+        const {
+            yearList,
+            // selectedYear
+        } = this.props.appState
         let stripeConnected = this.stripeConnected()
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
@@ -408,7 +411,7 @@ class RegistrationMainDashboard extends Component {
     }
 
     competitionStatus() {
-        let feeStatus = false
+        // let feeStatus = false
         if (this.state.compFeeStatus == 1) {
             return true
         } else if (this.state.inviteeStatus == 1) {
@@ -449,7 +452,7 @@ class RegistrationMainDashboard extends Component {
 
     ///dropdown view containing dropdown and next screen navigation button/text
     dropdownButtonView = () => {
-        const { yearList, selectedYear } = this.props.appState
+        // const { yearList, selectedYear } = this.props.appState
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">

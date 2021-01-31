@@ -207,7 +207,7 @@ const MatchesDetailView = () => {
         };
 
         try {
-            const result = await userHttp.post(
+            await userHttp.post(
                 `${process.env.REACT_APP_USER_API_URL}/userMerge/merge`, {
                     masterUserId: master.userId,
                     otherUserId: second.id,
@@ -226,11 +226,7 @@ const MatchesDetailView = () => {
         checkFullSelection()
     })
 
-    const {
-        UserState: {
-            usersToBeMerged: usersToBeMerged
-        },
-    } = useSelector((state) => state);
+    const { usersToBeMerged } = useSelector(state => state.UserState);
     const master = usersToBeMerged[0];
     const second = usersToBeMerged[1];
     

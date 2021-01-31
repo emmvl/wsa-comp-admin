@@ -31,25 +31,20 @@ const initialState = {
     scorerActionObject: null,
 }
 
-
-function genrateTeamId(teamIdArr) {
-
-    let teamId = []
-    for (let i in teamIdArr) {
-        teamId.push(teamIdArr[i].name)
-    }
-
-    return teamId
-
-}
-
+// function genrateTeamId(teamIdArr) {
+//     let teamId = []
+//     for (let i in teamIdArr) {
+//         teamId.push(teamIdArr[i].name)
+//     }
+//     return teamId
+// }
 
 function getTeamObj(teamSelectId, teamArr) {
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
         for (let j in teamSelectId) {
-            if (teamSelectId[j] == teamArr[i].id) {
+            if (teamSelectId[j] === teamArr[i].id) {
                 obj = {
                     name: teamArr[i].name,
                     id: teamArr[i].id
@@ -116,7 +111,7 @@ function liveScoreScorerState(state = initialState, action) {
                 id: null
             }
             if (!liveScoreCompIsParent) {
-                state.allTeamData = teamsArray.filter(item => item ?.linkedCompetitionOrganisation ?.id == compOrgId);
+                state.allTeamData = teamsArray.filter(item => item?.linkedCompetitionOrganisation?.id === compOrgId);
             } else {
                 state.allTeamData = teamsArray;
             }

@@ -5,7 +5,7 @@ import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+// import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
@@ -20,7 +20,8 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
     setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage"
 // import PlayerCommentModal from "../../customComponents/playerCommentModal";
@@ -153,7 +154,7 @@ class CompetitionPlayerGradeCalculate extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {

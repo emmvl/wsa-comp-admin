@@ -5,13 +5,12 @@ import {
     Select,
     Spin,
     Button,
-    Form,
     message,
     Modal,
     Menu,
     Tooltip, DatePicker, Checkbox
 } from 'antd';
-import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
+// import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
 import DashboardLayout from '../../pages/dashboardLayout';
@@ -62,7 +61,7 @@ import ValidationConstants from '../../themes/validationConstant';
 import moment from 'moment';
 import LegendComponent from '../../customComponents/legendComponent';
 import AllLegendComponent from '../../customComponents/allCompetitionLegendComponent'
-import { isArrayNotEmpty } from '../../util/helpers';
+// import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
 
@@ -114,11 +113,11 @@ class CompetitionDraws extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let userState = this.props.userState
+        // let userState = this.props.userState
         let competitionModuleState = this.props.competitionModuleState;
         let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
 
-        let drawOrganisations = this.props.drawsState.drawOrganisations
+        // let drawOrganisations = this.props.drawsState.drawOrganisations
         let venueData = this.props.drawsState.competitionVenues;
         let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
         let changeStatus = this.props.drawsState.changeStatus
@@ -1217,9 +1216,7 @@ class CompetitionDraws extends Component {
         var dateMargin = 25;
         var dayMargin = 25;
         let topMargin = 0;
-        let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray)
-            ? this.props.drawsState.legendsArray
-            : [];
+        // let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : [];
         return (
             <div>
                 <div className="scroll-bar pb-4">

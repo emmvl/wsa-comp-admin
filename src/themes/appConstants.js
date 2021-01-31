@@ -1685,6 +1685,7 @@ const AppConstants = {
     paymentType: 'Payment Type',
     membershipType: 'Membership type',
     totalFeeIncGst: 'Total Fee (inc GST)',
+    governmentVoucher: "Govt. Voucher",
     portion: 'Portion',
     redeemVoucher: 'Redeem Voucher',
     cashPaymentReceived: 'Cash Payment received',
@@ -1774,6 +1775,7 @@ const AppConstants = {
     removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
 
     yourOrder: "Your Order",
+    submitButtonPressDescription: "You must press SUBMIT to complete your Registration.",
 
     paymentSummary: 'Payment Summary',
     nominationFeesPaid: 'Nomination Fees Paid',
@@ -1798,6 +1800,13 @@ const AppConstants = {
 
     cashReceived: "Cash Received",
     retryPayment: "Retry Payment",
+
+    refund: "Refund",
+    maximumAmountPopupTxt: "Refund cannot be processed since the requested amount is more than the applicable amount.",
+    enterRefundAmount: "Please enter the amount to be Refunded.",
+    enterAmount: "Enter the Amount",
+    partialRefund: "Partial Refund",
+    enterValidAmount: "Please enter valid amount",
 
 };
 

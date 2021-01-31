@@ -50,7 +50,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const Mailto = ({ email, subject, body, children }) => {
     return (
-        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank">{children}</a>
+        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`} target="_blank" rel="noopener noreferrer">{children}</a>
     );
 };
 
@@ -284,7 +284,7 @@ class RegistrationForm extends Component {
             registrationCloseDate: registrationFormData.registrationCloseDate !== '' ? moment(registrationFormData.registrationCloseDate, "YYYY-MM-DD") : null,
             email: registrationFormData.replyEmail !== '' ? registrationFormData.replyEmail : ""
         });
-        disclaimerData.map((item, index) => {
+        disclaimerData.forEach((item, index) => {
             let disclaimerText = `disclaimerText${index}`
             let disclaimerLink = `disclaimerLink${index}`
             this.formRef.current.setFieldsValue({
@@ -571,7 +571,7 @@ class RegistrationForm extends Component {
         let fillteredProduct = this.props.registrationState.selectedProductName !== 0 ? this.props.registrationState.selectedProductName : []
         let productList = this.props.registrationState.membershipProductTypes.length !== 0 ? this.props.registrationState.membershipProductTypes : [];
         let venueList = this.props.appState.venueList.length !== 0 ? this.props.appState.venueList : [];
-        let dateOpen = this.regOpenDate()
+        // let dateOpen = this.regOpenDate()
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
@@ -607,7 +607,7 @@ class RegistrationForm extends Component {
                                 name="registrationOpenDate"
                                 format="DD-MM-YYYY"
                                 showTime={false}
-                                disabledDate={this.disabledDate}
+                                // disabledDate={this.disabledDate}
                                 disabledTime={this.disabledTime}
                                 //disabled={isPublished}
                                 disabledDate={d => !d || d.isAfter(closeDate)
@@ -634,7 +634,7 @@ class RegistrationForm extends Component {
                             <DatePicker
                                 // size="large"
                                 className="w-100"
-                                disabledDate={this.disabledDate}
+                                // disabledDate={this.disabledDate}
                                 placeholder="dd-mm-yyyy"
                                 onChange={(e) => this.dateChange(e, "registrationCloseDate")}
                                 name={"registrationCloseDate"}
@@ -1075,7 +1075,7 @@ class RegistrationForm extends Component {
             }
         }
 
-        if (upcomingData.includes("2") && upcomingData.includes("3") || upcomingData.includes("3") && upcomingData.includes("4") || upcomingData.includes("2") && upcomingData.includes("4")) {
+        if ((upcomingData.includes("2") && upcomingData.includes("3")) || (upcomingData.includes("3") && upcomingData.includes("4")) || (upcomingData.includes("2") && upcomingData.includes("4"))) {
             let selectedIndex = selectedInvitees.findIndex(x => x == "4")
             if (selectedIndex > -1) {
                 let index = upcomingData.findIndex(x => x == "4")
@@ -1152,15 +1152,20 @@ class RegistrationForm extends Component {
 
     ///advance  setting view
     advancedSettingView = () => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+        // let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
-        let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
+        // let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
         let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
-        let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
-        const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
+        // let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
+        const { 
+            selectedInvitees, 
+            // selectedDemographic, 
+            // SelectedOtherQuestions, 
+            selectedNetballQuestions 
+        } = this.props.registrationState
         let isPublished = false; // this.state.isPublished // CM-1513
         let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
-        let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
+        // let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
 
         return (
             <div className="discount-view pt-5">
@@ -1593,7 +1598,7 @@ class RegistrationForm extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
                                     <div>
-                                        <a className="user-reg-link" href={formDataValue.userRegistrationUrl} target='_blank'>
+                                        <a className="user-reg-link" href={formDataValue.userRegistrationUrl} target='_blank' rel="noopener noreferrer">
                                             {formDataValue.userRegistrationUrl}
                                         </a>
                                     </div>

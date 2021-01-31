@@ -14,7 +14,7 @@ import {
     Form,
 } from 'antd';
 import moment from 'moment';
-import CSVReader from 'react-csv-reader'
+// import CSVReader from 'react-csv-reader'
 import Tooltip from 'react-png-tooltip'
 
 import "./competition.css";
@@ -42,12 +42,12 @@ import { getOrganisationData } from "../../util/sessionStorage";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
-const papaparseOptions = {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    transformHeader: header => header.toLowerCase().replace(/\W/g, '_')
-}
+// const papaparseOptions = {
+//     header: true,
+//     dynamicTyping: true,
+//     skipEmptyLines: true,
+//     transformHeader: header => header.toLowerCase().replace(/\W/g, '_')
+// }
 
 class CompetitionVenueAndTimesAdd extends Component {
     constructor(props) {
@@ -266,7 +266,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         //     postcode: venueData.postalCode
         // });
 
-        venueData.venueCourts.map((item, index) => {
+        venueData.venueCourts.forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`venueCourtName${index}`]: item.venueCourtName,
                 [`lat${index}`]: item.lat,
@@ -891,8 +891,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                 return;
             }
 
-            venuData.venueCourts.map((item, index) => {
-                (item.availabilities || []).map((avItem, avIndex) => {
+            venuData.venueCourts.forEach((item) => {
+                (item.availabilities || []).forEach((avItem) => {
                     if (avItem.startTime > avItem.endTime) {
                         hasError = true;
                     }
@@ -904,7 +904,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 return;
             }
 
-            venuData.gameDays.map((item, index) => {
+            venuData.gameDays.forEach((item) => {
                 if (item.startTime > item.endTime) {
                     hasError = true;
                     // break;

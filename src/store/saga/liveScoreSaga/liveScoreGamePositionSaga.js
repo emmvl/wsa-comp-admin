@@ -32,7 +32,7 @@ function* errorSaga(error) {
 export function* liveScoreGamePositionSaga() {
   try {
     const result = yield call(LiveScoreAxiosApi.liveScoreGamePositions)
-    if (result.status == 1) {
+    if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_SUCCESS,
         result: result.result.data,

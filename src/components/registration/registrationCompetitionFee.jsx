@@ -3357,7 +3357,7 @@ class RegistrationCompetitionFee extends Component {
                     key: 'genderRefId',
                     // width:  ? "20%" : null,
                     render: (genderRefId, record, index) => {
-                        const { getFieldDecorator } = this.formRef.current;
+                        // const { getFieldDecorator } = this.formRef.current;
                         return (
                             record.genderRestriction && (
                                 <Form.Item
@@ -3429,7 +3429,7 @@ class RegistrationCompetitionFee extends Component {
                     key: 'fromDate',
                     width: '25%',
                     render: (fromDate, record, index) => {
-                        const { getFieldDecorator } = this.formRef.current;
+                        // const { getFieldDecorator } = this.formRef.current;
                         return (
                             <Form.Item
                                 name={`fromDate${record.parentIndex}${index}`}
@@ -3467,7 +3467,7 @@ class RegistrationCompetitionFee extends Component {
                     width: '25%',
                     key: 'toDate',
                     render: (toDate, record, index) => {
-                        const { getFieldDecorator } = this.formRef.current;
+                        // const { getFieldDecorator } = this.formRef.current;
                         return (
                             <Form.Item
                                 name={`toDate${record.parentIndex}${index}`}
@@ -3742,9 +3742,9 @@ class RegistrationCompetitionFee extends Component {
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId, affiliateOrgId });
         this.apiCalls(competitionId, orgData.organisationUniqueKey, affiliateOrgId);
         this.setDetailsFieldValue();
-        let checkVenueScreen = this.props.location.state && this.props.location.state.venueScreen
-            ? this.props.location.state.venueScreen
-            : null;
+        // let checkVenueScreen = this.props.location.state && this.props.location.state.venueScreen
+        //     ? this.props.location.state.venueScreen
+        //     : null;
         // setTimeout(() => {
         //     window.scrollTo(this.tableReference.offsetBottom,0);
         // },300)
@@ -3847,7 +3847,7 @@ class RegistrationCompetitionFee extends Component {
         let postCharityRoundUpData = JSON.parse(
             JSON.stringify(paymentDataArr.charityRoundUp)
         );
-        postCharityRoundUpData.map((item) => {
+        postCharityRoundUpData.forEach((item) => {
             item.charityRoundUpName = charityTitle;
             item.charityRoundUpDescription = charityDescription;
         });
@@ -4351,7 +4351,7 @@ class RegistrationCompetitionFee extends Component {
 
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeSeasonalData];
-                        finalPostData.map((item) => {
+                        finalPostData.forEach((item) => {
                             item['seasonalFees'] = item.fee;
                             item['seasonalGST'] = item.gst;
                             item['affiliateSeasonalFees'] = item.affiliateFee;
@@ -4433,7 +4433,7 @@ class RegistrationCompetitionFee extends Component {
 
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeSeasonalData];
-                        finalPostData.map((item) => {
+                        finalPostData.forEach((item) => {
                             item['seasonalFees'] = item.fee;
                             item['seasonalGST'] = item.gst;
                             item['affiliateSeasonalFees'] = item.affiliateFee;
@@ -4499,7 +4499,7 @@ class RegistrationCompetitionFee extends Component {
                      */
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeCasualData];
-                        finalPostData.map((item) => {
+                        finalPostData.forEach((item) => {
                             item['casualFees'] = item.fee;
                             item['casualGST'] = item.gst;
                             item['affiliateCasualFees'] = item.affiliateFee;
@@ -4560,7 +4560,7 @@ class RegistrationCompetitionFee extends Component {
 
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeCasualData];
-                        finalPostData.map((item) => {
+                        finalPostData.forEach((item) => {
                             item['casualFees'] = item.fee;
                             item['casualGST'] = item.gst;
                             item['affiliateCasualFees'] = item.affiliateFee;
@@ -4581,7 +4581,7 @@ class RegistrationCompetitionFee extends Component {
                     feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
                 }
                 finalPostData = [...feeSeasonalTeamData];
-                finalPostData.map((item) => {
+                finalPostData.forEach((item) => {
                     item['teamSeasonalFees'] = item.fee;
                     item['teamSeasonalGST'] = item.gst;
                     item['affiliateTeamSeasonalFees'] = item.affiliateFee;
@@ -4604,7 +4604,7 @@ class RegistrationCompetitionFee extends Component {
                     feeCasualTeamData = fee_data[i].casualTeam.perType;
                 }
                 finalPostData = [...feeCasualTeamData];
-                finalPostData.map((item) => {
+                finalPostData.forEach((item) => {
                     item['teamCasualFees'] = item.fee;
                     item['teamCasualGST'] = item.gst;
                     item['affiliateTeamCasualFees'] = item.affiliateFee;
@@ -4684,11 +4684,11 @@ class RegistrationCompetitionFee extends Component {
                     || fee_data[i].isTeamCasual)
             ) {
                 finalPostData.forEach((item, index) => {
-                    finalPostData[index]["isSeasonal"] = fee_data[i].isSeasonal;
-                    finalPostData[index]["isCasual"] = fee_data[i].isCasual;
-                    finalPostData[index]["isTeamSeasonal"] = fee_data[i].isTeamSeasonal;
-                    finalPostData[index]["isTeamCasual"] = fee_data[i].isTeamCasual;
-                    finalPostData[index]["teamRegChargeTypeRefId"] = fee_data[i].teamRegChargeTypeRefId;
+                    item["isSeasonal"] = fee_data[i].isSeasonal;
+                    item["isCasual"] = fee_data[i].isCasual;
+                    item["isTeamSeasonal"] = fee_data[i].isTeamSeasonal;
+                    item["isTeamCasual"] = fee_data[i].isTeamCasual;
+                    item["teamRegChargeTypeRefId"] = fee_data[i].teamRegChargeTypeRefId;
                 })
 
                 let modifyArr = [...finalpostarray, ...finalPostData];
@@ -5387,7 +5387,7 @@ class RegistrationCompetitionFee extends Component {
 
     //// On change Invitees
     onInviteesChange(value) {
-        let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees;
+        // let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees;
         let arr = [value];
         this.props.add_editcompetitionFeeDeatils(arr, 'invitees');
         if (value == 7) {
@@ -5504,6 +5504,7 @@ class RegistrationCompetitionFee extends Component {
                                         onError={(ev) => {
                                             ev.target.src = AppImages.circleImage;
                                         }}
+                                        alt=""
                                     />
                                 </label>
                             </div>
@@ -5579,6 +5580,7 @@ class RegistrationCompetitionFee extends Component {
                             onError={(ev) => {
                                 ev.target.src = AppImages.circleImage;
                             }}
+                            alt=""
                         />
                         <input
                             disabled={compDetailDisable}
@@ -6832,6 +6834,9 @@ class RegistrationCompetitionFee extends Component {
         let invitees = this.props.appState.registrationInvitees.length > 0
             ? this.props.appState.registrationInvitees
             : [];
+        if (!!invitees[0]) {
+            invitees[0].subReferences.sort((a, b) => a.sortOrder - b.sortOrder);
+        }
         const {
             affiliateSelected,
             anyOrgSelected,
@@ -7318,7 +7323,7 @@ class RegistrationCompetitionFee extends Component {
     //////charity voucher view
     charityVoucherView = () => {
         let charityRoundUp = this.props.competitionFeesState.charityRoundUp;
-        let paymentData = this.props.competitionFeesState.competitionPaymentsData;
+        // let paymentData = this.props.competitionFeesState.competitionPaymentsData;
         let paymentsDisable = this.state.permissionState.paymentsDisable;
         let checkCharityArray = this.props.competitionFeesState.competitionPaymentsData.charityRoundUp;
         return (
@@ -7413,7 +7418,7 @@ class RegistrationCompetitionFee extends Component {
     ////government voucher view
     voucherView = () => {
         let govtVoucher = this.props.competitionFeesState.govtVoucher;
-        let discountDisable = this.state.permissionState.discountsDisable;
+        // let discountDisable = this.state.permissionState.discountsDisable;
         let voucherDisable = this.state.permissionState.voucherDisable;
         return (
             <div className="advanced-setting-view pt-5">

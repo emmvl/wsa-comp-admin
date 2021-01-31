@@ -19,11 +19,14 @@ import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { exportFilesAction } from "../../store/actions/appAction";
 import ValidationConstants from "../../themes/validationConstant";
-import { teamListData, teamListDataCheck } from "../../util/helpers";
+import {
+    // teamListData,
+    teamListDataCheck
+} from "../../util/helpers";
 import { checkLivScoreCompIsParent } from 'util/permissions'
 
 const { Content } = Layout;
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 const { confirm } = Modal;
 
 let _this = null;
@@ -354,7 +357,7 @@ class LiveScorePlayerList extends Component {
     }
 
     headerView = () => {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // const { id } = JSON.parse(getLiveScoreCompetiton())
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">

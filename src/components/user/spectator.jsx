@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, DatePicker } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination } from "antd";
 import './user.css';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
@@ -13,9 +13,12 @@ import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/se
 import { getSpectatorListAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { Option } = Select;
-const { confirm } = Modal;
+// const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null
 

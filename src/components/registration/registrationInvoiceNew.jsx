@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Layout, Radio, Select, Descriptions, Input, Divider, Button } from 'antd';
+import { Layout, Descriptions, Divider } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import Chart from "chart.js";
+// import Chart from "chart.js";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead"
@@ -14,16 +14,23 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNullOrEmptyString
+} from "../../util/helpers";
 import history from "../../util/history";
 import Doc from '../../util/DocService';
 import PdfContainer from '../../util/PdfContainer';
 import {getUserId } from '../../util/sessionStorage'
 import {netSetGoTshirtSizeAction} from '../../store/actions/commonAction/commonAction';
 
-const { Header, Footer, Content } = Layout;
-const { Option } = Select;
-const { TextArea } = Input
+const {
+    Header,
+    // Footer,
+    Content
+} = Layout;
+// const { Option } = Select;
+// const { TextArea } = Input
 
 class RegistrationInvoice extends Component {
     constructor(props) {
@@ -132,7 +139,7 @@ class RegistrationInvoice extends Component {
         let {invoiceData, getAffiliteDetailData} = this.props.stripeState;
         let userDetail = invoiceData != null ? invoiceData.billTo: null;
         let organisationLogo = invoiceData!= null ? invoiceData.organisationLogo : null;
-        let invoiceDisabled = this.state.invoiceDisabled;
+        // let invoiceDisabled = this.state.invoiceDisabled;
         let isSchoolRegistrationApplied = invoiceData!= null ? invoiceData.isSchoolRegistrationApplied: 0;
         let msg = isSchoolRegistrationApplied == 1? "(" + AppConstants.toBeInvoicedViaSchool + ")" : ""
         return (
@@ -150,6 +157,7 @@ class RegistrationInvoice extends Component {
                                 onError={ev => {
                                     ev.target.src = AppImages.squareImage;
                                 }}
+                                alt=""
                             />
                         </label>
                         <div className="invoice-receipt">
@@ -237,7 +245,7 @@ class RegistrationInvoice extends Component {
             < div className="row" >
                 <div className="col-md-3 col-8 pb-0 pr-0 pl-0 " >
                     <InputWithHead
-                        heading={mOrganisationName + " - " + membershipProductName + " Membership Fees" + " - " + mTypeName}
+                        heading={mOrganisationName + " - " + membershipProductName + " Membership Fees - " + mTypeName}
                         required="pr-3 justify-content-start"
                     />
                 </div>
@@ -384,7 +392,7 @@ class RegistrationInvoice extends Component {
                             </div>
                             <div className="col-sm invoice-description" >
                                 <InputWithHead
-                                    heading={'$' + "0.00"}
+                                    heading={'$0.00'}
                                     required={"input-align-right"}
                                 />
                             </div>
@@ -521,7 +529,7 @@ class RegistrationInvoice extends Component {
                             <div className="col-sm invoice-description" >
                                 {affiliateDetail &&
                                     <InputWithHead
-                                        heading={'$' + "0.00"}
+                                        heading={'$0.00'}
                                         required={"input-align-right"}
                                     />
                                 }
@@ -649,14 +657,14 @@ class RegistrationInvoice extends Component {
                                                                 :
                                                                 mem.divisionName ?
                                                                     mem.membershipTypeName == "Player - NetSetGo" ?
-                                                                    regName + " - " + typeName + " " + "T Shirt" + " - " + mem.firstName + " " + mem.lastName
+                                                                    regName + " - " + typeName + " T Shirt - " + mem.firstName + " " + mem.lastName
                                                                     + " - " + tShirtName + ", " + item.competitionName + " - "+ mem.divisionName
                                                                     :
                                                                     regName + " - " + typeName + " " + mem.firstName + " " + mem.lastName
                                                                     + ", " + item.competitionName + " - "+ mem.divisionName
                                                                     :
                                                                     mem.membershipTypeName == "Player - NetSetGo" ?
-                                                                    regName + " - " + typeName + " " + "T Shirt" + " - " + mem.firstName + " " + mem.lastName
+                                                                    regName + " - " + typeName + " T Shirt - " + mem.firstName + " " + mem.lastName
                                                                     + " - " + tShirtName + ", " + item.competitionName
                                                                     :
                                                                     regName + " - " + typeName + " " + mem.firstName + " " + mem.lastName
@@ -841,6 +849,7 @@ class RegistrationInvoice extends Component {
                                 onError={ev => {
                                     ev.target.src = AppImages.netballImages;
                                 }}
+                                alt=""
                             />
                             }
                         </label>
@@ -853,6 +862,7 @@ class RegistrationInvoice extends Component {
                                 onError={ev => {
                                     ev.target.src = AppImages.netballLogoMain;
                                 }}
+                                alt=""
                             />
                         </label>
                     </div>
@@ -865,7 +875,7 @@ class RegistrationInvoice extends Component {
         let {invoiceData} = this.props.stripeState;
         let shopProducts = invoiceData!= null ? invoiceData.shopProducts : []
         let totalAmount = 0;
-        (shopProducts || []).map((x) =>{
+        (shopProducts || []).forEach((x) =>{
             totalAmount += x.totalAmt;
         })
         return(
@@ -875,7 +885,7 @@ class RegistrationInvoice extends Component {
                     <div className="col-md-3 col-8 pb-0 pr-0 pl-0 " >
                         {item.productName &&
                             <InputWithHead
-                                heading={item.organisationName + " - " + item.productName + " - " + item.variantName +'('+ item.optionName+')' + " - Shop Product Fees"}
+                                heading={item.organisationName + " - " + item.productName + " - " + item.variantName +'('+ item.optionName+') - Shop Product Fees'}
                                 required="pr-3 justify-content-start"
                             />
                         }

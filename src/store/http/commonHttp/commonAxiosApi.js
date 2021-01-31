@@ -218,7 +218,7 @@ let AxiosApi = {
 
     //// Get Org Venue list
     async getOrgVenue(search) {
-        let userId = await getUserId()
+        // let userId = await getUserId()
         let url = null
         if (search.length > 0) {
             url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=${search}`
@@ -297,7 +297,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -320,9 +320,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -372,7 +372,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -395,9 +395,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
@@ -443,7 +443,7 @@ const Method = {
                             result: result
                         });
                     }
-                    else if (result.status == 212) {
+                    else if (result.status === 212) {
                         return resolve({
                             status: 4,
                             result: result
@@ -466,9 +466,9 @@ const Method = {
                 .catch(err => {
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
-                            if (err.response.status == 401) {
+                            if (err.response.status === 401) {
                                 let unauthorizedStatus = err.response.status
-                                if (unauthorizedStatus == 401) {
+                                if (unauthorizedStatus === 401) {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }

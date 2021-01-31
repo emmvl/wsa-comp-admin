@@ -191,6 +191,12 @@ function getRefBadgeData(data) {
   };
 }
 
+function getDiscountMethodListAction() {
+  return {
+    type: ApiConstants.API_GET_DISCOUNT_METHOD_LIST_LOAD,
+  };
+}
+
 export {
   getYearListAction,
   getOnlyYearListAction,
@@ -218,5 +224,6 @@ export {
   getRefBadgeData,
   getFeeTypeAction,
   getPaymentOptionsListAction,
-  getPaymentMethodsListAction
+  getPaymentMethodsListAction,
+  getDiscountMethodListAction
 };

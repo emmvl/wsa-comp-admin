@@ -265,7 +265,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
         //filter data for if apply time slot for per venue
         if (timeSlotData.applyToVenueRefId == 2) {
-            let newObj = null
+            // let newObj = null
             let updatedTimeSlotManualArr = []
             for (let i in AllVenueData) {
                 if (AllVenueData[i].timeslots.length > 0) {
@@ -522,12 +522,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </div>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-view pb-4">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, 'competitionVenueTimeslotsDayTimedelete')}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span id={AppUniqueId.timeslotGenerationRemove_btn} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>
@@ -979,12 +979,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </div>
                     {data.length > 1 && (
                         <div className="col-sm-2 delete-image-timeSlot-view">
-                            <a className="transfer-image-view">
+                            <div className="transfer-image-view pt-0 pointer ml-auto">
                                 <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
                                     <i className="fa fa-trash-o" aria-hidden="true" />
                                 </span>
                                 <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                            </a>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -1041,7 +1041,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     addTimeSlotDivision(item, index, mainId, id, data) {
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
-        let timeSlotEntityKey = this.props.competitionTimeSlots
+        // let timeSlotEntityKey = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="d-flex">
@@ -1076,12 +1076,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </Form.Item>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-timeSlot-view pt-3">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>
@@ -1108,7 +1108,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     addTimeSlotGrades(item, index, mainId, id, data) {
         let grades = this.props.competitionTimeSlots.getcompetitionTimeSlotData
-        let timeSlotEntityKey = this.props.competitionTimeSlots
+        // let timeSlotEntityKey = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1
         let mainGradeList = this.props.competitionTimeSlots.mainGradeList
 
@@ -1144,12 +1144,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </Form.Item>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-timeSlot-view pt-2">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>
@@ -1301,12 +1301,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </div>
                 {data.length > 1 && (
                     <div className="col-sm-2 delete-image-timeSlot-view">
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 )}
             </div>

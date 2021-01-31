@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'antd';
 import AppImages from "../themes/appImages";
 
 class PdfContainer extends React.Component {
@@ -22,6 +21,7 @@ class PdfContainer extends React.Component {
                 onError={ev => {
                   ev.target.src = AppImages.printImage;
                 }}
+                alt=""
               />
               {/* <Button className="primary-add-comp-form" type="primary"
                 onClick={createPdf} >

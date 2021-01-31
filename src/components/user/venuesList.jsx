@@ -15,7 +15,10 @@ import DashboardLayout from 'pages/dashboardLayout';
 
 import './user.css';
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null;

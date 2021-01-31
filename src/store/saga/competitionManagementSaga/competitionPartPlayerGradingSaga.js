@@ -190,7 +190,7 @@ export function* importCompetitionPlayer(action) {
                 status: result.status,
             });
         } else {
-            let res = JSON.parse(JSON.stringify(result));
+            // let res = JSON.parse(JSON.stringify(result));
             yield put({
                 type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
                 status: result.status
@@ -222,7 +222,7 @@ export function* importCompetitionTeams(action) {
                 status: result.status,
             });
         } else {
-            let res = JSON.parse(JSON.stringify(result));
+            // let res = JSON.parse(JSON.stringify(result));
             yield put({
                 type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
                 status: result.status

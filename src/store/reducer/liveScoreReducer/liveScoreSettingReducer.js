@@ -74,32 +74,27 @@ const initialState = {
 
 //minutes to hour (and days) converter
 function recordingTimeDays(num) {
-    let d, h, m
+    let d
     if (num != null) {
         d = Math.floor(num / 1440); // 60*24
-        h = Math.floor((num - (d * 1440)) / 60);
-        m = Math.round(num % 60);
     }
     return d
 }
 
 //minutes to hour (and days) converter
 function recordingTimeHours(num) {
-    let d, h, m
+    let d, h
     if (num != null) {
         d = Math.floor(num / 1440); // 60*24
         h = Math.floor((num - (d * 1440)) / 60);
-        m = Math.round(num % 60);
     }
     return h
 }
 
 //minutes to hour (and days) converter
 function recordingTimeMins(num) {
-    let d, h, m
+    let m
     if (num != null) {
-        d = Math.floor(num / 1440); // 60*24
-        h = Math.floor((num - (d * 1440)) / 60);
         m = Math.round(num % 60);
     }
     return m
@@ -150,17 +145,17 @@ function getanyOrgArray(data) {
         if (data[i].inviteesRefId)
             arr.push(data[i].inviteesRefId)
     }
-    let filteredArr = arr.filter(function (item, index) {
-        if (arr.indexOf(item) == index)
-            return item;
-    });
-    return filteredArr
+    // let filteredArr = arr.filter(function (item, index) {
+    //     if (arr.indexOf(item) == index)
+    //         return item;
+    // });
+    return arr
 }
 
 function getCheckBoxSelection(compInvitess) {
     let associationLeague = false
     let clubLeage = false
-    let assocLeage = null
+    // let assocLeage = null
     for (let i in compInvitess) {
         if (compInvitess[i].inviteesRefId === 7) {
             associationLeague = true

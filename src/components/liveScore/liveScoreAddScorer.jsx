@@ -53,7 +53,10 @@ class LiveScoreAddScorer extends Component {
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
+            const {
+                id,
+                // competitionOrganisation
+            } = JSON.parse(getLiveScoreCompetiton())
             if (id !== null) {
                 // this.props.getliveScoreTeams(id);
             } else {
@@ -202,7 +205,11 @@ class LiveScoreAddScorer extends Component {
     }
 
     onChangeNumber = (number) => {
-        const { scorerData, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
+        const { 
+            scorerData, 
+            // scorerRadioBtn, 
+            // existingScorerId
+        } = this.props.liveScoreScorerState
         let key = scorerData.id ? "mobileNumber" : "contactNo"
         if (number.length === 10) {
             this.setState({

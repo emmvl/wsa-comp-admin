@@ -4,14 +4,17 @@ import AxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
 import history from "../../../util/history";
 import { message } from "antd";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 import { getCurrentYear } from 'util/permissions'
 import { getGlobalYear } from "util/sessionStorage";
 
 
 function* failSaga(result) {
     console.log(result)
-    yield put({
+yield put({
         type: ApiConstants.API_QUICK_COMPETITION_FAIL,
         error: result,
         status: result.status
@@ -46,7 +49,7 @@ export function* saveQuickCompDivisionSaga(action) {
     try {
         const result = yield call(AxiosApi.saveQuickCompDivision, action.competitionUniqueKey, action.divisions);
         if (result.status === 1) {
-            if (result.result.data.isDrawApplicable == 1) {
+            if (result.result.data.isDrawApplicable === 1) {
                 const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
                 if (drawResult.status === 1) {
                     const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
@@ -69,7 +72,7 @@ export function* saveQuickCompDivisionSaga(action) {
                         result: result.result.data,
                         status: result.status
                     });
-                    if (drawResult.status != 1) {
+                    if (drawResult.status !== 1) {
                         setTimeout(() => {
                             message.config({
                                 duration: 1,
@@ -118,7 +121,7 @@ export function* getquickYearAndCompetitionListSaga(action) {
     try {
         const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
         if (result.status === 1) {
-            let yearId = action.yearId == null ? getGlobalYear() ? getGlobalYear() : getCurrentYear(result.result.data) : action.yearId
+            let yearId = action.yearId === null ? getGlobalYear() ? getGlobalYear() : getCurrentYear(result.result.data) : action.yearId
             const resultCompetition = yield call(AxiosApi.getQuickCompetitionList, yearId);
             if (resultCompetition.status === 1) {
                 yield put({
@@ -173,7 +176,7 @@ export function* quickcompetitoTimeSlotsPostApi(action) {
     try {
         const result = yield call(AxiosApi.postTimeSlotData, action.payload);
         if (result.status === 1) {
-            if (result.result.data.isDrawApplicable == 1) {
+            if (result.result.data.isDrawApplicable === 1) {
                 const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
                 if (drawResult.status === 1) {
                     const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
@@ -196,7 +199,7 @@ export function* quickcompetitoTimeSlotsPostApi(action) {
                         result: result.result.data,
                         status: result.status,
                     });
-                    if (drawResult.status != 1) {
+                    if (drawResult.status !== 1) {
                         setTimeout(() => {
                             message.config({
                                 duration: 1,
@@ -460,7 +463,7 @@ export function* updateGrid_DivisionSaga(action) {
                         result: result.result.data,
                         status: result.status
                     });
-                    if (drawResult.status != 1) {
+                    if (drawResult.status !== 1) {
                         setTimeout(() => {
                             message.config({
                                 duration: 1,

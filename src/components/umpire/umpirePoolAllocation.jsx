@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Checkbox, Button, Select, Modal } from 'antd';
+import {
+    Layout,
+    Button,
+    Select, 
+    Modal,
+} from 'antd';
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -11,16 +16,25 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AppImages from "../../themes/appImages";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage'
+import { 
+    getUmpireCompetitonData,
+    // getUmpireCompId,
+    // setUmpireCompId, 
+    setUmpireCompitionData 
+} from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { checkUmpireCompIsParent } from "util/permissions";
 import { getUmpirePoolData, saveUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction"
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from '../../customComponents/loader'
 
-const { Header, Footer, Content } = Layout;
+const { 
+    // Header, 
+    Footer, 
+    Content 
+} = Layout;
 const { Option } = Select;
-let this_obj = null;
+// let this_obj = null;
 
 class UmpirePoolAllocation extends Component {
     constructor(props) {
@@ -54,8 +68,7 @@ class UmpirePoolAllocation extends Component {
             orgId: null,
             allCompetition: null
         }
-        this_obj = this;
-        this.onDragEnd = this.onDragEnd.bind(this);
+        // this_obj = this;
     }
 
     componentDidMount() {
@@ -168,49 +181,49 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
-    onDragEnd = result => {
-        const { source, destination } = result;
-        let assignedPlayerData = this.state.assignedData
-        let unassignedPlayerData = this.state.unassignedData
+    // onDragEnd = result => {
+    //     const { source, destination } = result;
+    //     let assignedPlayerData = this.state.assignedData;
+    //     let unassignedPlayerData = this.state.unassignedData;
 
-        let playerId
-        // dropped outside the list
-        if (!destination) {
-            return;
-        }
+    //     // let playerId = null
+    //     // dropped outside the list
+    //     if (!destination) {
+    //         return;
+    //     }
 
-        if (source.droppableId !== destination.droppableId) {
-            let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
-            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
+    //     if (source.droppableId !== destination.droppableId) {
+    //         let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+    //         let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
 
-            if (teamId !== null) {
-                if (sourceTeamID == null) {
-                    playerId = unassignedPlayerData[source.index].playerId
-                } else {
-                    for (let i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                            playerId = assignedPlayerData[i].players[source.index].playerId
-                        }
-                    }
-                }
-            } else {
-                for (let i in assignedPlayerData) {
-                    if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        playerId = assignedPlayerData[i].players[source.index].playerId
-                    }
-                }
-            }
-            // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
-        } else {
-            // this.props.onSameTeamDragAction(source, destination)
-        }
-    };
+    //         if (teamId !== null) {
+    //             if (sourceTeamID == null) {
+    //                 playerId = unassignedPlayerData[source.index].playerId;
+    //             } else {
+    //                 for (let i in assignedPlayerData) {
+    //                     if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+    //                         playerId = assignedPlayerData[i].players[source.index].playerId;
+    //                     }
+    //                 }
+    //             }
+    //         } else {
+    //             for (let i in assignedPlayerData) {
+    //                 if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+    //                     playerId = assignedPlayerData[i].players[source.index].playerId;
+    //                 }
+    //             }
+    //         }
+    //         // this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
+    //     } else {
+    //         // this.props.onSameTeamDragAction(source, destination)
+    //     }
+    // };
 
     onClickComment = (player, teamID) => {
         this.setState({
             modalVisible: true, comment: "", playerId: player.playerId,
             teamID
-        })
+        });
     }
 
     handleDeleteTeamCancel = () => {
@@ -235,7 +248,7 @@ class UmpirePoolAllocation extends Component {
     assignedView = () => {
         let commentList = []
         const { umpirePoolData } = this.props.umpirePoolAllocationState
-        let assignedData = this.state.assignedData
+        // let assignedData = this.state.assignedData
 
         return (
             <div className="d-flex flex-column">

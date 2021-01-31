@@ -1,19 +1,13 @@
 import React, {useState, Component } from "react";
 import {
     Layout,
-    Breadcrumb,
-    Select,
-    Checkbox,
     Button,
-    DatePicker,
-    Input,
     Radio,
     Form,
     message,
-    Modal
+    Modal,
 } from "antd";
-import moment from 'moment';
-import InputWithHead from "../../customComponents/InputWithHead";
+
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -21,10 +15,12 @@ import {
     updateReviewInfoAction,
     getTeamMembersReviewAction
 } from '../../store/actions/userAction/userAction'
-import ValidationConstants from "../../themes/validationConstant";
-import AppImages from "../../themes/appImages";
+// import moment from 'moment';
+// import InputWithHead from "../../customComponents/InputWithHead";
+// import ValidationConstants from "../../themes/validationConstant";
+// import AppImages from "../../themes/appImages";
+// import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
-import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import history from '../../util/history';
 import {isArrayNotEmpty} from '../../util/helpers';
@@ -39,9 +35,13 @@ import { loadStripe } from '@stripe/stripe-js';
 import StripeKeys from "../stripe/stripeKeys";
 
 const stripePromise = loadStripe(StripeKeys.publicKey);
-const { Header, Footer, Content } = Layout;
-const { Option } = Select;
-const { TextArea } = Input;
+const { 
+    // Header,
+    // Footer,
+    Content
+} = Layout;
+// const { Option } = Select;
+// const { TextArea } = Input;
 
 const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -91,9 +91,9 @@ var screenProps = null;
 const CheckoutForm = (props) => {
     const [error, setError] = useState(null);
     const [bankError, setBankError] = useState(null)
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [bankResult, setBankResult] = useState(false);
+    // const [name, setName] = useState(null);
+    // const [email, setEmail] = useState(null);
+    // const [bankResult, setBankResult] = useState(false);
     const [clientSecretKey, setClientKey] = useState("")
     const [regId, setRegId] = useState("")
     const [selectedPaymentOption, setUser] = useState({
@@ -296,7 +296,7 @@ const CheckoutForm = (props) => {
                                                                 <div id="bank-name"></div>
                                                                 <div id="error-message" className=" pl-4 card-errors" role="alert">{bankError}</div>
                                                                 <div class="col pt-3" id="mandate-acceptance">
-                                                                    {AppConstants.stripeMandate1} <a> </a>
+                                                                    {AppConstants.stripeMandate1}
                                                                     <a href="https://stripe.com/au-becs-dd-service-agreement/legal"
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
@@ -317,9 +317,14 @@ const CheckoutForm = (props) => {
                         ))}
                     </div>
                     :
-                    <div className="content-view pt-5 secure-payment-msg">
-                        {AppConstants.securePaymentMsg}
-                    </div>
+                    (
+                        <div className="content-view pt-5 secure-payment-msg">
+                            {AppConstants.securePaymentMsg}
+                            <div style={{ fontWeight: "bold" }}>
+                                {AppConstants.submitButtonPressDescription}
+                            </div>
+                        </div>
+                    )
                 }
                 <div className="mt-5">
                     <div style={{ padding: 0 }}>
@@ -431,16 +436,14 @@ class TeamMemberRegPayment extends Component {
             isArrayNotEmpty(teamMemberRegReviewList.compParticipants) ?
                 teamMemberRegReviewList.compParticipants : [] : [];
         let total = teamMemberRegReviewList != null ? teamMemberRegReviewList.total : null;
-        let shopProducts = teamMemberRegReviewList != null ?
-            isArrayNotEmpty(teamMemberRegReviewList.shopProducts) ?
-                teamMemberRegReviewList.shopProducts : [] : [];
+        // let shopProducts = teamMemberRegReviewList != null ? isArrayNotEmpty(teamMemberRegReviewList.shopProducts) ? teamMemberRegReviewList.shopProducts : [] : [];
         return (
             <div className="outline-style " style={{ padding: "36px 36px 22px 20px" }}>
                 <div className="product-text-common" style={{ fontSize: 21 }}>
                     {AppConstants.yourOrder}
                 </div>
                 {(compParticipants || []).map((item, index) => {
-                    let paymentOptionTxt = this.getPaymentOptionText(item.selectedOptions.paymentOptionRefId, item.isTeamRegistration)
+                    // let paymentOptionTxt = this.getPaymentOptionText(item.selectedOptions.paymentOptionRefId, item.isTeamRegistration)
                     return (
                         <div style={{ paddingBottom: 12 }} key={item.participantId}>
                             {item.isTeamRegistration == 1 ?
@@ -669,8 +672,10 @@ async function confirmDebitPayment(confirmDebitPaymentInput) {
             payment_method: {
                 au_becs_debit: confirmDebitPaymentInput.auBankAccount,
                 billing_details: {
-                    name: "Club Test 1", // accountholderName.value,
-                    email: "testclub@wsa.com"  // email.value,
+                    // name: "Club Test 1", // accountholderName.value,
+                    // email: "testclub@wsa.com"  // email.value,
+                    name: confirmDebitPaymentInput.payload.yourInfo.firstName + " " + confirmDebitPaymentInput.payload.yourInfo.lastName,
+                    email: confirmDebitPaymentInput.payload.yourInfo.email
                 },
             }
         });

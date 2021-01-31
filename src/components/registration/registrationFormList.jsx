@@ -20,7 +20,10 @@ import Tooltip from 'react-png-tooltip'
 import { getCurrentYear } from "util/permissions"
 import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 
-const { Footer, Content } = Layout;
+const {
+    // Footer,
+    Content
+} = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
 
@@ -97,7 +100,7 @@ const columns = [
             return (
                 record.status == "Published" &&
                 <span className="d-flex justify-content-center w-50">
-                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank'>
+                    <a className="user-reg-link" href={userRegistrationUrl} target='_blank' rel="noopener noreferrer">
                         <img className="dot-image pointer"
                             src={AppImages.docsIcon}
                             alt="" width="25" height="25" />

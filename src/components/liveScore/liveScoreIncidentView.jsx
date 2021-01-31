@@ -10,8 +10,15 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ReactPlayer from 'react-player';
-import { liveScore_formateDateTime, liveScore_formateDate, getTime } from '../../themes/dateformate'
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
+import {
+    // liveScore_formateDateTime,
+    liveScore_formateDate,
+    getTime
+} from '../../themes/dateformate'
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../util/helpers";
 import history from "../../util/history";
 import { NavLink } from 'react-router-dom';
 
@@ -94,7 +101,7 @@ class LiveScoreIncidentView extends Component {
                     this.state.isVideo ?
                         <ReactPlayer playing={this.state.visible} url={this.state.modaldata} controls />
                         :
-                        <img src={this.state.modaldata} height='250' width='250' />
+                        <img src={this.state.modaldata} height='250' width='250' alt="" />
                 }
             </div>
         )
@@ -198,7 +205,7 @@ class LiveScoreIncidentView extends Component {
                                         res[0] === "video" ?
                                             <video className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl ? item.mediaUrl : ''} height='70' width='70' />
                                             :
-                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl ? item.mediaUrl : ''} height='70' width='70' />
+                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer' }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl ? item.mediaUrl : ''} height='70' width='70' alt=""/>
                                     }
                                 </div>
                             })}

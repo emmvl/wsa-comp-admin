@@ -1,5 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {
+    isArrayNotEmpty,
+    // isNotNullOrEmptyString
+} from "../../../util/helpers";
 
 
 const initialState = {
@@ -85,14 +88,14 @@ function regChangeReducer(state = initialState, action) {
             if(key === "declineReasonRefId"){
                 state.reviewSaveData["refundAmount"] = null;
                 state.reviewSaveData["refundTypeRefId"] = null;
-                if(data != 3){
+                if(data !== 3){
                     state.reviewSaveData["otherInfo"] = null;
                 }
             }
             else if(key === "refundTypeRefId"){
                 state.reviewSaveData["declineReasonRefId"] = null;
                 state.reviewSaveData["otherInfo"] = null;
-                if(data == 1){
+                if(data === 1){
                     state.reviewSaveData["refundAmount"] = null;
                 }
             }
@@ -209,8 +212,8 @@ function setCompetitions(organisationId, organisations){
     try {
         let arr = [];
         if(isArrayNotEmpty(organisations)){
-            let compData = organisations.find(x=>x.organisationId == organisationId);
-            if(compData!= undefined){
+            let compData = organisations.find(x => x.organisationId === organisationId);
+            if(compData !== undefined){
                 if(isArrayNotEmpty(compData.competitions)){
                     arr.push(...compData.competitions);
                 }

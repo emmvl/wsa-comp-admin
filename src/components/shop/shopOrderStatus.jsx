@@ -13,7 +13,12 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from '../../store/actions/appAction';
-import { getOrderStatusListingAction, updateOrderStatusAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
+import {
+    getOrderStatusListingAction,
+    updateOrderStatusAction,
+    getReferenceOrderStatus,
+    exportOrderStatusAction,
+} from "../../store/actions/shopAction/orderStatusAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
 
@@ -223,7 +228,11 @@ class ShopOrderStatus extends Component {
         const { orderStatusListActionObject } = this.props.shopOrderStatusState;
         this.referenceCalls();
         const {
-            yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
+            // yearRefId,
+            searchText,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
         } = this.state;
         const params = {
             limit: 10,
@@ -357,6 +366,28 @@ class ShopOrderStatus extends Component {
         }
     }
 
+    handleTableExport = () => {
+        const {
+            yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
+        } = this_obj.state;
+        const { orderStatusCurrentPage } = this.props.shopOrderStatusState;
+        const params = {
+            limit: 10,
+            offset: orderStatusCurrentPage
+                ? 10 * (orderStatusCurrentPage - 1)
+                : 0,
+            search: searchText,
+            year: yearRefId,
+            paymentStatus,
+            fulfilmentStatus,
+            product,
+            order: "",
+            sorterBy: "",
+        };
+
+        this.props.exportOrderStatusAction(params);
+    }
+
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view mt-4 pt-2 orderSpace">
             <div className="fluid-width">
@@ -391,6 +422,22 @@ class ShopOrderStatus extends Component {
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <Button className="primary-add-comp-form" type="primary">
                                     {AppConstants.addOrder}
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="col-sm pt-1">
+                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
+                                <Button className="primary-add-comp-form" type="primary" onClick={this.handleTableExport}>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <img
+                                                src={AppImages.export}
+                                                alt=""
+                                                className="export-image"
+                                            />
+                                            {AppConstants.export}
+                                        </div>
+                                    </div>
                                 </Button>
                             </div>
                         </div>
@@ -441,18 +488,18 @@ class ShopOrderStatus extends Component {
     // Partial refund modal end
 
     dropdownView = () => {
-        const paymentStatusData = [
-            { name: "Not Paid", value: "not paid" },
-            { name: "Paid", value: "paid" },
-            { name: "Refunded", value: "refunded" },
-            { name: "Partially refunded", value: "partially refunded" },
-        ];
-        const fulfilmentStatusData = [
-            { name: "To Be Sent", value: "to be sent" },
-            { name: "Awaiting Pickup", value: "awaiting pickup" },
-            { name: "In Transit", value: "in transit" },
-            { name: "Completed", value: "completed" },
-        ];
+        // const paymentStatusData = [
+        //     { name: "Not Paid", value: "not paid" },
+        //     { name: "Paid", value: "paid" },
+        //     { name: "Refunded", value: "refunded" },
+        //     { name: "Partially refunded", value: "partially refunded" },
+        // ];
+        // const fulfilmentStatusData = [
+        //     { name: "To Be Sent", value: "to be sent" },
+        //     { name: "Awaiting Pickup", value: "awaiting pickup" },
+        //     { name: "In Transit", value: "in transit" },
+        //     { name: "Completed", value: "completed" },
+        // ];
         const { ShopFulfilmentStatusArr, ShopPaymentStatus } = this.props.shopOrderStatusState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
@@ -631,6 +678,7 @@ function mapDispatchToProps(dispatch) {
         getOrderStatusListingAction,
         updateOrderStatusAction,
         getReferenceOrderStatus,
+        exportOrderStatusAction,
     }, dispatch);
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Table, Modal } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Modal } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -173,10 +173,8 @@ class CompetitionLadder extends Component {
         let selectDivs = ladderFormat[index].selectedDivisions;
         for (let k in selectDivs) {
             if (e.indexOf(selectDivs[k]) == -1) {
-                {
-                    removedDivisions.push(selectDivs[k]);
-                    break;
-                }
+                removedDivisions.push(selectDivs[k]);
+                break;
             }
         }
 
@@ -185,8 +183,7 @@ class CompetitionLadder extends Component {
         ladderFormat[index].selectedDivisions = e;
 
         let schemeName = ladder.schemeName;
-        let remainingFormatDiv = ladderFormat.
-            filter(x => x.schemeName != schemeName);
+        let remainingFormatDiv = ladderFormat.filter(x => x.schemeName != schemeName);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -313,8 +310,7 @@ class CompetitionLadder extends Component {
             let divArr = [];
 
             for (let j in selectedDivisions) {
-                let matchDivisions = divisions.
-                    find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                let matchDivisions = divisions.find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
                 if (matchDivisions != "") {
                     let obj = {
                         competitionFormatDivisionId: 0,

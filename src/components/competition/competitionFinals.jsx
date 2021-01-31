@@ -28,9 +28,13 @@ import {
 import {
     getOrganisationData,
     setOwn_competition,
-    getOwn_competition, getOwn_competitionStatus, setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
-    getGlobalYear, setGlobalYear
+    getOwn_competition,
+    getOwn_competitionStatus,
+    setOwn_competitionStatus,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
+    getGlobalYear,
+    setGlobalYear
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import { NavLink } from 'react-router-dom';
@@ -63,7 +67,7 @@ class CompetitionFinals extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -204,11 +208,11 @@ class CompetitionFinals extends Component {
         let finalsList = Object.assign(this.props.competitionFinalsState.competitionFinalsList);
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let venueListId = []
-        venueList.map((item) => {
+        venueList.forEach((item) => {
             venueListId.push(item.venueId);
         });
 
-        (finalsList || []).map((item, index) => {
+        (finalsList || []).forEach((item, index) => {
             if (item.whoPlaysWho) {
                 for (let i = 0; i < item.whoPlaysWho.length; i++) {
                     if (item.whoPlaysWho[i].noOfPools == 2) {
@@ -507,7 +511,11 @@ class CompetitionFinals extends Component {
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
         const { finalTypeRefId } = this.props.competitionFinalsState;
         let appState = this.props.appState;
-        let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
+        let {
+            // applyToData,
+            // extraTimeDrawData,
+            finalFixtureTemplateData
+        } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1
         return (
             <div>
@@ -862,7 +870,11 @@ class CompetitionFinals extends Component {
         // let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         // let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let appState = this.props.appState;
-        let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
+        let {
+            applyToData,
+            extraTimeDrawData,
+            // finalFixtureTemplateData
+        } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1
         // let detailsData = this.props.competitionFeesState
         return (
@@ -886,7 +898,7 @@ class CompetitionFinals extends Component {
                             {(applyToData || []).map((app) => (
                                 <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
                             ))}
-                            <Radio key={'applyTo_' + "0"} value={0}>{AppConstants.none}</Radio>
+                            <Radio key={'applyTo_0'} value={0}>{AppConstants.none}</Radio>
                         </Radio.Group>
                     </Form.Item>
                     {data.applyToRefId !== '-1' && (

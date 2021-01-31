@@ -27,7 +27,8 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    // getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
     setGlobalYear, getGlobalYear
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
@@ -69,7 +70,7 @@ class CompetitionFormat extends Component {
         let yearId = getGlobalYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        // let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
@@ -258,7 +259,7 @@ class CompetitionFormat extends Component {
             [`matchTypeRefId`]: formatList.matchTypeRefId
         });
 
-        (competitionFormatDivision || []).map((item, index) => {
+        (competitionFormatDivision || []).forEach((item, index) => {
             this.formRef.current.setFieldsValue({
                 [`matchDuration${index}`]: item.matchDuration,
                 [`mainBreak${index}`]: item.mainBreak,
@@ -346,8 +347,8 @@ class CompetitionFormat extends Component {
     }
 
     onChangeSetValue = (id, fieldName) => {
-        let data = this.props.competitionFormatState.competitionFormatList;
-        let fixtureTemplateId = null;
+        // let data = this.props.competitionFormatState.competitionFormatList;
+        // let fixtureTemplateId = null;
         if (fieldName === "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
             //     if (item.noOfRounds == id) {
@@ -537,12 +538,12 @@ class CompetitionFormat extends Component {
                         />
                     </div>
                     <div className="col-sm-2 transfer-image-view" onClick={() => !disabledStatus ? this.removeNonPlaying(index) : null}>
-                        <a className="transfer-image-view">
+                        <div className="transfer-image-view pt-0 pointer ml-auto">
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0">{AppConstants.remove}</span>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -828,7 +829,7 @@ class CompetitionFormat extends Component {
                         </div>
                     </div>
                 </div>
-                {data.IsQuickCompetition == 1 && (
+                {data.IsQuickCompetition != 1 && (
                     <div className="inside-container-view pt-4">
                         <InputWithHead
                             auto_complete="new-nonPlayingDate"
@@ -838,11 +839,11 @@ class CompetitionFormat extends Component {
                             ? nonPlayingDates.map((item, index) => this.nonPlayingDateView(item, index))
                             : null
                         }
-                        <a>
+                        <div>
                             <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another">
                                 + {AppConstants.addAnotherNonPlayingDate}
                             </span>
-                        </a>
+                        </div>
                     </div>
                 )}
                 {(data.competionFormatDivisions || []).map((item, index) => (

@@ -1,5 +1,8 @@
 import ApiConstants from '../../../themes/apiConstants';
-import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
+import {
+  isArrayNotEmpty,
+  // isNotNullOrEmptyString
+} from '../../../util/helpers';
 import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
 
@@ -41,19 +44,21 @@ const initialState = {
 };
 var gradeColorArray = [];
 var gradeCompColorArray = []
-var fixtureColorArray = [];
+// var fixtureColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
 var legendsArray = [];
-let colorsArrayDup = [...colorsArray];
+// let colorsArrayDup = [...colorsArray];
 let allColorsArray = colorsArray
+
+export const checkColorMatching = (color) => (x) => x.colorCode === color;
 
 function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
   let newArray = currentLegends
   for (let i in drawsArray) {
     for (let j in drawsArray[i].slotsArray) {
       let competitionName = drawsArray[i].slotsArray[j].competitionName
-      let compIndex = currentLegends.findIndex((x) => x.competitionName == competitionName)
+      let compIndex = currentLegends.findIndex((x) => x.competitionName === competitionName)
       if (compIndex === -1) {
         let color = drawsArray[i].slotsArray[j].colorCode
         if (color !== "#999999") {
@@ -61,7 +66,7 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
           // let index = currentLegends.findIndex((x) => x.colorCode === color)
           let object = {
             colorCode: color,
-            gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+            gradeName: color === "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
             divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
             competitionDivisionGradeId: drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
             "checked": true
@@ -77,7 +82,7 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
         let getIndex = newArray[compIndex].legendArray.findIndex((x) => x.colorCode === color)
         let object = {
           colorCode: color,
-          gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+          gradeName: color === "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
           divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
           competitionDivisionGradeId: drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
           "checked": true
@@ -101,7 +106,7 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
       let index = currentLegends.findIndex((x) => x.colorCode === color)
       let object = {
         colorCode: color,
-        gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+        gradeName: color === "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
         divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
@@ -121,18 +126,18 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
   return finalLegendsChunkArray
 }
 
-function setFixtureColor(data) {
-  let fixtureDraws
-  for (let i in data) {
-    fixtureDraws = data[i].draws
-    for (let j in fixtureDraws) {
-      // let colorTeam = getColor(fixtureDraws[j].team1)
-      fixtureDraws[j].team1Color = getFixtureColor(fixtureDraws[j].team1)
-      fixtureDraws[j].team2Color = getFixtureColor(fixtureDraws[j].team2)
-    }
-  }
-  return data
-}
+// function setFixtureColor(data) {
+//   let fixtureDraws
+//   for (let i in data) {
+//     fixtureDraws = data[i].draws
+//     for (let j in fixtureDraws) {
+//       // let colorTeam = getColor(fixtureDraws[j].team1)
+//       fixtureDraws[j].team1Color = getFixtureColor(fixtureDraws[j].team1)
+//       fixtureDraws[j].team2Color = getFixtureColor(fixtureDraws[j].team2)
+//     }
+//   }
+//   return data
+// }
 
 function roundstructureData(data) {
   let roundsdata = data.rounds
@@ -181,7 +186,7 @@ if(data.length >0 && venuesData){
 }
   if (data) {
     if (isArrayNotEmpty(data)) {
-      data.map((object) => {
+      data.forEach((object) => {
         dateArray = setupDateObjectArray(dateArray, object)
         // if (checkDateNotInArray(dateArray, object.matchDate)) {
         //   let dateObject = checkOutOfRound(object)
@@ -323,37 +328,37 @@ if(checkDuplicate ){
     venueId
   };
 }
-function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+// function getRandomColor() {
+//   var letters = '0123456789ABCDEF';
+//   var color = '#';
+//   for (var i = 0; i < 6; i++) {
+//     color += letters[Math.floor(Math.random() * 16)];
+//   }
+//   return color;
+// }
 
-function getFixtureColor(team) {
+// function getFixtureColor(team) {
 
-  let teamColorTempArray = JSON.parse(JSON.stringify(fixtureColorArray));
-  let index = teamColorTempArray.findIndex((x) => x.team === team);
+//   let teamColorTempArray = JSON.parse(JSON.stringify(fixtureColorArray));
+//   let index = teamColorTempArray.findIndex((x) => x.team === team);
 
-  var color = lightGray;
-  if (index !== -1) {
-    color = teamColorTempArray[index].colorCode;
-  } else {
-    for (var i in colorsArray) {
-      let colorIndex = teamColorTempArray.findIndex(
-        (x) => x.colorCode === colorsArray[i]
-      );
-      if (colorIndex === -1) {
-        fixtureColorArray.push({ team: team, colorCode: colorsArray[i] });
-        color = colorsArray[i];
-        break;
-      }
-    }
-  }
-  return color;
-}
+//   var color = lightGray;
+//   if (index !== -1) {
+//     color = teamColorTempArray[index].colorCode;
+//   } else {
+//     for (var i in colorsArray) {
+//       let colorIndex = teamColorTempArray.findIndex(
+//         (x) => x.colorCode === colorsArray[i]
+//       );
+//       if (colorIndex === -1) {
+//         fixtureColorArray.push({ team: team, colorCode: colorsArray[i] });
+//         color = colorsArray[i];
+//         break;
+//       }
+//     }
+//   }
+//   return color;
+// }
 
 function getDrawsDuplicate(drawsArray,drawsObject){
   for(let i in drawsArray){
@@ -373,7 +378,7 @@ function pushColorDivision(division, drawsResultData) {
       for (let k in draws) {
         let slots = draws[k].slotsArray
         for (let l in slots) {
-          if (slots[l].competitionDivisionGradeId == divisionGradeId) {
+          if (slots[l].competitionDivisionGradeId === divisionGradeId) {
             let newDivisionobject = {
               divisionId: division[i].division,
               competitionDivisionGradeId: division[i].competitionDivisionGradeId,
@@ -420,18 +425,16 @@ function allcompetitionDrawsData(data) {
 
 function getCompGradeColor(gradeId, competitionUniqueKey) {
   let gradeColorCompTempArray = JSON.parse(JSON.stringify(gradeCompColorArray));
-  let compIndex = gradeColorCompTempArray.findIndex((x) => x.competitionUniqueKey == competitionUniqueKey);
+  let compIndex = gradeColorCompTempArray.findIndex((x) => x.competitionUniqueKey === competitionUniqueKey);
   var compGradeColor = lightGray;
   if (compIndex !== -1) {
-    let compGradeIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex((x) => x.gradeId == gradeId);
+    let compGradeIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex((x) => x.gradeId === gradeId);
     if (compGradeIndex !== -1) {
       compGradeColor = gradeColorCompTempArray[compIndex].newGradesArray[compGradeIndex].colorCode
     }
     else {
       for (var i in allColorsArray) {
-        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(
-          (x) => x.colorCode === allColorsArray[i]
-        );
+        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(checkColorMatching(allColorsArray[i]));
         if (colorIndex === -1) {
           gradeCompColorArray[compIndex].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[i] });
           compGradeColor = allColorsArray[i];
@@ -443,9 +446,7 @@ function getCompGradeColor(gradeId, competitionUniqueKey) {
   } else {
     gradeCompColorArray.unshift({ competitionUniqueKey: competitionUniqueKey, newGradesArray: [] })
     for (var j in allColorsArray) {
-      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(
-        (x) => x.colorCode === allColorsArray[j]
-      );
+      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(checkColorMatching(allColorsArray[j]));
       if (colorIndex === -1) {
         gradeCompColorArray[0].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[j] })
         compGradeColor = allColorsArray[j];
@@ -466,9 +467,7 @@ function getGradeColor(gradeId) {
     color = gradeColorTempArray[index].colorCode;
   } else {
     for (var i in colorsArray) {
-      let colorIndex = gradeColorTempArray.findIndex(
-        (x) => x.colorCode === colorsArray[i]
-      );
+      let colorIndex = gradeColorTempArray.findIndex(checkColorMatching(colorsArray[i]));
       if (colorIndex === -1) {
         gradeColorArray.push({ gradeId: gradeId, colorCode: colorsArray[i] });
         color = colorsArray[i];
@@ -488,14 +487,14 @@ function checkVenueCourtNumber(mainCourtNumberArray, object) {
   return { status: false, index: -1 };
 }
 
-function checkSlots(slotsArray, slotObject) {
-  for (let i in slotsArray) {
-    if (isDateSame(slotsArray[i].fixtureTime, slotObject.matchDate)) {
-      return { status: true, index: i };
-    }
-  }
-  return { status: false, index: -1 };
-}
+// function checkSlots(slotsArray, slotObject) {
+//   for (let i in slotsArray) {
+//     if (isDateSame(slotsArray[i].fixtureTime, slotObject.matchDate)) {
+//       return { status: true, index: i };
+//     }
+//   }
+//   return { status: false, index: -1 };
+// }
 
 // function checkDateNotInArray(dateArray, date) {
 //   for (let i in dateArray) {
@@ -519,7 +518,7 @@ function sortDateArray(dateArray) {
   let inDrawsArray = []
   let outDrawsArray = []
   for (let i in dateArray) {
-    if (dateArray[i].notInDraw == false) {
+    if (dateArray[i].notInDraw === false) {
       inDrawsArray.push(dateArray[i])
     }
     else {
@@ -536,11 +535,11 @@ function setupDateObjectArray(dateArray, drawObject) {
   let defaultDateObject = {
     date: drawObject.matchDate,
     endTime: drawObject.endTime,
-    notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
+    notInDraw: drawObject.outOfCompetitionDate === 1 || drawObject.outOfRoundDate === 1
   }
   for (let i in dateArray) {
     if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
-      if (tempDateArray[i].notInDraw == false) {
+      if (tempDateArray[i].notInDraw === false) {
         tempDateArray[i] = defaultDateObject
       }
       return tempDateArray;
@@ -562,66 +561,65 @@ function setupGradesArray(gradesArray, gradeId) {
   return true;
 }
 
-function checkSlotsDateStatus(slotsArray, checkdate) {
-  let obj = {
-    status: true,
-    index: null
-  }
-  for (let i in slotsArray) {
-    if (slotsArray[i].matchDate == checkdate) {
-      if (slotsArray[i].drawsId == null) {
-        obj = {
-          status: false,
-          index: i
-        }
-      }
-      else {
-        obj = {
-          status: true,
-          index: i
-        }
-      }
-      break;
-    }
-    else {
-      obj = {
-        status: true,
-        index: i
-      }
-    }
-  }
-  return obj
-}
+// function checkSlotsDateStatus(slotsArray, checkdate) {
+//   let obj = {
+//     status: true,
+//     index: null
+//   }
+//   for (let i in slotsArray) {
+//     if (slotsArray[i].matchDate === checkdate) {
+//       if (slotsArray[i].drawsId === null) {
+//         obj = {
+//           status: false,
+//           index: i
+//         }
+//       }
+//       else {
+//         obj = {
+//           status: true,
+//           index: i
+//         }
+//       }
+//       break;
+//     }
+//     else {
+//       obj = {
+//         status: true,
+//         index: i
+//       }
+//     }
+//   }
+//   return obj
+// }
 
+// function checkDrawsArrayFunc(allDrawsData) {
+//   let drawsAllDateData = allDrawsData.dateNewArray
+//   let drawsAllData = allDrawsData.draws
+//   for (let i in drawsAllDateData) {
+//     let nullStatus = false
+//     let checkDrawsObject = null
+//     let checkdate = drawsAllDateData[i].date
+//     for (let j in drawsAllData) {
+//       checkDrawsObject = checkSlotsDateStatus(drawsAllData[j].slotsArray, checkdate)
+//       if (checkDrawsObject.status === false) {
 
-function checkDrawsArrayFunc(allDrawsData) {
-  let drawsAllDateData = allDrawsData.dateNewArray
-  let drawsAllData = allDrawsData.draws
-  for (let i in drawsAllDateData) {
-    let nullStatus = false
-    let checkDrawsObject = null
-    let checkdate = drawsAllDateData[i].date
-    for (let j in drawsAllData) {
-      checkDrawsObject = checkSlotsDateStatus(drawsAllData[j].slotsArray, checkdate)
-      if (checkDrawsObject.status === false) {
-
-      }
-      else {
-        nullStatus = true
-        break;
-      }
-    }
-    if (nullStatus === false) {
-      for (let j in drawsAllData) {
-        drawsAllData[j].slotsArray.splice(checkDrawsObject.index, 1)
-      }
-      drawsAllDateData.splice(i, 1)
-    }
-  }
-  allDrawsData.dateNewArray = drawsAllDateData
-  allDrawsData.draws = drawsAllData
-  return allDrawsData
-}
+//       }
+//       else {
+//         nullStatus = true
+//         break;
+//       }
+//     }
+//     if (nullStatus === false) {
+//       for (let j in drawsAllData) {
+//         drawsAllData[j].slotsArray.splice(checkDrawsObject.index, 1)
+//       }
+//       drawsAllDateData.splice(i, 1)
+//     }
+//   }
+//   allDrawsData.dateNewArray = drawsAllDateData
+//   allDrawsData.draws = drawsAllData
+//   return allDrawsData
+// }
 
 //// Swipe Array object - draws
 function swapedDrawsArrayFunc(
@@ -663,97 +661,97 @@ function swapedDrawsArrayFunc(
   return drawsArray;
 }
 
-function swapedFixtureArrayFunc(fixtureArray, fixtureSourceXIndex,
-  fixtureTargetXIndex,
-  fixtureSourceYIndex,
-  fixtureTargetYIndex,
-  sourceZIndex,
-  targetZIndex
-) {
+// function swapedFixtureArrayFunc(fixtureArray, fixtureSourceXIndex,
+//   fixtureTargetXIndex,
+//   fixtureSourceYIndex,
+//   fixtureTargetYIndex,
+//   sourceZIndex,
+//   targetZIndex
+// ) {
 
-  var fixtureSourceArray = JSON.parse(JSON.stringify(fixtureArray))
-  var fixtureTargetArray = JSON.parse(JSON.stringify(fixtureArray))
-  var fixtureSource = fixtureSourceArray[fixtureSourceYIndex];
-  var fixtureTarget = fixtureTargetArray[fixtureTargetYIndex];
+//   var fixtureSourceArray = JSON.parse(JSON.stringify(fixtureArray))
+//   var fixtureTargetArray = JSON.parse(JSON.stringify(fixtureArray))
+//   var fixtureSource = fixtureSourceArray[fixtureSourceYIndex];
+//   var fixtureTarget = fixtureTargetArray[fixtureTargetYIndex];
 
-  if (sourceZIndex === '0') {
-    if (targetZIndex === '0') {
-      fixtureArray[fixtureSourceYIndex].team1 =
-        fixtureTarget.team1;
-      fixtureArray[fixtureSourceYIndex].team1Name =
-        fixtureTarget.team1Name;
-      fixtureArray[fixtureSourceYIndex].team1Color =
-        fixtureTarget.team1Color
-    }
-    else {
+//   if (sourceZIndex === '0') {
+//     if (targetZIndex === '0') {
+//       fixtureArray[fixtureSourceYIndex].team1 =
+//         fixtureTarget.team1;
+//       fixtureArray[fixtureSourceYIndex].team1Name =
+//         fixtureTarget.team1Name;
+//       fixtureArray[fixtureSourceYIndex].team1Color =
+//         fixtureTarget.team1Color
+//     }
+//     else {
 
-      fixtureArray[fixtureSourceYIndex].team1 =
-        fixtureTarget.team2;
-      fixtureArray[fixtureSourceYIndex].team1Name =
-        fixtureTarget.team2Name;
-      fixtureArray[fixtureSourceYIndex].team1Color =
-        fixtureTarget.team2Color;
-    }
-  }
-  else {
-    if (targetZIndex === '0') {
-      fixtureArray[fixtureSourceYIndex].team2 =
-        fixtureTarget.team1;
-      fixtureArray[fixtureSourceYIndex].team2Name =
-        fixtureTarget.team1Name;
-      fixtureArray[fixtureSourceYIndex].team2Color =
-        fixtureTarget.team1Color;
+//       fixtureArray[fixtureSourceYIndex].team1 =
+//         fixtureTarget.team2;
+//       fixtureArray[fixtureSourceYIndex].team1Name =
+//         fixtureTarget.team2Name;
+//       fixtureArray[fixtureSourceYIndex].team1Color =
+//         fixtureTarget.team2Color;
+//     }
+//   }
+//   else {
+//     if (targetZIndex === '0') {
+//       fixtureArray[fixtureSourceYIndex].team2 =
+//         fixtureTarget.team1;
+//       fixtureArray[fixtureSourceYIndex].team2Name =
+//         fixtureTarget.team1Name;
+//       fixtureArray[fixtureSourceYIndex].team2Color =
+//         fixtureTarget.team1Color;
 
-    } else {
-      fixtureArray[fixtureSourceYIndex].team2 =
-        fixtureTarget.team2;
-      fixtureArray[fixtureSourceYIndex].team2Name =
-        fixtureTarget.team2Name;
-      fixtureArray[fixtureSourceYIndex].team2Color =
-        fixtureTarget.team2Color;
+//     } else {
+//       fixtureArray[fixtureSourceYIndex].team2 =
+//         fixtureTarget.team2;
+//       fixtureArray[fixtureSourceYIndex].team2Name =
+//         fixtureTarget.team2Name;
+//       fixtureArray[fixtureSourceYIndex].team2Color =
+//         fixtureTarget.team2Color;
 
-    }
-  }
+//     }
+//   }
 
-  if (targetZIndex === '0') {
-    if (sourceZIndex === '0') {
-      fixtureArray[fixtureTargetYIndex].team1 =
-        fixtureSource.team1;
-      fixtureArray[fixtureTargetYIndex].team1Name =
-        fixtureSource.team1Name;
-      fixtureArray[fixtureTargetYIndex].team1Color =
-        fixtureSource.team1Color;
+//   if (targetZIndex === '0') {
+//     if (sourceZIndex === '0') {
+//       fixtureArray[fixtureTargetYIndex].team1 =
+//         fixtureSource.team1;
+//       fixtureArray[fixtureTargetYIndex].team1Name =
+//         fixtureSource.team1Name;
+//       fixtureArray[fixtureTargetYIndex].team1Color =
+//         fixtureSource.team1Color;
 
-    } else {
-      fixtureArray[fixtureTargetYIndex].team1 =
-        fixtureSource.team2;
-      fixtureArray[fixtureTargetYIndex].team1Name =
-        fixtureSource.team2Name;
-      fixtureArray[fixtureTargetYIndex].team1Color =
-        fixtureSource.team2Color;
+//     } else {
+//       fixtureArray[fixtureTargetYIndex].team1 =
+//         fixtureSource.team2;
+//       fixtureArray[fixtureTargetYIndex].team1Name =
+//         fixtureSource.team2Name;
+//       fixtureArray[fixtureTargetYIndex].team1Color =
+//         fixtureSource.team2Color;
 
-    }
-  } else {
-    if (sourceZIndex === '0') {
-      fixtureArray[fixtureTargetYIndex].team2 =
-        fixtureSource.team1;
-      fixtureArray[fixtureTargetYIndex].team2Name =
-        fixtureSource.team1Name;
-      fixtureArray[fixtureTargetYIndex].team2Color =
-        fixtureSource.team1Color;
+//     }
+//   } else {
+//     if (sourceZIndex === '0') {
+//       fixtureArray[fixtureTargetYIndex].team2 =
+//         fixtureSource.team1;
+//       fixtureArray[fixtureTargetYIndex].team2Name =
+//         fixtureSource.team1Name;
+//       fixtureArray[fixtureTargetYIndex].team2Color =
+//         fixtureSource.team1Color;
 
-    } else {
-      fixtureArray[fixtureTargetYIndex].team2 =
-        fixtureSource.team2;
-      fixtureArray[fixtureTargetYIndex].team2Name =
-        fixtureSource.team2Name;
-      fixtureArray[fixtureTargetYIndex].team2Color =
-        fixtureSource.team2Color;
-    }
-  }
+//     } else {
+//       fixtureArray[fixtureTargetYIndex].team2 =
+//         fixtureSource.team2;
+//       fixtureArray[fixtureTargetYIndex].team2Name =
+//         fixtureSource.team2Name;
+//       fixtureArray[fixtureTargetYIndex].team2Color =
+//         fixtureSource.team2Color;
+//     }
+//   }
 
-  return fixtureArray
-}
+//   return fixtureArray
+// }
 
 ///  Swipe Array object - Edit
 function swapedDrawsEditArrayFunc(
@@ -767,10 +765,10 @@ function swapedDrawsEditArrayFunc(
 ) {
   var sourceArray = JSON.parse(JSON.stringify(drawsArray));
   var targetArray = JSON.parse(JSON.stringify(drawsArray));
-  var sourceItem =
-    sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
-  var targetItem =
-    targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
+  // var sourceItem =
+  //   sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
+  // var targetItem =
+  //   targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
 
   var source = sourceArray[sourceXIndex].slotsArray[sourceYIndex];
   var target = targetArray[targetXIndex].slotsArray[targetYIndex];
@@ -925,7 +923,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       try {
         let resultData;
         let singleCompetitionDivision
-        if (action.competitionId == "-1" || action.dateRangeCheck) {
+        if (action.competitionId === "-1" || action.dateRangeCheck) {
           let allCompetiitonDraws = action.result
           
           resultData = allcompetitionDrawsData(allCompetiitonDraws)
@@ -941,14 +939,14 @@ function CompetitionMultiDraws(state = initialState, action) {
 
         state.publishStatus = action.result.drawsPublish
         state.isTeamInDraw = action.result.isTeamNotInDraws
-        // state.drawDivisions  = action.competitionId == "-1" || action.dateRangeCheck ? resultData.data ? resultData.data.legendsArray : [] : []
+        // state.drawDivisions  = action.competitionId === "-1" || action.dateRangeCheck ? resultData.data ? resultData.data.legendsArray : [] : []
         // let singleCompetitionDivision = action.competitionId != "-1" || !action.dateRangeChec && pushColorDivision(JSON.parse(JSON.stringify(state.divisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
         state.divisionGradeNameList = singleCompetitionDivision ? singleCompetitionDivision : []
         state.drawsCompetitionArray = state.drawDivisions.length > 0 ? getCompetitionArray(JSON.parse(JSON.stringify(state.drawDivisions))) : []
         let orgData = updateAllOrganisations(JSON.parse(JSON.stringify(action.result.organisations)), true)
         return {
           ...state,
-          getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
+          getRoundsDrawsdata: action.competitionId === "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
           drawOrganisations: orgData,
           onLoad: false,
           error: null,
@@ -958,9 +956,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       } catch (ex) {
         console.log("exception:", ex)
       }
-
-
-
+      return { ...state };
     /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_LOAD:
       return { ...state, onLoad: true, updateLoad: true, error: null, drawOrganisations: [] };
@@ -975,10 +971,10 @@ function CompetitionMultiDraws(state = initialState, action) {
       //   name: "All Venues",
       //   id: 0
       // }
-      let divisionNameObject = {
-        name: "All Division",
-        competitionDivisionGradeId: 0
-      }
+      // let divisionNameObject = {
+      //   name: "All Division",
+      //   competitionDivisionGradeId: 0
+      // }
       let roundNameObject = {
         roundId: 0, name: "All Rounds", startDateTime: ""
       }
@@ -1143,7 +1139,7 @@ function CompetitionMultiDraws(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:
       let resultDataNew
-      if (action.competitionId == "-1" || action.dateRangeCheck) {
+      if (action.competitionId === "-1" || action.dateRangeCheck) {
         let allCompetiitonDraws = action.getResult;
         resultDataNew = allcompetitionDrawsData(allCompetiitonDraws)
       }
@@ -1157,7 +1153,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       let orgDataNew = JSON.parse(JSON.stringify(action.getResult.organisations))
       return {
         ...state,
-        getRoundsDrawsdata: action.competitionId == "-1"|| action.dateRangeCheck ?  [resultDataNew.data] : resultDataNew.roundsdata,
+        getRoundsDrawsdata: action.competitionId === "-1"|| action.dateRangeCheck ?  [resultDataNew.data] : resultDataNew.roundsdata,
         drawOrganisations: orgDataNew,
         onLoad: false,
         error: null,
@@ -1259,14 +1255,14 @@ function CompetitionMultiDraws(state = initialState, action) {
     case ApiConstants.API_UPDATE_MULTI_DRAWS_LOCK_SUCCESS:
       let getDrawsArray = state.getRoundsDrawsdata
       if (action.key === "all") {
-        let updatetLockValueIndex = getDrawsArray[0].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
-        let updateslotsIndex = getDrawsArray[0].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+        let updatetLockValueIndex = getDrawsArray[0].draws.findIndex((x) => x.venueCourtId === action.venueCourtId)
+        let updateslotsIndex = getDrawsArray[0].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId === action.drawsId)
         getDrawsArray[0].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
         state.getRoundsDrawsdata = getDrawsArray
       } else {
         let getDrawsArrayIndex = getDrawsArray.findIndex((x) => x.roundId === action.roundId)
-        let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
-        let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+        let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId === action.venueCourtId)
+        let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId === action.drawsId)
         getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
         state.getRoundsDrawsdata = getDrawsArray
       }
@@ -1324,7 +1320,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       if (action.key === "competition") {
         state.drawsCompetitionArray[action.index].checked = action.value
       }
-      if (action.key == "division") {
+      if (action.key === "division") {
         state.drawDivisions[action.index].legendArray[action.subIndex].checked = action.value
       }
       if (action.key === 'allCompetitionVenues') {
@@ -1341,7 +1337,7 @@ function CompetitionMultiDraws(state = initialState, action) {
         state.drawOrganisations = allOrganisations
 
       }
-      if (action.key == "organisation") {
+      if (action.key === "organisation") {
         state.drawOrganisations[action.index].checked = action.value
       }
       if (action.key === "allDivisionChecked") {

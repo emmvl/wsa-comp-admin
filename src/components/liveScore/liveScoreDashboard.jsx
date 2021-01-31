@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Button, Table, message, Pagination, Menu } from 'antd';
+import { Layout, Button, Table, message, Pagination, Menu } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -7,9 +7,14 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreDashboardListAction, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import { liveScoreDashboardListAction, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction, liveScorePlayersToCashReceivedAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton, getOrganisationData, getLiveScoreUmpireCompition } from '../../util/sessionStorage'
+import {
+    // getCompetitonId,
+    getLiveScoreCompetiton,
+    getOrganisationData,
+    // getLiveScoreUmpireCompition
+} from '../../util/sessionStorage'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
@@ -38,13 +43,13 @@ function checkSorting(a, b, key) {
     }
 }
 
-function getFirstName(incidentPlayers) {
-    return incidentPlayers ? incidentPlayers[0].player.firstName : ""
-}
+// function getFirstName(incidentPlayers) {
+//     return incidentPlayers ? incidentPlayers[0].player.firstName : ""
+// }
 
-function getLastName(incidentPlayers) {
-    return incidentPlayers ? incidentPlayers[0].player.lastName : ""
-}
+// function getLastName(incidentPlayers) {
+//     return incidentPlayers ? incidentPlayers[0].player.lastName : ""
+// }
 
 function setMatchResult(record) {
     if (record.team1ResultId !== null) {
@@ -575,7 +580,7 @@ const columnsPlayersToPay = [
                 <Menu.SubMenu key="sub1" style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                     title={<img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />}
                 >
-                    <Menu.Item key="1">
+                    <Menu.Item key="1" onClick={() => this_obj.cashReceived(record)}>
                         <span>{AppConstants.cashReceived}</span>
                     </Menu.Item>
                     {(record.processType == "Instalment" || record.processType == "Per Match") &&
@@ -590,17 +595,17 @@ const columnsPlayersToPay = [
     }
 ];
 
-const playerTopay = [
-    {
-        firstName: "Sam",
-        lastName: "Ham",
-        linked: "Cromer Netball Club",
-        division: "11B",
-        team: "WSA 1",
-        grade: "A",
-        payReq: "Voucher redemption"
-    }
-]
+// const playerTopay = [
+//     {
+//         firstName: "Sam",
+//         lastName: "Ham",
+//         linked: "Cromer Netball Club",
+//         division: "11B",
+//         team: "WSA 1",
+//         grade: "A",
+//         payReq: "Voucher redemption"
+//     }
+// ]
 
 class LiveScoreDashboard extends Component {
     constructor(props) {
@@ -611,14 +616,14 @@ class LiveScoreDashboard extends Component {
             compOrgId: 0,
             onload: false,
             page: 1,
-            retryPaymentLoad: false,
+            retryPaymentLoad: false
         }
         this_obj = this
         this.props.initializeCompData()
     }
 
     componentDidMount() {
-        let competitionID = getCompetitonId()
+        // let competitionID = getCompetitonId()
         let startDay = this.getStartofDay()
         let currentTime = moment.utc().format()
 
@@ -630,7 +635,7 @@ class LiveScoreDashboard extends Component {
                 this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
                 this.setState({
                     liveScoreCompIsParent: value,
-                    compOrgId: compOrgId
+                    compOrgId: compOrgId,
                 })
             })
 
@@ -701,16 +706,33 @@ class LiveScoreDashboard extends Component {
     }
 
     retryPayment = (record) => {
+         const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
         let payload = {
-            processType: record.processType,
-            userRegUniqueKey: record.userRegUniqueKey,
-            participantId: record.participantId,
-            divisionId: record.divisionId
+            processTypeName: record.processTypeName,
+            registrationUniqueKey: record.registrationUniqueKey,
+            userId: record.userId,
+            divisionId: record.divisionId,
+            competitionId: uniqueKey
         }
 
 
         this.setState({ retryPaymentLoad: true })
         this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+    }
+
+    cashReceived = (record) => {
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+        let payload = {
+            processTypeName: record.processTypeName,
+            registrationUniqueKey: record.registrationUniqueKey,
+            userId: record.userId,
+            divisionId: record.divisionId,
+            competitionId: uniqueKey
+        }
+
+
+        this.setState({ retryPaymentLoad: true })
+        this.props.liveScorePlayersToCashReceivedAction(payload);
     }
 
     ////////participatedView view for competition
@@ -984,7 +1006,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width default-bg" style={{ paddingBottom: 10 }}>
-                <Loader visible={this.props.liveScoreDashboardState.onPlayersToPayLoad} />
+                <Loader visible={this.props.liveScoreDashboardState.onPlayersToPayLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
@@ -1001,7 +1023,7 @@ class LiveScoreDashboard extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction }, dispatch);
+    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction, liveScorePlayersToCashReceivedAction }, dispatch);
 }
 
 function mapStateToProps(state) {

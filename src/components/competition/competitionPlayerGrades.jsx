@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import {
-    Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown, message,
-} from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,10 +11,17 @@ import AppConstants from "../../themes/appConstants";
 import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
-    getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
-    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
-    playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction, commentListingAction, exportPlayerGrades
+    getCompPartPlayerGradingAction,
+    clearReducerCompPartPlayerGradingAction,
+    addNewTeamAction,
+    onDragPlayerAction,
+    onSameTeamDragAction,
+    playerGradingComment,
+    deleteTeamAction,
+    addOrRemovePlayerForChangeDivisionAction,
+    changeDivisionPlayerAction,
+    commentListingAction,
+    exportPlayerGrades
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwn_competition,
@@ -332,7 +337,7 @@ class CompetitionPlayerGrades extends Component {
             const teamItem = assignedData[teamIndex];
             teamItem.isChecked = checked;
 
-            (teamItem.players || []).map((item, ind) => {
+            (teamItem.players || []).forEach((item) => {
                 item.isChecked = checked;
             });
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
@@ -340,7 +345,7 @@ class CompetitionPlayerGrades extends Component {
             const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
             unassignedData.isChecked = checked;
 
-            (unassignedData.players || []).map((item, ind) => {
+            (unassignedData.players || []).forEach((item) => {
                 item.isChecked = checked;
             });
             this.props.addOrRemovePlayerForChangeDivisionAction(unassignedData, key);
@@ -355,7 +360,7 @@ class CompetitionPlayerGrades extends Component {
             teamItem.players[playerIndex].isChecked = checked;
 
             let flag = true;
-            (teamItem.players || []).map((item, ind) => {
+            (teamItem.players || []).forEach((item) => {
                 if (!item.isChecked) {
                     flag = false;
                 }
@@ -372,7 +377,7 @@ class CompetitionPlayerGrades extends Component {
             unassignedData.players[playerIndex].isChecked = checked;
 
             let flag = true;
-            (unassignedData.players || []).map((item, ind) => {
+            (unassignedData.players || []).forEach((item) => {
                 if (!item.isChecked) {
                     flag = false;
                 }
@@ -399,14 +404,14 @@ class CompetitionPlayerGrades extends Component {
             const assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
 
             if (assignedData != null && assignedData.length > 0) {
-                (assignedData || []).map((team, index) => {
+                (assignedData || []).forEach(team => {
                     if (team.isChecked) {
                         const obj = {
                             teamId: team.teamId,
                         };
                         res.teams.push(obj);
                     }
-                    (team.players || []).map((item, pIndex) => {
+                    (team.players || []).forEach(item => {
                         if (item.isChecked) {
                             const obj = {
                                 playerId: item.playerId,
@@ -420,7 +425,7 @@ class CompetitionPlayerGrades extends Component {
             const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
 
             if (unassignedData != null && unassignedData.players.length > 0) {
-                (unassignedData.players || []).map((item, index) => {
+                (unassignedData.players || []).forEach(item => {
                     if (item.isChecked) {
                         const obj = {
                             playerId: item.playerId,
@@ -544,14 +549,14 @@ class CompetitionPlayerGrades extends Component {
                         playerId = unassignedPlayerData.players[source.index].playerId;
                     } else {
                         for (const i in assignedPlayerData) {
-                            if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            if (sourceTeamID == assignedPlayerData[i].teamId) {
                                 playerId = assignedPlayerData[i].players[source.index].playerId;
                             }
                         }
                     }
                 } else {
                     for (const i in assignedPlayerData) {
-                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                        if (sourceTeamID == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId;
                         }
                     }
@@ -819,8 +824,8 @@ class CompetitionPlayerGrades extends Component {
         const commentList = this.props.partPlayerGradingState.playerCommentList;
         const { commentLoad } = this.props.partPlayerGradingState;
         const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-        let colorPosition1;
-        let colorPosition2;
+        // let colorPosition1;
+        // let colorPosition2;
         const divisionData = this.props.registrationState.allDivisionsData.filter((x) => x.competitionMembershipProductDivisionId != null);
         const disableStatus = this.state.competitionStatus == 1;
         return (

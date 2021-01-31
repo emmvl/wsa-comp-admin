@@ -38,151 +38,151 @@ const teamMembersSaveTemp = {
   registrationRestrictionTypeRefId: null,
 };
 
-const teamMemberRegReviewTemp = {
-  total: {
-    gst: "20.90",
-    total: "229.90",
-    shipping: "0.00",
-    subTotal: "209.00",
-    targetValue: "229.90",
-    charityValue: "0.00",
-    transactionFee: "0.00",
-  },
-  yourInfo: {
-    email: "manager12345@gmail.com",
-    suburb: "Melbourne",
-    userId: 13367,
-    street1: "123 Queen St",
-    street2: null,
-    lastName: "12",
-    firstName: "Manager123",
-    postalCode: "3000",
-    stateRefId: 7,
-    countryRefId: 1,
-    mobileNumber: "2323289348",
-  },
-  compParticipants: [
-    {
-      email: "manager12345@gmail.com",
-      gender: "Female",
-      payNow: "229.90",
-      userId: 0,
-      lastName: "12",
-      teamName: "team 98765",
-      firstName: "Manager123",
-      dateOfBirth: "1990-01-17T00:00:00.000Z",
-      noOfPlayers: null,
-      payPerMatch: "0.00",
-      teamMembers: {
-        payingForList: [],
-        notPayingForList: [],
-      },
-      mobileNumber: "2323289348",
-      participantId: "2440df41-76b3-4209-9b13-e9d86fb3d2ea",
-      paymentOptions: [
-        {
-          feesTypeRefId: 2,
-          paymentOptionRefId: 3,
-        },
-        {
-          feesTypeRefId: 1,
-          paymentOptionRefId: 1,
-        },
-      ],
-      competitionName: "Single game fee test 1",
-      selectedOptions: {
-        vouchers: [],
-        discountCodes: [],
-        gameVoucherValue: null,
-        selectedDiscounts: [],
-        paymentOptionRefId: 1,
-        isHardshipCodeApplied: 0,
-        selectedSchoolRegCode: null,
-        isSchoolRegCodeApplied: 0,
-        nominationPayOptionRefId: 1,
-        selectedGovernmentVouchers: [],
-      },
-      organisationName: "Netball NSW",
-      orgRegistrationId: 6205,
-      competitionEndDate: "2021-03-27T00:00:00.000Z",
-      competitionLogoUrl: "https://www.googleapis.com/download/storage/v1/b/world-sport-action-dev-c1019.appspot.com/o/competitions%2Flogo_comp_f5f531f9-720d-4bf3-8074-dfe14730d9db_1607903705789.png?generation=1607903708831697&alt=media",
-      isTeamRegistration: 1,
-      membershipProducts: [
-        {
-          fees: {
-            affiliateFee: null,
-            membershipFee: {
-              name: "Netball NSW",
-              emailId: "netball@nsw.gov.au",
-              phoneNo: "039009000",
-              casualFee: 0,
-              casualGST: 0,
-              feesToPay: 89,
-              seasonalFee: 89,
-              seasonalGST: 8.9,
-              feesToPayGST: 8.9,
-              organisationId: "b540171a-27b3-4c69-991f-b4bf0be28159",
-              discountsToDeduct: 0,
-              membershipMappingId: 1138,
-              childDiscountsToDeduct: 0,
-              governmentVoucherAmount: 0,
-            },
-            competitionOrganisorFee: {
-              name: "Netball NSW",
-              emailId: "netball@nsw.gov.au",
-              phoneNo: "039009000",
-              casualFee: 10,
-              casualGST: 1,
-              feesToPay: 0,
-              seasonalFee: 120,
-              seasonalGST: 12,
-              feesToPayGST: 0,
-              nominationFee: 0,
-              nominationGST: 0,
-              organisationId: "b540171a-27b3-4c69-991f-b4bf0be28159",
-              discountsToDeduct: 0,
-              nominationFeeToPay: 10,
-              nominationGSTToPay: 1,
-              membershipMappingId: 1138,
-              childDiscountsToDeduct: 0,
-              governmentVoucherAmount: 0,
-            },
-          },
-          email: "virat015@gmail.com.invalid",
-          isPlayer: 1,
-          lastName: "A",
-          feesToPay: "229.90",
-          firstName: "Virat017",
-          divisionId: 3948,
-          divisionName: "D1",
-          mobileNumber: "1212211221",
-          discountsToDeduct: "0.00",
-          membershipTypeName: "Player",
-          membershipMappingId: 1138,
-          orgRegParticipantId: 9927,
-          membershipProductName: "Single game fee",
-          childDiscountsToDeduct: "0.00",
-          governmentVoucherAmount: null,
-          competitionMembershipProductTypeId: 5502,
-        },
-      ],
-      competitionUniqueKey: "18e47b5f-4ab3-4c77-9ff8-e32436388497",
-      isTeamSeasonalUponReg: 0,
-      organisationUniqueKey: "9971815e-d9cb-4d44-bba2-f5be2e12c120",
-      governmentVoucherAmount: "0.00",
-      registeringYourselfRefId: 1,
-      competitionMembershipProductTypeIdCoach: null,
-    },
-  ],
-  securePaymentOptions: [
-    {
-      securePaymentOptionRefId: 1,
-    },
-    {
-      securePaymentOptionRefId: 2,
-    },
-  ],
-};
+// const teamMemberRegReviewTemp = {
+//   total: {
+//     gst: "20.90",
+//     total: "229.90",
+//     shipping: "0.00",
+//     subTotal: "209.00",
+//     targetValue: "229.90",
+//     charityValue: "0.00",
+//     transactionFee: "0.00",
+//   },
+//   yourInfo: {
+//     email: "manager12345@gmail.com",
+//     suburb: "Melbourne",
+//     userId: 13367,
+//     street1: "123 Queen St",
+//     street2: null,
+//     lastName: "12",
+//     firstName: "Manager123",
+//     postalCode: "3000",
+//     stateRefId: 7,
+//     countryRefId: 1,
+//     mobileNumber: "2323289348",
+//   },
+//   compParticipants: [
+//     {
+//       email: "manager12345@gmail.com",
+//       gender: "Female",
+//       payNow: "229.90",
+//       userId: 0,
+//       lastName: "12",
+//       teamName: "team 98765",
+//       firstName: "Manager123",
+//       dateOfBirth: "1990-01-17T00:00:00.000Z",
+//       noOfPlayers: null,
+//       payPerMatch: "0.00",
+//       teamMembers: {
+//         payingForList: [],
+//         notPayingForList: [],
+//       },
+//       mobileNumber: "2323289348",
+//       participantId: "2440df41-76b3-4209-9b13-e9d86fb3d2ea",
+//       paymentOptions: [
+//         {
+//           feesTypeRefId: 2,
+//           paymentOptionRefId: 3,
+//         },
+//         {
+//           feesTypeRefId: 1,
+//           paymentOptionRefId: 1,
+//         },
+//       ],
+//       competitionName: "Single game fee test 1",
+//       selectedOptions: {
+//         vouchers: [],
+//         discountCodes: [],
+//         gameVoucherValue: null,
+//         selectedDiscounts: [],
+//         paymentOptionRefId: 1,
+//         isHardshipCodeApplied: 0,
+//         selectedSchoolRegCode: null,
+//         isSchoolRegCodeApplied: 0,
+//         nominationPayOptionRefId: 1,
+//         selectedGovernmentVouchers: [],
+//       },
+//       organisationName: "Netball NSW",
+//       orgRegistrationId: 6205,
+//       competitionEndDate: "2021-03-27T00:00:00.000Z",
+//       competitionLogoUrl: "https://www.googleapis.com/download/storage/v1/b/world-sport-action-dev-c1019.appspot.com/o/competitions%2Flogo_comp_f5f531f9-720d-4bf3-8074-dfe14730d9db_1607903705789.png?generation=1607903708831697&alt=media",
+//       isTeamRegistration: 1,
+//       membershipProducts: [
+//         {
+//           fees: {
+//             affiliateFee: null,
+//             membershipFee: {
+//               name: "Netball NSW",
+//               emailId: "netball@nsw.gov.au",
+//               phoneNo: "039009000",
+//               casualFee: 0,
+//               casualGST: 0,
+//               feesToPay: 89,
+//               seasonalFee: 89,
+//               seasonalGST: 8.9,
+//               feesToPayGST: 8.9,
+//               organisationId: "b540171a-27b3-4c69-991f-b4bf0be28159",
+//               discountsToDeduct: 0,
+//               membershipMappingId: 1138,
+//               childDiscountsToDeduct: 0,
+//               governmentVoucherAmount: 0,
+//             },
+//             competitionOrganisorFee: {
+//               name: "Netball NSW",
+//               emailId: "netball@nsw.gov.au",
+//               phoneNo: "039009000",
+//               casualFee: 10,
+//               casualGST: 1,
+//               feesToPay: 0,
+//               seasonalFee: 120,
+//               seasonalGST: 12,
+//               feesToPayGST: 0,
+//               nominationFee: 0,
+//               nominationGST: 0,
+//               organisationId: "b540171a-27b3-4c69-991f-b4bf0be28159",
+//               discountsToDeduct: 0,
+//               nominationFeeToPay: 10,
+//               nominationGSTToPay: 1,
+//               membershipMappingId: 1138,
+//               childDiscountsToDeduct: 0,
+//               governmentVoucherAmount: 0,
+//             },
+//           },
+//           email: "virat015@gmail.com.invalid",
+//           isPlayer: 1,
+//           lastName: "A",
+//           feesToPay: "229.90",
+//           firstName: "Virat017",
+//           divisionId: 3948,
+//           divisionName: "D1",
+//           mobileNumber: "1212211221",
+//           discountsToDeduct: "0.00",
+//           membershipTypeName: "Player",
+//           membershipMappingId: 1138,
+//           orgRegParticipantId: 9927,
+//           membershipProductName: "Single game fee",
+//           childDiscountsToDeduct: "0.00",
+//           governmentVoucherAmount: null,
+//           competitionMembershipProductTypeId: 5502,
+//         },
+//       ],
+//       competitionUniqueKey: "18e47b5f-4ab3-4c77-9ff8-e32436388497",
+//       isTeamSeasonalUponReg: 0,
+//       organisationUniqueKey: "9971815e-d9cb-4d44-bba2-f5be2e12c120",
+//       governmentVoucherAmount: "0.00",
+//       registeringYourselfRefId: 1,
+//       competitionMembershipProductTypeIdCoach: null,
+//     },
+//   ],
+//   securePaymentOptions: [
+//     {
+//       securePaymentOptionRefId: 1,
+//     },
+//     {
+//       securePaymentOptionRefId: 2,
+//     },
+//   ],
+// };
 
 const affiliate = {
   affiliateId: 0,
@@ -367,7 +367,7 @@ function getUpdatedTeamMemberObj(competition) {
     const teamMemberTemp = deepCopyFunction(teamMemberObj);
     teamMemberTemp.membershipProductTypes = [];
     const filteredTeamMembershipProducts = competition.membershipProducts.filter(
-      (x) => x.isTeamRegistration == 1 && x.allowTeamRegistrationTypeRefId == 1,
+      (x) => x.isTeamRegistration === 1 && x.allowTeamRegistrationTypeRefId === 1,
     );
     for (let product of filteredTeamMembershipProducts) {
       const obj = {
@@ -456,8 +456,8 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_AFFILIATES_LISTING_LOAD:
       return {
         ...state,
-        onLoad: action.payload.paging.limit != -1,
-        onImpersonationLoad: action.payload.paging.limit == -1,
+        onLoad: action.payload.paging.limit !== -1,
+        onImpersonationLoad: action.payload.paging.limit === -1,
         userAffiliateListAction: action,
       };
 
@@ -690,7 +690,7 @@ function userReducer(state = initialState, action) {
         userDashboardTextualTotalCount: textualData.page.totalCount,
         competitions: isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
         organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
-        roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
+        roles: isArrayNotEmpty(textualData.roles) ? textualData.roles.sort((a, b) => a.description > b.description  ? 1 : -1) : [],
         userDashboardCounts: textualData.counts,
         status: action.status
       };
@@ -1305,7 +1305,7 @@ function userReducer(state = initialState, action) {
       if (action.key === "teamMembersSave") {
         state.teamMembersSave = action.data;
       } else if (action.key === "teamMember") {
-        if (action.index == undefined) {
+        if (action.index === undefined) {
           updateTeamMembersSave(state);
           state.addTeamMember = true;
         } else {
@@ -1370,7 +1370,7 @@ function userReducer(state = initialState, action) {
           let totalVal = reviewData.total.total;
           let transactionVal = 0;
           let targetVal = 0;
-          if (action.value == 1) {
+          if (action.value === 1) {
             if (type === "International_CC") {
               transactionVal = (totalVal * 3.0 / 100) + 0.30;
             }
@@ -1400,6 +1400,8 @@ function userReducer(state = initialState, action) {
       } catch (ex) {
         console.log("Error in UPDATE_TEAM_MEMBER_REVIEW_INFO::" + ex);
       }
+      return { ...state };
+
     case ApiConstants.API_TEAM_MEMBER_UPDATE_LOAD:
       return { ...state, onTeamUpdateLoad: true };
 
@@ -1438,7 +1440,7 @@ function getUserRole(userRoleData) {
   let userRole = false;
 
   for (let i in userRoleData) {
-    if (userRoleData[i].roleId == 15 || userRoleData[i].roleId == 20) {
+    if (userRoleData[i].roleId === 15 || userRoleData[i].roleId === 20) {
 
       userRole = true;
       break;
@@ -1470,8 +1472,8 @@ function checkSelectedCharity(selected, data) {
       isSelected: false,
     };
     if (selected) {
-      let filteredRes = selected.find(x => x.charityRoundUpRefId == data[i].id);
-      if (filteredRes != null && filteredRes != undefined) {
+      let filteredRes = selected.find(x => x.charityRoundUpRefId === data[i].id);
+      if (filteredRes !== null && filteredRes !== undefined) {
         obj.id = filteredRes.id;
         obj.charityRoundUpRefId = filteredRes.charityRoundUpRefId;
         obj.isSelected = true;

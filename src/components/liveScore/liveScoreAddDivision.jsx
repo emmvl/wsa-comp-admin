@@ -1,5 +1,5 @@
 import React, { Component, createRef } from "react";
-import { Layout, Breadcrumb, Button, Form, Select, Radio, Spin, AutoComplete } from 'antd';
+import { Layout, Breadcrumb, Button, Form, Select } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from 'react-router-dom';
@@ -14,7 +14,10 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
+import {
+    // getCompetitonId,
+    getLiveScoreCompetiton
+} from '../../util/sessionStorage';
 import Loader from '../../customComponents/loader'
 import { captializedString } from "../../util/helpers"
 
@@ -108,7 +111,7 @@ class LiveScoreAddDivision extends Component {
 
     ////form view
     contentView = () => {
-        const { name, divisionName, gradeName } = this.props.liveScoreDivisionState
+        // const { name, divisionName, gradeName } = this.props.liveScoreDivisionState
         const { positionTracking } = this.props.liveScoreDivisionState
         const competition = JSON.parse(getLiveScoreCompetiton());
         return (
