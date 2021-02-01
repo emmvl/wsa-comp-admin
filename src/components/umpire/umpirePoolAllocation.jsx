@@ -943,7 +943,14 @@ class UmpirePoolAllocation extends Component {
                         {this.footerView()}
                     </Footer>
                 </Layout>
-                <Loader visible={this.props.umpirePoolAllocationState.onLoad || this.props.appState.onLoad || this.props.umpireState.onLoad} />
+                
+                <Loader 
+                    visible={
+                        this.props.umpirePoolAllocationState.onLoad || 
+                        this.props.appState.onLoad || 
+                        this.props.umpireState.onLoad
+                    } 
+                />
             </div>
         );
     }
