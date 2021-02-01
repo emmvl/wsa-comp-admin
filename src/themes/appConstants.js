@@ -74,6 +74,7 @@ const AppConstants = {
     haveYouEverPlayed: 'Have you ever played Netball before:',
     yes: 'Yes',
     no: 'No',
+    loadMore: 'Load more',
     grade: 'Grade',
     year: 'Year',
     clubOther: 'Club/other',

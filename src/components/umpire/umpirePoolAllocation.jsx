@@ -477,6 +477,16 @@ class UmpirePoolAllocation extends Component {
         this.props.getUmpireList({ organisationId, competitionId: compId, offset: offset });
     };
 
+    handleLoadMore = page => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const compId = JSON.parse(getUmpireCompId());
+        const { currentPage_Data, totalCount_Data } = this.props.umpireState;
+
+        const offset = 10 * currentPage_Data;
+
+        this.props.getUmpireList({ organisationId, competitionId: compId, offset: offset });
+    };
+
     // save new data
     handleSave = () => {
         const { selectedComp, assignedData } = this.state;
@@ -853,15 +863,22 @@ class UmpirePoolAllocation extends Component {
                 <div className="comp-dashboard-botton-view-mobile">
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
-                    <div className="d-flex justify-content-end">
-                        <Pagination
+                    <div className="d-flex justify-content-center">
+                        {/* <Pagination
                             className="antd-pagination"
                             current={currentPage_Data}
                             total={totalCount_Data}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
                             showSizeChanger={false}
-                        />
+                        /> */}
+                        {totalCount_Data > currentPage_Data * 10 &&
+                            <Button
+                                onClick={this.handleLoadMore}
+                            >
+                                {AppConstants.loadMore}
+                            </Button>
+                        }
                     </div>
                 </div>
             </div>
@@ -886,19 +903,17 @@ class UmpirePoolAllocation extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width paddingBottom56px pool-space">
-                <div className="row">
-                    <div className="col-sm mt-3 px-0">
-                        <div className="d-flex justify-content-end">
-                            <Button
-                                className="publish-button save-draft-text mr-0" 
-                                type="primary"
-                                htmlType="submit"
-                                onClick={this.handleSave}
-                            >
-                                {AppConstants.save}
-                            </Button>
-                        </div>
+            <div className="fluid-width pool-space">
+                <div className="col-sm mt-3 px-0">
+                    <div className="d-flex justify-content-end">
+                        <Button
+                            className="publish-button save-draft-text mr-0" 
+                            type="primary"
+                            htmlType="submit"
+                            onClick={this.handleSave}
+                        >
+                            {AppConstants.save}
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -910,7 +925,6 @@ class UmpirePoolAllocation extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="5" />
-                <Loader visible={this.props.umpirePoolAllocationState.onLoad || this.props.appState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
@@ -923,8 +937,13 @@ class UmpirePoolAllocation extends Component {
                         {this.removeUmpireFromPoolModalView()}
                         {this.deletePoolModalView()}
                     </Content>
-                    <Footer>{this.footerView()}</Footer>
+                    <Footer 
+                        style={{ padding: '0 22px 100px' }}
+                    >
+                        {this.footerView()}
+                    </Footer>
                 </Layout>
+                <Loader visible={this.props.umpirePoolAllocationState.onLoad || this.props.appState.onLoad || this.props.umpireState.onLoad} />
             </div>
         );
     }

@@ -284,9 +284,12 @@ function umpireState(state = initialState, action) {
             };
 
         case ApiConstants.API_GET_UMPIRE_LIST_SUCCESS:
+            const umpireListDataCopy = JSON.parse(JSON.stringify(state.umpireListDataNew));
+            umpireListDataCopy.push(...action.result.data);
+
             return {
                 ...state,
-                umpireListDataNew: action.result.data,
+                umpireListDataNew: action.result?.page.currentPage === 1 ? action.result.data : umpireListDataCopy,
                 currentPage_Data: action.result.page ? action.result.page.currentPage : null,
                 totalCount_Data: action.result.page ? action.result.page.totalCount : null,
                 onLoad: false,
