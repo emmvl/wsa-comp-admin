@@ -147,7 +147,7 @@ class UmpirePoolAllocation extends Component {
 
             const unassignedDataCurrentState = JSON.parse(JSON.stringify(unassignedData));
 
-            if (umpireListDataNew !== prevProps.umpireState.umpireListDataNew) {
+            if (umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedDataCurrentState.length) {
                 unassignedDataCurrentState.push(...umpireListDataNew);
             }
 
