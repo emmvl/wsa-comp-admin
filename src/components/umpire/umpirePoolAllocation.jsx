@@ -67,6 +67,7 @@ class UmpirePoolAllocation extends Component {
             umpirePoolIdToUpdate: '',
             unassignedDataTemp: [],
             assignedDataTemp: [],
+            totalUnassigned: 0,
         }
         this.onDragEnd = this.onDragEnd.bind(this);
     }
@@ -82,7 +83,7 @@ class UmpirePoolAllocation extends Component {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
         const { deletedUmpirePoolId, newUmpirePool } = this.props.umpirePoolAllocationState;
-        const { assignedData, unassignedData } = this.state;
+        const { assignedData, unassignedData, selectedComp } = this.state;
 
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
@@ -132,7 +133,7 @@ class UmpirePoolAllocation extends Component {
             || this.props.umpirePoolAllocationState.onLoad !== prevProps.umpirePoolAllocationState.onLoad) && 
             !this.props.umpireState.onLoad && !this.props.umpirePoolAllocationState.onLoad
         ) {
-            const { umpireListDataNew, currentPage_Data } = this.props.umpireState;
+            const { umpireListDataNew, currentPage_Data, totalCount_Data } = this.props.umpireState;
             const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
             const assignedUmpiresIdSet = new Set();
@@ -146,7 +147,9 @@ class UmpirePoolAllocation extends Component {
 
             const unassignedDataCurrentState = JSON.parse(JSON.stringify(unassignedData));
 
-            if (umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedDataCurrentState.length) {
+            if ((umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedDataCurrentState.length) 
+                && selectedComp === prevState.selectedComp 
+            ) {
                 unassignedDataCurrentState.push(...umpireListDataNew);
             }
 
@@ -157,7 +160,11 @@ class UmpirePoolAllocation extends Component {
                     unassignedDataCurrentState.findIndex(umpireForDupl => umpireForDupl.id === umpireItem.id) === umpireItemIndex
                 ));
 
-            this.setState({unassignedData: unassignedUmpires, assignedData: umpirePoolDataCurrentState });
+            this.setState({
+                unassignedData: unassignedUmpires, 
+                assignedData: umpirePoolDataCurrentState,
+                totalUnassigned: totalCount_Data,
+            });
         }
 
         // handle state after pool delete
@@ -206,7 +213,7 @@ class UmpirePoolAllocation extends Component {
         setUmpireCompId(compId);
 
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
-        this.setState({ selectedComp: compId, isOrganiserView: isOrganiser });
+        this.setState({ selectedComp: compId, isOrganiserView: isOrganiser, unassignedData: [] });
     }
 
     onDragEnd = result => {
@@ -236,7 +243,7 @@ class UmpirePoolAllocation extends Component {
     };
 
     unassignedToAssignedMove = (source, destination) => {
-        const { assignedData, unassignedData } = this.state;
+        const { assignedData, unassignedData, totalUnassigned } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
         const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
@@ -250,11 +257,12 @@ class UmpirePoolAllocation extends Component {
         return { 
             unassignedData: unassignedDataCopy,
             assignedData: assignedDataCopy,
+            totalUnassigned: totalUnassigned - 1,
         }
     }
 
     moveToUnassigned = (source, destination) => {
-        const { assignedData, unassignedData } = this.state;
+        const { assignedData, unassignedData, totalUnassigned } = this.state;
         const { assignedUmpire, sourceAssignedData, assignedDataCopy, unassignedDataCopy } = this.getDataForDnD(source, destination);
 
         sourceAssignedData.umpires.splice(source.index, 1);
@@ -275,6 +283,7 @@ class UmpirePoolAllocation extends Component {
             assignedDataTemp: assignedData,
             moveToUnassignModalVisible: isMultipleAssigned,
             umpireForAction: isMultipleAssigned ? assignedUmpire : null,
+            totalUnassigned: isMultipleAssigned ? totalUnassigned: totalUnassigned + 1,
         }
     }
 
@@ -477,7 +486,7 @@ class UmpirePoolAllocation extends Component {
     // move umpire to unassigned section if he has multiple pools
 
     handleOkMoveToUnassigned = () => {
-        const { umpireForAction, assignedData } = this.state;
+        const { umpireForAction, assignedData, totalUnassigned } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -494,6 +503,7 @@ class UmpirePoolAllocation extends Component {
             moveToUnassignModalVisible: false,
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            totalUnassigned: totalUnassigned + 1,
         });
     };
 
@@ -840,7 +850,7 @@ class UmpirePoolAllocation extends Component {
 
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
-        const { unassignedData, isOrganiserView } = this.state;
+        const { unassignedData, isOrganiserView, totalUnassigned } = this.state;
         const { currentPage_Data, totalCount_Data } = this.props.umpireState;
 
         return (
@@ -852,11 +862,9 @@ class UmpirePoolAllocation extends Component {
                                 <div className="row">
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
-                                        {totalCount_Data && 
-                                            <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
-                                                {totalCount_Data > 1 ? totalCount_Data + " Umpires" : totalCount_Data + " Umpire"}
-                                            </span>
-                                        }
+                                        <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
+                                            {totalUnassigned > 1 ? totalUnassigned + " Umpires" : totalUnassigned + " Umpire"}
+                                        </span>
                                     </div>
                                     { isOrganiserView &&
                                         <div className="col-sm d-flex justify-content-end">
