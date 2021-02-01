@@ -138,11 +138,11 @@ class UmpireDivisions extends Component {
         this.setState({ umpPool: data.umpirePool })
     }
 
-    badgeView(badgeDat, index) {
+    poolView(poolItem, index) {
         return (
-            <div className="row pt-3" key={'badgeDat' + index}>
+            <div className="row pt-3" key={'poolItem' + index}>
                 <div className='col-sm-3 division-table-field-view'>
-                    <InputWithHead heading={badgeDat.description} />
+                    <InputWithHead heading={poolItem.name} />
                 </div>
                 <div className="col-sm">
                     <Select
@@ -160,18 +160,18 @@ class UmpireDivisions extends Component {
     }
 
     contentView = () => {
-        const { badgeData } = this.props.appState
-        let badge = isArrayNotEmpty(badgeData) ? badgeData : []
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+
         return (
             <div className="content-view pt-5">
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
 
-                {badge.map((item, index) => (
-                    this.badgeView(item, index)
+                {!!umpirePoolData && umpirePoolData.map((item, index) => (
+                    this.poolView(item, index)
                 ))}
 
-                <div className="row pt-3">
+                {/* <div className="row pt-3">
                     <div className='col-sm-3 division-table-field-view'>
                         <InputWithHead heading={AppConstants.umpireCoach} />
                     </div>
@@ -188,7 +188,7 @@ class UmpireDivisions extends Component {
                             <Option value="Gradecc">C Grade</Option>
                         </Select>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }
