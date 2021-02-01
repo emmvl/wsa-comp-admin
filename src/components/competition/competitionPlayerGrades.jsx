@@ -343,7 +343,6 @@ class CompetitionPlayerGrades extends Component {
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
         } else if (key === "unAssigned") {
             const unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-            console.log('onChangeParentDivCheckbox', this.props.partPlayerGradingState)
             unassignedData.isChecked = checked;
 
             (unassignedData.players || []).forEach((item) => {
