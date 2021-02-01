@@ -168,7 +168,6 @@ let userHttpApi = {
   },
 
   getUserModuleRegistrationData(payload) {
-      console.log(payload);
     const url = `api/user/registration`;
     return Method.dataPost(url, token, payload);
   },
@@ -307,7 +306,6 @@ let userHttpApi = {
   },
 
   transferUserRegistration(payload) {
-    console.log('4');
     const url = '/userRegistration/transferRegistration';
     return Method.dataPost(url, token, payload);
   },
@@ -526,9 +524,6 @@ let userHttpApi = {
 let Method = {
   async dataPost(newUrl, authorization, body) {
     const url = newUrl;
-      console.log('='.repeat(20));
-      console.log(body);
-      console.log('='.repeat(20));
     return await new Promise((resolve, reject) => {
       userHttp
         .post(url, body, {
@@ -540,7 +535,6 @@ let Method = {
           }
         })
         .then(result => {
-            console.log(result);
           if (result.status === 200) {
             return resolve({
               status: 1,

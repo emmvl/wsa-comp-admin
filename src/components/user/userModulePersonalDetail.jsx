@@ -232,9 +232,6 @@ const columns = [
                                 <Menu.Item key="5" onClick={() => {
                                         this_Obj.setState({ showTransferRegistrationPopup: true });
                                         this_Obj.setState({ registrationData: e });
-                                    console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQq');
-                                    console.log(e);
-                                    console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQq');
                                     }}>
                                     <span>
                                         Transfer registration
@@ -3509,12 +3506,8 @@ class UserModulePersonalDetail extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    transferRegistrationSubmit = () => {
+    transferRegistrationSubmit = async () => {
         const {transferRegistrationUserId, transferRegistrationPaidBy, registrationData} = this.state;
-
-        console.log('='.repeat(20));
-        console.log(registrationData);
-        console.log('='.repeat(20));
 
         const requestBodyObj = {
             userIdTrasferingTo: Number(transferRegistrationUserId),
@@ -3530,14 +3523,13 @@ class UserModulePersonalDetail extends Component {
             hasOtherRegistrations: 'true/false',
         };
 
-        this.props.transferUserRegistration(requestBodyObj);
+        await this.props.transferUserRegistration(requestBodyObj);
 
         this.setState({
             transferRegistrationUserId: '',
             transferRegistrationPaidBy: ''
         });
 
-        console.log(requestBodyObj);
     }
 
     transferRegistrationPopup = () => (
@@ -3554,7 +3546,7 @@ class UserModulePersonalDetail extends Component {
             <div className="transfer-modal-body">
                 <div className="transfer-modal-form">
                     <div>User ID</div>
-                    <div>Paid By</div>
+                    {/*<div>Paid By</div>*/}
                 </div>
                 <div className="transfer-modal-form">
                     <input
@@ -3564,13 +3556,15 @@ class UserModulePersonalDetail extends Component {
                         value={this.state.transferRegistrationUserId}
                         onChange={(e) => this.handleUserPaidIdsChange(e)}
                     />
-                    <input
-                        className="transfer-modal-form-input"
-                        type="text"
-                        name="transferRegistrationPaidBy"
-                        value={this.state.transferRegistrationPaidBy}
-                        onChange={(e) => this.handleUserPaidIdsChange(e)}
-                    />
+                    {/*{ Uncomment when transactions trasfering is ready }*/}
+
+                    {/*<input*/}
+                    {/*    className="transfer-modal-form-input"*/}
+                    {/*    type="text"*/}
+                    {/*    name="transferRegistrationPaidBy"*/}
+                    {/*    value={this.state.transferRegistrationPaidBy}*/}
+                    {/*    onChange={(e) => this.handleUserPaidIdsChange(e)}*/}
+                    {/*/>*/}
                 </div>
             </div>
         </Modal>

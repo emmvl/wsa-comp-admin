@@ -670,10 +670,8 @@ function* exportUserRegDataSaga(action) {
 // Transfer User Registration
 function* transferUserRegistrationSaga(action) {
     try {
-        console.log('3');
         const result = yield call(UserAxiosApi.transferUserRegistration, action.payload);
         if (result.status === 1) {
-            console.log(result.result.data);
             yield put({
                 type: ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS,
                 // result: result.result.data,

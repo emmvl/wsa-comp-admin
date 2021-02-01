@@ -932,7 +932,6 @@ function userReducer(state = initialState, action) {
       };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
-          console.log('11');
           return { ...state, onExpUserRegDataLoad: true };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
@@ -956,7 +955,6 @@ function userReducer(state = initialState, action) {
           };
 
       case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
-          console.log('2');
           return {...state, onTransferUserRegistrationLoad: true}
 
       case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
