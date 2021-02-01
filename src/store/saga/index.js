@@ -219,7 +219,6 @@ export default function* rootSaga() {
         fork(shopOrderSummarySaga),
         fork(shopProductSaga),
         fork(shopSettingSaga),
-        fork(shopOrderStatusSaga),
 
         // Stripe
         fork(stripeSaga),
