@@ -289,7 +289,8 @@ function umpireState(state = initialState, action) {
 
             return {
                 ...state,
-                umpireListDataNew: action.result?.page.currentPage === 1 ? action.result.data : umpireListDataCopy,
+                // umpireListDataNew: action.result?.page.currentPage === 1 ? action.result.data : umpireListDataCopy,
+                umpireListDataNew: action.result.data,
                 currentPage_Data: action.result.page ? action.result.page.currentPage : null,
                 totalCount_Data: action.result.page ? action.result.page.totalCount : null,
                 onLoad: false,
