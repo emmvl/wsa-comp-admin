@@ -165,9 +165,22 @@ class UmpirePoolAllocation extends Component {
         if (!!deletedUmpirePoolId && deletedUmpirePoolId !== prevProps.umpirePoolAllocationState.deletedUmpirePoolId) {
             const assignedDataFiltered = assignedData.filter(dataItem => dataItem.id !== deletedUmpirePoolId);
 
+            const deletedPoolData = assignedData.find(dataItem => dataItem.id === deletedUmpirePoolId);
+
+            const assignedUmpiresIdSet = new Set();
+
+            assignedDataFiltered.forEach(umpirePoolItem => {
+                umpirePoolItem.umpires.forEach(umpireItem => {
+                    assignedUmpiresIdSet.add(umpireItem.id);
+                })
+            });
+
+            const unassignedDataToAddToUnassign = deletedPoolData.umpires.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
+            const unassignedDataNew = [ ...unassignedDataToAddToUnassign, ...prevState.unassignedData];
+
             this.setState({ 
                 assignedData: assignedDataFiltered, 
-                unassignedData: prevState.unassignedData
+                unassignedData: unassignedDataNew
             });
         }
 
