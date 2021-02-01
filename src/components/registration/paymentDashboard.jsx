@@ -178,7 +178,7 @@ const columns = [
         render: (isUsed, record) => {
             return(
                 <div>
-                    {record.affiliatePortion > 0 ?
+                    {(record.affiliatePortion > 0 && record.paymentType != "Invoice") ?
                         <Menu
                             className="action-triple-dot-submenu "
                             theme="light"
@@ -198,14 +198,14 @@ const columns = [
                                     />
                                 )}
                             >
-                                <Menu.Item key="1">
+                                {/* <Menu.Item key="1">
                                     <span>{AppConstants.redeemVoucher}</span>
                                 </Menu.Item>
                                 <Menu.Item key="2">
                                     <span>{AppConstants.cashPaymentReceived}</span>
-                                </Menu.Item>
+                                </Menu.Item> */}
                                 <Menu.Item key="3" onClick={() =>this_Obj.refundPopUp(record)}>
-                                    <span>{AppConstants.refund}</span>
+                                    <span>{AppConstants.partialRefund}</span>
                                 </Menu.Item>
     
                             </SubMenu>
