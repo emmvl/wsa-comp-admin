@@ -1,19 +1,26 @@
-import React, { Component } from "react"
-import { NavLink } from "react-router-dom";
+import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Button, Select, Breadcrumb, Form, Radio, } from 'antd';
 
-import './umpire.css';
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import InputWithHead from "../../customComponents/InputWithHead";
+import { Layout, Button, Select, Breadcrumb, Form, } from 'antd';
+
+import { getRefBadgeData } from '../../store/actions/appAction';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import {
+    getUmpirePoolData,
+} from "../../store/actions/umpireAction/umpirePoolAllocationAction";
+
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "util/history";
-import { getRefBadgeData } from '../../store/actions/appAction'
+
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import DashboardLayout from "../../pages/dashboardLayout";
+import InputWithHead from "../../customComponents/InputWithHead";
+
+import AppConstants from "../../themes/appConstants";
+
+import './umpire.css';
 
 const { Header, Footer, } = Layout
 const { Option } = Select
@@ -36,26 +43,52 @@ class UmpireDivisions extends Component {
         this.props.getRefBadgeData()
     }
 
-    componentDidUpdate(nextProps) {
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+    componentDidUpdate(prevProps) {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
-                let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = compList.length > 0 && compList[0].id
+                let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+                let firstComp = competitionList.length > 0 && competitionList[0].id;
+
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
                     firstComp = compId
                 } else {
                     setUmpireCompId(firstComp)
                 }
-                let compKey = compList.length > 0 && compList[0].competitionUniqueKey
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+
+                if (JSON.parse(getUmpireCompetitonData())) {
+                    this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp })
+                }
+
+                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+                this.setState({ 
+                    selectedComp: firstComp, 
+                    loading: false, 
+                    competitionUniqueKey: compKey 
+                })
             }
         }
+
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        console.log('umpirePoolData', umpirePoolData);
     }
 
-    // onChangeComp(data) {
-    //     this.setState({ selectedComp: data.comp })
-    // }
+    onChangeComp = compId => {
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        // const { competitionList } = this.state;
+
+        // const { isOrganiser } = competitionList.find(competition => competition.id === compId);
+
+        setUmpireCompId(compId);
+
+        this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId });
+        this.setState({ 
+            selectedComp: compId, 
+            // isOrganiserView: isOrganiser 
+        });
+    }
 
     headerView = () => {
         return (
@@ -70,14 +103,6 @@ class UmpireDivisions extends Component {
             </div>
         );
     };
-
-    onChangeComp(compID) {
-        let selectedComp = compID.comp
-        setUmpireCompId(selectedComp)
-        let compKey = compID.competitionUniqueKey
-
-        this.setState({ selectedComp, competitionUniqueKey: compKey })
-    }
 
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
@@ -94,7 +119,7 @@ class UmpireDivisions extends Component {
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 200 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
+                                    onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
                                 >
                                     {competition.map((item) => (
@@ -214,14 +239,16 @@ class UmpireDivisions extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        getRefBadgeData
+        getRefBadgeData,
+        getUmpirePoolData,
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
-        appState: state.AppState
+        appState: state.AppState,
+        umpirePoolAllocationState: state.UmpirePoolAllocationState,
     }
 }
 
