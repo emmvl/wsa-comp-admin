@@ -232,8 +232,7 @@ function* getPaymentListSaga(action) {
       action.paymentType,
       action.paymentMethod,
       action.membershipType,
-      action.paymentStatus,
-      action.discountMethod
+      action.paymentStatus
     );
 
     if (result.status === 1) {
@@ -327,9 +326,7 @@ function* exportPaymentDashboardSaga(action) {
       action.paymentType,
       action.paymentMethod,
       action.membershipType,
-      action.paymentStatus,
-      action.discountMethod
-      );
+      action.paymentStatus);
 
     if (result.status === 1) {
       yield put({
@@ -383,8 +380,7 @@ function* getPaymentSummarySaga(action) {
 
 function* exportPaymentSummarySaga(action) {
   try {
-    const result = yield call(
-      AxiosApi.exportPaymentSummaryApi,
+    const result = yield call(AxiosApi.exportPaymentSummaryApi,
       action.offset,
       action.sortBy,
       action.sortOrder,
@@ -400,8 +396,7 @@ function* exportPaymentSummarySaga(action) {
       action.paymentType,
       action.paymentMethod,
       action.membershipType,
-      action.paymentStatus,
-    );
+      action.paymentStatus);
 
     if (result.status === 1) {
       yield put({
@@ -416,30 +411,6 @@ function* exportPaymentSummarySaga(action) {
     yield call(errorSaga, error);
   }
 }
-
-function* partialRefundAmountSaga(action) {
-  try {
-      const result = yield call(AxiosApi.partialRefundAmountApi,
-        action.payload);
-    if (result.status === 1) {
-        yield put({
-            type: ApiConstants.API_PARTIAL_REFUND_AMOUNT_SUCCESS,
-            result: result.result.data,
-            status: result.status,
-        });
-        message.config({
-          duration: 4.0,
-          maxCount: 1
-      })
-        message.success(result.result.data.message)
-    } else {
-        yield call(failSaga, result)
-    }
-  } catch (error) {
-    yield call(errorSaga, error)
-  }
-}
-
 
 export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, accountBalanceSaga);
@@ -458,6 +429,4 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD, exportPayoutsTransactionSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD, getPaymentSummarySaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD, exportPaymentSummarySaga);
-  yield takeEvery(ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD, partialRefundAmountSaga);
-
 }

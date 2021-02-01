@@ -49,7 +49,7 @@ import {
     getTeamRegistrationsSaga,
     exportTeamRegistrationsSaga,
     getMembershipFeeCapListSaga,
-    updateMembershipFeeCapSaga,
+    updateMembershipFeeCapSaga
 } from './registrationSaga/registrationSaga';
 
 /// /**************************Live Score***************************Start
@@ -189,7 +189,6 @@ import {
 import rootCompetitionMultiDrawSaga from './competitionManagementSaga/competitionMultiDrawsSaga';
 import umpirePaymentSaga from './umpireSaga/umpirePaymentSaga';
 import umpirePoolAllocationSaga from './umpireSaga/umpirePoolAllocationSaga';
-import rootCommunicationListSaga from "./communicationSaga/communicationSaga";
 
 export default function* rootSaga() {
     yield all([
@@ -220,6 +219,7 @@ export default function* rootSaga() {
         fork(shopOrderSummarySaga),
         fork(shopProductSaga),
         fork(shopSettingSaga),
+        fork(shopOrderStatusSaga),
 
         // Stripe
         fork(stripeSaga),
@@ -240,11 +240,8 @@ export default function* rootSaga() {
         // Umpire Payment Saga
         fork(umpirePaymentSaga),
 
-        // Umpire Pool Allocation Saga
+        //Umpire Pool Allocation Saga
         fork(umpirePoolAllocationSaga),
-
-        // Communication
-        fork(rootCommunicationListSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);

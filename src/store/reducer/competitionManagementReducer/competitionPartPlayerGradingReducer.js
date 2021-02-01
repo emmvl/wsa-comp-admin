@@ -70,8 +70,6 @@ function updatedAssignData(assignArr, source, destination) {
     let sourceTeam = source.droppableId === 0 ? null : JSON.parse(source.droppableId)
     let destinationTeam = destination.droppableId === 0 ? null : JSON.parse(destination.droppableId)
     let swapPlayer
-    sourceTeam = sourceTeam ? sourceTeam : null;
-    destinationTeam = destinationTeam ? destinationTeam : null;
     let matchSourceIndex = assignArr.findIndex(x => x.teamId === sourceTeam)
     swapPlayer = assignArr[matchSourceIndex].players[source.index]
     assignArr[matchSourceIndex].playerCount = parseInt(assignArr[matchSourceIndex].playerCount) - 1

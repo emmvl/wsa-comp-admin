@@ -1,7 +1,10 @@
-// function for returning currency format text number
+///////function for returning currency format text number
 function currencyFormat(data) {
-    const currencyFormatter = require('currency-formatter');
-    return currencyFormatter.format(data, { code: 'USD' });
+    var currencyFormatter = require('currency-formatter');
+    let value = currencyFormatter.format(data, { code: 'USD' });
+    return value
 }
 
-module.exports = { currencyFormat };
+
+
+module.exports = { currencyFormat }

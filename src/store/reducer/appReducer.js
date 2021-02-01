@@ -53,8 +53,7 @@ const initialState = {
   allCompetitionTypeList: [],
   badgeData: [],
   filterBadgeArr: [],
-  accreditation: [],
-  discountMethod: [],
+  accreditation: []
 };
 
 function arraymove(arr, fromIndex, toIndex) {
@@ -643,14 +642,6 @@ function appState(state = initialState, action) {
         onLoad: false,
         badgeData: action.result,
         status: action.status,
-      };
-
-    case ApiConstants.API_GET_DISCOUNT_METHOD_LIST_SUCCESS:
-      return {
-        ...state,
-        onLoad: false,
-        discountMethod: action.result,
-        status: action.status
       };
 
     default:

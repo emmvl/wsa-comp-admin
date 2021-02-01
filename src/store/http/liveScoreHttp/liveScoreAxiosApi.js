@@ -618,11 +618,6 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token);
     },
 
-    liveScoreCommunicationList(userId) {
-        const url = `/communications/admin?userId=${userId}`;
-        return Method.dataGet(url, token);
-    },
-
     liveScoreNewsList(competitionId) {
         const url = `/news/admin?entityId=${competitionId}&entityTypeId=1`;
         return Method.dataGet(url, token);
@@ -1230,7 +1225,7 @@ const LiveScoreAxiosApi = {
         const body = paginationBody;
 
         if (status === 'All') {
-            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
+            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;            
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&roleIds=${refRoleId}`;
         } else {
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&status=${status}&roleIds=${refRoleId}`;

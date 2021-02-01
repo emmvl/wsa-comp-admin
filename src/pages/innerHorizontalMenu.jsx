@@ -962,7 +962,7 @@ class InnerHorizontalMenu extends React.Component {
                         onClick={this.handleMenuClick}
                     >
                         <Menu.Item key="1">
-                            <NavLink to="/communicationList">
+                            <NavLink to="/CommunicationList">
                                 <span>{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>

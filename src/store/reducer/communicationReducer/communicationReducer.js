@@ -2,138 +2,135 @@ import ApiConstants from "../../../themes/apiConstants";
 
 const initialState = {
     onLoad: false,
-    onPublishLoad: false,
-    onDeleteLoad: false,
-    deleteSuccess: false,
-    addSuccess: false,
-    publishSuccess: false,
-
-    addedCommunication: null,
-    communicationList: [],
-
     error: null,
+    result: [],
     status: 0,
+    umpireComptitionList: [],
+    allOrg: false,
+    indivisualOrg: false,
+    indivisualUsers: false,
+    allUser: false,
+    selectedRoles: false,
+    onTextualLoad: false,
+    userDashboardTextualList: [],
+    userId: null,
+    orgId: null,
+    orgName: "",
+    userName: "",
+    affiliateTo: [],
+    onLoadSearch: false
 };
-function CommunicationState(state = initialState, action) {
+function communicationModuleState(state = initialState, action) {
+
     switch (action.type) {
         case ApiConstants.API_COMMUNICATION_LIST_LOAD:
+
+
             return { ...state, onLoad: true };
 
         case ApiConstants.API_COMMUNICATION_LIST_SUCCESS:
+            let result = action.result
             return {
                 ...state,
                 onLoad: false,
-                communicationList: action.result,
-                status: action.status,
+                umpireComptitionList: result,
+                status: action.status
             };
+
+        case ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD:
+            return { ...state, onTextualLoad: true };
+
+        case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
+            let textualData = action.result;
+            return {
+                ...state,
+                onTextualLoad: false,
+                userDashboardTextualList: textualData.users,
+            };
+
+        case ApiConstants.API_UPDATE_COMMUNICATION_DATA:
+            let data = action.data.data
+            let key = action.data.key
+            if (key === 'allOrg' || key === 'indivisualOrg') {
+                if (key === 'allOrg') {
+                    state[key] = data
+                    state['indivisualOrg'] = false
+                    state.orgId = null
+                    state.orgName = ""
+                }
+                if (key === 'indivisualOrg') {
+                    state[key] = data
+                    state['allOrg'] = false
+                    state.affiliateTo = []
+                }
+            } else if (key === 'allUser' || key === 'selectedRoles' || key === 'indivisualUsers') {
+                if (key === 'allUser') {
+                    state[key] = data
+                    state['selectedRoles'] = false
+                    state['indivisualUsers'] = false
+                    state.userId = null
+                    state.userName = ""
+                }
+                if (key === 'selectedRoles') {
+                    state[key] = data
+                    state['allUser'] = false
+                    state['indivisualUsers'] = false
+                    state.userId = null
+                    state.userName = ""
+                }
+                if (key === 'indivisualUsers') {
+                    state[key] = data
+                    state['allUser'] = false
+                    state['selectedRoles'] = false
+                    state.userDashboardTextualList = []
+                }
+            } else {
+                let subKey = action.data.subKey
+                let selectedName = action.data.selectedName
+                state[key] = data
+                state[subKey] = selectedName
+            }
+            return {
+                ...state,
+            };
+
+        case ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD:
+            return { ...state, onLoad: true, affiliateToOnLoad: true, onLoadSearch: true };
+
+        case ApiConstants.API_AFFILIATE_TO_ORGANISATION_SUCCESS:
+            let affiliateToData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                affiliateTo: affiliateToData,
+                affiliateToOnLoad: false,
+                status: action.status,
+                onLoadSearch: false
+            };
+
+        case ApiConstants.API_CLEAR_LIST_DATA:
+            state.userDashboardTextualList = []
+            state.onTextualLoad = false
+            return { ...state };
 
         case ApiConstants.API_COMMUNICATION_LIST_FAIL:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status,
+                status: action.status
             };
         case ApiConstants.API_COMMUNICATION_LIST_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status,
+                status: action.status
             };
 
-        case ApiConstants.API_ADD_COMMUNICATION_LOAD:
-            return {
-                ...state,
-                addSuccess: false,
-                onLoad: true,
-            };
-
-        case ApiConstants.API_ADD_COMMUNICATION_SUCCESS:
-            return {
-                ...state,
-                onLoad: false,
-                addSuccess: true,
-                addedCommunication: action.result,
-                communicationList: [...state.communicationList.filter((com) => com.id !== action.result.id), action.result],
-                status: action.status,
-            };
-        case ApiConstants.API_ADD_COMMUNICATION_FAIL:
-            return {
-                ...state,
-                onLoad: false,
-                addSuccess: false,
-                addedCommunication: null,
-                error: action.error,
-                status: action.status,
-            };
-        case ApiConstants.API_ADD_COMMUNICATION_ERROR:
-            return {
-                ...state,
-                onLoad: false,
-                addSuccess: false,
-                addedCommunication: null,
-                error: action.error,
-                status: action.status,
-            };
-
-        case ApiConstants.API_DELETE_COMMUNICATION_LOAD:
-            return { ...state, onDeleteLoad: true, deleteSuccess: false };
-
-        case ApiConstants.API_DELETE_COMMUNICATION_SUCCESS:
-            return {
-                ...state,
-                onDeleteLoad: false,
-                deleteSuccess: true,
-                communicationList: state.communicationList.filter((com) => com.id !== action.result),
-                status: action.status,
-            };
-        case ApiConstants.API_DELETE_COMMUNICATION_FAIL:
-            return {
-                ...state,
-                onDeleteLoad: false,
-                deleteSuccess: false,
-                error: action.error,
-                status: action.status,
-            };
-        case ApiConstants.API_DELETE_COMMUNICATION_ERROR:
-            return {
-                ...state,
-                onDeleteLoad: false,
-                deleteSuccess: false,
-                error: action.error,
-                status: action.status,
-            };
-
-        case ApiConstants.API_COMMUNICATION_PUBLISH_LOAD:
-            return { ...state, onPublishLoad: true, publishSuccess: false };
-        case ApiConstants.API_COMMUNICATION_PUBLISH_SUCCESS:
-            return {
-                ...state,
-                onPublishLoad: false,
-                publishSuccess: true,
-                communicationList: state.communicationList.filter((com) => com.id !== action.result),
-                status: action.status,
-            };
-        case ApiConstants.API_COMMUNICATION_PUBLISH_FAIL:
-            return {
-                ...state,
-                onPublishLoad: false,
-                publishSuccess: false,
-                error: action.error,
-                status: action.status,
-            };
-        case ApiConstants.API_COMMUNICATION_PUBLISH_ERROR:
-            return {
-                ...state,
-                onPublishLoad: false,
-                publishSuccess: false,
-                error: action.error,
-                status: action.status,
-            };
         default:
             return state;
     }
 }
 
-export default CommunicationState;
+export default communicationModuleState;
