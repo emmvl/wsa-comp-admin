@@ -20,6 +20,12 @@ let token = getAuthToken();
 // let userId = getUserId();
 
 let UmpireAxiosApi = {
+    umpireListGet(data) {
+        const { competitionId, organisationId, offset } = data;
+        const url = `/competitions/${competitionId}/umpires?organisationId=${organisationId}&offset=${offset}&limit=${10}`;
+        return Method.dataGet(url, token);
+    },
+
     umpirePaymentSettingsGet(data) {
         const { competitionId, organisationId } = data;
         const url = `/competitions/${competitionId}/umpires/payment/settings?organisationId=${organisationId}`;
@@ -43,7 +49,32 @@ let UmpireAxiosApi = {
         const organisationId = JSON.stringify(data.organisationId);
         const url = `/competitions/${competitionId}/umpires/payment/settings/${data.type}?organisationId=${organisationId}`
         return Method.dataPost(url, token, data.body);
-    }
+    },
+
+    getUmpirePoolAllocation(payload) {
+        const url = `/competitions/` + payload.compId + `/umpires/pools?organisationId=${payload.orgId}`;
+        return Method.dataGet(url, token);
+    },
+
+    saveUmpirePoolAllocation(payload) {
+        const url = `competitions/` + payload.compId + `/umpires/pools?competitionId=${payload.compId}&organisationId=${payload.orgId}`;
+        return Method.dataPost(url, token, payload.poolObj);
+    },
+
+    deleteUmpirePoolAllocation(payload) {
+        const url = `/competitions/` + payload.compId + `/umpires/pools/${payload.umpirePoolId}?organisationId=${payload.orgId}`;
+        return Method.dataDelete(url, token);
+    },
+
+    updateUmpirePoolAllocation(payload) {
+        const url = `/competitions/` + payload.compId + `/umpires/pools/${payload.umpirePoolId}/add?organisationId=${payload.orgId}`;
+        return Method.dataPost(url, token, payload.body);
+    },
+
+    updateUmpirePoolAllocationMany(payload) {
+        const url = `/competitions/` + payload.compId + `/umpires/pools/batch?organisationId=${payload.orgId}`;
+        return Method.dataPatch(url, token, payload.body);
+    },
 }
 
 const Method = {
@@ -62,7 +93,7 @@ const Method = {
 
                 .then(result => {
 
-                    if (result.status === 200) {
+                    if (result.status === 200 || result.status === 201) {
                         return resolve({
                             status: 1,
                             result: result
@@ -198,6 +229,79 @@ const Method = {
 
                     }
                 });
+        });
+    },
+
+    async dataPatch(newUrl, authorization, body) {
+        const url = newUrl;
+        return await new Promise((resolve, reject) => {
+            http
+                .patch(url, body, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
+                    }
+            })
+            .then(result => {
+                if (result.status === 200) {
+                    return resolve({
+                        status: 1,
+                        result: result
+                    });
+              } else if (result.status === 212) {
+                    return resolve({
+                        status: 4,
+                        result: result
+                    });
+              } else {
+                if (result) {
+                    return reject({
+                        status: 3,
+                        error: result.data.message,
+                    });
+                } else {
+                    return reject({
+                        status: 4,
+                        error: "Something went wrong."
+                    });
+                }
+              }
+            })
+            .catch(err => {
+                if (err.response) {
+                    if (err.response.status !== null || err.response.status !== undefined) {
+                        if (err.response.status === 401) {
+                            let unauthorizedStatus = err.response.status;
+                            if (unauthorizedStatus === 401) {
+                                logout();
+                                message.error(ValidationConstants.messageStatus401)
+                            }
+                        } else if (err.response.status === 400) {
+                            message.config({
+                                duration: 1.5,
+                                maxCount: 1,
+                            });
+                            message.error(err.response.data.message);
+                            return reject({
+                                status: 5,
+                                error: err.response.data.message
+                            });
+                        } else {
+                            return reject({
+                                status: 5,
+                                error: err.response && err.response.data.message
+                            });
+                        }
+                    }
+                } else {
+                    return reject({
+                        status: 5,
+                        error: err.response && err.response.data.message
+                    });
+                }
+            });
         });
     },
 

@@ -237,7 +237,6 @@ const initialState = {
   affiliateEdit: affiliate,
   affiliateOurOrg: affiliate,
   affiliateList: [],
-  affiliatesByParentList: [],
   affiliateTo: {},
   roles: [],
   userRolesEntity: [],
@@ -358,8 +357,7 @@ const initialState = {
   teamMemberDeletion: false,
   addTeamMember: false,
   userSubmittedRegData: [],
-  organisationUsersList: [],
-  usersByIdsList: [],
+  onTransferUserRegistrationLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -468,7 +466,6 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateList: data.affiliates,
         impersonationList: data.affiliates,
-        affiliatesByParentList: data?.affiliateList || [],
         affiliateListPage: data.page ? data.page.currentPage : 1,
         affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status,
@@ -479,7 +476,6 @@ function userReducer(state = initialState, action) {
         ...state,
         onImpersonationLoad: false,
         impersonationList: action.result.affiliates,
-        affiliatesByParentList: action.result?.affiliateList || [],
         status: action.status,
       };
     case ApiConstants.API_SAVE_AFFILIATE_LOAD:
@@ -680,8 +676,7 @@ function userReducer(state = initialState, action) {
       return { ...state, onTextualLoad: true, userTextualDasboardListAction: action };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
-      const textualData = action.result;
-
+      let textualData = action.result;
       return {
         ...state,
         onTextualLoad: false,
@@ -937,7 +932,6 @@ function userReducer(state = initialState, action) {
       };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
-          console.log('11');
           return { ...state, onExpUserRegDataLoad: true };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
@@ -959,6 +953,16 @@ function userReducer(state = initialState, action) {
               status: action.status,
               error: null
           };
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
+          return {...state, onTransferUserRegistrationLoad: true}
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
+          return {
+              ...state,
+              onTransferUserRegistrationLoad: false,
+              status: action.status,
+          }
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
@@ -1411,24 +1415,6 @@ function userReducer(state = initialState, action) {
         onTeamUpdateLoad: false,
         teamMemberUpdate: action.result,
         status: action.status
-      };
-
-    case ApiConstants.API_FILTER_USERS_LOAD:
-      return { ...state, onLoad: true };
-
-    case ApiConstants.API_FILTER_USERS_SUCCESS:
-      return {
-          ...state,
-          onLoad: false,
-          organisationUsersList: action.result,
-      };
-    case ApiConstants.API_GET_USERS_BY_IDS_LOAD:
-      return { ...state, onLoad: true };
-    case ApiConstants.API_GET_USERS_BY_IDS_SUCCESS:
-      return {
-          ...state,
-          onLoad: false,
-          usersByIdsList: action.result,
       };
     default:
       return state;

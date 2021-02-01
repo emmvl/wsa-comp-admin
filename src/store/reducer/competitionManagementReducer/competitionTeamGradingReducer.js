@@ -29,7 +29,8 @@ function checkGradesValue(gradeId, gradingData) {
         result: null
     }
     for (let j in gradingData) {
-        if (gradingData[j].sortOrder == gradeId) {
+        if (gradingData[j].sortOrder === gradeId) {
+
             object = {
                 status: true,
                 result: gradingData[j]

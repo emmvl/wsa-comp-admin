@@ -51,27 +51,28 @@ const columns = [
         title: AppConstants.id,
         dataIndex: "id",
         key: "key",
-    }, {
-        title: AppConstants.firstName,
-        dataIndex: "firstName",
-        key: "firstName",
-    }, {
-        title: AppConstants.lastName,
-        dataIndex: "lastName",
-        key: "lastName",
-    }, {
+    },
+    {
+        title: AppConstants.name,
+        dataIndex: "name",
+        key: "name",
+    },
+    {
         title: AppConstants.dateOfBirth,
         dataIndex: "dob",
         key: "dob",
-    }, {
+    },
+    {
         title: AppConstants.emailAdd,
         dataIndex: "email",
         key: "email",
-    }, {
+    },
+    {
         title: AppConstants.contactNumber,
         dataIndex: "mobile",
         key: "mobile",
-    }, {
+    },
+    {
         title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
@@ -100,7 +101,7 @@ class UserProfileEdit extends Component {
                 street1: "",
                 street2: "",
                 suburb: "",
-                stateRefId: 0,
+                stateRefId: 1,
                 postalCode: "",
                 statusRefId: 0,
                 emergencyFirstName: "",
@@ -313,7 +314,7 @@ class UserProfileEdit extends Component {
                 data.disabilityTypeRefId = null;
             }
         } else if (key === "dateOfBirth") {
-            value = value && (moment(value).format("YYYY-MM-DD"));
+            value = (moment(value).format("MM-DD-YYYY"));
         } else if (key === "email" && this.state.section === "address") {
             if (data.userId == getUserId()) {
                 this.setState({ isSameUserEmailChanged: true });
@@ -926,7 +927,7 @@ class UserProfileEdit extends Component {
                                         onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationUmpireExpiryDate")}
                                         format="DD-MM-YYYY"
                                         showTime={false}
-                                        value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
+                                        // value={userData.accreditationUmpireExpiryDate && moment(userData.accreditationUmpireExpiryDate)}
                                         disabledDate={(d) => !d || d.isSameOrBefore(new Date())}
                                     />
                                 </Form.Item>
@@ -958,7 +959,7 @@ class UserProfileEdit extends Component {
                                         onChange={(e, f) => this.onChangeSetValue((moment(e).format("YYYY-MM-DD")), "accreditationCoachExpiryDate")}
                                         format="DD-MM-YYYY"
                                         showTime={false}
-                                        value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
+                                        // value={userData.accreditationCoachExpiryDate && moment(userData.accreditationCoachExpiryDate)}
                                         disabledDate={(d) => !d || d.isSameOrBefore(new Date())}
                                     />
                                 </Form.Item>
@@ -1197,7 +1198,6 @@ class UserProfileEdit extends Component {
 
     // possible matches view
     // ideally this should be separate from the user profile view
-
     possibleMatchesDetailView = (matches) => {
         let selectedMatch = null;
 
@@ -1213,9 +1213,8 @@ class UserProfileEdit extends Component {
         const dataSource = matches.map((u) => ({
             key: u.id,
             id: u.id,
-            firstName: u.firstName,
-            lastName: u.lastname,
-            dob: moment(u.dateOfBirth).format('DD/MM/YYYY'),
+            name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
+            dob: u.dateOfBirth,
             email: u.email,
             mobile: u.mobileNumber,
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
@@ -1224,7 +1223,7 @@ class UserProfileEdit extends Component {
         // actual function to call saving a child / parent
         const addChildOrParent = async () => {
             // if match is not selected, save the user data from the form
-            const userToAdd = {...this.state.userData, ...selectedMatch};
+            const userToAdd = selectedMatch || this.state.userData;
             const { userId } = this.props.history.location.state.userData;
             const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
 
@@ -1259,7 +1258,6 @@ class UserProfileEdit extends Component {
         };
 
         const onCancel = () => {
-            this.confirmOpend = false;
             this.setState({ isPossibleMatchShow: false });
         };
 

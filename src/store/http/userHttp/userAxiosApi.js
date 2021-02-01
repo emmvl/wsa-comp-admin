@@ -80,13 +80,6 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  async getFilterByRelations(payload) {
-      let url = 'users/filterByRelations';
-
-      return Method.dataPost(url, token, payload);
-  },
-
-
   async affiliateToOrganisation(organisationId, searchText) {
     let userId = await getUserId();
     let url = null
@@ -312,6 +305,11 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "UserRegistrationData");
   },
 
+  transferUserRegistration(payload) {
+    const url = '/userRegistration/transferRegistration';
+    return Method.dataPost(url, token, payload);
+  },
+
   async getSubmittedRegData(payload) {
     const url = `api/user/registration/registrationForm`;
     return Method.dataPost(url, token, payload);
@@ -520,10 +518,6 @@ let userHttpApi = {
 
   findPossibleMerge(payload) {
     return Method.dataPost('userMerge/find', token, payload);
-  },
-
-  getUsersByIds(ids) {
-      return Method.dataGet(`users/byIds?ids=${ids}`);
   },
 };
 

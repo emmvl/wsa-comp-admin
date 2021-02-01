@@ -49,6 +49,28 @@
   font-family: inter-medium, sans-serif;
 }
 
+.transfer-modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+}
+
+.transfer-modal-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 80%;
+}
+
+.transfer-modal-form:nth-child(1) {
+    margin-right: 20px;
+}
+
+.transfer-modal-form-input {
+    border-radius: 7px;
+}
+
 .user-remove-text {
   color: var(--app-color);
   font-weight: 500;

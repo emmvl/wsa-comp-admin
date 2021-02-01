@@ -265,6 +265,14 @@ function getSubmittedRegData(payload) {
     };
 }
 
+/* Transfer User Registration */
+function transferUserRegistration(payload) {
+    return {
+        type: ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD,
+        payload,
+    };
+}
+
 /* Export User Registration Data */
 function exportUserRegData(payload) {
     return {
@@ -549,21 +557,6 @@ function teamMemberUpdateAction(data) {
     };
 }
 
-function filterByRelations(data) {
-    return {
-        type: ApiConstants.API_FILTER_USERS_LOAD,
-        data,
-    }
-}
-
-function getUsersByIds(data) {
-    return {
-        type: ApiConstants.API_GET_USERS_BY_IDS_LOAD,
-        data,
-    }
-}
-
-
 export {
     getRoleAction,
     getUreAction,
@@ -635,6 +628,5 @@ export {
     teamMemberUpdateAction,
     exportUserRegData,
     getSubmittedRegData,
-    filterByRelations,
-    getUsersByIds,
+    transferUserRegistration,
 };
