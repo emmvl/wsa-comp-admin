@@ -146,9 +146,17 @@ class UmpirePoolAllocation extends Component {
             });
 
             const unassignedDataCurrentState = JSON.parse(JSON.stringify(unassignedData));
-            unassignedDataCurrentState.push(...umpireListDataNew);
 
-            const unassignedUmpires = unassignedDataCurrentState.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
+            if (umpireListDataNew !== prevProps.umpireState.umpireListDataNew) {
+                unassignedDataCurrentState.push(...umpireListDataNew);
+            }
+
+            const unassignedUmpires = unassignedDataCurrentState
+                .filter((umpireItem, umpireItemIndex) => (
+                    !assignedUmpiresIdSet.has(umpireItem.id) 
+                    && 
+                    unassignedDataCurrentState.findIndex(umpireForDupl => umpireForDupl.id === umpireItem.id) === umpireItemIndex
+                ));
 
             this.setState({unassignedData: unassignedUmpires, assignedData: umpirePoolDataCurrentState });
         }
