@@ -174,7 +174,7 @@ import Account from 'pages/Account';
 import HelpAndSupport from 'pages/Support';
 
 import CommunicationList from 'components/communication/communicationList';
-import AddCommunication from 'components/communication/AddCommunication';
+import AddCommunication from 'components/communication/addCommunication';
 import CommunicationView from 'components/communication/communictionView';
 import MergeUserMatches from 'components/user/mergeUserMatches';
 import MergeUserDetail from 'components/user/mergeUserDetail';
