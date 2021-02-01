@@ -8,8 +8,7 @@ import {
     Select, 
     Modal,
     Menu,
-    message,
-    Pagination
+    message
 } from 'antd';
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -498,19 +497,10 @@ class UmpirePoolAllocation extends Component {
         });
     };
 
-    handlePageChange = page => {
+    handleLoadMore = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         const compId = JSON.parse(getUmpireCompId());
-
-        const offset = !!page ? 10 * (page - 1) : 0;
-
-        this.props.getUmpireList({ organisationId, competitionId: compId, offset: offset });
-    };
-
-    handleLoadMore = page => {
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        const compId = JSON.parse(getUmpireCompId());
-        const { currentPage_Data, totalCount_Data } = this.props.umpireState;
+        const { currentPage_Data } = this.props.umpireState;
 
         const offset = 10 * currentPage_Data;
 
@@ -896,14 +886,6 @@ class UmpirePoolAllocation extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-center">
-                        {/* <Pagination
-                            className="antd-pagination"
-                            current={currentPage_Data}
-                            total={totalCount_Data}
-                            defaultPageSize={10}
-                            onChange={this.handlePageChange}
-                            showSizeChanger={false}
-                        /> */}
                         {totalCount_Data > currentPage_Data * 10 &&
                             <Button
                                 onClick={this.handleLoadMore}
