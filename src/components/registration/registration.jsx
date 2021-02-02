@@ -13,7 +13,7 @@ import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
 import history from "util/history";
 import {
-    getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear,
+    getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear, getLiveScoreCompetiton
 } from "util/sessionStorage";
 import {
     getCommonRefData,
@@ -28,6 +28,8 @@ import {
 import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
+import { liveScorePlayersToCashReceivedAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+
 import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -140,11 +142,11 @@ const columns = [
         key: "paidByUsers",
         render: (paidBy, record, index) => (
             <div>
-                {(record.paidByUsers || []).map((item, index) => (
+                {(record.paidByUsers || []).map((item, pbu_index) => (
 
-                    record.userId == item.paidByUserId ? <div>Self</div>
+                    record.userId == item.paidByUserId ? <div key={'user_' + pbu_index}>Self</div>
                         : (
-                            <div>
+                            <div key={'user_' + pbu_index}>
                                 <NavLink
                                     to={{
                                         pathname: `/userPersonal`,
@@ -246,6 +248,14 @@ const columns = [
                                 </Menu.Item>
                             )
                             }
+                            {
+                                record.actionView == 3
+                            && (
+                                <Menu.Item key="3" onClick={() => this_Obj.setVoucherPayment(record)}>
+                                    <span>Voucher Payment Received</span>
+                                </Menu.Item>
+                            )
+                            }
 
                         </SubMenu>
 
@@ -284,6 +294,7 @@ class Registration extends Component {
             loading: false,
             teamName: null,
             teamId: -1,
+            isVoucherPaymentVisible: false,
         };
 
         this_Obj = this;
@@ -359,12 +370,24 @@ class Registration extends Component {
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(nextProps) {
         const { userRegistrationState } = this.props;
-        if (this.state.loading == true && userRegistrationState.onTranSaveLoad == false) {
-            this.setState({ loading: false });
-            this.handleRegTableList(1);
+        if(nextProps.userRegistrationState != userRegistrationState){
+            if (this.state.loading == true && userRegistrationState.onTranSaveLoad == false) {
+                this.setState({ loading: false });
+                this.handleRegTableList(1);
+            }
         }
+        if(nextProps.liveScoreDashboardState != this.props.liveScoreDashboardState){
+            if(this.state.loading == true && this.props.liveScoreDashboardState.onRetryPaymentLoad == false){
+                if(this.props.liveScoreDashboardState.retryPaymentSuccess){
+                    message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
+                }
+                this.setState({ loading: false });
+                this.handleRegTableList(1);
+            }
+        }
+
     }
 
     handleRegTableList = (page) => {
@@ -513,6 +536,12 @@ class Registration extends Component {
         });
     }
 
+    setVoucherPayment = (record) => {
+        this.setState({
+            selectedRow: record, isVoucherPaymentVisible: true,
+        });
+    }
+    
     receiveCashPayment = (key) => {
         if (key == "cancel") {
             this.setState({ visible: false });
@@ -529,6 +558,23 @@ class Registration extends Component {
                 message.config({ duration: 0.9, maxCount: 1 });
                 message.error("Amount exceeded");
             }
+        }
+    }
+
+    receiveVoucherPayment = (key) => {
+        const { selectedRow } = this.state;
+        if (key == "cancel") {
+            this.setState({ isVoucherPaymentVisible: false });
+        } else if (key == "ok") {
+            let payload = {
+                processTypeName: selectedRow.processType,
+                registrationUniqueKey: selectedRow.registrationUniqueKey,
+                userId: selectedRow.userId,
+                divisionId: selectedRow.divisionId,
+                competitionId: selectedRow.competitionUniqueKey
+            }
+            this.props.liveScorePlayersToCashReceivedAction(payload);
+            this.setState({ isVoucherPaymentVisible: false, loading: true });
         }
     }
 
@@ -1004,6 +1050,53 @@ class Registration extends Component {
         );
     }
 
+    voucherReceivedModalView = () => {
+        const { selectedRow } = this.state;
+        return(
+            <Modal
+                title="Confirm Qld Fair Play Payment Received"
+                visible={this.state.isVoucherPaymentVisible}
+                onCancel={() => this.receiveVoucherPayment("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText="Save"
+                onOk={() => this.receiveVoucherPayment("ok")}
+                centered
+            >
+                <div>
+                    <div>
+                    {' '}
+                    <span className="popup-head">{AppConstants.name}</span>
+:
+                    {' '}
+                    {selectedRow ? selectedRow.name : 0}
+                    </div>
+                    <div className="mt-2">
+                    {' '}
+                    <span className="popup-head">{AppConstants.dob}</span>
+:
+                    {' '}
+                    {selectedRow ? moment(selectedRow.dateOfBirth).format("DD/MM/YYYY") : 0}
+                    </div>
+                    <div className="mt-2">
+                    {' '}
+                    <span className="popup-head">{AppConstants.code}</span>
+:
+                    {' '}
+                    {selectedRow ? selectedRow.voucherCode : 0}
+                    </div>
+                    <div className="mt-2">
+                    {' '}
+                    <span className="popup-head">{AppConstants.amount}</span>
+:
+                    {' '}
+                    {selectedRow ? selectedRow.governmentVoucherAmount : 0}
+                    </div>
+                    
+                </div>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1016,11 +1109,12 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.userRegistrationState.onLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.userRegistrationState.onLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}
                         {this.transferModalView()}
+                        {this.voucherReceivedModalView()}
                     </Content>
                 </Layout>
             </div>
@@ -1039,6 +1133,7 @@ function mapDispatchToProps(dispatch) {
         registrationPaymentStatusAction,
         regTransactionUpdateAction,
         exportRegistrationAction,
+        liveScorePlayersToCashReceivedAction
     }, dispatch);
 }
 
@@ -1049,6 +1144,7 @@ function mapStateToProps(state) {
         commonReducerState: state.CommonReducerState,
         appState: state.AppState,
         registrationDashboardState: state.RegistrationDashboardState,
+        liveScoreDashboardState: state.LiveScoreDashboardState,
     };
 }
 
