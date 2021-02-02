@@ -8,6 +8,7 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import {
     getUmpirePoolData,
+    updateUmpirePoolToDivision
 } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
@@ -79,7 +80,7 @@ class UmpireDivisions extends Component {
         if (umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
             const selectedDivisions = [];
             umpirePoolData.forEach(poolItem => {
-                selectedDivisions.push(...poolItem.divisions);
+                selectedDivisions.push(...poolItem.divisions.map(division => division.id));
             });
 
             this.setState({ umpirePoolData, selectedDivisions });
@@ -100,22 +101,41 @@ class UmpireDivisions extends Component {
     }
 
     handleChangeDivisions = (divisions, poolIndex) => {
+        const { divisionList } = this.props.liveScoreTeamState;
         const { umpirePoolData, selectedDivisions } = this.state;
 
         const umpirePoolDataCopy = JSON.parse(JSON.stringify(umpirePoolData));
 
-        const divisionsToChange = umpirePoolDataCopy[poolIndex].divisions;
+        const divisionsToChange = umpirePoolDataCopy[poolIndex].divisions.map(division => division.id);
 
         const selectedDivisionsRest = selectedDivisions
             .filter(selectedDivision => !divisionsToChange.some(divisionToChange => divisionToChange === selectedDivision));
 
         selectedDivisionsRest.push(...divisions);
 
-        umpirePoolDataCopy[poolIndex].divisions = divisions;
+        umpirePoolDataCopy[poolIndex].divisions = divisions.map(divisionId => divisionList.find(divisionObj => divisionObj.id === divisionId));
 
         this.setState({ 
             umpirePoolData: umpirePoolDataCopy,
             selectedDivisions: selectedDivisionsRest,
+        });
+    }
+
+    handleSave = () => {
+        const { umpirePoolData, selectedComp } = this.state;
+
+        const data = umpirePoolData.reduce((acc, item) => {
+            acc[item.id] = item.divisions;
+            return acc;
+        }, {});
+
+        const body = {
+            umpirePools: data
+        };
+
+        this.props.updateUmpirePoolToDivision({
+            compId: selectedComp,
+            body,
         });
     }
 
@@ -179,7 +199,7 @@ class UmpireDivisions extends Component {
                         placeholder="Select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={divisions => this.handleChangeDivisions(divisions, index)}
-                        value={poolItem.divisions}
+                        value={poolItem.divisions.map(division => division.id)}
                     >
                         {(divisionList || []).map((item) => (
                             <Option
@@ -187,7 +207,7 @@ class UmpireDivisions extends Component {
                                 disabled={
                                     selectedDivisions.some(divisionId => divisionId === item.id)
                                     && 
-                                    !poolItem.divisions.find(divisionId => divisionId === item.id)
+                                    !poolItem.divisions.find(division => division.id === item.id)
                                 }
                                 value={item.id}
                             >
@@ -222,7 +242,12 @@ class UmpireDivisions extends Component {
                 <div className="footer-view">
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Button className="publish-button save-draft-text" type="primary" htmlType="submit">
+                            <Button 
+                                className="publish-button save-draft-text" 
+                                type="primary" 
+                                htmlType="submit"
+                                onClick={this.handleSave}
+                            >
                                 {AppConstants.save}
                             </Button>
                             <Button onClick={() => history.push("/umpireDashboard")} className="open-reg-button" type="primary" htmlType="submit">
@@ -264,6 +289,7 @@ function mapDispatchToProps(dispatch) {
         getRefBadgeData,
         getUmpirePoolData,
         liveScoreGetDivision,
+        updateUmpirePoolToDivision,
     }, dispatch)
 }
 

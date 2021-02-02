@@ -92,6 +92,20 @@ function umpirePoolAllocationState(state = initialState, action) {
                 deletedUmpirePoolId: action.result,
             };
 
+        case ApiConstants.API_UPDATE_UMPIRE_POOL_TO_DIVISION_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            };
+        
+        case ApiConstants.API_UPDATE_UMPIRE_POOL_TO_DIVISION_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                umpirePoolData: action.result,
+            };
+
         case ApiConstants.API_UMPIRE_POOL_ALLOCATION_FAIL:
             return {
                 ...state,
