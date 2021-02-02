@@ -237,6 +237,12 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  exportUserFriendList(payload) {
+    const url = `users/export/friends`;
+    return Method.dataPostDownload(url, token, payload, "UserFriends");
+  },
+
+
   getUserReferFriendList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {

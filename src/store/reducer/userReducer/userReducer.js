@@ -860,6 +860,17 @@ function userReducer(state = initialState, action) {
         friendTotalCount: (friendData && friendData.page) ? friendData.page.totalCount : 1,
         status: action.status
       };
+    case ApiConstants.API_EXPORT_USER_FRIEND_LOAD:
+      
+      return { ...state, onExpUserFriendLoad: true };
+
+    case ApiConstants.API_EXPORT_USER_FRIEND_SUCCESS:
+      return {
+        ...state,
+        onExpUserFriendLoad: false,
+        status: action.status,
+        error: null
+      };
 
     case ApiConstants.API_USER_REFER_FRIEND_LOAD:
       return { ...state, onLoad: true, userReferFriendListAction: action };
