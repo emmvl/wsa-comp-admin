@@ -51,6 +51,7 @@ const initialState = {
     },
     regChangeDashboardListData: [], ////////registration change Dashboard list
     regChangeDashboardListPage: 1,
+    regChangeDashboardListPageSize: 10,
     regChangeDashboardListTotalCount: 1,
     regChangeCompetitions: [],
     regChangeReviewData: {
@@ -200,7 +201,19 @@ function regChangeReducer(state = initialState, action) {
                 transferOrganisations: transferOrgData,
                 status: action.status,
             }
-
+        
+        case ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_SIZE:
+            console.log('pagesize ', action.pageSize);
+            return {
+                ...state,
+                regChangeDashboardListPageSize: action.pageSize,
+            }
+        
+        case ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                regChangeDashboardListPage: action.pageNum,
+            }
 
         default:
             return state;
