@@ -32,6 +32,7 @@ const initialState = {
     subTotalGst: 0,
     paymentListData: [],
     paymentListPage: 1,
+    paymentListPageSize: 10,
     paymentListTotalCount: 1,
     paymentDashboardListAction: null,
     paymentCompetitionList: [],
@@ -415,6 +416,18 @@ function stripe(state = initialState, action) {
             return {
                 ...state,
                 onExportLoad: false,
+            }
+
+        case ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                paymentListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                paymentListPage: action.pageNum,
             }
 
         default:

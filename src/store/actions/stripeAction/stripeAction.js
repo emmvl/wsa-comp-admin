@@ -97,6 +97,7 @@ function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
 /// payment dashboard
 function getPaymentList(
     offset,
+    limit,
     sortBy,
     sortOrder,
     userId,
@@ -116,6 +117,7 @@ function getPaymentList(
     const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
         offset,
+        limit,
         sortBy,
         sortOrder,
         userId,
@@ -279,6 +281,25 @@ function exportPaymentSummaryApi(offset,
         paymentStatus
     }
 }
+
+function setDashboardPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_SIZE,
+        pageSize
+    }
+
+    return action;
+}
+
+function setDashboardPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_CURRENT_NUMBER,
+        pageNum
+    }
+
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -294,5 +315,7 @@ export {
     exportPaymentDashboardApi,
     exportPayoutTransaction,
     getPaymentSummary,
-    exportPaymentSummaryApi
+    exportPaymentSummaryApi,
+    setDashboardPageSizeAction,
+    setDashboardPageNumberAction,
 };

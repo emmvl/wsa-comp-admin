@@ -218,6 +218,7 @@ function* getPaymentListSaga(action) {
     const result = yield call(
       AxiosApi.getPaymentList,
       action.offset,
+      action.limit,
       action.sortBy,
       action.sortOrder,
       action.userId,

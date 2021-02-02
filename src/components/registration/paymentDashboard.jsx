@@ -23,7 +23,7 @@ import {
     getPaymentMethodsListAction,
 } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
-import { getPaymentList, exportPaymentDashboardApi } from "../../store/actions/stripeAction/stripeAction";
+import { getPaymentList, exportPaymentDashboardApi, setDashboardPageSizeAction, setDashboardPageNumberAction } from "../../store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "../../store/actions/registrationAction/endUserRegistrationAction";
 import InputWithHead from "../../customComponents/InputWithHead";
 
@@ -462,7 +462,17 @@ class PaymentDashboard extends Component {
         );
     };
 
-    handlePaymentTableList = (page, userId, regId, searchValue) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setDashboardPageSizeAction(pageSize);
+        const { userId, registrationId, searchText } = this.state;
+        this.handlePaymentTableList(page, userId, registrationId, searchText);
+    }
+
+    handlePaymentTableList = async (page, userId, regId, searchValue) => {
+        await this.props.setDashboardPageNumberAction(page);
+        let { paymentListPageSize } = this.props.paymentState;
+        paymentListPageSize = paymentListPageSize ? paymentListPageSize : 10;
+
         const {
             sortBy,
             sortOrder,
@@ -478,7 +488,7 @@ class PaymentDashboard extends Component {
             membershipType,
             paymentStatus
         } = this.state
-        let offset = page ? 10 * (page - 1) : 0;
+        let offset = page ? paymentListPageSize * (page - 1) : 0;
         let year = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             offset,
@@ -488,6 +498,7 @@ class PaymentDashboard extends Component {
         // this.props.getPaymentList(offset, sortBy, sortOrder, userId, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo, searchValue);
         this.props.getPaymentList(
             offset,
+            paymentListPageSize,
             sortBy,
             sortOrder,
             userId,
@@ -950,10 +961,9 @@ class PaymentDashboard extends Component {
     }
 
     contentView = () => {
-        const { paymentState } = this.props;
-        const total = paymentState.paymentListTotalCount;
         const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
+        const { paymentListTotalCount, paymentListData, paymentListPage, onLoad, pageSize } = this.props.paymentState;
         return (
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
@@ -961,18 +971,21 @@ class PaymentDashboard extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={paymentState.paymentListData}
+                        dataSource={paymentListData}
                         pagination={false}
-                        loading={this.props.paymentState.onLoad && true}
+                        loading={onLoad && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={paymentState.paymentListPage}
-                        total={total}
+                        showSizeChanger
+                        total={paymentListTotalCount}
+                        current={paymentListPage}
+                        defaultCurrent={paymentListPage}
+                        defaultPageSize={pageSize}
                         onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -1009,6 +1022,8 @@ function mapDispatchToProps(dispatch) {
         exportPaymentDashboardApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
+        setDashboardPageSizeAction,
+        setDashboardPageNumberAction,
     }, dispatch);
 }
 
