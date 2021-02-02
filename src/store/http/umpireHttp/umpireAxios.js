@@ -71,6 +71,11 @@ let UmpireAxiosApi = {
         return Method.dataPost(url, token, payload.body);
     },
 
+    // updateUmpirePoolAllocationMany(payload) {
+    //     const url = `/competitions/` + payload.compId + `/umpires/pools/batch?organisationId=${payload.orgId}`;
+    //     return Method.dataPatch(url, token, payload.body);
+    // },
+
     updateUmpirePoolAllocationMany(payload) {
         const url = `/competitions/` + payload.compId + `/umpires/pools/batch?organisationId=${payload.orgId}`;
         return Method.dataPatch(url, token, payload.body);

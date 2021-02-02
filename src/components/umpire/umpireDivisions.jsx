@@ -77,7 +77,12 @@ class UmpireDivisions extends Component {
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
         if (umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
-            this.setState({ umpirePoolData });
+            const selectedDivisions = [];
+            umpirePoolData.forEach(poolItem => {
+                selectedDivisions.push(...poolItem.divisions);
+            });
+
+            this.setState({ umpirePoolData, selectedDivisions });
         }
     }
 
