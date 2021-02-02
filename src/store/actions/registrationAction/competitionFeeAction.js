@@ -1,10 +1,11 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 // get the competition fees list in registration
-function regCompetitionListAction(offset, yearRefId, searchText, sortBy, sortOrder) {
+function regCompetitionListAction(offset, limit, yearRefId, searchText, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_REG_COMPETITION_LIST_LOAD,
         offset,
+        limit,
         yearRefId,
         searchText,
         sortBy,
@@ -301,6 +302,20 @@ function paymentMethodsDefaultAction() {
     }
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_REGISTRATION_COMPETITION_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_REGISTARTION_COMPETITION_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     regCompetitionListAction,
     regCompetitionListDeleteAction,
@@ -334,5 +349,7 @@ export {
     onInviteesSearchAction,
     removeCompetitionDivisionAction,
     instalmentDateAction,
-    paymentMethodsDefaultAction
+    paymentMethodsDefaultAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };
