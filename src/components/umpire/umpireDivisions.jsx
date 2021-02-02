@@ -9,6 +9,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import {
     getUmpirePoolData,
 } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
+import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
 import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -29,10 +30,11 @@ class UmpireDivisions extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            umpPool: "A Grade",
             selectedComp: null,
             loading: false,
-            competitionUniqueKey: null
+            competitionUniqueKey: null,
+            umpirePoolData: [],
+            selectedDivisions: [],
         }
     }
 
@@ -59,7 +61,8 @@ class UmpireDivisions extends Component {
                 }
 
                 if (JSON.parse(getUmpireCompetitonData())) {
-                    this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp })
+                    this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
+                    this.props.liveScoreGetDivision(firstComp);
                 }
 
                 const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
@@ -72,21 +75,39 @@ class UmpireDivisions extends Component {
         }
 
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
-        console.log('umpirePoolData', umpirePoolData);
+
+        if (umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
+            this.setState({ umpirePoolData });
+        }
     }
 
     onChangeComp = compId => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        // const { competitionList } = this.state;
-
-        // const { isOrganiser } = competitionList.find(competition => competition.id === compId);
-
+        
         setUmpireCompId(compId);
 
+        this.props.liveScoreGetDivision(compId);
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId });
+
         this.setState({ 
-            selectedComp: compId, 
-            // isOrganiserView: isOrganiser 
+            selectedComp: compId,
+        });
+    }
+
+    handleChangeDivisions = (divisions, poolIndex) => {
+        const { umpirePoolData, selectedDivisions } = this.state;
+
+        const umpirePoolDataCopy = JSON.parse(JSON.stringify(umpirePoolData));
+        umpirePoolDataCopy[poolIndex].divisions = divisions;
+
+        const selectedDivisionsCopy = JSON.parse(JSON.stringify(selectedDivisions));
+        selectedDivisionsCopy.push(...divisions);
+
+        const selectedDivisionsNew = [...new Set(selectedDivisionsCopy)];
+
+        this.setState({ 
+            umpirePoolData: umpirePoolDataCopy,
+            selectedDivisions: selectedDivisionsNew,
         });
     }
 
@@ -134,11 +155,11 @@ class UmpireDivisions extends Component {
         );
     };
 
-    onChangeUmpirePools(data) {
-        this.setState({ umpPool: data.umpirePool })
-    }
-
     poolView(poolItem, index) {
+        const { divisionList } = this.props.liveScoreTeamState;
+
+        const { selectedDivisions } = this.state;
+
         return (
             <div className="row pt-3" key={'poolItem' + index}>
                 <div className='col-sm-3 division-table-field-view'>
@@ -146,13 +167,25 @@ class UmpireDivisions extends Component {
                 </div>
                 <div className="col-sm">
                     <Select
-                        placeholder="Select"
                         mode="multiple"
+                        placeholder="Select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={divisions => this.handleChangeDivisions(divisions, index)}
+                        value={poolItem.divisions}
                     >
-                        <Option value="a">A Grade</Option>
-                        <Option value="b">B Grade</Option>
-                        <Option value="c">C Grade</Option>
+                        {(divisionList || []).map((item) => (
+                            <Option
+                                key={item.id}
+                                disabled={
+                                    selectedDivisions.some(divisionId => divisionId === item.id)
+                                    && 
+                                    !poolItem.divisions.find(divisionId => divisionId === item.id)
+                                }
+                                value={item.id}
+                            >
+                                {item.name}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
             </div>
@@ -160,7 +193,7 @@ class UmpireDivisions extends Component {
     }
 
     contentView = () => {
-        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+        const { umpirePoolData } = this.state;
 
         return (
             <div className="content-view pt-5">
@@ -170,25 +203,6 @@ class UmpireDivisions extends Component {
                 {!!umpirePoolData && umpirePoolData.map((item, index) => (
                     this.poolView(item, index)
                 ))}
-
-                {/* <div className="row pt-3">
-                    <div className='col-sm-3 division-table-field-view'>
-                        <InputWithHead heading={AppConstants.umpireCoach} />
-                    </div>
-                    <div className="col-sm">
-                        <Select
-                            placeholder="Select"
-                            mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
-                            // value={this.state.umpPool}
-                        >
-                            <Option value="Gradeaa">A Grade</Option>
-                            <Option value="Gradebb">B Grade</Option>
-                            <Option value="Gradecc">C Grade</Option>
-                        </Select>
-                    </div>
-                </div> */}
             </div>
         )
     }
@@ -241,6 +255,7 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         getRefBadgeData,
         getUmpirePoolData,
+        liveScoreGetDivision,
     }, dispatch)
 }
 
@@ -249,6 +264,7 @@ function mapStateToProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState,
         appState: state.AppState,
         umpirePoolAllocationState: state.UmpirePoolAllocationState,
+        liveScoreTeamState: state.LiveScoreTeamState,
     }
 }
 
