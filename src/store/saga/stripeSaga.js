@@ -348,6 +348,7 @@ function* getPaymentSummarySaga(action) {
     const result = yield call(
       AxiosApi.getPaymentSummary,
       action.offset,
+      action.limit,
       action.sortBy,
       action.sortOrder,
       action.userId,

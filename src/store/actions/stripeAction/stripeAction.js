@@ -207,6 +207,7 @@ function exportPayoutTransaction(payoutId) {
 
 function getPaymentSummary(
     offset,
+    limit,
     sortBy,
     sortOrder,
     userId,
@@ -226,6 +227,7 @@ function getPaymentSummary(
     const action = {
         type: ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD,
         offset,
+        limit,
         sortBy,
         sortOrder,
         userId,
@@ -300,6 +302,24 @@ function setDashboardPageNumberAction(pageNum) {
     return action;
 }
 
+function setSummaryPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE,
+        pageSize
+    }
+
+    return action;
+}
+
+function setSummaryPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
+        pageNum
+    }
+
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -318,4 +338,6 @@ export {
     exportPaymentSummaryApi,
     setDashboardPageSizeAction,
     setDashboardPageNumberAction,
+    setSummaryPageSizeAction,
+    setSummaryPageNumberAction,
 };

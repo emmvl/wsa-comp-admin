@@ -28,7 +28,7 @@ import {
     getPaymentMethodsListAction,
 } from "store/actions/appAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getPaymentSummary, exportPaymentSummaryApi } from "store/actions/stripeAction/stripeAction";
+import { getPaymentSummary, exportPaymentSummaryApi, setSummaryPageSizeAction, setSummaryPageNumberAction } from "store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
@@ -532,7 +532,14 @@ class PaymentSummary extends Component {
         );
     };
 
-    handlePaymentTableList = (page, userId, regId, searchValue) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setSummaryPageSizeAction(pageSize);
+        const { userId, registrationId, searchText } = this.state;
+        this.handlePaymentTableList(page, userId, registrationId, searchText);
+    }
+
+    handlePaymentTableList = async (page, userId, regId, searchValue) => {
+        await this.props.setSummaryPageNumberAction(page);
         const {
             sortBy,
             sortOrder,
@@ -548,7 +555,10 @@ class PaymentSummary extends Component {
             paymentStatus,
         } = this.state;
 
-        const offset = page ? 10 * (page - 1) : 0;
+        let { paymentSummaryListPageSize } = this.props.paymentState;
+        paymentSummaryListPageSize = paymentSummaryListPageSize ? paymentSummaryListPageSize : 10;
+
+        const offset = page ? paymentSummaryListPageSize * (page - 1) : 0;
         const year = getGlobalYear() ? getGlobalYear() : '-1';
 
         this.setState({
@@ -559,6 +569,7 @@ class PaymentSummary extends Component {
 
         this.props.getPaymentSummary(
             offset,
+            paymentSummaryListPageSize,
             sortBy,
             sortOrder,
             userId,
@@ -876,10 +887,10 @@ class PaymentSummary extends Component {
     };
 
     contentView = () => {
-        const { paymentState } = this.props;
-        const total = paymentState.paymentSummaryListTotalCount;
         const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
+        const { paymentSummaryListTotalCount, paymentSummaryList, paymentSummaryListPage, onLoad, paymentSummaryListPageSize } = this.props.paymentState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
@@ -889,19 +900,22 @@ class PaymentSummary extends Component {
                         className="home-dashboard-table"
                         bordered
                         columns={columns}
-                        dataSource={paymentState.paymentSummaryList}
+                        dataSource={paymentSummaryList}
                         pagination={false}
-                        loading={this.props.paymentState.onLoad && true}
+                        loading={onLoad && true}
                     />
                 </div>
 
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={paymentState.paymentSummaryListPage}
-                        total={total}
+                        showSizeChanger
+                        current={paymentSummaryListPage}
+                        defaultCurrent={paymentSummaryListPage}
+                        defaultPageSize={paymentSummaryListPageSize}
+                        total={paymentSummaryListTotalCount}
                         onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -941,6 +955,8 @@ function mapDispatchToProps(dispatch) {
         exportPaymentSummaryApi,
         getAffiliateToOrganisationAction,
         endUserRegDashboardListAction,
+        setSummaryPageSizeAction,
+        setSummaryPageNumberAction,
     }, dispatch);
 }
 

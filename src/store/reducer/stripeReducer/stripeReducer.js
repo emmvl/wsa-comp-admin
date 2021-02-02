@@ -40,6 +40,10 @@ const initialState = {
     transactionId: null,
     getAffiliteDetailData: [],
     invoiceData: null,
+    paymentSummaryList: [],
+    paymentSummaryListTotalCount: 1,
+    paymentSummaryListPage: 1,
+    paymentSummaryListPageSize: 10,
 }
 
 
@@ -430,6 +434,18 @@ function stripe(state = initialState, action) {
                 paymentListPage: action.pageNum,
             }
 
+        case ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                paymentSummaryListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                paymentSummaryListPage: action.pageNum,
+            }
+    
         default:
             return state;
     }
