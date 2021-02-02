@@ -33,7 +33,7 @@ const UserDetailView = () => {
 
     const {
         UserState: { personalData: selectedUser },
-    } = useSelector((state) => state.UserS);
+    } = useSelector((state) => state);
 
     if (!Object.keys(selectedUser).length) {
         history.push("/userPersonal");
