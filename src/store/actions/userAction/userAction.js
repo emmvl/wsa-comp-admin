@@ -212,6 +212,13 @@ function getUserFriendAction(payload, sortBy, sortOrder) {
     };
 }
 
+function exportUserFriendAction(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_USER_FRIEND_LOAD,
+        payload,
+    };
+}
+
 function getUserReferFriendAction(payload, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
@@ -576,6 +583,7 @@ export {
     getUserModuleActivityScorerAction,
     getUserModuleActivityManagerAction,
     getUserFriendAction,
+    exportUserFriendAction,
     getUserReferFriendAction,
     getOrganisationPhotoAction,
     saveOrganisationPhotoAction,
