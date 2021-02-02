@@ -98,16 +98,19 @@ class UmpireDivisions extends Component {
         const { umpirePoolData, selectedDivisions } = this.state;
 
         const umpirePoolDataCopy = JSON.parse(JSON.stringify(umpirePoolData));
+
+        const divisionsToChange = umpirePoolDataCopy[poolIndex].divisions;
+
+        const selectedDivisionsRest = selectedDivisions
+            .filter(selectedDivision => !divisionsToChange.some(divisionToChange => divisionToChange === selectedDivision));
+
+        selectedDivisionsRest.push(...divisions);
+
         umpirePoolDataCopy[poolIndex].divisions = divisions;
-
-        const selectedDivisionsCopy = JSON.parse(JSON.stringify(selectedDivisions));
-        selectedDivisionsCopy.push(...divisions);
-
-        const selectedDivisionsNew = [...new Set(selectedDivisionsCopy)];
 
         this.setState({ 
             umpirePoolData: umpirePoolDataCopy,
-            selectedDivisions: selectedDivisionsNew,
+            selectedDivisions: selectedDivisionsRest,
         });
     }
 
