@@ -145,7 +145,6 @@ const Method = {
                             }
                             else {
                                 return reject({
-
                                     status: 5,
                                     error: err.response && err.response.data.message
                                 });
@@ -153,7 +152,6 @@ const Method = {
                         }
                     }
                     else {
-                        console.log(err.response, 'catch')
                         return reject({
                             status: 5,
                             error: err.response && err.response.data.message
@@ -217,7 +215,11 @@ const Method = {
                                     message.error(ValidationConstants.messageStatus401)
                                 }
                             } else if (err.response.status === 500) {
-                                message.error(err.response.data.message)
+                                // message.error(err.response.data.message)
+                                return reject({
+                                    status: 5,
+                                    error: "Something went wrong."
+                                });
                             }
                         }
                     }
