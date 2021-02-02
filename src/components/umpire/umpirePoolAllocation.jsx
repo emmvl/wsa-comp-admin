@@ -241,7 +241,13 @@ class UmpirePoolAllocation extends Component {
         setUmpireCompId(compId);
 
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
-        this.setState({ selectedComp: compId, isOrganiserView: isOrganiser, unassignedData: [] });
+        this.setState({ 
+            selectedComp: compId, 
+            isOrganiserView: isOrganiser, 
+            unassignedData: [],
+            assignedData: [],
+            totalUnassigned: 0
+        });
     }
 
     onDragEnd = result => {
@@ -935,7 +941,7 @@ class UmpirePoolAllocation extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-center">
-                        {totalCount_Data > currentPage_Data * 10 &&
+                        {totalCount_Data > currentPage_Data * 10 && !!totalUnassigned &&
                             <Button
                                 onClick={this.handleLoadMore}
                             >
