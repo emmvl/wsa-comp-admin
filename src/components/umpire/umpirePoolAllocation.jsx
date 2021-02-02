@@ -159,22 +159,14 @@ class UmpirePoolAllocation extends Component {
     }
 
     handleSetPoolDataAfterUpdate = () => {
-        const { assignedData, unassignedData, totalUnassigned } = this.state;
+        const { assignedData, totalUnassigned } = this.state;
         const { currentPage_Data, totalCount_Data } = this.props.umpireState;
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
-        const assignedUmpiresIdSet = new Set();
         const umpirePoolDataCurrentState = currentPage_Data > 1 ? assignedData : umpirePoolData;
-
-        umpirePoolDataCurrentState.forEach(umpirePoolItem => {
-            umpirePoolItem.umpires.forEach(umpireItem => {
-                assignedUmpiresIdSet.add(umpireItem.id);
-            })
-        });
 
         this.setState({
             assignedData: umpirePoolDataCurrentState,
-            // totalUnassigned: !!totalUnassigned ? totalUnassigned : !!unassignedData.length ? totalCount_Data : 0,
             totalUnassigned: !totalUnassigned ? totalCount_Data : totalUnassigned,
         });
     }
@@ -224,7 +216,16 @@ class UmpirePoolAllocation extends Component {
         const { umpireListDataNew } = this.props.umpireState;
 
         const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
-        unassignedDataCopy.push(...umpireListDataNew);
+
+        const unassignedUmpiresIdSet = new Set();
+
+        unassignedDataCopy.forEach(umpireItem => {
+            unassignedUmpiresIdSet.add(umpireItem.id);
+        });
+
+        const umpireDataToAddToUnassign = umpireListDataNew.filter(umpireItem => !unassignedUmpiresIdSet.has(umpireItem.id));
+
+        unassignedDataCopy.push(...umpireDataToAddToUnassign);
                  
         this.setState({
             unassignedData: unassignedDataCopy, 
