@@ -152,6 +152,18 @@ function registrationDashboard(state = initialState, action) {
             state.regDashboardListAction = null
             return { ...state, onLoad: false };
 
+        case ApiConstants.SET_REGISTRATION_DASHBOARD_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize
+            }
+
+        case ApiConstants.SET_REGISTARTION_DASHBOARD_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                regDashboardListPage: action.pageNum
+            }
+
         default:
             return state;
     }
