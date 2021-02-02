@@ -5,20 +5,21 @@ import { bindActionCreators } from 'redux';
 import { Layout, Button, Select, Breadcrumb, Form, } from 'antd';
 
 import { getRefBadgeData } from '../../store/actions/appAction';
-import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
+import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import {
     getUmpirePoolData,
     updateUmpirePoolToDivision
 } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
-import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "util/history";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import InputWithHead from "../../customComponents/InputWithHead";
+import Loader from '../../customComponents/loader';
 
 import AppConstants from "../../themes/appConstants";
 
@@ -154,7 +155,8 @@ class UmpireDivisions extends Component {
     };
 
     dropdownView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        const competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+        
         return (
             <div className="comp-venue-courts-dropdown-view mt-0 ">
                 <div className="fluid-width">
@@ -265,7 +267,6 @@ class UmpireDivisions extends Component {
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="4" />
-                {/* <Loader visible={this.props.liveScoreSetting.loader} /> */}
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
@@ -278,6 +279,12 @@ class UmpireDivisions extends Component {
                         </Footer>
                     </Form>
                 </Layout>
+                <Loader 
+                    visible={this.props.appState.onLoad ||
+                        this.props.umpirePoolAllocationState.onLoad ||
+                        this.props.liveScoreTeamState.onLoad
+                    }
+                />
             </div>
         )
     }
