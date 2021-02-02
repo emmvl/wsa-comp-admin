@@ -57,13 +57,13 @@ const AxiosApi = {
     },
 
     /// /registrationMembershipFeeList in membership table in the registration tab
-    async registrationMembershipFeeList(offset, yearRefId, sortBy, sortOrder) {
+    async registrationMembershipFeeList(offset, limit, yearRefId, sortBy, sortOrder) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const body = {
             paging: {
                 offset,
-                limit: 10,
+                limit,
             },
         };
         let url = `/api/membershipproductfee/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;

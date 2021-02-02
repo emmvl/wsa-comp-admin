@@ -10,8 +10,11 @@ import { connect } from 'react-redux';
 import { getCurrentYear } from 'util/permissions'
 import { bindActionCreators } from 'redux';
 import {
-    regMembershipListAction, regMembershipListDeleteAction,
-    clearReducerDataAction
+    regMembershipListAction,
+    regMembershipListDeleteAction,
+    clearReducerDataAction,
+    setRegistrationMembershipListPageSizeAction,
+    setRegistrationMembershipListPageNumberAction,
 } from "../../store/actions/registrationAction/registration";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { routePermissionForOrgLevel } from "../../util/permissions";
@@ -251,14 +254,21 @@ class RegistrationMembershipList extends Component {
         });
     }
 
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setRegistrationMembershipListPageSizeAction(pageSize);
+        this.handleMembershipTableList(page, this.state.yearRefId);
+    }
 
-    handleMembershipTableList = (page, yearRefId) => {
+    handleMembershipTableList = async (page, yearRefId) => {
+        await this.props.setRegistrationMembershipListPageNumberAction(page);
         let { sortBy, sortOrder } = this.state
-        let offset = page ? 10 * (page - 1) : 0;
+        let { regMembershipFeeListPageSize } = this.props.registrationState;
+        regMembershipFeeListPageSize = regMembershipFeeListPageSize ? regMembershipFeeListPageSize : 10;
+        let offset = page ? regMembershipFeeListPageSize * (page - 1) : 0;
         this.setState({
             offset
         })
-        this.props.regMembershipListAction(offset, yearRefId, sortBy, sortOrder)
+        this.props.regMembershipListAction(offset, regMembershipFeeListPageSize, yearRefId, sortBy, sortOrder)
     };
 
     headerView = () => {
@@ -321,27 +331,30 @@ class RegistrationMembershipList extends Component {
     }
 
     contentView = () => {
-        const { registrationState } = this.props;
-        let total = registrationState.regMembershipFeeListTotalCount;
+        const { regMembershipFeeListTotalCount, regMembershipFeeListData, regMembershipFeeListPage, onLoad, regMembershipFeeListPageSize } = this.props.registrationState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={registrationState.regMembershipFeeListData}
+                        dataSource={regMembershipFeeListData}
                         pagination={false}
-                        loading={this.props.registrationState.onLoad && true}
+                        loading={onLoad && true}
                         rowKey={(record, index) => record.membershipProductId + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={registrationState.regMembershipFeeListPage}
-                        total={total}
+                        showSizeChanger
+                        current={regMembershipFeeListPage}
+                        defaultCurrent={regMembershipFeeListPage}
+                        defaultPageSize={regMembershipFeeListPageSize}
+                        total={regMembershipFeeListTotalCount}
                         onChange={(page) => this.handleMembershipTableList(page, this.state.yearRefId)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -370,7 +383,9 @@ function mapDispatchToProps(dispatch) {
         regMembershipListAction,
         regMembershipListDeleteAction,
         clearReducerDataAction,
-        getOnlyYearListAction
+        getOnlyYearListAction,
+        setRegistrationMembershipListPageSizeAction,
+        setRegistrationMembershipListPageNumberAction,
     }, dispatch)
 }
 

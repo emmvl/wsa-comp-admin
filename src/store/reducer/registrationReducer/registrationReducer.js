@@ -58,6 +58,7 @@ const initialState = {
   regMembershipFeeListData: [], ////////registration membership fees list
   regMembershipFeeListPage: 1,
   regMembershipFeeListTotalCount: 1,
+  regMembershipFeeListPageSize: 10,
   getMembershipProductDetails: null, ////get membership product details
   getDefaultMembershipProductTypes: [],
   getRegFormCompetition: [], /// get registration form
@@ -113,6 +114,7 @@ const initialState = {
     page: {},
     teamRegistrations: []
   },
+  teamRegistrationTableListPageSize: 10,
   teamRegListAction: null,
   regMembershipListAction: null,
   canInviteSend: 0,
@@ -1371,6 +1373,18 @@ function registration(state = initialState, action) {
       }
       return{
         ...state
+      }
+
+    case ApiConstants.SET_TEAM_REGISTRATION_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        teamRegistrationTableListPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_TEAM_REGISTRATION_LIST_PAGE_CURRENT_NUMBER:
+      state.teamRegistrationTableData.page.currentPage = action.pageNum;
+      return {
+        ...state,
       }
 
     default:
