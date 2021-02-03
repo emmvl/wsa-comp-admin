@@ -33,7 +33,7 @@ class UmpireDivisions extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
-            umpirePoolData: [],
+            umpirePoolData: null,
             selectedDivisions: [],
             isOrganiserView: false,
         }
@@ -232,24 +232,37 @@ class UmpireDivisions extends Component {
         )
     }
 
+    noPoolView = () => (
+        <div className="mt-4 error-message-inside">
+            {AppConstants.noPoolAdded}
+        </div>
+    )
+
     contentView = () => {
         const { umpirePoolData } = this.state;
-        const { onLoad } = this.props.umpirePoolAllocationState;
 
         return (
             <div className="content-view pt-5">
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
 
-                {!!umpirePoolData && !onLoad && umpirePoolData.map((item, index) => (
-                    this.poolView(item, index)
-                ))}
+                {!this.props.appState.onLoad && 
+                    !this.props.umpirePoolAllocationState.onLoad && 
+                    !this.props.liveScoreTeamState.onLoad &&
+                    !!umpirePoolData &&
+                    <>
+                        {!!umpirePoolData.length ? umpirePoolData.map((item, index) => (
+                            this.poolView(item, index)
+                        )) : this.noPoolView()}
+                    </>
+                }
             </div>
         )
     }
 
     footerView = () => {
-        const { isOrganiserView } = this.state;
+        const { isOrganiserView, umpirePoolData } = this.state;
+
         return (
             <div className="form-footer-button-wrapper">
                 {isOrganiserView && 
@@ -261,6 +274,7 @@ class UmpireDivisions extends Component {
                         disabled={this.props.appState.onLoad ||
                             this.props.umpirePoolAllocationState.onLoad ||
                             this.props.liveScoreTeamState.onLoad
+                            || !umpirePoolData?.length
                         }
                     >
                         {AppConstants.save}
