@@ -196,8 +196,7 @@ class UmpireDivisions extends Component {
 
     poolView(poolItem, index) {
         const { divisionList } = this.props.liveScoreTeamState;
-
-        const { selectedDivisions } = this.state;
+        const { selectedDivisions, isOrganiserView } = this.state;
 
         return (
             <div className="row py-3" key={'poolItem' + index} style={{ paddingLeft: 15 }}>
@@ -212,6 +211,7 @@ class UmpireDivisions extends Component {
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={divisions => this.handleChangeDivisions(divisions, index)}
                         value={poolItem.divisions.map(division => division.id)}
+                        disabled={!isOrganiserView}
                     >
                         {(divisionList || []).map((item) => (
                             <Option
