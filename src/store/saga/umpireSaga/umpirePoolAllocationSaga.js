@@ -8,7 +8,8 @@ import {
 } from "antd";
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+
+import UmpireAxiosApi from "store/http/umpireHttp/umpireAxios";
 
 function* failSaga(result) {
     yield put({
@@ -47,7 +48,7 @@ function* errorSaga(error) {
 
 function* getUmpirePoolAllocationSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.getUmpirePoolAllocation, action.payload);
+        const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
 
         if (result.status === 1) {
             yield put({
@@ -65,7 +66,7 @@ function* getUmpirePoolAllocationSaga(action) {
 
 function* saveUmpirePoolAllocationSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.saveUmpirePoolAllocation, action.payload);
+        const result = yield call(UmpireAxiosApi.saveUmpirePoolAllocation, action.payload);
 
         if (result.status === 1) {
             yield put({
@@ -73,6 +74,83 @@ function* saveUmpirePoolAllocationSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
+            message.success(AppConstants.poolAddedSuccessMsg);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+function* updateUmpirePoolAllocationSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.updateUmpirePoolAllocation, action.payload);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.settingsUpdatedMessage);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+function* updateUmpirePoolAllocationManySaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.updateUmpirePoolAllocationMany, action.payload);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_UMPIRE_POOL_MANY_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.settingsUpdatedMessage);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+function* deleteUmpirePoolAllocationSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.deleteUmpirePoolAllocation, action.payload);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_DELETE_UMPIRE_POOL_DATA_SUCCESS,
+                result: action.payload.umpirePoolId,
+                status: result.status,
+            });
+            message.success(AppConstants.poolRemovedSuccessMsg);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+function* updateUmpirePoolAllocationToDivisionSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.updateUmpirePoolAllocationToDivision, action.payload);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_UMPIRE_POOL_TO_DIVISION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result);
         }
@@ -84,4 +162,8 @@ function* saveUmpirePoolAllocationSaga(action) {
 export default function* rootUmpirePoolAllocationSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_POOL_DATA_LOAD, getUmpirePoolAllocationSaga);
     yield takeEvery(ApiConstants.API_SAVE_UMPIRE_POOL_DATA_LOAD, saveUmpirePoolAllocationSaga);
+    yield takeEvery(ApiConstants.API_DELETE_UMPIRE_POOL_DATA_LOAD, deleteUmpirePoolAllocationSaga);
+    yield takeEvery(ApiConstants.API_UPDATE_UMPIRE_POOL_DATA_LOAD, updateUmpirePoolAllocationSaga);
+    yield takeEvery(ApiConstants.API_UPDATE_UMPIRE_POOL_MANY_DATA_LOAD, updateUmpirePoolAllocationManySaga);
+    yield takeEvery(ApiConstants.API_UPDATE_UMPIRE_POOL_TO_DIVISION_LOAD, updateUmpirePoolAllocationToDivisionSaga);
 }

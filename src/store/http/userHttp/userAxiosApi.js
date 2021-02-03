@@ -80,13 +80,6 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  async getFilterByRelations(payload) {
-      let url = 'users/filterByRelations';
-
-      return Method.dataPost(url, token, payload);
-  },
-
-
   async affiliateToOrganisation(organisationId, searchText) {
     let userId = await getUserId();
     let url = null
@@ -244,6 +237,12 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  exportUserFriendList(payload) {
+    const url = `users/export/friends`;
+    return Method.dataPostDownload(url, token, payload, "UserFriends");
+  },
+
+
   getUserReferFriendList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
@@ -310,6 +309,11 @@ let userHttpApi = {
   exportUserRegData(payload) {
     const url = `api/export/registration/data`;
     return Method.dataPostDownload(url, token, payload, "UserRegistrationData");
+  },
+
+  transferUserRegistration(payload) {
+    const url = '/userRegistration/transferRegistration';
+    return Method.dataPost(url, token, payload);
   },
 
   async getSubmittedRegData(payload) {
@@ -524,6 +528,14 @@ let userHttpApi = {
 
   getUsersByIds(ids) {
       return Method.dataGet(`users/byIds?ids=${ids}`);
+  },
+
+  async getUserParentData() {
+    let userId = await getUserId()
+    if (userId != 0) {
+      var url = `api/parents?userId=${userId}`;
+      return Method.dataGet(url, token)
+    }
   },
 };
 

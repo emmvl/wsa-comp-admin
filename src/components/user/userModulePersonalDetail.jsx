@@ -47,6 +47,7 @@ import {
     teamMemberUpdateAction,
     exportUserRegData,
     getSubmittedRegData,
+    transferUserRegistration,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -84,10 +85,10 @@ function umpireActivityTableSort(key) {
     this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
 }
 
-const { 
-    Header, 
-    // Footer, 
-    Content 
+const {
+    Header,
+    // Footer,
+    Content
 } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -220,13 +221,24 @@ const columns = [
                     <Menu.Item key="3" onClick={() => history.push("/paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
                         <span>Payment</span>
                     </Menu.Item>
-                    {userRoleId === 1 && (
-                        <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
-                            <span>
-                                Registration Form
-                            </span>
-                        </Menu.Item>
-                    )}
+                    {
+                        userRoleId === 2 &&
+                            <>
+                                <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
+                                    <span>
+                                        Registration Form
+                                    </span>
+                                </Menu.Item>
+                                <Menu.Item key="5" onClick={() => {
+                                        this_Obj.setState({ showTransferRegistrationPopup: true });
+                                        this_Obj.setState({ registrationData: e });
+                                    }}>
+                                    <span>
+                                        Transfer registration
+                                    </span>
+                                </Menu.Item>
+                            </>
+                    }
                 </SubMenu>
             </Menu>
         ),
@@ -1509,6 +1521,10 @@ class UserModulePersonalDetail extends Component {
             registrationTeam: null,
             removeTeamMemberLoad: false,
             showRemoveTeamMemberConfirmPopup: false,
+            showTransferRegistrationPopup: false,
+            transferRegistrationUserId: '',
+            transferRegistrationPaidBy: '',
+            registrationData: [],
             removeTeamMemberRecord: null,
         };
     }
@@ -3486,6 +3502,74 @@ class UserModulePersonalDetail extends Component {
         </div>
     )
 
+    handleUserPaidIdsChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    transferRegistrationSubmit = async () => {
+        const {transferRegistrationUserId, transferRegistrationPaidBy, registrationData} = this.state;
+
+        const requestBodyObj = {
+            userIdTrasferingTo: Number(transferRegistrationUserId),
+            userIdTrasferingFrom: this.state.userId,
+            paidBy: transferRegistrationPaidBy,
+            competitionUniqueKey: registrationData.competitionId,
+            userRegUniqueKey: registrationData.userRegUniquekey,
+            registrationId: registrationData.registrationId,
+            competitionMembershipProductDivisionId: 'test',
+            competitionMembershipProductTypeId: 'test',
+            userRegistrationid: 'test',
+            orgRegistrationParticipantId: 'test',
+            hasOtherRegistrations: 'true/false',
+        };
+
+        await this.props.transferUserRegistration(requestBodyObj);
+
+        this.setState({
+            transferRegistrationUserId: '',
+            transferRegistrationPaidBy: ''
+        });
+
+    }
+
+    transferRegistrationPopup = () => (
+        <Modal
+            title={AppConstants.confirmTransferTo}
+            // visible={true}
+            visible={this.state.showTransferRegistrationPopup}
+            onCancel={() => this.setState({ showTransferRegistrationPopup: false })}
+            onOk={() => {
+                this.transferRegistrationSubmit();
+                this.setState({ showTransferRegistrationPopup: false });
+            }}
+        >
+            <div className="transfer-modal-body">
+                <div className="transfer-modal-form">
+                    <div>User ID</div>
+                    {/*<div>Paid By</div>*/}
+                </div>
+                <div className="transfer-modal-form">
+                    <input
+                        className="transfer-modal-form-input"
+                        type="text"
+                        name="transferRegistrationUserId"
+                        value={this.state.transferRegistrationUserId}
+                        onChange={(e) => this.handleUserPaidIdsChange(e)}
+                    />
+                    {/*{ Uncomment when transactions trasfering is ready }*/}
+
+                    {/*<input*/}
+                    {/*    className="transfer-modal-form-input"*/}
+                    {/*    type="text"*/}
+                    {/*    name="transferRegistrationPaidBy"*/}
+                    {/*    value={this.state.transferRegistrationPaidBy}*/}
+                    {/*    onChange={(e) => this.handleUserPaidIdsChange(e)}*/}
+                    {/*/>*/}
+                </div>
+            </div>
+        </Modal>
+    )
+
     render() {
         const {
             activityPlayerList,
@@ -3582,6 +3666,7 @@ class UserModulePersonalDetail extends Component {
                         {this.unlinkParentConfirmPopup()}
                         {this.cannotUninkPopup()}
                         {this.removeTeamMemberConfirmPopup()}
+                        {this.transferRegistrationPopup()}
                     </Content>
                 </Layout>
             </div>
@@ -3619,6 +3704,7 @@ function mapDispatchToProps(dispatch) {
             teamMemberUpdateAction,
             exportUserRegData,
             getSubmittedRegData,
+            transferUserRegistration,
         },
         dispatch,
     );

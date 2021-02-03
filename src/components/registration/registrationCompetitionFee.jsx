@@ -6834,9 +6834,6 @@ class RegistrationCompetitionFee extends Component {
         let invitees = this.props.appState.registrationInvitees.length > 0
             ? this.props.appState.registrationInvitees
             : [];
-        if (!!invitees[0]) {
-            invitees[0].subReferences.sort((a, b) => a.sortOrder - b.sortOrder);
-        }
         const {
             affiliateSelected,
             anyOrgSelected,

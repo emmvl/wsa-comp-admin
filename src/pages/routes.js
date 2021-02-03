@@ -1032,8 +1032,6 @@ class Routes extends React.Component {
 
                 <Route path="/" component={lazyLoad(NotFound)} />
 
-
-
                 <Redirect from="*" to="/404" />
             </Switch>
         );

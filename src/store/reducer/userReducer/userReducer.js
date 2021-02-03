@@ -1,4 +1,5 @@
 import ApiConstants from "themes/apiConstants";
+import AppConstants from "themes/appConstants";
 import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from "util/helpers";
 import { setImpersonation } from 'util/sessionStorage';
 
@@ -237,7 +238,6 @@ const initialState = {
   affiliateEdit: affiliate,
   affiliateOurOrg: affiliate,
   affiliateList: [],
-  affiliatesByParentList: [],
   affiliateTo: {},
   roles: [],
   userRolesEntity: [],
@@ -358,8 +358,11 @@ const initialState = {
   teamMemberDeletion: false,
   addTeamMember: false,
   userSubmittedRegData: [],
+  onTransferUserRegistrationLoad: false,
   organisationUsersList: [],
   usersByIdsList: [],
+  parentData: [],
+  getUserParentDataOnLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -468,7 +471,6 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateList: data.affiliates,
         impersonationList: data.affiliates,
-        affiliatesByParentList: data?.affiliateList || [],
         affiliateListPage: data.page ? data.page.currentPage : 1,
         affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status,
@@ -479,7 +481,6 @@ function userReducer(state = initialState, action) {
         ...state,
         onImpersonationLoad: false,
         impersonationList: action.result.affiliates,
-        affiliatesByParentList: action.result?.affiliateList || [],
         status: action.status,
       };
     case ApiConstants.API_SAVE_AFFILIATE_LOAD:
@@ -680,8 +681,7 @@ function userReducer(state = initialState, action) {
       return { ...state, onTextualLoad: true, userTextualDasboardListAction: action };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
-      const textualData = action.result;
-
+      let textualData = action.result;
       return {
         ...state,
         onTextualLoad: false,
@@ -865,6 +865,17 @@ function userReducer(state = initialState, action) {
         friendTotalCount: (friendData && friendData.page) ? friendData.page.totalCount : 1,
         status: action.status
       };
+    case ApiConstants.API_EXPORT_USER_FRIEND_LOAD:
+      
+      return { ...state, onExpUserFriendLoad: true };
+
+    case ApiConstants.API_EXPORT_USER_FRIEND_SUCCESS:
+      return {
+        ...state,
+        onExpUserFriendLoad: false,
+        status: action.status,
+        error: null
+      };
 
     case ApiConstants.API_USER_REFER_FRIEND_LOAD:
       return { ...state, onLoad: true, userReferFriendListAction: action };
@@ -937,7 +948,6 @@ function userReducer(state = initialState, action) {
       };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
-          console.log('11');
           return { ...state, onExpUserRegDataLoad: true };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
@@ -959,6 +969,16 @@ function userReducer(state = initialState, action) {
               status: action.status,
               error: null
           };
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
+          return {...state, onTransferUserRegistrationLoad: true}
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
+          return {
+              ...state,
+              onTransferUserRegistrationLoad: false,
+              status: action.status,
+          }
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
@@ -1430,6 +1450,26 @@ function userReducer(state = initialState, action) {
           onLoad: false,
           usersByIdsList: action.result,
       };
+    case ApiConstants.API_GET_USER_PARENT_DATA_LOAD:
+        return { ...state, getUserParentDataOnLoad: true }
+
+    case ApiConstants.API_GET_USER_PARENT_DATA_SUCCESS:
+
+        let parentData = action.result.userData;
+        const nonAvailableParent = {
+            id: -1,
+            firstName: AppConstants.parentDetails,
+            lastName: AppConstants.unavailable,
+        }
+        parentData.push(nonAvailableParent);
+
+        return {
+            ...state,
+            parentData,
+            status: action.status,
+            getUserParentDataOnLoad: false
+        }
+
     default:
       return state;
   }

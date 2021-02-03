@@ -1,89 +1,97 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-// stripe payment account balance API
+//////stripe payment account balance API
 function accountBalanceAction() {
-    return {
+    const action = {
         type: ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD,
     };
+    return action;
 }
-
-// For stripe charging payment API
+//For stripe charging payment API
 function chargingPaymentAction(competitionId, stripeToken) {
-    return {
+    const action = {
         type: ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD,
         competitionId,
-        stripeToken,
+        stripeToken
     };
+    return action;
 }
-
-// save stripe account
+//save stripe account
 function saveStripeAccountAction(code) {
-    return {
+    const action = {
         type: ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD,
-        code,
+        code
     };
+    return action;
 }
 
-// stripe login link
+////stripe login link
 function getStripeLoginLinkAction() {
-    return {
+    const action = {
         type: ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD,
     };
+    return action;
 }
 
-// stripe payments transfer list
+////stripe payments transfer list
 function getStripeTransferListAction(page, starting_after, ending_before, params) {
-    return {
+    const action = {
         type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD,
         page,
         starting_after,
         ending_before,
-        params,
+        params
     };
+    return action;
 }
 
-// stripe payout list
+////stripe payout list
 function getStripePayoutListAction(page, starting_after, ending_before, params) {
-    return {
+    const action = {
         type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD,
         page,
         starting_after,
         ending_before,
-        params,
+        params
     };
+    return action;
 }
 
-// stripe payout list
+////stripe payout list
 function getStripeRefundsListAction(page, starting_after, ending_before, params) {
-    return {
+    const action = {
         type: ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD,
         page,
         starting_after,
         ending_before,
-        params,
+        params
     };
+    return action;
 }
 
-// stripe single payout transaction list
+////stripe single payout transaction list
 function getTransactionPayoutListAction(page, starting_after, ending_before, payoutId) {
-    return {
+    const action = {
         type: ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD,
         page,
         starting_after,
         ending_before,
-        payoutId,
+        payoutId
+
     };
+    return action;
 }
 
-// get invoice
+/////get invoice 
 function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
-    return {
+    const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
         registrationid,
         userRegId,
         invoiceId,
-        teamMemberRegId,
-    };
+        teamMemberRegId
+    }
+    return action
 }
 
 /// payment dashboard
@@ -103,10 +111,9 @@ function getPaymentList(
     paymentType,
     paymentMethod,
     membershipType,
-    paymentStatus,
-    discountMethod
+    paymentStatus
 ) {
-    return {
+    const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
         offset,
         sortBy,
@@ -123,34 +130,35 @@ function getPaymentList(
         paymentType,
         paymentMethod,
         membershipType,
-        paymentStatus,
-        discountMethod
-    };
+        paymentStatus
+    }
+    return action
 }
 
-// export payment dashboard data
+//export payment dashboard data
 function exportPaymentApi(key, year, dateFrom, dateTo) {
-    return {
+    const action = {
         type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD,
         key,
         year,
         dateFrom,
         dateTo,
     };
+    return action;
 }
 
 function getInvoiceStatusAction(registrationid, userRegId, invoiceId, teamMemberRegId) {
-    return {
+    const action = {
         type: ApiConstants.API_GET_INVOICE_STATUS_LOAD,
         registrationid,
         userRegId,
         invoiceId,
-        teamMemberRegId,
-    };
+        teamMemberRegId
+    }
+    return action
 }
 
-function exportPaymentDashboardApi(
-    offset,
+function exportPaymentDashboardApi(offset,
     sortBy,
     sortOrder,
     userId,
@@ -165,9 +173,7 @@ function exportPaymentDashboardApi(
     paymentType,
     paymentMethod,
     membershipType,
-    paymentStatus,
-    discountMethod
-) {
+    paymentStatus) {
     return {
         type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
         offset,
@@ -185,16 +191,16 @@ function exportPaymentDashboardApi(
         paymentType,
         paymentMethod,
         membershipType,
-        paymentStatus,
-        discountMethod
+        paymentStatus
     }
 }
 
 function exportPayoutTransaction(payoutId) {
-    return {
+    const action = {
         type: ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD,
         payoutId,
     };
+    return action;
 }
 
 function getPaymentSummary(
@@ -213,9 +219,9 @@ function getPaymentSummary(
     paymentType,
     paymentMethod,
     membershipType,
-    paymentStatus,
+    paymentStatus
 ) {
-    return {
+    const action = {
         type: ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD,
         offset,
         sortBy,
@@ -232,12 +238,12 @@ function getPaymentSummary(
         paymentType,
         paymentMethod,
         membershipType,
-        paymentStatus,
+        paymentStatus
     }
+    return action
 }
 
-function exportPaymentSummaryApi(
-    offset,
+function exportPaymentSummaryApi(offset,
     sortBy,
     sortOrder,
     userId,
@@ -252,8 +258,7 @@ function exportPaymentSummaryApi(
     paymentType,
     paymentMethod,
     membershipType,
-    paymentStatus,
-) {
+    paymentStatus) {
     return {
         type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
         offset,
@@ -271,18 +276,9 @@ function exportPaymentSummaryApi(
         paymentType,
         paymentMethod,
         membershipType,
-        paymentStatus,
+        paymentStatus
     }
 }
-
-function partialRefundAmountAction(payload) {
-    const action = {
-        type: ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD,
-        payload,
-    }
-    return action
-}
-
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -291,14 +287,12 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
-    getInvoice,
-    getPaymentList,
+    getInvoice, getPaymentList,
     exportPaymentApi,
     getStripeRefundsListAction,
     getInvoiceStatusAction,
     exportPaymentDashboardApi,
     exportPayoutTransaction,
     getPaymentSummary,
-    exportPaymentSummaryApi,
-    partialRefundAmountAction
+    exportPaymentSummaryApi
 };

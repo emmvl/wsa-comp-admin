@@ -49,7 +49,7 @@ import {
     getTeamRegistrationsSaga,
     exportTeamRegistrationsSaga,
     getMembershipFeeCapListSaga,
-    updateMembershipFeeCapSaga,
+    updateMembershipFeeCapSaga
 } from './registrationSaga/registrationSaga';
 
 /// /**************************Live Score***************************Start
@@ -189,7 +189,6 @@ import {
 import rootCompetitionMultiDrawSaga from './competitionManagementSaga/competitionMultiDrawsSaga';
 import umpirePaymentSaga from './umpireSaga/umpirePaymentSaga';
 import umpirePoolAllocationSaga from './umpireSaga/umpirePoolAllocationSaga';
-import rootCommunicationListSaga from "./communicationSaga/communicationSaga";
 
 export default function* rootSaga() {
     yield all([
@@ -241,11 +240,8 @@ export default function* rootSaga() {
         // Umpire Payment Saga
         fork(umpirePaymentSaga),
 
-        // Umpire Pool Allocation Saga
+        //Umpire Pool Allocation Saga
         fork(umpirePoolAllocationSaga),
-
-        // Communication
-        fork(rootCommunicationListSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
@@ -478,6 +474,8 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_LIST_LOAD, umpireRosterSaga.umpireRosterListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_LOAD, umpireRosterSaga.umpireActionPerofomSaga);
+    // new umpire list
+    yield takeEvery(ApiConstants.API_GET_UMPIRE_LIST_LOAD, umpireSaga.umpireListGetSaga);
 
     /// ///assign umpire get list
     yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga);
