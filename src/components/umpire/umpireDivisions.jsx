@@ -211,7 +211,9 @@ class UmpireDivisions extends Component {
                         placeholder="Select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={divisions => this.handleChangeDivisions(divisions, index)}
-                        value={poolItem.divisions.map(division => division.id)}
+                        value={!!poolItem.divisions.length && !!divisionList.length ?
+                            poolItem.divisions.map(division => division.id) : []
+                        }
                         disabled={!isOrganiserView}
                     >
                         {(divisionList || []).map((item) => (
