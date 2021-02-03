@@ -285,6 +285,7 @@ const initialState = {
   onAffiliateDirLoad: false,
   affiliateDirectoryList: [],
   affiliateDirectoryPage: 1,
+  affiliateDirectoryPageSize: 10,
   affiliateDirectoryTotalCount: 1,
   organisationTypes: [],
   onExpAffiliateDirLoad: false,
@@ -363,6 +364,10 @@ const initialState = {
   usersByIdsList: [],
   parentData: [],
   getUserParentDataOnLoad: false,
+  netSetGoList: [],
+  netSetGoPage: 1,
+  netSetGoPageSize: 10,
+  netSetGoTotalCount: 1,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -1469,6 +1474,29 @@ function userReducer(state = initialState, action) {
             status: action.status,
             getUserParentDataOnLoad: false
         }
+    case ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        affiliateDirectoryPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        affiliateDirectoryPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_NETSETGO_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        netSetGoPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_NETSETGO_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        netSetGoPage: action.pageNum,
+      }
 
     default:
       return state;
