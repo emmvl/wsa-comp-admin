@@ -7,7 +7,9 @@ const initialState = {
     status: 0,
     umpireRosterList: [],
     umpireCurrentPage: null,
-    umpireTotalCount: null,
+    umpireTotalCount: 1,
+    currentPage: 1,
+    pageSize: 10,
     rosterLoading: false,
     umpireRosterListActionObject: null
 };
@@ -64,6 +66,18 @@ function umpireRosterdState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.umpireRosterListActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_UMPIRE_ROSTER_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_UMPIRE_ROSTER_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
 
         default:
             return state;
