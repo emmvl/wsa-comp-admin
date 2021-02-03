@@ -136,7 +136,7 @@ class UmpireDivisions extends Component {
         const { umpirePoolData, selectedComp } = this.state;
 
         const data = umpirePoolData.reduce((acc, item) => {
-            acc[item.id] = item.divisions;
+            acc[item.id] = item.divisions.map(division => division.id);
             return acc;
         }, {});
 
