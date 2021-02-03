@@ -1106,7 +1106,7 @@ class Registration extends Component {
                     <span className="popup-head">{AppConstants.amount}</span>
 :
                     {' '}
-                    {selectedRow ? selectedRow.governmentVoucherAmount : 0}
+                    {selectedRow ? currencyFormat(selectedRow.governmentVoucherAmount) : "$0.00"}
                     </div>
                     
                 </div>

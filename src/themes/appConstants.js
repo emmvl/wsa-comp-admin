@@ -1802,8 +1802,10 @@ const AppConstants = {
     pleaseInputAmount: "Please input amount",
 
     cashReceived: "Cash Received",
-    retryPayment: "Retry Payment"
+    retryPayment: "Retry Payment",
 
+    parentDetails: "Parent details",
+    unavailable: "unavailable",
 };
 
 export default AppConstants;

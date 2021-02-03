@@ -525,6 +525,18 @@ let userHttpApi = {
   findPossibleMerge(payload) {
     return Method.dataPost('userMerge/find', token, payload);
   },
+
+  getUsersByIds(ids) {
+      return Method.dataGet(`users/byIds?ids=${ids}`);
+  },
+
+  async getUserParentData() {
+    let userId = await getUserId()
+    if (userId != 0) {
+      var url = `api/parents?userId=${userId}`;
+      return Method.dataGet(url, token)
+    }
+  },
 };
 
 let Method = {

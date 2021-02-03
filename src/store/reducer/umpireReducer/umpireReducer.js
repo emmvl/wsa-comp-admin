@@ -34,7 +34,7 @@ const initialState = {
     umpireList_Data: [],
     umpireListResult_Data: [],
     currentPage_Data: null,
-    totalCount_Data: null,
+    totalCount_Data: 0,
     umpireListActionObject: null,
     umpireListData: [],
     umpireCheckbox:false,

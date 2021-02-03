@@ -67,6 +67,7 @@ class UmpirePoolAllocation extends Component {
             umpirePoolIdToUpdate: '',
             unassignedDataTemp: [],
             assignedDataTemp: [],
+            totalUnassigned: 0,
         }
         this.onDragEnd = this.onDragEnd.bind(this);
     }
@@ -82,7 +83,6 @@ class UmpirePoolAllocation extends Component {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
         const { deletedUmpirePoolId, newUmpirePool } = this.props.umpirePoolAllocationState;
-        const { assignedData, unassignedData } = this.state;
 
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
@@ -124,77 +124,112 @@ class UmpirePoolAllocation extends Component {
             }
         }
 
+        const { unassignedData, selectedComp } = this.state;
+        const { umpireListDataNew } = this.props.umpireState;
+
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
             this.props.getUmpireList({ organisationId, competitionId: this.state.selectedComp, offset: 0 });
         }
 
-        if ((this.props.umpireState.onLoad !== prevProps.umpireState.onLoad
-            || this.props.umpirePoolAllocationState.onLoad !== prevProps.umpirePoolAllocationState.onLoad) && 
-            !this.props.umpireState.onLoad && !this.props.umpirePoolAllocationState.onLoad
-        ) {
-            const { umpireListDataNew, currentPage_Data } = this.props.umpireState;
-            const { umpirePoolData } = this.props.umpirePoolAllocationState;
-
-            const assignedUmpiresIdSet = new Set();
-            const umpirePoolDataCurrentState = currentPage_Data > 1 ? assignedData : umpirePoolData;
-
-            umpirePoolDataCurrentState.forEach(umpirePoolItem => {
-                umpirePoolItem.umpires.forEach(umpireItem => {
-                    assignedUmpiresIdSet.add(umpireItem.id);
-                })
-            });
-
-            const unassignedDataCurrentState = JSON.parse(JSON.stringify(unassignedData));
-
-            if (umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedDataCurrentState.length) {
-                unassignedDataCurrentState.push(...umpireListDataNew);
-            }
-
-            const unassignedUmpires = unassignedDataCurrentState
-                .filter((umpireItem, umpireItemIndex) => (
-                    !assignedUmpiresIdSet.has(umpireItem.id) 
-                    && 
-                    unassignedDataCurrentState.findIndex(umpireForDupl => umpireForDupl.id === umpireItem.id) === umpireItemIndex
-                ));
-
-            this.setState({unassignedData: unassignedUmpires, assignedData: umpirePoolDataCurrentState });
-        }
-
         // handle state after pool delete
 
-        if (!!deletedUmpirePoolId && deletedUmpirePoolId !== prevProps.umpirePoolAllocationState.deletedUmpirePoolId) {
-            const assignedDataFiltered = assignedData.filter(dataItem => dataItem.id !== deletedUmpirePoolId);
-
-            const deletedPoolData = assignedData.find(dataItem => dataItem.id === deletedUmpirePoolId);
-
-            const assignedUmpiresIdSet = new Set();
-
-            assignedDataFiltered.forEach(umpirePoolItem => {
-                umpirePoolItem.umpires.forEach(umpireItem => {
-                    assignedUmpiresIdSet.add(umpireItem.id);
-                })
-            });
-
-            const unassignedDataToAddToUnassign = deletedPoolData.umpires.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
-            const unassignedDataNew = [ ...unassignedDataToAddToUnassign, ...prevState.unassignedData];
-
-            this.setState({ 
-                assignedData: assignedDataFiltered, 
-                unassignedData: unassignedDataNew
-            });
+        else if (!!deletedUmpirePoolId && deletedUmpirePoolId !== prevProps.umpirePoolAllocationState.deletedUmpirePoolId) {
+            this.handleUpdatePoolAfterDelete();
         }
 
         // handle state after pool add
 
-        if (!!newUmpirePool && newUmpirePool !== prevProps.umpirePoolAllocationState.newUmpirePool) {
-            const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
-            assignedDataCopy.push(newUmpirePool);
-
-            this.setState({ 
-                assignedData: assignedDataCopy,
-                unassignedData: prevState.unassignedData
-            });
+        else if (!!newUmpirePool && newUmpirePool !== prevProps.umpirePoolAllocationState.newUmpirePool) {
+            this.handleUpdatePoolAfterAdd();
         }
+
+        else if ((this.props.umpireState.onLoad !== prevProps.umpireState.onLoad
+            || this.props.umpirePoolAllocationState.onLoad !== prevProps.umpirePoolAllocationState.onLoad) && 
+            !this.props.umpireState.onLoad && !this.props.umpirePoolAllocationState.onLoad
+        ) {
+            this.handleSetPoolDataAfterUpdate();
+
+            // handle state after load more
+            if ((umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedData.length) 
+                && selectedComp === prevState.selectedComp 
+            ) {
+                this.handleUpdateUnassignedAfterLoadMore();
+            }
+        }
+    }
+
+    handleSetPoolDataAfterUpdate = () => {
+        const { assignedData, totalUnassigned } = this.state;
+        const { currentPage_Data, totalCount_Data } = this.props.umpireState;
+        const { umpirePoolData } = this.props.umpirePoolAllocationState;
+
+        const umpirePoolDataCurrentState = currentPage_Data > 1 ? assignedData : umpirePoolData;
+
+        this.setState({
+            assignedData: umpirePoolDataCurrentState,
+            totalUnassigned: !totalUnassigned ? totalCount_Data : totalUnassigned,
+        });
+    }
+
+    handleUpdatePoolAfterAdd = () => {
+        const { assignedData } = this.state;
+        const { newUmpirePool } = this.props.umpirePoolAllocationState;
+
+        const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
+        assignedDataCopy.push(newUmpirePool);
+
+        this.setState({ 
+            assignedData: assignedDataCopy,
+        });
+    }
+
+    handleUpdatePoolAfterDelete = () => {
+        const { assignedData, unassignedData, totalUnassigned } = this.state;
+        const { deletedUmpirePoolId } = this.props.umpirePoolAllocationState;
+
+        const assignedDataFiltered = assignedData.filter(dataItem => dataItem.id !== deletedUmpirePoolId);
+
+        const deletedPoolData = assignedData.find(dataItem => dataItem.id === deletedUmpirePoolId);
+
+        const assignedUmpiresIdSet = new Set();
+
+        assignedDataFiltered.forEach(umpirePoolItem => {
+            umpirePoolItem.umpires.forEach(umpireItem => {
+                assignedUmpiresIdSet.add(umpireItem.id);
+            })
+        });
+
+        const unassignedDataToAddToUnassign = deletedPoolData.umpires.filter(umpireItem => !assignedUmpiresIdSet.has(umpireItem.id));
+        const unassignedDataNew = [ ...unassignedDataToAddToUnassign, ...unassignedData];
+
+        const totalUnassignedNew = totalUnassigned + unassignedDataToAddToUnassign.length;
+
+        this.setState({ 
+            assignedData: assignedDataFiltered, 
+            unassignedData: unassignedDataNew,
+            totalUnassigned: totalUnassignedNew,
+        });
+    }
+
+    handleUpdateUnassignedAfterLoadMore = () => {
+        const { unassignedData } = this.state;
+        const { umpireListDataNew } = this.props.umpireState;
+
+        const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
+
+        const unassignedUmpiresIdSet = new Set();
+
+        unassignedDataCopy.forEach(umpireItem => {
+            unassignedUmpiresIdSet.add(umpireItem.id);
+        });
+
+        const umpireDataToAddToUnassign = umpireListDataNew.filter(umpireItem => !unassignedUmpiresIdSet.has(umpireItem.id));
+
+        unassignedDataCopy.push(...umpireDataToAddToUnassign);
+                 
+        this.setState({
+            unassignedData: unassignedDataCopy, 
+        });
     }
 
     onChangeComp = compId => {
@@ -206,7 +241,13 @@ class UmpirePoolAllocation extends Component {
         setUmpireCompId(compId);
 
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId })
-        this.setState({ selectedComp: compId, isOrganiserView: isOrganiser });
+        this.setState({ 
+            selectedComp: compId, 
+            isOrganiserView: isOrganiser, 
+            unassignedData: [],
+            assignedData: [],
+            totalUnassigned: 0
+        });
     }
 
     onDragEnd = result => {
@@ -236,7 +277,7 @@ class UmpirePoolAllocation extends Component {
     };
 
     unassignedToAssignedMove = (source, destination) => {
-        const { assignedData, unassignedData } = this.state;
+        const { assignedData, unassignedData, totalUnassigned } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
         const unassignedDataCopy = JSON.parse(JSON.stringify(unassignedData));
@@ -250,11 +291,12 @@ class UmpirePoolAllocation extends Component {
         return { 
             unassignedData: unassignedDataCopy,
             assignedData: assignedDataCopy,
+            totalUnassigned: totalUnassigned - 1,
         }
     }
 
     moveToUnassigned = (source, destination) => {
-        const { assignedData, unassignedData } = this.state;
+        const { assignedData, unassignedData, totalUnassigned } = this.state;
         const { assignedUmpire, sourceAssignedData, assignedDataCopy, unassignedDataCopy } = this.getDataForDnD(source, destination);
 
         sourceAssignedData.umpires.splice(source.index, 1);
@@ -275,6 +317,7 @@ class UmpirePoolAllocation extends Component {
             assignedDataTemp: assignedData,
             moveToUnassignModalVisible: isMultipleAssigned,
             umpireForAction: isMultipleAssigned ? assignedUmpire : null,
+            totalUnassigned: isMultipleAssigned ? totalUnassigned: totalUnassigned + 1,
         }
     }
 
@@ -477,7 +520,7 @@ class UmpirePoolAllocation extends Component {
     // move umpire to unassigned section if he has multiple pools
 
     handleOkMoveToUnassigned = () => {
-        const { umpireForAction, assignedData } = this.state;
+        const { umpireForAction, assignedData, totalUnassigned } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -494,6 +537,7 @@ class UmpirePoolAllocation extends Component {
             moveToUnassignModalVisible: false,
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            totalUnassigned: totalUnassigned + 1,
         });
     };
 
@@ -840,7 +884,7 @@ class UmpirePoolAllocation extends Component {
 
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
-        const { unassignedData, isOrganiserView } = this.state;
+        const { unassignedData, isOrganiserView, totalUnassigned } = this.state;
         const { currentPage_Data, totalCount_Data } = this.props.umpireState;
 
         return (
@@ -852,11 +896,9 @@ class UmpirePoolAllocation extends Component {
                                 <div className="row">
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
-                                        {totalCount_Data && 
-                                            <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
-                                                {totalCount_Data > 1 ? totalCount_Data + " Umpires" : totalCount_Data + " Umpire"}
-                                            </span>
-                                        }
+                                        <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
+                                            {totalUnassigned > 1 ? totalUnassigned + " Umpires" : totalUnassigned + " Umpire"}
+                                        </span>
                                     </div>
                                     { isOrganiserView &&
                                         <div className="col-sm d-flex justify-content-end">
@@ -899,7 +941,7 @@ class UmpirePoolAllocation extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-center">
-                        {totalCount_Data > currentPage_Data * 10 &&
+                        {totalCount_Data > currentPage_Data * 10 && !!totalUnassigned &&
                             <Button
                                 onClick={this.handleLoadMore}
                             >
