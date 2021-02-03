@@ -19,6 +19,8 @@ import { connect } from "react-redux";
 import {
     getAffiliateDirectoryAction,
     exportAffiliateDirectoryAction,
+    setAffiliateDirectoryListPageSizeAction,
+    setAffiliateDirectoryListPageNumberAction,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { bindActionCreators } from "redux";
@@ -220,19 +222,27 @@ class AffiliateDirectory extends Component {
         this.props.getOnlyYearListAction();
     };
 
-    handleAffiliateTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setAffiliateDirectoryListPageSizeAction(pageSize);
+        this.handleAffiliateTableList(page);
+    };
+
+    handleAffiliateTableList = async (page) => {
+        await this.props.setAffiliateDirectoryListPageNumberAction(page);
         let yearId = getGlobalYear() ? getGlobalYear() : '-1'
         this.setState({
             pageNo: page,
         });
+        let { affiliateDirectoryPageSize } = this.props.userState;
+        affiliateDirectoryPageSize = affiliateDirectoryPageSize ? affiliateDirectoryPageSize : 10;
         let filter = {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             organisationTypeRefId: this.state.organisationTypeRefId,
             searchText: this.state.searchText,
             paging: {
-                limit: 10,
-                offset: page ? 10 * (page - 1) : this.state.offsetData,
+                limit: affiliateDirectoryPageSize,
+                offset: page ? affiliateDirectoryPageSize * (page - 1) : this.state.offsetData,
             },
         };
         this.props.getAffiliateDirectoryAction(filter, this.state.sortBy, this.state.sortOrder);
@@ -428,27 +438,29 @@ class AffiliateDirectory extends Component {
     };
 
     contentView = () => {
-        let userState = this.props.userState;
-        let affiliates = userState.affiliateDirectoryList;
-        let total = userState.affiliateDirectoryTotalCount;
+        const { affiliateDirectoryList, affiliateDirectoryTotalCount, affiliateDirectoryPage, onAffiliateDirLoad, affiliateDirectoryPageSize } = this.props.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={affiliates}
+                        dataSource={affiliateDirectoryList}
                         pagination={false}
-                        loading={this.props.userState.onAffiliateDirLoad === true && true}
+                        loading={onAffiliateDirLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.affiliateDirectoryPage}
-                        total={total}
-                        onChange={(page) => this.handleAffiliateTableList(page)}
-                        showSizeChanger={false}
+                        showSizeChanger
+                        current={affiliateDirectoryPage}
+                        defaultCurrent={affiliateDirectoryPage}
+                        defaultPageSize={affiliateDirectoryPageSize}
+                        total={affiliateDirectoryTotalCount}
+                        onChange={this.handleAffiliateTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -482,6 +494,8 @@ function mapDispatchToProps(dispatch) {
             getOnlyYearListAction,
             getAffiliateDirectoryAction,
             exportAffiliateDirectoryAction,
+            setAffiliateDirectoryListPageSizeAction,
+            setAffiliateDirectoryListPageNumberAction,
         },
         dispatch
     );

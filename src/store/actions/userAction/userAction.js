@@ -585,6 +585,34 @@ function getUserParentDataAction(data) {
     }
 }
 
+function setAffiliateDirectoryListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_SIZE,
+        pageSize,
+    };
+}
+
+function setAffiliateDirectoryListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+}
+
+function setNetSetGoListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_NETSETGO_LIST_PAGE_SIZE,
+        pageSize,
+    };
+}
+
+function setNetSetGoListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_NETSETGO_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -661,4 +689,8 @@ export {
     filterByRelations,
     getUsersByIds,
     getUserParentDataAction,
+    setAffiliateDirectoryListPageSizeAction,
+    setAffiliateDirectoryListPageNumberAction,
+    setNetSetGoListPageSizeAction,
+    setNetSetGoListPageNumberAction,
 };

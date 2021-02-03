@@ -467,9 +467,9 @@ let userHttpApi = {
     let url = null;
     let entity_Id = data.entityTypes === 6 ? data.competitionOrgId : data.compId
     if (data.userName) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&userName=${data.userName}&offset=${data.offset}&limit=${data.limit}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&offset=${data.offset}&limit=${data.limit}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     } else {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
