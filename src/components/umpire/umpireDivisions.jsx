@@ -107,6 +107,7 @@ class UmpireDivisions extends Component {
         this.setState({ 
             selectedComp: compId,
             isOrganiserView: isOrganiser,
+            umpirePoolData: null,
         });
     }
 
@@ -246,10 +247,7 @@ class UmpireDivisions extends Component {
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
 
-                {!this.props.appState.onLoad && 
-                    !this.props.umpirePoolAllocationState.onLoad && 
-                    !this.props.liveScoreTeamState.onLoad &&
-                    !!umpirePoolData &&
+                {!!umpirePoolData &&
                     <>
                         {!!umpirePoolData.length ? umpirePoolData.map((item, index) => (
                             this.poolView(item, index)
