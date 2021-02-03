@@ -14,7 +14,7 @@ import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
+import { umpireMainListAction, setUmpireListPageSizeAction, setUmpireListPageNumberAction } from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -348,9 +348,16 @@ class Umpire extends Component {
         return ""
     }
 
-    handlePageChange = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setUmpireListPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
+    handlePageChange = async (page) => {
+        await this.props.setUmpireListPageNumberAction(page);
         const { sortBy, sortOrder } = this.state;
-        let offset = page ? 10 * (page - 1) : 0;
+        let { pageSize_Data } = this.props.umpireState;
+        let offset = page ? pageSize_Data * (page - 1) : 0;
         this.setState({
             offsetData: offset,
         });
@@ -360,6 +367,7 @@ class Umpire extends Component {
             entityTypes: this.state.isCompParent ? 1 : 6,
             compId: this.state.selectedComp,
             offset,
+            limit: pageSize_Data,
             sortBy,
             sortOrder,
             userName: this.state.searchText,
@@ -368,7 +376,7 @@ class Umpire extends Component {
     };
 
     contentView = () => {
-        const { umpireList_Data, totalCount_Data, currentPage_Data } = this.props.umpireState;
+        const { umpireList_Data, totalCount_Data, currentPage_Data, pageSize_Data } = this.props.umpireState;
         let umpireListResult = isArrayNotEmpty(umpireList_Data) ? umpireList_Data : [];
         return (
             <div className="comp-dash-table-view mt-4">
@@ -382,18 +390,19 @@ class Umpire extends Component {
                         rowKey={(record) => "umpireListResult" + record.id}
                     />
                 </div>
-
                 <div className="comp-dashboard-botton-view-mobile">
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             current={currentPage_Data}
+                            defaultCurrent={currentPage_Data}
+                            defaultPageSize={pageSize_Data}
                             total={totalCount_Data}
-                            // defaultPageSize={10}
                             onChange={this.handlePageChange}
-                            showSizeChanger={false}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -638,7 +647,9 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         umpireMainListAction,
         userExportFilesAction,
-        getRefBadgeData
+        getRefBadgeData,
+        setUmpireListPageSizeAction,
+        setUmpireListPageNumberAction,
     }, dispatch);
 }
 

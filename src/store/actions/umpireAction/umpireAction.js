@@ -79,6 +79,24 @@ function umpireMainListAction(data) {
     return action;
 }
 
+function setUmpireListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_UMPIRE_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setUmpireListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_UMPIRE_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     umpireListAction,
     addUmpireAction,
@@ -89,4 +107,6 @@ export {
     umpireMainListAction,
     newUmpireListAction,
     getUmpireList,
+    setUmpireListPageSizeAction,
+    setUmpireListPageNumberAction,
 } 
