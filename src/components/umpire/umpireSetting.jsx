@@ -27,7 +27,7 @@ import {
 } from "../../store/actions/umpireAction/umpireSettingAction";
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
 const { Option } = Select;
 
 const initialUmpireAllocationGetData = {
@@ -664,32 +664,18 @@ class UmpireSetting extends Component {
         const { isOrganiserView, allocationSettingsData } = this.state;
 
         return (
-            <>
-                {isOrganiserView && 
-                    <div className="fluid-width">
-                        <div className="footer-view">
-                            <div className="row">
-                                <div className="col-sm">
-                                </div>
-                                <div className="col-sm px-0">
-                                    <div className="comp-buttons-view">
-                                        {!!allocationSettingsData && 
-                                            <Button
-                                                className="publish-button save-draft-text mr-0"
-                                                type="primary"
-                                                htmlType="submit"
-                                                onClick={this.handleSave}
-                                            >
-                                                {AppConstants.save}
-                                            </Button>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div className="form-footer-button-wrapper">
+                {isOrganiserView && !!allocationSettingsData && 
+                    <Button
+                        className="publish-button save-draft-text mr-0"
+                        type="primary"
+                        htmlType="submit"
+                        onClick={this.handleSave}
+                    >
+                        {AppConstants.save}
+                    </Button>
                 }
-            </>
+            </div>
         );
     };
 
@@ -708,7 +694,7 @@ class UmpireSetting extends Component {
                         <Content>
                             <div className="formView">{this.topView()}</div>
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        {this.footerView()}
                     </Form>
                     <Loader visible={this.props.umpireCompetitionState.onLoad
                             || this.props.liveScoreTeamState.onLoad || this.props.umpireSettingState.onLoad} 

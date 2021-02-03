@@ -191,10 +191,11 @@ class UmpireDivisions extends Component {
         const { selectedDivisions } = this.state;
 
         return (
-            <div className="row pt-3" key={'poolItem' + index}>
-                <div className='col-sm-3 division-table-field-view'>
-                    <InputWithHead heading={poolItem.name} />
+            <div className="row py-3" key={'poolItem' + index} style={{ paddingLeft: 15 }}>
+                <div className="d-flex align-items-center w-25">
+                    <span className="text-overflow">{poolItem.name}</span>
                 </div>
+
                 <div className="col-sm">
                     <Select
                         mode="multiple"
@@ -237,27 +238,17 @@ class UmpireDivisions extends Component {
         )
     }
 
-    //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="col-sm">
-                        <div className="comp-buttons-view">
-                            <Button 
-                                className="publish-button save-draft-text" 
-                                type="primary" 
-                                htmlType="submit"
-                                onClick={this.handleSave}
-                            >
-                                {AppConstants.save}
-                            </Button>
-                            <Button onClick={() => history.push("/umpireDashboard")} className="open-reg-button" type="primary" htmlType="submit">
-                                {AppConstants.createRoster}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+            <div className="form-footer-button-wrapper">
+                <Button 
+                    className="publish-button save-draft-text m-0" 
+                    type="primary" 
+                    htmlType="submit"
+                    onClick={this.handleSave}
+                >
+                    {AppConstants.save}
+                </Button>
             </div>
         );
     }
@@ -271,12 +262,9 @@ class UmpireDivisions extends Component {
                     {this.headerView()}
                     {this.dropdownView()}
                     <Form autoComplete="off" onFinish={this.handleSubmit} className="login-form">
-                        {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
                         <div className="formView">{this.contentView()}</div>
 
-                        <Footer>
-                            {this.footerView()}
-                        </Footer>
+                        {this.footerView()}
                     </Form>
                 </Layout>
                 <Loader 
