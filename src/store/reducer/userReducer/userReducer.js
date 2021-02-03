@@ -1,4 +1,5 @@
 import ApiConstants from "themes/apiConstants";
+import AppConstants from "themes/appConstants";
 import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from "util/helpers";
 import { setImpersonation } from 'util/sessionStorage';
 
@@ -358,6 +359,10 @@ const initialState = {
   addTeamMember: false,
   userSubmittedRegData: [],
   onTransferUserRegistrationLoad: false,
+  organisationUsersList: [],
+  usersByIdsList: [],
+  parentData: [],
+  getUserParentDataOnLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -1427,6 +1432,44 @@ function userReducer(state = initialState, action) {
         teamMemberUpdate: action.result,
         status: action.status
       };
+
+    case ApiConstants.API_FILTER_USERS_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_FILTER_USERS_SUCCESS:
+      return {
+          ...state,
+          onLoad: false,
+          organisationUsersList: action.result,
+      };
+    case ApiConstants.API_GET_USERS_BY_IDS_LOAD:
+      return { ...state, onLoad: true };
+    case ApiConstants.API_GET_USERS_BY_IDS_SUCCESS:
+      return {
+          ...state,
+          onLoad: false,
+          usersByIdsList: action.result,
+      };
+    case ApiConstants.API_GET_USER_PARENT_DATA_LOAD:
+        return { ...state, getUserParentDataOnLoad: true }
+
+    case ApiConstants.API_GET_USER_PARENT_DATA_SUCCESS:
+
+        let parentData = action.result.userData;
+        const nonAvailableParent = {
+            id: -1,
+            firstName: AppConstants.parentDetails,
+            lastName: AppConstants.unavailable,
+        }
+        parentData.push(nonAvailableParent);
+
+        return {
+            ...state,
+            parentData,
+            status: action.status,
+            getUserParentDataOnLoad: false
+        }
+
     default:
       return state;
   }
