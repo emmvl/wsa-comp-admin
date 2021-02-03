@@ -57,14 +57,14 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Date',
+        title: 'Date (AEST)',
         dataIndex: 'date',
         key: 'date',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("createdOn"),
         render: (date) => {
             return (
-                <span>{date ? moment(date).format("DD-MM-YYYY") : "N/A"}</span>
+                <span>{date ? moment(date).format("DD/MM/YYYY") : "N/A"}</span>
             )
         },
     },
