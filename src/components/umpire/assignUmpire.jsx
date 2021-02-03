@@ -15,6 +15,8 @@ import {
     getAssignUmpireListAction,
     assignUmpireAction,
     unassignUmpireAction,
+    setAssignUmpireListPageSizeAction,
+    setAssignUmpireListPageNumberAction,
 } from 'store/actions/umpireAction/assignUmpireAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
@@ -310,12 +312,20 @@ class AssignUmpire extends Component {
         );
     };
 
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setAssignUmpireListPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
     /// Handle Page change
-    handlePageChange(page) {
-        let offset = page ? 10 * (page - 1) : 0;
+    handlePageChange = async (page) => {
+        await this.props.setAssignUmpireListPageNumberAction(page);
+        let { assignUmpireListPageSize } = this.props.assignUmpireState;
+        assignUmpireListPageSize = assignUmpireListPageSize ? assignUmpireListPageSize : 10;
+        let offset = page ? assignUmpireListPageSize * (page - 1) : 0;
         const body = {
             paging: {
-                limit: 10,
+                limit: assignUmpireListPageSize,
                 offset,
             },
         };
@@ -324,7 +334,7 @@ class AssignUmpire extends Component {
 
     ////////tableView view for all the umpire assigned matches list
     tableView = () => {
-        const { assignUmpireList, totalAssignUmpireCount, onLoad } = this.props.assignUmpireState
+        const { assignUmpireList, totalAssignUmpireCount, assignUmpireListCurrentPage, assignUmpireListPageSize, onLoad } = this.props.assignUmpireState
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -349,10 +359,13 @@ class AssignUmpire extends Component {
                         <div className="d-flex justify-content-end">
                             <Pagination
                                 className="antd-pagination"
-                                // current={1}
+                                showSizeChanger
+                                current={assignUmpireListCurrentPage}
+                                defaultCurrent={assignUmpireListCurrentPage}
+                                defaultPageSize={assignUmpireListPageSize}
                                 total={totalAssignUmpireCount}
                                 onChange={(page) => this.handlePageChange(page)}
-                                showSizeChanger={false}
+                                onShowSizeChange={this.handleShowSizeChange}
                             />
                         </div>
                     </div>
@@ -384,6 +397,8 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         assignUmpireAction,
         unassignUmpireAction,
+        setAssignUmpireListPageSizeAction,
+        setAssignUmpireListPageNumberAction,
     }, dispatch);
 }
 

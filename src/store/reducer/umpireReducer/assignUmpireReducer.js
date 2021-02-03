@@ -7,7 +7,9 @@ const initialState = {
     result: [],
     status: 0,
     assignUmpireList: [],
-    totalAssignUmpireCount: 0,
+    assignUmpireListPageSize: 10,
+    assginUmpireListCurrentPage: 1,
+    totalAssignUmpireCount: 1,
 };
 function assignUmpireState(state = initialState, action) {
 
@@ -89,6 +91,18 @@ function assignUmpireState(state = initialState, action) {
                 onLoad: false,
                 status: action.status,
                 error: null
+            }
+
+        case ApiConstants.SET_ASSIGN_UMPIRE_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                assignUmpireListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_ASSIGN_UMPIRE_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                assignUmpireListCurrentPage: action.pageNum,
             }
 
         default:
