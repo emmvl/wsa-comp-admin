@@ -14,18 +14,16 @@ import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveSc
 
 import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
-import history from "util/history";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
-import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from '../../customComponents/loader';
 
 import AppConstants from "../../themes/appConstants";
 
 import './umpire.css';
 
-const { Header, Footer, } = Layout
+const { Header } = Layout
 const { Option } = Select
 
 class UmpireDivisions extends Component {
@@ -37,6 +35,7 @@ class UmpireDivisions extends Component {
             competitionUniqueKey: null,
             umpirePoolData: [],
             selectedDivisions: [],
+            isOrganiserView: false,
         }
     }
 
@@ -53,7 +52,7 @@ class UmpireDivisions extends Component {
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = competitionList.length > 0 && competitionList[0].id;
+                let firstComp = !!competitionList.length && competitionList[0].id;
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
@@ -68,10 +67,15 @@ class UmpireDivisions extends Component {
                 }
 
                 const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+
+                const selectedComp = competitionList.find(item => item.id === firstComp);  
+                const isOrganiser = selectedComp.organisationId === organisationId;
+
                 this.setState({ 
                     selectedComp: firstComp, 
                     loading: false, 
-                    competitionUniqueKey: compKey 
+                    competitionUniqueKey: compKey,
+                    isOrganiserView: isOrganiser,
                 })
             }
         }
@@ -90,7 +94,11 @@ class UmpireDivisions extends Component {
 
     onChangeComp = compId => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        
+        const competitionList = this.props.umpireCompetitionState.umpireComptitionList;
+ 
+        const selectedComp = competitionList.find(competition => competition.id === compId);
+        const isOrganiser = selectedComp.organisationId === organisationId;
+
         setUmpireCompId(compId);
 
         this.props.liveScoreGetDivision(compId);
@@ -98,6 +106,7 @@ class UmpireDivisions extends Component {
 
         this.setState({ 
             selectedComp: compId,
+            isOrganiserView: isOrganiser,
         });
     }
 
@@ -239,16 +248,19 @@ class UmpireDivisions extends Component {
     }
 
     footerView = () => {
+        const { isOrganiserView } = this.state;
         return (
             <div className="form-footer-button-wrapper">
-                <Button 
-                    className="publish-button save-draft-text m-0" 
-                    type="primary" 
-                    htmlType="submit"
-                    onClick={this.handleSave}
-                >
-                    {AppConstants.save}
-                </Button>
+                {isOrganiserView && 
+                    <Button 
+                        className="publish-button save-draft-text m-0" 
+                        type="primary" 
+                        htmlType="submit"
+                        onClick={this.handleSave}
+                    >
+                        {AppConstants.save}
+                    </Button>
+                }
             </div>
         );
     }

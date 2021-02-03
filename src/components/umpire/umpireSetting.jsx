@@ -94,7 +94,7 @@ class UmpireSetting extends Component {
                     this.props.liveScoreGetDivision(firstComp);
                 }
 
-                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+                const compKey = !!competitionList.length && competitionList[0].competitionUniqueKey;
 
                 competitionList.forEach(item => {
                     if (item.organisationId === organisationId) {
