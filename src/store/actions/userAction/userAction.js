@@ -564,6 +564,27 @@ function teamMemberUpdateAction(data) {
     };
 }
 
+function filterByRelations(data) {
+    return {
+        type: ApiConstants.API_FILTER_USERS_LOAD,
+        data,
+    }
+}
+
+function getUsersByIds(data) {
+    return {
+        type: ApiConstants.API_GET_USERS_BY_IDS_LOAD,
+        data,
+    }
+}
+
+function getUserParentDataAction(data) {
+    return {
+        type: ApiConstants.API_GET_USER_PARENT_DATA_LOAD,
+        data,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -637,4 +658,7 @@ export {
     exportUserRegData,
     getSubmittedRegData,
     transferUserRegistration,
+    filterByRelations,
+    getUsersByIds,
+    getUserParentDataAction,
 };
