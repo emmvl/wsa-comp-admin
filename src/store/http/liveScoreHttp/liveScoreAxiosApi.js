@@ -1577,21 +1577,6 @@ const LiveScoreAxiosApi = {
     umpirePaymentExport(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
-
-    getUmpirePoolAllocation(poolData) {
-
-        let url = `/competitions/` + poolData.compId + `/umpires/pools?organisationId=${poolData.orgId}`;
-
-        return Method.dataGet(url, token);
-    },
-
-    saveUmpirePoolAllocation(payload) {
-        let url = `competitions/` + payload.compId + `/umpires/pools?competitionId=${payload.compId}&organisationId=${payload.orgId}`;
-
-        return Method.dataPost(url, token, payload.poolObj);
-    },
-
-
 };
 
 const Method = {

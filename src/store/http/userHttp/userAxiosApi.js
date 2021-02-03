@@ -311,6 +311,11 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "UserRegistrationData");
   },
 
+  transferUserRegistration(payload) {
+    const url = '/userRegistration/transferRegistration';
+    return Method.dataPost(url, token, payload);
+  },
+
   async getSubmittedRegData(payload) {
     const url = `api/user/registration/registrationForm`;
     return Method.dataPost(url, token, payload);
@@ -519,6 +524,18 @@ let userHttpApi = {
 
   findPossibleMerge(payload) {
     return Method.dataPost('userMerge/find', token, payload);
+  },
+
+  getUsersByIds(ids) {
+      return Method.dataGet(`users/byIds?ids=${ids}`);
+  },
+
+  async getUserParentData() {
+    let userId = await getUserId()
+    if (userId != 0) {
+      var url = `api/parents?userId=${userId}`;
+      return Method.dataGet(url, token)
+    }
   },
 };
 

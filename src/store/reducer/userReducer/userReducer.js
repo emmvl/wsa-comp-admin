@@ -1,4 +1,5 @@
 import ApiConstants from "themes/apiConstants";
+import AppConstants from "themes/appConstants";
 import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from "util/helpers";
 import { setImpersonation } from 'util/sessionStorage';
 
@@ -356,7 +357,12 @@ const initialState = {
   teamMemberUpdate: null,
   teamMemberDeletion: false,
   addTeamMember: false,
-  userSubmittedRegData: []
+  userSubmittedRegData: [],
+  onTransferUserRegistrationLoad: false,
+  organisationUsersList: [],
+  usersByIdsList: [],
+  parentData: [],
+  getUserParentDataOnLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -859,6 +865,7 @@ function userReducer(state = initialState, action) {
         friendTotalCount: (friendData && friendData.page) ? friendData.page.totalCount : 1,
         status: action.status
       };
+
     case ApiConstants.API_EXPORT_USER_FRIEND_LOAD:
       
       return { ...state, onExpUserFriendLoad: true };
@@ -942,7 +949,6 @@ function userReducer(state = initialState, action) {
       };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
-          console.log('11');
           return { ...state, onExpUserRegDataLoad: true };
 
       case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
@@ -964,6 +970,16 @@ function userReducer(state = initialState, action) {
               status: action.status,
               error: null
           };
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
+          return {...state, onTransferUserRegistrationLoad: true}
+
+      case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
+          return {
+              ...state,
+              onTransferUserRegistrationLoad: false,
+              status: action.status,
+          }
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
@@ -1417,6 +1433,44 @@ function userReducer(state = initialState, action) {
         teamMemberUpdate: action.result,
         status: action.status
       };
+
+    case ApiConstants.API_FILTER_USERS_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_FILTER_USERS_SUCCESS:
+      return {
+          ...state,
+          onLoad: false,
+          organisationUsersList: action.result,
+      };
+    case ApiConstants.API_GET_USERS_BY_IDS_LOAD:
+      return { ...state, onLoad: true };
+    case ApiConstants.API_GET_USERS_BY_IDS_SUCCESS:
+      return {
+          ...state,
+          onLoad: false,
+          usersByIdsList: action.result,
+      };
+    case ApiConstants.API_GET_USER_PARENT_DATA_LOAD:
+        return { ...state, getUserParentDataOnLoad: true }
+
+    case ApiConstants.API_GET_USER_PARENT_DATA_SUCCESS:
+
+        let parentData = action.result.userData;
+        const nonAvailableParent = {
+            id: -1,
+            firstName: AppConstants.parentDetails,
+            lastName: AppConstants.unavailable,
+        }
+        parentData.push(nonAvailableParent);
+
+        return {
+            ...state,
+            parentData,
+            status: action.status,
+            getUserParentDataOnLoad: false
+        }
+
     default:
       return state;
   }

@@ -636,8 +636,8 @@ class UmpirePaymentSetting extends Component {
     feesView = (sectionData, sectionDataIndex) => {
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
-        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
-        const umpireBadgesData = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
+        const { badgeData } = this.props.appState;
+        const umpireBadgesData = isArrayNotEmpty(badgeData) ? badgeData : [];
 
         const { UmpirePaymentFeeType } = sectionData[sectionDataIndex];
 
