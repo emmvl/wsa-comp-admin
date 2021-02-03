@@ -71,7 +71,7 @@ class UmpireDivisions extends Component {
                 const selectedComp = competitionList.find(item => item.id === firstComp);  
                 const isOrganiser = selectedComp.organisationId === organisationId;
 
-                this.setState({ 
+                this.setState({
                     selectedComp: firstComp, 
                     loading: false, 
                     competitionUniqueKey: compKey,
@@ -234,13 +234,14 @@ class UmpireDivisions extends Component {
 
     contentView = () => {
         const { umpirePoolData } = this.state;
+        const { onLoad } = this.props.umpirePoolAllocationState;
 
         return (
             <div className="content-view pt-5">
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
 
-                {!!umpirePoolData && umpirePoolData.map((item, index) => (
+                {!!umpirePoolData && !onLoad && umpirePoolData.map((item, index) => (
                     this.poolView(item, index)
                 ))}
             </div>
@@ -257,6 +258,10 @@ class UmpireDivisions extends Component {
                         type="primary" 
                         htmlType="submit"
                         onClick={this.handleSave}
+                        disabled={this.props.appState.onLoad ||
+                            this.props.umpirePoolAllocationState.onLoad ||
+                            this.props.liveScoreTeamState.onLoad
+                        }
                     >
                         {AppConstants.save}
                     </Button>
