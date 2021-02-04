@@ -2147,7 +2147,9 @@ class MultifieldDrawsNewTimeline extends Component {
                 <div
                     className={`main-canvas Draws ${isAxisInverted ? 'd-flex' : ''}`}
                     id="draws-field"
-                    onDragOver={e => this.drawsFieldMove(e)}
+                    onDragOver={e => {
+                        if (!disabledStatus) this.drawsFieldMove(e)
+                    }}
                     onMouseMove={e => this.drawsFieldMove(e)}
                     onDragLeave={this.addDisplayNoneTooltip}
                     onMouseLeave={this.addDisplayNoneTooltip}
@@ -2276,21 +2278,21 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         })
                                                 }}
                                                 onDragOver={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
+                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus) {
                                                         this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
                                                     }
                                                 }}
                                                 onDragEnd={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
+                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus)
                                                         this.handleDragEnd(e)
                                                 }}
                                                 onTouchMove={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast) {
+                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus) {
                                                         this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
                                                     }
                                                 }}
                                                 onTouchEnd={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast)
+                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus)
                                                         this.handleDragEnd(e)
                                                 }}
                                             >
@@ -2391,7 +2393,10 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 "1"
                                                                             }
                                                                             content={1}
-                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast ? false : this.checkSwap(slotObject)}
+                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus 
+                                                                                ? false 
+                                                                                : this.checkSwap(slotObject)
+                                                                            }
                                                                             onSwap={(source, target) =>
                                                                                 this.onSwap(
                                                                                     source,
@@ -2401,7 +2406,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 )
                                                                             }
                                                                             isCurrentSwappable={(source, target) =>
-                                                                                isDayInPast
+                                                                                isDayInPast || disabledStatus
                                                                                     ? false
                                                                                     : this.checkCurrentSwapObjects(
                                                                                         source,
@@ -2433,7 +2438,10 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     dateItem.roundId.toString()
                                                                                 }
                                                                                 content={1}
-                                                                                swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast ? false : this.checkSwap(slotObject)}
+                                                                                swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus 
+                                                                                    ? false 
+                                                                                    : this.checkSwap(slotObject)
+                                                                                }
                                                                                 onSwap={(source, target) =>
                                                                                     this.onSwap(
                                                                                         source,
@@ -2443,7 +2451,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     )
                                                                                 }
                                                                                 isCurrentSwappable={(source, target) =>
-                                                                                    isDayInPast
+                                                                                    isDayInPast || disabledStatus
                                                                                         ? false
                                                                                         : this.checkCurrentSwapObjects(
                                                                                             source,
