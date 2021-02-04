@@ -1808,7 +1808,6 @@ const AppConstants = {
     retryPayment: "Retry Payment",
 
     parentDetails: "Parent details",
-    unavailable: "unavailable",
 };
 
 export default AppConstants;

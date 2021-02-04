@@ -2049,7 +2049,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
         return (
             <span 
-                className={isAxisInverted ? '' : 'text-overflow'}
+                className={`text-capitalize ${isAxisInverted ? '' : 'text-overflow'}`}
                 style={{
                     transform: isAxisInverted ? 'rotate(-90deg)' : 'none',
                 }}
