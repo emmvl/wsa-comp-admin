@@ -154,7 +154,13 @@ const columns = [
         title: AppConstants.governmentVoucher,
         dataIndex: "governmentVoucherAmount",
         key: "governmentVoucherAmount",
-        render: (governmentVoucherAmount, record) => currencyFormat(governmentVoucherAmount),
+        render: (governmentVoucherAmount, record) => {
+            return (
+                <div className={(record.governmentVoucherStatusRefId != 2 && parseFloat(governmentVoucherAmount) > 0) && "government-voucher-grey-text"}>
+                    {currencyFormat(governmentVoucherAmount)}
+                </div>
+            )
+        },
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("governmentVoucherAmount"),
     },
