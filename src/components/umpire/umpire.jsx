@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Icon, Form } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { getRefBadgeData } from '../../store/actions/appAction'
 
@@ -80,7 +80,31 @@ function tableSort(key) {
     })
 }
 
+const mockedSelectNumbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+
 const columns = [
+    {
+        title: "Rank",
+        dataIndex: "rank",
+        key: "rank",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (rank, record) => {
+            console.log('sfssdfsdf', rank, record);
+            return (
+                <Form>
+                    <Select
+                        onChange={(a) => console.log('AAAAAA', a)}
+                    >
+                        {mockedSelectNumbers.map((number, i) => <Option key={i}>{number}</Option>)}
+                    </Select>
+                    <Icon type="check" style={{ fontSize: '16px', color: 'green' }} theme='twoTone'/>
+                </Form>
+                
+                
+            )
+        },
+    },
     {
         title: "First Name",
         dataIndex: "firstName",
