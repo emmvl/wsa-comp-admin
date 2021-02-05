@@ -584,7 +584,7 @@ class LiveScoreMatchDetails extends Component {
                                 <div className="w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
                                         to={{
-                                            pathname: `${process.env.REACT_APP_LIVE_SCORE_API_URL}/refereeReport`,
+                                            pathname: `${process.env.REACT_APP_USER_REGISTRATION_URL}/refereeReport`,
                                             search: `?matchId=${matchId}&token=${localStorage.token}&userId=${localStorage.userId}&competitionId=${competitionId}`,
                                         }}
                                         target="_blank"
