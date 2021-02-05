@@ -589,7 +589,7 @@ const columnsPlayersToPay = [
                         </Menu.Item>
                     }
                 </Menu.SubMenu>
-                
+
             </Menu>
         )
     }
