@@ -164,11 +164,12 @@ let AxiosApi = {
         dateFrom,
         dateTo,
         searchValue,
-        feeType,
+        feeTypeRefId,
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus
+        paymentStatus,
+        discountMethod
     ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -185,11 +186,12 @@ let AxiosApi = {
             paymentFor: paymentFor,
             dateFrom: dateFrom,
             dateTo: dateTo,
-            feeType,
+            feeTypeRefId,
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
+            discountMethod
         }
         var url = `/api/payments/transactions?search=${searchValue}`;
         if (sortBy && sortOrder) {
@@ -288,7 +290,8 @@ let AxiosApi = {
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus) {
+        paymentStatus,
+        discountMethod) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -308,7 +311,8 @@ let AxiosApi = {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
+            discountMethod
         }
         var url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}&search=${searchValue}`;
         if (sortBy && sortOrder) {
@@ -387,6 +391,12 @@ let AxiosApi = {
         let url = `/api/payments/getInvoiceStatus`
         return Method.dataPost(url, token, body)
     },
+
+    partialRefundAmountApi(payload) {
+        let url = "/api/partial/refund"
+        return Method.dataPost(url, token, payload)
+    }
+
 
 };
 

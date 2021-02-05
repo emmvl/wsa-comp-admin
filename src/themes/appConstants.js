@@ -1282,6 +1282,7 @@ const AppConstants = {
     reserveAllocationTiming: 'Reserve Allocation timing',
     activeUmpireCoach: 'Activate Umpire Coaches',
     umpirePoolsDivision: 'Umpire Pools Allocation To Divisions/Grades',
+    noPoolAdded: 'Pools were not added to this competition yet.',
     allocatePools: 'Allocate Pools To',
     badgeAA: 'Badge AA',
     badgeA: 'Badge A',
@@ -1571,6 +1572,8 @@ const AppConstants = {
     filterDates: 'Filter Dates',
     showOnlyScheduledMatches: 'Show only scheduled matches',
     showByDivision: 'Show by Division/Grade',
+    invertAxis: 'Invert Axis',
+    notAllowed: 'Not allowed',
     uploadBankAccount: 'Upload Bank Account',
     editBankAccount: 'Edit Bank Account',
     theyAlreadyTakenCourt: 'They have already taken the court for training, grading or a competition game',
@@ -1805,7 +1808,6 @@ const AppConstants = {
     retryPayment: "Retry Payment",
 
     parentDetails: "Parent details",
-    unavailable: "unavailable",
 };
 
 export default AppConstants;
