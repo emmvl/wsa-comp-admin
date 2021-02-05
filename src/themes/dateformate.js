@@ -12,6 +12,8 @@ function liveScore_formateDateTime(date) {
 }
 
 function liveScore_formateDate(date) {
+    if (!date) return null;
+
     let formatedDate = moment(date).format("DD/MM/YYYY")
     return formatedDate
 }

@@ -86,13 +86,13 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Date',
+        title: 'Date (AEST)',
         dataIndex: 'date',
         key: 'date',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("createdOn"),
         render: (date) => (
-            <span>{date ? moment(date).format("DD-MM-YYYY") : "N/A"}</span>
+            <span>{date ? moment(date).format("DD/MM/YYYY") : "N/A"}</span>
         ),
     },
     {

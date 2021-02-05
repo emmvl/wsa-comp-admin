@@ -984,6 +984,54 @@
     font-size: 15px;
 }
 
+.main-canvas.Draws {
+    margin: 10px 20px 0 !important;
+}
+
 .white-bg-timeline {
     background-color: var(--app-white);
+}
+
+.draggable-wrap.draw-data-table {
+    overflow-x: auto;
+    overflow-y: auto;
+    position: relative;
+}
+
+.box-draws {
+    position: relative;
+    top: 0;
+    cursor: move;
+    border-radius: 5px;
+    text-align: center;
+    color: var(--app-white);
+    font-size: 13px;
+    font-family: "Inter-Medium";
+    line-height: initial;
+    display: flex;
+    justify-content: center !important;
+}
+
+.box-draws span {
+    font-size: 11px;
+    letter-spacing: normal;
+    padding: 5px;
+    margin: auto;
+    align-self: center;
+    text-align: left;
+}
+
+.draws-x-head-text {
+    flex-shrink: 0;
+    display: inline-block;
+    height: 40px;
+    color: var(--app-9b9bad);
+    font-size: 13px;
+    font-family: "Inter-Medium";
+    text-align: center;
+}
+  
+.draws-x-head{
+    position: relative;
+    margin: 0 30px;
 }

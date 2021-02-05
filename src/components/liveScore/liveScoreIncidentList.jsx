@@ -2,15 +2,30 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Button, Table, Breadcrumb, Pagination, Input, message } from "antd";
+import {
+    Layout,
+    Button,
+    Table,
+    Breadcrumb,
+    Pagination,
+    Input,
+    message,
+    Menu,
+    Modal,
+    DatePicker
+} from 'antd'
 import { SearchOutlined } from "@ant-design/icons";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { liveScoreIncidentList } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
-import { liveScore_MatchFormate } from '../../themes/dateformate'
+import {
+    liveScoreIncidentList,
+    createPlayerSuspensionAction,
+    updatePlayerSuspensionAction,
+} from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
+import { liveScore_MatchFormate, liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -18,8 +33,12 @@ import ValidationConstants from "../../themes/validationConstant";
 
 import { exportFilesAction } from "../../store/actions/appAction"
 import { checkLivScoreCompIsParent } from "util/permissions"
+import InputWithHead from 'customComponents/InputWithHead'
+import moment from 'moment'
 
 const { Content } = Layout;
+const { SubMenu } = Menu;
+
 let this_Obj = null;
 
 const listeners = (key) => ({
@@ -112,7 +131,51 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("type"),
     },
+    {
+        title: 'Status',
+        dataIndex: 'suspension',
+        key: 'suspension',
+        render: (suspension) => (
+            <span>
+                {suspension ? `Suspended till ${liveScore_formateDate(suspension.suspendedTo)}` : ''}
+            </span>
+        ),
+    },
+    {
+        title: 'Action',
+        render: (row) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={
+                        <img
+                            className="dot-image"
+                            src={AppImages.moreTripleDot}
+                            width="16"
+                            height="16"
+                            alt=""
+                        />
+                    }
+                >
+                    <Menu.Item key="1" onClick={() => this_Obj.openSuspensionDialog(row)}>
+                        <span>Suspension</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+        ),
+    },
 ];
+
+
+const defaultSuspendedDate = {
+    from: null,
+    to: null,
+}
 
 class LiveScoreIncidentList extends Component {
     constructor(props) {
@@ -126,7 +189,10 @@ class LiveScoreIncidentList extends Component {
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             competitionId: null,
             compOrgId: null,
-            liveScoreCompIsParent: false
+            liveScoreCompIsParent: false,
+            isSuspensionModelShow: false,
+            activeIncident: null,
+            suspendedDates: { ...defaultSuspendedDate },
         };
         this_Obj = this
     }
@@ -183,6 +249,21 @@ class LiveScoreIncidentList extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        this.clearActiveIncident(prevState)
+    }
+
+    clearActiveIncident = (prevState) => {
+        const { isSuspensionModelShow } = this.state;
+        const isPropChanged = prevState.isSuspensionModelShow !== isSuspensionModelShow;
+
+        if (isPropChanged && !isSuspensionModelShow) {
+            this.setState({
+                activeIncident: null,
+                suspendedDates: { ...defaultSuspendedDate },
+            })
+        }
+    }
 
     onExport = () => {
         let url = null
@@ -194,7 +275,6 @@ class LiveScoreIncidentList extends Component {
         }
         this.props.exportFilesAction(url)
     }
-
 
     checkUserId = (record) => {
         if (record.player.userId == null) {
@@ -365,6 +445,7 @@ class LiveScoreIncidentList extends Component {
     ////////tableView view for Umpire list
     tableView = () => {
         const { onLoad, liveScoreIncidentResult, liveScoreIncidentTotalCount, liveScoreIncidentCurrentPage } = this.props.liveScoreIncidentState;
+
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -395,6 +476,129 @@ class LiveScoreIncidentList extends Component {
         );
     };
 
+    suspensionModalView = () => {
+        return (
+            <Modal
+                title={AppConstants.suspendedQuestion}
+                visible={!!this.state.isSuspensionModelShow}
+                onCancel={this.toggleSuspensionDialog}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ style: { display: 'none' } }}
+                centered
+                footer={null}
+            >
+                <div className="row">
+                    <div className="col-sm-6">
+                        <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
+                        <DatePicker
+                            className="reg-payment-datepicker w-100"
+                            size="default"
+                            style={{ minWidth: 160 }}
+                            format="DD-MM-YYYY"
+                            showTime={false}
+                            placeholder="dd-mm-yyyy"
+                            onChange={(val) => this.handleSuspendedDateChange(val, "from")}
+                            value={this.getSuspendedDate('from')}
+                        />
+                    </div>
+
+                    <div className="col-sm-6">
+                        <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
+                        <DatePicker
+                            className="reg-payment-datepicker w-100"
+                            size="default"
+                            style={{ minWidth: 160 }}
+                            format="DD-MM-YYYY"
+                            showTime={false}
+                            placeholder="dd-mm-yyyy"
+                            onChange={(val) => this.handleSuspendedDateChange(val, "to")}
+                            value={this.getSuspendedDate('to')}
+                        />
+                    </div>
+                </div>
+
+                <div className="comp-dashboard-botton-view-mobile d-flex justify-content-between" style={{ paddingTop: 24 }}>
+                    <Button onClick={this.toggleSuspensionDialog} type="cancel-button">
+                        {AppConstants.cancel}
+                    </Button>
+                    <Button onClick={this.submitSuspensionDialog} type="primary">
+                        {AppConstants.confirm}
+                    </Button>
+                </div>
+            </Modal>
+        )
+    }
+
+    submitSuspensionDialog = () => {
+        const { from, to } = this.state.suspendedDates;
+        const { foulPlayerId, id: incidentId, suspension } = this.state.activeIncident;
+
+        const dataToAction = {
+            incidentId,
+            body: {
+                incidentId,
+                playerId: +foulPlayerId,
+                suspendedFrom: moment(from, 'DD/MM/YYYY'),
+                suspendedTo: moment(to, 'DD/MM/YYYY'),
+                suspensionTypeRefId: 1,
+            },
+        }
+
+        if (suspension) {
+            this.props.updatePlayerSuspensionAction(suspension.id, dataToAction)
+        } else {
+            this.props.createPlayerSuspensionAction(dataToAction)
+        }
+        this.toggleSuspensionDialog();
+    }
+
+    handleSuspendedDateChange = (value, dateKey) => {
+        const dateValue = value
+            ? liveScore_formateDate(value)
+            : value;
+
+        this.setState((state) => ({
+            suspendedDates: {
+                ...state.suspendedDates,
+                [dateKey]: dateValue,
+            },
+        }));
+    }
+
+    getSuspendedDate = (dateKey) => {
+        const dateString = this.state.suspendedDates[dateKey];
+
+        if (dateString) {
+            return moment(dateString, 'DD/MM/YYYY')
+        }
+
+        return null;
+    }
+
+    openSuspensionDialog = (activeRow) => {
+        const { suspendedFrom, suspendedTo } = activeRow.suspension || {};
+        const isDatesCorrect = suspendedFrom && suspendedTo;
+        const dataToUpdate = {
+            activeIncident: activeRow,
+        }
+
+        if (isDatesCorrect) {
+            dataToUpdate.suspendedDates = {
+                from: liveScore_formateDate(suspendedFrom),
+                to: liveScore_formateDate(suspendedTo),
+            }
+        }
+
+        this.setState(dataToUpdate)
+        this.toggleSuspensionDialog()
+    }
+
+    toggleSuspensionDialog = () => {
+        this.setState((state) => ({
+            isSuspensionModelShow: !state.isSuspensionModelShow,
+        }))
+    }
+
     render() {
         const { umpireKey } = this.props.liveScoreIncidentState
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
@@ -418,6 +622,7 @@ class LiveScoreIncidentList extends Component {
                     {this.headerView()}
                     <Content>
                         {this.tableView()}
+                        {this.suspensionModalView()}
                     </Content>
                 </Layout>
             </div>
@@ -426,7 +631,12 @@ class LiveScoreIncidentList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreIncidentList, exportFilesAction }, dispatch)
+    return bindActionCreators({
+        liveScoreIncidentList,
+        exportFilesAction,
+        createPlayerSuspensionAction,
+        updatePlayerSuspensionAction,
+    }, dispatch)
 }
 
 function mapStateToProps(state) {
