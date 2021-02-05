@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Icon, Form } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Form } from "antd";
+import Icon from '@ant-design/icons';
 import { SearchOutlined } from "@ant-design/icons";
 import { getRefBadgeData } from '../../store/actions/appAction'
 
@@ -14,7 +15,7 @@ import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
+import { umpireMainListAction, getUmpireList } from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -34,8 +35,8 @@ function checkUserRoll(rolesArr, index) {
     let isClub = "NO"
     if (isArrayNotEmpty(rolesArr)) {
         for (let i in rolesArr) {
-            let roles = rolesArr[i].role
-            if (roles.name === "umpire_coach") {
+            let roleId = rolesArr[i].roleId
+            if (roleId === 20) {
                 isClub = "YES"
             }
         }
@@ -59,6 +60,7 @@ function checkUmpireUserRoll(rolesArr, key) {
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
+    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
     if (this_obj.state.sortBy !== key) {
         sortOrder = "ASC";
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "ASC") {
@@ -68,16 +70,11 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-    this_obj.props.umpireMainListAction({
-        refRoleId: JSON.stringify([15, 20]),
-        entityTypes: this_obj.state.isCompParent ? 1 : 6,
+    this_obj.props.getUmpireList({
+        organisationId,
         compId: this_obj.state.selectedComp,
         offset: this_obj.state.offsetData,
-        sortBy,
-        sortOrder,
-        userName: this_obj.state.searchText,
-        competitionOrgId: this_obj.state.compOrganisationId
-    })
+    });
 }
 
 const mockedSelectNumbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
@@ -89,8 +86,8 @@ const columns = [
         key: "rank",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (rank, record) => {
-            console.log('sfssdfsdf', rank, record);
+        render: (rank, record, a, b) => {
+            console.log('RECORD', record, rank, a, b);
             return (
                 <Form>
                     <Select
@@ -98,10 +95,12 @@ const columns = [
                     >
                         {mockedSelectNumbers.map((number, i) => <Option key={i}>{number}</Option>)}
                     </Select>
-                    <Icon type="check" style={{ fontSize: '16px', color: 'green' }} theme='twoTone'/>
+                    <Icon 
+                        type="check" 
+                        style={{ fontSize: '16px', color: 'green' }} 
+                        theme='twoTone'
+                    />
                 </Form>
-                
-                
             )
         },
     },
@@ -172,16 +171,12 @@ const columns = [
     },
     {
         title: "Organisation",
-        dataIndex: "linkedEntity",
-        key: "linkedEntity",
+        dataIndex: "organisationName",
+        key: "organisationName",
         sorter: true,
         onHeaderCell: () => listeners("linkedEntityName"),
-        render: (linkedEntity) => (
-            <div>
-                {linkedEntity.map((item, index) => (
-                    <span key={`entityName ${index}`} className="multi-column-text-aligned">{item.name}</span>
-                ))}
-            </div>
+        render: (organisation) => (
+            <span className="multi-column-text-aligned">{organisation}</span>
         )
     },
     {
@@ -323,15 +318,10 @@ class Umpire extends Component {
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
-                    this.props.umpireMainListAction({
-                        refRoleId: JSON.stringify([15, 20]),
-                        entityTypes: isCompParent ? 1 : 6,
-                        compId: firstComp,
+                    this.props.getUmpireList({
+                        organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                        competitionId: localStorage.getItem("umpireCompetitionId"),
                         offset: this.state.offsetData,
-                        sortBy,
-                        sortOrder,
-                        userName: this.state.searchText,
-                        competitionOrgId: compOrganisationId
                     });
                     this.setState({
                         selectedComp: firstComp,
@@ -379,21 +369,17 @@ class Umpire extends Component {
             offsetData: offset,
         });
 
-        this.props.umpireMainListAction({
-            refRoleId: JSON.stringify([15, 20]),
-            entityTypes: this.state.isCompParent ? 1 : 6,
-            compId: this.state.selectedComp,
+        this.props.getUmpireList({
+            organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+            competitionId: localStorage.getItem("umpireCompetitionId"),
             offset,
-            sortBy,
-            sortOrder,
-            userName: this.state.searchText,
-            competitionOrgId: this.state.compOrganisationId
         });
     };
 
     contentView = () => {
-        const { umpireList_Data, totalCount_Data, currentPage_Data } = this.props.umpireState;
-        let umpireListResult = isArrayNotEmpty(umpireList_Data) ? umpireList_Data : [];
+        const { umpireList_Data, totalCount_Data, currentPage_Data, umpireListDataNew } = this.props.umpireState;
+        let umpireListResult = isArrayNotEmpty(umpireListDataNew) ? umpireListDataNew : [];
+        console.log('umpireListResult', umpireListResult);
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -426,6 +412,7 @@ class Umpire extends Component {
     };
 
     onChangeComp = async (compID) => {
+        console.log('1111', compID);
         let selectedComp = compID.comp;
         // setUmpireCompId(selectedComp);
 
@@ -448,15 +435,10 @@ class Umpire extends Component {
 
         let compKey = compID.competitionUniqueKey;
 
-        this.props.umpireMainListAction({
-            refRoleId: JSON.stringify([15, 20]),
-            entityTypes: this.state.isCompParent ? 1 : 6,
-            compId: selectedComp,
+        this.props.getUmpireList({
+            organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+            competitionId: localStorage.getItem("umpireCompetitionId"),
             offset: 0,
-            sortBy,
-            sortOrder,
-            userName: this.state.searchText,
-            competitionOrgId: this.state.compOrganisationId
         });
 
         this.setState({ selectedComp, competitionUniqueKey: compKey });
@@ -468,15 +450,10 @@ class Umpire extends Component {
 
         const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
-            this.props.umpireMainListAction({
-                refRoleId: JSON.stringify([15, 20]),
-                entityTypes: this.state.isCompParent ? 1 : 6,
-                compId: this.state.selectedComp,
+            this.props.getUmpireList({
+                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: 0,
-                userName: e.target.value,
-                sortBy,
-                sortOrder,
-                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -487,15 +464,10 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
-            this.props.umpireMainListAction({
-                refRoleId: JSON.stringify([15, 20]),
-                entityTypes: this.state.isCompParent ? 1 : 6,
-                compId: this.state.selectedComp,
-                userName: this.state.searchText,
+            this.props.getUmpireList({
+                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: 0,
-                sortBy,
-                sortOrder,
-                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -506,15 +478,10 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
-            this.props.umpireMainListAction({
-                refRoleId: JSON.stringify([15, 20]),
-                entityTypes: this.state.isCompParent ? 1 : 6,
-                compId: this.state.selectedComp,
-                userName: this.state.searchText,
+            this.props.getUmpireList({
+                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: 0,
-                sortBy,
-                sortOrder,
-                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -637,7 +604,7 @@ class Umpire extends Component {
         );
     };
 
-    render() {
+    render() {console.log(this.state.selectedComp);
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -662,7 +629,8 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         umpireMainListAction,
         userExportFilesAction,
-        getRefBadgeData
+        getRefBadgeData,
+        getUmpireList,
     }, dispatch);
 }
 
