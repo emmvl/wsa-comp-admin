@@ -246,6 +246,19 @@
   color: var(--app-color);
 }
 
+.form-footer-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 70%;
+  margin: 34px auto 100px;
+}
+
+.text-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 767px) {
   .form-header-view.ant-layout-header {
     padding: 0;
@@ -259,6 +272,10 @@
     padding-left: 18px;
     padding-top: 10px;
     align-items: center
+  }
+
+  .form-footer-button-wrapper {
+    width: 87%;
   }
 }
 

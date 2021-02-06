@@ -546,6 +546,7 @@ class LiveScoreMatchDetails extends Component {
         const length = match ? match.length : 0;
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
         const { liveScoreCompIsParent, userRole, isCompetitionOrganisationId } = this.state
+        const { matchId, competitionId } = this.state;
 
         return (
             <div className="p-4">
@@ -577,6 +578,26 @@ class LiveScoreMatchDetails extends Component {
                                     {AppConstants.attendance}
                                 </div>
 
+                            </div>
+
+                            <div className="col-sm pt-2">
+                                <div className="w-100 d-flex flex-row align-items-center justify-content-end">
+                                    <NavLink
+                                        to={{
+                                            pathname: `${process.env.REACT_APP_USER_REGISTRATION_URL}/refereeReport`,
+                                            search: `?matchId=${matchId}&token=${localStorage.token}&userId=${localStorage.userId}&competitionId=${competitionId}`,
+                                        }}
+                                        target="_blank"
+                                    >
+                                        <Button
+                                            disabled={userRole}
+                                            className="primary-add-comp-form"
+                                            type="primary"
+                                        >
+                                            + { AppConstants.addRefereeReport }
+                                        </Button>
+                                    </NavLink>
+                                </div>
                             </div>
 
                             {

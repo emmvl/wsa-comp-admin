@@ -35,10 +35,18 @@ function deleteUmpirePoolData(payload) {
     };
 }
 
+function updateUmpirePoolToDivision(payload) {
+    return {
+        type: ApiConstants.API_UPDATE_UMPIRE_POOL_TO_DIVISION_LOAD,
+        payload,
+    };
+}
+
 export {
     getUmpirePoolData,
     saveUmpirePoolData,
     updateUmpirePoolData,
     updateUmpirePoolManyData,
     deleteUmpirePoolData,
+    updateUmpirePoolToDivision,
 }

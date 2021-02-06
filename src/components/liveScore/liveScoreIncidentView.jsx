@@ -10,6 +10,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ReactPlayer from 'react-player';
+import { get } from 'lodash';
 import {
     // liveScore_formateDateTime,
     liveScore_formateDate,
@@ -131,7 +132,7 @@ class LiveScoreIncidentView extends Component {
         return (
             <div className="row p-4">
                 <div className="col-sm">
-                    <div><span className="year-select-heading">Incident Data</span></div>
+                    <div><span className="year-select-heading">Incident Date</span></div>
                     <div className="pt-2">
                         <span className="side-bar-profile-data">{DATA && liveScore_formateDate(DATA.incidentTime)}</span>
                     </div>
@@ -153,9 +154,130 @@ class LiveScoreIncidentView extends Component {
         )
     }
 
+    getWitnessesTemplateList = () => {
+        const witnessList = get(this.state, 'incidentItem.witnesses') || []
+
+        return witnessList.length > 0 ? (
+            <div className="row mb-4">
+                <div className="col-sm-2">
+                    <div className="year-select-heading">
+                        <span>{AppConstants.witnesses}</span>
+                    </div>
+                </div>
+                <div className="col-sm-10">
+                    {witnessList.map((item) => (
+                        <div className="side-bar-profile-data" key={item.name + item.phone}>
+                            <span className="mr-4">
+                                <i>Name: </i>
+                                { item.name }
+                            </span>
+                            <span>
+                                <i>Phone: </i>
+                                { item.phone }
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        ) : null;
+    };
+
+    getOffencesTemplateList = () => {
+        const offencesList = get(this.state, 'incidentItem.offences') || []
+
+        return offencesList.length > 0 ? (
+            <div className="row mb-4">
+                <div className="col-sm-2">
+                    <div className="year-select-heading">
+                        <span>{AppConstants.offences}</span>
+                    </div>
+                </div>
+                <div className="col-sm-10">
+                    {offencesList.map((item) => (
+                        <div className="side-bar-profile-data" key={item.name}>
+                            {item.description}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        ) : null;
+    };
+
+    getClarifyingQuestionsTemplateList = () => {
+        const clarifyingQuestionsList = get(this.state, 'incidentItem.clarifyingQuestions') || []
+
+        return clarifyingQuestionsList.length > 0 ? (
+            <div className="row mb-4">
+                <div className="col-sm-2">
+                    <div className="year-select-heading">
+                        <span>{AppConstants.clarifyingQuestions}</span>
+                    </div>
+                </div>
+                <div className="col-sm-10">
+                    {clarifyingQuestionsList.map((item, index) => (
+                        <ul key={item.question.substring(0, 16) + index}>
+                            <li className="side-bar-profile-data">
+                                <i>{item.question}</i>
+                                <div>- {item.answer}</div>
+                            </li>
+                        </ul>
+                    ))}
+                </div>
+            </div>
+        ) : null;
+    };
+
+    getReportRefereeTemplate = () => {
+        const {
+            userId,
+            competitionId,
+            foulPlayer,
+            foulPlayerRole,
+            suspension = {},
+        } = this.state.incidentItem;
+        if (!foulPlayer) return null;
+
+       const rowsData = [
+           { titleKey: 'userId', value: userId },
+           { titleKey: 'competitionId', value: competitionId },
+           { titleKey: 'foulPlayerName', value: foulPlayer ? foulPlayer.firstName + ' ' + foulPlayer.lastName : '' },
+           { titleKey: 'foulPlayerRole', value: foulPlayerRole },
+           { titleKey: 'suspendedFrom', value: liveScore_formateDate(suspension.suspendedFrom) },
+           { titleKey: 'suspendedTo', value: liveScore_formateDate(suspension.suspendedTo) },
+       ];
+       return (
+            <>
+                {rowsData.map((row) => {
+                    if (!row.value) return null;
+
+                    return (
+                        <div className="row mb-2" key={row.titleKey}>
+                            <div className="col-sm-2">
+                                <div className="year-select-heading">
+                                    <span>{ AppConstants[row.titleKey] }</span>
+                                </div>
+                            </div>
+
+                            <div className="col-sm-10">
+                                <div className="side-bar-profile-data">
+                                    <span>{ row.value }</span>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
+
+                {this.getWitnessesTemplateList()}
+                {this.getOffencesTemplateList()}
+                {this.getClarifyingQuestionsTemplateList()}
+            </>
+        )
+    }
+
     mediaView = () => {
         let array = this.state.incidentItem ? this.state.incidentItem.incidentPlayers : []
         let mediaPlayer = this.state.incidentItem ? isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : [] : []
+
         return (
             <div className="col-sm pt-3 pb-3 mt-5">
                 <div className="row">
@@ -168,11 +290,14 @@ class LiveScoreIncidentView extends Component {
                     <div className="col-sm-10">
                         {array.map((item, index) => (
                             <div className="side-bar-profile-data" key={item.player.id + index}>
-                                <span >{item.player.firstName} {item.player.lastName}</span>
+                                <span>{item.player.firstName} {item.player.lastName}</span>
                             </div>
                         ))}
                     </div>
                 </div>
+
+                {this.getReportRefereeTemplate()}
+
                 <div className="row mt-2">
                     <div className="col-sm-2">
                         <div className="year-select-heading">

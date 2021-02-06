@@ -112,7 +112,8 @@ function getPaymentList(
     paymentType,
     paymentMethod,
     membershipType,
-    paymentStatus
+    paymentStatus,
+    discountMethod
 ) {
     const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
@@ -132,7 +133,8 @@ function getPaymentList(
         paymentType,
         paymentMethod,
         membershipType,
-        paymentStatus
+        paymentStatus,
+        discountMethod
     }
     return action
 }
@@ -175,7 +177,8 @@ function exportPaymentDashboardApi(offset,
     paymentType,
     paymentMethod,
     membershipType,
-    paymentStatus) {
+    paymentStatus,
+    discountMethod) {
     return {
         type: ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD,
         offset,
@@ -193,7 +196,8 @@ function exportPaymentDashboardApi(offset,
         paymentType,
         paymentMethod,
         membershipType,
-        paymentStatus
+        paymentStatus,
+        discountMethod
     }
 }
 
@@ -320,6 +324,13 @@ function setSummaryPageNumberAction(pageNum) {
     return action;
 }
 
+function partialRefundAmountAction(payload) {
+    const action = {
+        type: ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD,
+        payload,
+    }
+    return action
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -340,4 +351,5 @@ export {
     setDashboardPageNumberAction,
     setSummaryPageSizeAction,
     setSummaryPageNumberAction,
+    partialRefundAmountAction
 };
