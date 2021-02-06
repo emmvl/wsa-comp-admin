@@ -280,7 +280,8 @@ const initialState = {
   friendTotalCount: 1,
   referFriendList: [],
   referFriendPage: 1,
-  referFriendTotalCount: 1,
+  referFriendPageSize: 10,
+  referFriendTotalCount: 1,  
   orgPhotosList: [],
   userDashboardCounts: null,
   onAffiliateDirLoad: false,
@@ -337,8 +338,9 @@ const initialState = {
   onLoadSearch: false,
   impersonationAccess: false,
   spectatorList: [],
-  spectatorPage: null,
-  spectatorTotalCount: null,
+  spectatorPage: 1,
+  spectatorPageSize: 10,
+  spectatorTotalCount: 1,
   spectatorListAction: null,
   impersonationList: [],
   onImpersonationLoad: false,
@@ -1510,6 +1512,30 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         friendPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        referFriendPageSize: action.pageSize,
+      }
+    
+    case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        referFriendPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_SPECTATOR_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        spectatorPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_SPECTATOR_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        spectatorPage: action.pageNum,
       }
 
     default:
