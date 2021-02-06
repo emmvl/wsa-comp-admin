@@ -276,6 +276,7 @@ const initialState = {
   onOrgLoad: false,
   friendList: [],
   friendPage: 1,
+  friendPageSize: 10,
   friendTotalCount: 1,
   referFriendList: [],
   referFriendPage: 1,
@@ -1497,6 +1498,18 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         netSetGoPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        friendPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        friendPage: action.pageNum,
       }
 
     default:

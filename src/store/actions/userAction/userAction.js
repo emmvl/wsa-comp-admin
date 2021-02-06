@@ -613,6 +613,20 @@ function setNetSetGoListPageNumberAction(pageNum) {
     };
 }
 
+function setPlayWithFriendListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPlayWithFriendListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -693,4 +707,6 @@ export {
     setAffiliateDirectoryListPageNumberAction,
     setNetSetGoListPageSizeAction,
     setNetSetGoListPageNumberAction,
+    setPlayWithFriendListPageSizeAction,
+    setPlayWithFriendListPageNumberAction,
 };
