@@ -627,6 +627,34 @@ function setPlayWithFriendListPageNumberAction(pageNum) {
     }
 }
 
+function setReferFriendListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_REFER_FRIEND_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setReferFriendListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_REFER_FRIEND_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
+function setSpectatorListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_SPECTATOR_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setSpectatorListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_SPECTATOR_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -709,4 +737,8 @@ export {
     setNetSetGoListPageNumberAction,
     setPlayWithFriendListPageSizeAction,
     setPlayWithFriendListPageNumberAction,
+    setReferFriendListPageSizeAction,
+    setReferFriendListPageNumberAction,
+    setSpectatorListPageSizeAction,
+    setSpectatorListPageNumberAction,
 };

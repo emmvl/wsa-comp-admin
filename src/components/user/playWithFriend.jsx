@@ -41,12 +41,14 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { friendPageSize } = this.props.userState;
+    friendPageSize = friendPageSize ? friendPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         paging: {
-            limit: this.props.userState.friendPageSize,
-            offset: (this_Obj.state.pageNo ? (this.props.userState.friendPageSize * (this_Obj.state.pageNo - 1)) : 0)
+            limit: friendPageSize,
+            offset: (this_Obj.state.pageNo ? (friendPageSize * (this_Obj.state.pageNo - 1)) : 0)
         }
     }
 
@@ -197,12 +199,14 @@ class PlayWithFriend extends Component {
         this.setState({
             pageNo: 1
         })
+        let { friendPageSize } = this.props.userState;
+        friendPageSize = friendPageSize ? friendPageSize : 10;
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
-                limit: this.props.userState.friendPageSize,
+                limit: friendPageSize,
                 offset: 0
             }
         }
