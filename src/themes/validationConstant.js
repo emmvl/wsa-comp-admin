@@ -262,6 +262,8 @@ const ValidationConstants = {
     accreditationLevelUmpire: "National accreditation level umpire is required.",
     accreditationLevelCoach: "National accreditation level coach is required.",
     expiryDateRequire: 'Expire date is required.',
+
+    phoneNumberRequired: 'Phone Number is required',
 };
 
 export default ValidationConstants;
