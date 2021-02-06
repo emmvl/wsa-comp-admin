@@ -10,7 +10,13 @@ import { isArrayNotEmpty } from 'util/helpers';
 import { umpireCompetitionListAction } from 'store/actions/umpireAction/umpireCompetetionAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
-import { getUmpirePaymentData, updateUmpirePaymentData, umpirePaymentTransferData } from '../../store/actions/umpireAction/umpirePaymentAction'
+import {
+    getUmpirePaymentData,
+    updateUmpirePaymentData,
+    umpirePaymentTransferData,
+    setPageSizeAction,
+    setPageNumberAction,
+} from '../../store/actions/umpireAction/umpirePaymentAction'
 import {
     // getUmpireCompetiton,
     setUmpireCompition,
@@ -359,22 +365,30 @@ class UmpirePayments extends Component {
         this.props.updateUmpirePaymentData({ data: onHoverValue, key: "hoverVisible", index: index })
     }
 
-    handlePageChange = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
+    handlePageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
         let { sortBy, sortOrder, searchText } = this.state
-        let offsetData = page ? 10 * (page - 1) : 0;
+        let { pageSize } = this.props.umpirePaymentState;
+        pageSize = pageSize ? pageSize: 10;
+        let offsetData = page ? pageSize * (page - 1) : 0;
         this.setState({ offsetData });
 
         const body = {
             paging: {
                 offset: offsetData,
-                limit: 10,
+                limit: pageSize,
             },
         };
         this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
     }
 
     contentView = () => {
-        const { umpirePaymentList, onLoad, totalCount, currentPage } = this.props.umpirePaymentState
+        const { umpirePaymentList, onLoad, totalCount, currentPage, pageSize } = this.props.umpirePaymentState
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -394,11 +408,13 @@ class UmpirePayments extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination pb-2"
-                            total={totalCount}
-                            defaultPageSize={10}
-                            onChange={this.handlePageChange}
+                            showSizeChanger
                             current={currentPage}
-                            showSizeChanger={false}
+                            total={totalCount}
+                            defaultCurrent={totalCount}
+                            defaultPageSize={pageSize}
+                            onChange={this.handlePageChange}
+                            onShowSizeChange={this.handleShowSizeChange}                            
                         />
                     </div>
                 </div>
@@ -722,7 +738,9 @@ function mapDispatchToProps(dispatch) {
         getUmpirePaymentData,
         updateUmpirePaymentData,
         umpirePaymentTransferData,
-        exportFilesAction
+        exportFilesAction,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch);
 }
 

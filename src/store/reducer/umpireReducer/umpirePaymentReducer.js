@@ -6,8 +6,9 @@ const initialState = {
     result: [],
     status: 0,
     umpirePaymentList: [],
-    totalCount: null,
-    currentPage: null,
+    totalCount: 1,
+    currentPage: 1,
+    pageSize: 10,
     paymentStatus: false,
     paymentTransferPostData: [],
     onPaymentLoad: false,
@@ -287,8 +288,19 @@ function umpirePaymentState(state = initialState, action) {
             return {
                 ...state,
                 onPaymentLoad: false,
-
             };
+
+        case ApiConstants.SET_UMPIRE_PAYMENT_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+        
+        case ApiConstants.SET_UMPIRE_ROSTER_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
 
         default:
             return state;
