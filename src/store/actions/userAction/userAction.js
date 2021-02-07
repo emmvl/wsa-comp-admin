@@ -662,10 +662,24 @@ function setAffiliateTableListPageSizeAction(pageSize) {
     }
 }
 
-function setAffiliateTableListPageNumberAction(pageSize) {
+function setAffiliateTableListPageNumberAction(pageNum) {
     return {
         type: ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
+function setTextualTableListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_SIZE,
         pageSize,
+    }
+}
+
+function setTextualTableListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
     }
 }
 
@@ -757,4 +771,6 @@ export {
     setSpectatorListPageNumberAction,
     setAffiliateTableListPageSizeAction,
     setAffiliateTableListPageNumberAction,
+    setTextualTableListPageSizeAction,
+    setTextualTableListPageNumberAction,
 };

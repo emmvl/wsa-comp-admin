@@ -16,6 +16,8 @@ import {
     getUserDashboardTextualAction,
     exportOrgRegQuestionAction,
     userDeleteAction,
+    setTextualTableListPageSizeAction,
+    setTextualTableListPageNumberAction,
 } from 'store/actions/userAction/userAction';
 import InputWithHead from 'customComponents/InputWithHead';
 import Loader from 'customComponents/loader';
@@ -221,7 +223,9 @@ class UserTextualDashboard extends Component {
             const { searchText } = userTextualDasboardListAction.payload;
             const yearRefId = JSON.parse(yearId);
             await this.setState({ offsetData, sortBy, sortOrder, dobFrom, dobTo, genderRefId, linkedEntityId, postalCode, roleId, searchText, yearRefId });
-            page = Math.floor(offsetData / 10) + 1;
+            let { userDashboardTextualPageSize } = this.props.userState;
+            userDashboardTextualPageSize = userDashboardTextualPageSize ? userDashboardTextualPageSize : 10;
+            page = Math.floor(offsetData / userDashboardTextualPageSize) + 1;
         }
 
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
@@ -351,7 +355,13 @@ class UserTextualDashboard extends Component {
         this.handleTextualTableList(1);
     };
 
-    handleTextualTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setTextualTableListPageSizeAction(pageSize);
+        this.handleTextualTableList(page);
+    }
+
+    handleTextualTableList = async (page) => {
+        await this.props.setTextualTableListPageNumberAction(page);
         const {
             organisationId,
             yearRefId,
@@ -365,6 +375,9 @@ class UserTextualDashboard extends Component {
             searchText,
         } = this.state;
         const yearId = yearRefId == -1 ? yearRefId : getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+
+        let { userDashboardTextualPageSize } = this.props.userState;
+        userDashboardTextualPageSize = userDashboardTextualPageSize ? userDashboardTextualPageSize : 10;
 
         const filter = {
             organisationId,
@@ -380,8 +393,8 @@ class UserTextualDashboard extends Component {
             postCode: (postalCode !== '' && postalCode !== null) ? postalCode.toString() : '-1',
             searchText,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : this.state.offsetData),
+                limit: userDashboardTextualPageSize,
+                offset: (page ? (userDashboardTextualPageSize * (page - 1)) : this.state.offsetData),
             },
         };
 
@@ -671,8 +684,8 @@ class UserTextualDashboard extends Component {
     };
 
     contentView = () => {
-        const { userState } = this.props;
-        const { userDashboardTextualList } = userState;
+        const { userDashboardTextualList, onTextualLoad, userDashboardTextualTotalCount, userDashboardTextualPage, userDashboardTextualPageSize } = this.props.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -681,17 +694,20 @@ class UserTextualDashboard extends Component {
                         columns={columns}
                         dataSource={userDashboardTextualList}
                         pagination={false}
-                        loading={this.props.userState.onTextualLoad === true}
+                        loading={onTextualLoad === true}
                     />
                 </div>
 
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.userDashboardTextualPage}
-                        showSizeChanger={false}
-                        total={userState.userDashboardTextualTotalCount}
+                        showSizeChanger
+                        current={userDashboardTextualPage}
+                        defaultcurrent={userDashboardTextualPage}
+                        defaultPageSize={userDashboardTextualPageSize}
+                        total={userDashboardTextualTotalCount}
                         onChange={this.handleTextualTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -730,6 +746,8 @@ function mapDispatchToProps(dispatch) {
         getGenderAction,
         exportOrgRegQuestionAction,
         userDeleteAction,
+        setTextualTableListPageSizeAction,
+        setTextualTableListPageNumberAction,
     }, dispatch);
 }
 

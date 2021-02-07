@@ -249,6 +249,7 @@ const initialState = {
   getUserOrganisation: [],
   userDashboardTextualList: [],
   userDashboardTextualPage: 1,
+  userDashboardTextualPageSize: 10,
   userDashboardTextualTotalCount: 1,
   personalData: {},
   personalEmergency: [],
@@ -1549,6 +1550,18 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         affiliateListPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        userDashboardTextualPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        userDashboardTextualPage: action.pageNum,
       }
 
     default:
