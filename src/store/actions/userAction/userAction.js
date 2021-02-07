@@ -655,6 +655,20 @@ function setSpectatorListPageNumberAction(pageNum) {
     }
 }
 
+function setAffiliateTableListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setAffiliateTableListPageNumberAction(pageSize) {
+    return {
+        type: ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_CURRENT_NUMBER,
+        pageSize,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -741,4 +755,6 @@ export {
     setReferFriendListPageNumberAction,
     setSpectatorListPageSizeAction,
     setSpectatorListPageNumberAction,
+    setAffiliateTableListPageSizeAction,
+    setAffiliateTableListPageNumberAction,
 };

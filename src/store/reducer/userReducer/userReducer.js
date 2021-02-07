@@ -242,6 +242,7 @@ const initialState = {
   roles: [],
   userRolesEntity: [],
   affiliateListPage: 1,
+  affiliateListPageSize: 10,
   affiliateListTotalCount: 1,
   venueOrganisation: [],
   allUserOrganisationData: [],
@@ -1536,6 +1537,18 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         spectatorPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        affiliateListPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        affiliateListPage: action.pageNum,
       }
 
     default:
