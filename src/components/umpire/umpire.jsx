@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Form } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Form, Modal } from "antd";
 import Icon from '@ant-design/icons';
 import { SearchOutlined } from "@ant-design/icons";
 import { getRefBadgeData } from '../../store/actions/appAction'
@@ -15,7 +15,12 @@ import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { umpireMainListAction, getUmpireList } from "store/actions/umpireAction/umpireAction";
+import { 
+    umpireMainListAction,
+    getUmpireList,
+    getRankedUmpiresCount,
+    updateUmpireRank
+} from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -77,174 +82,6 @@ function tableSort(key) {
     });
 }
 
-const mockedSelectNumbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-
-const columns = [
-    {
-        title: "Rank",
-        dataIndex: "rank",
-        key: "rank",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (rank, record, a, b) => {
-            console.log('RECORD', record, rank, a, b);
-            return (
-                <Form>
-                    <Select
-                        onChange={(a) => console.log('AAAAAA', a)}
-                    >
-                        {mockedSelectNumbers.map((number, i) => <Option key={i}>{number}</Option>)}
-                    </Select>
-                    <Icon 
-                        type="check" 
-                        style={{ fontSize: '16px', color: 'green' }} 
-                        theme='twoTone'
-                    />
-                </Form>
-            )
-        },
-    },
-    {
-        title: "First Name",
-        dataIndex: "firstName",
-        key: "firstsName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (firstName, record) => (
-            <NavLink
-                to={{
-                    pathname: "/userPersonal",
-                    state: {
-                        userId: record.id,
-                        screenKey: "umpire",
-                        screen: "/umpire",
-                    },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{firstName}</span>
-            </NavLink>
-        ),
-    },
-    {
-        title: "Last Name",
-        dataIndex: "lastName",
-        key: "lastName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (lastName, record) => (
-            <NavLink
-                to={{
-                    pathname: "/userPersonal",
-                    state: {
-                        userId: record.id,
-                        screenKey: "umpire",
-                        screen: "/umpire",
-                    },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{lastName}</span>
-            </NavLink>
-        ),
-    },
-    {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
-    {
-        title: "Contact No",
-        dataIndex: "mobileNumber",
-        key: "mobileNumber",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
-    {
-        title: 'Accreditation',
-        dataIndex: 'accreditationLevelUmpireRefId',
-        key: 'accreditationLevelUmpireRefId',
-        sorter: false,
-        render: (accreditationLevelUmpireRefId, record) => (
-            <span>{this_obj.checkAccreditationLevel(accreditationLevelUmpireRefId)}</span>
-        )
-    },
-    {
-        title: "Organisation",
-        dataIndex: "organisationName",
-        key: "organisationName",
-        sorter: true,
-        onHeaderCell: () => listeners("linkedEntityName"),
-        render: (organisation) => (
-            <span className="multi-column-text-aligned">{organisation}</span>
-        )
-    },
-    {
-        title: "Umpire",
-        dataIndex: "umpire",
-        key: "umpire",
-        sorter: true,
-        onHeaderCell: () => listeners("umpire"),
-        render: (umpireCoach, record) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
-    },
-    {
-        title: "Umpire Coach",
-        dataIndex: "umpireCoach",
-        key: "umpireCoach",
-        sorter: true,
-        onHeaderCell: () => listeners("umpireCoach"),
-        render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
-    },
-    {
-        title: "Action",
-        dataIndex: "action",
-        key: "action",
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <Menu.SubMenu
-                    key="sub1"
-                    style={{ borderBottomStyle: "solid", borderBottom: 0 }}
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            width="16"
-                            height="16"
-                            alt=""
-                        />
-                    }
-                >
-                    <Menu.Item key="1">
-                        <NavLink
-                            to={{
-                                pathname: "/addUmpire",
-                                state: { isEdit: true, tableRecord: record },
-                            }}
-                        >
-                            <span>Edit</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <NavLink
-                            to={{
-                                pathname: "./assignUmpire",
-                                state: { record },
-                            }}
-                        >
-                            <span>Assign to match</span>
-                        </NavLink>
-                    </Menu.Item>
-                </Menu.SubMenu>
-            </Menu>
-        ),
-    }
-];
-
 class Umpire extends Component {
     constructor(props) {
         super(props);
@@ -259,10 +96,240 @@ class Umpire extends Component {
             sortBy: null,
             sortOrder: null,
             isCompParent: false,
-            compOrganisationId: 0
+            compOrganisationId: 0,
+            visible: false,
+            umpireRank: null,
+            umpireId: null,
+            columns: [
+                {
+                    title: "Rank",
+                    dataIndex: "rank",
+                    key: "rank",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                    render: (rank, record, a) => {
+                        const { rankedUmpiresCount } = this.props.umpireState;
+                        return (
+                            <Form>
+                                <Select
+                                    onChange={(i, option) => this.handleSelectChange(i, option, record.id)}
+                                >
+                                    {
+                                        Array.apply(null, { length: rankedUmpiresCount + 1 }).map((rank, i, arr) => {
+                                            if (i === arr.length - 1) {
+                                                return <Option style={{backgroundColor: 'lightgreen'}} key={i}>{i+1}</Option>;
+                                            }
+                                            return <Option key={i}>{i+1}</Option>
+                                        })
+                                    }
+                                </Select>
+                            </Form>
+                        )
+                    },
+                },
+                {
+                    title: "First Name",
+                    dataIndex: "firstName",
+                    key: "firstsName",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                    render: (firstName, record) => (
+                        <NavLink
+                            to={{
+                                pathname: "/userPersonal",
+                                state: {
+                                    userId: record.id,
+                                    screenKey: "umpire",
+                                    screen: "/umpire",
+                                },
+                            }}
+                        >
+                            <span className="input-heading-add-another pt-0">{firstName}</span>
+                        </NavLink>
+                    ),
+                },
+                {
+                    title: "Last Name",
+                    dataIndex: "lastName",
+                    key: "lastName",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                    render: (lastName, record) => (
+                        <NavLink
+                            to={{
+                                pathname: "/userPersonal",
+                                state: {
+                                    userId: record.id,
+                                    screenKey: "umpire",
+                                    screen: "/umpire",
+                                },
+                            }}
+                        >
+                            <span className="input-heading-add-another pt-0">{lastName}</span>
+                        </NavLink>
+                    ),
+                },
+                {
+                    title: "Email",
+                    dataIndex: "email",
+                    key: "email",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                },
+                {
+                    title: "Contact No",
+                    dataIndex: "mobileNumber",
+                    key: "mobileNumber",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                },
+                {
+                    title: 'Accreditation',
+                    dataIndex: 'accreditationLevelUmpireRefId',
+                    key: 'accreditationLevelUmpireRefId',
+                    sorter: false,
+                    render: (accreditationLevelUmpireRefId, record) => (
+                        <span>{this_obj.checkAccreditationLevel(accreditationLevelUmpireRefId)}</span>
+                    )
+                },
+                {
+                    title: "Organisation",
+                    dataIndex: "organisationName",
+                    key: "organisationName",
+                    sorter: true,
+                    onHeaderCell: () => listeners("linkedEntityName"),
+                    render: (organisation) => (
+                        <span className="multi-column-text-aligned">{organisation}</span>
+                    )
+                },
+                {
+                    title: "Umpire",
+                    dataIndex: "umpire",
+                    key: "umpire",
+                    sorter: true,
+                    onHeaderCell: () => listeners("umpire"),
+                    render: (umpireCoach, record) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
+                },
+                {
+                    title: "Umpire Coach",
+                    dataIndex: "umpireCoach",
+                    key: "umpireCoach",
+                    sorter: true,
+                    onHeaderCell: () => listeners("umpireCoach"),
+                    render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
+                },
+                {
+                    title: "Action",
+                    dataIndex: "action",
+                    key: "action",
+                    render: (data, record) => (
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <Menu.SubMenu
+                                key="sub1"
+                                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                                title={
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        width="16"
+                                        height="16"
+                                        alt=""
+                                    />
+                                }
+                            >
+                                <Menu.Item key="1">
+                                    <NavLink
+                                        to={{
+                                            pathname: "/addUmpire",
+                                            state: { isEdit: true, tableRecord: record },
+                                        }}
+                                    >
+                                        <span>Edit</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="2">
+                                    <NavLink
+                                        to={{
+                                            pathname: "./assignUmpire",
+                                            state: { record },
+                                        }}
+                                    >
+                                        <span>Assign to match</span>
+                                    </NavLink>
+                                </Menu.Item>
+                            </Menu.SubMenu>
+                        </Menu>
+                    ),
+                }
+            ],
         };
 
         this_obj = this;
+    }
+
+    handleSelectChange = (i, option, id) => {
+        const { rankedUmpiresCount } = this.props.umpireState; 
+        const { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
+        if(option.children === rankedUmpiresCount + 1) {
+            this.props.updateUmpireRank({
+                compId: localStorage.getItem("umpireCompetitionId"),
+                umpireRank: option.children,
+                organisationId,
+                umpireId: id,
+            });
+        } else {
+            this.setState({
+                visible: true,
+                umpireRank: option.children,
+                umpireId: id,
+            });
+        }
+    }
+
+    switchShiftHandler = (updateRankType) => {
+        const { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
+        const { umpireRank, umpireId } = this.state;
+        this.props.updateUmpireRank({
+            compId: localStorage.getItem("umpireCompetitionId"),
+            umpireRank,
+            organisationId,
+            umpireId,
+            updateRankType,
+        });
+        this.setState({visible: false});
+    }
+
+    ModalView() {
+        return (
+            <Modal
+                visible={this.state.visible}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ style: { display: 'none' } }}
+                centered
+                closable={false}
+                footer={false}
+            >
+                <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+                    <Button 
+                        className="primary-add-comp-form"
+                        type="primary"
+                        onClick={() => this.switchShiftHandler('switch')}>
+                        Switch
+                    </Button>
+                    <Button 
+                        className="primary-add-comp-form"
+                        type="primary"
+                        onClick={() => this.switchShiftHandler('shift')}>
+                        Shift
+                    </Button>
+                </div>
+            </Modal>
+        )
     }
 
     async componentDidMount() {
@@ -280,7 +347,10 @@ class Umpire extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
-        this.props.getRefBadgeData(this.props.appstate.accreditation)
+        this.props.getRefBadgeData(this.props.appstate.accreditation);
+        this.props.getRankedUmpiresCount({
+            compId: localStorage.getItem("umpireCompetitionId"),
+        });
     }
 
     async componentDidUpdate(nextProps) {
@@ -379,14 +449,13 @@ class Umpire extends Component {
     contentView = () => {
         const { umpireList_Data, totalCount_Data, currentPage_Data, umpireListDataNew } = this.props.umpireState;
         let umpireListResult = isArrayNotEmpty(umpireListDataNew) ? umpireListDataNew : [];
-        console.log('umpireListResult', umpireListResult);
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.umpireState.onLoad}
                         className="home-dashboard-table"
-                        columns={columns}
+                        columns={this.state.columns}
                         dataSource={umpireListResult}
                         pagination={false}
                         rowKey={(record) => "umpireListResult" + record.id}
@@ -412,7 +481,6 @@ class Umpire extends Component {
     };
 
     onChangeComp = async (compID) => {
-        console.log('1111', compID);
         let selectedComp = compID.comp;
         // setUmpireCompId(selectedComp);
 
@@ -604,7 +672,7 @@ class Umpire extends Component {
         );
     };
 
-    render() {console.log(this.state.selectedComp);
+    render() {
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -617,6 +685,7 @@ class Umpire extends Component {
                     <Content>
                         {/* {this.dropdownView()} */}
                         {this.contentView()}
+                        {this.ModalView()}
                     </Content>
                 </Layout>
             </div>
@@ -631,6 +700,8 @@ function mapDispatchToProps(dispatch) {
         userExportFilesAction,
         getRefBadgeData,
         getUmpireList,
+        getRankedUmpiresCount,
+        updateUmpireRank,
     }, dispatch);
 }
 
@@ -638,7 +709,8 @@ function mapStateToProps(state) {
     return {
         umpireState: state.UmpireState,
         umpireCompetitionState: state.UmpireCompetitionState,
-        appstate: state.AppState
+        appstate: state.AppState,
+        rankedUmpiresCount: state.rankedUmpiresCount,
     };
 }
 

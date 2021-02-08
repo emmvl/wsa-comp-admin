@@ -480,6 +480,9 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_LIST_LOAD, umpireRosterSaga.umpireRosterListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_ROSTER_ACTION_CLICK_LOAD, umpireRosterSaga.umpireActionPerofomSaga);
+    yield takeEvery(ApiConstants.API_GET_RANKED_UMPIRES_COUNT, umpireSaga.getRankedUmpiresCount);
+    /// /// update umpire rank
+    yield takeEvery(ApiConstants.API_UPDATE_UMPIRE_RANK, umpireSaga.updateUmpireRank);
     // new umpire list
     yield takeEvery(ApiConstants.API_GET_UMPIRE_LIST_LOAD, umpireSaga.umpireListGetSaga);
 

@@ -80,6 +80,20 @@ let UmpireAxiosApi = {
         const url = `/competitions/` + payload.compId + `/umpires/pools/divisions`;
         return Method.dataPatch(url, token, payload.body);
     },
+
+    getRankedUmpiresCount(payload) {
+        console.log('payload', payload);
+        const url = `/competitions/id/${payload.compId}/ranked-umpires-count`;
+        return Method.dataGet(url, token);
+    },
+
+    updateUmpireRank(payload) {
+        console.log('PAYload', payload);
+        const url = `/competitions/${payload.compId}/umpires/${payload.umpireId}/rank?organisationId=${payload.organisationId}`;
+        return Method.dataPatch(url, token, {
+            rank: payload.umpireRank
+        });
+    }
 }
 
 const Method = {

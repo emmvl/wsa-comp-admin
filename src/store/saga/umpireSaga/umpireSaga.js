@@ -182,3 +182,29 @@ export function* umpireListGetSaga(action) {
         yield call(errorSaga, error);
     }
 }
+
+export function* getRankedUmpiresCount(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.getRankedUmpiresCount, action.data);
+        yield put({
+            type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT_SUCCESS,
+            result: result.result.data,
+            status: result.status,
+        });
+    } catch(error) {
+        yield call(errorSaga, error);
+    }
+}
+
+export function* updateUmpireRank(action) {
+    console.log('ACTION', action);
+    try {
+        console.log('11111');
+        const result = yield call(UmpireAxiosApi.updateUmpireRank, action.data);
+        console.log('RESULT', result);
+        const newRanklist = yield call(UmpireAxiosApi.getRankedUmpiresCount, action.data);
+        console.log('newRanklist',newRanklist);
+    }catch(error) {
+        yield call(errorSaga, error);
+    }
+}

@@ -79,6 +79,23 @@ function umpireMainListAction(data) {
     return action;
 }
 
+function getRankedUmpiresCount(data) {
+    const action = {
+        type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT,
+        data,
+    };
+    return action;
+}
+
+function updateUmpireRank(data) {
+    console.log('DATA',data);
+    const action = {
+        type: ApiConstants.API_UPDATE_UMPIRE_RANK,
+        data,
+    };
+    return action;
+}
+
 export {
     umpireListAction,
     addUmpireAction,
@@ -89,4 +106,6 @@ export {
     umpireMainListAction,
     newUmpireListAction,
     getUmpireList,
+    getRankedUmpiresCount,
+    updateUmpireRank,
 } 
