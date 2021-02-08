@@ -13,7 +13,7 @@ function* failSaga(result) {
       message.error(result.result.data.message);
     }, 800);
   }
-  
+
   function* errorSaga(error) {
     yield put({
       type: ApiConstants.API_REGISTRATION_CHANGE_ERROR,
@@ -26,7 +26,7 @@ function* failSaga(result) {
     }, 800);
   }
 
-  
+
   ////// Save DeRegister Data
 export function* saveDeRegisterSaga(action) {
     try {
@@ -117,4 +117,4 @@ export function* saveRegistrationChangeReviewSaga(action) {
   }
 }
 
-  
+

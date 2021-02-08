@@ -8,30 +8,9 @@ const initialState = {
     umpireComptitionList: [],
     paidByCompOrgDivisionAffiliate: [],
     poolViewArray: [],
-    badgeDataCompOrg: [],
-    badgeDataByAffiliate: [],
 
     paymentSettingsData: null,
 };
-
-function getFilterBadgeData(badgeData) {
-
-    let arr = []
-    for (let i in badgeData) {
-        let obj = {
-            description: badgeData[i].description,
-            id: badgeData[i].id,
-            name: badgeData[i].name,
-            sortOrder: badgeData[i].sortOrder,
-            subReferences: badgeData[i].subReferences,
-            umpireRate: 0,
-            umpReserveRate: 0,
-            umpCoachRate: 0
-        }
-        arr.push(obj)
-    }
-    return arr;
-}
 
 function umpirePaymentSetting(state = initialState, action) {
 
@@ -48,20 +27,6 @@ function umpirePaymentSetting(state = initialState, action) {
                 onLoad: false,
                 umpireComptitionList: result,
                 status: action.status
-            };
-
-        ////Ref Badge 
-        case ApiConstants.API_GET_REF_BADGE_LOAD:
-            return { ...state, onLoad: true };
-
-        case ApiConstants.API_GET_REF_BADGE_SUCCESS:
-            let filterBadgeData = getFilterBadgeData(action.result)
-            state.badgeDataCompOrg = filterBadgeData
-            state.badgeDataByAffiliate = filterBadgeData
-            return {
-                ...state,
-                onLoad: false,
-                status: action.status,
             };
 
 

@@ -59,30 +59,107 @@ export function* liveScoreIncidentListSaga(action) {
     }
 }
 
+export function* liveScoreIncidentItemSaga(action) {
+    yield put({
+        type: ApiConstants.API_LIVE_SCORE_INCIDENT_ITEM_LOAD,
+    });
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreIncidentItem, action.data.incidentId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_INCIDENT_ITEM_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* createPlayerSuspensionSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.createPlayerSuspension, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_CREATE_PLAYER_SUSPENSION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success('Add Suspension - Added Successfully')
+            yield liveScoreIncidentItemSaga(action)
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* updatePlayerSuspensionSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.updatePlayerSuspension, action.suspensionId, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_PLAYER_SUSPENSION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success('Update Suspension - Updated Successfully')
+            yield liveScoreIncidentItemSaga(action)
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+function* liveScoreAddEditIncidentMediaSaga(action, incidentId) {
+    try {
+        const mediaResult = yield call(LiveScoreAxiosApi.liveScoreAddEditIncidentMedia, action.data, incidentId);
+
+        if (mediaResult.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
+                result: mediaResult.result.data,
+                status: mediaResult.status,
+                umpireKey: action.data.umpireKey,
+            });
+            history.push('/matchDayIncidentList')
+            message.success('Add Incident - Added Successfully')
+        } else {
+            yield call(failSaga, mediaResult)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
 export function* liveScoreAddEditIncidentSaga(action) {
     try {
         // if (action.data.key === 'media') {
-
         const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);
+
         if (result.status === 1) {
-            const mediaResult = yield call(LiveScoreAxiosApi.liveScoreAddEditIncidentMedia, action.data, result.result.data.incidentId);
-            if (mediaResult.status === 1) {
+            if (action.data.incidentMediaIds && action.data.umpireKey) {
+                yield liveScoreAddEditIncidentMediaSaga(action, result.result.data.incidentId)
+            } else {
                 yield put({
                     type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
-                    result: mediaResult.result.data,
-                    status: mediaResult.status,
-                    umpireKey: action.data.umpireKey
+                    result: result.result.data,
+                    status: result.status,
                 });
                 history.push('/matchDayIncidentList')
                 message.success('Add Incident - Added Successfully')
             }
-            else {
-                yield call(failSaga, result)
-            }
         } else {
             yield call(failSaga, result)
         }
-        // } 
+        // }
 
         // else {
         //     const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);

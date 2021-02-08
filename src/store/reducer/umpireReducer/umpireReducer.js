@@ -34,10 +34,11 @@ const initialState = {
     umpireList_Data: [],
     umpireListResult_Data: [],
     currentPage_Data: null,
-    totalCount_Data: null,
+    totalCount_Data: 0,
     umpireListActionObject: null,
     umpireListData: [],
-    umpireCheckbox:false
+    umpireCheckbox:false,
+    umpireListDataNew: [],
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -274,6 +275,27 @@ function umpireState(state = initialState, action) {
             return {
                 ...state,
             }
+
+        // get umpire list settings - new
+        case ApiConstants.API_GET_UMPIRE_LIST_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+
+        case ApiConstants.API_GET_UMPIRE_LIST_SUCCESS:
+            const umpireListDataCopy = JSON.parse(JSON.stringify(state.umpireListDataNew));
+            umpireListDataCopy.push(...action.result.data);
+
+            return {
+                ...state,
+                // umpireListDataNew: action.result?.page.currentPage === 1 ? action.result.data : umpireListDataCopy,
+                umpireListDataNew: action.result.data,
+                currentPage_Data: action.result.page ? action.result.page.currentPage : null,
+                totalCount_Data: action.result.page ? action.result.page.totalCount : null,
+                onLoad: false,
+            };
+
         //// Fail and Error case
         case ApiConstants.API_UMPIRE_FAIL:
             return {

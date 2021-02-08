@@ -1,13 +1,16 @@
 import React, {useState, Component } from "react";
 import {
     Layout,
+    // Select,
     Button,
+    // Input,
     Radio,
     Form,
     message,
-    Modal,
+    Modal
 } from "antd";
-
+// import moment from 'moment';
+// import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -15,12 +18,10 @@ import {
     updateReviewInfoAction,
     getTeamMembersReviewAction
 } from '../../store/actions/userAction/userAction'
-// import moment from 'moment';
-// import InputWithHead from "../../customComponents/InputWithHead";
 // import ValidationConstants from "../../themes/validationConstant";
 // import AppImages from "../../themes/appImages";
-// import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
+// import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import history from '../../util/history';
 import {isArrayNotEmpty} from '../../util/helpers';
@@ -317,14 +318,9 @@ const CheckoutForm = (props) => {
                         ))}
                     </div>
                     :
-                    (
-                        <div className="content-view pt-5 secure-payment-msg">
-                            {AppConstants.securePaymentMsg}
-                            <div style={{ fontWeight: "bold" }}>
-                                {AppConstants.submitButtonPressDescription}
-                            </div>
-                        </div>
-                    )
+                    <div className="content-view pt-5 secure-payment-msg">
+                        {AppConstants.securePaymentMsg}
+                    </div>
                 }
                 <div className="mt-5">
                     <div style={{ padding: 0 }}>

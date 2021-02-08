@@ -62,6 +62,16 @@ function checkVenueCourtId(data) {
 }
 
 const LiveScoreAxiosApi = {
+    createPlayerSuspension(data) {
+        const url = '/suspension/';
+
+        return Method.dataPost(url, token, data.body);
+    },
+    updatePlayerSuspension(suspensionId, data) {
+        const url = `/suspension/?id=${suspensionId}`;
+
+        return Method.dataPatch(url, token, data.body);
+    },
     livescoreMatchDetails(data, isLineup) {
         const url = `/matches/admin/${data}?lineups=${isLineup}`;
         // let url = `/matches/admin/${data}`
@@ -270,6 +280,12 @@ const LiveScoreAxiosApi = {
     liveScoreAddEditMatch(id) {
         const url = `/matches/id/${id}`;
         return Method.dataGet(url, localStorage.token);
+    },
+
+    liveScoreIncidentItem(incidentId) {
+        const url = `/incident/id/${incidentId}`;
+
+        return Method.dataGet(url, token);
     },
 
     liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder, isParent, competitionOrganisationId) {
@@ -1577,21 +1593,6 @@ const LiveScoreAxiosApi = {
     umpirePaymentExport(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
-
-    getUmpirePoolAllocation(poolData) {
-
-        let url = `/competitions/` + poolData.compId + `/umpires/pools?organisationId=${poolData.orgId}`;
-
-        return Method.dataGet(url, token);
-    },
-
-    saveUmpirePoolAllocation(payload) {
-        let url = `competitions/` + payload.compId + `/umpires/pools?competitionId=${payload.compId}&organisationId=${payload.orgId}`;
-
-        return Method.dataPost(url, token, payload.poolObj);
-    },
-
-
 };
 
 const Method = {

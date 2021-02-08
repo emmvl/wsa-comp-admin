@@ -480,6 +480,8 @@ class UserEditAffiliates extends Component {
             } ${state ? `${state},` : ''
             } Australia`;
 
+        const isValidate = affiliate.suburb ? false : true;
+
         return (
             <div className="content-view pt-4">
                 <InputWithHead heading={AppConstants.organisationType} />
@@ -566,9 +568,18 @@ class UserEditAffiliates extends Component {
                         value={affiliate.name}
                     />
                 </Form.Item>
-                <Form.Item name="affiliateAddress">
+
+                <Form.Item
+                    className="formLineHeight"
+                    name="affiliateAddress"
+                    rules={[{
+                        required: isValidate,
+                        message: AppConstants.addressSearch,
+                    }]}
+                >
                     <PlacesAutocomplete
                         defaultValue={defaultAffiliateAddress}
+                        required="required-field"
                         heading={AppConstants.address}
                         required
                         error={this.state.affiliateAddressError}
@@ -581,14 +592,17 @@ class UserEditAffiliates extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead
-                    maxLength={10}
-                    heading={AppConstants.phoneNumber}
-                    placeholder={AppConstants.phoneNumber}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
-                    value={affiliate.phoneNo}
-                    auto_complete="new-phoneNo"
-                />
+                <Form.Item name="phoneNo" rules={[{ required: true, message: ValidationConstants.phoneNumberRequired }]}>
+                    <InputWithHead
+                        maxLength={10}
+                        required="required-field"
+                        heading={AppConstants.phoneNumber}
+                        placeholder={AppConstants.phoneNumber}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
+                        value={affiliate.phoneNo}
+                        auto_complete="new-phoneNo"
+                    />
+                </Form.Item>
             </div>
         );
     };

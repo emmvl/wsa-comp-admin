@@ -1,24 +1,30 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal } from "antd";
-import './user.css';
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import {
+    Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, Input,
+} from "antd";
 import { NavLink } from "react-router-dom";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { SearchOutlined } from "@ant-design/icons";
+
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import DashboardLayout from "../../pages/dashboardLayout";
 import {
     getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction, affiliateDeleteAction,
 } from "../../store/actions/userAction/userAction";
-import { bindActionCreators } from "redux";
-import AppImages from "../../themes/appImages";
 import { getOrganisationData } from "../../util/sessionStorage";
-const { Content } = Layout;
+
+import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
+import './user.css';
+
+const { Content, Header } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
-/////function to sort table column
+/// //function to sort table column
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
@@ -30,14 +36,14 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let filterData = {
+    const filterData = {
         organisationId: this_Obj.state.organisationId,
         affiliatedToOrgId: this_Obj.state.affiliatedToOrgId,
         organisationTypeRefId: this_Obj.state.organisationTypeRefId,
         statusRefId: this_Obj.state.statusRefId,
         paging: {
             limit: 10,
-            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0),
         },
         stateOrganisations: false,
     }
@@ -105,7 +111,7 @@ const columns = [
                 >
                     <SubMenu
                         key="sub1"
-                        title={
+                        title={(
                             <img
                                 className="dot-image"
                                 src={AppImages.moreTripleDot}
@@ -113,16 +119,18 @@ const columns = [
                                 width="16"
                                 height="16"
                             />
-                        }
+                        )}
                     >
                         <Menu.Item key="1">
-                            <NavLink to={{ pathname: '/userEditAffiliates', state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }}>
+                            <NavLink
+                                to={{
+                                    pathname: '/userEditAffiliates',
+                                    state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId },
+                                }}
+                            >
                                 <span>Edit</span>
                             </NavLink>
                         </Menu.Item>
-                        {/* <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.affiliateId)}>
-                            <span>Delete</span>
-                        </Menu.Item> */}
                     </SubMenu>
                 </Menu>
             )
@@ -143,6 +151,7 @@ class UserAffiliatesList extends Component {
             sortBy: null,
             sortOrder: null,
             offsetData: 0,
+            searchText: '',
         };
         this_Obj = this;
         // this.props.getUreAction();
@@ -152,24 +161,32 @@ class UserAffiliatesList extends Component {
     async componentDidMount() {
         const { userAffiliateListAction } = this.props.userState
         let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
+        let { sortBy } = this.state
+        let { sortOrder } = this.state
         if (userAffiliateListAction) {
-            let offsetData = userAffiliateListAction.payload.paging.offset
+            const offsetData = userAffiliateListAction.payload.paging.offset
             sortBy = userAffiliateListAction.sortBy
             sortOrder = userAffiliateListAction.sortOrder
-            let affiliatedToOrgId = userAffiliateListAction.payload.affiliatedToOrgId
-            let organisationTypeRefId = userAffiliateListAction.payload.organisationTypeRefId
-            let statusRefId = userAffiliateListAction.payload.statusRefId
+            const { affiliatedToOrgId } = userAffiliateListAction.payload
+            const { organisationTypeRefId } = userAffiliateListAction.payload
+            const { statusRefId } = userAffiliateListAction.payload
 
-            await this.setState({ offsetData, sortBy, sortOrder, affiliatedToOrgId, statusRefId, organisationTypeRefId })
+            await this.setState({
+                offsetData, sortBy, sortOrder, affiliatedToOrgId, statusRefId, organisationTypeRefId,
+            })
             page = Math.floor(offsetData / 10) + 1;
         }
-        this.handleAffiliateTableList(page, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, this.state.statusRefId)
+        this.handleAffiliateTableList(
+            page,
+            this.state.organisationId,
+            this.state.affiliatedToOrgId,
+            this.state.organisationTypeRefId,
+            this.state.statusRefId,
+        )
     }
 
     componentDidUpdate(nextProps) {
-        let userState = this.props.userState;
+        const { userState } = this.props;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -194,16 +211,17 @@ class UserAffiliatesList extends Component {
 
     handleAffiliateTableList = (page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
         this.setState({
-            pageNo: page
+            pageNo: page,
         })
-        let filter = {
-            organisationId: organisationId,
-            affiliatedToOrgId: affiliatedToOrgId,
-            organisationTypeRefId: organisationTypeRefId,
-            statusRefId: statusRefId,
+        const filter = {
+            organisationId,
+            affiliatedToOrgId,
+            organisationTypeRefId,
+            statusRefId,
+            searchText: this.state.searchText,
             paging: {
                 limit: 10,
-                offset: (page ? (10 * (page - 1)) : this.state.offsetData)
+                offset: (page ? (10 * (page - 1)) : this.state.offsetData),
             },
             stateOrganisations: false,
         }
@@ -230,7 +248,7 @@ class UserAffiliatesList extends Component {
     }
 
     showDeleteConfirm = (affiliateId) => {
-        let this_ = this
+        const this_ = this
         confirm({
             title: 'Are you sure you want to delete this affiliate?',
             // content: 'Some descriptions',
@@ -251,26 +269,73 @@ class UserAffiliatesList extends Component {
         this.setState({ deleteLoading: true })
     }
 
-    headerView = () => {
-        return (
-            <div className="comp-player-grades-header-view-design">
-                <div className="row">
-                    <div className="col-sm d-flex align-items-center">
-                        <Breadcrumb separator=" > ">
-                            {/* <Breadcrumb.Item className="breadcrumb-product">User</Breadcrumb.Item> */}
-                            <Breadcrumb.Item className="breadcrumb-add">Affiliates</Breadcrumb.Item>
-                        </Breadcrumb>
+    handleTextualTableList = (page) => {
+        this.handleAffiliateTableList(
+            page,
+            this.state.organisationId,
+            this.state.affiliatedToOrgId,
+            this.state.organisationTypeRefId,
+            this.state.statusRefId,
+        );
+    };
+
+    onKeyEnterSearchText = async (e) => {
+        const code = e.keyCode || e.which;
+        if (code === 13) {
+            this.handleTextualTableList(1);
+        }
+    };
+
+    onChangeSearchText = async (e) => {
+        const { value } = e.target;
+
+        await this.setState({ searchText: value });
+
+        if (!value) {
+            this.handleTextualTableList(1);
+        }
+    };
+
+    onClickSearchIcon = async () => {
+        this.handleTextualTableList(1);
+    };
+
+    headerView = () => (
+        <Header className="comp-player-grades-header-view" style={{ marginTop: 0, padding: '0 22px' }}>
+            <div className="row">
+                <div className="col-sm d-flex align-items-center">
+                    <Breadcrumb separator=" > ">
+                        {/* <Breadcrumb.Item className="breadcrumb-product">User</Breadcrumb.Item> */}
+                        <Breadcrumb.Item className="breadcrumb-add">Affiliates</Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
+                <div className="col-sm search-flex">
+                    <div className="reg-product-search-inp-width">
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
+                            placeholder="Search..."
+                            onKeyPress={this.onKeyEnterSearchText}
+                            value={this.state.searchText}
+                            prefix={(
+                                <SearchOutlined
+                                    style={{ color: 'rgba(0,0,0,.25)', height: 16, width: 16 }}
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            )}
+                            allowClear
+                        />
                     </div>
                 </div>
             </div>
-        )
-    }
+        </Header>
+    )
 
     dropdownView = () => {
-        let affiliateToData = this.props.userState.affiliateTo;
+        const affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         if (affiliateToData.affiliatedTo != undefined) {
-            uniqueValues = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["affiliatedToOrgId"], obj])).values()];
+            uniqueValues = [...new Map(affiliateToData.affiliatedTo.map((obj) => [obj.affiliatedToOrgId, obj])).values()];
         }
 
         return (
@@ -289,7 +354,7 @@ class UserAffiliatesList extends Component {
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org) => (
                                         <Option
-                                            key={'organization_' + org.affiliatedToOrgId}
+                                            key={`organization_${org.affiliatedToOrgId}`}
                                             value={org.affiliatedToOrgId}
                                         >
                                             {org.affiliatedToOrgName}
@@ -335,9 +400,13 @@ class UserAffiliatesList extends Component {
                                 <div className="d-flex flex-row-reverse">
                                     <NavLink to={{
                                         pathname: '/userAddAffiliates',
-                                        state: { isEdit: true }
-                                    }}>
-                                        <Button className="primary-add-product" type="primary">+ {AppConstants.addAffiliate}</Button>
+                                        state: { isEdit: true },
+                                    }}
+                                    >
+                                        <Button className="primary-add-product" type="primary">
++
+                                            {AppConstants.addAffiliate}
+                                        </Button>
                                     </NavLink>
                                 </div>
                             )}
@@ -349,9 +418,9 @@ class UserAffiliatesList extends Component {
     }
 
     contentView = () => {
-        let userState = this.props.userState;
-        let affiliates = userState.affiliateList;
-        let total = userState.affiliateListTotalCount;
+        const { userState } = this.props;
+        const affiliates = userState.affiliateList;
+        const total = userState.affiliateListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -387,7 +456,10 @@ class UserAffiliatesList extends Component {
                 {affiliateToData.isEligibleToAddAffiliate && (
                     <div className="d-flex flex-row-reverse">
                         <NavLink to="/userAddAffiliates">
-                            <Button className="primary-add-product" type="primary">+ {AppConstants.addAffiliate}</Button>
+                            <Button className="primary-add-product" type="primary">
++
+                                {AppConstants.addAffiliate}
+                            </Button>
                         </NavLink>
                     </div>
                 )}
