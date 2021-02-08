@@ -637,6 +637,8 @@ class UserOurOrganization extends Component {
             } ${state ? `${state},` : ''
             } Australia`;
 
+        const isValidate = affiliate.suburb ? false : true;
+
         return (
             <div className="content-view pt-4">
                 <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
@@ -737,7 +739,14 @@ class UserOurOrganization extends Component {
                     </div>
                 </div>
 
-                <Form.Item className="formLineHeight" name="affiliateAddress">
+                <Form.Item
+                    className="formLineHeight"
+                    name="affiliateAddress"
+                    rules={[{
+                        required: isValidate,
+                        message: AppConstants.addressSearch,
+                    }]}
+                >
                     <PlacesAutocomplete
                         defaultValue={defaultAffiliateAddress}
                         heading={AppConstants.affiliateAddressAddressSelect}
@@ -746,25 +755,42 @@ class UserOurOrganization extends Component {
                         onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
+                <Form.Item name="phoneNo" rules={[{ required: true, message: ValidationConstants.phoneNumberRequired }]}>
+                    <InputWithHead
+                        auto_complete='new-phone'
+                        required="required-field"
+                        maxLength={10}
+                        heading={AppConstants.phoneNumber}
+                        placeholder={AppConstants.phoneNumber}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
+                        value={affiliate.phoneNo}
+                        disabled={!this.state.isEditable}
+                    />
+                </Form.Item>
 
-                <InputWithHead
-                    auto_complete='new-phone'
-                    maxLength={10}
-                    heading={AppConstants.phoneNumber}
-                    placeholder={AppConstants.phoneNumber}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
-                    value={affiliate.phoneNo}
-                    disabled={!this.state.isEditable}
-                />
-
-                <InputWithHead
-                    heading={AppConstants.email}
-                    placeholder={AppConstants.email}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
-                    value={affiliate.email}
-                    disabled={!this.state.isEditable}
-                    auto_complete='new-email'
-                />
+                <Form.Item
+                    name="email"
+                    rules={[
+                        {
+                            required: true, message: ValidationConstants.emailField[0],
+                        },
+                        {
+                            type: "email",
+                            pattern: new RegExp(AppConstants.emailExp),
+                            message: ValidationConstants.email_validation,
+                        },
+                    ]}
+                >
+                    <InputWithHead
+                        heading={AppConstants.email}
+                        required="required-field"
+                        placeholder={AppConstants.email}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                        value={affiliate.email}
+                        disabled={!this.state.isEditable}
+                        auto_complete='new-email'
+                    />
+                </Form.Item>
             </div>
         )
     }

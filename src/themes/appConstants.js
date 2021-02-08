@@ -1648,7 +1648,7 @@ const AppConstants = {
     oneHasPreference: "Which one has preference:",
     divisionAndGrades: "Division and Grades",
     combine: "Combine",
-    whatRegistrationChange: "What registration change do you",
+    whatRegistrationChange: "What registration change do you need to make?",
     registrationChangeRef: "RegistrationChange",
     reasonWhyYourAreDecline:
         "Reason why you are declining the request for de-registration?",
@@ -1967,6 +1967,8 @@ const AppConstants = {
     retryPayment: "Retry Payment",
 
     parentDetails: "Parent details",
+    noOfRegisteredUsersInfo: "Number of individual users who are registered to your organisation or 1st / 2nd level affiliates (if applicable)",
+    noOfRegistrationsInfo: "Note: number of registrations are counted per role / competition",
 };
 
 export default AppConstants;

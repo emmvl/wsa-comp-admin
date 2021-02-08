@@ -34,6 +34,7 @@ import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
 import Loader from '../../customComponents/loader';
+import CustomTooltip from 'react-png-tooltip';
 
 import "./product.scss";
 
@@ -962,7 +963,12 @@ class Registration extends Component {
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="registration-count">
-                                <div className="reg-payment-paid-reg-text">No. of Registrations</div>
+                                <div className="reg-payment-paid-reg-text">
+                                    No. of Registrations
+                                    <CustomTooltip>
+                                        <span>{AppConstants.noOfRegistrationsInfo}</span>
+                                    </CustomTooltip>
+                                </div>
                                 <div className="reg-payment-price-text">{total}</div>
                             </div>
                         </div>
