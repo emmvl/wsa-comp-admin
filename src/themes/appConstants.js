@@ -1648,7 +1648,7 @@ const AppConstants = {
     oneHasPreference: "Which one has preference:",
     divisionAndGrades: "Division and Grades",
     combine: "Combine",
-    whatRegistrationChange: "What registration change do you",
+    whatRegistrationChange: "What registration change do you need to make?",
     registrationChangeRef: "RegistrationChange",
     reasonWhyYourAreDecline:
         "Reason why you are declining the request for de-registration?",
