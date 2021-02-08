@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, DatePicker, Modal, Form } from 'antd';
+import { Tooltip, Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, DatePicker, Modal, Form } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -23,6 +23,7 @@ import InputWithHead from 'customComponents/InputWithHead';
 import Loader from 'customComponents/loader';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
+import CustomTooltip from 'react-png-tooltip';
 
 import './user.css';
 
@@ -668,7 +669,12 @@ class UserTextualDashboard extends Component {
                     </div>
                     <div className="col-sm-4">
                         <div className="registration-count">
-                            <div className="reg-payment-paid-reg-text">No. of Registered Users</div>
+                            <div className="reg-payment-paid-reg-text">
+                                No. of Registered Users
+                                <CustomTooltip>
+                                    <span>{AppConstants.noOfRegisteredUsersInfo}</span>
+                                </CustomTooltip>
+                            </div>
                             <div className="reg-payment-price-text">{noOfRegisteredUsers}</div>
                         </div>
                     </div>
