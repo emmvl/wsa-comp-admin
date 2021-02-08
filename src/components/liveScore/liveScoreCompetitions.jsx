@@ -21,7 +21,15 @@ import {
     getOrganisationData, getPrevUrl, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData, setKeyForStateWideMessage, getGlobalYear, setGlobalYear
 } from 'util/sessionStorage';
 import { getOnlyYearListAction } from 'store/actions/appAction';
-import { liveScoreOwnPartCompetitionList, liveScoreCompetitionActionInitiate, liveScoreCompetitionDeleteInitiate } from 'store/actions/LiveScoreAction/liveScoreCompetitionAction';
+import {
+    liveScoreOwnPartCompetitionList,
+    liveScoreCompetitionActionInitiate,
+    liveScoreCompetitionDeleteInitiate,
+    setParticipatePageSizeAction,
+    setParticipatePageNumberAction,
+    setOwnedPageSizeAction,
+    setOwnedPageNumberAction,
+} from 'store/actions/LiveScoreAction/liveScoreCompetitionAction';
 // import Loader from "customComponents/loader";
 import DashboardLayout from 'pages/dashboardLayout';
 import './liveScore.css';
@@ -50,12 +58,16 @@ function tableSort(key, tableName) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
+    let { participatePageSize } = this.props.liveScoreCompetition;
+    participatePageSize = participatePageSize ? participatePageSize : 10;
+    let { ownedPageSize } = this.props.liveScoreCompetition;
+    ownedPageSize = ownedPageSize ? ownedPageSize : 10;
     const body = {
         paging: {
             offsetOwned: this_Obj.state.ownOffset,
             offsetParticipating: this_Obj.state.partOffset,
-            limitOwned: 10,
-            limitParticipating: 10,
+            limitOwned: ownedPageSize,
+            limitParticipating: participatePageSize,
         },
     };
     this_Obj.props.liveScoreOwnPartCompetitionList(body, this_Obj.state.orgKey, sortBy, sortOrder, tableName, this_Obj.state.year);
@@ -423,12 +435,16 @@ class LiveScoreCompetitions extends Component {
                 allCompListLoad: true, sortBy, sortOrder, year,
             });
         } else {
+            let { participatePageSize } = this.props.liveScoreCompetition;
+            participatePageSize = participatePageSize ? participatePageSize : 10;
+            let { ownedPageSize } = this.props.liveScoreCompetition;
+            ownedPageSize = ownedPageSize ? ownedPageSize : 10;
             const body = {
                 paging: {
                     offsetOwned: 0,
                     offsetParticipating: 0,
-                    limitOwned: 10,
-                    limitParticipating: 10,
+                    limitOwned: ownedPageSize,
+                    limitParticipating: participatePageSize,
                 },
             };
             this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, 'all', yearRefId);
@@ -463,13 +479,28 @@ class LiveScoreCompetitions extends Component {
         });
     };
 
-    handlePagination = (page, key) => {
+    handleShowSizeChange = (key) => async (page, pageSize) => {
+        if (key === 'own') {
+            await this.props.setParticipatePageSizeAction(pageSize);
+        } else {
+            await this.props.setOwnedPageSizeAction(pageSize);
+        }
+        this.handlePagination(page, key);
+    }
+
+    handlePagination = async (page, key) => {
         let { ownOffset } = this.state;
         let { partOffset } = this.state;
+        let { participatePageSize } = this.props.liveScoreCompetition;
+        participatePageSize = participatePageSize ? participatePageSize : 10;
+        let { ownedPageSize } = this.props.liveScoreCompetition;
+        ownedPageSize = ownedPageSize ? ownedPageSize : 10;
         if (key === 'own') {
-            ownOffset = page ? 10 * (page - 1) : 0;
+            await this.props.setParticipatePageNumberAction(page);
+            ownOffset = page ? participatePageSize * (page - 1) : 0;
         } else if (key === 'part') {
-            partOffset = page ? 10 * (page - 1) : 0;
+            await this.props.setOwnedPageNumberAction(page);
+            partOffset = page ? ownedPageSize * (page - 1) : 0;
         }
 
         this.setState({ ownOffset, partOffset });
@@ -478,8 +509,8 @@ class LiveScoreCompetitions extends Component {
             paging: {
                 offsetOwned: ownOffset,
                 offsetParticipating: partOffset,
-                limitOwned: 10,
-                limitParticipating: 10,
+                limitOwned: ownedPageSize,
+                limitParticipating: participatePageSize,
             },
         };
 
@@ -581,7 +612,7 @@ class LiveScoreCompetitions extends Component {
 
     participatedView = () => {
         const {
-            participatingInComptitions, participateTotalCount, participateCurrentPage, partLoad,
+            participatingInComptitions, participateTotalCount, participateCurrentPage, participatePageSize, partLoad,
         } = this.props.liveScoreCompetition;
         return (
             <div className="comp-dash-table-view">
@@ -599,10 +630,13 @@ class LiveScoreCompetitions extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
+                        showSizeChanger
                         current={participateCurrentPage}
-                        showSizeChanger={false}
+                        defaultCurrent={participateCurrentPage}
+                        defaultPageSize={participatePageSize}
                         total={participateTotalCount}
                         onChange={(page) => this.handlePagination(page, 'part')}
+                        onShowSizeChange={this.handleShowSizeChange('part')}
                     />
                 </div>
             </div>
@@ -613,13 +647,16 @@ class LiveScoreCompetitions extends Component {
         localStorage.setItem('yearId', yearId);
         setGlobalYear(yearId)
         this.setState({ year: yearId });
-
+        let { participatePageSize } = this.props.liveScoreCompetition;
+        participatePageSize = participatePageSize ? participatePageSize : 10;
+        let { ownedPageSize } = this.props.liveScoreCompetition;
+        ownedPageSize = ownedPageSize ? ownedPageSize : 10;
         const body = {
             paging: {
                 offsetOwned: 0,
                 offsetParticipating: 0,
-                limitOwned: 10,
-                limitParticipating: 10,
+                limitOwned: ownedPageSize,
+                limitParticipating: participatePageSize,
             },
         };
         this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, this.state.sortBy, this.state.sortOrder, 'all', yearId);
@@ -662,9 +699,8 @@ class LiveScoreCompetitions extends Component {
     };
 
     ownedView = () => {
-        const {
-            ownedCompetitions, ownedTotalCount, ownedCurrentPage, ownedLoad,
-        } = this.props.liveScoreCompetition;
+        const { ownedCompetitions, ownedTotalCount, ownedCurrentPage, ownedPageSize, ownedLoad } = this.props.liveScoreCompetition;
+
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -681,9 +717,12 @@ class LiveScoreCompetitions extends Component {
                     <Pagination
                         className="antd-pagination pb-0"
                         current={ownedCurrentPage}
-                        showSizeChanger={false}
+                        defaultCurrent={ownedCurrentPage}
+                        defaultPageSize={ownedPageSize}
                         total={ownedTotalCount}
                         onChange={(page) => this.handlePagination(page, 'own')}
+                        onShowSizeChange={this.handleShowSizeChange('own')}
+                        showSizeChanger
                     />
                 </div>
             </div>
@@ -718,4 +757,8 @@ export default connect(mapStateToProps, {
     liveScoreCompetitionDeleteInitiate,
     getOnlyYearListAction,
     updateInnerHorizontalData,
+    setParticipatePageSizeAction,
+    setParticipatePageNumberAction,
+    setOwnedPageSizeAction,
+    setOwnedPageNumberAction,
 })(LiveScoreCompetitions);
