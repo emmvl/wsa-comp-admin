@@ -8,7 +8,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import AppConstants from 'themes/appConstants';
 import AppImages from 'themes/appImages';
 import { getOrganisationData } from 'util/sessionStorage';
-import { venuesListAction, venueDeleteAction } from 'store/actions/commonAction/commonAction';
+import { venuesListAction, venueDeleteAction, setVenuesTableListPageSizeAction, setVenuesTableListPageNumberAction } from 'store/actions/commonAction/commonAction';
 import { clearVenueDataAction } from 'store/actions/competitionModuleAction/venueTimeAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
@@ -36,11 +36,13 @@ function tableSort(key) {
 
     this_Obj.setState({ sortBy, sortOrder });
 
+    let { venuesListPageSize } = this.props.commonReducerState;
+    venuesListPageSize = venuesListPageSize ? venuesListPageSize : 10;
     const filter = {
         searchText: this_Obj.state.searchText,
         organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         paging: {
-            limit: 10,
+            limit: venuesListPageSize,
             offset: this_Obj.state.offset,
         },
     };
@@ -200,13 +202,21 @@ class VenuesList extends Component {
         }
     }
 
-    handleVenuesTableList = (page, searchText) => {
-        const offset = (page ? (10 * (page - 1)) : 0);
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setVenuesTableListPageSizeAction(pageSize);
+        this.handleVenuesTableList(page, this.state.searchText);
+    }
+
+    handleVenuesTableList = async (page, searchText) => {
+        await this.props.setVenuesTableListPageNumberAction(page);
+        let { venuesListPageSize } = this.props.commonReducerState;
+        venuesListPageSize = venuesListPageSize ? venuesListPageSize : 10;
+        const offset = (page ? (venuesListPageSize * (page - 1)) : 0);
         const filter = {
             searchText,
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             paging: {
-                limit: 10,
+                limit: venuesListPageSize,
                 offset,
             },
         };
@@ -366,9 +376,8 @@ class VenuesList extends Component {
     );
 
     contentView = () => {
-        const commonReducerState = this.props.commonReducerState;
-        const venuesList = commonReducerState.venuesList;
-        const total = commonReducerState.venuesListTotalCount;
+        const { venuesList, venuesListTotalCount, onLoad, venuesListPage, venuesListPageSize } = this.props.commonReducerState;
+        
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -377,16 +386,19 @@ class VenuesList extends Component {
                         columns={columns}
                         dataSource={venuesList}
                         pagination={false}
-                        loading={this.props.commonReducerState.onLoad === true && true}
+                        loading={onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={commonReducerState.venuesListPage}
-                        total={total}
+                        showSizeChanger
+                        current={venuesListPage}
+                        defaultCurrent={venuesListPage}
+                        defaultPageSize={venuesListPageSize}
+                        total={venuesListTotalCount}
                         onChange={(page) => this.handleVenuesTableList(page, this.state.searchText)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -425,6 +437,8 @@ function mapDispatchToProps(dispatch) {
         venuesListAction,
         venueDeleteAction,
         clearVenueDataAction,
+        setVenuesTableListPageSizeAction,
+        setVenuesTableListPageNumberAction,
     }, dispatch);
 }
 
