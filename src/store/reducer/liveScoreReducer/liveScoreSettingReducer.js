@@ -1,4 +1,6 @@
 import ApiConstants from '../../../themes/apiConstants'
+import { get } from 'lodash'
+import {getTimeoutsDetailsData} from 'components/liveScore/liveScoreSettings/liveScoreSettingsUtils'
 
 const initialState = {
     loader: false,
@@ -25,7 +27,11 @@ const initialState = {
         lineupSelectionDays: null,
         lineupSelectionHours: null,
         lineupSelectionMins: null,
-        gameTimeTrackingType: 0
+        gameTimeTrackingType: 0,
+        timeouts: null,
+        timeoutsToQuarters: [],
+        timeoutsToHalves: [],
+        timeoutsValue: [],
     },
     buzzerEnabled: false,
     warningBuzzerEnabled: false,
@@ -191,6 +197,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             }
         case ApiConstants.LiveScore_SETTING_VIEW_SUCCESS:
             const arraymaped = [{ ...payload }]
+            const timeoutsData = getTimeoutsDetailsData(payload.timeoutDetails)
             const record1 = arraymaped.reduce((memo, data) => {
                 if (data.recordUmpire === 1) {
                     memo.push('recordUmpire')
@@ -374,6 +381,9 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     lineupSelectionDays: recordingTimeDays(payload.lineupSelectionTime),
                     lineupSelectionHours: recordingTimeHours(payload.lineupSelectionTime),
                     lineupSelectionMins: recordingTimeMins(payload.lineupSelectionTime),
+                    timeouts: timeoutsData.timeouts,
+                    timeoutsToQuarters: timeoutsData.timeoutsToQuarters,
+                    timeoutsToHalves: timeoutsData.timeoutsToHalves,
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,

@@ -64,7 +64,8 @@ function* liveScoreCreateDivisionSaga(action) {
       action.competitionId,
       action.divisionId,
       action.positionTracking,
-      action.recordGoalAttempts ,
+      action.recordGoalAttempts,
+      action.timeoutsData,
     );
 
     if (result.status === 1) {

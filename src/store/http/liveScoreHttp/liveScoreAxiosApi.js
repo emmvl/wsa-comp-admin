@@ -887,7 +887,7 @@ const LiveScoreAxiosApi = {
     },
 
     // create/edit division
-    liveScoreCreateDivision(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts) {
+    liveScoreCreateDivision(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts, timeoutsData) {
         const body = {
             name,
             divisionName,
@@ -896,6 +896,7 @@ const LiveScoreAxiosApi = {
             id: divisionId,
             positionTracking: positionTracking === 'null' ? null : positionTracking,
             recordGoalAttempts: recordGoalAttempts === 'null' ? null : recordGoalAttempts,
+            timeoutDetails: timeoutsData,
         };
         const url = '/division';
         return Method.dataPost(url, token, body);
@@ -1241,7 +1242,7 @@ const LiveScoreAxiosApi = {
         const body = paginationBody;
 
         if (status === 'All') {
-            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;            
+            // url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&roleIds=${refRoleId}`;
         } else {
             url = `/roster/list?entityTypeId=${entityType}&entityId=${competitionID}&status=${status}&roleIds=${refRoleId}`;
