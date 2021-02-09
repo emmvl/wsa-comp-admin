@@ -101,18 +101,18 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, compOrgId, isParent) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, limit, sortBy, sortOrder, compOrgId, isParent) {
     let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}&offset=${offset}&limit=${10}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}&offset=${offset}&limit=${limit}`;
       } else {
         url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}`;
       }
     } else {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&offset=${offset}&limit=${10}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&offset=${offset}&limit=${limit}`;
       } else {
         url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}`;
       }

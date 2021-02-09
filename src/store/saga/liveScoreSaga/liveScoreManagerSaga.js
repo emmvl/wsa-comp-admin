@@ -52,6 +52,7 @@ function* liveScoreManagerListSaga(action) {
       action.entityId,
       action.searchText,
       action.offset,
+      action.limit,
       action.sortBy,
       action.sortOrder,
       action.compOrgId,

@@ -309,7 +309,7 @@ class LiveScoreAddEditCoach extends Component {
             teamResult,
             // coachesResult
         } = this.props.liveScoreCoachState
-        const { managerListResult, onLoadSearch } = this.props.liveScoreMangerState
+        const { managerListResult, onLoadSearch } = this.props.liveScoreManagerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         // let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
@@ -551,7 +551,7 @@ function mapStateToProps(state) {
     return {
         liveScoreTeamState: state.LiveScoreTeamState,
         liveScoreCoachState: state.LiveScoreCoachState,
-        liveScoreMangerState: state.LiveScoreMangerState
+        liveScoreManagerState: state.LiveScoreManagerState
     }
 }
 

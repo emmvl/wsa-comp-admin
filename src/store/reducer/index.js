@@ -18,7 +18,7 @@ import LiveScoreRoundState from './liveScoreReducer/liveScoreRoundReducer';
 import CompetitionFeesState from './registrationReducer/competitionFeeReducer';
 import LiveScoreGoalState from './liveScoreReducer/liveScoreGoalReducer';
 import LiveScoreBulkMatchState from './liveScoreReducer/liveScoreBulkMatchReducer';
-import LiveScoreMangerState from './liveScoreReducer/liveScoreManagerReducer';
+import LiveScoreManagerState from './liveScoreReducer/liveScoreManagerReducer';
 import LiveScoreScorerState from './liveScoreReducer/liveScoreScorerReducer';
 import LiveScoreDashboardState from './liveScoreReducer/liveScoreDashboardReducer';
 import liveScoreGamePositionState from './liveScoreReducer/liveScoreGamePositionReducer';
@@ -99,7 +99,7 @@ const rootReducer = combineReducers({
     LiveScoreRoundState,
     CompetitionFeesState,
     LiveScoreGoalState,
-    LiveScoreMangerState,
+    LiveScoreManagerState,
     LiveScoreScorerState,
     LiveScoreBulkMatchState,
     liveScoreGamePositionState,

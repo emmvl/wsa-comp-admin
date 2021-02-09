@@ -205,19 +205,19 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, localStorage.token, payload);
     },
 
-    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamId, sortBy, sortOrder, competitionOrganisationId) {
+    liveScoreMatchList(competitionID, start, offset, limit, search, divisionId, roundName, teamId, sortBy, sortOrder, competitionOrganisationId) {
         let url;
         if (teamId !== undefined) {
             url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamId}&competitionOrganisationId=${competitionOrganisationId}`;
         } else if (divisionId && roundName) {
             // eslint-disable-next-line max-len
-            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${limit}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
         } else if (divisionId) {
-            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&competitionOrganisationId=${competitionOrganisationId}`;
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${limit}&search=${search}&divisionIds=${divisionId}&competitionOrganisationId=${competitionOrganisationId}`;
         } else if (roundName) {
-            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${limit}&search=${search}&roundName=${roundName}&competitionOrganisationId=${competitionOrganisationId}`;
         } else {
-            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&competitionOrganisationId=${competitionOrganisationId}`;
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${limit}&search=${search}&competitionOrganisationId=${competitionOrganisationId}`;
         }
 
         if (sortBy && sortOrder) {
