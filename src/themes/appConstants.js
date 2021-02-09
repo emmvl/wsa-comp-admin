@@ -1969,6 +1969,7 @@ const AppConstants = {
     parentDetails: "Parent details",
     noOfRegisteredUsersInfo: "Number of individual users who are registered to your organisation or 1st / 2nd level affiliates (if applicable)",
     noOfRegistrationsInfo: "Note: number of registrations are counted per role / competition",
+    partialRefund: "Partial Refund"
 };
 
 export default AppConstants;
