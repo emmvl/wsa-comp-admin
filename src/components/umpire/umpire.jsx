@@ -343,8 +343,9 @@ class Umpire extends Component {
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
                 centered
-                closable={false}
+                closable
                 footer={false}
+                onCancel={() => this.setState({visible: false})}
             >
                 <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
                     <Button 
