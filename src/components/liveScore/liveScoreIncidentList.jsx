@@ -24,6 +24,8 @@ import {
     liveScoreIncidentList,
     createPlayerSuspensionAction,
     updatePlayerSuspensionAction,
+    setPageSizeAction,
+    setPageNumberAction,
 } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
 import { liveScore_MatchFormate, liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
@@ -59,7 +61,9 @@ function tableSort(key) {
     this_Obj.setState({ sortBy, sortOrder });
     const { id } = JSON.parse(getLiveScoreCompetiton())
     let { searchText, limit, offset } = this_Obj.state
-    this_Obj.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder, this_Obj.state.liveScoreCompIsParent, this_Obj.state.compOrgId);
+    let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+    liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
+    this_Obj.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, this_Obj.state.liveScoreCompIsParent, this_Obj.state.compOrgId);
 }
 
 const columns = [
@@ -218,7 +222,9 @@ class LiveScoreIncidentList extends Component {
                         this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder, value, compOrgId);
                     } else {
                         let { searchText, limit, offset, sortBy, sortOrder } = this.state
-                        this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder, value, compOrgId);
+                        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+                        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
+                        this.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, value, compOrgId);
                     }
 
                 })
@@ -240,7 +246,9 @@ class LiveScoreIncidentList extends Component {
                         this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder, value, compOrgId);
                     } else {
                         let { searchText, limit, offset, sortBy, sortOrder } = this.state
-                        this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder, value, compOrgId);
+                        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+                        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
+                        this.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, value, compOrgId);
                     }
                 })
             } else {
@@ -298,9 +306,11 @@ class LiveScoreIncidentList extends Component {
         }
 
         let { limit, sortBy, sortOrder } = this.state
+        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
+            this.props.liveScoreIncidentList(compId, e.target.value, liveScoreIncidentPageSize, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
         }
     }
 
@@ -320,8 +330,10 @@ class LiveScoreIncidentList extends Component {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { limit, sortBy, sortOrder } = this.state
+        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
+            this.props.liveScoreIncidentList(compId, e.target.value, liveScoreIncidentPageSize, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
         }
     }
 
@@ -339,14 +351,24 @@ class LiveScoreIncidentList extends Component {
         }
 
         let { searchText, limit, sortBy, sortOrder } = this.state
+        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
         if (searchText === null || searchText === "") {
         } else {
-            this.props.liveScoreIncidentList(compId, searchText, limit, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
+            this.props.liveScoreIncidentList(compId, searchText, liveScoreIncidentPageSize, 0, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
         }
     }
 
-    handleTableChange = (page) => {
-        let offset = page ? 10 * (page - 1) : 0;
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handleTableChange(page);
+    }
+
+    handleTableChange = async (page) => {
+        await this.props.setPageNumberAction(page);
+        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
+        let offset = page ? liveScoreIncidentPageSize * (page - 1) : 0;
         let { searchText, limit, sortBy, sortOrder } = this.state
         this.setState({ offset })
         const { umpireKey } = this.props.liveScoreIncidentState
@@ -358,7 +380,7 @@ class LiveScoreIncidentList extends Component {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             compId = id
         }
-        this.props.liveScoreIncidentList(compId, searchText, limit, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
+        this.props.liveScoreIncidentList(compId, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId);
     }
 
     headerView = () => {
@@ -444,7 +466,7 @@ class LiveScoreIncidentList extends Component {
 
     ////////tableView view for Umpire list
     tableView = () => {
-        const { onLoad, liveScoreIncidentResult, liveScoreIncidentTotalCount, liveScoreIncidentCurrentPage } = this.props.liveScoreIncidentState;
+        const { onLoad, liveScoreIncidentResult, liveScoreIncidentTotalCount, liveScoreIncidentCurrentPage, liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -465,10 +487,13 @@ class LiveScoreIncidentList extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             current={liveScoreIncidentCurrentPage}
-                            showSizeChanger={false}
+                            defaultCurrent={liveScoreIncidentCurrentPage}
+                            defaultPageSize={liveScoreIncidentPageSize}
                             total={liveScoreIncidentTotalCount}
                             onChange={this.handleTableChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -636,6 +661,8 @@ function mapDispatchToProps(dispatch) {
         exportFilesAction,
         createPlayerSuspensionAction,
         updatePlayerSuspensionAction,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch)
 }
 

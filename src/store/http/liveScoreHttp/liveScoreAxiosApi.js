@@ -676,20 +676,20 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreGoalList(compId, goalType, search, offset, sortBy, sortOrder, isParent, compOrgId) {
+    liveScoreGoalList(compId, goalType, search, offset, limit, sortBy, sortOrder, isParent, compOrgId) {
         let url = null;
         if (isParent !== true) {
             if (goalType === 'By Match') {
-                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}&competitionOrganisationId=${compOrgId}`;
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${limit}&competitionOrganisationId=${compOrgId}`;
             } else if (goalType === 'Total') {
-                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}&competitionOrganisationId=${compOrgId}`;
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${limit}&competitionOrganisationId=${compOrgId}`;
             }
         }
         else {
             if (goalType === 'By Match') {
-                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`;
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${limit}`;
             } else if (goalType === 'Total') {
-                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`;
+                url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${limit}`;
             }
         }
 

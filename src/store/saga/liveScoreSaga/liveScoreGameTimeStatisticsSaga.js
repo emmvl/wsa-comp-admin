@@ -29,7 +29,8 @@ function* errorSaga(error) {
 
 export function* liveScoreGameTimeStatisticsSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.gameTimeStatistics, action.competitionId,
+        const result = yield call(LiveScoreAxiosApi.gameTimeStatistics,
+            action.competitionId,
             action.aggregate,
             action.offset,
             action.limit,
