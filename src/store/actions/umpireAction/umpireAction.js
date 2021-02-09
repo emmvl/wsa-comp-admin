@@ -88,7 +88,6 @@ function getRankedUmpiresCount(data) {
 }
 
 function updateUmpireRank(data) {
-    console.log('DATA',data);
     const action = {
         type: ApiConstants.API_UPDATE_UMPIRE_RANK,
         data,

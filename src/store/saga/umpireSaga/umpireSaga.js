@@ -46,7 +46,7 @@ function* errorSaga(error) {
 export function* umpireListSaga(action) {
     try {
         const result = yield call(UserAxiosApi.umpireList, action.data);
-
+        
         if (result.status === 1) {
 
             yield put({
@@ -168,7 +168,7 @@ export function* umpireListDataSaga(action) {
 export function* umpireListGetSaga(action) {
     try {
         const result = yield call(UmpireAxiosApi.umpireListGet, action.data);
-
+        
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_LIST_SUCCESS,
@@ -197,13 +197,15 @@ export function* getRankedUmpiresCount(action) {
 }
 
 export function* updateUmpireRank(action) {
-    console.log('ACTION', action);
     try {
-        console.log('11111');
         const result = yield call(UmpireAxiosApi.updateUmpireRank, action.data);
-        console.log('RESULT', result);
-        const newRanklist = yield call(UmpireAxiosApi.getRankedUmpiresCount, action.data);
-        console.log('newRanklist',newRanklist);
+        const newRankedUmpiresCount = yield call(UmpireAxiosApi.getRankedUmpiresCount, action.data);
+        yield put({
+            type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT_SUCCESS,
+            result: newRankedUmpiresCount.result.data,
+            status: newRankedUmpiresCount.status,
+        });
+
     }catch(error) {
         yield call(errorSaga, error);
     }
