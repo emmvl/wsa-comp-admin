@@ -50,6 +50,7 @@ function* liveScoreCoachSaga(action) {
       action.entityId,
       action.search,
       action.offset,
+      action.limit,
       action.sortBy,
       action.sortOrder,
       action.isParent,

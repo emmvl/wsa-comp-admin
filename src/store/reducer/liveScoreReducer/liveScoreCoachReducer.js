@@ -214,6 +214,18 @@ function liveScoreCoachState(state = initialState, action) {
             state.coachListActionObject = null
             return { ...state, onLoad: false };
 
+        case ApiConstants.SET_LIVE_SCORE_COACHES_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+        
+        case ApiConstants.SET_LIVE_SCORE_COACHES_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
+
         default:
             return state;
     }

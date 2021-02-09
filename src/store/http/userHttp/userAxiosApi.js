@@ -280,11 +280,11 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder, isParent, competitionId) {
+  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, limit, sortBy, sortOrder, isParent, competitionId) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url;
     if (offset != null) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}&offset=${offset}&limit=${10}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}&offset=${offset}&limit=${limit}`
     } else {
       url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}`
     }
