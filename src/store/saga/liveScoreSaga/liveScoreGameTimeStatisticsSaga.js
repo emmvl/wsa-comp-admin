@@ -32,6 +32,7 @@ export function* liveScoreGameTimeStatisticsSaga(action) {
         const result = yield call(LiveScoreAxiosApi.gameTimeStatistics, action.competitionId,
             action.aggregate,
             action.offset,
+            action.limit,
             action.searchText,
             action.sortBy,
             action.sortOrder,
