@@ -120,25 +120,25 @@ export default function liveScoreCompetition(state = initialState, payload) {
             state.competitionListActionObject = null
             return { ...state, onLoad: false };
 
-        case ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_SIZE_ACTION:
+        case ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_SIZE:
             return {
                 ...state,
                 participatePageSize: payload.pageSize,
             }
 
-        case ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_CURRENT_NUMBER_ACTION:
+        case ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_CURRENT_NUMBER:
             return {
                 ...state,
                 participateCurrentPage: payload.pageNum,
             }
 
-        case ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_SIZE_ACTION:
+        case ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_SIZE:
             return {
                 ...state,
                 ownedPageSize: payload.pageSize,
             }
 
-        case ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_CURRENT_NUMBER_ACTION:
+        case ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_CURRENT_NUMBER:
             return {
                 ...state,
                 ownedCurrentPage: payload.pageNum,

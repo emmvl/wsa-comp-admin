@@ -44,28 +44,28 @@ export const liveScoreCompetitionDeleteError = (data) => {
 
 export const setParticipatePageSizeAction = (pageSize) => {
     return {
-        type: ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_SIZE_ACTION,
+        type: ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_SIZE,
         pageSize,
     }
 }
 
 export const setParticipatePageNumberAction = (pageNum) => {
     return {
-        type: ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_CURRENT_NUMBER_ACTION,
+        type: ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_CURRENT_NUMBER,
         pageNum,
     }
 }
 
 export const setOwnedPageSizeAction = (pageSize) => {
     return {
-        type: ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_SIZE_ACTION,
+        type: ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_SIZE,
         pageSize,
     }
 }
 
 export const setOwnedPageNumberAction = (pageNum) => {
     return {
-        type: ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_CURRENT_NUMBER_ACTION,
+        type: ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_CURRENT_NUMBER,
         pageNum,
     }
 }
