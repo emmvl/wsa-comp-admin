@@ -481,9 +481,9 @@ class LiveScoreCompetitions extends Component {
 
     handleShowSizeChange = (key) => async (page, pageSize) => {
         if (key === 'own') {
-            await this.props.setParticipatePageSizeAction(pageSize);
-        } else {
             await this.props.setOwnedPageSizeAction(pageSize);
+        } else {
+            await this.props.setParticipatePageSizeAction(pageSize);
         }
         this.handlePagination(page, key);
     }
@@ -496,10 +496,10 @@ class LiveScoreCompetitions extends Component {
         let { ownedPageSize } = this.props.liveScoreCompetition;
         ownedPageSize = ownedPageSize ? ownedPageSize : 10;
         if (key === 'own') {
-            await this.props.setParticipatePageNumberAction(page);
+            await this.props.setOwnedPageNumberAction(page);
             ownOffset = page ? participatePageSize * (page - 1) : 0;
         } else if (key === 'part') {
-            await this.props.setOwnedPageNumberAction(page);
+            await this.props.setParticipatePageNumberAction(page);
             partOffset = page ? ownedPageSize * (page - 1) : 0;
         }
 
