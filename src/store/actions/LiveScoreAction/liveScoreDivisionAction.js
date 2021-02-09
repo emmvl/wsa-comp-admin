@@ -59,14 +59,29 @@ function liveScoreDivisionResetImportResultAction() {
 }
 
 //Division action
-function getMainDivisionListAction(competitionID, offset, sortBy, sortOrder) {
+function getMainDivisionListAction(competitionID, offset, limit, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD,
         competitionID,
         offset,
+        limit,
         sortBy,
         sortOrder
     };
+}
+
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_DIVISION_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_DIVISION_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
 }
 
 export {
@@ -77,4 +92,6 @@ export {
     liveScoreDivisionImportAction,
     liveScoreDivisionResetImportResultAction,
     getMainDivisionListAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

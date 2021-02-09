@@ -913,11 +913,11 @@ const LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder, isParent, compOrgId) {
+    gameTimeStatistics(competitionId, aggregate, offset, limit, searchText, sortBy, sortOrder, isParent, compOrgId) {
         const Body = {
             paging: {
-                limit: 10,
-                offset: `${offset}`,
+                limit,
+                offset,
             },
             search: searchText,
         };
@@ -1486,10 +1486,10 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreGetMainDivisionList(compId, offset, sortBy, sortOrder) {
+    liveScoreGetMainDivisionList(compId, offset, limit, sortBy, sortOrder) {
         let url;
 
-        url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`;
+        url = `/division?competitionId=${compId}&offset=${offset}&limit=${limit}`;
 
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;

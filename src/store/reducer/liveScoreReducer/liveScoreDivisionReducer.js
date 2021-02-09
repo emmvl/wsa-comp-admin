@@ -16,8 +16,9 @@ const initialState = {
     name: "",
     divisionData: divisionObj,
     mainDivisionList: [],
-    totalCount: null,
-    currentPage: null,
+    totalCount: 1,
+    currentPage: 1,
+    pageSize: 10,
     positionTracking: "null",
     recordGoalAttempts: "null",
     divisionListActionObject: null,
@@ -130,6 +131,18 @@ function liveScoreDivisionState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.divisionListActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_LIVE_SCORE_DIVISION_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_DIVISION_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
 
         default:
             return state;
