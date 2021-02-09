@@ -39,6 +39,7 @@ const initialState = {
     umpireListData: [],
     umpireCheckbox:false,
     umpireListDataNew: [],
+    rankedUmpiresCount: 0,
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -167,6 +168,12 @@ function umpireState(state = initialState, action) {
                 currentPage: action.result.page ? action.result.page.currentPage : null,
                 totalCount: action.result.page ? action.result.page.totalCount : null,
                 status: action.status
+            };
+
+        case ApiConstants.API_GET_RANKED_UMPIRES_COUNT_SUCCESS:
+            return { 
+                ...state,
+                rankedUmpiresCount: action.result,
             };
 
         ////Main Umpire List

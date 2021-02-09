@@ -128,7 +128,12 @@ class UmpirePoolAllocation extends Component {
         const { umpireListDataNew } = this.props.umpireState;
 
         if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
-            this.props.getUmpireList({ organisationId, competitionId: this.state.selectedComp, offset: 0 });
+            this.props.getUmpireList({ 
+                organisationId, 
+                competitionId: this.state.selectedComp, 
+                offset: 0, 
+                skipAssignedToPools: true 
+            });
         }
 
         // handle state after pool delete

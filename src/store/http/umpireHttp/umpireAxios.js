@@ -21,8 +21,13 @@ let token = getAuthToken();
 
 let UmpireAxiosApi = {
     umpireListGet(data) {
-        const { competitionId, organisationId, offset } = data;
-        const url = `/competitions/${competitionId}/umpires?organisationId=${organisationId}&offset=${offset}&limit=${10}`;
+        let url = null;
+        const { competitionId, organisationId, offset, skipAssignedToPools = false, sortBy, sortOrder } = data;
+        if (sortBy && sortOrder) {
+            url = `/competitions/${competitionId}/umpires?organisationId=${organisationId}&offset=${offset}&limit=${10}&skipAssignedToPools=${skipAssignedToPools}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        } else {
+            url = `/competitions/${competitionId}/umpires?organisationId=${organisationId}&offset=${offset}&limit=${10}&skipAssignedToPools=${skipAssignedToPools}`;
+        }
         return Method.dataGet(url, token);
     },
 
@@ -80,6 +85,19 @@ let UmpireAxiosApi = {
         const url = `/competitions/` + payload.compId + `/umpires/pools/divisions`;
         return Method.dataPatch(url, token, payload.body);
     },
+
+    getRankedUmpiresCount(payload) {
+        const url = `/competitions/id/${payload.competitionId}/ranked-umpires-count`;
+        return Method.dataGet(url, token);
+    },
+
+    updateUmpireRank(payload) {
+        const url = `/competitions/${payload.competitionId}/umpires/${payload.umpireId}/rank?organisationId=${payload.organisationId}`;
+        return Method.dataPatch(url, token, {
+            rank: payload.umpireRank,
+            updateRankType: payload.updateRankType,
+        });
+    }
 }
 
 const Method = {
