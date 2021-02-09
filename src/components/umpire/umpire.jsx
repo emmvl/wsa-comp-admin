@@ -95,8 +95,8 @@ class Umpire extends Component {
             competitionUniqueKey: null,
             compArray: [],
             offsetData: 0,
-            sortBy: "rank",
-            sortOrder: "ASC",
+            sortBy: null,
+            sortOrder: null,
             isCompParent: false,
             compOrganisationId: 0,
             visible: false,
@@ -113,14 +113,14 @@ class Umpire extends Component {
                         const { rankedUmpiresCount } = this.props.umpireState;
                         const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
                         const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
-
+                        console.log('RECORD', record, rank);
                         return (
                             <Form>
                                 {
                                     currentOrganisationId === competitionOrganisationId
                                     ?   <Select
                                             onChange={(i, option) => this.handleSelectChange(i, option, record.id)}
-                                            defaultValue={record.rank ? record.rank : ''}
+                                            value={record.rank ? record.rank : ''}
                                         >
                                             {
                                                 Array.apply(null, { length: rankedUmpiresCount + 1 }).map((rank, i, arr) => {
@@ -294,14 +294,17 @@ class Umpire extends Component {
                 umpireRank: option.children,
                 organisationId,
                 umpireId: id,
-            });
-            this.props.getUmpireList({
-                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
-                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: this.state.offsetData,
-                sortBy: "rank",
-                sortOrder: "ASC",
+                sortBy: this.state.sortBy,
+                sortOrder: this.state.sortOrder,
             });
+            // this.props.getUmpireList({
+            //     competitionId: localStorage.getItem("umpireCompetitionId"),
+            //     offset: this.state.offsetData,
+            //     organisationId,
+            //     sortBy: this.state.sortBy,
+            //     sortOrder: this.state.sortOrder,
+            // });
         } else {
             this.setState({
                 visible: true,
@@ -320,14 +323,16 @@ class Umpire extends Component {
             organisationId,
             umpireId,
             updateRankType,
-        });
-        this.props.getUmpireList({
-            organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
-            competitionId: localStorage.getItem("umpireCompetitionId"),
             offset: this.state.offsetData,
-            sortBy: "rank",
-            sortOrder: "ASC",
+            sortOrder: this.state.sortOrder,
+            sortBy: this.state.sortBy,
         });
+        // this.props.getUmpireList({
+        //     competitionId: localStorage.getItem("umpireCompetitionId"),
+        //     offset: this.state.offsetData,
+        //     organisationId,
+        //     sortBy: this.state.sortBy,
+        // });
         this.setState({visible: false});
     }
 
@@ -345,7 +350,7 @@ class Umpire extends Component {
                     <Button 
                         className="primary-add-comp-form"
                         type="primary"
-                        onClick={() => this.switchShiftHandler('switch')}>
+                        onClick={() => this.switchShiftHandler('replace')}>
                         Switch
                     </Button>
                     <Button 
@@ -419,8 +424,8 @@ class Umpire extends Component {
                         organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
                         competitionId: localStorage.getItem("umpireCompetitionId"),
                         offset: this.state.offsetData,
-                        sortBy: "rank",
-                        sortOrder: "ASC",
+                        sortBy,
+                        sortOrder,
                     });
                     this.setState({
                         selectedComp: firstComp,

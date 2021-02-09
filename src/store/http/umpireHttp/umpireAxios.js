@@ -92,9 +92,10 @@ let UmpireAxiosApi = {
     },
 
     updateUmpireRank(payload) {
-        const url = `/competitions/${payload.compId}/umpires/${payload.umpireId}/rank?organisationId=${payload.organisationId}`;
+        const url = `/competitions/${payload.competitionId}/umpires/${payload.umpireId}/rank?organisationId=${payload.organisationId}`;
         return Method.dataPatch(url, token, {
-            rank: payload.umpireRank
+            rank: payload.umpireRank,
+            updateRankType: payload.updateRankType,
         });
     }
 }
