@@ -24,8 +24,9 @@ const initialState = {
     allTeamData: [],
     teamId: null,
     assignMatches: [],
-    assignMatchListPage: 0,
-    assignMatchTotalCount: "",
+    assignMatchListPage: 1,
+    assignMatchListPageSize: 10,
+    assignMatchTotalCount: 1,
     searchScorer: [],
     onLoadSearch: false,
     scorerActionObject: null,
@@ -250,6 +251,18 @@ function liveScoreScorerState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.scorerActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_LIVE_SCORE_ASSIGN_MATCH_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                assignMatchListPageSize: action.pageSize,
+            }
+        
+        case ApiConstants.SET_LIVE_SCORE_ASSIGN_MATCH_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                assignMatchListPage: action.pageNum,
+            }    
 
         default:
             return state;

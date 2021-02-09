@@ -5,7 +5,13 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import { assignMatchesAction, changeAssignStatus, unAssignMatcheStatus } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
+import {
+    assignMatchesAction,
+    changeAssignStatus,
+    unAssignMatcheStatus,
+    setLiveScoreAssignMatchListPageSizeAction,
+    setLiveScoreAssignMatchListPageNumberAction
+} from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
@@ -229,9 +235,11 @@ class LiveScoreAssignMatch extends Component {
         if (nextProps.liveScoreScorerState.teamResult !== this.props.liveScoreScorerState.teamResult) {
             if (this.state.lodding && this.props.liveScoreScorerState.onLoad == false) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
+                let { assignMatchListPageSize } = this.props.liveScoreScorerState;
+                assignMatchListPageSize = assignMatchListPageSize ? assignMatchListPageSize : 10;
                 const body = {
                     paging: {
-                        limit: 10,
+                        limit: assignMatchListPageSize,
                         offset: 0
                     }
                 }
@@ -273,13 +281,21 @@ class LiveScoreAssignMatch extends Component {
     }
 
     /// On change values
-    handlePaggination = (page) => {
-        let offset = page ? 10 * (page - 1) : 0;
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setLiveScoreAssignMatchListPageSizeAction(pageSize);
+        this.handlePagination(page);
+    }
+
+    handlePagination = async (page) => {
+        await this.props.setLiveScoreAssignMatchListPageNumberAction(page);
+        let { assignMatchListPageSize } = this.props.liveScoreScorerState;
+        assignMatchListPageSize = assignMatchListPageSize ? assignMatchListPageSize : 10;
+        let offset = page ? assignMatchListPageSize * (page - 1) : 0;
         this.setState({ lodding: true })
         const body = {
             paging: {
-                limit: 10,
-                offset: offset
+                limit: assignMatchListPageSize,
+                offset,
             },
             "searchText": ""
         }
@@ -289,9 +305,11 @@ class LiveScoreAssignMatch extends Component {
 
     onChangeTeam(filter) {
         this.setState({ teamID: filter.filter })
+        let { assignMatchListPageSize } = this.props.liveScoreScorerState;
+        assignMatchListPageSize = assignMatchListPageSize ? assignMatchListPageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: assignMatchListPageSize,
                 offset: 0
             },
             "searchText": ""
@@ -335,15 +353,16 @@ class LiveScoreAssignMatch extends Component {
 
     ////////tableView view for Game Time list
     tableView = () => {
-        let matcheList = this.props.liveScoreScorerState
+        const { assignMatches, assignMatchTotalCount, assignMatchListPage, assignMatchListPageSize, onLoad } = this.props.liveScoreScorerState;
+
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={matcheList.onLoad && true}
+                        loading={onLoad && true}
                         className="home-dashboard-table"
                         columns={this.state.columns}
-                        dataSource={matcheList.assignMatches}
+                        dataSource={assignMatches}
                         pagination={false}
                     />
 
@@ -360,11 +379,13 @@ class LiveScoreAssignMatch extends Component {
                         <div className="d-flex justify-content-end">
                             <Pagination
                                 className="antd-pagination"
-                                current={1}
-                                showSizeChanger={false}
-                                total={matcheList.assignMatchTotalCount}
-                                onChange={(page) => this.handlePaggination(page)}
-                            // defaultPageSize={10}
+                                showSizeChanger
+                                current={assignMatchListPage}
+                                defaultCurrent={assignMatchListPage}
+                                defaultPageSize={assignMatchListPageSize}                                
+                                total={assignMatchTotalCount}
+                                onChange={this.handlePagination}
+                                onShowSizeChange={this.handleShowSizeChange}
                             />
                         </div>
                     </div>
@@ -391,7 +412,14 @@ class LiveScoreAssignMatch extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ assignMatchesAction, changeAssignStatus, getliveScoreTeams, unAssignMatcheStatus }, dispatch)
+    return bindActionCreators({
+        assignMatchesAction,
+        changeAssignStatus,
+        getliveScoreTeams,
+        unAssignMatcheStatus,
+        setLiveScoreAssignMatchListPageSizeAction,
+        setLiveScoreAssignMatchListPageNumberAction,
+    }, dispatch)
 }
 
 function mapStateToProps(state) {
