@@ -109,15 +109,15 @@ class Umpire extends Component {
                     key: "rank",
                     sorter: true,
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                    render: (rank, record, a) => {
+                    render: (rank, record) => {
                         const { rankedUmpiresCount } = this.props.umpireState;
-                        const { organisationId } =JSON.parse(localStorage.getItem("setOrganisationData"));
-                        const { orgId } = JSON.parse(localStorage.getItem("umpireCompetitionData")).competitionOrganisation;
-                        
+                        const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
+                        const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
+
                         return (
                             <Form>
                                 {
-                                    organisationId === orgId
+                                    currentOrganisationId === competitionOrganisationId
                                     ?   <Select
                                             onChange={(i, option) => this.handleSelectChange(i, option, record.id)}
                                             defaultValue={record.rank ? record.rank : ''}
