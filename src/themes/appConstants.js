@@ -1973,7 +1973,12 @@ const AppConstants = {
     parentDetails: "Parent details",
     noOfRegisteredUsersInfo: "Number of individual users who are registered to your organisation or 1st / 2nd level affiliates (if applicable)",
     noOfRegistrationsInfo: "Note: number of registrations are counted per role / competition",
-    partialRefund: "Partial Refund"
+    refund: "Refund",
+    maximumAmountPopupTxt: "Refund cannot be processed since the requested amount is more than the applicable amount.",
+    enterRefundAmount: "Please enter the amount to be Refunded.",
+    enterAmount: "Enter the Amount",
+    partialRefund: "Partial Refund",
+    enterValidAmount: "Please enter valid amount",
 };
 
 export default AppConstants;
