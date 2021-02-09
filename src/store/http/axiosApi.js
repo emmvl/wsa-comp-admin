@@ -309,7 +309,7 @@ let AxiosApi = {
     var url = `/common/reference/AccreditationUmpire`;
     return Method.dataGet(url, token);
   },
-
+  
   getDiscountMethodList() {
     var url = `/common/reference/discountMethod`;
     return Method.dataGet(url, token);

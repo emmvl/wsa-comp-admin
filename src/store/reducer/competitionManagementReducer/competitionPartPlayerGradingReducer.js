@@ -57,7 +57,7 @@ function unassignedListDataFormation(data, ) {
 }
 
 function updatedAssignData(assignArr, source, destination) {
-    let match_Index = assignArr.findIndex(x => x.teamId === null)
+    let match_Index = assignArr.findIndex(x => x.teamId === null);
     if (match_Index === -1) {
         let unassignedPartPlayerGradingList = {
             teamId: null,
@@ -65,15 +65,16 @@ function updatedAssignData(assignArr, source, destination) {
             playerCount: 0,
             players: []
         }
-        assignArr.push(unassignedPartPlayerGradingList)
+        assignArr.push(unassignedPartPlayerGradingList);
     }
-    let sourceTeam = source.droppableId === 0 ? null : JSON.parse(source.droppableId)
-    let destinationTeam = destination.droppableId === 0 ? null : JSON.parse(destination.droppableId)
-    let swapPlayer
+    let sourceTeam = parseInt(source.droppableId) === 0 ? null : JSON.parse(source.droppableId);
+    let destinationTeam = parseInt(destination.droppableId) === 0 ? null : JSON.parse(destination.droppableId);
     sourceTeam = sourceTeam ? sourceTeam : null;
     destinationTeam = destinationTeam ? destinationTeam : null;
-    let matchSourceIndex = assignArr.findIndex(x => x.teamId === sourceTeam)
-    swapPlayer = assignArr[matchSourceIndex].players[source.index]
+    let swapPlayer;
+    assignArr = sortTeamsAndPlayers(assignArr);
+    let matchSourceIndex = assignArr.findIndex(x => x.teamId === sourceTeam);
+    swapPlayer = assignArr[matchSourceIndex].players[source.index];    
     assignArr[matchSourceIndex].playerCount = parseInt(assignArr[matchSourceIndex].playerCount) - 1
     assignArr[matchSourceIndex].players.splice(source.index, 1)
     let matchDestinationIndex = assignArr.findIndex(x => x.teamId === destinationTeam)

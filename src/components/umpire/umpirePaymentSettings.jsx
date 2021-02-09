@@ -32,7 +32,7 @@ import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveSc
 import { getUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import { getRefBadgeData } from '../../store/actions/appAction';
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
 const { Option } = Select;
 
 const initialPaymentSettingsData = {
@@ -636,8 +636,8 @@ class UmpirePaymentSetting extends Component {
     feesView = (sectionData, sectionDataIndex) => {
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
-        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState;
-        const umpireBadgesData = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : [];
+        const { badgeData } = this.props.appState;
+        const umpireBadgesData = isArrayNotEmpty(badgeData) ? badgeData : [];
 
         const { UmpirePaymentFeeType } = sectionData[sectionDataIndex];
 
@@ -778,26 +778,18 @@ class UmpirePaymentSetting extends Component {
         ));
 
         return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm px-0">
-                            <div className="comp-buttons-view">
-                                <Button 
-                                    onClick={this.handleSave}
-                                    className="publish-button save-draft-text mr-0" 
-                                    type="primary" 
-                                    htmlType="submit"
-                                    disabled={someNoPoolSettings 
-                                        || this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
-                                        || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
-                                >
-                                    {AppConstants.save}
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="form-footer-button-wrapper">
+                <Button 
+                    onClick={this.handleSave}
+                    className="publish-button save-draft-text mr-0" 
+                    type="primary" 
+                    htmlType="submit"
+                    disabled={someNoPoolSettings 
+                        || this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
+                        || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
+                >
+                    {AppConstants.save}
+                </Button>
             </div>
         );
     }
@@ -817,7 +809,7 @@ class UmpirePaymentSetting extends Component {
                         <Content>
                             <div className="formView umpire-form-view">{this.contentView()}</div>
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        {this.footerView()}
                     </Form>
                     <Loader visible={this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
                             || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad} 

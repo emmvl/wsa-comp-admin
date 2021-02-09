@@ -383,8 +383,7 @@ function* getPaymentSummarySaga(action) {
 
 function* exportPaymentSummarySaga(action) {
   try {
-    const result = yield call(
-      AxiosApi.exportPaymentSummaryApi,
+    const result = yield call(AxiosApi.exportPaymentSummaryApi,
       action.offset,
       action.sortBy,
       action.sortOrder,
@@ -400,8 +399,7 @@ function* exportPaymentSummarySaga(action) {
       action.paymentType,
       action.paymentMethod,
       action.membershipType,
-      action.paymentStatus,
-    );
+      action.paymentStatus);
 
     if (result.status === 1) {
       yield put({
@@ -440,7 +438,6 @@ function* partialRefundAmountSaga(action) {
   }
 }
 
-
 export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, accountBalanceSaga);
   yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, chargingPaymentSaga);
@@ -459,5 +456,4 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD, getPaymentSummarySaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD, exportPaymentSummarySaga);
   yield takeEvery(ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD, partialRefundAmountSaga);
-
 }

@@ -3,6 +3,7 @@ const ValidationConstants = {
     teamName: 'Team name is required.',
     firstName: 'Name is required.',
     dateField: 'Date is required.',
+    timeouts: 'Time Outs option is required.',
     divisionField: 'Division field is required.',
     typeField: 'Type is required.',
     homeField: 'Home team is required.',
@@ -262,6 +263,8 @@ const ValidationConstants = {
     accreditationLevelUmpire: "National accreditation level umpire is required.",
     accreditationLevelCoach: "National accreditation level coach is required.",
     expiryDateRequire: 'Expire date is required.',
+
+    phoneNumberRequired: 'Phone Number is required',
 };
 
 export default ValidationConstants;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-    Layout, Table, Select, Menu, Pagination, Button, DatePicker, Tag, Input,Modal
+    Layout, Table, Select, Menu, Pagination, Button, DatePicker, Tag, Input, Modal
 } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
@@ -156,7 +156,13 @@ const columns = [
         title: AppConstants.governmentVoucher,
         dataIndex: "governmentVoucherAmount",
         key: "governmentVoucherAmount",
-        render: (governmentVoucherAmount, record) => currencyFormat(governmentVoucherAmount),
+        render: (governmentVoucherAmount, record) => {
+            return (
+                <div className={(record.governmentVoucherStatusRefId != 2 && parseFloat(governmentVoucherAmount) > 0) && "government-voucher-grey-text"}>
+                    {currencyFormat(governmentVoucherAmount)}
+                </div>
+            )
+        },
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("governmentVoucherAmount"),
     },
@@ -405,7 +411,7 @@ class PaymentDashboard extends Component {
                 this.state.feeType,
                 this.state.paymentType,
                 this.state.paymentMethod,
-                this.state.discountMethod
+                this.state.discountMethod,
             );
         }
     };
@@ -495,6 +501,7 @@ class PaymentDashboard extends Component {
             </Modal>
         );
     }
+
 
     headerView = () => {
         const tagName = this.state.userInfo != null ? `${this.state.userInfo.firstName} ${this.state.userInfo.lastName}` : null;
@@ -1122,7 +1129,7 @@ class PaymentDashboard extends Component {
                     menuName={AppConstants.finance}
                 />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="1" />
-                <Loader visible={this.props.paymentState.onExportLoad || this.props.paymentState.refundAmountLoad} />
+                <Loader visible={this.props.paymentState.onExportLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>

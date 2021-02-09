@@ -28,6 +28,21 @@ function liveScoreUpdateIncident(data, key) {
 // }
 
 
+export const createPlayerSuspensionAction = (data) => {
+    return {
+        type: ApiConstatnts.API_CREATE_PLAYER_SUSPENSION,
+        data,
+    }
+}
+
+export const updatePlayerSuspensionAction = (suspensionId, data) => {
+    return {
+        type: ApiConstatnts.API_UPDATE_PLAYER_SUSPENSION,
+        suspensionId,
+        data,
+    }
+}
+
 export const liveScoreClearIncident = () => {
     return {
         type: ApiConstatnts.API_LIVE_SCORE_CLEAR_INCIDENT

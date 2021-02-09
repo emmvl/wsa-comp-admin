@@ -14,6 +14,18 @@ function newUmpireListAction(data) {
     };
     return action;
 }
+
+// new for umpire list
+
+function getUmpireList(data) {
+    const action = {
+        type: ApiConstants.API_GET_UMPIRE_LIST_LOAD,
+        data
+    };
+
+    return action;
+}
+
 function addUmpireAction(data, affiliateId, exsitingUmpireId, extraData, isUmpire, isUmpireCoach) {
     const action = {
         type: ApiConstants.API_ADD_UMPIRE_LOAD,
@@ -67,6 +79,22 @@ function umpireMainListAction(data) {
     return action;
 }
 
+function getRankedUmpiresCount(data) {
+    const action = {
+        type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT,
+        data,
+    };
+    return action;
+}
+
+function updateUmpireRank(data) {
+    const action = {
+        type: ApiConstants.API_UPDATE_UMPIRE_RANK,
+        data,
+    };
+    return action;
+}
+
 export {
     umpireListAction,
     addUmpireAction,
@@ -75,5 +103,8 @@ export {
     umpireSearchAction,
     umpireClear,
     umpireMainListAction,
-    newUmpireListAction
+    newUmpireListAction,
+    getUmpireList,
+    getRankedUmpiresCount,
+    updateUmpireRank,
 } 

@@ -379,7 +379,6 @@ class PaymentSummary extends Component {
             feeType,
             paymentOption,
             paymentMethod,
-            paymentStatus,
             membershipType,
             offset,
             userId,
@@ -403,7 +402,6 @@ class PaymentSummary extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus,
         );
     };
 

@@ -589,7 +589,7 @@ const columnsPlayersToPay = [
                         </Menu.Item>
                     }
                 </Menu.SubMenu>
-                
+
             </Menu>
         )
     }
@@ -616,7 +616,7 @@ class LiveScoreDashboard extends Component {
             compOrgId: 0,
             onload: false,
             page: 1,
-            retryPaymentLoad: false
+            retryPaymentLoad: false,
         }
         this_obj = this
         this.props.initializeCompData()
@@ -635,7 +635,7 @@ class LiveScoreDashboard extends Component {
                 this.props.liveScoreDashboardListAction(id, startDay, currentTime, compOrgId, value)
                 this.setState({
                     liveScoreCompIsParent: value,
-                    compOrgId: compOrgId,
+                    compOrgId: compOrgId
                 })
             })
 
@@ -706,7 +706,7 @@ class LiveScoreDashboard extends Component {
     }
 
     retryPayment = (record) => {
-         const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
         let payload = {
             processTypeName: record.processTypeName,
             registrationUniqueKey: record.registrationUniqueKey,
@@ -729,7 +729,6 @@ class LiveScoreDashboard extends Component {
             divisionId: record.divisionId,
             competitionId: uniqueKey
         }
-
 
         this.setState({ retryPaymentLoad: true })
         this.props.liveScorePlayersToCashReceivedAction(payload);

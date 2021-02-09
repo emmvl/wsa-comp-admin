@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Pagination } from "antd";
+import { Layout, Breadcrumb, Table, Select, Pagination, Button } from "antd";
+
 import './user.css';
 // import moment from 'moment';
 import { NavLink } from 'react-router-dom';
+import Loader from 'customComponents/loader';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-// import AppImages from "../../themes/appImages";
+import AppImages from 'themes/appImages';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
-import { getUserFriendAction } from "../../store/actions/userAction/userAction";
+import { getUserFriendAction, exportUserFriendAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 const {
@@ -187,6 +189,24 @@ class PlayWithFriend extends Component {
         this.handleFriendTableList(1);
     }
 
+    exportPlayWithAFriend = () => {
+        console.log(this.state)
+        let yearId = getGlobalYear() ? getGlobalYear() : '-1'
+        this.setState({
+            pageNo: 1
+        })
+        let filter =
+        {
+            organisationUniqueKey: this.state.organisationId,
+            yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
+            paging: {
+                limit: 10,
+                offset: 0
+            }
+        }
+        this.props.exportUserFriendAction(filter, this.state.sortBy, this.state.sortOrder);
+    };
+
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design">
@@ -196,7 +216,28 @@ class PlayWithFriend extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playWithAFriend}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    <div className="col-sm d-flex align-content-center justify-content-end"> 
+                        <div className="comp-dashboard-botton-view-mobile">
+                            <Button
+                                type="primary"
+                                className="primary-add-comp-form"
+                                onClick={this.exportPlayWithAFriend}
+                            >
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <img
+                                            className="export-image"
+                                            src={AppImages.export}
+                                            alt=""
+                                        />
+                                        {AppConstants.export}
+                                    </div>
+                                </div>
+                            </Button>
+                        </div>
+                    </div>
                 </div>
+           
             </div>
         )
     }
@@ -270,6 +311,7 @@ class PlayWithFriend extends Component {
                         {this.contentView()}
                     </Content>
                 </Layout>
+                <Loader visible={this.props.userState.onExpUserFriendLoad} />
             </div>
         );
     }
@@ -279,7 +321,8 @@ class PlayWithFriend extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserFriendAction,
-        getOnlyYearListAction
+        getOnlyYearListAction,
+        exportUserFriendAction
     }, dispatch);
 }
 

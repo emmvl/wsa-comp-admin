@@ -34,6 +34,7 @@ import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
 import Loader from '../../customComponents/loader';
+import CustomTooltip from 'react-png-tooltip';
 
 import "./product.scss";
 
@@ -142,11 +143,11 @@ const columns = [
         key: "paidByUsers",
         render: (paidBy, record, index) => (
             <div>
-                {(record.paidByUsers || []).map((item, index) => (
+                {(record.paidByUsers || []).map((item, pbu_index) => (
 
-                    record.userId == item.paidByUserId ? <div>Self</div>
+                    record.userId == item.paidByUserId ? <div key={'user_' + pbu_index}>Self</div>
                         : (
-                            <div>
+                            <div key={'user_' + pbu_index}>
                                 <NavLink
                                     to={{
                                         pathname: `/userPersonal`,
@@ -962,7 +963,12 @@ class Registration extends Component {
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="registration-count">
-                                <div className="reg-payment-paid-reg-text">No. of Registrations</div>
+                                <div className="reg-payment-paid-reg-text">
+                                    No. of Registrations
+                                    <CustomTooltip>
+                                        <span>{AppConstants.noOfRegistrationsInfo}</span>
+                                    </CustomTooltip>
+                                </div>
                                 <div className="reg-payment-price-text">{total}</div>
                             </div>
                         </div>
@@ -1089,7 +1095,7 @@ class Registration extends Component {
                     <span className="popup-head">{AppConstants.amount}</span>
 :
                     {' '}
-                    {selectedRow ? selectedRow.governmentVoucherAmount : 0}
+                    {selectedRow ? currencyFormat(selectedRow.governmentVoucherAmount) : "$0.00"}
                     </div>
                     
                 </div>

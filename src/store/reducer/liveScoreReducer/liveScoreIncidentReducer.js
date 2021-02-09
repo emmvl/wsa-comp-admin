@@ -240,7 +240,11 @@ function liveScoreIncidentState(state = initialState, action) {
             } else {
                 state.incidentData[action.key] = action.data
             }
+            return state;
+
             break;
+        case ApiConstants.API_LIVE_SCORE_INCIDENT_ITEM_LOAD:
+        case ApiConstants.API_CREATE_PLAYER_SUSPENSION:
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
             return { ...state, onLoad: true };
 
@@ -251,6 +255,27 @@ function liveScoreIncidentState(state = initialState, action) {
                 onLoad: false,
                 teamResult: action.result,
                 status: action.status
+            }
+
+        case ApiConstants.API_LIVE_SCORE_INCIDENT_ITEM_SUCCESS:
+            const foundIncident = action.result;
+            const updatedIncidentList = state.liveScoreIncidentResult.map((incident) => {
+                const isIncidentShouldUpdate = incident.id === foundIncident.id;
+
+                return isIncidentShouldUpdate ? foundIncident : incident;
+            })
+
+            return {
+                ...state,
+                onLoad: false,
+                liveScoreIncidentResult: updatedIncidentList,
+                status: action.status
+            }
+
+        case ApiConstants.API_CREATE_PLAYER_SUSPENSION_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
             }
 
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD:

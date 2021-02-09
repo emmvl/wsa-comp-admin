@@ -3526,7 +3526,8 @@ class RegistrationCompetitionFee extends Component {
             heroImage: null,
             yearRefId: getGlobalYear() ? JSON.parse(getGlobalYear()) : null,
             isEdit: props.location.state ? props.location.state.isEdit : false,
-            clickedOnTab: false
+            clickedOnTab: false,
+            isFamilyDiscountType: false
         };
 
         this_Obj = this;
@@ -6834,9 +6835,6 @@ class RegistrationCompetitionFee extends Component {
         let invitees = this.props.appState.registrationInvitees.length > 0
             ? this.props.appState.registrationInvitees
             : [];
-        if (!!invitees[0]) {
-            invitees[0].subReferences.sort((a, b) => a.sortOrder - b.sortOrder);
-        }
         const {
             affiliateSelected,
             anyOrgSelected,
@@ -7464,6 +7462,7 @@ class RegistrationCompetitionFee extends Component {
 
     //On change membership product discount type
     onChangeMembershipProductDisType = (discountType, index) => {
+        this.setState({isFamilyDiscountType: discountType == 3 ? true : false});
         let discountData = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts;
         discountData[index].competitionTypeDiscountTypeRefId = discountType;
         this.props.updatedDiscountDataAction(discountData);
@@ -7473,6 +7472,15 @@ class RegistrationCompetitionFee extends Component {
             }
         }
     };
+
+    discountTypeDesc = (desc) => {
+        const {isFamilyDiscountType} = this.state;
+        if(isFamilyDiscountType){
+            return desc.split("(")[0];
+        }else{
+            return desc;
+        } 
+    }
 
     discountViewChange = (item, index) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0
@@ -7494,7 +7502,7 @@ class RegistrationCompetitionFee extends Component {
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
                                 <Option key={'discountType_' + item.id} value={item.id}>
-                                    {item.description}
+                                    {this.discountTypeDesc(item.description)}
                                 </Option>
                             ))}
                         </Select>
@@ -7571,7 +7579,7 @@ class RegistrationCompetitionFee extends Component {
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
                                 <Option key={'discountType_' + item.id} value={item.id}>
-                                    {item.description}
+                                    {this.discountTypeDesc(item.description)}
                                 </Option>
                             ))}
                         </Select>
@@ -7657,7 +7665,7 @@ class RegistrationCompetitionFee extends Component {
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
                                 <Option key={'discountType_' + item.id} value={item.id}>
-                                    {item.description}
+                                     {this.discountTypeDesc(item.description)}
                                 </Option>
                             ))}
                         </Select>
@@ -7741,7 +7749,7 @@ class RegistrationCompetitionFee extends Component {
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
                                 <Option key={'discountType_' + item.id} value={item.id}>
-                                    {item.description}
+                                     {this.discountTypeDesc(item.description)}
                                 </Option>
                             ))}
                         </Select>

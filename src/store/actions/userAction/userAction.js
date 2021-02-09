@@ -212,6 +212,13 @@ function getUserFriendAction(payload, sortBy, sortOrder) {
     };
 }
 
+function exportUserFriendAction(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_USER_FRIEND_LOAD,
+        payload,
+    };
+}
+
 function getUserReferFriendAction(payload, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
@@ -261,6 +268,14 @@ function exportOrgRegQuestionAction(payload) {
 function getSubmittedRegData(payload) {
     return {
         type: ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD,
+        payload,
+    };
+}
+
+/* Transfer User Registration */
+function transferUserRegistration(payload) {
+    return {
+        type: ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD,
         payload,
     };
 }
@@ -549,6 +564,27 @@ function teamMemberUpdateAction(data) {
     };
 }
 
+function filterByRelations(data) {
+    return {
+        type: ApiConstants.API_FILTER_USERS_LOAD,
+        data,
+    }
+}
+
+function getUsersByIds(data) {
+    return {
+        type: ApiConstants.API_GET_USERS_BY_IDS_LOAD,
+        data,
+    }
+}
+
+function getUserParentDataAction(data) {
+    return {
+        type: ApiConstants.API_GET_USER_PARENT_DATA_LOAD,
+        data,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -576,6 +612,7 @@ export {
     getUserModuleActivityScorerAction,
     getUserModuleActivityManagerAction,
     getUserFriendAction,
+    exportUserFriendAction,
     getUserReferFriendAction,
     getOrganisationPhotoAction,
     saveOrganisationPhotoAction,
@@ -620,4 +657,8 @@ export {
     teamMemberUpdateAction,
     exportUserRegData,
     getSubmittedRegData,
+    transferUserRegistration,
+    filterByRelations,
+    getUsersByIds,
+    getUserParentDataAction,
 };

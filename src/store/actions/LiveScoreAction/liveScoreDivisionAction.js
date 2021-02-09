@@ -8,13 +8,13 @@ function getLiveScoreDivisionList(competitionID, compKey, sortBy, sortOrder , is
         compKey,
         sortBy,
         sortOrder,
-        isParent , 
+        isParent ,
         compOrgId
     };
 }
 
 //liveScoreUpdateDivisionAction
-function liveScoreUpdateDivisionAction(data, key, contentType) {
+function liveScoreUpdateDivisionAction({ data, key, contentType }) {
     return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_DIVISION,
         data,
@@ -24,7 +24,7 @@ function liveScoreUpdateDivisionAction(data, key, contentType) {
 }
 
 //createDivisionAction
-function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts) {
+function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts, timeoutsData) {
     return {
         type: ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD,
         name,
@@ -33,7 +33,8 @@ function createDivisionAction(name, divisionName, gradeName, competitionId, divi
         competitionId,
         divisionId,
         positionTracking,
-        recordGoalAttempts
+        recordGoalAttempts,
+        timeoutsData
     };
 }
 
