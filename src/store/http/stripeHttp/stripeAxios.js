@@ -248,7 +248,6 @@ let AxiosApi = {
     },
 
     async exportPayoutTransaction(payoutId) {
-        console.log("call export exportPayoutTransaction");
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const body = { payoutId, organisationUniqueKey };
