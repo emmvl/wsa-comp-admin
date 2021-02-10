@@ -12,7 +12,9 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import {
     playerListWithPaginationAction,
-    liveScoreDeletePlayerAction
+    liveScoreDeletePlayerAction,
+    setPageSizeAction,
+    setPageNumberAction,
 } from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import history from "../../util/history";
@@ -262,24 +264,32 @@ class LiveScorePlayerList extends Component {
         });
     }
 
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
     /// Handle Page change
-    handlePageChange = (page) => {
-        let offset = page ? 10 * (page - 1) : 0;
+    handlePageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
+        let { pageSize } = this.props.liveScorePlayerState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
         this.setState({
             offset
         })
-        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, this.state.searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
+        this.props.playerListWithPaginationAction(this.state.competitionId, offset, pageSize, this.state.searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
     }
 
     contentView = () => {
-        let { result, totalCount, currentPage } = this.props.liveScorePlayerState
+        let { result, totalCount, currentPage, pageSize, onLoad } = this.props.liveScorePlayerState
 
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScorePlayerState.onLoad && true}
+                        loading={onLoad && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={result}
@@ -293,10 +303,13 @@ class LiveScorePlayerList extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             current={currentPage}
-                            showSizeChanger={false}
+                            defaultCurrent={currentPage}
+                            defaultPageSize={pageSize}                            
                             total={totalCount}
                             onChange={this.handlePageChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -472,7 +485,13 @@ class LiveScorePlayerList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ playerListWithPaginationAction, exportFilesAction, liveScoreDeletePlayerAction }, dispatch)
+    return bindActionCreators({
+        playerListWithPaginationAction,
+        exportFilesAction,
+        liveScoreDeletePlayerAction,
+        setPageSizeAction,
+        setPageNumberAction,
+    }, dispatch)
 }
 
 function mapStateToProps(state) {
