@@ -2493,7 +2493,7 @@ class UserModulePersonalDetail extends Component {
                     </div>
                 </div>
                 {/* )} */}
-                {(!personal.dateOfBirth || getAge(personal.dateOfBirth) > 18) && (
+                {/* {(!personal.dateOfBirth || getAge(personal.dateOfBirth) > 18) && ( */}
                     <div>
                         <div
                             className="user-module-row-heading"
@@ -2521,7 +2521,7 @@ class UserModulePersonalDetail extends Component {
                             />
                         </div>
                     </div>
-                )}
+                {/* )} */}
                 <div className="user-module-row-heading" style={{ marginTop: 30 }}>
                     {AppConstants.emergencyContacts}
                 </div>

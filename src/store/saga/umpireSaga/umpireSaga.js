@@ -46,7 +46,7 @@ function* errorSaga(error) {
 export function* umpireListSaga(action) {
     try {
         const result = yield call(UserAxiosApi.umpireList, action.data);
-
+        
         if (result.status === 1) {
 
             yield put({
@@ -168,7 +168,7 @@ export function* umpireListDataSaga(action) {
 export function* umpireListGetSaga(action) {
     try {
         const result = yield call(UmpireAxiosApi.umpireListGet, action.data);
-
+        console.log('UMPIRES', result);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_LIST_SUCCESS,
@@ -179,6 +179,47 @@ export function* umpireListGetSaga(action) {
             yield call(failSaga, result);
         }
     } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+export function* getRankedUmpiresCount(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.getRankedUmpiresCount, action.data);
+        yield put({
+            type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT_SUCCESS,
+            result: result.result.data,
+            status: result.status,
+        });
+    } catch(error) {
+        yield call(errorSaga, error);
+    }
+}
+
+export function* updateUmpireRank(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.updateUmpireRank, action.data);
+        const newRankedUmpiresCount = yield call(UmpireAxiosApi.getRankedUmpiresCount, action.data);
+
+        yield put({
+            type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT_SUCCESS,
+            result: newRankedUmpiresCount.result.data,
+            status: newRankedUmpiresCount.status,
+        });
+        
+        const newUmpiresList = yield call(UmpireAxiosApi.umpireListGet, action.data);
+        
+        if (newUmpiresList.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_UMPIRE_LIST_SUCCESS,
+                result: newUmpiresList.result.data,
+                status: newUmpiresList.status,
+            });
+        } else {
+            yield call(failSaga, newUmpiresList);
+        }
+
+    }catch(error) {
         yield call(errorSaga, error);
     }
 }

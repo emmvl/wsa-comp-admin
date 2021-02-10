@@ -682,6 +682,7 @@ const AppConstants = {
     report: "Report",
     attendance_record_report: "Attendance Recording and Reporting",
     scoring: "Scoring",
+    scoringAndTimer: 'Scoring and Timer',
     single: "Single",
     timer: "Timer",
     ladderSettings: "Ladder Settings",
@@ -1031,6 +1032,9 @@ const AppConstants = {
     totalPages: "Total pages",
     currentPage: "Current page",
     buzzer: "Buzzer",
+    timeouts: "Timeouts",
+    applyToHalves: "Apply to Halves",
+    applyToQuarters: "Apply to Quarters",
     turnOffBuzzer: "Turn off Buzzer",
     turnOff_30Second: "30 second warning",
     payouts: "Payouts",
@@ -1969,6 +1973,12 @@ const AppConstants = {
     parentDetails: "Parent details",
     noOfRegisteredUsersInfo: "Number of individual users who are registered to your organisation or 1st / 2nd level affiliates (if applicable)",
     noOfRegistrationsInfo: "Note: number of registrations are counted per role / competition",
+    refund: "Refund",
+    maximumAmountPopupTxt: "Refund cannot be processed since the requested amount is more than the applicable amount.",
+    enterRefundAmount: "Please enter the amount to be Refunded.",
+    enterAmount: "Enter the Amount",
+    partialRefund: "Partial Refund",
+    enterValidAmount: "Please enter valid amount",
 };
 
 export default AppConstants;

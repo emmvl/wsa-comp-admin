@@ -149,7 +149,7 @@ import LiveScorerCoachImport from 'components/liveScore/liveScoreCoachImport';
 import LiveScorerList from 'components/liveScore/liveScorerList';
 import LiveScorerView from 'components/liveScore/liveScorerView';
 import LiveScoreSeasonFixture from 'components/liveScore/liveScoreSeasonFixture';
-import LiveScoreSettingsView from 'components/liveScore/liveScoreSettingsView';
+import LiveScoreSettingsView from 'components/liveScore/liveScoreSettings/liveScoreSettingsView';
 import LiveScoreSocialSheet from 'components/liveScore/liveScoreSocialSheet';
 import LiveScoreTeam from 'components/liveScore/liveScoreTeams';
 import LiveScoreTeamAttendance from 'components/liveScore/liveScoreTeamAttendance';

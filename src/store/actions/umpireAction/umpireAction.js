@@ -97,6 +97,22 @@ function setUmpireListPageNumberAction(pageNum) {
     return action;
 }
 
+function getRankedUmpiresCount(data) {
+    const action = {
+        type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT,
+        data,
+    };
+    return action;
+}
+
+function updateUmpireRank(data) {
+    const action = {
+        type: ApiConstants.API_UPDATE_UMPIRE_RANK,
+        data,
+    };
+    return action;
+}
+
 export {
     umpireListAction,
     addUmpireAction,
@@ -109,4 +125,6 @@ export {
     getUmpireList,
     setUmpireListPageSizeAction,
     setUmpireListPageNumberAction,
+    getRankedUmpiresCount,
+    updateUmpireRank,
 } 

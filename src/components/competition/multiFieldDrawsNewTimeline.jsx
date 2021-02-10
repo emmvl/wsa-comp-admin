@@ -1966,6 +1966,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 style={{
                     margin: isAxisInverted ? 0 : '0 0 0 34px',
                     top: isAxisInverted ? -8 : 0,
+                    flexShrink: 0,
                 }}
             >
                 {date.map((itemDate, index) => {
@@ -2180,6 +2181,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                 key={"court" + index} 
                                 style={{
                                     display: 'flex', 
+                                    flexShrink: 0,
                                     alignItems: 'center',
                                     ...(isAxisInverted ? {
                                         position: 'relative',

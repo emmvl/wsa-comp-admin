@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Form, Modal } from "antd";
+import Icon from '@ant-design/icons';
 import { SearchOutlined } from "@ant-design/icons";
 import { getRefBadgeData } from '../../store/actions/appAction'
 
@@ -14,7 +15,14 @@ import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { umpireMainListAction, setUmpireListPageSizeAction, setUmpireListPageNumberAction } from "store/actions/umpireAction/umpireAction";
+import { 
+    umpireMainListAction,
+    setUmpireListPageSizeAction,
+    setUmpireListPageNumberAction,
+    getUmpireList,
+    getRankedUmpiresCount,
+    updateUmpireRank
+} from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -34,8 +42,8 @@ function checkUserRoll(rolesArr, index) {
     let isClub = "NO"
     if (isArrayNotEmpty(rolesArr)) {
         for (let i in rolesArr) {
-            let roles = rolesArr[i].role
-            if (roles.name === "umpire_coach") {
+            let roleId = rolesArr[i].roleId
+            if (roleId === 20) {
                 isClub = "YES"
             }
         }
@@ -59,6 +67,7 @@ function checkUmpireUserRoll(rolesArr, key) {
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
+    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
     if (this_obj.state.sortBy !== key) {
         sortOrder = "ASC";
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "ASC") {
@@ -68,163 +77,14 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-    this_obj.props.umpireMainListAction({
-        refRoleId: JSON.stringify([15, 20]),
-        entityTypes: this_obj.state.isCompParent ? 1 : 6,
-        compId: this_obj.state.selectedComp,
+    this_obj.props.getUmpireList({
+        organisationId,
+        competitionId: this_obj.state.selectedComp,
         offset: this_obj.state.offsetData,
         sortBy,
         sortOrder,
-        userName: this_obj.state.searchText,
-        competitionOrgId: this_obj.state.compOrganisationId
-    })
+    });
 }
-
-const columns = [
-    {
-        title: "First Name",
-        dataIndex: "firstName",
-        key: "firstsName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (firstName, record) => (
-            <NavLink
-                to={{
-                    pathname: "/userPersonal",
-                    state: {
-                        userId: record.id,
-                        screenKey: "umpire",
-                        screen: "/umpire",
-                    },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{firstName}</span>
-            </NavLink>
-        ),
-    },
-    {
-        title: "Last Name",
-        dataIndex: "lastName",
-        key: "lastName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (lastName, record) => (
-            <NavLink
-                to={{
-                    pathname: "/userPersonal",
-                    state: {
-                        userId: record.id,
-                        screenKey: "umpire",
-                        screen: "/umpire",
-                    },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">{lastName}</span>
-            </NavLink>
-        ),
-    },
-    {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
-    {
-        title: "Contact No",
-        dataIndex: "mobileNumber",
-        key: "mobileNumber",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
-    {
-        title: 'Accreditation',
-        dataIndex: 'accreditationLevelUmpireRefId',
-        key: 'accreditationLevelUmpireRefId',
-        sorter: false,
-        render: (accreditationLevelUmpireRefId, record) => (
-            <span>{this_obj.checkAccreditationLevel(accreditationLevelUmpireRefId)}</span>
-        )
-    },
-    {
-        title: "Organisation",
-        dataIndex: "linkedEntity",
-        key: "linkedEntity",
-        sorter: true,
-        onHeaderCell: () => listeners("linkedEntityName"),
-        render: (linkedEntity) => (
-            <div>
-                {linkedEntity.map((item, index) => (
-                    <span key={`entityName ${index}`} className="multi-column-text-aligned">{item.name}</span>
-                ))}
-            </div>
-        )
-    },
-    {
-        title: "Umpire",
-        dataIndex: "umpire",
-        key: "umpire",
-        sorter: true,
-        onHeaderCell: () => listeners("umpire"),
-        render: (umpireCoach, record) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
-    },
-    {
-        title: "Umpire Coach",
-        dataIndex: "umpireCoach",
-        key: "umpireCoach",
-        sorter: true,
-        onHeaderCell: () => listeners("umpireCoach"),
-        render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
-    },
-    {
-        title: "Action",
-        dataIndex: "action",
-        key: "action",
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <Menu.SubMenu
-                    key="sub1"
-                    style={{ borderBottomStyle: "solid", borderBottom: 0 }}
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            width="16"
-                            height="16"
-                            alt=""
-                        />
-                    }
-                >
-                    <Menu.Item key="1">
-                        <NavLink
-                            to={{
-                                pathname: "/addUmpire",
-                                state: { isEdit: true, tableRecord: record },
-                            }}
-                        >
-                            <span>Edit</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <NavLink
-                            to={{
-                                pathname: "./assignUmpire",
-                                state: { record },
-                            }}
-                        >
-                            <span>Assign to match</span>
-                        </NavLink>
-                    </Menu.Item>
-                </Menu.SubMenu>
-            </Menu>
-        ),
-    }
-];
 
 class Umpire extends Component {
     constructor(props) {
@@ -240,10 +100,271 @@ class Umpire extends Component {
             sortBy: null,
             sortOrder: null,
             isCompParent: false,
-            compOrganisationId: 0
+            compOrganisationId: 0,
+            visible: false,
+            umpireRank: null,
+            umpireId: null,
+            columns: [
+                {
+                    title: "Rank",
+                    dataIndex: "rank",
+                    key: "rank",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                    render: (rank, record) => {
+                        const { rankedUmpiresCount } = this.props.umpireState;
+                        const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
+                        const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
+                        console.log('RECORD', record, rank);
+                        return (
+                            <Form>
+                                {
+                                    currentOrganisationId === competitionOrganisationId
+                                    ?   <Select
+                                            onChange={(i, option) => this.handleSelectChange(i, option, record.id)}
+                                            value={record.rank ? record.rank : ''}
+                                        >
+                                            {
+                                                Array.apply(null, { length: rankedUmpiresCount + 1 }).map((rank, i, arr) => {
+                                                    return (
+                                                        <Option 
+                                                            style={ i === arr.length - 1 ? {backgroundColor: 'lightgreen'} : {}} 
+                                                            key={i}>
+                                                                {i+1}
+                                                        </Option>
+                                                    );
+                                                })
+                                            }
+                                        </Select>
+                                    :   <div>{record.rank ? record.rank : ''}</div>
+                                }
+                            </Form>
+                        )
+                    },
+                },
+                {
+                    title: "First Name",
+                    dataIndex: "firstName",
+                    key: "firstsName",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                    render: (firstName, record) => (
+                        <NavLink
+                            to={{
+                                pathname: "/userPersonal",
+                                state: {
+                                    userId: record.id,
+                                    screenKey: "umpire",
+                                    screen: "/umpire",
+                                },
+                            }}
+                        >
+                            <span className="input-heading-add-another pt-0">{firstName}</span>
+                        </NavLink>
+                    ),
+                },
+                {
+                    title: "Last Name",
+                    dataIndex: "lastName",
+                    key: "lastName",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                    render: (lastName, record) => (
+                        <NavLink
+                            to={{
+                                pathname: "/userPersonal",
+                                state: {
+                                    userId: record.id,
+                                    screenKey: "umpire",
+                                    screen: "/umpire",
+                                },
+                            }}
+                        >
+                            <span className="input-heading-add-another pt-0">{lastName}</span>
+                        </NavLink>
+                    ),
+                },
+                {
+                    title: "Email",
+                    dataIndex: "email",
+                    key: "email",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                },
+                {
+                    title: "Contact No",
+                    dataIndex: "mobileNumber",
+                    key: "mobileNumber",
+                    sorter: true,
+                    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                },
+                {
+                    title: 'Accreditation',
+                    dataIndex: 'accreditationLevelUmpireRefId',
+                    key: 'accreditationLevelUmpireRefId',
+                    sorter: false,
+                    render: (accreditationLevelUmpireRefId, record) => (
+                        <span>{this_obj.checkAccreditationLevel(accreditationLevelUmpireRefId)}</span>
+                    )
+                },
+                {
+                    title: "Organisation",
+                    dataIndex: "organisationName",
+                    key: "organisationName",
+                    sorter: false,
+                    onHeaderCell: () => {},
+                    render: (organisation) => (
+                        <span className="multi-column-text-aligned">{organisation}</span>
+                    )
+                },
+                {
+                    title: "Umpire",
+                    dataIndex: "umpire",
+                    key: "umpire",
+                    sorter: false,
+                    onHeaderCell: () => {},
+                    render: (umpireCoach, record) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
+                },
+                {
+                    title: "Umpire Coach",
+                    dataIndex: "umpireCoach",
+                    key: "umpireCoach",
+                    sorter: false,
+                    onHeaderCell: () => {},
+                    render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
+                },
+                {
+                    title: "Action",
+                    dataIndex: "action",
+                    key: "action",
+                    render: (data, record) => (
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <Menu.SubMenu
+                                key="sub1"
+                                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                                title={
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        width="16"
+                                        height="16"
+                                        alt=""
+                                    />
+                                }
+                            >
+                                <Menu.Item key="1">
+                                    <NavLink
+                                        to={{
+                                            pathname: "/addUmpire",
+                                            state: { isEdit: true, tableRecord: record },
+                                        }}
+                                    >
+                                        <span>Edit</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="2">
+                                    <NavLink
+                                        to={{
+                                            pathname: "./assignUmpire",
+                                            state: { record },
+                                        }}
+                                    >
+                                        <span>Assign to match</span>
+                                    </NavLink>
+                                </Menu.Item>
+                            </Menu.SubMenu>
+                        </Menu>
+                    ),
+                }
+            ],
         };
 
         this_obj = this;
+    }
+
+    handleSelectChange = (i, option, id) => {
+        const { rankedUmpiresCount } = this.props.umpireState; 
+        const { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
+        if(option.children === rankedUmpiresCount + 1) {
+            this.props.updateUmpireRank({
+                competitionId: localStorage.getItem("umpireCompetitionId"),
+                umpireRank: option.children,
+                organisationId,
+                umpireId: id,
+                offset: this.state.offsetData,
+                sortBy: this.state.sortBy,
+                sortOrder: this.state.sortOrder,
+            });
+            // this.props.getUmpireList({
+            //     competitionId: localStorage.getItem("umpireCompetitionId"),
+            //     offset: this.state.offsetData,
+            //     organisationId,
+            //     sortBy: this.state.sortBy,
+            //     sortOrder: this.state.sortOrder,
+            // });
+        } else {
+            this.setState({
+                visible: true,
+                umpireRank: option.children,
+                umpireId: id,
+            });
+        }
+    }
+
+    switchShiftHandler = (updateRankType) => {
+        const { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
+        const { umpireRank, umpireId } = this.state;
+        this.props.updateUmpireRank({
+            competitionId: localStorage.getItem("umpireCompetitionId"),
+            umpireRank,
+            organisationId,
+            umpireId,
+            updateRankType,
+            offset: this.state.offsetData,
+            sortOrder: this.state.sortOrder,
+            sortBy: this.state.sortBy,
+        });
+        // this.props.getUmpireList({
+        //     competitionId: localStorage.getItem("umpireCompetitionId"),
+        //     offset: this.state.offsetData,
+        //     organisationId,
+        //     sortBy: this.state.sortBy,
+        // });
+        this.setState({visible: false});
+    }
+
+    ModalView() {
+        return (
+            <Modal
+                visible={this.state.visible}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ style: { display: 'none' } }}
+                centered
+                closable
+                footer={false}
+                onCancel={() => this.setState({visible: false})}
+            >
+                <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+                    <Button 
+                        className="primary-add-comp-form"
+                        type="primary"
+                        onClick={() => this.switchShiftHandler('replace')}>
+                        Switch
+                    </Button>
+                    <Button 
+                        className="primary-add-comp-form"
+                        type="primary"
+                        onClick={() => this.switchShiftHandler('shift')}>
+                        Shift
+                    </Button>
+                </div>
+            </Modal>
+        )
     }
 
     async componentDidMount() {
@@ -261,7 +382,10 @@ class Umpire extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
-        this.props.getRefBadgeData(this.props.appstate.accreditation)
+        this.props.getRefBadgeData(this.props.appstate.accreditation);
+        this.props.getRankedUmpiresCount({
+            competitionId: localStorage.getItem("umpireCompetitionId"),
+        });
     }
 
     async componentDidUpdate(nextProps) {
@@ -299,15 +423,12 @@ class Umpire extends Component {
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
-                    this.props.umpireMainListAction({
-                        refRoleId: JSON.stringify([15, 20]),
-                        entityTypes: isCompParent ? 1 : 6,
-                        compId: firstComp,
+                    this.props.getUmpireList({
+                        organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                        competitionId: localStorage.getItem("umpireCompetitionId"),
                         offset: this.state.offsetData,
                         sortBy,
                         sortOrder,
-                        userName: this.state.searchText,
-                        competitionOrgId: compOrganisationId
                     });
                     this.setState({
                         selectedComp: firstComp,
@@ -362,29 +483,26 @@ class Umpire extends Component {
             offsetData: offset,
         });
 
-        this.props.umpireMainListAction({
-            refRoleId: JSON.stringify([15, 20]),
-            entityTypes: this.state.isCompParent ? 1 : 6,
-            compId: this.state.selectedComp,
+        this.props.getUmpireList({
+            organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+            competitionId: localStorage.getItem("umpireCompetitionId"),
             offset,
             limit: pageSize_Data,
             sortBy,
             sortOrder,
-            userName: this.state.searchText,
-            competitionOrgId: this.state.compOrganisationId
         });
     };
 
     contentView = () => {
-        const { umpireList_Data, totalCount_Data, currentPage_Data, pageSize_Data } = this.props.umpireState;
-        let umpireListResult = isArrayNotEmpty(umpireList_Data) ? umpireList_Data : [];
+        const { umpireListDataNew, totalCount_Data, currentPage_Data, pageSize_Data } = this.props.umpireState;
+        let umpireListResult = isArrayNotEmpty(umpireListDataNew) ? umpireListDataNew : [];
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.umpireState.onLoad}
                         className="home-dashboard-table"
-                        columns={columns}
+                        columns={this.state.columns}
                         dataSource={umpireListResult}
                         pagination={false}
                         rowKey={(record) => "umpireListResult" + record.id}
@@ -433,15 +551,12 @@ class Umpire extends Component {
 
         let compKey = compID.competitionUniqueKey;
 
-        this.props.umpireMainListAction({
-            refRoleId: JSON.stringify([15, 20]),
-            entityTypes: this.state.isCompParent ? 1 : 6,
-            compId: selectedComp,
+        this.props.getUmpireList({
+            organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+            competitionId: localStorage.getItem("umpireCompetitionId"),
             offset: 0,
             sortBy,
             sortOrder,
-            userName: this.state.searchText,
-            competitionOrgId: this.state.compOrganisationId
         });
 
         this.setState({ selectedComp, competitionUniqueKey: compKey });
@@ -453,15 +568,12 @@ class Umpire extends Component {
 
         const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
-            this.props.umpireMainListAction({
-                refRoleId: JSON.stringify([15, 20]),
-                entityTypes: this.state.isCompParent ? 1 : 6,
-                compId: this.state.selectedComp,
+            this.props.getUmpireList({
+                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: 0,
-                userName: e.target.value,
                 sortBy,
                 sortOrder,
-                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -472,15 +584,12 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
-            this.props.umpireMainListAction({
-                refRoleId: JSON.stringify([15, 20]),
-                entityTypes: this.state.isCompParent ? 1 : 6,
-                compId: this.state.selectedComp,
-                userName: this.state.searchText,
+            this.props.getUmpireList({
+                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: 0,
                 sortBy,
                 sortOrder,
-                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -491,15 +600,12 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
-            this.props.umpireMainListAction({
-                refRoleId: JSON.stringify([15, 20]),
-                entityTypes: this.state.isCompParent ? 1 : 6,
-                compId: this.state.selectedComp,
-                userName: this.state.searchText,
+            this.props.getUmpireList({
+                organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
+                competitionId: localStorage.getItem("umpireCompetitionId"),
                 offset: 0,
                 sortBy,
                 sortOrder,
-                competitionOrgId: this.state.compOrganisationId
             });
         }
     };
@@ -635,6 +741,7 @@ class Umpire extends Component {
                     <Content>
                         {/* {this.dropdownView()} */}
                         {this.contentView()}
+                        {this.ModalView()}
                     </Content>
                 </Layout>
             </div>
@@ -650,6 +757,9 @@ function mapDispatchToProps(dispatch) {
         getRefBadgeData,
         setUmpireListPageSizeAction,
         setUmpireListPageNumberAction,
+        getUmpireList,
+        getRankedUmpiresCount,
+        updateUmpireRank,
     }, dispatch);
 }
 
@@ -657,7 +767,8 @@ function mapStateToProps(state) {
     return {
         umpireState: state.UmpireState,
         umpireCompetitionState: state.UmpireCompetitionState,
-        appstate: state.AppState
+        appstate: state.AppState,
+        rankedUmpiresCount: state.rankedUmpiresCount,
     };
 }
 

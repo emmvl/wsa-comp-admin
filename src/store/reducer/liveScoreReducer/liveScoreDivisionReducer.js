@@ -1,4 +1,5 @@
 import ApiConstants from "themes/apiConstants";
+import {getTimeoutsDetailsData} from 'components/liveScore/liveScoreSettings/liveScoreSettingsUtils'
 
 const divisionObj = {
     divisionName: "",
@@ -22,6 +23,9 @@ const initialState = {
     positionTracking: "null",
     recordGoalAttempts: "null",
     divisionListActionObject: null,
+    timeouts: null,
+    timeoutsToQuarters: [],
+    timeoutsToHalves: [],
 };
 
 function liveScoreDivisionState(state = initialState, action) {
@@ -45,6 +49,12 @@ function liveScoreDivisionState(state = initialState, action) {
             } else if (action.key === "name") {
                 state.name = action.data;
             } else if (action.key === "isEditDivision") {
+                const { timeoutDetails } = action.data;
+                const timeoutsData = getTimeoutsDetailsData(timeoutDetails)
+
+                state.timeouts = timeoutsData.timeouts
+                state.timeoutsToQuarters = timeoutsData.timeoutsToQuarters
+                state.timeoutsToHalves = timeoutsData.timeoutsToHalves
                 state.divisionName = action.data.divisionName;
                 state.gradeName = action.data.grade;
                 state.name = action.data.name;
@@ -60,6 +70,15 @@ function liveScoreDivisionState(state = initialState, action) {
             }
             else if (action.key === "recordGoalAttempts") {
                 state.recordGoalAttempts = action.data
+            }
+            else if (action.key === "timeouts") {
+                state.timeouts = action.data
+            }
+            else if (action.key === "timeoutsToQuarters") {
+                state.timeoutsToQuarters = action.data
+            }
+            else if (action.key === "timeoutsToHalves") {
+                state.timeoutsToHalves = action.data
             }
             return {
                 ...state,
