@@ -17,7 +17,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
-import { getRegistrationChangeDashboard } from "../../store/actions/registrationAction/registrationChangeAction";
+import { getRegistrationChangeDashboard, setRegistrationChangeListPageSize, setRegistrationChangeListPageNumber } from "../../store/actions/registrationAction/registrationChangeAction";
 import { registrationChangeType } from "../../store/actions/commonAction/commonAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import AppImages from "../../themes/appImages";
@@ -314,22 +314,30 @@ class RegistrationChange extends Component {
         this.handleRegChangeList(1);
     }
 
-    handleRegChangeList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setRegistrationChangeListPageSize(pageSize);
+        this.handleRegChangeList(page);
+    }
+
+    handleRegChangeList = async (page) => {
+        await this.props.setRegistrationChangeListPageNumber(page);
         const {
             // yearRefId,
             competitionId,
             organisationId,
             regChangeTypeRefId
         } = this.state;
-        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1
+        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
+        let { regChangeDashboardListPageSize } = this.props.regChangeState;
+        regChangeDashboardListPageSize = regChangeDashboardListPageSize ? regChangeDashboardListPageSize : 10;
         let filter = {
             organisationId,
             yearRefId,
             competitionId,
             regChangeTypeRefId,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0),
+                limit: regChangeDashboardListPageSize,
+                offset: (page ? (regChangeDashboardListPageSize * (page - 1)) : 0),
             },
         };
 
@@ -482,7 +490,7 @@ class RegistrationChange extends Component {
     }
 
     contentView = () => {
-        const { regChangeDashboardListData, regChangeDashboardListPage, regChangeDashboardListTotalCount } = this.props.regChangeState;
+        const { regChangeDashboardListData, regChangeDashboardListPage, regChangeDashboardListTotalCount, onLoad, regChangeDashboardListPageSize } = this.props.regChangeState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -491,16 +499,19 @@ class RegistrationChange extends Component {
                         columns={columns}
                         dataSource={regChangeDashboardListData}
                         pagination={false}
-                        loading={this.props.regChangeState.onLoad && true}
+                        loading={onLoad && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
+                        showSizeChanger
                         current={regChangeDashboardListPage}
+                        defaultCurrent={regChangeDashboardListPage}
+                        defaultPageSize={regChangeDashboardListPageSize}
                         total={regChangeDashboardListTotalCount}
                         onChange={(page) => this.handleRegChangeList(page)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -533,7 +544,9 @@ function mapDispatchToProps(dispatch) {
         clearCompReducerDataAction, regCompetitionListDeleteAction,
         CLEAR_OWN_COMPETITION_DATA,
         getRegistrationChangeDashboard,
-        registrationChangeType
+        registrationChangeType,
+        setRegistrationChangeListPageSize,
+        setRegistrationChangeListPageNumber,
     }, dispatch)
 }
 

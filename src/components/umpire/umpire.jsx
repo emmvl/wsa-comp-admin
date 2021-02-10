@@ -17,6 +17,8 @@ import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrg
 import { userExportFilesAction } from "store/actions/appAction";
 import { 
     umpireMainListAction,
+    setUmpireListPageSizeAction,
+    setUmpireListPageNumberAction,
     getUmpireList,
     getRankedUmpiresCount,
     updateUmpireRank
@@ -113,7 +115,7 @@ class Umpire extends Component {
                         const { rankedUmpiresCount } = this.props.umpireState;
                         const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
                         const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
-                        console.log('RECORD', record, rank);
+                        
                         return (
                             <Form>
                                 {
@@ -298,13 +300,6 @@ class Umpire extends Component {
                 sortBy: this.state.sortBy,
                 sortOrder: this.state.sortOrder,
             });
-            // this.props.getUmpireList({
-            //     competitionId: localStorage.getItem("umpireCompetitionId"),
-            //     offset: this.state.offsetData,
-            //     organisationId,
-            //     sortBy: this.state.sortBy,
-            //     sortOrder: this.state.sortOrder,
-            // });
         } else {
             this.setState({
                 visible: true,
@@ -327,12 +322,6 @@ class Umpire extends Component {
             sortOrder: this.state.sortOrder,
             sortBy: this.state.sortBy,
         });
-        // this.props.getUmpireList({
-        //     competitionId: localStorage.getItem("umpireCompetitionId"),
-        //     offset: this.state.offsetData,
-        //     organisationId,
-        //     sortBy: this.state.sortBy,
-        // });
         this.setState({visible: false});
     }
 
@@ -346,20 +335,26 @@ class Umpire extends Component {
                 closable
                 footer={false}
                 onCancel={() => this.setState({visible: false})}
+                style={{ maxWidth: 400 }}
             >
-                <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-                    <Button 
-                        className="primary-add-comp-form"
-                        type="primary"
-                        onClick={() => this.switchShiftHandler('replace')}>
-                        Switch
-                    </Button>
-                    <Button 
-                        className="primary-add-comp-form"
-                        type="primary"
-                        onClick={() => this.switchShiftHandler('shift')}>
-                        Shift
-                    </Button>
+                <div className="umpire-modal">
+                    <span className="umpire-modal-text">Would you like to</span>
+                    <div className="umpire-modal-button-group">
+                        <Button 
+                            className="primary-add-comp-form umpire-modal-button"
+                            type="primary"
+                            onClick={() => this.switchShiftHandler('replace')}
+                        >
+                            Switch ratings
+                        </Button>
+                        <Button 
+                            className="primary-add-comp-form umpire-modal-button"
+                            type="primary"
+                            onClick={() => this.switchShiftHandler('shift')}
+                        >
+                            Shift ratings
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         )
@@ -467,9 +462,16 @@ class Umpire extends Component {
         return ""
     }
 
-    handlePageChange = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setUmpireListPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
+    handlePageChange = async (page) => {
+        await this.props.setUmpireListPageNumberAction(page);
         const { sortBy, sortOrder } = this.state;
-        let offset = page ? 10 * (page - 1) : 0;
+        let { pageSize_Data } = this.props.umpireState;
+        let offset = page ? pageSize_Data * (page - 1) : 0;
         this.setState({
             offsetData: offset,
         });
@@ -478,13 +480,14 @@ class Umpire extends Component {
             organisationId: JSON.parse(localStorage.getItem("setOrganisationData")).organisationId,
             competitionId: localStorage.getItem("umpireCompetitionId"),
             offset,
+            limit: pageSize_Data,
             sortBy,
             sortOrder,
         });
     };
 
     contentView = () => {
-        const { totalCount_Data, currentPage_Data, umpireListDataNew } = this.props.umpireState;
+        const { umpireListDataNew, totalCount_Data, currentPage_Data, pageSize_Data } = this.props.umpireState;
         let umpireListResult = isArrayNotEmpty(umpireListDataNew) ? umpireListDataNew : [];
         return (
             <div className="comp-dash-table-view mt-4">
@@ -498,18 +501,19 @@ class Umpire extends Component {
                         rowKey={(record) => "umpireListResult" + record.id}
                     />
                 </div>
-
                 <div className="comp-dashboard-botton-view-mobile">
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end" />
 
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             current={currentPage_Data}
+                            defaultCurrent={currentPage_Data}
+                            defaultPageSize={pageSize_Data}
                             total={totalCount_Data}
-                            // defaultPageSize={10}
                             onChange={this.handlePageChange}
-                            showSizeChanger={false}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -744,6 +748,8 @@ function mapDispatchToProps(dispatch) {
         umpireMainListAction,
         userExportFilesAction,
         getRefBadgeData,
+        setUmpireListPageSizeAction,
+        setUmpireListPageNumberAction,
         getUmpireList,
         getRankedUmpiresCount,
         updateUmpireRank,

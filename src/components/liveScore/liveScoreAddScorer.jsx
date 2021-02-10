@@ -518,7 +518,7 @@ function mapStateToProps(state) {
     return {
         liveScoreTeamState: state.LiveScoreTeamState,
         liveScoreScorerState: state.LiveScoreScorerState,
-        liveScoreMangerState: state.LiveScoreMangerState,
+        liveScoreManagerState: state.LiveScoreManagerState,
         liveScoreState: state.LiveScoreState
     }
 }

@@ -10,7 +10,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
-import { getUserReferFriendAction } from "../../store/actions/userAction/userAction";
+import { getUserReferFriendAction, setReferFriendListPageSizeAction, setReferFriendListPageNumberAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 const {
@@ -38,12 +38,14 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { referFriendPageSize } = this.props.userState;
+    referFriendPageSize = referFriendPageSize ? referFriendPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         paging: {
-            limit: 10,
-            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+            limit: referFriendPageSize,
+            offset: (this_Obj.state.pageNo ? (referFriendPageSize * (this_Obj.state.pageNo - 1)) : 0)
         }
     }
 
@@ -142,8 +144,9 @@ class ReferFriend extends Component {
             sortBy = userReferFriendListAction.sortBy
             sortOrder = userReferFriendListAction.sortOrder
             let yearRefId = JSON.parse(yearId)
-
-            pageNo = Math.floor(offset / 10) + 1;
+            const { referFriendPageSize } = this.props.userState;
+            referFriendPageSize = referFriendPageSize ? referFriendPageSize : 10;
+            pageNo = Math.floor(offset / referFriendPageSize) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleFriendTableList(pageNo);
@@ -152,22 +155,24 @@ class ReferFriend extends Component {
             this.handleFriendTableList(1);
         }
     }
-    componentDidUpdate(nextProps) {
 
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setReferFriendListPageSizeAction(pageSize);
+        this.handleFriendTableList(page);
     }
 
-    handleFriendTableList = (page) => {
+    handleFriendTableList = async (page) => {
+        await this.props.setReferFriendListPageNumberAction(page);
         let yearId = getGlobalYear() ? getGlobalYear() : '-1'
-        this.setState({
-            pageNo: page
-        })
-        let filter =
-        {
+        this.setState({ pageNo: page });
+        let { referFriendPageSize } = this.props.userState;
+        referFriendPageSize = referFriendPageSize ? referFriendPageSize : 10;
+        let filter = {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0)
+                limit: referFriendPageSize,
+                offset: (page ? (referFriendPageSize * (page - 1)) : 0)
             }
         }
         this.props.getUserReferFriendAction(filter, this.state.sortBy, this.state.sortOrder);
@@ -232,26 +237,28 @@ class ReferFriend extends Component {
     }
 
     contentView = () => {
-        let userState = this.props.userState;
-        let friendList = userState.referFriendList;
-        let total = userState.referFriendTotalCount;
+        const { referFriendList, referFriendTotalCount, referFriendPageSize, referFriendPage, onLoad } = this.props.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columns}
-                        dataSource={friendList}
+                        dataSource={referFriendList}
                         pagination={false}
-                        loading={this.props.userState.onLoad}
+                        loading={onLoad}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.referFriendPage}
-                        total={total}
-                        onChange={(page) => this.handleFriendTableList(page)}
-                        showSizeChanger={false}
+                        showSizeChanger
+                        current={referFriendPage}
+                        defaultCurrent={referFriendPage}
+                        defaultPageSize={referFriendPageSize}
+                        total={referFriendTotalCount}
+                        onChange={this.handleFriendTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -279,7 +286,9 @@ class ReferFriend extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserReferFriendAction,
-        getOnlyYearListAction
+        getOnlyYearListAction,
+        setReferFriendListPageSizeAction,
+        setReferFriendListPageNumberAction,
     }, dispatch);
 }
 

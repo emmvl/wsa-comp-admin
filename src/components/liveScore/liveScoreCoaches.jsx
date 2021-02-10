@@ -19,7 +19,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
-import { liveScoreCoachListAction } from "../../store/actions/LiveScoreAction/liveScoreCoachAction";
+import { liveScoreCoachListAction, setPageSizeAction, setPageNumberAction } from "../../store/actions/LiveScoreAction/liveScoreCoachAction";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { getliveScoreTeams } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { userExportFilesAction } from "../../store/actions/appAction";
@@ -212,8 +212,16 @@ class LiveScoreCoaches extends Component {
     }
 
     /// Handle Page change
-    handlePageChange = (page) => {
-        let offset = page ? 10 * (page - 1) : 0;
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
+    handlePageChange = async (page) => {
+        await this.props.   setPageNumberAction(page);
+        let { pageSize } = this.props.liveScoreCoachState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
         let {
             sortBy,
             sortOrder,
@@ -224,13 +232,11 @@ class LiveScoreCoaches extends Component {
         this.setState({
             offset
         })
-        this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
+        this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, pageSize, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
     }
 
     contentView = () => {
-        const { coachesResult, currentPage, totalCount } = this.props.liveScoreCoachState
-        let couchesList = isArrayNotEmpty(coachesResult) ? coachesResult : []
-        // let teamList = isArrayNotEmpty(coachesResult) ? coachesResult : []
+        const { coachesResult, currentPage, pageSize, totalCount, onLoad } = this.props.liveScoreCoachState;
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -238,9 +244,9 @@ class LiveScoreCoaches extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={couchesList}
+                        dataSource={coachesResult}
                         pagination={false}
-                        loading={this.props.liveScoreCoachState.onLoad}
+                        loading={onLoad}
                         rowKey={(record) => "couchesList" + record.id}
                     />
                 </div>
@@ -248,11 +254,13 @@ class LiveScoreCoaches extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             current={currentPage}
-                            showSizeChanger={false}
+                            defaultCurrent={currentPage}
+                            defaultPageSize={pageSize}
                             total={totalCount}
-                            defaultPageSize={10}
                             onChange={this.handlePageChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -403,7 +411,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreCoachListAction,
         getliveScoreTeams,
-        userExportFilesAction
+        userExportFilesAction,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch)
 }
 

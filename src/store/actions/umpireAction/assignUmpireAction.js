@@ -36,8 +36,28 @@ function unassignUmpireAction(rosterId, index, umpireKey, rosterLocked) {
     return action;
 }
 
+function setAssignUmpireListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_ASSIGN_UMPIRE_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setAssignUmpireListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_ASSIGN_UMPIRE_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     getAssignUmpireListAction,
     assignUmpireAction,
     unassignUmpireAction,
+    setAssignUmpireListPageSizeAction,
+    setAssignUmpireListPageNumberAction,
 } 

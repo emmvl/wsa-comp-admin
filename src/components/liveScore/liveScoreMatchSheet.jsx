@@ -199,10 +199,13 @@ class LiveScoreMatchSheet extends Component {
     }
 
     fetchMatchList(divisionId, teamId) {
+        let { liveScoreMatchListPageSize } = this.props.liveScoreMatchState;
+        liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
         this.props.liveScoreMatchListAction(
             this.state.competitionId,
             undefined,
             undefined,
+            liveScoreMatchListPageSize,
             undefined,
             divisionId,
             undefined,

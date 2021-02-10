@@ -32,6 +32,7 @@ const initialState = {
     subTotalGst: 0,
     paymentListData: [],
     paymentListPage: 1,
+    paymentListPageSize: 10,
     paymentListTotalCount: 1,
     paymentDashboardListAction: null,
     paymentCompetitionList: [],
@@ -39,6 +40,10 @@ const initialState = {
     transactionId: null,
     getAffiliteDetailData: [],
     invoiceData: null,
+    paymentSummaryList: [],
+    paymentSummaryListTotalCount: 1,
+    paymentSummaryListPage: 1,
+    paymentSummaryListPageSize: 10,
 }
 
 
@@ -419,6 +424,30 @@ function stripe(state = initialState, action) {
                 onExportLoad: false,
             }
 
+        case ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                paymentListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                paymentListPage: action.pageNum,
+            }
+
+        case ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                paymentSummaryListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                paymentSummaryListPage: action.pageNum,
+            }
+    
         case ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD:
             return { ...state, refundAmountLoad: true }
 

@@ -135,7 +135,7 @@ function* liveScoreDivisionImportSaga(action) {
 // Main Division List
 function* liveScoreMainDivisionListSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreGetMainDivisionList, action.competitionID, action.offset, action.sortBy, action.sortOrder);
+    const result = yield call(LiveScoreAxiosApi.liveScoreGetMainDivisionList, action.competitionID, action.offset, action.limit, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({

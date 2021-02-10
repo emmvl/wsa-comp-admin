@@ -9,7 +9,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { liveScoreGoalListAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
+import { liveScoreGoalListAction, setPageSizeAction, setPageNumberAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
 // import { liveScore_formateDateTime } from '../../themes/dateformate'
@@ -38,9 +38,10 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-
+    let { pageSize } = this.props.liveScoreGoalState;
+    pageSize = pageSize ? pageSize : 10;
     let offset = 0
-    this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent , this_obj.state.compOrgId)
+    this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, pageSize, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent , this_obj.state.compOrgId)
 }
 
 const columns1 = [
@@ -236,6 +237,8 @@ class LiveScoreGoalList extends Component {
             this.setState({ competitionId: id , compOrgId , liveScoreCompIsParent })
             if (id !== null) {
                 let offset = 0
+                let { pageSize } = this.props.liveScoreGoalState;
+                pageSize = pageSize ? pageSize : 10;
                 if (livescoreGoalActionObject) {
                     offset = livescoreGoalActionObject.offset
                     let searchText = livescoreGoalActionObject.search
@@ -243,10 +246,10 @@ class LiveScoreGoalList extends Component {
                     let sortOrder = livescoreGoalActionObject.sortOrder
                     let goalType = livescoreGoalActionObject.goalType
                     await this.setState({ offset, searchText, sortBy, sortOrder, filter: goalType })
-                    this.props.liveScoreGoalListAction(id, goalType, searchText, offset, sortBy, sortOrder , liveScoreCompIsParent , compOrgId)
+                    this.props.liveScoreGoalListAction(id, goalType, searchText, offset, pageSize, sortBy, sortOrder , liveScoreCompIsParent , compOrgId)
                 }
                 else {
-                    this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset , undefined , undefined , liveScoreCompIsParent , compOrgId)
+                    this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset, pageSize, undefined , undefined , liveScoreCompIsParent , compOrgId)
                 }
             } else {
                 history.push('/matchDayCompetitions')
@@ -275,7 +278,9 @@ class LiveScoreGoalList extends Component {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+            let { pageSize } = this.props.liveScoreGoalState;
+            pageSize = pageSize ? pageSize : 10;
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, pageSize, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -286,7 +291,9 @@ class LiveScoreGoalList extends Component {
         let { sortBy, sortOrder } = this.state
         if (code === 13) { // 13 is the enter keycode
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+            let { pageSize } = this.props.liveScoreGoalState;
+            pageSize = pageSize ? pageSize : 10;
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, pageSize, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
@@ -298,14 +305,18 @@ class LiveScoreGoalList extends Component {
         }
         else {
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+            let { pageSize } = this.props.liveScoreGoalState;
+            pageSize = pageSize ? pageSize : 10;
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, pageSize, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         }
     }
 
     onChangeFilter = (filter) => {
         let { sortBy, sortOrder } = this.state
         let offset = 0
-        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+        let { pageSize } = this.props.liveScoreGoalState;
+        pageSize = pageSize ? pageSize : 10;
+        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset, pageSize, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
         this.setState({ filter })
     }
 
@@ -375,21 +386,29 @@ class LiveScoreGoalList extends Component {
         )
     }
 
-    onPageChange(page) {
-        let offset = page ? 10 * (page - 1) : 0;
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.onPageChange(page);
+    }
+
+    onPageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
+        let { pageSize } = this.props.liveScoreGoalState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
-        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, pageSize, sortBy, sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
     }
 
     contentView = () => {
-        const { result, totalCount, currentPage } = this.props.liveScoreGoalState;
+        const { result, totalCount, currentPage, pageSize, onLoad } = this.props.liveScoreGoalState;
         let goalList = isArrayNotEmpty(result) ? result : [];
 
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreGoalState.onLoad === true && true}
+                        loading={onLoad === true && true}
                         className="home-dashboard-table"
                         columns={this.state.filter === "By Match" ? columns1 : columns2}
                         dataSource={goalList}
@@ -402,10 +421,13 @@ class LiveScoreGoalList extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
+                            current={currentPage}
                             defaultCurrent={currentPage}
+                            defaultPageSize={pageSize}
                             total={totalCount}
-                            showSizeChanger={false}
-                            onChange={(page) => this.onPageChange(page)}
+                            onChange={this.onPageChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -430,7 +452,7 @@ class LiveScoreGoalList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreGoalListAction, exportFilesAction }, dispatch)
+    return bindActionCreators({ liveScoreGoalListAction, exportFilesAction, setPageSizeAction, setPageNumberAction }, dispatch)
 }
 
 function mapStateToProps(state) {

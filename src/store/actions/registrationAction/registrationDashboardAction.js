@@ -3,10 +3,11 @@ import ApiConstants from "../../../themes/apiConstants";
 
 
 //////get the membership fee list in registration
-function regDashboardListAction(offset, yearRefId, sortBy, sortOrder) {
+function regDashboardListAction(offset, limit, yearRefId, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_REG_DASHBOARD_LIST_LOAD,
         offset,
+        limit,
         yearRefId,
         sortBy,
         sortOrder
@@ -33,8 +34,24 @@ function registrationMainDashboardListAction(yearRefId, sortBy, sortOrder, key) 
     return action
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_REGISTRATION_DASHBOARD_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_REGISTARTION_DASHBOARD_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     regDashboardListAction,
     getAllCompetitionAction,
     registrationMainDashboardListAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

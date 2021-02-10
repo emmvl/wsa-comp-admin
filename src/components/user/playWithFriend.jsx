@@ -12,7 +12,7 @@ import AppImages from 'themes/appImages';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
-import { getUserFriendAction, exportUserFriendAction } from "../../store/actions/userAction/userAction";
+import { getUserFriendAction, exportUserFriendAction, setPlayWithFriendListPageSizeAction, setPlayWithFriendListPageNumberAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 const {
@@ -41,12 +41,14 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { friendPageSize } = this.props.userState;
+    friendPageSize = friendPageSize ? friendPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         paging: {
-            limit: 10,
-            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+            limit: friendPageSize,
+            offset: (this_Obj.state.pageNo ? (friendPageSize * (this_Obj.state.pageNo - 1)) : 0)
         }
     }
 
@@ -145,7 +147,7 @@ class PlayWithFriend extends Component {
             sortBy = userFriendListAction.sortBy
             sortOrder = userFriendListAction.sortOrder
             let yearRefId = JSON.parse(yearId)
-            pageNo = Math.floor(offset / 10) + 1;
+            pageNo = Math.floor(offset / this.props.friendPageSize) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleFriendTableList(pageNo);
@@ -154,22 +156,24 @@ class PlayWithFriend extends Component {
             this.handleFriendTableList(1);
         }
     }
-    componentDidUpdate(nextProps) {
 
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPlayWithFriendListPageSizeAction(pageSize);
+        this.handleFriendTableList(page);
     }
 
-    handleFriendTableList = (page) => {
+    handleFriendTableList = async (page) => {
+        await this.props.setPlayWithFriendListPageNumberAction(page);
         let yearId = getGlobalYear() ? getGlobalYear() : '-1'
-        this.setState({
-            pageNo: page
-        })
-        let filter =
-        {
+        this.setState({ pageNo: page });
+        let { friendPageSize } = this.props.userState;
+        friendPageSize = friendPageSize ? friendPageSize : 10;
+        let filter = {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0)
+                limit: friendPageSize,
+                offset: (page ? (friendPageSize * (page - 1)) : 0)
             }
         }
         this.props.getUserFriendAction(filter, this.state.sortBy, this.state.sortOrder);
@@ -195,12 +199,14 @@ class PlayWithFriend extends Component {
         this.setState({
             pageNo: 1
         })
+        let { friendPageSize } = this.props.userState;
+        friendPageSize = friendPageSize ? friendPageSize : 10;
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
-                limit: 10,
+                limit: friendPageSize,
                 offset: 0
             }
         }
@@ -273,9 +279,8 @@ class PlayWithFriend extends Component {
     }
 
     contentView = () => {
-        let userState = this.props.userState;
-        let friendList = userState.friendList;
-        let total = userState.friendTotalCount;
+        const { friendList, total, friendPage, friendPageSize, onLoad } = this.props.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -283,16 +288,19 @@ class PlayWithFriend extends Component {
                         columns={columns}
                         dataSource={friendList}
                         pagination={false}
-                        loading={this.props.userState.onLoad}
+                        loading={onLoad}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.friendPage}
+                        showSizeChanger
+                        current={friendPage}
+                        defaultCurrent={friendPage}
+                        defaultPageSize={friendPageSize}
                         total={total}
-                        onChange={(page) => this.handleFriendTableList(page)}
-                        showSizeChanger={false}
+                        onChange={this.handleFriendTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -322,7 +330,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserFriendAction,
         getOnlyYearListAction,
-        exportUserFriendAction
+        exportUserFriendAction,
+        setPlayWithFriendListPageSizeAction,
+        setPlayWithFriendListPageNumberAction,
     }, dispatch);
 }
 

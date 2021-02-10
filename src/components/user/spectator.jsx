@@ -10,7 +10,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
-import { getSpectatorListAction } from "../../store/actions/userAction/userAction";
+import { getSpectatorListAction, setSpectatorListPageSizeAction, setSpectatorListPageNumberAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 const {
@@ -39,12 +39,14 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { spectatorPageSize } = this.props.userState;
+    spectatorPageSize = spectatorPageSize ? spectatorPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         paging: {
-            limit: 10,
-            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+            limit: spectatorPageSize,
+            offset: (this_Obj.state.pageNo ? (spectatorPageSize * (this_Obj.state.pageNo - 1)) : 0)
         }
     }
 
@@ -159,7 +161,9 @@ class Spectator extends Component {
             sortBy = spectatorListAction.sortBy
             sortOrder = spectatorListAction.sortOrder
             let yearRefId = JSON.parse(yearId)
-            pageNo = Math.floor(offset / 10) + 1;
+            let { spectatorPageSize } = this.props.userState;
+            spectatorPageSize = spectatorPageSize ? spectatorPageSize : 10;
+            pageNo = Math.floor(offset / spectatorPageSize) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleSpectatorTableList(pageNo);
@@ -169,18 +173,22 @@ class Spectator extends Component {
         }
     }
 
-    handleSpectatorTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setSpectatorListPageSizeAction(pageSize);
+        this.handleSpectatorTableList(page);
+    }
+
+    handleSpectatorTableList = async (page) => {
+        await this.props.setSpectatorListPageNumberAction(page);
         let yearId = getGlobalYear() ? getGlobalYear() : '-1'
-        this.setState({
-            pageNo: page
-        })
-        let filter =
-        {
+        this.setState({ pageNo: page });
+        let { spectatorPageSize } = this.props.userState;
+        let filter = {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0)
+                limit: spectatorPageSize,
+                offset: (page ? (spectatorPageSize * (page - 1)) : 0)
             }
         }
         this.props.getSpectatorListAction(filter, this.state.sortBy, this.state.sortOrder);
@@ -249,9 +257,8 @@ class Spectator extends Component {
     }
 
     contentView = () => {
-        let userState = this.props.userState;
-        let spectatorList = userState.spectatorList;
-        let total = userState.spectatorTotalCount;
+        const { spectatorList, spectatorPage, spectatorTotalCount, onLoad, spectatorPageSize } = this.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -259,16 +266,17 @@ class Spectator extends Component {
                         columns={columns}
                         dataSource={spectatorList}
                         pagination={false}
-                        loading={this.props.userState.onLoad}
+                        loading={onLoad}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.spectatorPage}
-                        total={total}
-                        onChange={(page) => this.handleSpectatorTableList(page)}
-                        showSizeChanger={false}
+                        showSizeChanger
+                        current={spectatorPage}
+                        total={spectatorTotalCount}
+                        onChange={this.handleSpectatorTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -296,7 +304,9 @@ class Spectator extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
-        getSpectatorListAction
+        getSpectatorListAction,
+        setSpectatorListPageSizeAction,
+        setSpectatorListPageNumberAction,
     }, dispatch);
 }
 

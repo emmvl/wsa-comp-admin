@@ -25,7 +25,27 @@ function umpireRosterOnActionClick(data) {
     return action;
 }
 
+function setPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_UMPIRE_ROSTER_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_UMPIRE_ROSTER_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     umpireRosterListAction,
-    umpireRosterOnActionClick
+    umpireRosterOnActionClick,
+    setPageSizeAction,
+    setPageNumberAction,
 } 

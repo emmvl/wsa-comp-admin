@@ -1,11 +1,12 @@
 import ApiConstants from "themes/apiConstants";
 
-function liveScoreMatchListAction(competitionID, start, offset, search, divisionId, roundName, teamIds, sortBy, sortOrder, competitionOrganisationId) {
+function liveScoreMatchListAction(competitionID, start, offset, limit, search, divisionId, roundName, teamIds, sortBy, sortOrder, competitionOrganisationId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD,
         competitionID,
         start,
         offset,
+        limit,
         search,
         divisionId,
         roundName,
@@ -162,6 +163,20 @@ function resetUmpireListBoolAction() {
     };
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_MATCH_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_MATCH_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     liveScoreMatchListAction,
     liveScoreAddEditMatchAction,
@@ -182,5 +197,7 @@ export {
     onCancelBulkScoreUpdate,
     liveScoreAddLiveStreamAction,
     clearDataOnCompChangeAction,
-    resetUmpireListBoolAction
+    resetUmpireListBoolAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

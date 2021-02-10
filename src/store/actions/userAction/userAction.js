@@ -585,6 +585,104 @@ function getUserParentDataAction(data) {
     }
 }
 
+function setAffiliateDirectoryListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_SIZE,
+        pageSize,
+    };
+}
+
+function setAffiliateDirectoryListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+}
+
+function setNetSetGoListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_NETSETGO_LIST_PAGE_SIZE,
+        pageSize,
+    };
+}
+
+function setNetSetGoListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_NETSETGO_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+}
+
+function setPlayWithFriendListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPlayWithFriendListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
+function setReferFriendListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_REFER_FRIEND_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setReferFriendListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_REFER_FRIEND_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
+function setSpectatorListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_SPECTATOR_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setSpectatorListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_SPECTATOR_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
+function setAffiliateTableListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setAffiliateTableListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
+function setTextualTableListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setTextualTableListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -661,4 +759,18 @@ export {
     filterByRelations,
     getUsersByIds,
     getUserParentDataAction,
+    setAffiliateDirectoryListPageSizeAction,
+    setAffiliateDirectoryListPageNumberAction,
+    setNetSetGoListPageSizeAction,
+    setNetSetGoListPageNumberAction,
+    setPlayWithFriendListPageSizeAction,
+    setPlayWithFriendListPageNumberAction,
+    setReferFriendListPageSizeAction,
+    setReferFriendListPageNumberAction,
+    setSpectatorListPageSizeAction,
+    setSpectatorListPageNumberAction,
+    setAffiliateTableListPageSizeAction,
+    setAffiliateTableListPageNumberAction,
+    setTextualTableListPageSizeAction,
+    setTextualTableListPageNumberAction,
 };

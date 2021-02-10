@@ -11,7 +11,9 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import {
     getMainDivisionListAction,
-    liveScoreDeleteDivision
+    liveScoreDeleteDivision,
+    setPageSizeAction,
+    setPageNumberAction,
 } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import {
     getLiveScoreCompetiton,
@@ -42,7 +44,9 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getMainDivisionListAction(id, this_Obj.state.offset, sortBy, sortOrder);
+    let { pageSize } = this.props.liveScoreDivisionState;
+    pageSize = pageSize ? pageSize : 10;
+    this_Obj.props.getMainDivisionListAction(id, this_Obj.state.offset, pageSize, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -206,24 +210,34 @@ class LiveScoreDivisionList extends Component {
             ))
             let offset = 0
             let { divisionListActionObject } = this.props.liveScoreDivisionState
+            let { pageSize } = this.props.liveScoreDivisionState;
+            pageSize = pageSize ? pageSize : 10;
             if (divisionListActionObject) {
                 let offset = divisionListActionObject.offset
                 let sortBy = divisionListActionObject.sortBy
                 let sortOrder = divisionListActionObject.sortOrder
-                this.setState({ offset, sortBy, sortOrder })
-                this.props.getMainDivisionListAction(id, offset, sortBy, sortOrder)
+                this.setState({ offset, sortBy, sortOrder })                
+                this.props.getMainDivisionListAction(id, offset, pageSize, sortBy, sortOrder)
             } else {
-                this.props.getMainDivisionListAction(id, offset)
+                this.props.getMainDivisionListAction(id, offset, pageSize)
             }
         } else {
             history.push('/matchDayCompetitions')
         }
     }
 
-    onPageChange(page) {
-        let offset = page ? 10 * (page - 1) : 0;
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.onPageChange(page);
+    }
+
+    onPageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
+        let { pageSize } = this.props.liveScoreDivisionState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
         this.setState({ offset })
-        this.props.getMainDivisionListAction(this.state.competitionId, offset, this.state.sortBy, this.state.sortOrder)
+        this.props.getMainDivisionListAction(this.state.competitionId, offset, pageSize, this.state.sortBy, this.state.sortOrder)
     }
 
     checkValue = (data) => {
@@ -237,7 +251,7 @@ class LiveScoreDivisionList extends Component {
     }
 
     contentView = () => {
-        const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState;
+        const { mainDivisionList, totalCount, currentPage, pageSize, onLoad } = this.props.liveScoreDivisionState;
         let divisionList = isArrayNotEmpty(mainDivisionList) ? mainDivisionList : [];
         let { liveScoreCompIsParent } = this.state
         return (
@@ -248,7 +262,7 @@ class LiveScoreDivisionList extends Component {
                         columns={liveScoreCompIsParent ? columns : participateColumns}
                         dataSource={divisionList}
                         pagination={false}
-                        loading={this.props.liveScoreDivisionState.onLoad === true && true}
+                        loading={onLoad === true && true}
                         rowKey={(record) => record.id}
                     />
                 </div>
@@ -256,10 +270,13 @@ class LiveScoreDivisionList extends Component {
                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             current={currentPage}
-                            total={totalCount}
-                            showSizeChanger={false}
-                            onChange={(page) => this.onPageChange(page)}
+                            defaultCurrent={currentPage}
+                            defaultPageSize={pageSize}
+                            total={totalCount}                            
+                            onChange={this.onPageChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -394,6 +411,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getMainDivisionListAction,
         liveScoreDeleteDivision,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch);
 }
 

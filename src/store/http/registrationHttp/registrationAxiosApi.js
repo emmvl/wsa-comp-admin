@@ -38,13 +38,13 @@ const AxiosApi = {
     },
 
     /// /registrationMembershipFeeList in membership table in the registration tab
-    async registrationCompetitionFeeList(offset, yearRefId, searchText, sortBy, sortOrder) {
+    async registrationCompetitionFeeList(offset, limit, yearRefId, searchText, sortBy, sortOrder) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const body = {
             paging: {
                 offset,
-                limit: 10,
+                limit,
             },
         };
         let url = `/api/competitionfee/listing/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}&search=${searchText}`;
@@ -57,13 +57,13 @@ const AxiosApi = {
     },
 
     /// /registrationMembershipFeeList in membership table in the registration tab
-    async registrationMembershipFeeList(offset, yearRefId, sortBy, sortOrder) {
+    async registrationMembershipFeeList(offset, limit, yearRefId, sortBy, sortOrder) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const body = {
             paging: {
                 offset,
-                limit: 10,
+                limit,
             },
         };
         let url = `/api/membershipproductfee/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;
@@ -398,13 +398,13 @@ const AxiosApi = {
     },
 
     // registration dash list
-    async registrationDashboardList(offset, yearRefId, sortBy, sortOrder) {
+    async registrationDashboardList(offset, limit, yearRefId, sortBy, sortOrder) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const body = {
             paging: {
                 offset,
-                limit: 10,
+                limit,
             },
         };
         let url = `/api/orgregistration/dashboard/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;

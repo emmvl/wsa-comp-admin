@@ -89,6 +89,7 @@ function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
 // payment dashboard
 function getPaymentList(
     offset,
+    limit,
     sortBy,
     sortOrder,
     userId,
@@ -109,6 +110,7 @@ function getPaymentList(
     return {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
         offset,
+        limit,
         sortBy,
         sortOrder,
         userId,
@@ -199,6 +201,7 @@ function exportPayoutTransaction(payoutId) {
 
 function getPaymentSummary(
     offset,
+    limit,
     sortBy,
     sortOrder,
     userId,
@@ -218,6 +221,7 @@ function getPaymentSummary(
     return {
         type: ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD,
         offset,
+        limit,
         sortBy,
         sortOrder,
         userId,
@@ -275,6 +279,42 @@ function exportPaymentSummaryApi(
     }
 }
 
+function setDashboardPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_SIZE,
+        pageSize
+    }
+
+    return action;
+}
+
+function setDashboardPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_CURRENT_NUMBER,
+        pageNum
+    }
+
+    return action;
+}
+
+function setSummaryPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE,
+        pageSize
+    }
+
+    return action;
+}
+
+function setSummaryPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
+        pageNum
+    }
+
+    return action;
+}
+
 function partialRefundAmountAction(payload) {
     return {
         type: ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD,
@@ -299,5 +339,9 @@ export {
     exportPayoutTransaction,
     getPaymentSummary,
     exportPaymentSummaryApi,
+    setDashboardPageSizeAction,
+    setDashboardPageNumberAction,
+    setSummaryPageSizeAction,
+    setSummaryPageNumberAction,
     partialRefundAmountAction,
 };

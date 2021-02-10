@@ -22,6 +22,7 @@ const initialState = {
     orderStatusListingData: [],
     orderStatusTotalCount: 1,
     orderStatusCurrentPage: 1,
+    orderStatusPageSize: 10,
     orderDetails: defaultOrderObject,
     orderStatusListActionObject: null,
     purchasesListingData: [],
@@ -187,6 +188,19 @@ function shopOrderStatusState(state = initialState, action) {
                             onLoad:false,
                             error: null
                         }
+
+            case ApiConstants.SET_ORDER_STATUS_LIST_PAGE_SIZE:
+                return {
+                    ...state,
+                    orderStatusPageSize: action.pageSize,
+                }
+
+            case ApiConstants.SET_ORDER_STATUS_LIST_PAGE_CURRENT_NUMBER:
+                return {
+                    ...state,
+                    orderStatusCurrentPage: action.pageNum,
+                }
+
         default:
             return state;
     }

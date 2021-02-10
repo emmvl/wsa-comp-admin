@@ -6,8 +6,9 @@ const initialState = {
     error: null,
     gameTimeStatisticsListResult: [],
     gameTimeStatistics: "",
-    gameTimeStatisticsPage: 0,
-    gameTimeStatisticstotalCount: 0,
+    gameTimeStatisticsPage: 1,
+    gameTimeStatisticsPageSize: 10,
+    gameTimeStatisticstotalCount: 1,
     gameTimeStatisticsActionObject: null,
 }
 
@@ -49,6 +50,19 @@ function liveScoreGameTimeStatisticsState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.gameTimeStatisticsActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_LIVE_SCORE_GAME_TIME_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                gameTimeStatisticsPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_GAME_TIME_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                gameTimeStatisticsPage: action.pageNum,
+            }
+
 
         default: return state
     }

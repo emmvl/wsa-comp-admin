@@ -9,8 +9,11 @@ const initialState = {
     dashboardNewsList: null,
     dashboardMatchList: null,
     onSingleGameLoad: false,
-    onSingleGameRedeemPayLoad: false
-
+    onSingleGameRedeemPayLoad: false,
+    playersToPayList: [],
+    liveScorePlayerstoPayListPage: 1,
+    liveScorePlayerstoPayListPageSize: 10,
+    liveScorePlayerstoPayListTotalCount: 1,
 };
 
 function liveScoreDashboardsReducer(state = initialState, action) {
@@ -112,6 +115,18 @@ function liveScoreDashboardsReducer(state = initialState, action) {
                     retryPaymentMessage: action.result.message,
                     retryPaymentSuccess: action.result.success,
                 };
+
+            case ApiConstants.SET_LIVE_SCORE_DASHBOARD_LIST_PAGE_SIZE:
+                return {
+                    ...state,
+                    liveScorePlayerstoPayListPageSize: action.pageSize,
+                }
+
+            case ApiConstants.SET_LIVE_SCORE_DASHBOARD_LIST_PAGE_CURRENT_NUMBER:
+                return {
+                    ...state,
+                    liveScorePlayerstoPayListPage: action.pageNum,
+                }
 
         default:
             return state;

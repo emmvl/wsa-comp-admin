@@ -11,7 +11,12 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { getOrderSummaryListingAction, exportOrderSummaryAction } from "../../store/actions/shopAction/orderSummaryAction";
+import {
+    getOrderSummaryListingAction,
+    exportOrderSummaryAction,
+    setOrderSummaryListPageSizeAction,
+    setOrderSummaryListPageNumberAction,
+} from "../../store/actions/shopAction/orderSummaryAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
@@ -188,7 +193,13 @@ class OrderSummary extends Component {
         this.props.getOnlyYearListAction();
     }
 
-    handleTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setOrderSummaryListPageSizeAction(pageSize);
+        this.handleTableList(page);
+    }
+
+    handleTableList = async (page) => {
+        await this.props.setOrderSummaryListPageNumberAction(page);
         let {
             // yearRefId,
             affiliateOrgId,
@@ -199,9 +210,11 @@ class OrderSummary extends Component {
             sortBy
         } = this.state
         let yearId = getGlobalYear() ? getGlobalYear() : '-1'
+        let { orderSummaryPageSize } = this.props.shopOrderSummaryState;
+        orderSummaryPageSize = orderSummaryPageSize ? orderSummaryPageSize : 10;
         let params = {
-            limit: 10,
-            offset: (page ? (10 * (page - 1)) : 0),
+            limit: orderSummaryPageSize,
+            offset: (page ? (orderSummaryPageSize * (page - 1)) : 0),
             search: searchText,
             year: this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(yearId),
             postcode: postcode,
@@ -468,7 +481,7 @@ class OrderSummary extends Component {
     }
 
     contentView = () => {
-        let { onLoad, orderSummaryListingData, orderSummaryTotalCount, orderSummaryCurrentPage } = this.props.shopOrderSummaryState
+        let { onLoad, orderSummaryListingData, orderSummaryTotalCount, orderSummaryCurrentPage, orderSummaryPageSize } = this.props.shopOrderSummaryState
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -484,10 +497,13 @@ class OrderSummary extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
+                        showSizeChanger
                         current={orderSummaryCurrentPage}
+                        defaultCurrent={orderSummaryCurrentPage}
+                        defaultPageSize={orderSummaryPageSize}
                         total={orderSummaryTotalCount}
                         onChange={(page) => this.handleTableList(page)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -518,6 +534,8 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAffiliateToOrganisationAction,
         exportOrderSummaryAction,
+        setOrderSummaryListPageSizeAction,
+        setOrderSummaryListPageNumberAction,
     }, dispatch);
 }
 

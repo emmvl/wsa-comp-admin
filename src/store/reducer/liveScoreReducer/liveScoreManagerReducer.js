@@ -24,8 +24,9 @@ const initialState = {
     onLoadSearch: false,
     managerSearchResult: [],
     loading: false,
-    totalCount: null,
-    currentPage: null,
+    totalCount: 1,
+    currentPage: 1,
+    pageSize: 10,
     managerListActionObject: null,
 };
 
@@ -105,7 +106,7 @@ function updateManagersData(result) {
 //     return teamIds;
 // }
 
-function liveScoreMangerState(state = initialState, action) {
+function liveScoreManagerState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD:
             if (action.key === "managerList") {
@@ -248,9 +249,21 @@ function liveScoreMangerState(state = initialState, action) {
             state.managerListResult = []
             return { ...state, };
 
+        case ApiConstants.SET_LIVE_SCORE_MANAGER_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_MANAGER_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
+
         default:
             return state;
     }
 }
 
-export default liveScoreMangerState;
+export default liveScoreManagerState;

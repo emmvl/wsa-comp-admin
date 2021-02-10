@@ -12,7 +12,9 @@ import {
     getOnlyYearListAction,
 } from "../../store/actions/appAction";
 import {
-    regDashboardListAction
+    regDashboardListAction,
+    setPageSizeAction,
+    setPageNumberAction,
 }
     from "../../store/actions/registrationAction/registrationDashboardAction"
 import moment from "moment"
@@ -227,13 +229,19 @@ class RegistrationFormList extends Component {
 
     }
 
-    handleMembershipTableList = (page, yearRefId) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handleMembershipTableList(page, this.state.yearRefId);
+    }
+
+    handleMembershipTableList = async (page, yearRefId) => {
+        await this.props.setPageNumberAction(page);
         let { sortBy, sortOrder } = this.state
-        let offset = page ? 10 * (page - 1) : 0;
-        this.setState({
-            offset
-        })
-        this.props.regDashboardListAction(offset, yearRefId, sortBy, sortOrder)
+        let { pageSize } = this.props.dashboardState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
+        this.setState({ offset });
+        this.props.regDashboardListAction(offset, pageSize, yearRefId, sortBy, sortOrder);
     };
 
     headerView = () => {
@@ -291,25 +299,29 @@ class RegistrationFormList extends Component {
 
     contentView = () => {
         const { dashboardState } = this.props;
-        let total = dashboardState.regDashboardListTotalCount;
+        const { regDashboardListTotalCount, regDashboardListData, regDashboardListPage, onLoad, pageSize } = this.props.dashboardState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={dashboardState.regDashboardListData}
+                        dataSource={regDashboardListData}
                         pagination={false}
-                        loading={this.props.dashboardState.onLoad === true && true}
+                        loading={onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={dashboardState.regDashboardListPage}
-                        total={total}
+                        showSizeChanger
+                        current={regDashboardListPage}
+                        defaultCurrent={regDashboardListPage}
+                        defaultPageSize={pageSize}
+                        total={regDashboardListTotalCount}
                         onChange={(page) => this.handleMembershipTableList(page, this.state.yearRefId)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -347,6 +359,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
         regDashboardListAction,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch);
 }
 

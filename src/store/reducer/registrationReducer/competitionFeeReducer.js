@@ -152,7 +152,8 @@ const initialState = {
     anyOrgClubArr: [],
     selectedPaymentMethods: [],
     paymentMethodsDefault: [],
-    competitionListAction: null
+    competitionListAction: null,
+    pageSize: 10,
 };
 
 /////function to append isselected values in default membership types array
@@ -3055,6 +3056,18 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.competitionListAction = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_REGISTRATION_COMPETITION_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize
+            }
+
+        case ApiConstants.SET_REGISTARTION_COMPETITION_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                regCompetitonFeeListPage: action.pageNum
+            }
 
         default:
             return state;

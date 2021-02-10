@@ -153,7 +153,9 @@ let AxiosApi = {
     },
 
     //get payment list
-    async getPaymentList(offset,
+    async getPaymentList(
+        offset,
+        limit,
         sortBy,
         sortOrder,
         userId,
@@ -178,8 +180,8 @@ let AxiosApi = {
             userId: parseInt(userId),
             registrationId: registrationId,
             paging: {
-                offset: offset,
-                limit: 10
+                offset,
+                limit
             },
             yearId: parseInt(yearId),
             competitionKey: competitionKey,
@@ -201,7 +203,9 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    async getPaymentSummary(offset,
+    async getPaymentSummary(
+        offset,
+        limit,
         sortBy,
         sortOrder,
         userId,
@@ -225,8 +229,8 @@ let AxiosApi = {
             userId: parseInt(userId),
             registrationId: registrationId,
             paging: {
-                offset: offset,
-                limit: 10
+                offset,
+                limit,
             },
             yearId: parseInt(yearId),
             competitionKey: competitionKey,

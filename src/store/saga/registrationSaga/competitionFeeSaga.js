@@ -45,6 +45,7 @@ function* regCompetitionFeeListSaga(action) {
         const result = yield call(
             RegistrationAxiosApi.registrationCompetitionFeeList,
             action.offset,
+            action.limit,
             action.yearRefId,
             action.searchText,
             action.sortBy,

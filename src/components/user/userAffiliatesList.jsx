@@ -10,7 +10,12 @@ import { SearchOutlined } from "@ant-design/icons";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import {
-    getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction, affiliateDeleteAction,
+    getAffiliatesListingAction,
+    getUreAction,
+    getAffiliateToOrganisationAction,
+    affiliateDeleteAction,
+    setAffiliateTableListPageSizeAction,
+    setAffiliateTableListPageNumberAction,
 } from "../../store/actions/userAction/userAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 
@@ -36,14 +41,17 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { affiliateListPageSize } = this.props.userState;
+    affiliateListPageSize = affiliateListPageSize ? affiliateListPageSize : 10;
+
     const filterData = {
         organisationId: this_Obj.state.organisationId,
         affiliatedToOrgId: this_Obj.state.affiliatedToOrgId,
         organisationTypeRefId: this_Obj.state.organisationTypeRefId,
         statusRefId: this_Obj.state.statusRefId,
         paging: {
-            limit: 10,
-            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0),
+            limit: affiliateListPageSize,
+            offset: (this_Obj.state.pageNo ? (affiliateListPageSize * (this_Obj.state.pageNo - 1)) : 0),
         },
         stateOrganisations: false,
     }
@@ -170,11 +178,12 @@ class UserAffiliatesList extends Component {
             const { affiliatedToOrgId } = userAffiliateListAction.payload
             const { organisationTypeRefId } = userAffiliateListAction.payload
             const { statusRefId } = userAffiliateListAction.payload
-
+            let { affiliateListPageSize } = this.props.userState;
+            affiliateListPageSize = affiliateListPageSize ? affiliateListPageSize : 10;
             await this.setState({
                 offsetData, sortBy, sortOrder, affiliatedToOrgId, statusRefId, organisationTypeRefId,
             })
-            page = Math.floor(offsetData / 10) + 1;
+            page = Math.floor(offsetData / affiliateListPageSize) + 1;
         }
         this.handleAffiliateTableList(
             page,
@@ -209,10 +218,19 @@ class UserAffiliatesList extends Component {
         this.props.getAffiliateToOrganisationAction(organisationId);
     }
 
-    handleAffiliateTableList = (page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setAffiliateTableListPageSizeAction(pageSize);
+        const { organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId } = this.state;
+        this.handleAffiliateTableList(page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId);
+    }
+
+    handleAffiliateTableList = async (page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
+        await this.props.setAffiliateTableListPageNumberAction(page);
         this.setState({
             pageNo: page,
         })
+        let { affiliateListPageSize } = this.props.userState;
+        affiliateListPageSize = affiliateListPageSize ? affiliateListPageSize : 10;
         const filter = {
             organisationId,
             affiliatedToOrgId,
@@ -220,8 +238,8 @@ class UserAffiliatesList extends Component {
             statusRefId,
             searchText: this.state.searchText,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : this.state.offsetData),
+                limit: affiliateListPageSize,
+                offset: (page ? (affiliateListPageSize * (page - 1)) : this.state.offsetData),
             },
             stateOrganisations: false,
         }
@@ -418,9 +436,8 @@ class UserAffiliatesList extends Component {
     }
 
     contentView = () => {
-        const { userState } = this.props;
-        const affiliates = userState.affiliateList;
-        const total = userState.affiliateListTotalCount;
+        const { affiliateList, affiliateListPage, affiliateListPageSize, affiliateListTotalCount, onLoad } = this.props.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -430,18 +447,21 @@ class UserAffiliatesList extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={affiliates}
+                        dataSource={affiliateList}
                         pagination={false}
-                        loading={this.props.userState.onLoad === true && true}
+                        loading={onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.affiliateListPage}
-                        total={total}
+                        showSizeChanger
+                        current={affiliateListPage}
+                        defaultCurrent={affiliateListPage}
+                        defaultPageSize={affiliateListPageSize}
+                        total={affiliateListTotalCount}
                         onChange={(page) => this.handleAffiliateTableList(page, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, this.state.statusRefId)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -493,6 +513,8 @@ function mapDispatchToProps(dispatch) {
         getUreAction,
         getAffiliateToOrganisationAction,
         affiliateDeleteAction,
+        setAffiliateTableListPageSizeAction,
+        setAffiliateTableListPageNumberAction,
     }, dispatch);
 }
 

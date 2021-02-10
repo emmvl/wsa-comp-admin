@@ -24,6 +24,8 @@ import {
     endUserRegDashboardListAction,
     regTransactionUpdateAction,
     exportRegistrationAction,
+    setRegistrationListPageSize,
+    setRegistrationListPageNumber,
 } from "store/actions/registrationAction/endUserRegistrationAction";
 import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
@@ -388,10 +390,15 @@ class Registration extends Component {
                 this.handleRegTableList(1);
             }
         }
-
     }
 
-    handleRegTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setRegistrationListPageSize(pageSize);
+        this.handleRegTableList(page);
+    }
+
+    handleRegTableList = async (page) => {
+        await this.props.setRegistrationListPageNumber(page);
         const {
             organisationId,
             // yearRefId,
@@ -413,6 +420,8 @@ class Registration extends Component {
             teamId,
         } = this.state;
         const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : this.state.yearRefId;
+        let { userRegDashboardListPageSize } = this.props.userRegistrationState;
+        userRegDashboardListPageSize = userRegDashboardListPageSize ? userRegDashboardListPageSize : 10;
         const filter = {
             organisationUniqueKey: organisationId,
             yearRefId,
@@ -435,8 +444,8 @@ class Registration extends Component {
             // regTo: (regTo !== "-1" && !isNaN(regTo)) ? moment(regTo).format("YYYY-MM-DD") : "-1",
             regTo: (regTo !== "-1") ? moment(regTo).format("YYYY-MM-DD") : "-1",
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0),
+                limit: userRegDashboardListPageSize,
+                offset: (page ? (userRegDashboardListPageSize * (page - 1)) : 0),
             },
         };
 
@@ -987,9 +996,14 @@ class Registration extends Component {
     };
 
     contentView = () => {
-        const { userRegistrationState } = this.props;
-        const userRegDashboardList = userRegistrationState.userRegDashboardListData;
-        const total = userRegistrationState.userRegDashboardListTotalCount;
+        const {
+            userRegDashboardListTotalCount,
+            userRegDashboardListData,
+            userRegDashboardListPage,
+            onUserRegDashboardLoad,
+            userRegDashboardListPageSize
+        } = this.props.userRegistrationState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -997,18 +1011,21 @@ class Registration extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         rowKey={(record, index) => record.orgRegistrationId + index}
-                        dataSource={userRegDashboardList}
+                        dataSource={userRegDashboardListData}
                         pagination={false}
-                        loading={userRegistrationState.onUserRegDashboardLoad === true}
+                        loading={onUserRegDashboardLoad === true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userRegistrationState.userRegDashboardListPage}
-                        total={total}
+                        showSizeChanger
+                        current={userRegDashboardListPage}
+                        defaultCurrent={userRegDashboardListPage}
+                        defaultPageSize={userRegDashboardListPageSize}
+                        total={userRegDashboardListTotalCount}
                         onChange={this.handleRegTableList}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -1139,7 +1156,9 @@ function mapDispatchToProps(dispatch) {
         registrationPaymentStatusAction,
         regTransactionUpdateAction,
         exportRegistrationAction,
-        liveScorePlayersToCashReceivedAction
+        liveScorePlayersToCashReceivedAction,
+        setRegistrationListPageSize,
+        setRegistrationListPageNumber,
     }, dispatch);
 }
 

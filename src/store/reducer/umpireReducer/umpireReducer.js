@@ -33,8 +33,9 @@ const initialState = {
     coachList_Data: [],
     umpireList_Data: [],
     umpireListResult_Data: [],
-    currentPage_Data: null,
-    totalCount_Data: 0,
+    pageSize_Data: 10,
+    currentPage_Data: 1,
+    totalCount_Data: 1,
     umpireListActionObject: null,
     umpireListData: [],
     umpireCheckbox:false,
@@ -324,6 +325,18 @@ function umpireState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.umpireListActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_UMPIRE_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize_Data: action.pageSize,
+            }
+
+        case ApiConstants.SET_UMPIRE_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage_Data: action.pageNum,
+            }
 
         default:
             return state;

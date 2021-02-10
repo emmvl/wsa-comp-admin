@@ -8,7 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { gameTimeStatisticsListAction } from '../../store/actions/LiveScoreAction/liveScoregameTimeStatisticsAction'
+import { gameTimeStatisticsListAction, setPageSizeAction, setPageNumberAction } from '../../store/actions/LiveScoreAction/liveScoregameTimeStatisticsAction'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
@@ -94,8 +94,9 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-
-    this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, this_obj.state.searchText, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent ,this_obj.state.compOrgId)
+    let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+    gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
+    this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, gameTimeStatisticsPageSize, this_obj.state.searchText, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent ,this_obj.state.compOrgId)
 }
 
 const columns = [
@@ -220,6 +221,8 @@ class LiveScoreGameTimeList extends Component {
 
             this.setState({ competitionId: id, filter: attendanceRecordingPeriod, liveScoreCompIsParent, compOrgId })
             if (id !== null) {
+                let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+                gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
                 if (gameTimeStatisticsActionObject) {
                     let offset = gameTimeStatisticsActionObject.offset
                     let searchText = gameTimeStatisticsActionObject.searchText
@@ -227,9 +230,10 @@ class LiveScoreGameTimeList extends Component {
                     let sortOrder = gameTimeStatisticsActionObject.sortOrder
                     let aggregate = gameTimeStatisticsActionObject.aggregate
                     await this.setState({ offset, searchText, sortBy, sortOrder, filter: aggregate })
-                    this.props.gameTimeStatisticsListAction(id, aggregate === 'All' ? "" : aggregate, offset, searchText, sortBy, sortOrder , liveScoreCompIsParent , compOrgId)
+                    
+                    this.props.gameTimeStatisticsListAction(id, aggregate === 'All' ? "" : aggregate, offset, gameTimeStatisticsPageSize, searchText, sortBy, sortOrder , liveScoreCompIsParent , compOrgId)
                 } else {
-                    this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText , undefined , undefined , liveScoreCompIsParent , compOrgId)
+                    this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, gameTimeStatisticsPageSize, this.state.searchText , undefined , undefined , liveScoreCompIsParent , compOrgId)
                 }
             } else {
                 history.push("/matchDayCompetitions")
@@ -253,18 +257,28 @@ class LiveScoreGameTimeList extends Component {
         }
     }
 
-    handleGameTimeTableList = (page, competitionId, aggregate) => {
-        let offset = page ? 10 * (page - 1) : 0
-        this.setState({ offset })
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        const { id } = JSON.parse(getLiveScoreCompetiton());
+        this.handleGameTimeTableList(page, id, this.state.filter);
+    }
 
-        this.props.gameTimeStatisticsListAction(competitionId, aggregate === 'All' ? "" : aggregate, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+    handleGameTimeTableList = async (page, competitionId, aggregate) => {
+        await this.props.setPageNumberAction(page);
+        let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+        gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
+        let offset = page ? gameTimeStatisticsPageSize * (page - 1) : 0;
+        this.setState({ offset });
+        this.props.gameTimeStatisticsListAction(competitionId, aggregate === 'All' ? "" : aggregate, offset, gameTimeStatisticsPageSize, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
     }
 
     setFilterValue = (data) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        let offset = 1 ? 10 * (1 - 1) : 0
+        let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+        gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
+        let offset = 1 ? gameTimeStatisticsPageSize * (1 - 1) : 0
         this.setState({ filter: data.filter })
-        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
+        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, gameTimeStatisticsPageSize, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent , this.state.compOrgId)
     }
 
     onExport = () => {
@@ -285,7 +299,9 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, e.target.value, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
+            let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+            gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, gameTimeStatisticsPageSize, e.target.value, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
         }
     }
 
@@ -296,7 +312,9 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
         if (code === 13) { // 13 is the enter keycode
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
+            let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+            gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, gameTimeStatisticsPageSize, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
         }
     }
 
@@ -307,7 +325,9 @@ class LiveScoreGameTimeList extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
+            let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+            gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, gameTimeStatisticsPageSize, this.state.searchText, this.state.sortBy, this.state.sortOrder , this.state.liveScoreCompIsParent ,this.state.compOrgId)
         }
     }
 
@@ -382,17 +402,16 @@ class LiveScoreGameTimeList extends Component {
 
     ////////tableView view for Game Time list
     tableView = () => {
-        const { gameTimeStatisticsListResult } = this.props.liveScoreGameTimeStatisticsState
+        const { gameTimeStatisticsListResult, gameTimeStatisticsPage, gameTimeStatisticsPageSize, onLoad, gameTimeStatisticstotalCount } = this.props.liveScoreGameTimeStatisticsState
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let dataSource = gameTimeStatisticsListResult ? gameTimeStatisticsListResult.stats : []
-        let total = this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticstotalCount
 
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreGameTimeStatisticsState.onLoad === true && true}
+                        loading={onLoad === true && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={dataSource}
@@ -407,11 +426,13 @@ class LiveScoreGameTimeList extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            current={this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticsPage}
-                            total={total}
-                            showSizeChanger={false}
+                            showSizeChanger
+                            current={gameTimeStatisticsPage}
+                            defaultCurrent={gameTimeStatisticsPage}
+                            defaultPageSize={gameTimeStatisticsPageSize}
+                            total={gameTimeStatisticstotalCount}                            
                             onChange={(page) => this.handleGameTimeTableList(page, id, this.state.filter)}
-                        // defaultPageSize={10}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -436,7 +457,12 @@ class LiveScoreGameTimeList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ gameTimeStatisticsListAction, exportFilesAction }, dispatch)
+    return bindActionCreators({
+        gameTimeStatisticsListAction,
+        exportFilesAction,
+        setPageSizeAction,
+        setPageNumberAction,
+    }, dispatch)
 }
 
 function mapStateToProps(state) {

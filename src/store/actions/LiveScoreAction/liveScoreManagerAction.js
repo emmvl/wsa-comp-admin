@@ -13,7 +13,7 @@ function liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId, isP
 
 
 // Manager list action
-function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, key, compOrgId, isParent) {
+function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, offset, limit, sortBy, sortOrder, key, compOrgId, isParent) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD,
         roleId,
@@ -21,6 +21,7 @@ function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, 
         entityId,
         searchText,
         offset,
+        limit,
         sortBy,
         sortOrder,
         key,
@@ -79,6 +80,20 @@ function clearListAction() {
     };
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_MANAGER_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_MANAGER_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     liveScoreAddEditManager,
     liveScoreManagerListAction,
@@ -88,5 +103,7 @@ export {
     liveScoreManagerSearch,
     liveScoreManagerImportAction,
     liveScoreManagerResetImportResultAction,
-    clearListAction
+    clearListAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

@@ -10,10 +10,8 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData } from "../../util/sessionStorage";
-import { getUserFriendAction } from "../../store/actions/userAction/userAction";
+import { getUserFriendAction, getNetSetGoActionList, setNetSetGoListPageSizeAction, setNetSetGoListPageNumberAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction';
-import { getNetSetGoActionList } from "../../store/actions/userAction/userAction";
-
 
 const {
     // Footer,
@@ -151,17 +149,25 @@ class NetSetGo extends Component {
 
     }
 
-    handleNetSetGoTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setNetSetGoListPageSizeAction(pageSize);
+        this.handleNetSetGoTableList(page);
+    }
+
+    handleNetSetGoTableList = async (page) => {
+        await this.props.setNetSetGoListPageNumberAction(page);
         this.setState({
             pageNo: page
         })
+        let { netSetGoPageSize } = this.props.userState;
+        netSetGoPageSize = netSetGoPageSize ? netSetGoPageSize: 10;
         let filter =
         {
             organisationId: this.state.organisationId,
             yearRefId: this.state.yearRefId,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0)
+                limit: netSetGoPageSize,
+                offset: (page ? (netSetGoPageSize * (page - 1)) : 0)
             }
         }
         this.props.getNetSetGoActionList(filter, this.state.sortBy, this.state.sortOrder);
@@ -223,9 +229,8 @@ class NetSetGo extends Component {
     }
 
     contentView = () => {
-        let userState = this.props.userState;
-        let netSetGoList = userState.netSetGoList;
-        let total = userState.netSetGoTotalCount;
+        const { netSetGoList, netSetGoTotalCount, netSetGoPage, onLoad, netSetGoPageSize } = this.props.userState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -233,16 +238,19 @@ class NetSetGo extends Component {
                         columns={columns}
                         dataSource={netSetGoList}
                         pagination={false}
-                        loading={this.props.userState.onLoad}
+                        loading={onLoad}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.netSetGoPage}
-                        total={total}
-                        onChange={(page) => this.handleNetSetGoTableList(page)}
-                        showSizeChanger={false}
+                        showSizeChanger
+                        current={netSetGoPage}
+                        defaultCurrent={netSetGoPage}
+                        defaultPageSize={netSetGoPageSize}
+                        total={netSetGoTotalCount}
+                        onChange={this.handleNetSetGoTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -271,7 +279,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserFriendAction,
         getOnlyYearListAction,
-        getNetSetGoActionList
+        getNetSetGoActionList,
+        setNetSetGoListPageSizeAction,
+        setNetSetGoListPageNumberAction,
     }, dispatch);
 }
 

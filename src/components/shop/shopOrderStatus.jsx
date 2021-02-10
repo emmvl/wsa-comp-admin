@@ -18,6 +18,8 @@ import {
     updateOrderStatusAction,
     getReferenceOrderStatus,
     exportOrderStatusAction,
+    setOrderStatusListPageSizeAction,
+    setOrderStatusListPageNumberAction,
 } from "../../store/actions/shopAction/orderStatusAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -277,13 +279,21 @@ class ShopOrderStatus extends Component {
         this.props.getReferenceOrderStatus();
     }
 
-    handleTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setOrderStatusListPageSizeAction(pageSize);
+        this.handleTableList(page);
+    }
+
+    handleTableList = async (page) => {
+        await this.props.setOrderStatusListPageNumberAction(page);
         const {
             yearRefId, searchText, paymentStatus, fulfilmentStatus, product, sortOrder, sortBy,
         } = this.state;
+        let { orderStatusPageSize } = this.props.shopOrderStatusState;
+        orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
         const params = {
-            limit: 10,
-            offset: (page ? (10 * (page - 1)) : 0),
+            limit: orderStatusPageSize,
+            offset: (page ? (orderStatusPageSize * (page - 1)) : 0),
             search: searchText,
             year: yearRefId,
             paymentStatus,
@@ -603,7 +613,7 @@ class ShopOrderStatus extends Component {
 
     contentView = () => {
         const {
-            onLoad, orderStatusListingData, orderStatusTotalCount, orderStatusCurrentPage,
+            onLoad, orderStatusListingData, orderStatusTotalCount, orderStatusCurrentPage, orderStatusPageSize,
         } = this.props.shopOrderStatusState;
         return (
             <div className="comp-dash-table-view mt-2">
@@ -620,10 +630,13 @@ class ShopOrderStatus extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={orderStatusCurrentPage}
+                        showSizeChanger
                         total={orderStatusTotalCount}
+                        current={orderStatusCurrentPage}
+                        defaultCurrent={orderStatusCurrentPage}
+                        defaultPageSize={orderStatusPageSize}
                         onChange={(page) => this.handleTableList(page)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -679,6 +692,8 @@ function mapDispatchToProps(dispatch) {
         updateOrderStatusAction,
         getReferenceOrderStatus,
         exportOrderStatusAction,
+        setOrderStatusListPageSizeAction,
+        setOrderStatusListPageNumberAction,
     }, dispatch);
 }
 
