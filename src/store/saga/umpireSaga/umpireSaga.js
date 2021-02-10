@@ -168,7 +168,6 @@ export function* umpireListDataSaga(action) {
 export function* umpireListGetSaga(action) {
     try {
         const result = yield call(UmpireAxiosApi.umpireListGet, action.data);
-        console.log('UMPIRES', result);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_LIST_SUCCESS,

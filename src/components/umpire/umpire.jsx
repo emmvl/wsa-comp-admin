@@ -113,7 +113,7 @@ class Umpire extends Component {
                         const { rankedUmpiresCount } = this.props.umpireState;
                         const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
                         const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
-                        console.log('RECORD', record, rank);
+                        
                         return (
                             <Form>
                                 {
@@ -298,13 +298,6 @@ class Umpire extends Component {
                 sortBy: this.state.sortBy,
                 sortOrder: this.state.sortOrder,
             });
-            // this.props.getUmpireList({
-            //     competitionId: localStorage.getItem("umpireCompetitionId"),
-            //     offset: this.state.offsetData,
-            //     organisationId,
-            //     sortBy: this.state.sortBy,
-            //     sortOrder: this.state.sortOrder,
-            // });
         } else {
             this.setState({
                 visible: true,
@@ -327,12 +320,6 @@ class Umpire extends Component {
             sortOrder: this.state.sortOrder,
             sortBy: this.state.sortBy,
         });
-        // this.props.getUmpireList({
-        //     competitionId: localStorage.getItem("umpireCompetitionId"),
-        //     offset: this.state.offsetData,
-        //     organisationId,
-        //     sortBy: this.state.sortBy,
-        // });
         this.setState({visible: false});
     }
 
@@ -346,20 +333,26 @@ class Umpire extends Component {
                 closable
                 footer={false}
                 onCancel={() => this.setState({visible: false})}
+                style={{ maxWidth: 400 }}
             >
-                <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-                    <Button 
-                        className="primary-add-comp-form"
-                        type="primary"
-                        onClick={() => this.switchShiftHandler('replace')}>
-                        Switch
-                    </Button>
-                    <Button 
-                        className="primary-add-comp-form"
-                        type="primary"
-                        onClick={() => this.switchShiftHandler('shift')}>
-                        Shift
-                    </Button>
+                <div className="umpire-modal">
+                    <span className="umpire-modal-text">Would you like to</span>
+                    <div className="umpire-modal-button-group">
+                        <Button 
+                            className="primary-add-comp-form umpire-modal-button"
+                            type="primary"
+                            onClick={() => this.switchShiftHandler('replace')}
+                        >
+                            Switch ratings
+                        </Button>
+                        <Button 
+                            className="primary-add-comp-form umpire-modal-button"
+                            type="primary"
+                            onClick={() => this.switchShiftHandler('shift')}
+                        >
+                            Shift ratings
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         )

@@ -57,6 +57,30 @@
   padding: 10px 12.3% 5% 12.2%;
 }
 
+.umpire-modal {
+  text-align: center;
+  padding: 10px;
+}
+
+.umpire-modal-text {
+  font-family: inter-semi-bold, sans-serif;
+  color: var(--app-1b1b34);
+}
+
+.umpire-modal-button-group {
+  display: flex;
+  margin-top: 20px;
+}
+
+.umpire-modal-button {
+  flex-basis: 100%;
+  margin: 0 10px;
+}
+
+.ant-modal-body {
+  padding: 10px 0 0 0;
+}
+
 @media (max-width: 767px) {
   .input-width {
     min-width: fit-content
