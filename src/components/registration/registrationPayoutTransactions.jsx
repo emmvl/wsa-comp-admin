@@ -1,38 +1,25 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import {
-    Layout, Breadcrumb, Button, Table,
-} from 'antd';
-import './product.scss';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-// import moment from 'moment';
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-// import InputWithHead from "../../customComponents/InputWithHead";
-import DashboardLayout from "../../pages/dashboardLayout";
+    Layout,
+    Breadcrumb,
+    Button,
+    Table,
+} from "antd";
+
+import "./product.scss";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import {
-    getTransactionPayoutListAction, exportPayoutTransaction,
-} from "../../store/actions/stripeAction/stripeAction";
+import { liveScore_formateDate } from "../../themes/dateformate";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
-// import Loader from '../../customComponents/loader';
-import { liveScore_formateDate } from '../../themes/dateformate';
-// import { SearchOutlined } from "@ant-design/icons";
+import { getTransactionPayoutListAction, exportPayoutTransaction } from "../../store/actions/stripeAction/stripeAction";
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import DashboardLayout from "../../pages/dashboardLayout";
+// import Loader from "../../customComponents/loader";
 
-const {
-    // Header,
-    Content
-} = Layout;
-// const { Option } = Select;
-// const { SubMenu } = Menu;
-
-/// //function to sort table column
-// function tableSort(a, b, key) {
-//     const stringA = JSON.stringify(a[key]);
-//     const stringB = JSON.stringify(b[key]);
-//     return stringA.localeCompare(stringB);
-// }
+const { Content } = Layout;
 
 const columns = [
     {
@@ -81,30 +68,26 @@ const columns = [
 ];
 
 class RegistrationPayoutTransaction extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
-
     componentDidMount() {
         if (this.stripeConnected()) {
-            this.props.getTransactionPayoutListAction(1, null, null, this.props.location.state ? this.props.location.state.id : null)
+            this.props.getTransactionPayoutListAction(
+                1,
+                null,
+                null,
+                this.props.location.state ? this.props.location.state.id : null,
+            );
         }
     }
 
     stripeConnected = () => {
-        let orgData = getOrganisationData() ? getOrganisationData() : null
-        let stripeAccountID = orgData ? orgData.stripeAccountID : null
-        return stripeAccountID
+        const orgData = getOrganisationData() ? getOrganisationData() : null;
+        return orgData ? orgData.stripeAccountID : null;
     }
 
     onExport = () => {
         this.props.exportPayoutTransaction(this.props.location.state ? this.props.location.state.id : null);
     }
 
-    /// ////view for breadcrumb
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view">
             <div className="row">
@@ -118,7 +101,7 @@ class RegistrationPayoutTransaction extends Component {
                         <div className="col-sm pt-1">
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <Button
-                                    onClick={() => this.onExport()}
+                                    onClick={this.onExport}
                                     className="primary-add-comp-form"
                                     type="primary"
                                 >
@@ -142,46 +125,48 @@ class RegistrationPayoutTransaction extends Component {
     )
 
     handleStripeTransactionPayoutList = (key) => {
-        let page = this.props.stripeState.stripeTransactionPayoutListPage
-        let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
-        let starting_after = null
-        let ending_before = null
+        let page = this.props.stripeState.stripeTransactionPayoutListPage;
+        const { stripeTransactionPayoutList } = this.props.stripeState;
+        let startingAfter = null;
+        let endingBefore = null;
         if (key === "next") {
-            ///move forward
-            page = parseInt(page) + 1
-            let id = (stripeTransactionPayoutList[stripeTransactionPayoutList.length - 1]['id']);
-            starting_after = id
-            ending_before = null
+            // move forward
+            page = parseInt(page, 10) + 1;
+            if (stripeTransactionPayoutList.length) {
+                startingAfter = stripeTransactionPayoutList[stripeTransactionPayoutList.length - 1].id;
+            }
+            endingBefore = null;
         }
         if (key === "Previous") {
-            //////move backward
-            page = parseInt(page) - 1
-            let id = (stripeTransactionPayoutList[0]['id']);
-            starting_after = null
-            ending_before = id
+            // move backward
+            page = parseInt(page, 10) - 1;
+            startingAfter = null;
+            endingBefore = stripeTransactionPayoutList[0].id;
         }
-        this.props.getTransactionPayoutListAction(page, starting_after, ending_before, this.props.location.state ? this.props.location.state.id : null)
+        this.props.getTransactionPayoutListAction(
+            page,
+            startingAfter,
+            endingBefore,
+            this.props.location.state ? this.props.location.state.id : null,
+        );
     }
 
-    ////checking for enabling click on next button or not
+    // checking for enabling click on next button or not
     checkNextEnabled = () => {
-        let currentPage = this.props.stripeState.stripeTransactionPayoutListPage
-        let totalCount = this.props.stripeState.stripeTransactionPayoutListTotalCount ? this.props.stripeState.stripeTransactionPayoutListTotalCount : 1
-        let lastPage = Math.ceil(parseInt(totalCount) / 10)
-        if (lastPage == currentPage) {
-            return false
-        } else {
-            return true
-        }
+        const { stripeState } = this.props;
+        const currentPage = stripeState.stripeTransactionPayoutListPage;
+        const totalCount = stripeState.stripeTransactionPayoutListTotalCount ? stripeState.stripeTransactionPayoutListTotalCount : 1;
+        const lastPage = Math.ceil(parseInt(totalCount, 10) / 10);
+        return (lastPage != currentPage);
     }
 
     transactionPayoutListView = () => {
-        let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
-        let previousEnabled = this.props.stripeState.stripeTransactionPayoutListPage == 1 ? false : true
-        let nextEnabled = this.checkNextEnabled()
-        let currentPage = this.props.stripeState.stripeTransactionPayoutListPage
-        let totalCount = this.props.stripeState.stripeTransactionPayoutListTotalCount ? this.props.stripeState.stripeTransactionPayoutListTotalCount : 1
-        let totalPageCount = Math.ceil(parseInt(totalCount) / 10)
+        const { stripeTransactionPayoutList, stripeTransactionPayoutListPage, stripeTransactionPayoutListTotalCount } = this.props.stripeState;
+        const previousEnabled = stripeTransactionPayoutListPage != 1;
+        const nextEnabled = this.checkNextEnabled();
+        const currentPage = stripeTransactionPayoutListPage;
+        const totalCount = stripeTransactionPayoutListTotalCount || 1;
+        const totalPageCount = Math.ceil(parseInt(totalCount, 10) / 10);
         return (
             <div>
                 <div className="table-responsive home-dash-table-view mt-5 mb-5">

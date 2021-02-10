@@ -19,6 +19,7 @@
     },
     "rules": {
         "semi": 0,
+        "camelcase": "warn",
         "consistent-return": 0,
         "indent": [
             "warn",
