@@ -9,7 +9,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { liveScorePositionTrackingAction } from '../../store/actions/LiveScoreAction/liveScorePositionTrackingAction'
+import { liveScorePositionTrackingAction, setPageSizeAction, setPageNumberAction } from '../../store/actions/LiveScoreAction/liveScorePositionTrackingAction'
 import { getLiveScoreCompetiton, getOrganisationData } from "../../util/sessionStorage"
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
@@ -637,14 +637,22 @@ class LiveScorePositionTrackReport extends Component {
         )
     }
 
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
     /// Handle Page change
-    handlePageChnage(page) {
-        let offset = page ? 10 * (page - 1) : 0;
+    handlePageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
+        let { pageSize } = this.props.liveScorePositionTrackState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
         const body = {
             paging: {
-                limit: 10,
-                offset: offset
+                limit: pageSize,
+                offset,
             }
         }
         this.setState({ offset })
@@ -657,20 +665,19 @@ class LiveScorePositionTrackReport extends Component {
             sortBy,
             sortOrder,
             IsParent: this.state.liveScoreCompIsParent,
-            compOrgId: this.state.compOrgId
-
+            compOrgId: this.state.compOrgId,
         })
     }
 
     //////// tableView
     tableView = () => {
-        const { positionTrackResult, totalCount } = this.props.liveScorePositionTrackState
+        const { positionTrackResult, totalCount, onLoad, currentPage, pageSize } = this.props.liveScorePositionTrackState
         let positionTrackData = isArrayNotEmpty(positionTrackResult) ? positionTrackResult : []
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScorePositionTrackState.onLoad}
+                        loading={onLoad}
                         className="home-dashboard-table"
                         columns={(this.state.aggregate == 'MATCH' && this.state.reporting === 'PERCENT') ? percentColumn : this.state.aggregate == 'MATCH' ? columns_1 : (this.state.aggregate == 'ALL' && this.state.reporting === 'PERCENT') ? percentColumn_1 : columns_2}
                         dataSource={positionTrackData}
@@ -681,10 +688,13 @@ class LiveScorePositionTrackReport extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination pb-5"
-                        defaultCurrent={1}
+                        showSizeChanger
+                        current={currentPage}
+                        defaultCurrent={currentPage}
+                        defaultPageSize={pageSize}
                         total={totalCount}
-                        showSizeChanger={false}
-                        onChange={(page) => this.handlePageChnage(page)}
+                        onChange={this.handlePageChange}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -889,7 +899,9 @@ class LiveScorePositionTrackReport extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScorePositionTrackingAction,
-        exportFilesAction
+        exportFilesAction,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch)
 }
 

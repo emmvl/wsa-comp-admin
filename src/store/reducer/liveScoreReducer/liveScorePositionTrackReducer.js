@@ -6,7 +6,9 @@ const initialState = {
     error: null,
     status: 0,
     positionTrackResult: [],
-    totalCount: null
+    totalCount: 1,
+    currentPage: 1,
+    pageSize: 10,
 };
 function LiveScorePositionTrackState(state = initialState, action) {
 
@@ -40,6 +42,17 @@ function LiveScorePositionTrackState(state = initialState, action) {
                 onLoad: false,
             };
 
+        case ApiConstants.SET_LIVE_SCORE_POSITION_TRACK_REPORT_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_POSITION_TRACK_REPORT_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
 
         default:
             return state;
