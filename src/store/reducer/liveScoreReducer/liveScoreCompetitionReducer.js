@@ -9,8 +9,10 @@ const initialState = {
     participatingInComptitions: [],
     ownedTotalCount: 1,
     ownedCurrentPage: 1,
+    ownedPageSize: 10,
     participateTotalCount: 1,
     participateCurrentPage: 1,
+    participatePageSize: 10,
     ownedLoad: false,
     partLoad: false,
     allCompListLoad: false,
@@ -117,6 +119,30 @@ export default function liveScoreCompetition(state = initialState, payload) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.competitionListActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_SIZE:
+            return {
+                ...state,
+                participatePageSize: payload.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_PARTICIPATE_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                participateCurrentPage: payload.pageNum,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_SIZE:
+            return {
+                ...state,
+                ownedPageSize: payload.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_OWNED_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                ownedCurrentPage: payload.pageNum,
+            }
 
         default:
             return state

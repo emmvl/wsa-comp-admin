@@ -13,7 +13,7 @@ import { liveScore_MatchFormate } from "../../themes/dateformate";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { exportFilesAction } from "../../store/actions/appAction";
-import { liveScoreMatchListAction, changeMatchBulkScore, bulkScoreUpdate, onCancelBulkScoreUpdate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { liveScoreMatchListAction, changeMatchBulkScore, bulkScoreUpdate, onCancelBulkScoreUpdate, setPageNumberAction, setPageSizeAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -35,7 +35,9 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder, _this.state.competitionOrganisationId);
+    let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+    liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, liveScoreMatchListPageSize, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder, _this.state.competitionOrganisationId);
 }
 
 var _this = null
@@ -292,11 +294,13 @@ class LiveScoreMatchesList extends Component {
         )
     }
 
-    handleMatchTableList(page, competitionID, sortBy, sortOrder, competitionOrganisationId) {
-        let offset = page ? 10 * (page - 1) : 0;
+    handleMatchTableList = (page, competitionID, sortBy, sortOrder, competitionOrganisationId) => {
+        let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+        liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+        let offset = page ? liveScoreMatchListPageSize * (page - 1) : 0;
         this.setState({ offset })
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder, competitionOrganisationId)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, liveScoreMatchListPageSize, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder, competitionOrganisationId)
     }
 
     onExport() {
@@ -330,7 +334,9 @@ class LiveScoreMatchesList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
+            let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+            liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, liveScoreMatchListPageSize, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -339,7 +345,9 @@ class LiveScoreMatchesList extends Component {
         var code = e.keyCode || e.which;
         this.setState({ offset: 0 })
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
+            let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+            liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, liveScoreMatchListPageSize, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -348,7 +356,9 @@ class LiveScoreMatchesList extends Component {
         this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
+            let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+            liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, liveScoreMatchListPageSize, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }
     }
 
@@ -514,7 +524,13 @@ class LiveScoreMatchesList extends Component {
         )
     }
 
-    onPageChange(page) {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.onPageChange(page);
+    }
+
+    onPageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
         let checkScoreChanged = this.checkIsScoreChanged()
         if (checkScoreChanged === true) {
             message.info("Please save or cancel the current changes! ");
@@ -525,15 +541,14 @@ class LiveScoreMatchesList extends Component {
 
     //////// tableView
     tableView = () => {
-        const { liveScoreMatchListData, liveScoreMatchListPage, liveScoreMatchListTotalCount } = this.props.liveScoreMatchListState;
+        const { liveScoreMatchListData, liveScoreMatchListPage, liveScoreMatchListPageSize, liveScoreMatchListTotalCount, onLoadMatch } = this.props.liveScoreMatchListState;
         let DATA = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
-        let total = liveScoreMatchListTotalCount;
 
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreMatchListState.onLoadMatch}
+                        loading={onLoadMatch}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={DATA}
@@ -544,11 +559,13 @@ class LiveScoreMatchesList extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
+                        showSizeChanger
                         current={liveScoreMatchListPage}
-                        showSizeChanger={false}
-                        total={total}
-                        onChange={(page) => this.onPageChange(page)}
-                        defaultPageSize={10}
+                        defaultCurrent={liveScoreMatchListPage}
+                        defaultPageSize={liveScoreMatchListPageSize}
+                        total={liveScoreMatchListTotalCount}
+                        onChange={this.onPageChange}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
 
@@ -632,9 +649,10 @@ class LiveScoreMatchesList extends Component {
         let offset = 0;
         let start = 1;
         const { competitionId, searchText } = this.state;
-
+        let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+        liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
         setTimeout(() => {
-            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
+            this.props.liveScoreMatchListAction(competitionId, start, offset, liveScoreMatchListPageSize, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         }, 200);
         this.props.liveScoreRoundListAction(competitionId, division === 'All' ? '' : division)
 
@@ -644,7 +662,9 @@ class LiveScoreMatchesList extends Component {
         let offset = 0;
         let start = 1
         const { competitionId, searchText, selectedDivision } = this.state;
-        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
+        let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+        liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+        this.props.liveScoreMatchListAction(competitionId, start, offset, liveScoreMatchListPageSize, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder, this.state.competitionOrganisationId)
         this.setState({ selectedRound: roundName })
     }
 
@@ -750,7 +770,9 @@ function mapDispatchToProps(dispatch) {
         liveScoreRoundListAction,
         changeMatchBulkScore,
         bulkScoreUpdate,
-        onCancelBulkScoreUpdate
+        onCancelBulkScoreUpdate,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch)
 }
 

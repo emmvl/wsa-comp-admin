@@ -78,6 +78,20 @@ function liveScoreScorerSearch(roleId, entityTypeId, competitionId, searchText) 
     };
 }
 
+function setLiveScoreAssignMatchListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_ASSIGN_MATCH_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setLiveScoreAssignMatchListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_ASSIGN_MATCH_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     liveScoreScorerListAction,
     liveScoreScorerUpdate,
@@ -85,5 +99,7 @@ export {
     assignMatchesAction,
     changeAssignStatus,
     unAssignMatcheStatus,
-    liveScoreScorerSearch
+    liveScoreScorerSearch,
+    setLiveScoreAssignMatchListPageSizeAction,
+    setLiveScoreAssignMatchListPageNumberAction,
 };

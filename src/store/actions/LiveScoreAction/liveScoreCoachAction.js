@@ -1,6 +1,6 @@
 import ApiConstants from "themes/apiConstants";
 
-function liveScoreCoachListAction(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder, isParent, competitionId) {
+function liveScoreCoachListAction(roleId, entityTypeId, entityId, search, offset, limit, sortBy, sortOrder, isParent, competitionId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD,
         roleId,
@@ -8,6 +8,7 @@ function liveScoreCoachListAction(roleId, entityTypeId, entityId, search, offset
         entityId,
         search,
         offset,
+        limit,
         sortBy,
         sortOrder,
         isParent,
@@ -61,6 +62,20 @@ function liveScoreCoachResetImportResultAction() {
     };
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_COACHES_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_COACHES_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     liveScoreUpdateCoach,
     liveScoreCoachListAction,
@@ -69,4 +84,6 @@ export {
     liveScoreClear,
     liveScoreCoachImportAction,
     liveScoreCoachResetImportResultAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

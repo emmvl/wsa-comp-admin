@@ -9,10 +9,10 @@ const initialState = {
     orderSummaryListingData: [],
     orderSummaryTotalCount: 1,
     orderSummaryCurrentPage: 1,
+    orderSummaryPageSize: 10,
     numberOfOrders: 0,
     valueOfOrders: 0,
     orderSummaryListingActionObject: null,
-
 };
 
 function shopOrderSummaryState(state = initialState, action) {
@@ -68,6 +68,18 @@ function shopOrderSummaryState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.orderSummaryListingActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_ORDER_SUMMARY_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                orderSummaryPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_ORDER_SUMMARY_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                orderSummaryCurrentPage: action.pageNum,
+            }
 
         default:
             return state;

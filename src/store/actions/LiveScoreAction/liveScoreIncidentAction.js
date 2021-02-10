@@ -1,3 +1,4 @@
+import ApiConstants from '../../../themes/apiConstants';
 import ApiConstatnts from '../../../themes/apiConstants'
 
 function liveScoreIncidentList(competitionId, search, limit, offset, sortBy, sortOrder, liveScoreCompIsParent, competitionOrganisationId) {
@@ -76,12 +77,30 @@ function liveScoreIncidentTypeAction() {
     return action;
 }
 
+function setPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_LIVE_SCORE_INCIDENT_LIST_PAGE_SIZE,
+        pageSize,
+    }
 
+    return action;
+}
+
+function setPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_LIVE_SCORE_INCIDENT_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
 
 export {
     liveScoreIncidentList,
     liveScoreUpdateIncident,
     liveScoreUpdateIncidentData,
     liveScoreAddEditIncident,
-    liveScoreIncidentTypeAction
+    liveScoreIncidentTypeAction,
+    setPageSizeAction,
+    setPageNumberAction,
 }

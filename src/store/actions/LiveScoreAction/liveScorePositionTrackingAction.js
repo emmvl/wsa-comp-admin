@@ -9,6 +9,26 @@ function liveScorePositionTrackingAction(data) {
     return action;
 }
 
+function setPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_LIVE_SCORE_POSITION_TRACK_REPORT_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_LIVE_SCORE_POSITION_TRACK_REPORT_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
-    liveScorePositionTrackingAction
+    liveScorePositionTrackingAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

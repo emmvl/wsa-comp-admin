@@ -37,7 +37,9 @@ import {
     getUmpireDashboardVenueList,
     getUmpireDashboardDivisionList,
     umpireRoundListAction,
-    umpireDashboardUpdate
+    umpireDashboardUpdate,
+    setPageSizeAction,
+    setPageNumberAction,
 } from "store/actions/umpireAction/umpireDashboardAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
@@ -776,14 +778,22 @@ class UmpireDashboard extends Component {
         }
     };
 
-    handlePageChange = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
+
+    handlePageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
         let { sortBy, sortOrder } = this.state
-        let offsetData = page ? 10 * (page - 1) : 0;
+        let { pageSize } = this.props.umpireDashboardState;
+        pageSize = pageSize ? pageSize : 10;
+        let offsetData = page ? pageSize * (page - 1) : 0;
         this.setState({ offsetData });
 
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: offsetData,
             },
         };
@@ -801,7 +811,7 @@ class UmpireDashboard extends Component {
     };
 
     contentView = () => {
-        const { umpireDashboardList, totalPages, currentPage } = this.props.umpireDashboardState
+        const { umpireDashboardList, totalPages, currentPage, pageSize } = this.props.umpireDashboardState
         let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
         let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
         return (
@@ -825,11 +835,13 @@ class UmpireDashboard extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
                             total={totalPages}
-                            defaultPageSize={10}
-                            onChange={this.handlePageChange}
                             current={currentPage}
-                            showSizeChanger={false}
+                            defaultCurrent={currentPage}
+                            defaultPageSize={pageSize}
+                            onChange={this.handlePageChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -1201,6 +1213,8 @@ function mapDispatchToProps(dispatch) {
         exportFilesAction,
         umpireRoundListAction,
         umpireDashboardUpdate,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch);
 }
 

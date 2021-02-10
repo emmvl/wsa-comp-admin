@@ -23,6 +23,7 @@ const initialState = {
     liveScoreIncidentResult: [],
     liveScoreIncidentTotalCount: 1,
     liveScoreIncidentCurrentPage: 1,
+    liveScoreIncidentPageSize: 10,
     incidentData: incidentObj,
     teamResult: [],
     playerResult: [],
@@ -317,6 +318,19 @@ function liveScoreIncidentState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.incidentListActionObject = null
             return { ...state, onLoad: false };
+        
+        case ApiConstants.SET_LIVE_SCORE_INCIDENT_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                liveScoreIncidentPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_INCIDENT_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                liveScoreIncidentCurrentPage: action.pageNum,
+            }
+
 
         default:
             return state

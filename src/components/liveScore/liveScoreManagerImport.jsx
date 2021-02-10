@@ -163,7 +163,7 @@ class LiveScoreManagerImport extends Component {
     )
 
     render() {
-        const { liveScoreMangerState: { importResult, onLoad } } = this.props;
+        const { liveScoreManagerState: { importResult, onLoad } } = this.props;
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout
@@ -205,7 +205,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         appState: state.AppState,
-        liveScoreMangerState: state.LiveScoreMangerState,
+        liveScoreManagerState: state.LiveScoreManagerState,
     };
 }
 

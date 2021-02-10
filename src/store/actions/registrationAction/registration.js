@@ -1,10 +1,11 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 /// ///get the membership fee list in registration
-function regMembershipListAction(offset, yearRefId, sortBy, sortOrder) {
+function regMembershipListAction(offset, limit, yearRefId, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD,
         offset,
+        limit,
         yearRefId,
         sortBy,
         sortOrder,
@@ -296,6 +297,43 @@ function updateMembershipFeeCapAction(organisationUniqueKey, yearRefId, payload)
     return action;
 }
 
+function setRegistrationMembershipListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_REGISTRATION_MEMBERSHIP_LIST_PAGE_SIZE,
+        pageSize,
+    };
+
+    return action;
+}
+
+function setRegistrationMembershipListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_REGISTRATION_MEMBERSHIP_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+
+    return action;
+}
+
+
+function setTeamRegistrationTableListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_TEAM_REGISTRATION_LIST_PAGE_SIZE,
+        pageSize,
+    };
+
+    return action;
+}
+
+function setTeamRegistrationTableListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_TEAM_REGISTRATION_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+
+    return action;
+}
+
 export {
     regMembershipListAction,
     regMembershipListDeleteAction,
@@ -330,4 +368,8 @@ export {
     updateMembershipFeeCapListAction,
     getMembershipCapListAction,
     updateMembershipFeeCapAction,
+    setRegistrationMembershipListPageSizeAction,
+    setRegistrationMembershipListPageNumberAction,
+    setTeamRegistrationTableListPageSizeAction,
+    setTeamRegistrationTableListPageNumberAction,
 };

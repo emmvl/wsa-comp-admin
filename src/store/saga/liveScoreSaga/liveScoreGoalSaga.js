@@ -29,7 +29,7 @@ function* errorSaga(error) {
 
 export function* liveScoreGoalSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGoalList, action.competitionID, action.goalType, action.search, action.offset, action.sortBy, action.sortOrder , action.isParent , action.compOrgId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreGoalList, action.competitionID, action.goalType, action.search, action.offset, action.limit, action.sortBy, action.sortOrder , action.isParent , action.compOrgId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_GOAL_LIST_SUCCESS,

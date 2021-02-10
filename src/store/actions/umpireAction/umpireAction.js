@@ -79,6 +79,24 @@ function umpireMainListAction(data) {
     return action;
 }
 
+function setUmpireListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_UMPIRE_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setUmpireListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_UMPIRE_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 function getRankedUmpiresCount(data) {
     const action = {
         type: ApiConstants.API_GET_RANKED_UMPIRES_COUNT,
@@ -105,6 +123,8 @@ export {
     umpireMainListAction,
     newUmpireListAction,
     getUmpireList,
+    setUmpireListPageSizeAction,
+    setUmpireListPageNumberAction,
     getRankedUmpiresCount,
     updateUmpireRank,
 } 

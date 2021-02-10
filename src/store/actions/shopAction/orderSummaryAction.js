@@ -18,7 +18,27 @@ function exportOrderSummaryAction(params) {
     return action;
 }
 
+function setOrderSummaryListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_ORDER_SUMMARY_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setOrderSummaryListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_ORDER_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     getOrderSummaryListingAction,
     exportOrderSummaryAction,
+    setOrderSummaryListPageSizeAction,
+    setOrderSummaryListPageNumberAction,
 };

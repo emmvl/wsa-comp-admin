@@ -76,6 +76,20 @@ function playerListWithPaginationAction(competitionID, offset, limit, search, so
     };
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_PLAYER_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_LIVE_SCORE_PLAYER_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     liveScorePlayerListAction,
     liveScoreAddEditPlayerAction,
@@ -85,4 +99,6 @@ export {
     liveScorePlayerResetImportResultAction,
     playerListWithPaginationAction,
     liveScoreDeletePlayerAction,
+    setPageSizeAction,
+    setPageNumberAction,
 };

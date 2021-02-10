@@ -59,6 +59,23 @@ function liveScorePlayersToCashReceivedAction(payload){
     return action;
 }
 
+function setPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_LIVE_SCORE_DASHBOARD_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_LIVE_SCORE_DASHBOARD_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
 
 export {
     liveScoreDashboardListAction,
@@ -66,5 +83,7 @@ export {
     liveScoreSingleGameRedeemPayAction,
     liveScorePlayersToPayListAction,
     liveScorePlayersToPayRetryPaymentAction,
-    liveScorePlayersToCashReceivedAction
+    liveScorePlayersToCashReceivedAction,
+    setPageSizeAction,
+    setPageNumberAction,
 }

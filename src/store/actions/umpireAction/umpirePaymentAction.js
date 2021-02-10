@@ -28,9 +28,25 @@ function exportFilesAction(data) {
     };
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_UMPIRE_PAYMENT_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_UMPIRE_PAYMENT_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     getUmpirePaymentData,
     updateUmpirePaymentData,
     umpirePaymentTransferData,
-    exportFilesAction
+    exportFilesAction,
+    setPageSizeAction,
+    setPageNumberAction,
 }

@@ -53,6 +53,7 @@ function* liveScoreMatchListSaga(action) {
             action.competitionID,
             action.start,
             action.offset,
+            action.limit,
             action.search,
             action.divisionId,
             action.roundName,

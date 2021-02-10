@@ -22,9 +22,10 @@ const initialState = {
     status: 0,
     playerData: playerObj,
     playerDataArr: [],
-    totalCount: null,
+    totalCount: 1,
     searchResult: [],
     currentPage: 1,
+    pageSize: 10,
     playerListActionObject: null,
 };
 
@@ -152,6 +153,18 @@ function LiveScorePlayerState(state = initialState, action) {
             state.playerListActionObject = null
             return { ...state, onLoad: false };
 
+        case ApiConstants.SET_LIVE_SCORE_PLAYER_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_PLAYER_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
+    
         default:
             return state;
     }

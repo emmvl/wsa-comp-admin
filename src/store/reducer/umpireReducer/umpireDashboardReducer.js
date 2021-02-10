@@ -10,11 +10,12 @@ const initialState = {
     umpireDivisionList: [],
     onDivisionLoad: false,
     umpireDashboardList: [],
-    totalPages: null,
+    totalPages: 1,
     umpireRoundList: [],
     allRoundList: [],
     allRoundIds: null,
     currentPage: 1,
+    pageSize: 10,
     umpireDashboardListActionObject: null
 };
 
@@ -139,6 +140,18 @@ function umpireDashboardState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.umpireDashboardListActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_UMPIRE_DASHBOARD_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_UMPIRE_DASHBOARD_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
 
         default:
             return state;

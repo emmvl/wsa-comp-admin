@@ -29,6 +29,7 @@ const initialState = {
     searchVenueList: [],
     venuesList: [],
     venuesListPage: 1,
+    venuesListPageSize: 10,
     venuesListTotalCount: 1,
     genderDataEnum: [{
         description: 'Male',
@@ -534,6 +535,18 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false,
                 error: null
             };
+
+        case ApiConstants.SET_VENUES_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                venuesListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_VENUES_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                venuesListPage: action.pageNum,
+            }
 
         default:
             return state;

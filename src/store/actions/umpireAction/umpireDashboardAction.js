@@ -49,6 +49,20 @@ function umpireDashboardUpdate(data) {
     };
 }
 
+function setPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_UMPIRE_DASHBOARD_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+function setPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_UMPIRE_DASHBOARD_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     getUmpireDashboardList,
     getUmpireDashboardVenueList,
@@ -57,4 +71,6 @@ export {
     umpireDashboardResetImportResultAction,
     umpireRoundListAction,
     umpireDashboardUpdate,
+    setPageSizeAction,
+    setPageNumberAction,
 }

@@ -9,7 +9,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../../util/helpers";
-import { umpireRosterListAction, umpireRosterOnActionClick } from "../../store/actions/umpireAction/umpirRosterAction"
+import { umpireRosterListAction, umpireRosterOnActionClick, setPageSizeAction, setPageNumberAction } from "../../store/actions/umpireAction/umpirRosterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 // import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompetiton, getUmpireCompetitonData, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
@@ -199,7 +199,7 @@ class UmpireRoster extends Component {
     }
 
     async componentDidMount() {
-        const { umpireRosterListActionObject } = this.props.umpireRosterdState
+        const { umpireRosterListActionObject } = this.props.umpireRosterState
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
         if (umpireRosterListActionObject) {
@@ -287,8 +287,8 @@ class UmpireRoster extends Component {
             }
         }
 
-        if (nextProps.umpireRosterdState !== this.props.umpireRosterdState) {
-            if (this.props.umpireRosterdState.rosterLoading !== this.state.rosterLoad) {
+        if (nextProps.umpireRosterState !== this.props.umpireRosterState) {
+            if (this.props.umpireRosterState.rosterLoading !== this.state.rosterLoad) {
                 const body = {
                     paging: {
                         limit: 10,
@@ -358,17 +358,24 @@ class UmpireRoster extends Component {
         }
     }
 
-    /// Handle Page change
-    handlePageChnage(page) {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handlePageChange(page);
+    }
 
-        let { sortBy, sortOrder } = this.state
-        let offset = page ? 10 * (page - 1) : 0;
+    /// Handle Page change
+    handlePageChange = async (page) => {
+        await this.props.setPageNumberAction(page);
+        let { sortBy, sortOrder } = this.state;
+        let { pageSize } = this.props.umpireRosterState;
+        pageSize = pageSize ? pageSize : 10;
+        let offset = page ? pageSize * (page - 1) : 0;
         this.setState({
             offsetData: offset
         })
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: offset
             },
         }
@@ -379,17 +386,16 @@ class UmpireRoster extends Component {
         else {
             this.props.umpireRosterListAction(this.state.compOrgId, this.state.status, roleIds, body, sortBy, sortOrder, 6)
         }
-
     }
 
     contentView = () => {
-        const { umpireRosterList, umpireTotalCount } = this.props.umpireRosterdState
+        const { umpireRosterList, umpireTotalCount, currentPage, pageSize, onLoad } = this.props.umpireRosterState
         let umpireListResult = isArrayNotEmpty(umpireRosterList) ? umpireRosterList : []
         return (
             <div className="comp-dash-table-view mt-0">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.umpireRosterdState.onLoad}
+                        loading={onLoad}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={umpireListResult}
@@ -402,9 +408,13 @@ class UmpireRoster extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
+                            showSizeChanger
+                            current={currentPage}
+                            defaultCurrent={currentPage}
+                            defaultPageSize={pageSize}
                             total={umpireTotalCount}
-                            onChange={(page) => this.handlePageChnage(page)}
-                            showSizeChanger={false}
+                            onChange={this.handlePageChange}
+                            onShowSizeChange={this.handleShowSizeChange}
                         />
                     </div>
                 </div>
@@ -678,13 +688,15 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         umpireRosterListAction,
         umpireRosterOnActionClick,
-        exportFilesAction
+        exportFilesAction,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        umpireRosterdState: state.UmpireRosterState,
+        umpireRosterState: state.UmpireRosterState,
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }

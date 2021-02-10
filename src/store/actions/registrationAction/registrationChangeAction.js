@@ -59,6 +59,25 @@ function getTransferCompetitionsAction(payload){
 
     return action;
 }
+
+function setRegistrationChangeListPageSize(pageSize) {
+    const action = {
+        type: ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setRegistrationChangeListPageNumber(pageNum) {
+    const action = {
+        type: ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     updateRegistrationReviewAction,
     saveDeRegisterDataAction,
@@ -66,5 +85,7 @@ export {
     getRegistrationChangeDashboard,
     getRegistrationChangeReview,
     saveRegistrationChangeReview,
-    getTransferCompetitionsAction
+    getTransferCompetitionsAction,
+    setRegistrationChangeListPageSize,
+    setRegistrationChangeListPageNumber,
 };

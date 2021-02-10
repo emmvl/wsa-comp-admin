@@ -68,6 +68,24 @@ function exportOrderStatusAction(params) {
     return action;
 }
 
+function setOrderStatusListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_ORDER_STATUS_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setOrderStatusListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_ORDER_STATUS_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
@@ -77,4 +95,6 @@ export {
     getReferenceOrderStatus,
     updateOrderFullfilmentStatus,
     exportOrderStatusAction,
+    setOrderStatusListPageSizeAction,
+    setOrderStatusListPageNumberAction,
 };

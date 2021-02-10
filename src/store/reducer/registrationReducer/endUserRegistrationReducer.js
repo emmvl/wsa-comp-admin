@@ -36,6 +36,7 @@ const initialState = {
     userRegDashboardListData: [],
     userRegDashboardListPage: 1,
     userRegDashboardListTotalCount: 1,
+    userRegDashboardListPageSize: 10,
     competitions: [],
     membershipProductTypes: [],
     membershipProducts: [],
@@ -168,6 +169,18 @@ function endUserRegistrationReducer(state = initialState, action) {
                 status: action.status,
                 error: null,
             };
+
+        case ApiConstants.SET_REGISTRATION_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                userRegDashboardListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_REGISTRATION_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                userRegDashboardListPage: action.pageNum,
+            }
 
         default:
             return state;

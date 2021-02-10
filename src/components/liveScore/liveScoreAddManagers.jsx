@@ -75,8 +75,8 @@ class LiveScoreAddManager extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        if (this.props.liveScoreMangerState.managerListResult !== nextProps.liveScoreMangerState.managerListResult) {
-            if (this.state.load === true && this.props.liveScoreMangerState.onLoad === false) {
+        if (this.props.liveScoreManagerState.managerListResult !== nextProps.liveScoreManagerState.managerListResult) {
+            if (this.state.load === true && this.props.liveScoreManagerState.onLoad === false) {
                 this.filterManagerList()
                 if (this.state.isEdit === true) {
                     this.setInitalFiledValue()
@@ -85,9 +85,9 @@ class LiveScoreAddManager extends Component {
             }
         }
 
-        if (this.props.liveScoreMangerState.teamId !== nextProps.liveScoreMangerState.teamId) {
+        if (this.props.liveScoreManagerState.teamId !== nextProps.liveScoreManagerState.teamId) {
             if (this.state.teamLoad === true) {
-                const { teamId } = this.props.liveScoreMangerState
+                const { teamId } = this.props.liveScoreManagerState
                 this.setSelectedTeamValue(teamId)
 
                 this.setState({ teamLoad: false })
@@ -102,7 +102,7 @@ class LiveScoreAddManager extends Component {
     }
 
     setInitalFiledValue() {
-        const { managerData, teamId } = this.props.liveScoreMangerState
+        const { managerData, teamId } = this.props.liveScoreManagerState
         this.formRef.current.setFieldsValue({
             'First Name': managerData.firstName,
             'Last Name': managerData.lastName,
@@ -113,7 +113,7 @@ class LiveScoreAddManager extends Component {
     }
 
     filterManagerList() {
-        const { managerListResult } = this.props.liveScoreMangerState
+        const { managerListResult } = this.props.liveScoreManagerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
 
         for (let i in managerList) {
@@ -159,10 +159,10 @@ class LiveScoreAddManager extends Component {
 
     ////form view
     managerExistingRadioButton() {
-        const { managerListResult, onLoadSearch } = this.props.liveScoreMangerState
+        const { managerListResult, onLoadSearch } = this.props.liveScoreManagerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
-        // const { teamId } = this.props.liveScoreMangerState
-        let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
+        // const { teamId } = this.props.liveScoreManagerState
+        let teamData = isArrayNotEmpty(this.props.liveScoreManagerState.teamResult) ? this.props.liveScoreManagerState.teamResult : []
 
         return (
             <div className="content-view pt-4">
@@ -237,7 +237,7 @@ class LiveScoreAddManager extends Component {
             // managerData,
             // teamId,
             teamResult
-        } = this.props.liveScoreMangerState
+        } = this.props.liveScoreManagerState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         let hasError = this.state.hasError;
         return (
@@ -359,7 +359,7 @@ class LiveScoreAddManager extends Component {
     }
 
     radioBtnContainer() {
-        const { managerRadioBtn } = this.props.liveScoreMangerState
+        const { managerRadioBtn } = this.props.liveScoreManagerState
         return (
             <div className="content-view pb-0 pt-4 row">
                 <span className="applicable-to-heading ml-4 mr-3">{AppConstants.managerHeading}</span>
@@ -402,7 +402,7 @@ class LiveScoreAddManager extends Component {
 
     ////form view
     contentViewForAddManager = () => {
-        const { managerRadioBtn } = this.props.liveScoreMangerState
+        const { managerRadioBtn } = this.props.liveScoreManagerState
         return (
             <div>
                 {this.radioBtnContainer()}
@@ -445,7 +445,7 @@ class LiveScoreAddManager extends Component {
     };
 
     onSaveClick = values => {
-        const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+        const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreManagerState
         const { compOrgId } = this.state
         if (managerRadioBtn === 'new') {
             if (managerData.mobileNumber.length !== 10) {
@@ -522,7 +522,7 @@ class LiveScoreAddManager extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
                 />
-                <Loader visible={this.props.liveScoreMangerState.loading} />
+                <Loader visible={this.props.liveScoreManagerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
@@ -565,7 +565,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         liveScoreState: state.LiveScoreState,
-        liveScoreMangerState: state.LiveScoreMangerState,
+        liveScoreManagerState: state.LiveScoreManagerState,
         liveScoreScorerState: state.LiveScoreScorerState
     }
 }

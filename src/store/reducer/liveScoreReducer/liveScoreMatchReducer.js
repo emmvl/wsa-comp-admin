@@ -171,6 +171,7 @@ const initialState = {
     venueData: null,
     venueIdArray: [],
     liveScoreMatchListPage: 1,
+    liveScoreMatchListPageSize: 10,
     liveScoreMatchListTotalCount: 1,
     matchData: matchObj,
     matchLoad: false,
@@ -1072,6 +1073,18 @@ function liveScoreMatchReducer(state = initialState, action) {
             return {
                 ...state,
                 updateUmpireFetchCall: false
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_MATCH_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                liveScoreMatchListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_MATCH_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                liveScoreMatchListPage: action.pageNum,
             }
 
         default:

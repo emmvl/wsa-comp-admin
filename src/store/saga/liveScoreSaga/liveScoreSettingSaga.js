@@ -9,6 +9,7 @@ import { setUmpireCompitionData, getLiveScoreUmpireCompitionData, setLiveScoreUm
 export function* liveScoreSettingSaga({ payload }) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreSettingView, payload)
+
         if (result.status === 1) {
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_SUCCESS, payload: result.result.data })
         } else {

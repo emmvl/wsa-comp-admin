@@ -303,6 +303,24 @@ function combinedAccreditationUmpieCoachRefrence() {
     return action;
 }
 
+function setVenuesTableListPageSizeAction(pageSize) {
+    const action = {
+        type: ApiConstants.SET_VENUES_LIST_PAGE_SIZE,
+        pageSize,
+    }
+
+    return action;
+}
+
+function setVenuesTableListPageNumberAction(pageNum) {
+    const action = {
+        type: ApiConstants.SET_VENUES_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+
+    return action;
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -339,5 +357,7 @@ export {
     membershipPaymentOptionAction,
     accreditationUmpireReferenceAction,
     netSetGoTshirtSizeAction,
-    combinedAccreditationUmpieCoachRefrence
+    combinedAccreditationUmpieCoachRefrence,
+    setVenuesTableListPageSizeAction,
+    setVenuesTableListPageNumberAction,
 }

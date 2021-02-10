@@ -13,7 +13,7 @@ import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionS
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from "store/actions/commonAction/commonAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getTeamRegistrationsAction, exportTeamRegistrationAction } from "store/actions/registrationAction/registration";
+import { getTeamRegistrationsAction, exportTeamRegistrationAction, setTeamRegistrationTableListPageSizeAction, setTeamRegistrationTableListPageNumberAction} from "store/actions/registrationAction/registration";
 import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
@@ -212,7 +212,13 @@ class TeamRegistrations extends Component {
         }
     }
 
-    handleRegTableList = (page) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setTeamRegistrationTableListPageSizeAction(pageSize);
+        this.handleRegTableList(page);
+    }
+
+    handleRegTableList = async (page) => {
+        await this.props.setTeamRegistrationTableListPageNumberAction(page);
         const {
             organisationUniqueKey,
             // yearRefId,
@@ -225,6 +231,8 @@ class TeamRegistrations extends Component {
             membershipProductUniqueKey
         } = this.state;
         let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1
+        let { teamRegistrationTableListPageSize } = this.props.registrationState;
+        teamRegistrationTableListPageSize = teamRegistrationTableListPageSize ? teamRegistrationTableListPageSize : 10;
         const filter = {
             organisationUniqueKey,
             yearRefId,
@@ -234,8 +242,8 @@ class TeamRegistrations extends Component {
             divisionId,
             membershipProductUniqueKey,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0),
+                limit: teamRegistrationTableListPageSize,
+                offset: (page ? (teamRegistrationTableListPageSize * (page - 1)) : 0),
             },
         };
 
@@ -537,26 +545,29 @@ class TeamRegistrations extends Component {
     };
 
     contentView = () => {
-        const teamRegDashboardList = this.props.registrationState.teamRegistrationTableData;
+        const { teamRegistrationTableData, teamRegistrationTableListPageSize, onLoad } = this.props.registrationState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view table-competition">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={teamRegDashboardList.teamRegistrations}
+                        dataSource={teamRegistrationTableData.teamRegistrations}
                         pagination={false}
-                        loading={this.props.registrationState.onLoad === true && true}
+                        loading={onLoad === true && true}
                     />
                 </div>
 
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={teamRegDashboardList.page.currentPage}
-                        total={teamRegDashboardList.page.totalCount}
+                        showSizeChanger
+                        current={teamRegistrationTableData.page.currentPage}
+                        defaultCurrent={teamRegistrationTableData.page.currentPage}
+                        defaultPageSize={teamRegistrationTableListPageSize}
+                        total={teamRegistrationTableData.page.totalCount}
                         onChange={this.handleRegTableList}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -593,7 +604,9 @@ function mapDispatchToProps(dispatch) {
         getAllCompetitionAction,
         registrationPaymentStatusAction,
         getTeamRegistrationsAction,
-        exportTeamRegistrationAction
+        exportTeamRegistrationAction,
+        setTeamRegistrationTableListPageSizeAction,
+        setTeamRegistrationTableListPageNumberAction,
     }, dispatch);
 }
 

@@ -242,12 +242,14 @@ const initialState = {
   roles: [],
   userRolesEntity: [],
   affiliateListPage: 1,
+  affiliateListPageSize: 10,
   affiliateListTotalCount: 1,
   venueOrganisation: [],
   allUserOrganisationData: [],
   getUserOrganisation: [],
   userDashboardTextualList: [],
   userDashboardTextualPage: 1,
+  userDashboardTextualPageSize: 10,
   userDashboardTextualTotalCount: 1,
   personalData: {},
   personalEmergency: [],
@@ -276,15 +278,18 @@ const initialState = {
   onOrgLoad: false,
   friendList: [],
   friendPage: 1,
+  friendPageSize: 10,
   friendTotalCount: 1,
   referFriendList: [],
   referFriendPage: 1,
-  referFriendTotalCount: 1,
+  referFriendPageSize: 10,
+  referFriendTotalCount: 1,  
   orgPhotosList: [],
   userDashboardCounts: null,
   onAffiliateDirLoad: false,
   affiliateDirectoryList: [],
   affiliateDirectoryPage: 1,
+  affiliateDirectoryPageSize: 10,
   affiliateDirectoryTotalCount: 1,
   organisationTypes: [],
   onExpAffiliateDirLoad: false,
@@ -335,8 +340,9 @@ const initialState = {
   onLoadSearch: false,
   impersonationAccess: false,
   spectatorList: [],
-  spectatorPage: null,
-  spectatorTotalCount: null,
+  spectatorPage: 1,
+  spectatorPageSize: 10,
+  spectatorTotalCount: 1,
   spectatorListAction: null,
   impersonationList: [],
   onImpersonationLoad: false,
@@ -363,6 +369,10 @@ const initialState = {
   usersByIdsList: [],
   parentData: [],
   getUserParentDataOnLoad: false,
+  netSetGoList: [],
+  netSetGoPage: 1,
+  netSetGoPageSize: 10,
+  netSetGoTotalCount: 1,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -1470,6 +1480,89 @@ function userReducer(state = initialState, action) {
             status: action.status,
             getUserParentDataOnLoad: false
         }
+    case ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        affiliateDirectoryPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        affiliateDirectoryPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_NETSETGO_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        netSetGoPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_NETSETGO_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        netSetGoPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        friendPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        friendPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        referFriendPageSize: action.pageSize,
+      }
+    
+    case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        referFriendPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_SPECTATOR_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        spectatorPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_SPECTATOR_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        spectatorPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        affiliateListPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        affiliateListPage: action.pageNum,
+      }
+
+    case ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_SIZE:
+      return {
+        ...state,
+        userDashboardTextualPageSize: action.pageSize,
+      }
+
+    case ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_CURRENT_NUMBER:
+      return {
+        ...state,
+        userDashboardTextualPage: action.pageNum,
+      }
 
     default:
       return state;

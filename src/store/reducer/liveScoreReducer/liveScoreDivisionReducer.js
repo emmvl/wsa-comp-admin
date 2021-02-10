@@ -1,4 +1,5 @@
 import ApiConstants from "themes/apiConstants";
+import {getTimeoutsDetailsData} from 'components/liveScore/liveScoreSettings/liveScoreSettingsUtils'
 
 const divisionObj = {
     divisionName: "",
@@ -16,11 +17,15 @@ const initialState = {
     name: "",
     divisionData: divisionObj,
     mainDivisionList: [],
-    totalCount: null,
-    currentPage: null,
+    totalCount: 1,
+    currentPage: 1,
+    pageSize: 10,
     positionTracking: "null",
     recordGoalAttempts: "null",
     divisionListActionObject: null,
+    timeouts: null,
+    timeoutsToQuarters: [],
+    timeoutsToHalves: [],
 };
 
 function liveScoreDivisionState(state = initialState, action) {
@@ -44,6 +49,12 @@ function liveScoreDivisionState(state = initialState, action) {
             } else if (action.key === "name") {
                 state.name = action.data;
             } else if (action.key === "isEditDivision") {
+                const { timeoutDetails } = action.data;
+                const timeoutsData = getTimeoutsDetailsData(timeoutDetails)
+
+                state.timeouts = timeoutsData.timeouts
+                state.timeoutsToQuarters = timeoutsData.timeoutsToQuarters
+                state.timeoutsToHalves = timeoutsData.timeoutsToHalves
                 state.divisionName = action.data.divisionName;
                 state.gradeName = action.data.grade;
                 state.name = action.data.name;
@@ -59,6 +70,15 @@ function liveScoreDivisionState(state = initialState, action) {
             }
             else if (action.key === "recordGoalAttempts") {
                 state.recordGoalAttempts = action.data
+            }
+            else if (action.key === "timeouts") {
+                state.timeouts = action.data
+            }
+            else if (action.key === "timeoutsToQuarters") {
+                state.timeoutsToQuarters = action.data
+            }
+            else if (action.key === "timeoutsToHalves") {
+                state.timeoutsToHalves = action.data
             }
             return {
                 ...state,
@@ -130,6 +150,18 @@ function liveScoreDivisionState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.divisionListActionObject = null
             return { ...state, onLoad: false };
+
+        case ApiConstants.SET_LIVE_SCORE_DIVISION_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_LIVE_SCORE_DIVISION_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                currentPage: action.pageNum,
+            }
 
         default:
             return state;

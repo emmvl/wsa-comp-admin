@@ -65,6 +65,24 @@ function exportRegistrationAction(params) {
     return action;
 }
 
+function setRegistrationListPageSize(pageSize) {
+    const action = {
+        type: ApiConstants.SET_REGISTRATION_LIST_PAGE_SIZE,
+        pageSize,
+    };
+
+    return action;
+}
+
+function setRegistrationListPageNumber(pageNum) {
+    const action = {
+        type: ApiConstants.SET_REGISTRATION_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    };
+
+    return action;
+}
+
 export {
     saveEndUserRegistrationAction,
     updateEndUserRegisrationAction,
@@ -73,4 +91,6 @@ export {
     endUserRegDashboardListAction,
     regTransactionUpdateAction,
     exportRegistrationAction,
+    setRegistrationListPageSize,
+    setRegistrationListPageNumber,
 };

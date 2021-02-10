@@ -437,7 +437,7 @@ class LiveScoreAddNews extends Component {
 
     /// Manager and Scorer view
     managerView = () => {
-        const { managerListResult } = this.props.liveScoreMangerState
+        const { managerListResult } = this.props.liveScoreManagerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
 
         return (
@@ -905,7 +905,7 @@ function mapStateToProps(state) {
     return {
         liveScoreNewsState: state.LiveScoreNewsState,
         liveScoreScorerState: state.LiveScoreScorerState,
-        liveScoreMangerState: state.LiveScoreMangerState,
+        liveScoreManagerState: state.LiveScoreManagerState,
         liveScoreState: state.LiveScoreState
     }
 }

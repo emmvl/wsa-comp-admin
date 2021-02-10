@@ -419,7 +419,7 @@ class LiveScoreAddTeam extends Component {
     managerExistingRadioBtnView() {
         // let grade = this.state.managerData
         // const { selectedManager } = this.props.liveScoreTeamState
-        const { managerListResult } = this.props.liveScoreMangerState
+        const { managerListResult } = this.props.liveScoreManagerState
         return (
             <div>
                 <InputWithHead heading={AppConstants.managerSearch} required="required-field pb-0" />
@@ -444,7 +444,7 @@ class LiveScoreAddTeam extends Component {
                             optionFilterProp="children"
                         // onSearch={(value) => {
                         //     this.setState({ showOption: true })
-                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                        //     const filteredData = this.props.liveScoreManagerState.MainManagerListResult.filter(data => {
                         //         return data.firstName.indexOf(value) > -1
                         //     })
                         //     this.props.liveScoreManagerFilter(filteredData)
@@ -801,7 +801,7 @@ function mapStateToProps(state) {
     return {
         liveScoreTeamState: state.LiveScoreTeamState,
         liveScoreState: state.LiveScoreState,
-        liveScoreMangerState: state.LiveScoreMangerState
+        liveScoreManagerState: state.LiveScoreManagerState
     }
 }
 

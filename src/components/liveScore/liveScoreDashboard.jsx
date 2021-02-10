@@ -7,7 +7,14 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreDashboardListAction, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction, liveScorePlayersToCashReceivedAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import {
+    liveScoreDashboardListAction,
+    liveScorePlayersToPayListAction,
+    liveScorePlayersToPayRetryPaymentAction,
+    liveScorePlayersToCashReceivedAction,
+    setPageSizeAction,
+    setPageNumberAction,
+} from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
 import {
     // getCompetitonId,
@@ -661,20 +668,30 @@ class LiveScoreDashboard extends Component {
 
     getPlayersToPayList = (page) => {
         const { organisationUniqueKey } = getOrganisationData();
-        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
+        let { liveScorePlayerstoPayListPageSize } = this.props.liveScoreDashboardState;
+        liveScorePlayerstoPayListPageSize = liveScorePlayerstoPayListPageSize ? liveScorePlayerstoPayListPageSize : 10;
         let payload = {
             competitionId: uniqueKey,
             organisationId: organisationUniqueKey,
             paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0),
+                limit: liveScorePlayerstoPayListPageSize,
+                offset: (page ? (liveScorePlayerstoPayListPageSize * (page - 1)) : 0),
             },
         }
         this.props.liveScorePlayersToPayListAction(payload);
     }
 
-    handleTablePage = (page, key) => {
-        if(key=="playerToPay"){
+    handleShowSizeChange = (key) => async (page, pageSize) => {
+        if(key == "playerToPay"){
+            await this.props.setPageSizeAction(pageSize);
+            this.handleTablePage(page, key);
+        }
+    }
+
+    handleTablePage = async (page, key) => {
+        if(key == "playerToPay") {
+            await this.props.setPageNumberAction(page);
             this.setState({onload: true, page: page})
         }
     }
@@ -954,13 +971,13 @@ class LiveScoreDashboard extends Component {
 
     ////////ownedView view for competition
     playersToPayView = () => {
-        const { playersToPayList, liveScorePlayerstoPayListTotalCount } = this.props.liveScoreDashboardState
+        const { playersToPayList, onLoad, liveScorePlayerstoPayListTotalCount, liveScorePlayerstoPayListPage, liveScorePlayerstoPayListPageSize } = this.props.liveScoreDashboardState
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreDashboardState.onLoad}
+                        loading={onLoad}
                         className="home-dashboard-table"
                         columns={columnsPlayersToPay}
                         dataSource={playersToPayList}
@@ -971,10 +988,13 @@ class LiveScoreDashboard extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination pb-5"
-                        defaultCurrent={1}
+                        showSizeChanger
+                        current={liveScorePlayerstoPayListPage}
+                        defaultCurrent={liveScorePlayerstoPayListPage}
+                        defaultPageSize={liveScorePlayerstoPayListPageSize}
                         total={liveScorePlayerstoPayListTotalCount}
-                        showSizeChanger={false}
                         onChange={(page) => this.handleTablePage(page, "playerToPay")}
+                        onShowSizeChange={this.handleShowSizeChange("playerToPay")}
                     />
                 </div>
             </div>
@@ -1022,7 +1042,15 @@ class LiveScoreDashboard extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData, liveScorePlayersToPayListAction, liveScorePlayersToPayRetryPaymentAction, liveScorePlayersToCashReceivedAction }, dispatch);
+    return bindActionCreators({
+        liveScoreDashboardListAction,
+        initializeCompData,
+        liveScorePlayersToPayListAction,
+        liveScorePlayersToPayRetryPaymentAction,
+        liveScorePlayersToCashReceivedAction,
+        setPageSizeAction,
+        setPageNumberAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

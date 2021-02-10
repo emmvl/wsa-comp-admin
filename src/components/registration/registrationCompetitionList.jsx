@@ -18,6 +18,8 @@ import {
     regCompetitionListAction,
     clearCompReducerDataAction,
     regCompetitionListDeleteAction,
+    setPageSizeAction,
+    setPageNumberAction,
 } from 'store/actions/registrationAction/competitionFeeAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
@@ -436,34 +438,46 @@ class RegistrationCompetitionList extends Component {
         </div>
     );
 
-    handleCompetitionTableList = (page, yearRefId, searchText) => {
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setPageSizeAction(pageSize);
+        this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText);
+    };
+
+    handleCompetitionTableList = async (page, yearRefId, searchText) => {
+        await this.props.setPageNumberAction(page);
+
         const { sortBy, sortOrder } = this.state;
-        const offset = page ? 10 * (page - 1) : 0;
+        let { pageSize } = this.props.competitionFeesState;
+        pageSize = pageSize ? pageSize : 10;
+        const offset = page ? pageSize * (page - 1) : 0;
         this.setState({ offset });
-        this.props.regCompetitionListAction(offset, yearRefId, searchText, sortBy, sortOrder);
+        this.props.regCompetitionListAction(offset, pageSize, yearRefId, searchText, sortBy, sortOrder);
     };
 
     contentView = () => {
-        const { competitionFeesState } = this.props;
-        const total = competitionFeesState.regCompetitonFeeListTotalCount;
+        const { regCompetitonFeeListTotalCount, regCompetitionFeeListData, regCompetitonFeeListPage, onLoad, pageSize } = this.props.competitionFeesState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view table-competition">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={competitionFeesState.regCompetitionFeeListData}
+                        dataSource={regCompetitionFeeListData}
                         pagination={false}
-                        loading={this.props.competitionFeesState.onLoad === true && true}
+                        loading={onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={competitionFeesState.regCompetitonFeeListPage}
-                        total={total}
+                        current={regCompetitonFeeListPage}
+                        defaultCurrent={regCompetitonFeeListPage}
+                        defaultPageSize={pageSize}
+                        showSizeChanger
+                        total={regCompetitonFeeListTotalCount}
                         onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText)}
-                        showSizeChanger={false}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
             </div>
@@ -500,6 +514,8 @@ function mapDispatchToProps(dispatch) {
         clearCompReducerDataAction,
         regCompetitionListDeleteAction,
         CLEAR_OWN_COMPETITION_DATA,
+        setPageSizeAction,
+        setPageNumberAction,
     }, dispatch);
 }
 
