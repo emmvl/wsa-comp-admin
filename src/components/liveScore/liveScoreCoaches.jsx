@@ -42,7 +42,9 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreCoachListAction(17, 6, _this.state.compOrgId, _this.state.searchText, _this.state.offset, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.competitionId);
+    let { pageSize } = this.props.liveScoreCoachState;
+    pageSize = pageSize ? pageSize : 10;
+    _this.props.liveScoreCoachListAction(17, 6, _this.state.compOrgId, _this.state.searchText, _this.state.offset, pageSize, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.competitionId);
 }
 
 const listeners = (key) => ({
@@ -183,15 +185,17 @@ class LiveScoreCoaches extends Component {
                 let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
                 this.setState({ competitionId: id, compOrgId: compOrgId, liveScoreCompIsParent: value })
                 let offset = 0
+                let { pageSize } = this.props.liveScoreCoachState;
+                pageSize = pageSize ? pageSize : 10;
                 if (coachListActionObject) {
                     offset = coachListActionObject.offset
                     let searchText = coachListActionObject.search
                     let sortBy = coachListActionObject.sortBy
                     let sortOrder = coachListActionObject.sortOrder
                     this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, sortBy, sortOrder, value, id);
+                    this.props.liveScoreCoachListAction(17, 6, compOrgId, searchText, offset, pageSize, sortBy, sortOrder, value, id);
                 } else {
-                    this.props.liveScoreCoachListAction(17, 6, compOrgId, this.state.searchText, offset, null, null, value, id)
+                    this.props.liveScoreCoachListAction(17, 6, compOrgId, this.state.searchText, offset , pageSize, null, null, value, id)
                 }
 
                 if (id !== null) {
@@ -362,7 +366,9 @@ class LiveScoreCoaches extends Component {
         this.setState({ searchText: e.target.value, offset: 0 })
         let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
+            let { pageSize } = this.props.liveScoreCoachState;
+            pageSize = pageSize ? pageSize : 10;
+            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, pageSize, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
@@ -373,7 +379,9 @@ class LiveScoreCoaches extends Component {
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         let { sortBy, sortOrder, offset, compOrgId } = this.state
         if (code === 13) { // 13 is the enter keycode
-            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
+            let { pageSize } = this.props.liveScoreCoachState;
+            pageSize = pageSize ? pageSize : 10;
+            this.props.liveScoreCoachListAction(17, 6, compOrgId, e.target.value, offset, pageSize, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
@@ -384,7 +392,9 @@ class LiveScoreCoaches extends Component {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreCoachListAction(17, 6, this.state.compOrgId, this.state.searchText, this.state.offset, null, null, this.state.liveScoreCompIsParent, this.state.competitionId)
+            let { pageSize } = this.props.liveScoreCoachState;
+            pageSize = pageSize ? pageSize : 10;
+            this.props.liveScoreCoachListAction(17, 6, this.state.compOrgId, this.state.searchText, this.state.offset, pageSize, null, null, this.state.liveScoreCompIsParent, this.state.competitionId)
         }
     }
 
