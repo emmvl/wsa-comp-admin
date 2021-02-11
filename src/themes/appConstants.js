@@ -1979,6 +1979,15 @@ const AppConstants = {
     enterAmount: "Enter the Amount",
     partialRefund: "Partial Refund",
     enterValidAmount: "Please enter valid amount",
+
+    // Communication
+    communicationTitle: 'Communication Title',
+    enterCommunicationTitle: 'Enter Communication Title',
+    communicationBody: 'Communication Body',
+    communicationImage: 'Communication Image',
+    communicationVideo: 'Communication Video',
+    communicationExpiryDate: 'Communication Expiry Date',
+    communicationExpiryTime: 'Communication Expiry Time',
 };
 
 export default AppConstants;

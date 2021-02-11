@@ -238,6 +238,7 @@ const initialState = {
   affiliateEdit: affiliate,
   affiliateOurOrg: affiliate,
   affiliateList: [],
+  affiliatesByParentList: [],
   affiliateTo: {},
   roles: [],
   userRolesEntity: [],
@@ -283,7 +284,7 @@ const initialState = {
   referFriendList: [],
   referFriendPage: 1,
   referFriendPageSize: 10,
-  referFriendTotalCount: 1,  
+  referFriendTotalCount: 1,
   orgPhotosList: [],
   userDashboardCounts: null,
   onAffiliateDirLoad: false,
@@ -481,6 +482,7 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateList: data.affiliates,
         impersonationList: data.affiliates,
+        affiliatesByParentList: data?.affiliateList || [],
         affiliateListPage: data.page ? data.page.currentPage : 1,
         affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status,
@@ -491,6 +493,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onImpersonationLoad: false,
         impersonationList: action.result.affiliates,
+        affiliatesByParentList: action.result?.affiliateList || [],
         status: action.status,
       };
     case ApiConstants.API_SAVE_AFFILIATE_LOAD:
@@ -877,7 +880,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_EXPORT_USER_FRIEND_LOAD:
-      
+
       return { ...state, onExpUserFriendLoad: true };
 
     case ApiConstants.API_EXPORT_USER_FRIEND_SUCCESS:
@@ -887,7 +890,7 @@ function userReducer(state = initialState, action) {
         status: action.status,
         error: null
       };
-    
+
     case ApiConstants.API_USER_REFER_FRIEND_LOAD:
       return { ...state, onLoad: true, userReferFriendListAction: action };
 
@@ -1521,7 +1524,7 @@ function userReducer(state = initialState, action) {
         ...state,
         referFriendPageSize: action.pageSize,
       }
-    
+
     case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
