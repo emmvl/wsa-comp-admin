@@ -345,7 +345,7 @@ class AddCommunication extends Component {
                 >
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {isEdit ? AppConstants.addCommunication : AppConstants.addCommunication}
+                            {isEdit ? AppConstants.editCommunication : AppConstants.addCommunication}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>

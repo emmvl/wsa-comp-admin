@@ -1981,6 +1981,7 @@ const AppConstants = {
     enterValidAmount: "Please enter valid amount",
 
     // Communication
+    communicationDetails: 'Communication Details',
     communicationTitle: 'Communication Title',
     enterCommunicationTitle: 'Enter Communication Title',
     communicationBody: 'Communication Body',
@@ -1988,6 +1989,7 @@ const AppConstants = {
     communicationVideo: 'Communication Video',
     communicationExpiryDate: 'Communication Expiry Date',
     communicationExpiryTime: 'Communication Expiry Time',
+    editCommunication: 'Edit Communication',
 };
 
 export default AppConstants;

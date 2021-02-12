@@ -130,7 +130,7 @@ class CommunicationView extends Component {
             <div className="row">
                 <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
                     <Breadcrumb separator=" > ">
-                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.newsDetail}</Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.communicationDetails}</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
                 <div className="col-sm live-form-view-button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
