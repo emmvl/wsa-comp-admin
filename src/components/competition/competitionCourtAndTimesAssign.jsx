@@ -882,7 +882,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <div key={timeIndex} className="row">
                                 <div className="col-sm">
                                     <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
-                                    <TimePicker
+                                    1111111<TimePicker
                                         disabled={disabledStatus}
                                         id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_startTime}
                                         key="startTime"
@@ -1378,6 +1378,51 @@ class CompetitionCourtAndTimesAssign extends Component {
         );
     };
 
+    teamPreferencesView() {
+        const mockTeams = ['Sparrows (11s - Div A)','Sparrows (12s - Div B)','Sparrows (13s - Div C)'];
+        return (
+            <div className="formView" style={{marginTop: '20px'}}>
+                <div className="content-view pt-3">
+                    <div className="team-preferences-header">Team Preferences</div>
+                    <div style={{display: 'flex'}}>
+                        <Select>
+                            {mockTeams.map((team, i) => {
+                                return <Option key={i}>{team}</Option>
+                            })}
+                        </Select>
+                        <Form.Item
+                            // name={`timeSlotEntityManualkey${index}${timeIndex}`}
+                            rules={[{
+                                // required: true,
+                                // message: ValidationConstants.divisionField
+                            }]}
+                        >
+                            {/* <Select
+                                disabled={disabledStatus}
+                                mode="multiple"
+                                placeholder="Select"
+                                filterOption={false}
+                                className="d-grid align-content-center"
+                                onBlur={() => this.props.ClearDivisionArr('divisions')}
+                                onChange={(divisions) => this.onSelectDivisionMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
+                                onSearch={(value) => this.handleSearch(value, mainDivisionList)}
+                            >
+                                {id == 4 && division.divisions && division.divisions.map((item) => (
+                                    <Option
+                                        key={`compMemProdDiv_${item.competitionMembershipProductDivision}`}
+                                        value={item.competitionMembershipProductDivision}
+                                    >
+                                        {item.divisionName}
+                                    </Option>
+                                ))}
+                            </Select> */}
+                        </Form.Item>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1398,6 +1443,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <div className="formView">
                                 {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
                             </div>
+                            {this.teamPreferencesView()}
                         </Content>
                         <Footer>
                             {!this.state.isQuickCompetition && this.footerView()}
