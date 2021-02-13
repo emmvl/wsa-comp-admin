@@ -82,7 +82,9 @@ const LiveScoreSettingsTimeoutsFields = ({
                                         timeoutOption.fieldsLength,
                                     ).map((i, index) => {
                                         const humanIndex = index + 1;
-                                        const title = `${humanIndex}th ${timeoutOption.optionTitle}`;
+                                        const suffixes = ['st', 'nd', 'rd', 'th'];
+                                        const suffix = index < 3 ? suffixes[index] : suffixes[3];
+                                        const title = `${humanIndex}${suffix} ${timeoutOption.optionTitle}`;
 
                                         return (
                                             <div key={timeoutOption.key + index} className="col-auto">

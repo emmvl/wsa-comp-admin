@@ -1323,7 +1323,7 @@ class LiveScoreSettingsView extends Component {
                         ]}
                     >
                         <Select
-                            placeholder="Select Time"
+                            placeholder="Select Timer"
                             style={mediumSelectStyles}
                             onChange={(timer) => this.props.onChangeSettingForm({
                                 key: "timerType",
@@ -1368,6 +1368,8 @@ class LiveScoreSettingsView extends Component {
                         })}
                     </div>
 
+                    {this.timeoutsView()}
+
                     <ExtraTimeFields
                         values={{
                             extraTime,
@@ -1384,8 +1386,6 @@ class LiveScoreSettingsView extends Component {
                     <span className="text-heading-large pt-5">
                         {AppConstants.competitionInvitees}
                     </span>
-                    {this.timeoutsView()}
-
                     <LiveScoreSettingsInvitees
                         stateEditMode={this.props.isEdit}
                         localEditMode={this.state.edit}
