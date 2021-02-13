@@ -4,28 +4,28 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import {
     Layout, Breadcrumb, Button, Select, Form, Modal,
-    Checkbox, message, Tabs, Table, Radio, Input
+    Checkbox, message, Tabs, Table, Radio, Input,
 } from 'antd';
 
 import './user.css';
+import {
+    getAffiliateToOrganisationAction, saveAffiliateAction, updateOrgAffiliateAction,
+    getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
+    getOrganisationPhotoAction, saveOrganisationPhotoAction, deleteOrganisationPhotoAction,
+    deleteOrgContact, updateCharityValue, updateCharityAction, updateTermsAndConditionAction,
+} from 'store/actions/userAction/userAction';
+import { getCommonRefData, getPhotoTypeAction } from 'store/actions/commonAction/commonAction';
+import { getUserId, getOrganisationData } from 'util/sessionStorage';
+import { captializedString, isImageFormatValid, isImageSizeValid } from 'util/helpers'
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages"
 import history from "../../util/history";
-import {
-    getAffiliateToOrganisationAction, saveAffiliateAction, updateOrgAffiliateAction,
-    getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
-    getOrganisationPhotoAction, saveOrganisationPhotoAction, deleteOrganisationPhotoAction,
-    deleteOrgContact, updateCharityValue, updateCharityAction, updateTermsAndConditionAction
-} from "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
-import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/commonAction/commonAction';
-import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader'
-import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
 import PlacesAutocomplete from '../competition/elements/PlaceAutoComplete';
 
 const { Header, Footer, Content } = Layout;
@@ -33,19 +33,17 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
-var _this = null
+let _this = null
 const columns = [
     {
         dataIndex: 'photoUrl',
         key: 'photoUrl',
-        render: (photoUrl, record) => {
-            return (
-                <div>
-                    {_this.state.isEditable && _this.photosRemoveBtnView(record)}
-                    {_this.photosImageView(photoUrl, record)}
-                </div>
-            )
-        }
+        render: (photoUrl, record) => (
+            <div>
+                {_this.state.isEditable && _this.photosRemoveBtnView(record)}
+                {_this.photosImageView(photoUrl, record)}
+            </div>
+        ),
     },
 ]
 
@@ -87,14 +85,15 @@ class UserOurOrganization extends Component {
 
     async componentDidMount() {
         if (this.props.location.state != null && this.props.location.state != undefined) {
-            let isEditable = this.props.location.state.isEditable;
-            let affiliateOrgId = this.props.location.state.affiliateOrgId;
-            let sourcePage = this.props.location.state.sourcePage;
-            let organisationTypeRefId = this.props.location.state.organisationTypeRefId;
+            const { isEditable } = this.props.location.state;
+            const { affiliateOrgId } = this.props.location.state;
+            const { sourcePage } = this.props.location.state;
+            const { organisationTypeRefId } = this.props.location.state;
             await this.setState({
                 organisationId: affiliateOrgId,
-                isEditable: isEditable, sourcePage: sourcePage,
-                organisationTypeRefId: organisationTypeRefId
+                isEditable,
+                sourcePage,
+                organisationTypeRefId,
             })
         }
 
@@ -103,9 +102,9 @@ class UserOurOrganization extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let userState = this.props.userState;
-        let affiliateTo = this.props.userState.affiliateTo;
-        let obj = { organisationId: this.state.organisationId }
+        const { userState } = this.props;
+        const { affiliateTo } = this.props.userState;
+        const obj = { organisationId: this.state.organisationId }
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -124,14 +123,19 @@ class UserOurOrganization extends Component {
         if (nextProps.userState != userState) {
             if (userState.onSaveOrgPhotoLoad == false && this.state.photoLoading == true) {
                 this.setState({
-                    isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
-                    photoLoading: false
+                    isEditView: false,
+                    orgPhotosImg: null,
+                    orgPhotosImgSend: null,
+                    buttonPressed: "",
+                    photoLoading: false,
                 });
 
                 this.props.getOrganisationPhotoAction(obj);
             }
             if (userState.onDeleteOrgPhotoLoad == false && this.state.photoDeleteLoading == true) {
-                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "", photoDeleteLoading: false });
+                this.setState({
+                    isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "", photoDeleteLoading: false,
+                });
                 this.props.getOrganisationPhotoAction(obj);
             }
         }
@@ -149,7 +153,7 @@ class UserOurOrganization extends Component {
                 if (affiliateTo.organisationName != "" && affiliateTo.organisationTypeRefId != 0) {
                     this.setState({
                         loggedInuserOrgTypeRefId: affiliateTo.organisationTypeRefId,
-                        organisationName: affiliateTo.organisationName
+                        organisationName: affiliateTo.organisationName,
                     })
                 }
             }
@@ -158,7 +162,7 @@ class UserOurOrganization extends Component {
         if (nextProps.userState !== userState) {
             if (userState.affiliateOurOrgOnLoad === false && this.state.getDataLoading) {
                 this.setState({
-                    getDataLoading: false
+                    getDataLoading: false,
                 });
                 this.setFormFieldValue();
             }
@@ -170,7 +174,7 @@ class UserOurOrganization extends Component {
             localStorage.clear();
             history.push("/login");
         } catch (error) {
-            console.log("Error" + error);
+            console.log(`Error${error}`);
         }
     };
 
@@ -185,17 +189,17 @@ class UserOurOrganization extends Component {
     }
 
     setFormFieldValue = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
+        const affiliate = this.props.userState.affiliateOurOrg;
         this.formRef.current.setFieldsValue({
             name: affiliate.name,
             addressOne: affiliate.street1,
             suburb: affiliate.suburb,
             stateRefId: affiliate.stateRefId,
             postcode: affiliate.postalCode,
-            orgEmail: affiliate.email
+            orgEmail: affiliate.email,
         })
 
-        let contacts = affiliate.contacts;
+        const { contacts } = affiliate;
         if (contacts == null || contacts == undefined || contacts == "") {
             this.addContact();
         }
@@ -210,9 +214,9 @@ class UserOurOrganization extends Component {
     }
 
     addContact = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
-        let contacts = affiliate.contacts;
-        let obj = {
+        const affiliate = this.props.userState.affiliateOurOrg;
+        const { contacts } = affiliate;
+        const obj = {
             userId: 0,
             firstName: '',
             middleName: '',
@@ -220,7 +224,7 @@ class UserOurOrganization extends Component {
             mobileNumber: '',
             email: '',
             isSameUser: true,
-            permissions: []
+            permissions: [],
         }
         if (contacts != undefined && contacts != null) {
             contacts.push(obj);
@@ -242,16 +246,16 @@ class UserOurOrganization extends Component {
     }
 
     removeContact = (index) => {
-        let affiliate = this.props.userState.affiliateOurOrg;
-        let contacts = affiliate.contacts;
+        const affiliate = this.props.userState.affiliateOurOrg;
+        const { contacts } = affiliate;
         if (contacts != null && contacts != undefined) {
-            let contact = contacts[index];
+            const contact = contacts[index];
             contacts.splice(index, 1);
             this.updateContactFormFields(contacts);
             this.props.updateOrgAffiliateAction(contacts, "contacts");
-            let obj = {
+            const obj = {
                 id: contact.userId,
-                organisationId: this.state.organisationId
+                organisationId: this.state.organisationId,
             }
             this.props.deleteOrgContact(obj);
         }
@@ -264,11 +268,11 @@ class UserOurOrganization extends Component {
                 [`lastName${index}`]: item.lastName,
                 [`email${index}`]: item.email,
             });
-            item['isSameUser'] = getUserId() == item.userId;
+            item.isSameUser = getUserId() == item.userId;
             if (item.userId == getUserId()) {
                 this.setState({ isSameUserEmailId: item.email });
             }
-            let permissions = item.permissions;
+            const { permissions } = item;
             permissions.forEach((perm) => {
                 this.formRef.current.setFieldsValue({
                     [`permissions${index}`]: perm.roleId,
@@ -278,18 +282,18 @@ class UserOurOrganization extends Component {
     }
 
     onChangeContactSetValue = (val, key, index) => {
-        let contacts = this.props.userState.affiliateOurOrg.contacts;
-        let contact = contacts[index];
+        const { contacts } = this.props.userState.affiliateOurOrg;
+        const contact = contacts[index];
         if (key == "roles") {
             let userRoleEntityId = 0;
-            const userRoleEntity = contact.permissions.find(x => x);
+            const userRoleEntity = contact.permissions.find((x) => x);
             if (userRoleEntity != null && userRoleEntity != undefined && userRoleEntity != "") {
                 userRoleEntityId = userRoleEntity.userRoleEntityId;
             }
-            let permissions = [];
-            let obj = {
-                userRoleEntityId: userRoleEntityId,
-                roleId: val
+            const permissions = [];
+            const obj = {
+                userRoleEntityId,
+                roleId: val,
             }
             permissions.push(obj);
             contact.permissions = permissions;
@@ -311,10 +315,10 @@ class UserOurOrganization extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            let file = data.files[0]
-            let extension = file.name.split('.').pop().toLowerCase();
-            let imageSizeValid = isImageSizeValid(file.size)
-            let isSuccess = isImageFormatValid(extension);
+            const file = data.files[0]
+            const extension = file.name.split('.').pop().toLowerCase();
+            const imageSizeValid = isImageSizeValid(file.size)
+            const isSuccess = isImageFormatValid(extension);
             if (!isSuccess) {
                 message.error(AppConstants.logo_Image_Format);
                 return
@@ -334,7 +338,7 @@ class UserOurOrganization extends Component {
         const fileInput = document.getElementById('user-pic');
         fileInput.setAttribute("type", "file");
         fileInput.setAttribute("accept", "image/*");
-        if (!!fileInput) {
+        if (fileInput) {
             fileInput.click();
         }
     }
@@ -347,17 +351,17 @@ class UserOurOrganization extends Component {
         const fileInput = document.getElementById('photos-pic');
         fileInput.setAttribute("type", "file");
         fileInput.setAttribute("accept", "image/*");
-        if (!!fileInput) {
+        if (fileInput) {
             fileInput.click();
         }
     }
 
     setPhotosImage = (data) => {
         if (data.files[0] !== undefined) {
-            let file = data.files[0]
-            let extension = file.name.split('.').pop().toLowerCase();
-            let imageSizeValid = isImageSizeValid(file.size)
-            let isSuccess = isImageFormatValid(extension);
+            const file = data.files[0]
+            const extension = file.name.split('.').pop().toLowerCase();
+            const imageSizeValid = isImageSizeValid(file.size)
+            const isSuccess = isImageFormatValid(extension);
             if (!isSuccess) {
                 message.error(AppConstants.logo_Image_Format);
                 return
@@ -366,9 +370,11 @@ class UserOurOrganization extends Component {
                 message.error(AppConstants.logo_Image_Size);
                 return
             }
-            let tableRow = this.state.tableRecord;
+            const tableRow = this.state.tableRecord;
             tableRow.photoUrl = null;
-            this.setState({ tableRecord: tableRow, orgPhotosImgSend: data.files[0], orgPhotosImg: URL.createObjectURL(data.files[0]), timeout: 2000 })
+            this.setState({
+                tableRecord: tableRow, orgPhotosImgSend: data.files[0], orgPhotosImg: URL.createObjectURL(data.files[0]), timeout: 2000,
+            })
             setTimeout(() => {
                 this.setState({ timeout: null })
             }, 1000);
@@ -378,7 +384,7 @@ class UserOurOrganization extends Component {
     tabCallBack = (key) => {
         this.setState({ organisationTabKey: key })
         if (key == "2") {
-            let obj = { organisationId: this.state.organisationId }
+            const obj = { organisationId: this.state.organisationId }
             this.setState({ isEditView: false });
             this.props.getOrganisationPhotoAction(obj);
         }
@@ -388,12 +394,12 @@ class UserOurOrganization extends Component {
         await this.setState({ tableRecord: record, isEditView: true });
 
         this.formRef.current.setFieldsValue({
-            photoTypeRefId: record.photoTypeRefId
+            photoTypeRefId: record.photoTypeRefId,
         })
     }
 
     removePhoto = () => {
-        let obj = this.state.tableRecord;
+        const obj = this.state.tableRecord;
         obj.photoUrl = null;
         this.setState({ orgPhotosImg: null, orgPhotosImgSend: null, tableRecord: obj })
     }
@@ -404,40 +410,44 @@ class UserOurOrganization extends Component {
 
     addPhoto = () => {
         try {
-            let obj = {
+            const obj = {
                 id: 0,
                 photoTypeRefId: null,
-                photoUrl: null
+                photoUrl: null,
             }
-            this.setState({ isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null });
+            this.setState({
+                isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null,
+            });
         } catch (ex) {
-            console.log("Error in addPhoto::" + ex);
+            console.log(`Error in addPhoto::${ex}`);
         }
     }
 
     cancelEditView = () => {
-        let obj = {
+        const obj = {
             id: 0,
             photoTypeRefId: null,
-            photoUrl: null
+            photoUrl: null,
         }
 
         this.setState({
-            isEditView: false, tableRecord: obj,
-            orgPhotosImg: null, orgPhotosImgSend: null
+            isEditView: false,
+            tableRecord: obj,
+            orgPhotosImg: null,
+            orgPhotosImgSend: null,
         });
     }
 
     setOrgPhotoValue = (e) => {
-        let obj = this.state.tableRecord;
+        const obj = this.state.tableRecord;
         obj.photoTypeRefId = e;
         this.setState({ tableRecord: obj });
     }
 
     deleteOrgPhotoModalHandle = (key) => {
         if (key === "ok") {
-            let payload = {
-                id: this.state.tableRecord.id
+            const payload = {
+                id: this.state.tableRecord.id,
             }
             this.setState({ photoDeleteLoading: true, buttonPressed: "deletePhotos" });
             this.props.deleteOrganisationPhotoAction(payload);
@@ -446,7 +456,7 @@ class UserOurOrganization extends Component {
         this.setState({ orgPhotoModalVisible: false });
     }
 
-    handleForce = data => {
+    handleForce = (data) => {
         this.setState({ termsAndCondititionFile: data.target.files[0] })
     };
 
@@ -455,24 +465,24 @@ class UserOurOrganization extends Component {
     }
 
     saveAffiliate = (values) => {
-        let tabKey = this.state.organisationTabKey;
+        const tabKey = this.state.organisationTabKey;
         if (this.state.affiliateAddressError) {
             message.error(this.state.affiliateAddressError);
             return;
         }
         if (tabKey == "1") {
-            let affiliate = this.props.userState.affiliateOurOrg;
+            const affiliate = this.props.userState.affiliateOurOrg;
 
             if (affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length === 0) {
                 message.error(ValidationConstants.affiliateContactRequired[0]);
             } else {
-                let data = affiliate.contacts.find(x => x.permissions.find(y => y.roleId == 2));
+                const data = affiliate.contacts.find((x) => x.permissions.find((y) => y.roleId == 2));
                 if (data == undefined || data == null || data == "") {
                     message.error(ValidationConstants.affiliateContactRequired[0]);
                 } else {
-                    let contacts = JSON.stringify(affiliate.contacts);
+                    const contacts = JSON.stringify(affiliate.contacts);
 
-                    let formData = new FormData();
+                    const formData = new FormData();
 
                     if (this.state.image != null) {
                         affiliate.organisationLogo = this.state.image;
@@ -510,8 +520,8 @@ class UserOurOrganization extends Component {
                 }
             }
         } else if (tabKey == "2") {
-            let tableRowData = this.state.tableRecord;
-            let formData = new FormData();
+            const tableRowData = this.state.tableRecord;
+            const formData = new FormData();
             if (this.state.orgPhotosImgSend === null && tableRowData.photoUrl === null) {
                 message.error(ValidationConstants.organisationPhotoRequired)
                 return
@@ -528,8 +538,8 @@ class UserOurOrganization extends Component {
     }
 
     updateTermsAndCondition = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
-        let formData = new FormData();
+        const affiliate = this.props.userState.affiliateOurOrg;
+        const formData = new FormData();
         let termsAndConditionsValue = null;
         if (affiliate.termsAndConditionsRefId == 1) {
             termsAndConditionsValue = affiliate.termsAndConditionsLink;
@@ -539,7 +549,7 @@ class UserOurOrganization extends Component {
         }
         formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-        formData.append("termsAndConditions", termsAndConditionsValue ? termsAndConditionsValue : "");
+        formData.append("termsAndConditions", termsAndConditionsValue || "");
         formData.append("termsAndCondition", this.state.termsAndCondititionFile ? this.state.termsAndCondititionFile : "");
 
         this.setState({ loading: true });
@@ -548,13 +558,13 @@ class UserOurOrganization extends Component {
     }
 
     updateCharity = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
-        let charityRoundUpArr = affiliate.charityRoundUp.filter(x => x.isSelected);
+        const affiliate = this.props.userState.affiliateOurOrg;
+        const charityRoundUpArr = affiliate.charityRoundUp.filter((x) => x.isSelected);
 
-        let payload = {
+        const payload = {
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             charityRoundUp: charityRoundUpArr,
-            charity: affiliate.charity
+            charity: affiliate.charity,
         }
         this.setState({ loading: true });
         this.props.updateCharityAction(payload);
@@ -572,10 +582,10 @@ class UserOurOrganization extends Component {
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
                     </Breadcrumb>
                 ) : (
-                        <NavLink to="/affiliatedirectory">
-                            <span className="breadcrumb-product">{AppConstants.affiliates}</span>
-                        </NavLink>
-                    )}
+                    <NavLink to="/affiliatedirectory">
+                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                    </NavLink>
+                )}
             </Header>
         </div>
     );
@@ -590,7 +600,7 @@ class UserOurOrganization extends Component {
             })
         } else {
             this.setState({
-                affiliateAddressError: ''
+                affiliateAddressError: '',
             })
         }
 
@@ -620,28 +630,27 @@ class UserOurOrganization extends Component {
     };
 
     contentView = () => {
-        let affiliateToData = this.props.userState.affiliateTo;
-        let affiliate = this.props.userState.affiliateOurOrg;
+        const affiliateToData = this.props.userState.affiliateTo;
+        const affiliate = this.props.userState.affiliateOurOrg;
         const { stateList } = this.props.commonReducerState;
         if (affiliate.organisationTypeRefId === 0) {
-            if (affiliateToData.organisationTypes != undefined && affiliateToData.organisationTypes.length > 0)
-                affiliate.organisationTypeRefId = affiliateToData.organisationTypes[0].id;
+            if (affiliateToData.organisationTypes != undefined && affiliateToData.organisationTypes.length > 0) affiliate.organisationTypeRefId = affiliateToData.organisationTypes[0].id;
         }
 
         const state = stateList.length > 0 && affiliate.stateRefId
             ? stateList.find((state) => state.id === affiliate.stateRefId).name
             : null;
 
-        let defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
-            } ${affiliate.suburb ? `${affiliate.suburb},` : ''
-            } ${state ? `${state},` : ''
-            } Australia`;
+        const defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
+        } ${affiliate.suburb ? `${affiliate.suburb},` : ''
+        } ${state ? `${state},` : ''
+        } Australia`;
 
-        const isValidate = affiliate.suburb ? false : true;
+        const isValidate = !affiliate.suburb;
 
         return (
             <div className="content-view pt-4">
-                <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
+                <Form.Item name="name" rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
                     <InputWithHead
                         auto_complete="off"
                         required="required-field pt-0"
@@ -656,7 +665,8 @@ class UserOurOrganization extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div className="reg-competition-logo-view"
+                            <div
+                                className="reg-competition-logo-view"
                                 onClick={() => this.selectImage()}
                             >
                                 <label>
@@ -675,10 +685,10 @@ class UserOurOrganization extends Component {
                                     /> */}
                                     <img
                                         src={affiliate.logoUrl == null ? AppImages.circleImage : affiliate.logoUrl}
-                                        height={'120'}
-                                        width={'120'}
+                                        height="120"
+                                        width="120"
                                         style={{
-                                            borderRadius: 60
+                                            borderRadius: 60,
                                         }}
                                         alt=""
                                     />
@@ -700,9 +710,7 @@ class UserOurOrganization extends Component {
                                 // defaultChecked={false}
                                 checked={affiliate.logoIsDefault}
                                 disabled={!this.state.isEditable}
-                                onChange={e =>
-                                    this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")
-                                }
+                                onChange={(e) => this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")}
                             >
                                 {AppConstants.saveAsDefault}
                             </Checkbox>
@@ -757,7 +765,7 @@ class UserOurOrganization extends Component {
                 </Form.Item>
                 <Form.Item name="phoneNo" rules={[{ required: true, message: ValidationConstants.phoneNumberRequired }]}>
                     <InputWithHead
-                        auto_complete='new-phone'
+                        auto_complete="new-phone"
                         required="required-field"
                         maxLength={10}
                         heading={AppConstants.phoneNumber}
@@ -788,7 +796,7 @@ class UserOurOrganization extends Component {
                         onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                         value={affiliate.email}
                         disabled={!this.state.isEditable}
-                        auto_complete='new-email'
+                        auto_complete="new-email"
                     />
                 </Form.Item>
             </div>
@@ -796,30 +804,31 @@ class UserOurOrganization extends Component {
     }
 
     contacts = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
-        let roles = this.props.userState.roles.filter(x => x.applicableToWeb == 1);
+        const affiliate = this.props.userState.affiliateOurOrg;
+        const roles = this.props.userState.roles.filter((x) => x.applicableToWeb == 1);
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.contacts}</span>
                 {(affiliate.contacts || []).map((item, index) => (
-                    <div className="prod-reg-inside-container-view pt-4" key={"Contact" + (index + 1)}>
+                    <div className="prod-reg-inside-container-view pt-4" key={`Contact${index + 1}`}>
                         <div className="row">
                             <div className="col-sm">
                                 <span className="user-contact-heading">{AppConstants.contact + (index + 1)}</span>
                             </div>
-                            {(!this.state.isEditable || affiliate.contacts.length === 1) ? null :
-                                <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
-                                    <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
-                                    <span className="user-remove-text">
-                                        {AppConstants.remove}
-                                    </span>
-                                </div>
-                            }
+                            {(!this.state.isEditable || affiliate.contacts.length === 1) ? null
+                                : (
+                                    <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
+                                        <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                                        <span className="user-remove-text">
+                                            {AppConstants.remove}
+                                        </span>
+                                    </div>
+                                )}
                         </div>
 
                         <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
                             <InputWithHead
-                                auto_complete='new-firstName'
+                                auto_complete="new-firstName"
                                 required="required-field"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
@@ -836,34 +845,38 @@ class UserOurOrganization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index)}
                             value={item.middleName}
                             disabled={!this.state.isEditable}
-                            auto_complete='new-middleName'
+                            auto_complete="new-middleName"
                         // required="pt-0"
                         />
 
                         <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
                                 required="required-field "
-                                heading={AppConstants.lastName} placeholder={AppConstants.lastName}
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.lastName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
                                 value={item.lastName}
                                 disabled={!this.state.isEditable}
-                                auto_complete='new-lastName'
+                                auto_complete="new-lastName"
                             />
                         </Form.Item>
 
-                        <Form.Item name={`email${index}`} rules={[
-                            {
-                                required: true,
-                                message: ValidationConstants.emailField[0]
-                            },
-                            {
-                                type: "email",
-                                pattern: new RegExp(AppConstants.emailExp),
-                                message: ValidationConstants.email_validation
-                            }
-                        ]}>
+                        <Form.Item
+                            name={`email${index}`}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: ValidationConstants.emailField[0],
+                                },
+                                {
+                                    type: "email",
+                                    pattern: new RegExp(AppConstants.emailExp),
+                                    message: ValidationConstants.email_validation,
+                                },
+                            ]}
+                        >
                             <InputWithHead
-                                auto_complete='new-email'
+                                auto_complete="new-email"
                                 required="required-field"
                                 heading={AppConstants.email}
                                 placeholder={AppConstants.email}
@@ -886,7 +899,7 @@ class UserOurOrganization extends Component {
                             value={item.mobileNumber}
                             maxLength={10}
                             disabled={!this.state.isEditable}
-                            auto_complete='new-phoneNumber'
+                            auto_complete="new-phoneNumber"
                         />
                         {this.state.isEditable && (
                             <div>
@@ -903,7 +916,7 @@ class UserOurOrganization extends Component {
                                         value={item.roleId}
                                     >
                                         {(roles || []).map((role) => (
-                                            <Option key={'role_' + role.id} value={role.id}>{role.description}</Option>
+                                            <Option key={`role_${role.id}`} value={role.id}>{role.description}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -915,7 +928,9 @@ class UserOurOrganization extends Component {
                 {this.state.isEditable && (
                     <div className="transfer-image-view mt-2 pointer" onClick={() => this.addContact()}>
                         <span className="user-remove-text">
-                            + {AppConstants.addContact}
+                            +
+                            {' '}
+                            {AppConstants.addContact}
                         </span>
                     </div>
                 )}
@@ -927,7 +942,7 @@ class UserOurOrganization extends Component {
     }
 
     termsAndConditionsView = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
+        const affiliate = this.props.userState.affiliateOurOrg;
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.termsAndConditions}</span>
@@ -958,7 +973,7 @@ class UserOurOrganization extends Component {
                             <div className="pt-4">
                                 <div className="row">
                                     <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
-                                        <a className="user-reg-link" href={affiliate.termsAndConditions} target='_blank' rel="noopener noreferrer">
+                                        <a className="user-reg-link" href={affiliate.termsAndConditions} target="_blank" rel="noopener noreferrer">
                                             {affiliate.termsAndConditionsFile}
                                         </a>
                                     </div>
@@ -970,7 +985,7 @@ class UserOurOrganization extends Component {
                     {affiliate.termsAndConditionsRefId === 1 && (
                         <div className=" pl-5 pb-5">
                             <InputWithHead
-                                auto_complete='new-termsAndConditions'
+                                auto_complete="new-termsAndConditions"
                                 placeholder={AppConstants.termsAndConditions}
                                 value={affiliate.termsAndConditionsLink}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
@@ -995,7 +1010,7 @@ class UserOurOrganization extends Component {
         </div>
     );
 
-    ////// Photos//////
+    /// /// Photos//////
     photosHeaderView = () => (
         <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
             <div className="row">
@@ -1016,7 +1031,7 @@ class UserOurOrganization extends Component {
     );
 
     photosEditHeaderView = () => {
-        const id = this.state.tableRecord.id;
+        const { id } = this.state.tableRecord;
         return (
             <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
                 <div className="row">
@@ -1031,7 +1046,7 @@ class UserOurOrganization extends Component {
     }
 
     photosListView = () => {
-        let { orgPhotosList } = this.props.userState;
+        const { orgPhotosList } = this.props.userState;
         return (
             <div className="content-view">
                 <Table
@@ -1046,22 +1061,20 @@ class UserOurOrganization extends Component {
         )
     }
 
-    photosRemoveBtnView = (record) => {
-        return (
-            <div className="mb-3">
-                {/* <div className="col-sm"> */}
-                <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
-                    <Button onClick={() => this.editPhotos(record)} className="primary-add-comp-form ml-5" type="primary">
-                        {AppConstants.edit}
-                    </Button>
-                    <Button onClick={() => this.deletePhotos(record)} className="primary-add-comp-form ml-5" type="primary">
-                        {AppConstants.remove}
-                    </Button>
-                </div>
+    photosRemoveBtnView = (record) => (
+        <div className="mb-3">
+            {/* <div className="col-sm"> */}
+            <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
+                <Button onClick={() => this.editPhotos(record)} className="primary-add-comp-form ml-5" type="primary">
+                    {AppConstants.edit}
+                </Button>
+                <Button onClick={() => this.deletePhotos(record)} className="primary-add-comp-form ml-5" type="primary">
+                    {AppConstants.remove}
+                </Button>
             </div>
-            // </div>
-        );
-    };
+        </div>
+        // </div>
+    );
 
     photosImageView(photosUrl, record) {
         return (
@@ -1084,7 +1097,7 @@ class UserOurOrganization extends Component {
                 </div>
             </div>
         )
-    };
+    }
 
     photosAddEditView = () => {
         try {
@@ -1098,15 +1111,13 @@ class UserOurOrganization extends Component {
                         width
                         borderRadius
                         timeout={this.state.timeout}
-                        src={photoUrl ? photoUrl : this.state.orgPhotosImg}
+                        src={photoUrl || this.state.orgPhotosImg}
                     />
                     <div>
                         <div className="row">
                             <div className="col-sm">
                                 <span className="user-contact-heading required-field">{AppConstants.uploadImage}</span>
-                                <div onClick={this.onSelectPhotos}>
-                                </div>
-                                {/* <Form.Item name='photosImage' rules={[{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]}> */}
+                                <div onClick={this.onSelectPhotos} />
                                 <input
                                     required="pb-0"
                                     type="file"
@@ -1114,14 +1125,9 @@ class UserOurOrganization extends Component {
                                     accept="image/*"
                                     onChange={(evt) => {
                                         this.setPhotosImage(evt.target)
-                                        // this.setState({ timeout: 1000 })
-                                        // setTimeout(() => {
-                                        //     this.setState({ timeout: null })
-                                        // }, 1000);
                                     }}
                                     onClick={(event) => event.target.value = null}
                                 />
-                                {/* </Form.Item> */}
                                 <span className="form-err">{this.state.imageError}</span>
                             </div>
                             <div className="col-sm pt-1">
@@ -1152,22 +1158,20 @@ class UserOurOrganization extends Component {
         }
     }
 
-    photosEditViewRemoveBtnView = () => {
-        return (
-            <div className="comp-player-grades-header-drop-down-view">
-                <div className="col-sm">
-                    <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
-                        <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
-                            {AppConstants.remove}
-                        </Button>
-                    </div>
+    photosEditViewRemoveBtnView = () => (
+        <div className="comp-player-grades-header-drop-down-view">
+            <div className="col-sm">
+                <div className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end w-100">
+                    <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
+                        {AppConstants.remove}
+                    </Button>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     photosEditViewFooterView = (isSubmitting) => {
-        let tableRecord = this.state.tableRecord;
+        const { tableRecord } = this.state;
         return (
             <div className="fluid-width">
                 <div className="footer-view" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
@@ -1182,7 +1186,9 @@ class UserOurOrganization extends Component {
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Button
-                                    className="user-approval-button" type="primary" htmlType="submit"
+                                    className="user-approval-button"
+                                    type="primary"
+                                    htmlType="submit"
                                     disabled={isSubmitting}
                                     onClick={() => this.setState({ buttonPressed: "savePhotos" })}
                                 >
@@ -1196,68 +1202,43 @@ class UserOurOrganization extends Component {
         );
     };
 
-    orgPhotoDeleteConfirmModalView = () => {
-        return (
-            <div>
-                <Modal
-                    title="Organisation Photos"
-                    visible={this.state.orgPhotoModalVisible}
-                    onOk={() => this.deleteOrgPhotoModalHandle("ok")}
-                    onCancel={() => this.deleteOrgPhotoModalHandle("cancel")}
-                >
-                    <p>Are you sure you want to remove the organisation photo?</p>
-                </Modal>
-            </div>
-        );
-    }
+    orgPhotoDeleteConfirmModalView = () => (
+        <div>
+            <Modal
+                title="Organisation Photos"
+                visible={this.state.orgPhotoModalVisible}
+                onOk={() => this.deleteOrgPhotoModalHandle("ok")}
+                onCancel={() => this.deleteOrgPhotoModalHandle("cancel")}
+            >
+                <p>Are you sure you want to remove the organisation photo?</p>
+            </Modal>
+        </div>
+    )
 
-    //////charity voucher view
+    /// ///charity voucher view
     charityVoucherView = () => {
-        let affiliate = this.props.userState.affiliateOurOrg;
-        let charityRoundUp = affiliate.charityRoundUp;
-        let checkCharityArray = affiliate.charity;
+        const affiliate = this.props.userState.affiliateOurOrg;
+        const { charityRoundUp } = affiliate;
+        const checkCharityArray = affiliate.charity;
+
         return (
             <div className="advanced-setting-view pt-5">
-                {/* <div className="contextualHelp-RowDirection">
-                    <span className="form-heading">{AppConstants.charityRoundUp}</span>
-                    <div style={{ marginTop: 4 }}>
-                        <CustomToolTip placement="top">
-                            <span>{AppConstants.charityRoundUpMsg}</span>
-                        </CustomToolTip>
-                    </div>
-                </div> */}
                 {(checkCharityArray || []).map((item, index) => (
                     <div>
-                        {/* <Form.Item
-                            name='charityTitle'
-                            rules={[{
-                                required: true,
-                                message: ValidationConstants.charityTitleNameIsRequired,
-                            }]}
-                        > */}
                         <InputWithHead
-                            auto_complete='new-title'
+                            auto_complete="new-title"
                             heading={AppConstants.title}
                             placeholder={AppConstants.title}
                             value={item.name}
                             onChange={(e) => this.onChangesetCharity(captializedString(e.target.value), index, 'name')}
                         />
-                        {/* </Form.Item> */}
                         <InputWithHead heading={AppConstants.description} />
-                        {/* <Form.Item
-                            name='charityDescription'
-                            rules={[{
-                                required: true,
-                                message: ValidationConstants.charityDescriptionIsRequired,
-                            }]}
-                        > */}
                         <TextArea
                             placeholder={AppConstants.addCharityDescription}
                             value={item.description}
                             allowClear
                             onChange={(e) => this.onChangesetCharity(e.target.value, index, 'description')}
                         />
-                        {/* </Form.Item> */}
                     </div>
                 ))}
                 <div className="inside-container-view">
@@ -1278,71 +1259,69 @@ class UserOurOrganization extends Component {
         );
     };
 
-    //////////////End Photos ///////////////////
-    ///footer view containing all the buttons like submit and cancel
-    footerView = (isSubmitting) => {
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="reg-add-save-button">
-                                <Button type="cancel-button" onClick={() => this.setState({ buttonPressed: "cancel" })}>
-                                    {AppConstants.cancel}
-                                </Button>
-                            </div>
+    /// ///////////End Photos ///////////////////
+    /// footer view containing all the buttons like submit and cancel
+    footerView = (isSubmitting) => (
+        <div className="fluid-width">
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="reg-add-save-button">
+                            <Button type="cancel-button" onClick={() => this.setState({ buttonPressed: "cancel" })}>
+                                {AppConstants.cancel}
+                            </Button>
                         </div>
-                        {this.state.isEditable && (
-                            <div className="col-sm">
-                                {this.state.organisationTabKey === "1" && (
-                                    <div className="comp-buttons-view">
-                                        <Button
-                                            className="user-approval-button"
-                                            type="primary"
-                                            htmlType="submit"
-                                            disabled={isSubmitting}
-                                            onClick={() => this.setState({ buttonPressed: "save" })}
-                                        >
-                                            {AppConstants.updateAffiliates}
-                                        </Button>
-                                    </div>
-                                )}
-                                {this.state.organisationTabKey === "3" && (
-                                    <div className="comp-buttons-view">
-                                        <Button
-                                            className="user-approval-button"
-                                            type="primary"
-                                            htmlType="button"
-                                            disabled={isSubmitting}
-                                            onClick={() => this.updateTermsAndCondition()}
-                                        >
-                                            {AppConstants.updateAffiliates}
-                                        </Button>
-                                    </div>
-                                )}
-                                {this.state.organisationTabKey === "4" && (
-                                    <div className="comp-buttons-view">
-                                        <Button
-                                            className="user-approval-button"
-                                            type="primary"
-                                            htmlType="button"
-                                            disabled={isSubmitting}
-                                            onClick={() => this.updateCharity()}
-                                        >
-                                            {AppConstants.updateAffiliates}
-                                        </Button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
                     </div>
+                    {this.state.isEditable && (
+                        <div className="col-sm">
+                            {this.state.organisationTabKey === "1" && (
+                                <div className="comp-buttons-view">
+                                    <Button
+                                        className="user-approval-button"
+                                        type="primary"
+                                        htmlType="submit"
+                                        disabled={isSubmitting}
+                                        onClick={() => this.setState({ buttonPressed: "save" })}
+                                    >
+                                        {AppConstants.updateAffiliates}
+                                    </Button>
+                                </div>
+                            )}
+                            {this.state.organisationTabKey === "3" && (
+                                <div className="comp-buttons-view">
+                                    <Button
+                                        className="user-approval-button"
+                                        type="primary"
+                                        htmlType="button"
+                                        disabled={isSubmitting}
+                                        onClick={() => this.updateTermsAndCondition()}
+                                    >
+                                        {AppConstants.updateAffiliates}
+                                    </Button>
+                                </div>
+                            )}
+                            {this.state.organisationTabKey === "4" && (
+                                <div className="comp-buttons-view">
+                                    <Button
+                                        className="user-approval-button"
+                                        type="primary"
+                                        htmlType="button"
+                                        disabled={isSubmitting}
+                                        onClick={() => this.updateCharity()}
+                                    >
+                                        {AppConstants.updateAffiliates}
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     render() {
-        let userState = this.props.userState;
+        const { userState } = this.props;
         const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
         return (
             <div className="fluid-width default-bg">
@@ -1381,12 +1360,12 @@ class UserOurOrganization extends Component {
                                                     {this.photosListView()}
                                                 </div>
                                             ) : (
-                                                    <div>
-                                                        {this.photosEditHeaderView()}
-                                                        {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
-                                                        {this.photosAddEditView()}
-                                                    </div>
-                                                )}
+                                                <div>
+                                                    {this.photosEditHeaderView()}
+                                                    {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
+                                                    {this.photosAddEditView()}
+                                                </div>
+                                            )}
                                         </div>
                                         {this.state.isEditView && (
                                             <div>{this.photosEditViewFooterView()}</div>
@@ -1398,14 +1377,14 @@ class UserOurOrganization extends Component {
                                             {this.termsAndConditionsView()}
                                         </div>
                                     </TabPane>
-                                    {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
-                                        (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
-                                            <TabPane tab={AppConstants.charity} key="4">
-                                                <div className="tab-formView mt-5">
-                                                    {this.charityVoucherView()}
-                                                </div>
-                                            </TabPane>
-                                        )}
+                                    {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR")
+                                        || (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
+                                        <TabPane tab={AppConstants.charity} key="4">
+                                            <div className="tab-formView mt-5">
+                                                {this.charityVoucherView()}
+                                            </div>
+                                        </TabPane>
+                                    )}
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />
@@ -1444,7 +1423,7 @@ function mapStateToProps(state) {
     return {
         userState: state.UserState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
     }
 }
 

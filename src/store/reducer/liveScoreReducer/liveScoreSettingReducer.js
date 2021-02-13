@@ -32,6 +32,15 @@ const initialState = {
         timeoutsToQuarters: [],
         timeoutsToHalves: [],
         timeoutsValue: [],
+        whoScoring: null,
+        acceptScoring: null,
+        extraTime: null,
+        extraTimeFor: null,
+        extraTimeType: null,
+        extraTimeDuration: null,
+        extraTimeMainBreak: null,
+        extraTimeQuarterBreak: null,
+        recordUmpire: [],
     },
     buzzerEnabled: false,
     warningBuzzerEnabled: false,
@@ -384,6 +393,14 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     timeouts: timeoutsData.timeouts,
                     timeoutsToQuarters: timeoutsData.timeoutsToQuarters,
                     timeoutsToHalves: timeoutsData.timeoutsToHalves,
+                    whoScoring: payload.whoScoring,
+                    acceptScoring: payload.acceptScoring,
+                    extraTime: payload.extraTime,
+                    extraTimeFor: payload.extraTimeFor,
+                    extraTimeType: payload.extraTimeType,
+                    extraTimeDuration: payload.extraTimeDuration,
+                    extraTimeMainBreak: payload.extraTimeMainBreak,
+                    extraTimeQuarterBreak: payload.extraTimeQuarterBreak,
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,
@@ -411,7 +428,13 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
-            if (keys === 'buzzerEnabled' || keys === 'warningBuzzerEnabled' || keys === "lineupSelection" || keys === 'premierCompLink') {
+            const keysToSetByKey = [
+                "buzzerEnabled",
+                "warningBuzzerEnabled",
+                "lineupSelection",
+                "premierCompLink",
+            ]
+            if (keysToSetByKey.includes(keys)) {
                 state[keys] = Data
 
                 if (keys === 'premierCompLink') {

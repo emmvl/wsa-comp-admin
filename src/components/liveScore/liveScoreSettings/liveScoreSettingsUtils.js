@@ -1,9 +1,11 @@
 import AppConstants from "themes/appConstants";
 import { isObject } from 'lodash'
 
-export const isTimeoutsEnabled = !!+process.env.REACT_APP_TIMEOUTS_ENABLED;
+export const isTimeoutsEnabled = !!+process.env.REACT_APP_TIMEOUTS_FIELDS_ENABLED;
 
 export const getArrayFromLength = (length) => Array.from(Array(length).keys());
+
+export const getOnlyNumbers = (value) => value.replace(/\D/g, "");
 
 export const timeoutsModes = {
     NONE: "NONE",
