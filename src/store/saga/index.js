@@ -223,7 +223,6 @@ export default function* rootSaga() {
         fork(competitionFeeSaga),
 
         // Shop
-        fork(shopOrderStatusSaga),
         fork(shopOrderSummarySaga),
         fork(shopProductSaga),
         fork(shopSettingSaga),
