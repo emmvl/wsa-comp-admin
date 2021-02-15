@@ -48,6 +48,7 @@ import {
     exportUserRegData,
     getSubmittedRegData,
     transferUserRegistration,
+    cancelDeRegistrationAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -216,6 +217,11 @@ const columns = [
                     {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
                         <Menu.Item key="2" onClick={() => history.push("/deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
+                        </Menu.Item>
+                    )}
+                    {(e.paymentStatus == "Pending De-registration" || e.paymentStatus == "Pending Transfer") && (
+                        <Menu.Item key="6" onClick={() => this_Obj.cancelDeRegistrtaion(e.deRegisterId)}>
+                            <span>{e.paymentStatus == "Pending De-registration" ? AppConstants.cancelDeRegistrtaion : AppConstants.cancelTransferReg}</span>
                         </Menu.Item>
                     )}
                     <Menu.Item key="3" onClick={() => history.push("/paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
@@ -1651,6 +1657,16 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleTeamMembersAction(payload);
             this.setState({ removeTeamMemberLoad: false });
         }
+        if(this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelDeRegistrationLoad == true){
+            this.handleRegistrationTableList(
+                1, 
+                this.state.userId,
+                this.state.competition,
+                this.state.yearRefId,
+                "myRegistrations"
+                );
+            this.setState({cancelDeRegistrationLoad: false})
+        }
     }
 
     apiCalls = (userId) => {
@@ -1686,6 +1702,18 @@ class UserModulePersonalDetail extends Component {
             return statusValue;
         }
         return statusValue;
+    }
+
+    cancelDeRegistrtaion = (deRegisterId) => {
+        try{
+            let payload = {
+                deRegisterId: deRegisterId
+            }
+            this.props.cancelDeRegistrationAction(payload);
+            this.setState({cancelDeRegistrationLoad: true})
+        } catch(ex) {
+            console.log("Error in cancelDeRegistrtaion::" +ex)
+        }
     }
 
     parentUnLinkView = (data) => {
@@ -2766,7 +2794,7 @@ class UserModulePersonalDetail extends Component {
                                         dataSource={myRegistrations}
                                         pagination={false}
                                         loading={
-                                            this.props.userState.userRegistrationOnLoad
+                                            (this.props.userState.userRegistrationOnLoad || this.props.userState.cancelDeRegistrationLoad)
                                         }
                                     />
                                 </div>
@@ -3705,6 +3733,7 @@ function mapDispatchToProps(dispatch) {
             exportUserRegData,
             getSubmittedRegData,
             transferUserRegistration,
+            cancelDeRegistrationAction
         },
         dispatch,
     );

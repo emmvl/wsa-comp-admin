@@ -1567,6 +1567,16 @@ function userReducer(state = initialState, action) {
         userDashboardTextualPage: action.pageNum,
       }
 
+    case ApiConstants.API_CANCEL_DEREGISTRATION_LOAD:
+        return {...state, cancelDeRegistrationLoad: true}
+
+    case ApiConstants.API_CANCEL_DEREGISTRATION_SUCCESS:
+        return {
+            ...state,
+            cancelDeRegistrationLoad: false,
+            status: action.status,
+        }
+
     default:
       return state;
   }
