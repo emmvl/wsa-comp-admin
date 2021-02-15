@@ -426,6 +426,7 @@ function userReducer(state = initialState, action) {
         umpireActivityOnLoad: false,
         onMedicalLoad: false,
         possibleMatchesOnLoad: false,
+        cancelDeRegistrationLoad: false
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -441,6 +442,7 @@ function userReducer(state = initialState, action) {
         umpireActivityOnLoad: false,
         onMedicalLoad: false,
         possibleMatchesOnLoad: false,
+        cancelDeRegistrationLoad: false
       };
 
     // get Role Entity List for current user
