@@ -3099,6 +3099,20 @@ class UserModulePersonalDetail extends Component {
                                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
                             </NavLink>
                         </Breadcrumb>
+                    </Header>
+                </div>
+                <div className="col-sm">
+                    <div className="comp-buttons-view mt-5 d-flex align-items-center justify-content-end">
+                        {this.state.screenKey && (
+                            <Button
+                                onClick={() => history.push(this.state.screen)}
+                                className="primary-add-comp-form mr-4"
+                                type="primary"
+                            >
+                                {/* {this.state.screenKey === "umpire" ? AppConstants.backToUmpire : AppConstants.backToLiveScore} */}
+                                {AppConstants.back}
+                            </Button>
+                        )}
                         <Dropdown overlay={menu}>
                             <Button type="primary">
                                 {AppConstants.actions}
@@ -3106,22 +3120,9 @@ class UserModulePersonalDetail extends Component {
                                 <DownOutlined />
                             </Button>
                         </Dropdown>
-                    </Header>
-                </div>
-                {this.state.screenKey && (
-                    <div className="col-sm">
-                        <div className="comp-buttons-view mt-4 d-flex align-items-center justify-content-end">
-                            <Button
-                                onClick={() => history.push(this.state.screen)}
-                                className="primary-add-comp-form"
-                                type="primary"
-                            >
-                                {/* {this.state.screenKey === "umpire" ? AppConstants.backToUmpire : AppConstants.backToLiveScore} */}
-                                {AppConstants.back}
-                            </Button>
-                        </div>
                     </div>
-                )}
+                </div>
+                
             </div>
         );
     };
