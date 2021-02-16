@@ -24,6 +24,15 @@ function addRemoveTimeSlot(index, item, key, parentIndex) {
     return action
 }
 
+// get competition teams
+function getCompetitionTeams(competitionId) {
+    const action = {
+        type: ApiConstants.API_COMPETITION_TEAMS_GET_LOAD,
+        competitionId,
+    }
+    return action;
+}
+
 function UpdateTimeSlotsData(value, key, contentType, index, mainId, id) {
     return {
         type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION,
@@ -81,5 +90,6 @@ export {
     UpdateTimeSlotsDataManual,
     addTimeSlotDataPost,
     searchDivisionList,
-    ClearDivisionArr
+    ClearDivisionArr,
+    getCompetitionTeams
 }

@@ -29,6 +29,7 @@ import {
     getCompetitionWithTimeSlots, addRemoveTimeSlot,
     UpdateTimeSlotsData, UpdateTimeSlotsDataManual,
     addTimeSlotDataPost, searchDivisionList, ClearDivisionArr,
+    getCompetitionTeams,
 } from 'store/actions/competitionModuleAction/competitionTimeAndSlotsAction';
 import { timeSlotInit } from 'store/actions/commonAction/commonAction';
 import InputWithHead from 'customComponents/InputWithHead';
@@ -81,6 +82,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 finalTypeRefId: storedfinalTypeRefId
             })
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
+            this.props.getCompetitionTeams(storedCompetitionId);
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
@@ -116,6 +118,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(yearId, competitionId);
+                    console.log('competitionId', competitionId);
+                    this.props.getCompetitionTeams(competitionId);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
@@ -145,6 +149,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 })
             }
         }
+        console.log('team list', this.props.competitionTimeSlots.teamList);
     }
 
     // for set default values
@@ -449,6 +454,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             x => x.competitionId == competitionId && x.isQuickCompetition == 1
         );
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
+        this.props.getCompetitionTeams(competitionId);
         this.setState({
             getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId,
             isQuickCompetition: quickComp != undefined
@@ -656,8 +662,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
         let disabledStatus = this.state.competitionStatus == 1
 
-        console.log('timeSlotData', timeSlotData);
-        console.log('timeSlotManual', timeSlotManual);
+        // console.log('timeSlotData', timeSlotData);
+        // console.log('timeSlotManual', timeSlotManual);
         return (
             <div className="content-view pt-3">
                 <span className="applicable-to-heading">
@@ -1489,6 +1495,7 @@ function mapDispatchToProps(dispatch) {
         clearYearCompetitionAction,
         searchDivisionList,
         ClearDivisionArr,
+        getCompetitionTeams,
     }, dispatch);
 }
 

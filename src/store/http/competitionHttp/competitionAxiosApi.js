@@ -40,6 +40,12 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    /////get competition teams
+    competitionTeamsGet(competitionId) {
+        const url = `/api/competitions/${competitionId}/teams`;
+        return Method.dataGet(url, token);
+    },
+
     /////competition part player grade calculate player grading summary get API
     async getCompPartPlayerGradingSummary(yearRefId, competitionId) {
         let userId = await getUserId()
