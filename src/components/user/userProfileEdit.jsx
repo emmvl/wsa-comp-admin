@@ -244,6 +244,8 @@ class UserProfileEdit extends Component {
                 userRole: getOrganisationData().userRole,
                 ...additionalSettings,
             });
+
+            this.setSameEmail(this.state.userData)
         }
     }
 
@@ -523,6 +525,45 @@ class UserProfileEdit extends Component {
         }
     };
 
+    setSameEmail = async (userData) => {
+        try{
+            const { parentData } = this.props.userState;
+            if(userData.isInActive){
+                this.setState({isSameEmail: true})
+                if (this.state.titleLabel === (AppConstants.edit + ' ' + AppConstants.address)) {
+                    await this.setState({
+                        showParentEmailSelectbox: true,
+                        showEmailInputbox: false,
+                        enableEmailInputbox: false,
+                    });
+                    await this.setUserDataContactEmail(parentData[0].email + '.' + this.state.userData.firstName);
+                } else {
+                    await this.setUserDataContactEmailDefault();
+                    await this.setState({
+                        enableEmailInputbox: false,
+                    });
+                }
+            }
+            else{
+                this.setState({isSameEmail: false})
+                if (this.state.titleLabel === (AppConstants.edit + ' ' + AppConstants.address)) {
+                    await this.setUserDataContactEmailDefault();
+                    await this.setState({
+                        showParentEmailSelectbox: false,
+                        showEmailInputbox: true,
+                        enableEmailInputbox: true,
+                    });
+                } else {
+                    await this.setState({
+                        enableEmailInputbox: true,
+                    })
+                }
+            }
+        } catch(ex) {
+            console.log("Error in setSameEmail::" +ex)
+        }
+    }
+
     addressEdit = () => {
         const { userData } = this.state;
         const { stateListData } = this.props.commonReducerState;
@@ -717,7 +758,9 @@ class UserProfileEdit extends Component {
                                             })
                                         }
                                     }
-                                    this.setState({ isSameEmail: e.target.checked });
+                                    let userData = this.state.userData;
+                                    userData.isInActive = e.target.checked ? 1 : 0;
+                                    this.setState({ isSameEmail: e.target.checked, userData: userData });
                                 }}
                             >
                                 {AppConstants.useParentEmail}
