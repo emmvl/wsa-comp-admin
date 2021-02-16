@@ -773,6 +773,7 @@ const AppConstants = {
     enterTimeMatchesEachDay: "Enter time matches should run each day",
     allocateToSameTimeslot: "Allocate to same time slot",
     newCompetition: "New Competition",
+    teamPreferences: "Team Preferences",
 
     // team grading summary
     teamGradingSummary: "Team Grading Summary",

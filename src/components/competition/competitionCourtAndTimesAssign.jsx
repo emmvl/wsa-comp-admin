@@ -155,8 +155,11 @@ class CompetitionCourtAndTimesAssign extends Component {
             timeslotGenerationRefId: competitionTimeSlots.getcompetitionTimeSlotData.timeslotGenerationRefId,
             applyToVenueRefId: competitionTimeSlots.getcompetitionTimeSlotData.applyToVenueRefId,
             mainTimeRotationID: competitionTimeSlots.getcompetitionTimeSlotData.mainTimeRotationID
-        })
-        let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
+        });
+
+        const competitionVenueTimeslotsDayTime = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime;
+        let timeSlotMatchDuration = competitionVenueTimeslotsDayTime ? competitionVenueTimeslotsDayTime : [];
+
         if (timeSlotMatchDuration.length > 0) {
             timeSlotMatchDuration.forEach((item, index) => {
                 let dayRefId = `dayRefId${index}`
@@ -166,7 +169,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         }
 
-        let timeslotmatchEntityCheck = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity : []
+        const competitionTimeslotsEntity = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity;
+        const timeslotmatchEntityCheck = competitionTimeslotsEntity ? competitionTimeslotsEntity : []
+        
         if (timeslotmatchEntityCheck.length > 0) {
             timeslotmatchEntityCheck.forEach((item, index) => {
                 let timeSlotEntityManualkeyArr = `timeSlotEntityManualkeyArr${index}`
@@ -179,7 +184,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         }
 
-        let timeSlotManualPerVenue = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual : []
+        const competitionTimeslotManual = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
+        const timeSlotManualPerVenue = competitionTimeslotManual ? competitionTimeslotManual : [];
+
         if (timeSlotManualPerVenue.length > 0) {
             timeSlotManualPerVenue.forEach((PerVenueItem) => {
                 if (PerVenueItem.timeslots.length > 0) {
@@ -648,6 +655,9 @@ class CompetitionCourtAndTimesAssign extends Component {
         let commonState = this.props.competitionTimeSlots
         let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
         let disabledStatus = this.state.competitionStatus == 1
+
+        console.log('timeSlotData', timeSlotData);
+        console.log('timeSlotManual', timeSlotManual);
         return (
             <div className="content-view pt-3">
                 <span className="applicable-to-heading">
@@ -928,7 +938,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     filterOption={false}
                                                     className="d-grid align-content-center"
                                                     onBlur={() => this.props.ClearDivisionArr('divisions')}
-                                                    onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
+                                                    onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(
+                                                        divisions, 
+                                                        'venuePreferenceTypeRefId', 
+                                                        'competitionTimeslotManualAllvenue', 
+                                                        timeIndex, 
+                                                        id, 
+                                                        index, 
+                                                        venueIndex
+                                                    )}
                                                     onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                                                 >
                                                     {division.divisions && division.divisions.map((item) => (
@@ -1383,40 +1401,43 @@ class CompetitionCourtAndTimesAssign extends Component {
         return (
             <div className="formView" style={{marginTop: '20px'}}>
                 <div className="content-view pt-3">
-                    <div className="team-preferences-header">Team Preferences</div>
+                    <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
                     <div style={{display: 'flex'}}>
-                        <Select>
+                        <Select
+                            className="mr-4"
+                        >
                             {mockTeams.map((team, i) => {
                                 return <Option key={i}>{team}</Option>
                             })}
                         </Select>
-                        <Form.Item
-                            // name={`timeSlotEntityManualkey${index}${timeIndex}`}
-                            rules={[{
-                                // required: true,
-                                // message: ValidationConstants.divisionField
-                            }]}
+                        <Select
+                            // disabled={disabledStatus}
+                            // id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Divisions}
+                            mode="multiple"
+                            placeholder="Select"
+                            filterOption={false}
+                            className="d-grid align-content-center"
+                            // onBlur={() => this.props.ClearDivisionArr('divisions')}
+                            // onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(
+                            //     divisions, 
+                            //     'venuePreferenceTypeRefId', 
+                            //     'competitionTimeslotManualAllvenue', 
+                            //     timeIndex, 
+                            //     id, 
+                            //     index, 
+                            //     venueIndex
+                            // )}
+                            // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                         >
-                            {/* <Select
-                                disabled={disabledStatus}
-                                mode="multiple"
-                                placeholder="Select"
-                                filterOption={false}
-                                className="d-grid align-content-center"
-                                onBlur={() => this.props.ClearDivisionArr('divisions')}
-                                onChange={(divisions) => this.onSelectDivisionMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
-                                onSearch={(value) => this.handleSearch(value, mainDivisionList)}
-                            >
-                                {id == 4 && division.divisions && division.divisions.map((item) => (
-                                    <Option
-                                        key={`compMemProdDiv_${item.competitionMembershipProductDivision}`}
-                                        value={item.competitionMembershipProductDivision}
-                                    >
-                                        {item.divisionName}
-                                    </Option>
-                                ))}
-                            </Select> */}
-                        </Form.Item>
+                            {/* {division.divisions && division.divisions.map((item) => (
+                                <Option
+                                    key={`compMemProdDiv_${item.competitionMembershipProductDivision}`}
+                                    value={item.competitionMembershipProductDivision}
+                                >
+                                    {item.divisionName}
+                                </Option>
+                            ))} */}
+                        </Select> 
                     </div>
                 </div>
             </div>
