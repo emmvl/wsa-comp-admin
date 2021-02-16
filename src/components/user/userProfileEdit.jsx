@@ -205,7 +205,7 @@ class UserProfileEdit extends Component {
             || (titleLabel === AppConstants.edit + ' ' + AppConstants.child)
             || (titleLabel === AppConstants.addChild));
 
-            await this.props.getUserParentDataAction();
+            await this.props.getUserParentDataAction(data.key);
             const { parentData } = this.props.userState;
             let additionalSettings = {};
             if (showSameEmailOption) {
