@@ -1387,8 +1387,11 @@ class UserProfileEdit extends Component {
         let selectedMatch = null;
 
         const rowSelection = {
+            type: 'radio',
             onChange: (selectedRowKeys, selectedRows) => {
-                selectedMatch = selectedRows;
+                if (selectedRows.length) {
+                    selectedMatch = selectedRows[0];
+                }
             },
             getCheckboxProps: (record) => ({
                 name: record.name,
@@ -1456,7 +1459,6 @@ class UserProfileEdit extends Component {
                 <div className="table-responsive home-dash-table-view mt-3">
                     <Table
                         rowSelection={{
-                            type: 'radio',
                             ...rowSelection,
                         }}
                         className="home-dashboard-table"
