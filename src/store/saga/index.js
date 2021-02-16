@@ -33,6 +33,8 @@ import umpireDashboardSaga from './umpireSaga/umpireDashboardSaga';
 
 import umpireSettingsSaga from './umpireSaga/umpireSettingsSaga';
 
+import communicationListSaga from "./communicationSaga/communicationSaga";
+
 import {
     getRegistrationFormSaga,
     regMembershipFeeListSaga,
@@ -221,7 +223,6 @@ export default function* rootSaga() {
         fork(competitionFeeSaga),
 
         // Shop
-        fork(shopOrderStatusSaga),
         fork(shopOrderSummarySaga),
         fork(shopProductSaga),
         fork(shopSettingSaga),
@@ -247,6 +248,9 @@ export default function* rootSaga() {
 
         //Umpire Pool Allocation Saga
         fork(umpirePoolAllocationSaga),
+
+        // Communication
+        fork(communicationListSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);

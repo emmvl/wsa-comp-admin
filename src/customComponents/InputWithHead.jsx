@@ -20,23 +20,30 @@ function InputWithHead(props) {
         id,
         headingId,
         auto_complete,
+        isOptional,
+        inputHeadingStyles = {}
     } = props;
 
     return (
         <div>
             {heading && (
                 <div className="d-flex align-items-center">
-                    <span id={headingId} className={`input-heading ${required}`}>{heading}</span>
-                    {conceptulHelp && (
-                        <div
-                            className={`Content_Cancel__VinjW_withCrossBtn ${tooltiprequired}`}
-                            style={{ marginTop }}
-                        >
-                            <Tooltip>
-                                <span>{conceptulHelpMsg}</span>
-                            </Tooltip>
-                        </div>
-                    )}
+                    <span id={headingId} className={`input-heading ${required}`} style={inputHeadingStyles}>
+                        {heading}
+
+                        {conceptulHelp && (
+                            <div
+                                className={`Content_Cancel__VinjW_withCrossBtn ${tooltiprequired}`}
+                                style={{ marginTop }}
+                            >
+                                <Tooltip>
+                                    <span>{conceptulHelpMsg}</span>
+                                </Tooltip>
+                            </div>
+                        )}
+
+                        { isOptional ? <i className="input-heading__optional">- optional</i> : null }
+                    </span>
                 </div>
             )}
 
