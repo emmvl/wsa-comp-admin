@@ -48,6 +48,7 @@ const initialState = {
     timeSlotRotationHelpMessage: [AppConstants.timeSloteNoPrefMsg, AppConstants.timeSloteEvenRotationMsg, AppConstants.allocateToSameTimeslotMsg],
     timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg],
     teamList: null,
+    timeslotsList: null,
     timeslotsManualRawData: null
 };
 
@@ -872,6 +873,18 @@ function CompetitionTimeSlots(state = initialState, action) {
             return {
                 ...state,
                 teamList: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
+        case ApiConstants.API_COMPETITION_TIMESLOTS_GET_LOAD:
+            return { ...state, onLoad: true, error: null }
+        
+        case ApiConstants.API_COMPETITION_TIMESLOTS_GET_SUCCESS:
+            return {
+                ...state,
+                timeslotsList: action.result,
                 onLoad: false,
                 error: null,
                 status: action.status

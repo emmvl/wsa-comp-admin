@@ -46,6 +46,12 @@ let CompetitionAxiosApi = {
         return Method.dataGet(url, token);
     },
 
+    /////get competition timeslots
+    competitionTeamsTimeslotsGet(id) {
+        const url = `/api/competitions/${id}/teams/available-timeslots`;
+        return Method.dataGet(url, token);
+    },
+
     /////competition part player grade calculate player grading summary get API
     async getCompPartPlayerGradingSummary(yearRefId, competitionId) {
         let userId = await getUserId()

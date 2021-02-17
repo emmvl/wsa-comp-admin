@@ -30,7 +30,7 @@ import {
     getCompetitionWithTimeSlots, addRemoveTimeSlot,
     UpdateTimeSlotsData, UpdateTimeSlotsDataManual,
     addTimeSlotDataPost, searchDivisionList, ClearDivisionArr,
-    getCompetitionTeams,
+    getCompetitionTeams, getCompetitionTimeslots,
 } from 'store/actions/competitionModuleAction/competitionTimeAndSlotsAction';
 import { timeSlotInit } from 'store/actions/commonAction/commonAction';
 import InputWithHead from 'customComponents/InputWithHead';
@@ -85,6 +85,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
             this.props.getCompetitionTeams(compIdNumber);
+            this.props.getCompetitionTimeslots(compIdNumber);
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
@@ -123,6 +124,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(yearId, competitionId);
                     this.props.getCompetitionTeams(id);
+                    this.props.getCompetitionTimeslots(id);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
@@ -458,6 +460,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         );
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
         this.props.getCompetitionTeams(id);
+        this.props.getCompetitionTimeslots(id);
         this.setState({
             getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId,
             isQuickCompetition: quickComp != undefined
@@ -665,8 +668,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
         let disabledStatus = this.state.competitionStatus == 1
 
-        // console.log('timeSlotData', timeSlotData);
-        // console.log('timeSlotManual', timeSlotManual);
         return (
             <div className="content-view pt-3">
                 <span className="applicable-to-heading">
@@ -1425,10 +1426,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     };
 
     teamPreferencesView() {
-        const competitionTimeSlots = this.props.competitionTimeSlots;
-        const teams = this.props.competitionTimeSlots.teamList;
-        const { timeslotsManualRawData } = competitionTimeSlots;
-        console.log('timeslotsManualRawData', timeslotsManualRawData);
+        const { timeslotsList, weekDays, teamList } = this.props.competitionTimeSlots;
 
         return (
             <div className="formView mt-4">
@@ -1439,9 +1437,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                             className="mr-4 w-25"
                             placeholder="Select"
                         >
-                            {(teams || []).map((team, i) => (
+                            {(teamList || []).map(team => (
                                 <Option 
-                                    key={i}
+                                    key={team.id}
                                     value={team.id}
                                 >
                                     {`${team.name} (${team.divisionName} - ${team.gradeName})`}
@@ -1467,14 +1465,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                             // )}
                             // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                         >
-                            {/* {division.divisions && division.divisions.map((item) => (
-                                <Option
-                                    key={`compMemProdDiv_${item.competitionMembershipProductDivision}`}
-                                    value={item.competitionMembershipProductDivision}
+                            {!!weekDays.length && (timeslotsList || []).map(timeslot => (
+                                <Option 
+                                    key={timeslot.id}
+                                    value={timeslot.id}
                                 >
-                                    {item.divisionName}
+                                    {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
                                 </Option>
-                            ))} */}
+                            ))}
                         </Select> 
                     </div>
                 </div>
@@ -1535,6 +1533,7 @@ function mapDispatchToProps(dispatch) {
         searchDivisionList,
         ClearDivisionArr,
         getCompetitionTeams,
+        getCompetitionTimeslots,
     }, dispatch);
 }
 

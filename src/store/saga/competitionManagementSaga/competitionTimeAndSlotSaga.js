@@ -106,3 +106,21 @@ export function* competitionTeamsGetSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+// competition team list get
+export function* competitionTimeslotsGetSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.competitionTeamsTimeslotsGet, action.id);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_TIMESLOTS_GET_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
