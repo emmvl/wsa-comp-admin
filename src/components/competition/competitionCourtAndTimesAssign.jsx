@@ -22,7 +22,8 @@ import {
     setOwn_competitionStatus,
     getOwn_CompetitionFinalRefId,
     setOwn_CompetitionFinalRefId,
-    setGlobalYear, getGlobalYear
+    setGlobalYear, getGlobalYear,
+    setCompetitionID, getCompetitonId
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, getVenuesTypeAction, clearYearCompetitionAction } from 'store/actions/appAction';
 import {
@@ -66,6 +67,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        const compIdNumber = getCompetitonId();
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -82,7 +84,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 finalTypeRefId: storedfinalTypeRefId
             })
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
-            this.props.getCompetitionTeams(storedCompetitionId);
+            this.props.getCompetitionTeams(compIdNumber);
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
@@ -112,14 +114,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
                     let finalTypeRefId = competitionList[0].finalTypeRefId
+                    const { id } = competitionList[0];
+                    setCompetitionID(id);
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(yearId, competitionId);
-                    console.log('competitionId', competitionId);
-                    this.props.getCompetitionTeams(competitionId);
+                    this.props.getCompetitionTeams(id);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
@@ -447,6 +450,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
+        const { id } = own_CompetitionArr.find(comp => comp.competitionId === competitionId);
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         setOwn_CompetitionFinalRefId(finalTypeRefId)
@@ -454,7 +458,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             x => x.competitionId == competitionId && x.isQuickCompetition == 1
         );
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
-        this.props.getCompetitionTeams(competitionId);
+        this.props.getCompetitionTeams(id);
         this.setState({
             getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId,
             isQuickCompetition: quickComp != undefined
@@ -898,7 +902,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <div key={timeIndex} className="row">
                                 <div className="col-sm">
                                     <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
-                                    1111111<TimePicker
+                                    <TimePicker
                                         disabled={disabledStatus}
                                         id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_startTime}
                                         key="startTime"

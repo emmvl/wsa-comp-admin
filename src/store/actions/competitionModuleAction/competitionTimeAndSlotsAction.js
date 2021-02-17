@@ -25,10 +25,10 @@ function addRemoveTimeSlot(index, item, key, parentIndex) {
 }
 
 // get competition teams
-function getCompetitionTeams(competitionId) {
+function getCompetitionTeams(id) {
     const action = {
         type: ApiConstants.API_COMPETITION_TEAMS_GET_LOAD,
-        competitionId,
+        id,
     }
     return action;
 }

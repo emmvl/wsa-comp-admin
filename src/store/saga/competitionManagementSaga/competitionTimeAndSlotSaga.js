@@ -92,16 +92,13 @@ export function* competitonWithTimeSlotsPostApi(action) {
 // competition team list get
 export function* competitionTeamsGetSaga(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.competitionTeamsGet, action.payload);
+        const result = yield call(CompetitionAxiosApi.competitionTeamsGet, action.id);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_COMPETITION_TEAMS_GET_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
-            setTimeout(() => {
-                message.success(result.result.data.message)
-            }, 500);
         } else {
             yield call(failSaga, result)
         }

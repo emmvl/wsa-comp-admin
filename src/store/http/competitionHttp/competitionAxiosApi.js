@@ -41,8 +41,8 @@ let CompetitionAxiosApi = {
     },
 
     /////get competition teams
-    competitionTeamsGet(competitionId) {
-        const url = `/api/competitions/${competitionId}/teams`;
+    competitionTeamsGet(id) {
+        const url = `/api/competitions/${id}/teams`;
         return Method.dataGet(url, token);
     },
 
