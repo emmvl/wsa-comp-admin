@@ -205,7 +205,9 @@ class UserProfileEdit extends Component {
             || (titleLabel === AppConstants.edit + ' ' + AppConstants.child)
             || (titleLabel === AppConstants.addChild));
 
-            await this.props.getUserParentDataAction(data.key);
+            if (moduleFrom !== "7" && moduleFrom !== '8') {
+                await this.props.getUserParentDataAction(data.key);
+            }
             const { parentData } = this.props.userState;
             let additionalSettings = {};
             if (showSameEmailOption) {
@@ -1402,7 +1404,7 @@ class UserProfileEdit extends Component {
             key: u.id,
             id: u.id,
             name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
-            dob: u.dateOfBirth,
+            dob: moment(u.dateOfBirth).format('DD/MM/YYYY'),
             email: u.email,
             mobile: u.mobileNumber,
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
