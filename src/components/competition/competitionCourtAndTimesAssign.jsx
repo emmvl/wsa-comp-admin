@@ -1432,7 +1432,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             <div className="formView mt-4">
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
-                    <div style={{display: 'flex'}}>
+                    <div className="d-flex align-items-start">
                         <Select
                             className="mr-4 w-25"
                             placeholder="Select"
