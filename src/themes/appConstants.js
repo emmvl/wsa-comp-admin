@@ -2004,7 +2004,8 @@ const AppConstants = {
     communicationExpiryTime: 'Communication Expiry Time',
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
-    cancelTransferReg: "Cancel Transfer registration"
+    cancelTransferReg: "Cancel Transfer registration",
+    feePaid: "Fee Paid"
 };
 
 export default AppConstants;
