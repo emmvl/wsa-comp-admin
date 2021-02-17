@@ -815,7 +815,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 )}
                             </div>
                             <span className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(null, null, "competitionTimeslotManual")}> +{AppConstants.addAnotherDay}</span>
-                            {!this.state.isQuickCompetition && this.footerViewSettings()}
                         </div>
                     )}
                     {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 2 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) && (
@@ -831,11 +830,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddAnotherDayBtn} className="input-heading-add-another pointer" onClick={() => disabledStatus == false && this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")}> + {AppConstants.addAnotherDay}</span>
                                         </div>
                                     ))}
-                                    {!this.state.isQuickCompetition && this.footerViewSettings()}
                                 </div>
                             </div>
                         </div>
                     )}
+                    {!this.state.isQuickCompetition && this.footerViewSettings()}
                 </div>
             </div>
         )
@@ -1365,31 +1364,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Tooltip
-                                className="h-100"
-                                onMouseEnter={() => {
-                                    this.setState({
-                                        tooltipVisibleDelete: isPublished,
-                                    });
-                                }}
-                                onMouseLeave={() => {
-                                    this.setState({ tooltipVisibleDelete: false });
-                                }}
-                                visible={this.state.tooltipVisibleDelete}
-                                title={AppConstants.statusPublishHover}
-                            >
-                                <Button
-                                    id={AppUniqueId.timeSlotSaveBtn}
-                                    disabled={isPublished}
-                                    style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
-                                    className="publish-button save-draft-text"
-                                    htmlType="submit"
-                                    type="primary"
-                                >
-                                    {AppConstants.save}
-                                </Button>
-                            </Tooltip>
                             {/* <NavLink to="/competitionVenueTimesPrioritisation"> */}
+                            <Button
+                                // id={AppUniqueId.timeSlotSaveBtn}
+                                style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                                className="publish-button save-draft-text"
+                                htmlType="submit"
+                                type="primary"
+                            >
+                                {AppConstants.save}
+                            </Button>
                             <Button
                                 onClick={() => this.setState({ nextButtonClicked: true })}
                                 htmlType="submit"
@@ -1412,16 +1396,30 @@ class CompetitionCourtAndTimesAssign extends Component {
         const isPublished = this.state.competitionStatus == 1;
         return (
             <div className="d-flex justify-content-end">
-                <Button
-                    id={AppUniqueId.timeSlotSaveBtn}
-                    disabled={isPublished}
-                    style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
-                    className="publish-button save-draft-text m-0"
-                    htmlType="submit"
-                    type="primary"
+                <Tooltip
+                    className="h-100"
+                    onMouseEnter={() => {
+                        this.setState({
+                            tooltipVisibleDelete: isPublished,
+                        });
+                    }}
+                    onMouseLeave={() => {
+                        this.setState({ tooltipVisibleDelete: false });
+                        }}
+                        visible={this.state.tooltipVisibleDelete}
+                        title={AppConstants.statusPublishHover}
                 >
-                    {AppConstants.save}
-                </Button>
+                    <Button
+                        id={AppUniqueId.timeSlotSaveBtn}
+                        disabled={isPublished}
+                        style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                        className="publish-button save-draft-text"
+                        htmlType="submit"
+                        type="primary"
+                    >
+                        {AppConstants.save}
+                    </Button>
+                 </Tooltip>
             </div>
         );
     };
@@ -1433,7 +1431,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         console.log('timeslotsManualRawData', timeslotsManualRawData);
 
         return (
-            <div className="formView">
+            <div className="formView mt-4">
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
                     <div style={{display: 'flex'}}>
