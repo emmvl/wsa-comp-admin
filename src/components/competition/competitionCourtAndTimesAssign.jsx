@@ -815,6 +815,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 )}
                             </div>
                             <span className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(null, null, "competitionTimeslotManual")}> +{AppConstants.addAnotherDay}</span>
+                            {!this.state.isQuickCompetition && this.footerViewSettings()}
                         </div>
                     )}
                     {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 2 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) && (
@@ -830,6 +831,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddAnotherDayBtn} className="input-heading-add-another pointer" onClick={() => disabledStatus == false && this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")}> + {AppConstants.addAnotherDay}</span>
                                         </div>
                                     ))}
+                                    {!this.state.isQuickCompetition && this.footerViewSettings()}
                                 </div>
                             </div>
                         </div>
@@ -1405,12 +1407,33 @@ class CompetitionCourtAndTimesAssign extends Component {
         );
     };
 
-    teamPreferencesView() {
-        const mockTeams = ['Sparrows (11s - Div A)','Sparrows (12s - Div B)','Sparrows (13s - Div C)'];
-        const teams = this.props.competitionTimeSlots.teamList;
-        console.log('team list', this.props.competitionTimeSlots.teamList);
+        // footer view containing all the buttons like submit and cancel
+    footerViewSettings = () => {
+        const isPublished = this.state.competitionStatus == 1;
         return (
-            <div className="formView" style={{marginTop: '20px'}}>
+            <div className="d-flex justify-content-end">
+                <Button
+                    id={AppUniqueId.timeSlotSaveBtn}
+                    disabled={isPublished}
+                    style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                    className="publish-button save-draft-text m-0"
+                    htmlType="submit"
+                    type="primary"
+                >
+                    {AppConstants.save}
+                </Button>
+            </div>
+        );
+    };
+
+    teamPreferencesView() {
+        const competitionTimeSlots = this.props.competitionTimeSlots;
+        const teams = this.props.competitionTimeSlots.teamList;
+        const { timeslotsManualRawData } = competitionTimeSlots;
+        console.log('timeslotsManualRawData', timeslotsManualRawData);
+
+        return (
+            <div className="formView">
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
                     <div style={{display: 'flex'}}>
@@ -1481,6 +1504,13 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <div className="formView">
                                 {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
                             </div>
+                        </Content>
+                    </Form>
+                    <Form
+                        autoComplete="off"
+                        noValidate="noValidate"
+                    >
+                        <Content>
                             {this.teamPreferencesView()}
                         </Content>
                         <Footer>

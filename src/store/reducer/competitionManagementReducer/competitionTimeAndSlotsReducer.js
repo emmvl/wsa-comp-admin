@@ -48,6 +48,7 @@ const initialState = {
     timeSlotRotationHelpMessage: [AppConstants.timeSloteNoPrefMsg, AppConstants.timeSloteEvenRotationMsg, AppConstants.allocateToSameTimeslotMsg],
     timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg],
     teamList: null,
+    timeslotsManualRawData: null
 };
 
 //time slot Entity
@@ -577,6 +578,7 @@ function CompetitionTimeSlots(state = initialState, action) {
             state.mainGradeList = resultData.grades
             return {
                 ...state,
+                timeslotsManualRawData: resultData.competitionTimeslotManual,
                 status: action.status,
                 onLoad: false,
                 error: null,
