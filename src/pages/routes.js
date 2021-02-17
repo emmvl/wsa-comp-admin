@@ -96,7 +96,7 @@ import UserEditAffiliates from 'components/user/userEditAffiliates';
 import userModuleMedical from 'components/user/userModuleMedical';
 import UserModulePersonalDetail from 'components/user/userModulePersonalDetail';
 import UserSubmittedRegistrationData from 'components/user/userSubmittedRegistrationData';
-import UserOurOrganization from 'components/user/userOurOragnization';
+import UserOurOrganization from 'components/user/userOurOrganization';
 import UserProfileEdit from 'components/user/userProfileEdit';
 import UserTextualDashboard from 'components/user/userTextualDashboard';
 import VenuesList from 'components/user/venuesList';
