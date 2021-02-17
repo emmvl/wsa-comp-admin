@@ -530,12 +530,9 @@ let userHttpApi = {
       return Method.dataGet(`users/byIds?ids=${ids}`);
   },
 
-  async getUserParentData() {
-    let userId = await getUserId()
-    if (userId != 0) {
-      var url = `api/parents?userId=${userId}`;
-      return Method.dataGet(url, token)
-    }
+  async getUserParentData(userId) {
+    var url = `api/parents?userId=${userId || 0}`;
+    return Method.dataGet(url, token)
   },
 };
 

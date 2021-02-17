@@ -136,8 +136,6 @@ function* getOrderStatusReferenceSaga(action) {
 
 // export order status  API
 function* exportOrderStatusSaga(action) {
-    console.log('###-action')
-
     try {
         const result = yield call(AxiosApi.exportOrderStatus, action.params);
 

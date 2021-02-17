@@ -75,6 +75,15 @@
   font-family: inter-medium, sans-serif;
 }
 
+.input-heading__optional {
+    display: inline-block;
+    vertical-align: middle;
+    color: var(--app-bbbbc6);
+    font-weight: 500;
+    margin-left: 4px;
+    font-style: normal;
+}
+
 .comment-heading {
   display: contents;
   align-content: flex-start;

@@ -1,3 +1,5 @@
+/* eslint-disable react/sort-comp */
+/* eslint-disable camelcase */
 import React, { Component } from "react";
 import {
     Layout,
@@ -11,48 +13,42 @@ import {
     Spin,
     Checkbox,
     message,
-    Radio
+    Radio,
 } from "antd";
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import moment from "moment";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { NavLink } from "react-router-dom";
+import htmlToDraft from 'html-to-draftjs';
+import { Editor } from "react-draft-wysiwyg";
+
+import draftToHtml from "draftjs-to-html";
+import ImageLoader from '../../customComponents/ImageLoader';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import moment from "moment";
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import {
-    liveScoreAddNewsDetailsAction,
-    liveScoreAddNewsAction,
-    liveScoreUpdateNewsAction,
-    liveScoreRefreshNewsAction,
-    setDefaultImageVideoNewAction
-} from "../../store/actions/LiveScoreAction/liveScoreNewsAction";
-import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
 import ValidationConstants from "../../themes/validationConstant";
-import history from '../../util/history'
-import Loader from '../../customComponents/loader';
-import { Editor } from 'react-draft-wysiwyg';
+
+import { getOrganisationData } from '../../util/sessionStorage';
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import {
-    EditorState,
-    ContentState,
-    // convertFromHTML,
-    convertToRaw
-} from 'draft-js';
+    getAffiliatesListingAction,
+    filterByRelations,
+    getAffiliateToOrganisationAction,
+    clearListAction,
+    getUserDashboardTextualAction,
+    getRoleAction, getUsersByIds,
+} from '../../store/actions/userAction/userAction';
+
 import {
-    getLiveScoreCompetiton,
-    // getKeyForStateWideMessage
-} from '../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers";
-import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-import ImageLoader from '../../customComponents/ImageLoader'
-import { NavLink } from "react-router-dom";
-import htmlToDraft from 'html-to-draftjs';
-import draftToHtml from 'draftjs-to-html';
-import { getOrganisationData } from "../../util/sessionStorage";
-import { getAffiliateToOrganisationAction, clearListAction, getUserDashboardTextualAction } from "../../store/actions/userAction/userAction";
-// import { isEmptyArray } from "formik";
-import { updateCommunicationModuleData } from '../../store/actions/communicationAction/communicationAction'
+    refreshCommunicationModuleDataAction,
+    addCommunicationAction,
+} from '../../store/actions/communicationAction/communicationAction';
+import Loader from "../../customComponents/loader";
+import history from "../../util/history";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -61,153 +57,121 @@ class AddCommunication extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedFile: null,
-            // newsImage: AppImages.circleImage,
-            recipientSelection: AppConstants.selectRecipients,
-            newsTitle: null,
+            title: '',
+            body: '',
             author: '',
-            managerData: [],
-            scorerData: [],
+            expiryDate: null,
+            expiryTime: null,
+            toOrganisationIds: [],
+            toUserRoleIds: [],
+            toUserIds: [],
+            imageUrl: null,
+            videoUrl: null,
+            image: null,
             imageSelection: AppImages.circleImage,
             videoSelection: '',
-            date: null,
-            time: null,
             isEdit: props.location.state ? props.location.state.isEdit : false,
-            load: false,
             visible: false,
-            bodyData: "",
-            image: null,
-            media: null,
-            video: null,
-            key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
-            getDataLoading: false,
-            editorState: EditorState.createEmpty(),
-            authorName: 'abc',
             imageTimeout: null,
             videoTimeout: null,
-            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
+            screenKey: props.location?.state?.screenKey,
+            key: props.location?.state?.key,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
             linkedEntityId: '-1',
-            postalCode: '',
-            searchText: '',
-            deleteLoading: false,
             dobFrom: '-1',
             dobTo: '-1',
-            sortBy: null,
-            sortOrder: null,
-            offsetData: 0,
             postCode: "-1",
-            exsitingValue: undefined,
-            userValue: undefined
+            allOrg: true,
+            individualOrg: false,
+            allUser: true,
+            selectedRoles: false,
+            individualUsers: false,
+            isFetchedUsersData: false,
         };
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
-        let name
-        if (getLiveScoreCompetiton()) {
-            const AuthorData = JSON.parse(getLiveScoreCompetiton())
-            name = AuthorData.longName
+        let name;
+        if (getOrganisationData()) {
+            name = getOrganisationData().name;
         } else {
-            name = 'World sport actioa'
+            name = 'World sport action';
         }
 
-        if (getLiveScoreCompetiton()) {
-            const { id, organisationId } = JSON.parse(getLiveScoreCompetiton())
-            if (this.state.screenKey === 'stateWideMsg') {
-                this.props.getliveScoreScorerList(organisationId, 4)
-                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, organisationId)
-            } else {
+        this.props.getRoleAction();
 
-                this.props.getliveScoreScorerList(id, 4)
-                this.props.liveScoreManagerListAction(3, 1, null, null, null, null, null, null, 1)
-            }
-        } else {
-            this.props.getliveScoreScorerList(1, 4)
-            this.props.liveScoreManagerListAction(3, 1, 1)
-        }
-
-        this.setState({ getDataLoading: false, authorName: name })
-        const { addEditNews } = this.props.liveScoreNewsState;
+        this.setState({ getDataLoading: false, author: name });
         this.formRef.current.setFieldsValue({
-            'author': addEditNews.author ? addEditNews.author : name
-        })
+            author: name,
+        });
 
         if (this.state.isEdit === true) {
-            this.props.setDefaultImageVideoNewAction({
-                newsImage: this.props.location.state.item.newsImage,
-                newsVideo: this.props.location.state.item.newsVideo,
-                author: name
-            })
-            this.props.liveScoreAddNewsDetailsAction(this.props.location.state.item)
-            this.setInitalFiledValue(this.props.location.state.item, name)
+            this.setState({
+                imageUrl: this.props.location.state.item.imageUrl,
+                videoUrl: this.props.location.state.item.videoUrl,
+                author: name,
+            });
+            this.setInitialFilledValue(this.props.location.state.item, name);
         } else {
-            this.props.liveScoreRefreshNewsAction()
+            this.props.refreshCommunicationModuleDataAction();
+        }
+
+        this.props.getAffiliatesListingAction({
+            organisationId: getOrganisationData().organisationUniqueKey,
+            affiliatedToOrgId: -1,
+            organisationTypeRefId: -1,
+            statusRefId: -1,
+            paging: { limit: -1, offset: 0 },
+            stateOrganisations: false,
+            affiliateListByParent: true,
+            parentId: getOrganisationData().organisationId,
+        });
+    }
+
+    componentDidUpdate(nextProps) {
+        const { communicationState } = this.props;
+
+        if (nextProps.communicationState !== communicationState) {
+            if (nextProps.communicationState.addSuccess !== communicationState.addSuccess
+                && communicationState.addSuccess
+            ) {
+                history.push({
+                    pathname: '/communicationView',
+                    state: { item: communicationState.addedCommunication, id: this.state.key, screenKey: this.state.screenKey },
+                });
+            }
         }
     }
 
-    onChangeEditorData = (event) => {
-        this.props.liveScoreUpdateNewsAction(event, "body")
-        // this.setState({ editorState: event })
-    }
-
-    EditorView = () => {
-        // const { liveScoreNewsState } = this.props;
-        const { editorState } = this.state;
-        return (
-            <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)", }}>
-                <div className="livescore-editor-news col-sm">
-                    <Editor
-                        editorState={editorState}
-                        editorClassName="newsDetailEditor"
-                        placeholder="News body"
-                        onChange={(e) => this.onChangeEditorData(e.blocks)}
-                        onEditorStateChange={this.onEditorStateChange}
-                        toolbar={{
-                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
-                            inline: { inDropdown: true },
-                            list: { inDropdown: true },
-                            textAlign: { inDropdown: true },
-                            link: { inDropdown: true },
-                            history: { inDropdown: true },
-                        }}
-                    />
-                </div>
-            </div>
-        )
+    handleChangeState(field, value) {
+        this.setState({
+            [field]: value,
+        });
     }
 
     onEditorStateChange = (editorState) => {
+        const body = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+
         this.setState({
             editorState,
+            body,
         });
     };
 
-    setInitalFiledValue(data, author) {
-        let authorData = null
-        if (getLiveScoreCompetiton()) {
-            authorData = JSON.parse(getLiveScoreCompetiton())
-        }
+    setInitialFilledValue(data, author) {
         this.formRef.current.setFieldsValue({
-            'news_Title': data.title,
-            'author': data.author ? data.author : author ? author : authorData ? authorData.longName : 'World sport actioa'
-        })
-        // let finalBody = data ? data.body ? data.body : "" : ""
-        // let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
-        // this.setState({ editorState: body })
+            communication_Title: data.title,
+            author: data.author ? data.author : author,
+        });
 
-        let finalBody = data ? data.body ? data.body : "" : ""
-        // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
-        // const editorState = EditorState.createWithContent(contentState);
-        // this.setState({
-        //     editorState
-        // })
+        const finalBody = data ? data.body ? data.body : "" : "";
 
         const html = finalBody;
         const contentBlock = htmlToDraft(html);
@@ -215,173 +179,138 @@ class AddCommunication extends Component {
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
             const editorState = EditorState.createWithContent(contentState);
             this.setState({
-                editorState
-            })
+                editorState,
+                body: data.body,
+            });
         }
+
+        if (data.expiryDate) {
+            const expiryDate = moment(data.expiryDate).format("YYYY-MM-DD");
+            const expiryTime = moment(data.expiryDate).format("HH:mm");
+
+            this.setState({
+                expiryDate,
+                expiryTime,
+            });
+        }
+
+        const toOrganisationIds = data.toOrganisationIds
+            ? data.toOrganisationIds.split(',').map((id) => parseInt(id, 10))
+            : [];
+        const toUserRoleIds = data.toUserRoleIds
+            ? data.toUserRoleIds.split(',').map((id) => parseInt(id, 10))
+            : [];
+        const toUserIds = data.toUserIds
+            ? data.toUserIds.split(',').map((id) => parseInt(id, 10))
+            : [];
+        if (data.toUserIds) {
+            this.props.getUsersByIds(toUserIds);
+        }
+
+        this.setState({
+            title: data.title || '',
+            allUser: !(data.toUserIds || data.toUserRoleIds),
+            selectedRoles: !!data.toUserRoleIds,
+            individualUsers: !!data.toUserIds,
+            allOrg: !data.toOrganisationIds,
+            individualOrg: !!data.toOrganisationIds,
+            toUserIds,
+            toOrganisationIds,
+            toUserRoleIds,
+        });
     }
 
-    componentDidUpdate(nextProps) {
-        let newsState = this.props.liveScoreNewsState.addNewsResult
-        let onLoad_2Data = this.props.liveScoreNewsState
-        if (nextProps.newsState !== newsState) {
-            if (onLoad_2Data.onLoad_2 === false && this.state.getDataLoading === true) {
-                // debugger
-                const appendData = this.props.liveScoreNewsState.addNewsResult
-                if (this.state.isEdit === true) {
-                    if (!appendData.hasOwnProperty('newsVideo')) {
-                        appendData['newsVideo'] = this.props.location.state.item.newsVideo
-                    }
-                    if (!appendData.hasOwnProperty('newsImage')) {
-                        appendData['newsImage'] = this.props.location.state.item.newsImage
-                    }
-                }
-
-                const { success } = this.props.liveScoreNewsState;
-
-                if (success) {
-                    history.push({
-                        pathname: '/matchDayNewsView',
-                        state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
-                    })
-                }
-            }
-        }
-    }
-
-    ////method to show modal view after click
+    /// method to show modal view after click
     showModal = () => {
         this.setState({
             visible: true,
         });
     };
 
-    ////method to hide modal view after ok click
-    handleOk = e => {
+    /// method to hide modal view after ok click
+    handleOk = () => {
         this.setState({
             visible: false,
         });
     };
 
-    ////method to hide modal view after click on cancle button
-    handleCancel = e => {
+    /// method to hide modal view after click on cancle button
+    handleCancel = () => {
         this.setState({
             visible: false,
         });
     };
 
-    // onChangeExpiryDate(date) {
-    //     let { addEditNews } = this.props.liveScoreNewsState
-    // }
-
-    ///method to change time slots
-    // onChangeTime(time, timeString) {
-    // }
-
-    ////method to setimage
-    setImage_1 = (data) => {
-        this.setState({ imageSelection: null, image: null })
-        this.props.liveScoreUpdateNewsAction(null, "newsImage")
-
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
-
-        if (data.files[0] !== undefined) {
-            // if (data.files[0].size > AppConstants.logo_size) {
-            //     message.error(AppConstants.videoSize);
-            //     return;
-            // }
-
-            if (this.state.isEdit) {
-                editData.newsImage = ''
-            }
-
-            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
-            // this.props.liveScoreUpdateNewsAction(data.files[0], "newsImage")
-        }
-    };
-
+    /// method to setimage
     setImage = (data) => {
+        this.setState({ imageSelection: null, image: null, imageUrl: null });
+        this.setState({ });
+
+        const editData = this.state;
+
         if (data.files[0] !== undefined) {
-            let file = data.files[0]
-            let extension = file.name.split('.').pop().toLowerCase();
-            let imageSizeValid = isImageSizeValid(file.size)
-            let isSuccess = isImageFormatValid(extension);
-            if (!isSuccess) {
-                message.error(AppConstants.logo_Image_Format);
-                return
+            if (this.state.isEdit) {
+                editData.imageUrl = '';
             }
-            if (!imageSizeValid) {
-                message.error(AppConstants.logo_Image_Size);
-                return
-            }
-            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]), imageTimeout: 2000, crossImageIcon: false })
-            setTimeout(() => {
-                this.setState({ imageTimeout: null, crossImageIcon: true })
-            }, 2000);
+
+            this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) });
         }
     };
 
-    ///method to open file to select image
+    /// method to open file to select image
     selectImage() {
         const fileInput = document.getElementById('user-pic');
         fileInput.setAttribute("type", "file");
         fileInput.setAttribute("accept", "image/*");
-        if (!!fileInput) {
+        if (fileInput) {
             fileInput.click();
         }
     }
 
-    ////method to setVideo
+    /// /method to setVideo
     setVideo = (data) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
-
-        this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
-        this.props.liveScoreUpdateNewsAction(null, "newsVideo")
+        this.setState({
+            video: null, videoSelection: '', crossVideoIcon: false, videoUrl: null,
+        });
 
         if (data.files[0] !== undefined) {
             if (data.files[0].size > AppConstants.video_size) {
                 message.error(AppConstants.videoSize);
                 return;
-            } else {
-                this.setState({
-                    videoTimeout: 2000,
-                    crossVideoIcon: false,
-                    video: data.files[0],
-                    videoSelection: URL.createObjectURL(data.files[0])
-                })
-                setTimeout(() => {
-                    this.setState({ videoTimeout: null, crossVideoIcon: true })
-                }, 2000);
             }
+            this.setState({
+                videoTimeout: 2000,
+                crossVideoIcon: false,
+                video: data.files[0],
+                videoSelection: URL.createObjectURL(data.files[0]),
+            });
+            setTimeout(() => {
+                this.setState({ videoTimeout: null, crossVideoIcon: true });
+            }, 2000);
 
             if (this.state.isEdit) {
-                editData.newsVideo = ''
+                this.setState({ videoUrl: null });
             }
-            // this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
-            // this.props.liveScoreUpdateNewsAction(URL.createObjectURL(data.files[0]), "newsVideo")
         }
     };
 
-    ///method to open file to select video
+    /// method to open file to select video
+    // eslint-disable-next-line class-methods-use-this
     selectVideo() {
         const fileInput = document.getElementById('user-vdo');
         fileInput.setAttribute("type", "file");
         fileInput.setAttribute("accept", "video/*");
-        if (!!fileInput) {
+        if (fileInput) {
             fileInput.click();
         }
     }
 
-    //On change title
+    // On change title
     onChangeTitle(title) {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
-        editData.title = title
-        this.props.liveScoreUpdateNewsAction(editData)
+        this.setState({ title });
     }
 
-    ////modal view
+    /// /modal view
     ModalView() {
         return (
             <Modal
@@ -396,16 +325,14 @@ class AddCommunication extends Component {
                 height={0}
                 closable={false}
             >
-                {/* <div style={{ backgroundColor: 'red', height: 100, width: 100 }}> */}
                 <Spin size="large" />
-                {/* </div> */}
             </Modal>
-        )
+        );
     }
 
-    ///////view for breadcrumb
+    /// view for breadcrumb
     headerView = () => {
-        let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
+        const isEdit = this.props.location.state ? this.props.location.state.isEdit : null;
         return (
             <div className="header-view">
                 <Header
@@ -413,12 +340,12 @@ class AddCommunication extends Component {
                     style={{
                         backgroundColor: "transparent",
                         display: "flex",
-                        alignItems: "center"
+                        alignItems: "center",
                     }}
                 >
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {isEdit ? AppConstants.editNews : AppConstants.addNews}
+                            {isEdit ? AppConstants.editCommunication : AppConstants.addCommunication}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -492,66 +419,79 @@ class AddCommunication extends Component {
     }
 
     deleteImage() {
-        this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false })
-        this.props.liveScoreUpdateNewsAction(null, "newsImage")
+        this.setState({
+            image: null, imageSelection: AppImages.circleImage, crossImageIcon: false, imageUrl: null,
+        });
     }
 
     deleteVideo() {
-        this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
-        this.props.liveScoreUpdateNewsAction(null, "newsVideo")
+        this.setState({
+            video: null, videoSelection: '', crossVideoIcon: false, videoUrl: null,
+        });
     }
 
     contentView = () => {
-        const { addEditNews, news_expire_date, expire_time, newsImage, newsVideo } = this.props.liveScoreNewsState;
-        let editData = addEditNews;
-        let expiryDate = news_expire_date
-        let expiryTime = expire_time
-        let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
-        // let stateWideMsg = getKeyForStateWideMessage()
+        const {
+            expiryDate, expiryTime, imageUrl, videoUrl,
+        } = this.state;
+        const editData = this.state;
+
         return (
             <div className="content-view pt-4">
-                <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
+                <Form.Item name="communication_Title" rules={[{ required: true, message: ValidationConstants.communicationValidation[0] }]}>
                     <InputWithHead
                         required="required-field pt-0"
-                        heading={AppConstants.newsTitle}
-                        placeholder={AppConstants.enterNewsTitle}
-                        name="newsTitle"
-                        onChange={(event) => this.props.liveScoreUpdateNewsAction(captializedString(event.target.value), "title")}
+                        heading={AppConstants.communicationTitle}
+                        placeholder={AppConstants.enterCommunicationTitle}
+                        name="communicationTitle"
+                        onChange={(event) => this.setState({ title: captializedString(event.target.value) })}
                         value={editData.title}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'news_Title': captializedString(i.target.value)
+                            communication_Title: captializedString(i.target.value),
                         })}
                     />
                 </Form.Item>
                 <InputWithHead
-                    // required=""
-                    heading={AppConstants.newsBody}
-                // value={editData.body}
+                    heading={AppConstants.communicationBody}
                 />
-
-                {this.EditorView()}
-
-                <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
+                <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)" }}>
+                    <div className="livescore-editor-news col-sm">
+                        <Editor
+                            editorState={this.state.editorState}
+                            editorClassName="newsDetailEditor"
+                            placeholder={AppConstants.communicationBody}
+                            onEditorStateChange={this.onEditorStateChange}
+                            toolbar={{
+                                options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign',
+                                    'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
+                                inline: { inDropdown: true },
+                                list: { inDropdown: true },
+                                textAlign: { inDropdown: true },
+                                link: { inDropdown: true },
+                                history: { inDropdown: true },
+                            }}
+                        />
+                    </div>
+                </div>
+                <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.communicationValidation[1] }]}>
                     <InputWithHead
                         required="required-field pt-4"
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
-                        onChange={(event) => this.props.liveScoreUpdateNewsAction(captializedString(event.target.value), "author")}
+                        onChange={(event) => this.setState({ author: captializedString(event.target.value) })}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'author': captializedString(i.target.value)
+                            author: captializedString(i.target.value),
                         })}
                     />
                 </Form.Item>
-                {this.state.recipientSelection === "Individual Manager" && this.managerView()}
-                {this.state.recipientSelection === "Individual Scorer" && this.scorerView()}
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.newsImage} />
+                        <InputWithHead heading={AppConstants.communicationImage} />
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
                             <ImageLoader
                                 timeout={this.state.imageTimeout}
-                                src={newsImage ? newsImage : this.state.imageSelection}
+                                src={imageUrl || this.state.imageSelection}
                             />
                         </div>
                         <div>
@@ -559,21 +499,21 @@ class AddCommunication extends Component {
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
-                                // onChange={(event) => {
-                                //     this.setImage(event.target, 'evt.target')
-                                //     this.setState({ imageTimeout: 2000, crossImageIcon: false })
-                                //     setTimeout(() => {
-                                //         this.setState({ imageTimeout: null, crossImageIcon: true })
-                                //     }, 2000);
-                                // }}
-                                onChange={(evt) => this.setImage(evt.target)}
+                                onChange={(event) => {
+                                    this.setImage(event.target, 'evt.target');
+                                    this.setState({ imageTimeout: 2000, crossImageIcon: false });
+                                    setTimeout(() => {
+                                        this.setState({ imageTimeout: null, crossImageIcon: true });
+                                    }, 2000);
+                                }}
                                 onClick={(event) => {
-                                    event.target.value = null
+                                    // eslint-disable-next-line no-param-reassign
+                                    event.target.value = null;
                                 }}
                             />
 
                             <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
-                                {(this.state.crossImageIcon || newsImage) && (
+                                {(this.state.crossImageIcon || imageUrl) && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                         <img
                                             className="dot-image"
@@ -587,18 +527,15 @@ class AddCommunication extends Component {
                                 )}
                             </div>
                         </div>
-                        <span className="image-size-format-text">
-                            {AppConstants.imageSizeFormatText}
-                        </span>
                     </div>
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.newsVideo} />
+                        <InputWithHead heading={AppConstants.communicationVideo} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
                             <ImageLoader
                                 timeout={this.state.videoTimeout}
                                 video
-                                src={newsVideo ? newsVideo : this.state.videoSelection}
-                                poster={(newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
+                                src={videoUrl || this.state.videoSelection}
+                                poster={(videoUrl || this.state.videoSelection !== '') ? '' : AppImages.circleImage}
                             />
                         </div>
                         <input
@@ -606,18 +543,16 @@ class AddCommunication extends Component {
                             id="user-vdo"
                             style={{ display: 'none' }}
                             onChange={(event) => {
-                                this.setVideo(event.target, "evt.target")
-                                // this.setState({ videoTimeout: 2000, crossVideoIcon: false })
-                                // setTimeout(() => {
-                                //     this.setState({ videoTimeout: null, crossVideoIcon: true })
-                                // }, 2000);
+                                this.setVideo(event.target, "evt.target");
                             }}
                             onClick={(event) => {
-                                event.target.value = null
+                                // eslint-disable-next-line no-param-reassign
+                                event.target.value = null;
                             }}
                         />
                         <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
-                            {(this.state.crossVideoIcon || newsVideo) &&
+                            {(this.state.crossVideoIcon || videoUrl)
+                            && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
                                         className="dot-image"
@@ -628,36 +563,37 @@ class AddCommunication extends Component {
                                         onClick={() => this.deleteVideo()}
                                     />
                                 </span>
-                            }
+                            )}
                         </div>
                         <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
                 </div>
 
-                {/* News expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.newsExpiryDate} />
+                        <InputWithHead heading={AppConstants.communicationExpiryDate} />
                         <DatePicker
-                            // size="large"
                             style={{ width: '100%' }}
-                            onChange={(date) => this.props.liveScoreUpdateNewsAction(date, "expire_date")}
+                            onChange={(date) => this.setState({ expiryDate: date })}
                             format="DD-MM-YYYY"
                             value={expiryDate ? moment(expiryDate) : ''}
                             showTime={false}
                             placeholder="dd-mm-yyyy"
-                            name="registrationOepn"
                         />
                     </div>
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.newsExpiryTime} />
+                        <InputWithHead heading={AppConstants.communicationExpiryTime} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: '100%' }}
                             format="HH:mm"
-                            value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
-                            onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
-                            onBlur={(e) => this.props.liveScoreUpdateNewsAction(e.target.value && moment(e.target.value, "HH:mm"), 'expire_time')}
+                            value={expiryTime && moment(expiryTime, "HH:mm")}
+                            onChange={(time) => this.setState({ expiryTime: time })}
+                            onBlur={
+                                (e) => {
+                                    this.setState({ expiryTime: e.target.value && moment(e.target.value, "HH:mm") });
+                                }
+                            }
                             placeholder="Select Time"
                         />
                     </div>
@@ -669,9 +605,9 @@ class AddCommunication extends Component {
     };
 
     userSearchApi(searchText) {
+        this.setState({ isFetchedUsersData: true });
 
         const {
-            organisationId,
             yearRefId,
             competitionUniqueKey,
             roleId,
@@ -679,13 +615,11 @@ class AddCommunication extends Component {
             linkedEntityId,
             dobFrom,
             dobTo,
-            postCode
-
+            postCode,
         } = this.state;
 
-
         const filter = {
-            organisationId,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId,
             competitionUniqueKey,
             roleId,
@@ -702,96 +636,102 @@ class AddCommunication extends Component {
         };
 
         this.props.getUserDashboardTextualAction(filter);
-
     }
 
     stateWideMsgView() {
         const {
             allOrg,
-            indivisualOrg,
-            indivisualUsers,
+            individualOrg,
+            individualUsers,
             allUser,
             selectedRoles,
-            onTextualLoad,
-            userDashboardTextualList,
-            userName,
-            orgName,
-            affiliateTo,
-            onLoadSearch
-        } = this.props.communicationModuleState;
-        let organisationUniqueKey = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-        let affiliateToData = isArrayNotEmpty(affiliateTo.affiliatedTo) ? affiliateTo.affiliatedTo : [];
-        let userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : [];
-        // let uniqueValues = [];
-        // if (affiliateToData.affiliatedTo != undefined) {
-        //     let obj = {
-        //         organisationId: getOrganisationData().organisationUniqueKey,
-        //         name: getOrganisationData().name
-        //     }
-        //     uniqueValues.push(obj);
-        //     let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
-        //     if (isEmptyArray) {
-        //         uniqueValues = [...uniqueValues, ...arr];
-        //     }
-        // }
+            isFetchedUsersData,
+        } = this.state;
 
-        const selctedRolArr = [
-            { label: 'Managers', value: "manager", },
-            { label: 'Coaches', value: "coaches", },
-            { label: 'Scorers', value: "scorers", },
-            { label: 'Players', value: "players", },
-            { label: 'Umpires', value: "umpires", },
+        const {
+            impersonationList, affiliatesByParentList, usersByIdsList, userDashboardTextualList, onLoadSearch, onTextualLoad,
+        } = this.props.userState;
+
+        const impersonationListData = isArrayNotEmpty(impersonationList) ? impersonationList : [];
+        const affiliateToData = impersonationListData.length > 0
+            ? impersonationListData.map((aff) => {
+                const orgId = affiliatesByParentList.find((item) => item.id === aff.affiliateId)?.affiliateOrgId;
+                return {
+                    ...aff,
+                    orgId,
+                };
+            }) : [];
+        const userDefaultData = !isFetchedUsersData
+            ? usersByIdsList.map((user) => ({
+                userId: user.id,
+                name: `${user.firstName} ${user.lastName}`,
+            })) : [];
+
+        const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : userDefaultData;
+
+        const selectedRoleArray = [
+            { label: 'Managers', value: "manager" },
+            { label: 'Coaches', value: "coach" },
+            { label: 'Scorers', value: "scorer" },
+            { label: 'Players', value: "player" },
+            { label: 'Umpires', value: "umpire" },
         ];
+
         return (
             <div>
-                <InputWithHead heading={AppConstants.organisation + "(s)"} />
+                <InputWithHead heading={`${AppConstants.organisation}(s)`} />
                 <div className="d-flex flex-column">
-                    <Radio className='mt-3'
-                        onChange={(e) => this.props.updateCommunicationModuleData({ data: e.target.checked, key: "allOrg" })}
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allOrg: true,
+                                individualOrg: false,
+                            });
+                        }}
                         checked={allOrg}
                     >
                         {AppConstants.allOrganisation}
                     </Radio>
-                    <Radio className='mt-3'
-                        onChange={(e) => this.props.updateCommunicationModuleData({ data: e.target.checked, key: "indivisualOrg" })}
-                        checked={indivisualOrg}
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allOrg: false,
+                                individualOrg: true,
+                                toOrganisationIds: [],
+                            });
+                        }}
+                        checked={individualOrg}
                     >
-                        {AppConstants.individualOrganisation + '(s)'}
+                        {`${AppConstants.individualOrganisation}(s)`}
                     </Radio>
                 </div>
 
-
-
-                {indivisualOrg && (
-                    <div className='mt-3'>
-
+                {individualOrg && (
+                    <div className="mt-3">
                         <Select
-                            mode='multiple'
-                            className='ml-5'
+                            mode="multiple"
+                            className="ml-5"
                             style={{ width: '97%', height: '44px' }}
-                            placeholder="Select User"
-                            onChange={(item, option) => {
-                                const orgName = option.children
-                                const orgId = option.key
-                                // this.props.clearListAction()
-                                this.props.updateCommunicationModuleData({ dara: orgId, key: 'orgId', selectedName: orgName, subKey: 'orgName' })
+                            placeholder={AppConstants.selectOrganisation}
+                            onChange={(value) => {
+                                this.setState({
+                                    toOrganisationIds: value,
+                                });
                             }}
+                            filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                            filterOption={false}
-                            onSearch={(value) => {
-                                this.setState({ exsitingValue: value })
-                                value && value.length > 2
-                                    && this.props.getAffiliateToOrganisationAction(organisationUniqueKey, value)
-                                // : this.props.clearListAction()
-                            }}
-                            value={orgName ? orgName : undefined}
+                            value={
+                                affiliateToData
+                                    .filter((org) => this.state.toOrganisationIds.includes(org.orgId))
+                                    .map((role) => role.orgId)
+                            }
                         >
                             {
-
-                                this.state.exsitingValue &&
-                                affiliateToData.map((org) => (
-                                    <Option key={org.organisationId} value={org.organisationId}>
-                                        {org.name}
+                                affiliateToData.length > 0 && affiliateToData.map((org, index) => (
+                                    <Option key={`${org.orgId}_${index}`} value={org.orgId}>
+                                        {org.affiliateName}
                                     </Option>
                                 ))
                             }
@@ -806,21 +746,36 @@ class AddCommunication extends Component {
                     style={{ display: "flex", alignItems: "center" }}
                 >
                     <Radio
-                        onChange={(e) => this.props.updateCommunicationModuleData({ data: e.target.checked, key: "allUser" })}
+                        onChange={() => {
+                            this.setState({
+                                allUser: true,
+                                toUserRoleIds: [],
+                                selectedRoles: false,
+                                individualUsers: false,
+                            });
+                        }}
                         checked={allUser}
                     >
-                        {"All Users"}
+                        All Users
                     </Radio>
                 </div>
 
                 <div
                     style={{ display: "flex", alignItems: "center" }}
                 >
-                    <Radio className='mt-3'
-                        onChange={(e) => this.props.updateCommunicationModuleData({ data: e.target.checked, key: "selectedRoles" })}
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allUser: false,
+                                toUserIds: [],
+                                selectedRoles: true,
+                                individualUsers: false,
+                            });
+                        }}
                         checked={selectedRoles}
                     >
-                        {"Selected Role(s)"}
+                        Selected Role(s)
                     </Radio>
 
                 </div>
@@ -828,10 +783,27 @@ class AddCommunication extends Component {
                 <div className="col-sm">
                     {selectedRoles && (
                         <Checkbox.Group
+                            value={
+                                this.props.userState.roles
+                                    .filter((role) => this.state.toUserRoleIds.includes(role.id))
+                                    .map((role) => role.description.toLowerCase())
+                            }
+                            onChange={(value) => {
+                                const selected = value.length > 0
+                                    ? value.map((item) => {
+                                        const role = this.props.userState.roles
+                                            .find((rol) => rol.description.toLowerCase() === item.toLowerCase());
+                                        return role?.id;
+                                    }).filter((item) => item)
+                                    : [];
+                                this.setState({
+                                    toUserRoleIds: selected,
+                                });
+                            }}
                         >
 
-                            {selctedRolArr.map((item) => (
-                                <div>
+                            {selectedRoleArray.map((item) => (
+                                <div key={item.value}>
                                     <Checkbox className="single-checkbox-radio-style pt-4 ml-0" value={item.value}>
                                         {item.label}
                                     </Checkbox>
@@ -845,42 +817,51 @@ class AddCommunication extends Component {
                 <div
                     style={{ display: "flex", alignItems: "center" }}
                 >
-                    <Radio className='mt-3'
-                        onChange={(e) => this.props.updateCommunicationModuleData({ data: e.target.checked, key: "indivisualUsers" })}
-                        checked={indivisualUsers}
+                    <Radio
+                        className="mt-3"
+                        onChange={() => {
+                            this.setState({
+                                allUser: false,
+                                selectedRoles: false,
+                                toUserRoleIds: [],
+                                individualUsers: true,
+                            });
+                        }}
+                        checked={individualUsers}
                     >
-                        {"Individual User(s)"}
+                        Individual User(s)
                     </Radio>
                 </div>
 
-                {indivisualUsers && (
-                    <div className='mt-3'>
+                {individualUsers && (
+                    <div className="mt-3">
 
                         <Select
-                            className='ml-5'
-                            mode='multiple'
+                            className="ml-5"
+                            mode="multiple"
                             style={{ width: '97%', height: '44px' }}
                             placeholder="Select User"
                             filterOption={false}
-                            onChange={(item, option) => {
-                                const userName = option.children
-                                const userId = option.value
-                                // this.props.clearListAction()
-                                this.props.updateCommunicationModuleData({ data: userId, key: 'userId', selectedName: userName, subKey: "userName" })
+                            onChange={(value) => {
+                                this.setState({
+                                    toUserIds: value,
+                                });
                             }}
                             notFoundContent={onTextualLoad === true ? <Spin size="small" /> : null}
                             onSearch={(value) => {
-                                this.setState({ userValue: value })
-                                value && value.length > 2
-                                    && this.userSearchApi(value)
-                                // : this.props.clearListAction()
+                                this.setState({ userValue: value });
+                                if (value && value.length > 2) {
+                                    this.userSearchApi(value);
+                                }
                             }}
-                            value={userName ? userName : undefined}
+                            value={
+                                !isFetchedUsersData && userDefaultData
+                                    ? userDefaultData.map((usr) => usr.userId)
+                                    : this.state.toUserIds
+                            }
                         >
                             {
-
-                                this.state.userValue &&
-                                userData.map((item) => (
+                                userData.length > 0 && userData.map((item) => (
                                     <Option key={item.userId} value={item.userId}>
                                         {item.name}
                                     </Option>
@@ -892,118 +873,83 @@ class AddCommunication extends Component {
                 )}
 
             </div>
-        )
+        );
     }
 
     onSaveButton = () => {
-        let newsId = this.props.location.state ? this.props.location.state.item ? this.props.location.state.item.id ? this.props.location.state.item.id : null : null : null
-        let mediaArry = []
+        const mediaArray = [
+            this.state.image,
+            this.state.video,
+        ].filter((media) => media);
 
-        if (this.state.image !== null && this.state.video !== null) {
-            mediaArry = [
-                this.state.image,
-                this.state.video
-            ]
-        } else if (this.state.image !== null) {
-            mediaArry = [
-                this.state.image
-            ]
-        } else if (this.state.video !== null) {
-            mediaArry = [
-                this.state.video
-            ]
-        }
+        const expiryDate = moment(this.state.newExpiryDate).format("YYYY-MM-DD");
+        const expiryTime = moment(this.state.expire_time).format("HH:mm");
+        const postDate = moment(`${expiryDate} ${expiryTime}`);
 
-        const { liveScoreNewsState } = this.props;
-        let data = liveScoreNewsState
+        const payload = {
+            id: this.state.isEdit ? this.props.location.state.item.id : null,
+            title: this.state.title,
+            author: this.state.author,
+            body: this.state.body,
+            key: this.state.key,
+            mediaArray,
+            expiryDate: postDate,
+            organisationId: this.state.organisationId,
+            toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
+            toUserRoleIds: this.state.selectedRoles ? this.state.toUserRoleIds : [],
+            toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
+            imageUrl: this.state.imageUrl,
+            videoUrl: this.state.videoUrl,
+        };
 
-        if (data.newExpiryDate && data.expire_time) {
-            let expiry__Date = data.news_expire_date
-            // let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
-            let expiryTime = moment(data.expire_time).format("HH:mm")
-            let postDate = moment(expiry__Date + " " + expiryTime);
-
-            let formatedDate = new Date(postDate).toISOString()
-            liveScoreNewsState.addEditNews.news_expire_date = formatedDate
-        }
-
-        if (data.newsBody) {
-            let newstringArr = []
-            for (let i in data.newsBody) {
-                newstringArr.push(data.newsBody[i].text)
-            }
-
-            let bodyDetails = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-            liveScoreNewsState.addEditNews.body = bodyDetails
-        }
-
-        let editData = liveScoreNewsState.addEditNews;
-        if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.props.liveScoreAddNewsAction({
-                editData: editData,
-                mediaArry: mediaArry,
-                newsId: newsId,
-                key: this.state.key,
-                compId: id,
-                newsImage: data.newsImage,
-                newsVideo: data.newsVideo
-            })
-        } else {
-            this.props.liveScoreAddNewsAction({
-                editData: editData,
-                mediaArry: mediaArry,
-                newsId: newsId,
-                key: this.state.key,
-                compId: 1,
-                newsImage: data.newsImage,
-                newsVideo: data.newsVideo
-            })
-        }
-        this.setState({ getDataLoading: true })
+        this.props.addCommunicationAction(payload);
     }
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = (isSubmitting) => {
-        // const { liveScoreNewsState } = this.props;
-        // let editData = liveScoreNewsState.addEditNews;
-
-        return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm pl-3">
-                            <div className="reg-add-save-button">
-                                <NavLink
-                                    to={{
-                                        pathname: "/CommunicationList",
-                                        state: { screenKey: this.state.screenKey }
-                                    }}
-                                >
-                                    <Button className="cancelBtnWidth" type="cancel-button">
-                                        {AppConstants.cancel}
-                                    </Button>
-                                </NavLink>
-                            </div>
-                        </div>
-                        <div className="col-sm pr-3">
-                            <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
-                                    {AppConstants.next}
+    footerView = (isSubmitting) => (
+        <div className="fluid-width">
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm pl-3">
+                        <div className="reg-add-save-button">
+                            <NavLink
+                                to={{
+                                    pathname: "/communicationList",
+                                    state: { screenKey: this.state.screenKey },
+                                }}
+                            >
+                                <Button className="cancelBtnWidth" type="cancel-button">
+                                    {AppConstants.cancel}
                                 </Button>
-                            </div>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="col-sm pr-3">
+                        <div className="comp-buttons-view">
+                            <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                {AppConstants.next}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        );
+        </div>
+    );
+
+    onFinishFailed = () => {
+        message.config({ maxCount: 1, duration: 1.5 });
+        message.error(ValidationConstants.plzReviewPage);
     };
 
     render() {
-        // let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width default-bg">
-                <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
+                <Loader
+                    visible={
+                        this.props.userState.onImpersonationLoad
+                        || this.props.userState.onLoad
+                        || this.props.communicationState.onLoad
+                    }
+                />
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
 
                 <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
@@ -1013,12 +959,12 @@ class AddCommunication extends Component {
                     <Form
                         ref={this.formRef}
                         autoComplete="off"
-                        // onFinish={this.onSaveButton}
                         noValidate="noValidate"
+                        onFinish={this.onSaveButton}
+                        onFinishFailed={this.onFinishFailed}
                     >
                         <Content>
                             <div className="formView">{this.contentView()}</div>
-                            {/* {this.ModalView()} */}
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
@@ -1030,29 +976,23 @@ class AddCommunication extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        liveScoreAddNewsDetailsAction,
-        liveScoreAddNewsAction,
-        liveScoreUpdateNewsAction,
-        liveScoreRefreshNewsAction,
-        getliveScoreScorerList,
-        liveScoreManagerListAction,
-        setDefaultImageVideoNewAction,
+        getRoleAction,
+        getAffiliatesListingAction,
+        refreshCommunicationModuleDataAction,
         getAffiliateToOrganisationAction,
         clearListAction,
         getUserDashboardTextualAction,
-        updateCommunicationModuleData
-    }, dispatch)
+        filterByRelations,
+        addCommunicationAction,
+        getUsersByIds,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreNewsState: state.LiveScoreNewsState,
-        liveScoreScorerState: state.LiveScoreScorerState,
-        liveScoreManagerState: state.LiveScoreManagerState,
-        liveScoreState: state.LiveScoreState,
         userState: state.UserState,
-        communicationModuleState: state.CommunicationModuleState
-    }
+        communicationState: state.CommunicationState,
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCommunication);

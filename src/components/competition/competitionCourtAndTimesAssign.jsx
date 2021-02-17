@@ -750,7 +750,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     this.addDataTimeSlot(item, index, timeSlotData.competitionVenueTimeslotsDayTime)
                                                 )}
                                             </div>
-                                            <span id={AppUniqueId.timeRotation_matchDuration_Add_anotherday_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")}> + {AppConstants.addAnotherDay}</span>
+                                            <span id={AppUniqueId.timeRotation_matchDuration_Add_anotherday_Btn} className="input-heading-add-another font-15 mb-3" onClick={() => disabledStatus == false && this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")}> + {AppConstants.addAnotherDay}</span>
                                         </div>
                                     )}
                                     {timeSlotData.mainTimeRotationID === 8 && item.id == 1 && timeSlotData.timeslotGenerationRefId === index + 1 && (
