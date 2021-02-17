@@ -152,7 +152,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                 })
             }
         }
-        console.log('team list', this.props.competitionTimeSlots.teamList);
     }
 
     // for set default values
@@ -1408,17 +1407,25 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     teamPreferencesView() {
         const mockTeams = ['Sparrows (11s - Div A)','Sparrows (12s - Div B)','Sparrows (13s - Div C)'];
+        const teams = this.props.competitionTimeSlots.teamList;
+        console.log('team list', this.props.competitionTimeSlots.teamList);
         return (
             <div className="formView" style={{marginTop: '20px'}}>
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
                     <div style={{display: 'flex'}}>
                         <Select
-                            className="mr-4"
+                            className="mr-4 w-25"
+                            placeholder="Select"
                         >
-                            {mockTeams.map((team, i) => {
-                                return <Option key={i}>{team}</Option>
-                            })}
+                            {(teams || []).map((team, i) => (
+                                <Option 
+                                    key={i}
+                                    value={team.id}
+                                >
+                                    {`${team.name} (${team.divisionName} - ${team.gradeName})`}
+                                </Option>
+                            ))}
                         </Select>
                         <Select
                             // disabled={disabledStatus}
@@ -1426,7 +1433,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             mode="multiple"
                             placeholder="Select"
                             filterOption={false}
-                            className="d-grid align-content-center"
+                            className="d-grid align-content-center w-75"
                             // onBlur={() => this.props.ClearDivisionArr('divisions')}
                             // onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(
                             //     divisions, 
