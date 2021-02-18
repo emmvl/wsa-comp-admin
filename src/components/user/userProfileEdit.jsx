@@ -1411,7 +1411,7 @@ class UserProfileEdit extends Component {
             key: u.id,
             id: u.id,
             firstName: u.firstName,
-            lastName:  u.lastName,
+            lastName:  u.lastname,
             dob: !!u.dateOfBirth ? moment(u.dateOfBirth).format('DD/MM/YYYY') : null,
             email: u.email,
             mobile: u.mobileNumber,
