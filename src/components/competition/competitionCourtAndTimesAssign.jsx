@@ -464,11 +464,11 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     handleAddPrefer = () => {
-        const { preferences } = this.state;
-        const preferencesCopy = _.cloneDeep(preferences);
+        const { timePreferences } = this.state;
+        const preferencesCopy = _.cloneDeep(timePreferences);
 
-        preferencesCopy.push({});
-        this.setState({ preferences: preferencesCopy });
+        preferencesCopy.push(initialTimePrefItem);
+        this.setState({ timePreferences: preferencesCopy });
     }
 
     headerView = () => (
