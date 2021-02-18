@@ -2711,6 +2711,23 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
+    handlePublishModal = (key) => {
+        try {
+            if (key === "ok") {
+                let competitiondata = this.props.drawsState.liveScoreCompetiton
+                localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
+                localStorage.removeItem('stateWideMessage')
+                setLiveScoreUmpireCompition(competitiondata.id)
+                setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
+                history.push('/matchDayLadderList')
+            } else {
+                this.setState({ publishModalVisible: false })
+            }
+        } catch (ex) {
+            console.log("Error in handlePublishModal::" + ex)
+        }
+    }
+
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {
         const { publishStatus, activeDrawsRoundsData, teamNames } = this.props.drawsState;
