@@ -124,3 +124,21 @@ export function* competitionTimeslotsGetSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+// competition team list get
+export function* teamsTimeslotsPreferencesGetSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.teamsTimeslotsPreferencesGet, action.id);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

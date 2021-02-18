@@ -49,7 +49,8 @@ const initialState = {
     timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg],
     teamList: null,
     timeslotsList: null,
-    timeslotsManualRawData: null
+    timeslotsManualRawData: null,
+    timePreferences: null,
 };
 
 //time slot Entity
@@ -885,6 +886,19 @@ function CompetitionTimeSlots(state = initialState, action) {
             return {
                 ...state,
                 timeslotsList: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
+
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD:
+            return { ...state, onLoad: true, error: null }
+            
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_SUCCESS:
+            return {
+                ...state,
+                timePreferences: action.result,
                 onLoad: false,
                 error: null,
                 status: action.status

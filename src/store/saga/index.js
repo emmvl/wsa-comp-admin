@@ -108,7 +108,8 @@ import {
     competitonWithTimeSlots,
     competitonWithTimeSlotsPostApi,
     competitionTeamsGetSaga,
-    competitionTimeslotsGetSaga
+    competitionTimeslotsGetSaga,
+    teamsTimeslotsPreferencesGetSaga,
 } from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
 import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
@@ -316,6 +317,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD, competitonWithTimeSlots);
     yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_GET_LOAD, competitionTeamsGetSaga);
     yield takeEvery(ApiConstants.API_COMPETITION_TIMESLOTS_GET_LOAD, competitionTimeslotsGetSaga);
+    yield takeEvery(ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD, teamsTimeslotsPreferencesGetSaga);
 
     /// /Venue Constraints
     yield takeEvery(ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD, venueTimeSaga);

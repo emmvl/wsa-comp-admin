@@ -42,6 +42,15 @@ function getCompetitionTimeslots(id) {
     return action;
 }
 
+// get competition timeslots
+function getTeamTimeslotsPreferences(id) {
+    const action = {
+        type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD,
+        id,
+    }
+    return action;
+}
+
 function UpdateTimeSlotsData(value, key, contentType, index, mainId, id) {
     return {
         type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION,
@@ -101,5 +110,6 @@ export {
     searchDivisionList,
     ClearDivisionArr,
     getCompetitionTeams,
-    getCompetitionTimeslots
+    getCompetitionTimeslots,
+    getTeamTimeslotsPreferences
 }
