@@ -1406,7 +1406,7 @@ class UserProfileEdit extends Component {
             key: u.id,
             id: u.id,
             name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
-            dob: moment(u.dateOfBirth).format('DD/MM/YYYY'),
+            dob: !!u.dateOfBirth ? moment(u.dateOfBirth).format('DD/MM/YYYY') : null,
             email: u.email,
             mobile: u.mobileNumber,
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
