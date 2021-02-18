@@ -182,8 +182,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                 }))
 
             this.setState({ timePreferences });
-        } 
-        // console.log('this.props.competitionTimeSlots', this.props.competitionTimeSlots);  
+        }
+
+        if (prevProps.competitionTimeSlots.timeslotsManualRawData !== this.props.competitionTimeSlots.timeslotsManualRawData) {
+            this.setIsManuallySelected();
+        }
+        // console.log('this.state.isManuallySelected', this.state.isManuallySelected);  
+    }
+
+    setIsManuallySelected = () => {
+        const { competitionTimeslotManual } = this.handleTimeslotsFormData();
+        this.setState({ isManuallySelected: !!competitionTimeslotManual.length });
     }
 
     // for set default values
@@ -284,8 +293,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
     }
 
-    // for post api
-    saveAPIsActionCall = () => {
+    handleTimeslotsFormData = () => {
         let AllVenueData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeSlotManualAllVenue))
         let timeSlotData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.getcompetitionTimeSlotData))
         timeSlotData['competitionUniqueKey'] = this.state.firstTimeCompId
@@ -419,6 +427,14 @@ class CompetitionCourtAndTimesAssign extends Component {
         delete timeSlotData['divisions']
         delete timeSlotData['grades']
         delete timeSlotData['mainTimeRotationID']
+
+        return timeSlotData;
+    }
+
+    // for post api
+    saveAPIsActionCall = () => {
+        const timeSlotData = this.handleTimeslotsFormData();
+
         if (timeSlotData.competitionUniqueKey == null || timeSlotData.competitionUniqueKey == '') {
             message.error(ValidationConstants.pleaseSelectCompetition)
         } else {
@@ -449,8 +465,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     changeTimeSlotGeneration(e) {
         this.props.UpdateTimeSlotsData(e.target.value, 'timeslotGenerationRefId', null, null, null, null)
         setTimeout(() => {
-            this.setDetailsFieldValue()
-        }, 800);
+            this.setDetailsFieldValue();
+            this.setIsManuallySelected();
+        }, 0);
     }
 
     handleChangePrefer = (e, preferItemIdx, key, timePreferencesForChange) => {
@@ -687,9 +704,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     getCourtRotationId = (data, key) => {
-        const { isManuallySelected } = this.state;
-        // this.setState({ isManuallySelected: key === 'manuallySubPref'})
-        
         switch (key) {
             case 'timeSlotPref':
                 switch (data) {
@@ -902,7 +916,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                         </div>
                     )}
-                    {!this.state.isQuickCompetition && isTeamPreferencesEnable && this.footerViewSettings()}
+                    {!this.state.isQuickCompetition && isTeamPreferencesEnable && this.state.isManuallySelected && this.footerViewSettings()}
                 </div>
             </div>
         )
@@ -1588,13 +1602,13 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
                             </div>
                         </Content>
-                        {!isTeamPreferencesEnable && (
+                        {(!isTeamPreferencesEnable || !this.state.isManuallySelected) && (
                             <Footer>
                                 {!this.state.isQuickCompetition && this.footerView()}
                             </Footer>
                         )}
                     </Form>
-                    {isTeamPreferencesEnable &&
+                    {isTeamPreferencesEnable && this.state.isManuallySelected &&
                         <Form
                             ref={this.formPreferenceRef}
                             autoComplete="off"
