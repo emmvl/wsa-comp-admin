@@ -50,7 +50,9 @@ import {
     getOrganisationData,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    setLiveScoreUmpireCompition,
+    setLiveScoreUmpireCompitionData
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import './draws.scss';
@@ -2955,7 +2957,7 @@ function mapDispatchToProps(dispatch) {
             unlockDrawsAction,
             getActiveRoundsAction,
             changeDrawsDateRangeAction,
-            checkBoxOnChange,
+            checkBoxOnChange
         },
         dispatch
     );
