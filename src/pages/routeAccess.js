@@ -45,7 +45,7 @@ const routeAdminRole = [
     "/userAffiliateApproveRejectForm",
     "/userAddAffiliates",
     "/userEditAffiliates",
-    "/userOurOragnization",
+    "/userOurOrganization",
     "/userTextualDashboard",
     "/userProfileEdit",
     "/venuesList",

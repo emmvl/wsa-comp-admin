@@ -97,8 +97,8 @@ class UserOurOrganization extends Component {
             })
         }
 
-        this.referenceCalls(this.state.organisationId);
-        this.apiCalls(this.state.organisationId);
+        await this.referenceCalls(this.state.organisationId);
+        await this.apiCalls(this.state.organisationId);
     }
 
     componentDidUpdate(nextProps) {
@@ -183,8 +183,8 @@ class UserOurOrganization extends Component {
         this.props.getAffiliateToOrganisationAction(organisationId);
     }
 
-    apiCalls = (organisationId) => {
-        this.props.getAffiliateOurOrganisationIdAction(organisationId);
+    apiCalls = async (organisationId) => {
+        await this.props.getAffiliateOurOrganisationIdAction(organisationId);
         this.setState({ getDataLoading: true });
     }
 
@@ -196,7 +196,8 @@ class UserOurOrganization extends Component {
             suburb: affiliate.suburb,
             stateRefId: affiliate.stateRefId,
             postcode: affiliate.postalCode,
-            orgEmail: affiliate.email,
+            email: affiliate.email,
+            phoneNo: affiliate.phoneNo,
         })
 
         const { contacts } = affiliate;

@@ -527,7 +527,7 @@ let userHttpApi = {
   },
 
   getUsersByIds(ids) {
-      return Method.dataGet(`users/byIds?ids=${ids}`);
+      return Method.dataGet(`users/byIds?ids=${JSON.stringify(ids)}`);
   },
 
   async getUserParentData(userId) {

@@ -356,7 +356,7 @@ class AddCommunication extends Component {
     /// Manager and Scorer view
     scorerView = () => {
         const { scorerListResult } = this.props.liveScoreState
-        let scorerList = isArrayNotEmpty(scorerListResult) ? scorerListResult : []
+        const scorerList = isArrayNotEmpty(scorerListResult) ? scorerListResult : []
 
         return (
             <div className="row">
@@ -370,7 +370,7 @@ class AddCommunication extends Component {
                     // value={editData.title}
                     >
                         {scorerList.map((item) => (
-                            <Option key={'scorer_' + item.firstName} value={item.firstName}>
+                            <Option key={`scorer_${item.firstName}`} value={item.firstName}>
                                 {item.NameWithNumber}
                             </Option>
                         ))}
@@ -383,7 +383,7 @@ class AddCommunication extends Component {
     /// Manager and Scorer view
     managerView = () => {
         const { managerListResult } = this.props.liveScoreManagerState
-        let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
+        const managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
 
         return (
             <div className="row">
@@ -397,8 +397,8 @@ class AddCommunication extends Component {
                     // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
                         {managerList.map((item) => (
-                            <Option key={'manager_' + item.firstName} value={item.firstName}>
-                                {item.firstName + " " + item.lastName}
+                            <Option key={`manager_${item.firstName}`} value={item.firstName}>
+                                {`${item.firstName} ${item.lastName}`}
                             </Option>
                         ))}
                     </Select>
@@ -408,7 +408,7 @@ class AddCommunication extends Component {
     }
 
     html2text(html) {
-        var d = document.createElement('div');
+        const d = document.createElement('div');
         d.innerHTML = html;
         return d.textContent;
     }
@@ -661,6 +661,18 @@ class AddCommunication extends Component {
                     orgId,
                 };
             }) : [];
+        const organisationListData = affiliateToData.length > 0
+            ? affiliateToData.map((aff) => ({
+                orgId: aff.orgId,
+                name: aff.affiliateName,
+            })) : [];
+        if (getOrganisationData()) {
+            organisationListData.push({
+                orgId: `${getOrganisationData().organisationId}`,
+                name: getOrganisationData().name,
+            });
+        }
+
         const userDefaultData = !isFetchedUsersData
             ? usersByIdsList.map((user) => ({
                 userId: user.id,
@@ -723,15 +735,15 @@ class AddCommunication extends Component {
                             filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                             value={
-                                affiliateToData
+                                organisationListData
                                     .filter((org) => this.state.toOrganisationIds.includes(org.orgId))
-                                    .map((role) => role.orgId)
+                                    .map((org) => org.orgId)
                             }
                         >
                             {
-                                affiliateToData.length > 0 && affiliateToData.map((org, index) => (
+                                organisationListData.length > 0 && organisationListData.map((org, index) => (
                                     <Option key={`${org.orgId}_${index}`} value={org.orgId}>
-                                        {org.affiliateName}
+                                        {org.name}
                                     </Option>
                                 ))
                             }
@@ -854,11 +866,12 @@ class AddCommunication extends Component {
                                     this.userSearchApi(value);
                                 }
                             }}
-                            value={
+                            defaultValue={
                                 !isFetchedUsersData && userDefaultData
                                     ? userDefaultData.map((usr) => usr.userId)
                                     : this.state.toUserIds
                             }
+                            value={this.state.toUserIds}
                         >
                             {
                                 userData.length > 0 && userData.map((item) => (
