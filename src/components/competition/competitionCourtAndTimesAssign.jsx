@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import CustomTooltip from 'react-png-tooltip';
 import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip } from 'antd';
 import moment from 'moment';
+import _ from 'lodash';
 
 import './competition.css';
 
@@ -53,7 +54,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             isQuickCompetition: false,
             onNextLoad: false,
             nextButtonClicked: false,
-            finalTypeRefId: null
+            finalTypeRefId: null,
+            teams: null,
+            preferences: [{}],
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
@@ -97,9 +100,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     // component did update
-    componentDidUpdate(nextProps) {
+    componentDidUpdate(prevProps) {
         let competitionTimeSlots = this.props.competitionTimeSlots
-        if (nextProps.competitionTimeSlots !== competitionTimeSlots) {
+        if (prevProps.competitionTimeSlots !== competitionTimeSlots) {
             if (competitionTimeSlots.onGetTimeSlotLoad == false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false,
@@ -108,9 +111,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             }
         }
 
-        if (nextProps.appState !== this.props.appState) {
+        if (prevProps.appState !== this.props.appState) {
             let competitionList = this.props.appState.own_CompetitionArr;
-            if (nextProps.appState.own_CompetitionArr !== competitionList) {
+            if (prevProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
@@ -153,6 +156,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                     nextButtonClicked: false
                 })
             }
+        }
+
+        if (prevProps.competitionTimeSlots.teamList !== this.props.competitionTimeSlots.teamList) {
+            this.setState({ teams: this.props.competitionTimeSlots.teamList });
         }
     }
 
@@ -421,6 +428,22 @@ class CompetitionCourtAndTimesAssign extends Component {
         setTimeout(() => {
             this.setDetailsFieldValue()
         }, 800);
+    }
+
+    handleChangePrefer = (e, preferItemIdx, key) => {
+        const { preferences } = this.state;
+        const preferencesCopy = _.cloneDeep(preferences);
+
+        preferencesCopy[preferItemIdx][key] = e;
+        this.setState({ preferences: preferencesCopy });
+    }
+
+    handleAddPrefer = () => {
+        const { preferences } = this.state;
+        const preferencesCopy = _.cloneDeep(preferences);
+
+        preferencesCopy.push({});
+        this.setState({ preferences: preferencesCopy });
     }
 
     headerView = () => (
@@ -1426,61 +1449,78 @@ class CompetitionCourtAndTimesAssign extends Component {
     };
 
     teamPreferencesView() {
-        const { timeslotsList, weekDays, teamList } = this.props.competitionTimeSlots;
+        const { timeslotsList, weekDays } = this.props.competitionTimeSlots;
+        const { teams, preferences } = this.state;
 
         return (
             <div className="formView mt-4">
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
-                    <div className="d-flex align-items-start">
-                        <Select
-                            className="mr-4 w-25"
-                            placeholder="Select"
-                        >
-                            {(teamList || []).map(team => (
-                                <Option 
-                                    key={team.id}
-                                    value={team.id}
-                                >
-                                    {`${team.name} (${team.divisionName} - ${team.gradeName})`}
-                                </Option>
-                            ))}
-                        </Select>
-                        <Select
-                            // disabled={disabledStatus}
-                            // id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Divisions}
-                            mode="multiple"
-                            placeholder="Select"
-                            filterOption={false}
-                            className="d-grid align-content-center w-75"
-                            // onBlur={() => this.props.ClearDivisionArr('divisions')}
-                            // onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(
-                            //     divisions, 
-                            //     'venuePreferenceTypeRefId', 
-                            //     'competitionTimeslotManualAllvenue', 
-                            //     timeIndex, 
-                            //     id, 
-                            //     index, 
-                            //     venueIndex
-                            // )}
-                            // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
-                        >
-                            {!!weekDays.length && (timeslotsList || []).map(timeslot => (
-                                <Option 
-                                    key={timeslot.id}
-                                    value={timeslot.id}
-                                >
-                                    {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
-                                </Option>
-                            ))}
-                        </Select> 
-                    </div>
+
+                    {preferences.map((preferItem, preferItemIdx) => (
+                        <div className="d-flex align-items-start mb-4">
+                            <Select
+                                className="mr-4 w-25"
+                                placeholder="Select"
+                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'teamId')}
+                                value={preferItem.teamId || ''}
+                            >
+                                {(teams || []).map(team => (
+                                    <Option 
+                                        key={team.id}
+                                        value={team.id}
+                                    >
+                                        {`${team.name} (${team.divisionName} - ${team.gradeName})`}
+                                    </Option>
+                                ))}
+                            </Select>
+                            <Select
+                                // disabled={disabledStatus}
+                                // id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Divisions}
+                                mode="multiple"
+                                placeholder="Select"
+                                filterOption={false}
+                                className="d-grid align-content-center w-75"
+                                value={preferItem.competitionTimeslotsIds || []}
+                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds')}
+                                // onBlur={() => this.props.ClearDivisionArr('divisions')}
+                                // onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(
+                                //     divisions, 
+                                //     'venuePreferenceTypeRefId', 
+                                //     'competitionTimeslotManualAllvenue', 
+                                //     timeIndex, 
+                                //     id, 
+                                //     index, 
+                                //     venueIndex
+                                // )}
+                                // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
+                            >
+                                {!!weekDays.length && (timeslotsList || []).map(timeslot => (
+                                    <Option 
+                                        key={timeslot.id}
+                                        value={timeslot.id}
+                                    >
+                                        {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
+                                    </Option>
+                                ))}
+                            </Select> 
+                        </div>
+                    ))}
+                    
+                    <span 
+                        className="input-heading-add-another" 
+                        onClick={() => this.handleAddPrefer()}
+                    > 
+                        +{AppConstants.addTeam}
+                    </span>
                 </div>
             </div>
         );
     }
 
     render() {
+        const { preferences } = this.state;
+
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
