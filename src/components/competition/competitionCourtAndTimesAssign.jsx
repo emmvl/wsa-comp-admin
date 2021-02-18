@@ -48,6 +48,8 @@ const initialTimePrefItem = {
     competitionTimeslotsIds: null
 }
 
+const isTeamPreferencesEnable = process.env.REACT_APP_TEAM_PREFERENCES_FOR_DRAW === 'true';
+
 class CompetitionCourtAndTimesAssign extends Component {
     constructor(props) {
         super(props);
@@ -63,11 +65,13 @@ class CompetitionCourtAndTimesAssign extends Component {
             finalTypeRefId: null,
             teams: null,
             timePreferences: null,
+            isManuallySelected: false,
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
         this.props.getVenuesTypeAction()
         this.formRef = createRef();
+        this.formPreferenceRef = createRef();
     }
 
     // component did mount
@@ -178,7 +182,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                 }))
 
             this.setState({ timePreferences });
-        }   
+        } 
+        // console.log('this.props.competitionTimeSlots', this.props.competitionTimeSlots);  
     }
 
     // for set default values
@@ -448,9 +453,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         }, 800);
     }
 
-    handleChangePrefer = (e, preferItemIdx, key) => {
-        const { timePreferences } = this.state;
-        const preferencesCopy = _.cloneDeep(timePreferences);
+    handleChangePrefer = (e, preferItemIdx, key, timePreferencesForChange) => {
+        const preferencesCopy = _.cloneDeep(timePreferencesForChange);
 
         preferencesCopy[preferItemIdx][key] = e;
         this.setState({ timePreferences: preferencesCopy });
@@ -683,6 +687,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     getCourtRotationId = (data, key) => {
+        const { isManuallySelected } = this.state;
+        // this.setState({ isManuallySelected: key === 'manuallySubPref'})
+        
         switch (key) {
             case 'timeSlotPref':
                 switch (data) {
@@ -895,7 +902,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                         </div>
                     )}
-                    {!this.state.isQuickCompetition && this.footerViewSettings()}
+                    {!this.state.isQuickCompetition && isTeamPreferencesEnable && this.footerViewSettings()}
                 </div>
             </div>
         )
@@ -1432,7 +1439,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 className="publish-button save-draft-text"
                                 htmlType="submit"
                                 type="primary"
-                                onClick={this.handleSavePreferences}
+                                // onClick={this.handleSavePreferences}
                             >
                                 {AppConstants.save}
                             </Button>
@@ -1453,7 +1460,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         );
     };
 
-        // footer view containing all the buttons like submit and cancel
+    // footer view containing all the buttons like submit and cancel
     footerViewSettings = () => {
         const isPublished = this.state.competitionStatus == 1;
         return (
@@ -1502,7 +1509,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <Select
                                 className="mr-4 w-25"
                                 placeholder="Select"
-                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'teamId')}
+                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'teamId', timePreferencesForMap)}
                                 value={preferItem.teamId || ''}
                             >
                                 {(teams || []).map(team => (
@@ -1515,13 +1522,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     </Option>
                                 ))}
                             </Select>
+                            
                             <Select
                                 mode="multiple"
                                 placeholder="Select"
                                 filterOption={false}
                                 className="d-grid align-content-center w-75"
                                 value={preferItem.competitionTimeslotsIds || []}
-                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds')}
+                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds', timePreferencesForMap)}
                                 // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                             >
                                 {!!weekDays.length && (timeslotsList || []).map(timeslot => (
@@ -1580,18 +1588,28 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
                             </div>
                         </Content>
+                        {!isTeamPreferencesEnable && (
+                            <Footer>
+                                {!this.state.isQuickCompetition && this.footerView()}
+                            </Footer>
+                        )}
                     </Form>
-                    <Form
-                        autoComplete="off"
-                        noValidate="noValidate"
-                    >
-                        <Content>
-                            {this.teamPreferencesView()}
-                        </Content>
-                        <Footer>
-                            {!this.state.isQuickCompetition && this.footerView()}
-                        </Footer>
-                    </Form>
+                    {isTeamPreferencesEnable &&
+                        <Form
+                            ref={this.formPreferenceRef}
+                            autoComplete="off"
+                            noValidate="noValidate"
+                            onFinish={this.handleSavePreferences}
+                            onFinishFailed={({ errorFields }) => this.formPreferenceRef.current.scrollToField(errorFields[0].name)}
+                        >
+                            <Content>
+                                {this.teamPreferencesView()}
+                            </Content>
+                            <Footer>
+                                {!this.state.isQuickCompetition && this.footerView()}
+                            </Footer>
+                        </Form>
+                    }
                 </Layout>
             </div>
         );
