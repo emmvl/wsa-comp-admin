@@ -3,7 +3,7 @@ import { Form, Radio } from "antd";
 import { get } from "lodash";
 
 import {
-    getArrayFromLength,
+    getArrayFromLength, getOnlyNumbers,
     isTimeoutsEnabled,
     timeoutsModes, timeoutsOptions,
 } from 'components/liveScore/liveScoreSettings/liveScoreSettingsUtils'
@@ -36,7 +36,7 @@ const LiveScoreSettingsTimeoutsFields = ({
     };
 
     const handleTimeoutInputChange = (e, timeoutFieldKey, fieldOptionsIndex) => {
-        const value = e.target.value.replace(/\D/g, "");
+        const value = getOnlyNumbers(e.target.value)
         const currentTimeoutsValue = values[timeoutFieldKey] || []
         const newValue = [...currentTimeoutsValue];
 
@@ -82,7 +82,9 @@ const LiveScoreSettingsTimeoutsFields = ({
                                         timeoutOption.fieldsLength,
                                     ).map((i, index) => {
                                         const humanIndex = index + 1;
-                                        const title = `${humanIndex}th ${timeoutOption.optionTitle}`;
+                                        const suffixes = ['st', 'nd', 'rd', 'th'];
+                                        const suffix = index < 3 ? suffixes[index] : suffixes[3];
+                                        const title = `${humanIndex}${suffix} ${timeoutOption.optionTitle}`;
 
                                         return (
                                             <div key={timeoutOption.key + index} className="col-auto">

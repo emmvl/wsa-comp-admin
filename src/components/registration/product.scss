@@ -164,6 +164,10 @@
   white-space: nowrap;
 }
 
+.font-15{
+  font-size: 15px;
+}
+
 .column-width-style {
   white-space: nowrap;
 }
@@ -1314,4 +1318,16 @@ input[type="number"] {
 
 .government-voucher-grey-text {
   color: var(--app-bbbbc6);
+}
+
+.input-heading-add-another-strike {
+  display: inline-flex;
+  align-content: flex-start;
+  padding-top: 22px;
+  color: var(--app-color);
+  font-weight: 500;
+  font-family: inter-medium, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: line-through;
 }

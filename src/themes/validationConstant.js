@@ -20,6 +20,7 @@ const ValidationConstants = {
     competitionField: 'Competition is required.',
     timerField: 'Timer is required.',
     newsValidation: ['News title is required.', 'Author is required'],
+    communicationValidation: ['Communication title is required.', 'Author is required'],
     bannerImage: 'Banner image is required',
     horizontalBannerImage: 'Horizontal Banner image is required',
     squareBannerImage: 'Square Banner image is required',

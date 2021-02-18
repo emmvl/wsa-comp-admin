@@ -1332,7 +1332,7 @@ function* getUsersByIdsSaga(action) {
 
 function* getUserParentData(action) {
   try {
-      const result = yield call(UserAxiosApi.getUserParentData);
+      const result = yield call(UserAxiosApi.getUserParentData, action.data);
       if (result.status === 1) {
           yield put({
               type: ApiConstants.API_GET_USER_PARENT_DATA_SUCCESS,
@@ -1344,6 +1344,24 @@ function* getUserParentData(action) {
       }
   } catch (error) {
       yield call(errorSaga, error);
+  }
+}
+
+function* cancelDeRegistrationSaga(action) {
+  try {
+      const result = yield call(registrationAxiosApi.cancelDeRegistration, action.payload);
+      if (result.status === 1) {
+          message.success(result.result.data.message)
+          yield put({
+              type: ApiConstants.API_CANCEL_DEREGISTRATION_SUCCESS,
+              // result: result.result.data,
+              status: result.status
+          });
+      } else {
+          yield call(failSaga, result)
+      }
+  } catch (error) {
+      yield call(errorSaga, error)
   }
 }
 
@@ -1413,4 +1431,5 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_FILTER_USERS_LOAD, getOrganisationUsers);
   yield takeEvery(ApiConstants.API_GET_USERS_BY_IDS_LOAD, getUsersByIdsSaga);
   yield takeEvery(ApiConstants.API_GET_USER_PARENT_DATA_LOAD, getUserParentData);
+  yield takeEvery(ApiConstants.API_CANCEL_DEREGISTRATION_LOAD, cancelDeRegistrationSaga);
 }

@@ -683,6 +683,13 @@ function setTextualTableListPageNumberAction(pageNum) {
     }
 }
 
+function cancelDeRegistrationAction(payload) {
+    return {
+        type: ApiConstants.API_CANCEL_DEREGISTRATION_LOAD,
+        payload,
+    };
+}
+
 export {
     getRoleAction,
     getUreAction,
@@ -773,4 +780,5 @@ export {
     setAffiliateTableListPageNumberAction,
     setTextualTableListPageSizeAction,
     setTextualTableListPageNumberAction,
+    cancelDeRegistrationAction
 };

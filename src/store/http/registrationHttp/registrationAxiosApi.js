@@ -584,6 +584,10 @@ const AxiosApi = {
         const url = `api/playerstopay/cash`;
         return Method.dataPost(url, token, payload);
     },
+    cancelDeRegistration(payload) {
+        const url = `/api/deregisterortransfer/cancel`;
+        return Method.dataPost(url, token, payload);
+    },
     async exportRegistraion(params) {
         const body = {
             ...params,

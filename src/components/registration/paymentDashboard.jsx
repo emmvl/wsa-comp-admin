@@ -133,6 +133,14 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
+        title: AppConstants.feePaid,
+        dataIndex: "paidFee",
+        key: "paidFee",
+        render: (paidFee, record) => currencyFormat(paidFee),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("paidFee"),
+    },
+    {
         title: AppConstants.portion,
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",

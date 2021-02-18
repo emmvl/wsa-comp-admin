@@ -205,7 +205,9 @@ class UserProfileEdit extends Component {
             || (titleLabel === AppConstants.edit + ' ' + AppConstants.child)
             || (titleLabel === AppConstants.addChild));
 
-            await this.props.getUserParentDataAction();
+            if (moduleFrom !== "7" && moduleFrom !== '8') {
+                await this.props.getUserParentDataAction(data.key);
+            }
             const { parentData } = this.props.userState;
             let additionalSettings = {};
             if (showSameEmailOption) {
@@ -234,16 +236,20 @@ class UserProfileEdit extends Component {
                 }
             }
 
-            await this.setState({
-                displaySection: moduleFrom,
-                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
-                showSameEmailOption,
-                titleLabel,
-                section,
-                loadValue: true,
-                userRole: getOrganisationData().userRole,
-                ...additionalSettings,
-            });
+            setTimeout(() => {
+                this.setState({
+                    displaySection: moduleFrom,
+                    userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
+                    showSameEmailOption,
+                    titleLabel,
+                    section,
+                    loadValue: true,
+                    userRole: getOrganisationData().userRole,
+                    ...additionalSettings,
+                });
+            }, 300);
+
+            this.setSameEmail(this.state.userData)
         }
     }
 
@@ -523,6 +529,45 @@ class UserProfileEdit extends Component {
         }
     };
 
+    setSameEmail = async (userData) => {
+        try{
+            const { parentData } = this.props.userState;
+            if(userData.isInActive){
+                this.setState({isSameEmail: true})
+                if (this.state.titleLabel === (AppConstants.edit + ' ' + AppConstants.address)) {
+                    await this.setState({
+                        showParentEmailSelectbox: true,
+                        showEmailInputbox: false,
+                        enableEmailInputbox: false,
+                    });
+                    await this.setUserDataContactEmail(parentData[0].email + '.' + this.state.userData.firstName);
+                } else {
+                    await this.setUserDataContactEmailDefault();
+                    await this.setState({
+                        enableEmailInputbox: false,
+                    });
+                }
+            }
+            else{
+                this.setState({isSameEmail: false})
+                if (this.state.titleLabel === (AppConstants.edit + ' ' + AppConstants.address)) {
+                    await this.setUserDataContactEmailDefault();
+                    await this.setState({
+                        showParentEmailSelectbox: false,
+                        showEmailInputbox: true,
+                        enableEmailInputbox: true,
+                    });
+                } else {
+                    await this.setState({
+                        enableEmailInputbox: true,
+                    })
+                }
+            }
+        } catch(ex) {
+            console.log("Error in setSameEmail::" +ex)
+        }
+    }
+
     addressEdit = () => {
         const { userData } = this.state;
         const { stateListData } = this.props.commonReducerState;
@@ -717,7 +762,9 @@ class UserProfileEdit extends Component {
                                             })
                                         }
                                     }
-                                    this.setState({ isSameEmail: e.target.checked });
+                                    let userData = this.state.userData;
+                                    userData.isInActive = e.target.checked ? 1 : 0;
+                                    this.setState({ isSameEmail: e.target.checked, userData: userData });
                                 }}
                             >
                                 {AppConstants.useParentEmail}
@@ -1344,8 +1391,11 @@ class UserProfileEdit extends Component {
         let selectedMatch = null;
 
         const rowSelection = {
+            type: 'radio',
             onChange: (selectedRowKeys, selectedRows) => {
-                selectedMatch = selectedRows;
+                if (selectedRows.length) {
+                    selectedMatch = selectedRows[0];
+                }
             },
             getCheckboxProps: (record) => ({
                 name: record.name,
@@ -1356,7 +1406,7 @@ class UserProfileEdit extends Component {
             key: u.id,
             id: u.id,
             name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
-            dob: u.dateOfBirth,
+            dob: moment(u.dateOfBirth).format('DD/MM/YYYY'),
             email: u.email,
             mobile: u.mobileNumber,
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
@@ -1413,7 +1463,6 @@ class UserProfileEdit extends Component {
                 <div className="table-responsive home-dash-table-view mt-3">
                     <Table
                         rowSelection={{
-                            type: 'radio',
                             ...rowSelection,
                         }}
                         className="home-dashboard-table"
