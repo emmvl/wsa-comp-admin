@@ -220,28 +220,28 @@ let AxiosApi = {
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus
+        paymentStatus,
     ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             organisationId: organisationUniqueKey,
-            userId: parseInt(userId),
-            registrationId: registrationId,
+            userId: parseInt(userId, 10),
+            registrationId,
             paging: {
                 offset,
                 limit,
             },
-            yearId: parseInt(yearId),
-            competitionKey: competitionKey,
-            paymentFor: paymentFor,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
+            yearId: parseInt(yearId, 10),
+            competitionKey,
+            paymentFor,
+            dateFrom,
+            dateTo,
             feeType,
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
         }
         var url = `api/payment/summary?search=${searchValue}`;
         if (sortBy && sortOrder) {
@@ -339,27 +339,28 @@ let AxiosApi = {
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus) {
+        paymentStatus,
+    ) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             organisationId: organisationUniqueKey,
-            userId: parseInt(userId),
-            registrationId: registrationId,
+            userId: parseInt(userId, 10),
+            registrationId,
             paging: {
-                offset: offset,
-                limit: 10
+                offset: 0,
+                limit: -1,
             },
-            yearId: parseInt(yearId),
-            competitionKey: competitionKey,
-            paymentFor: paymentFor,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
+            yearId: parseInt(yearId, 10),
+            competitionKey,
+            paymentFor,
+            dateFrom,
+            dateTo,
             feeType,
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus
+            paymentStatus,
         }
         var url = `/api/payment/summary/export?search=${searchValue}`;
         if (sortBy && sortOrder) {
