@@ -55,9 +55,14 @@ const columns = [
         key: "key",
     },
     {
-        title: AppConstants.name,
-        dataIndex: "name",
-        key: "name",
+        title: AppConstants.firstName,
+        dataIndex: "firstName",
+        key: "firstName",
+    },
+    {
+        title: AppConstants.lastName,
+        dataIndex: "lastName",
+        key: "lastName",
     },
     {
         title: AppConstants.dateOfBirth,
@@ -1405,7 +1410,8 @@ class UserProfileEdit extends Component {
         const dataSource = matches.map((u) => ({
             key: u.id,
             id: u.id,
-            name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
+            firstName: u.firstName,
+            lastName:  u.lastName,
             dob: !!u.dateOfBirth ? moment(u.dateOfBirth).format('DD/MM/YYYY') : null,
             email: u.email,
             mobile: u.mobileNumber,
