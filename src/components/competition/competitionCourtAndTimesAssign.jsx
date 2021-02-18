@@ -43,6 +43,11 @@ import DashboardLayout from 'pages/dashboardLayout';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
+const initialTimePrefItem = {
+    teamId: null,
+    competitionTimeslotsIds: null
+}
+
 class CompetitionCourtAndTimesAssign extends Component {
     constructor(props) {
         super(props);
@@ -170,14 +175,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             const timePreferences = this.props.competitionTimeSlots.timePreferences
                 .map(preferenceItem => ({
                     teamId: preferenceItem.id,
-                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => (
-                    //     {
-                    //     dayRefId: time.dayRefId,
-                    //     id: time.id,
-                    //     startTime: time.startTime
-                    // }
-                    time.id
-                    ))
+                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => time.id)
                 }))
 
             this.setState({ timePreferences });
@@ -450,14 +448,6 @@ class CompetitionCourtAndTimesAssign extends Component {
             this.setDetailsFieldValue()
         }, 800);
     }
-
-    // handleChangePrefer = (e, preferItemIdx, key) => {
-    //     const { preferences } = this.state;
-    //     const preferencesCopy = _.cloneDeep(preferences);
-
-    //     preferencesCopy[preferItemIdx][key] = e;
-    //     this.setState({ preferences: preferencesCopy });
-    // }
 
     handleChangePrefer = (e, preferItemIdx, key) => {
         const { timePreferences } = this.state;
@@ -1482,12 +1472,14 @@ class CompetitionCourtAndTimesAssign extends Component {
         const { timeslotsList, weekDays } = this.props.competitionTimeSlots;
         const { teams, timePreferences } = this.state;
 
+        const timePreferencesForMap =  !!timePreferences?.length ? timePreferences : [initialTimePrefItem];
+
         return (
             <div className="formView mt-4">
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
 
-                    {(timePreferences || []).map((preferItem, preferItemIdx) => (
+                    {(timePreferencesForMap || []).map((preferItem, preferItemIdx) => (
                         <div className="d-flex align-items-start mb-4">
                             <Select
                                 className="mr-4 w-25"
@@ -1510,7 +1502,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 placeholder="Select"
                                 filterOption={false}
                                 className="d-grid align-content-center w-75"
-                                // value={preferItem.preference.map(time => time.id) || []}
                                 value={preferItem.competitionTimeslotsIds || []}
                                 onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds')}
                                 // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
@@ -1539,8 +1530,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     render() {
-        const { preferences } = this.state;
-
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
