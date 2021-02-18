@@ -365,6 +365,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.invitedAnyAssocArr = []
                 state.invitedAnyClubArr = []
             }
+
             return {
                 ...state,
                 editLoader: false,
