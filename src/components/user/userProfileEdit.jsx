@@ -236,16 +236,18 @@ class UserProfileEdit extends Component {
                 }
             }
 
-            await this.setState({
-                displaySection: moduleFrom,
-                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
-                showSameEmailOption,
-                titleLabel,
-                section,
-                loadValue: true,
-                userRole: getOrganisationData().userRole,
-                ...additionalSettings,
-            });
+            setTimeout(() => {
+                this.setState({
+                    displaySection: moduleFrom,
+                    userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
+                    showSameEmailOption,
+                    titleLabel,
+                    section,
+                    loadValue: true,
+                    userRole: getOrganisationData().userRole,
+                    ...additionalSettings,
+                });
+            }, 300);
 
             this.setSameEmail(this.state.userData)
         }
