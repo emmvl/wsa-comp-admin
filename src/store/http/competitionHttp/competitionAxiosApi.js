@@ -58,6 +58,12 @@ let CompetitionAxiosApi = {
         return Method.dataGet(url, token);
     },
 
+    //////competition save own final team grading table data
+    teamsTimeslotsPreferencesSave(id, organisationId, payload) {
+        const url = `/api/competitions/${id}/teams/timeslots-preferences?organisationId=${organisationId}`;
+        return Method.dataPatch(url, token, payload);
+    },
+
     /////competition part player grade calculate player grading summary get API
     async getCompPartPlayerGradingSummary(yearRefId, competitionId) {
         let userId = await getUserId()
@@ -1051,6 +1057,78 @@ const Method = {
         });
     },
 
+    async dataPatch(newUrl, authorization, body) {
+        const url = newUrl;
+        return await new Promise((resolve, reject) => {
+            competitionHttp
+                .patch(url, body, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
+                    }
+            })
+            .then(result => {
+                if (result.status === 200) {
+                    return resolve({
+                        status: 1,
+                        result: result
+                    });
+              } else if (result.status === 212) {
+                    return resolve({
+                        status: 4,
+                        result: result
+                    });
+              } else {
+                if (result) {
+                    return reject({
+                        status: 3,
+                        error: result.data.message,
+                    });
+                } else {
+                    return reject({
+                        status: 4,
+                        error: "Something went wrong."
+                    });
+                }
+              }
+            })
+            .catch(err => {
+                if (err.response) {
+                    if (err.response.status !== null || err.response.status !== undefined) {
+                        if (err.response.status === 401) {
+                            let unauthorizedStatus = err.response.status;
+                            if (unauthorizedStatus === 401) {
+                                logout();
+                                message.error(ValidationConstants.messageStatus401)
+                            }
+                        } else if (err.response.status === 400) {
+                            message.config({
+                                duration: 1.5,
+                                maxCount: 1,
+                            });
+                            message.error(err.response.data.message);
+                            return reject({
+                                status: 5,
+                                error: err.response.data.message
+                            });
+                        } else {
+                            return reject({
+                                status: 5,
+                                error: err.response && err.response.data.message
+                            });
+                        }
+                    }
+                } else {
+                    return reject({
+                        status: 5,
+                        error: err.response && err.response.data.message
+                    });
+                }
+            });
+        });
+    },
 };
 
 export default CompetitionAxiosApi;

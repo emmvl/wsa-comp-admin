@@ -904,6 +904,18 @@ function CompetitionTimeSlots(state = initialState, action) {
                 status: action.status
             }
 
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_LOAD:
+            return { ...state, onLoad: true, error: null }
+                
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_SUCCESS:
+            return {
+                ...state,
+                timePreferences: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
         /// Venue list
         case ApiConstants.API_REG_FORM_VENUE_SUCCESS:
             return {

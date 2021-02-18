@@ -32,7 +32,7 @@ import {
     UpdateTimeSlotsData, UpdateTimeSlotsDataManual,
     addTimeSlotDataPost, searchDivisionList, ClearDivisionArr,
     getCompetitionTeams, getCompetitionTimeslots,
-    getTeamTimeslotsPreferences,
+    getTeamTimeslotsPreferences, saveTeamTimeslotsPreferences
 } from 'store/actions/competitionModuleAction/competitionTimeAndSlotsAction';
 import { timeSlotInit } from 'store/actions/commonAction/commonAction';
 import InputWithHead from 'customComponents/InputWithHead';
@@ -62,7 +62,6 @@ class CompetitionCourtAndTimesAssign extends Component {
             nextButtonClicked: false,
             finalTypeRefId: null,
             teams: null,
-            preferences: [{}],
             timePreferences: null,
         }
         // this.props.timeSlotInit()
@@ -469,6 +468,18 @@ class CompetitionCourtAndTimesAssign extends Component {
 
         preferencesCopy.push(initialTimePrefItem);
         this.setState({ timePreferences: preferencesCopy });
+    }
+
+    handleSavePreferences = () => {
+        const { timePreferences } = this.state;
+        const compIdNumber = getCompetitonId();
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        const payload = {
+            preferences: timePreferences,
+        }
+
+        this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, payload);
     }
 
     headerView = () => (
@@ -1421,6 +1432,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 className="publish-button save-draft-text"
                                 htmlType="submit"
                                 type="primary"
+                                onClick={this.handleSavePreferences}
                             >
                                 {AppConstants.save}
                             </Button>
@@ -1497,7 +1509,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     <Option 
                                         key={team.id}
                                         value={team.id}
-                                        disabled={timePreferences.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
+                                        disabled={timePreferencesForMap.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
                                     >
                                         {`${team.name} (${team.divisionName} - ${team.gradeName})`}
                                     </Option>
@@ -1602,6 +1614,7 @@ function mapDispatchToProps(dispatch) {
         getCompetitionTeams,
         getCompetitionTimeslots,
         getTeamTimeslotsPreferences,
+        saveTeamTimeslotsPreferences,
     }, dispatch);
 }
 

@@ -51,6 +51,17 @@ function getTeamTimeslotsPreferences(id) {
     return action;
 }
 
+// save competition timeslots
+function saveTeamTimeslotsPreferences(id, organisationId, payload) {
+    const action = {
+        type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_LOAD,
+        id,
+        organisationId,
+        payload
+    }
+    return action;
+}
+
 function UpdateTimeSlotsData(value, key, contentType, index, mainId, id) {
     return {
         type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION,
@@ -111,5 +122,6 @@ export {
     ClearDivisionArr,
     getCompetitionTeams,
     getCompetitionTimeslots,
-    getTeamTimeslotsPreferences
+    getTeamTimeslotsPreferences,
+    saveTeamTimeslotsPreferences
 }
