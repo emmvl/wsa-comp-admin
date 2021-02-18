@@ -457,6 +457,12 @@ class CompetitionCourtAndTimesAssign extends Component {
         this.setState({ timePreferences: preferencesCopy });
     }
 
+    handleRemovePreferLine = preferItemIdx => {
+        const { timePreferences } = this.state;
+        const preferencesNew = timePreferences.filter((_, idx) => idx !== preferItemIdx);
+        this.setState({ timePreferences: preferencesNew });
+    }
+
     handleAddPrefer = () => {
         const { preferences } = this.state;
         const preferencesCopy = _.cloneDeep(preferences);
@@ -1515,6 +1521,18 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     </Option>
                                 ))}
                             </Select> 
+                            {timePreferencesForMap.length > 1 && (
+                                <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.redCross}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                        onClick={() => this.handleRemovePreferLine(preferItemIdx)}
+                                    />
+                                </span>
+                            )}
                         </div>
                     ))}
                     
