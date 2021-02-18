@@ -1469,6 +1469,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     <Option 
                                         key={team.id}
                                         value={team.id}
+                                        disabled={preferences.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
                                     >
                                         {`${team.name} (${team.divisionName} - ${team.gradeName})`}
                                     </Option>
