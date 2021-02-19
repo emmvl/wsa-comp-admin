@@ -172,6 +172,13 @@ class CompetitionCourtAndTimesAssign extends Component {
         if (prevProps.competitionTimeSlots.timeslotsManualRawData !== this.props.competitionTimeSlots.timeslotsManualRawData) {
             this.setIsManuallySelected();
         }
+
+        if (prevProps.competitionTimeSlots.timePreferences !== this.props.competitionTimeSlots.timePreferences) {
+            const timePreferencesProps = {
+                preferences: this.getTimePreferencesProps()
+            }
+            this.setState({ preferenceFormValues: timePreferencesProps });
+        }
         // console.log('this.state.isManuallySelected', this.state.isManuallySelected);  
     }
 
@@ -1493,10 +1500,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <Form.List name="preferences">
                         {(timePreferences, { add, remove }) => (
                             <>
-                                {timePreferences.map(field => (
+                                {timePreferences.map((field, fieldIdx) => (
                                     <Space 
                                         key={field.key} 
-                                        style={{ marginBottom: 8 }} 
+                                        style={{ marginBottom: 25 }} 
                                         align="baseline"
                                         className='d-flex w-100 preference-form-line'
                                     >
@@ -1508,16 +1515,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         >
                                              <Select
                                                 placeholder="Select"
-                                                style={{ width: '95%' }}
                                             >
                                                 {(teams || []).map(team => (
                                                     <Option 
                                                         key={team.id}
                                                         value={team.id}
-                                                        // disabled={selectedTeams.some(team => team === team.id && team !== preferItem.teamId)}
-                                                        // disabled={
-                                                        //     preferenceFormValues?.preferences.some(preference => preference?.teamId === team.id && preference?.teamId)
-                                                        // }
+                                                        disabled={
+                                                            preferenceFormValues?.preferences.some((preference, idx) => preference?.teamId === team.id && idx !== fieldIdx)
+                                                        }
                                                     >
                                                         {`${team.name} (${team.divisionName} - ${team.gradeName})`}
                                                     </Option>
@@ -1576,11 +1581,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     handleChangePreferences = (_, allValues) => {
-        console.log('allValues', allValues);
-        // const preferenceFormValues = allValues.preferences.map(value => value?.teamId);
         this.setState({ preferenceFormValues: allValues });
     }
-;
+
     render() {
         const timePreferencesProps = this.getTimePreferencesProps();
     
@@ -1618,7 +1621,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             onFinish={this.handleSavePreferences}
                             onFinishFailed={({ errorFields }) => this.formPreferenceRef.current.scrollToField(errorFields[0].name)}
                             initialValues={{ preferences: [ ...timePreferencesProps]} }
-                            onValuesChange={(changedValues, allValues) => this.handleChangePreferences(changedValues, allValues)}
+                            onValuesChange={(_, allValues) => this.setState({ preferenceFormValues: allValues })}
                         >
                             <Content>
                                 {this.teamPreferencesView()}

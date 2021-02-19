@@ -155,6 +155,7 @@ export function* teamsTimeslotsPreferencesSaveSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result)
         }
