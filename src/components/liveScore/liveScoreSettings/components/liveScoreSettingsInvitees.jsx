@@ -15,7 +15,7 @@ const LiveScoreSettingsInvitees = ({
     onInviteesChange,
     onInviteesSearchAction,
     organisationTypeRefId,
-    openModel,
+    onOpenModel,
 }) => {
     const dispatch = useDispatch();
     const liveScoreSettingState = useSelector(
@@ -42,7 +42,7 @@ const LiveScoreSettingsInvitees = ({
     const orgLevelId = JSON.stringify(organisationTypeRefId);
     const isEditMode = stateEditMode === "edit" || localEditMode === "edit";
     const disabledComponent = isEditMode && onOkClick;
-    const isEdit = stateEditMode || localEditMode ? stateEditMode || localEditMode : "add";
+    const isEdit = (stateEditMode || localEditMode) || "add";
 
     const onInviteeSearch = (value, inviteesType) => {
         dispatch(onInviteesSearchAction(value, inviteesType));
@@ -59,7 +59,7 @@ const LiveScoreSettingsInvitees = ({
             {(isEdit.edit === "edit" || isEdit === "edit") && onOkClick && (
                 <div className="transfer-image-view">
                     <Button
-                        onClick={openModel}
+                        onClick={onOpenModel}
                         className="primary-add-comp-form"
                         type="primary"
                     >

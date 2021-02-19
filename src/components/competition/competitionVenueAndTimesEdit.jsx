@@ -312,8 +312,10 @@ class CompetitionVenueAndTimesEdit extends Component {
         // let venueData = this.props.venueTimeState.venuData;
         // let isVenueMapped = venueData.isVenueMapped;
         // let affiliateData = venueData.affiliateData;
-        let venueOrganisation = this.props.userState.affiliateList;
-        let organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        const { affiliateList, impersonationList = [] } = this.props.userState;
+        const venueOrganisation = affiliateList.length ? affiliateList : impersonationList;
+        const organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.forEach((item) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);

@@ -96,8 +96,9 @@ const columns = [
                         screen: "/registration",
                     },
                 }}
-            >
-                <span className="input-heading-add-another pt-0">{name}</span>
+            > 
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{name}</span>
+                  
             </NavLink>
         ),
     },

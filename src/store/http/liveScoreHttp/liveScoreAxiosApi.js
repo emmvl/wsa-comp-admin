@@ -121,6 +121,7 @@ const LiveScoreAxiosApi = {
     liveScoreSettingPost(data) {
         const venueString = JSON.stringify(data.venue);
         const url = `competitions?venues=${venueString}`;
+
         return Method.dataPost(url, null, data.body);
     },
 

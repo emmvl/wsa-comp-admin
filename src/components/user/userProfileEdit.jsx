@@ -55,9 +55,14 @@ const columns = [
         key: "key",
     },
     {
-        title: AppConstants.name,
-        dataIndex: "name",
-        key: "name",
+        title: AppConstants.firstName,
+        dataIndex: "firstName",
+        key: "firstName",
+    },
+    {
+        title: AppConstants.lastName,
+        dataIndex: "lastName",
+        key: "lastName",
     },
     {
         title: AppConstants.dateOfBirth,
@@ -236,16 +241,18 @@ class UserProfileEdit extends Component {
                 }
             }
 
-            await this.setState({
-                displaySection: moduleFrom,
-                userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
-                showSameEmailOption,
-                titleLabel,
-                section,
-                loadValue: true,
-                userRole: getOrganisationData().userRole,
-                ...additionalSettings,
-            });
+            setTimeout(() => {
+                this.setState({
+                    displaySection: moduleFrom,
+                    userData: (moduleFrom != "7" && moduleFrom != "8") ? data : userDataTemp,
+                    showSameEmailOption,
+                    titleLabel,
+                    section,
+                    loadValue: true,
+                    userRole: getOrganisationData().userRole,
+                    ...additionalSettings,
+                });
+            }, 300);
 
             this.setSameEmail(this.state.userData)
         }
@@ -1403,8 +1410,9 @@ class UserProfileEdit extends Component {
         const dataSource = matches.map((u) => ({
             key: u.id,
             id: u.id,
-            name: `${u.firstName} ${u.lastName ? u.lastName : ''}`,
-            dob: moment(u.dateOfBirth).format('DD/MM/YYYY'),
+            firstName: u.firstName,
+            lastName:  u.lastname,
+            dob: !!u.dateOfBirth ? moment(u.dateOfBirth).format('DD/MM/YYYY') : null,
             email: u.email,
             mobile: u.mobileNumber,
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
