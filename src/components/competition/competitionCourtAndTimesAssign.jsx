@@ -179,7 +179,6 @@ class CompetitionCourtAndTimesAssign extends Component {
             }
             this.setState({ preferenceFormValues: timePreferencesProps });
         }
-        // console.log('this.state.isManuallySelected', this.state.isManuallySelected);  
     }
 
     setIsManuallySelected = () => {
@@ -420,8 +419,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         delete timeSlotData['grades']
         delete timeSlotData['mainTimeRotationID']
 
-        console.log('timeSlotData', timeSlotData);
-
         return timeSlotData;
     }
 
@@ -477,7 +474,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     handleSavePreferences = values => {
-        console.log('Received values of form:', values);
         const compIdNumber = getCompetitonId();
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
