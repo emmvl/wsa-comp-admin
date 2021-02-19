@@ -10,7 +10,7 @@ const { Option } = Select;
 const LiveScoreSettingsInvitees = ({
     stateEditMode,
     localEditMode,
-    onOkClick,
+    okClick,
     onFormChange,
     onInviteesChange,
     onInviteesSearchAction,
@@ -41,8 +41,9 @@ const LiveScoreSettingsInvitees = ({
     const invitees = get(liveScoreSettingState, "registrationInvitees", []);
     const orgLevelId = JSON.stringify(organisationTypeRefId);
     const isEditMode = stateEditMode === "edit" || localEditMode === "edit";
-    const disabledComponent = isEditMode && onOkClick;
+    const disabledComponent = isEditMode && okClick;
     const isEdit = (stateEditMode || localEditMode) || "add";
+    const isEditButtonShow = (isEdit.edit === "edit" || isEdit === "edit") && okClick;
 
     const onInviteeSearch = (value, inviteesType) => {
         dispatch(onInviteesSearchAction(value, inviteesType));
@@ -52,11 +53,11 @@ const LiveScoreSettingsInvitees = ({
         <div
             className={
                 (isEdit.edit === "edit" || isEdit === "edit")
-                && onOkClick
+                && okClick
                 && "inside-container-view"
             }
         >
-            {(isEdit.edit === "edit" || isEdit === "edit") && onOkClick && (
+            {isEditButtonShow && (
                 <div className="transfer-image-view">
                     <Button
                         onClick={onOpenModel}
@@ -73,7 +74,7 @@ const LiveScoreSettingsInvitees = ({
                     className={
                         `reg-competition-radio${
                             (isEdit.edit === "edit" || isEdit === "edit")
-                            && onOkClick
+                            && okClick
                         }`
                             ? ""
                             : " mt-5"
@@ -471,5 +472,16 @@ const LiveScoreSettingsInvitees = ({
         </div>
     );
 };
+
+LiveScoreSettingsInvitees.defaultProps = {
+    stateEditMode: '',
+    localEditMode: '',
+    okClick: false,
+    onFormChange: () => {},
+    onInviteesChange: () => {},
+    onInviteesSearchAction: () => {},
+    organisationTypeRefId: {},
+    onOpenModel: () => {},
+}
 
 export default LiveScoreSettingsInvitees;
