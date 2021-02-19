@@ -1042,4 +1042,12 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
     position: absolute;
     bottom: -22px;
     left: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preference-form-line .ant-form-item-explain > div {
+    display: inline;
 }
