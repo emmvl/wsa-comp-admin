@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CustomTooltip from 'react-png-tooltip';
-import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip, Input } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -342,7 +342,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             for (let l in manualcompetitionTimeslotsEntityOBj) {
                                 manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
                                 manualperVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: 0,
+                                    competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k].competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: getTimeSlot[j].dayRefId,
                                     startTime: getStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -351,7 +351,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             }
                         } else {
                             manualperVenueObj = {
-                                competitionVenueTimeslotsDayTimeId: 0,
+                                competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k].competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
                                 dayRefId: getTimeSlot[j].dayRefId,
                                 startTime: getStartTime[k].startTime,
                                 sortOrder: JSON.parse(k),
@@ -392,9 +392,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                             if (timeSlotData.mainTimeRotationID == 8) {
                                 for (let l in competitionTimeslotsEntityObj) {
                                     competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
-
+                                    
                                     manualAllVenueObj = {
-                                        competitionVenueTimeslotsDayTimeId: 0,
+                                        competitionVenueTimeslotsDayTimeId: !!manualStartTime[k].competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                         dayRefId: timeSloltdataArr[j].dayRefId,
                                         startTime: manualStartTime[k].startTime,
                                         sortOrder: JSON.parse(k),
@@ -403,7 +403,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 }
                             } else {
                                 manualAllVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: 0,
+                                    competitionVenueTimeslotsDayTimeId: !!manualStartTime[k].competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: timeSloltdataArr[j].dayRefId,
                                     startTime: manualStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -427,6 +427,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         delete timeSlotData['divisions']
         delete timeSlotData['grades']
         delete timeSlotData['mainTimeRotationID']
+
+        console.log('timeSlotData', timeSlotData);
 
         return timeSlotData;
     }
@@ -1520,41 +1522,63 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                     {(timePreferencesForMap || []).map((preferItem, preferItemIdx) => (
                         <div className="d-flex align-items-start mb-4">
-                            <Select
+                            <Form.Item
                                 className="mr-4 w-25"
-                                placeholder="Select"
-                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'teamId', timePreferencesForMap)}
-                                value={preferItem.teamId || ''}
+                                name={`teamname-${preferItemIdx}`}
+                                rules={[
+                                {
+                                    required: true,
+                                    message: ValidationConstants.pleaseSelectTeam,
+                                },
+                                ]}
                             >
-                                {(teams || []).map(team => (
-                                    <Option 
-                                        key={team.id}
-                                        value={team.id}
-                                        disabled={timePreferencesForMap.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
-                                    >
-                                        {`${team.name} (${team.divisionName} - ${team.gradeName})`}
-                                    </Option>
-                                ))}
-                            </Select>
+                                <Select
+                                    placeholder="Select"
+                                    onChange={e => this.handleChangePrefer(e, preferItemIdx, 'teamId', timePreferencesForMap)}
+                                    value={preferItem.teamId || ''}
+                                    style={{ width: '95%' }}
+                                >
+                                    {(teams || []).map(team => (
+                                        <Option 
+                                            key={team.id}
+                                            value={team.id}
+                                            disabled={timePreferencesForMap.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
+                                        >
+                                            {`${team.name} (${team.divisionName} - ${team.gradeName})`}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
                             
-                            <Select
-                                mode="multiple"
-                                placeholder="Select"
-                                filterOption={false}
-                                className="d-grid align-content-center w-75"
-                                value={preferItem.competitionTimeslotsIds || []}
-                                onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds', timePreferencesForMap)}
-                                // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
+                            <Form.Item
+                                className="w-75"
+                                name={`timeslots-${preferItemIdx}`}
+                                rules={[
+                                {
+                                    required: true,
+                                    message: ValidationConstants.timeSlotPreference,
+                                },
+                                ]}
                             >
-                                {!!weekDays.length && (timeslotsList || []).map(timeslot => (
-                                    <Option 
-                                        key={timeslot.id}
-                                        value={timeslot.id}
-                                    >
-                                        {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
-                                    </Option>
-                                ))}
-                            </Select> 
+                                <Select
+                                    mode="multiple"
+                                    placeholder="Select"
+                                    filterOption={false}
+                                    className="d-grid align-content-center"
+                                    value={preferItem.competitionTimeslotsIds || []}
+                                    onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds', timePreferencesForMap)}
+                                    // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
+                                >
+                                    {!!weekDays.length && (timeslotsList || []).map(timeslot => (
+                                        <Option 
+                                            key={timeslot.id}
+                                            value={timeslot.id}
+                                        >
+                                            {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
+                                        </Option>
+                                    ))}
+                                </Select> 
+                            </Form.Item>
                             {timePreferencesForMap.length > 1 && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
