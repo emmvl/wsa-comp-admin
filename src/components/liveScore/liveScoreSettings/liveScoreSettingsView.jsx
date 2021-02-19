@@ -478,6 +478,7 @@ class LiveScoreSettingsView extends Component {
                 duration: 1.5,
                 maxCount: 1,
             });
+
             message.error(ValidationConstants.pleaseSelectRegInvitees, 1.5);
             localStorage.setItem("regInvitees", "false");
         } else if (associationChecked === true || clubChecked === true) {
@@ -1398,11 +1399,12 @@ class LiveScoreSettingsView extends Component {
                     <LiveScoreSettingsInvitees
                         stateEditMode={this.state.isEdit}
                         localEditMode={this.state.edit}
-                        onOkClick={this.state.onOkClick}
+                        okClick={this.state.onOkClick}
                         organisationTypeRefId={this.state.organisationTypeRefId}
                         onInviteesChange={this.onInviteesChange}
                         onOpenModel={this.openModel}
                         onFormChange={this.props.onChangeSettingForm}
+                        onInviteesSearchAction={this.props.onInviteesSearchAction}
                     />
                 </div>
             </div>
