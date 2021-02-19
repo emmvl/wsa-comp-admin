@@ -3,9 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CustomTooltip from 'react-png-tooltip';
-import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip, Input } from 'antd';
+import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip, Input, Space } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
+
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import './competition.css';
 
@@ -493,7 +495,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         this.setState({ timePreferences: preferencesCopy });
     }
 
-    handleSavePreferences = () => {
+    handleSavePreferences = (values) => {
+        console.log('Received values of form:', values);
         const { timePreferences } = this.state;
         const compIdNumber = getCompetitonId();
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
@@ -502,7 +505,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             preferences: timePreferences,
         }
 
-        this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, payload);
+        this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, values);
     }
 
     headerView = () => (
@@ -1520,7 +1523,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <div className="content-view pt-3">
                     <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
 
-                    {(timePreferencesForMap || []).map((preferItem, preferItemIdx) => (
+                    {/* {(timePreferencesForMap || []).map((preferItem, preferItemIdx) => (
                         <div className="d-flex align-items-start mb-4">
                             <Form.Item
                                 className="mr-4 w-25"
@@ -1592,20 +1595,90 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 </span>
                             )}
                         </div>
-                    ))}
+                    ))} */}
                     
-                    <span 
+                    {/* <span 
                         className="input-heading-add-another" 
                         onClick={() => this.handleAddPrefer()}
                     > 
                         +{AppConstants.addTeam}
-                    </span>
+                    </span> */}
+
+                    <Form.List name="preferences">
+                        {(timePreferences, { add, remove }) => (
+                            <>
+                                {timePreferences.map(field => (
+                                    <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                        <Form.Item
+                                            {...field}
+                                            name={[field.name, 'teamId']}
+                                            fieldKey={[field.fieldKey, 'teamId']}
+                                            rules={[{ required: true, message: 'Missing first name' }]}
+                                        >
+                                             <Select
+                                                placeholder="Select"
+                                                style={{ width: '95%' }}
+                                            >
+                                                {(teams || []).map(team => (
+                                                    <Option 
+                                                        key={team.id}
+                                                        value={team.id}
+                                                        // disabled={timePreferencesForMap.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
+                                                    >
+                                                        {`${team.name} (${team.divisionName} - ${team.gradeName})`}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            name={[field.name, 'competitionTimeslotsIds']}
+                                            fieldKey={[field.fieldKey, 'competitionTimeslotsIds']}
+                                            rules={[{ required: true, message: 'Missing last name' }]}
+                                        >
+                                            <Select
+                                                mode="multiple"
+                                                placeholder="Select"
+                                                filterOption={false}
+                                                className="d-grid align-content-center"
+                                            >
+                                                {!!weekDays.length && (timeslotsList || []).map(timeslot => (
+                                                    <Option 
+                                                        key={timeslot.id}
+                                                        value={timeslot.id}
+                                                    >
+                                                        {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
+                                                    </Option>
+                                                ))}
+                                            </Select> 
+                                        </Form.Item>
+                                        <MinusCircleOutlined onClick={() => remove(field.name)} />
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <span 
+                                        className="input-heading-add-another" 
+                                        onClick={() => add()}
+                                    > 
+                                        +{AppConstants.addTeam}
+                                    </span>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
                 </div>
             </div>
         );
     }
 
     render() {
+        const timePreferencesProps = !!this.props.competitionTimeSlots?.timePreferences ? 
+        this.props.competitionTimeSlots.timePreferences
+                .map(preferenceItem => ({
+                    teamId: preferenceItem.id,
+                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => time.id)
+                }))
+                : [];
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
@@ -1639,6 +1712,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             noValidate="noValidate"
                             onFinish={this.handleSavePreferences}
                             onFinishFailed={({ errorFields }) => this.formPreferenceRef.current.scrollToField(errorFields[0].name)}
+                            initialValues={{ preferences: [ ...timePreferencesProps]} }
                         >
                             <Content>
                                 {this.teamPreferencesView()}
