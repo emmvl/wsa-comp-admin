@@ -286,6 +286,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     handleTimeslotsFormData = () => {
         let AllVenueData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeSlotManualAllVenue))
+        let timeslotsManualRawData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeslotsManualRawData));
         let timeSlotData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.getcompetitionTimeSlotData))
         timeSlotData['competitionUniqueKey'] = this.state.firstTimeCompId
         timeSlotData['organisationId'] = 1
@@ -333,7 +334,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             for (let l in manualcompetitionTimeslotsEntityOBj) {
                                 manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
                                 manualperVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k].competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
+                                    competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k]?.competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: getTimeSlot[j].dayRefId,
                                     startTime: getStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -342,7 +343,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             }
                         } else {
                             manualperVenueObj = {
-                                competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k].competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
+                                competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k]?.competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
                                 dayRefId: getTimeSlot[j].dayRefId,
                                 startTime: getStartTime[k].startTime,
                                 sortOrder: JSON.parse(k),
@@ -385,7 +386,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
                                     
                                     manualAllVenueObj = {
-                                        competitionVenueTimeslotsDayTimeId: !!manualStartTime[k].competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
+                                        competitionVenueTimeslotsDayTimeId: !!manualStartTime[k]?.competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                         dayRefId: timeSloltdataArr[j].dayRefId,
                                         startTime: manualStartTime[k].startTime,
                                         sortOrder: JSON.parse(k),
@@ -394,7 +395,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 }
                             } else {
                                 manualAllVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: !!manualStartTime[k].competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
+                                    competitionVenueTimeslotsDayTimeId: !!manualStartTime[k]?.competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: timeSloltdataArr[j].dayRefId,
                                     startTime: manualStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -512,6 +513,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         setOwn_CompetitionFinalRefId(finalTypeRefId)
+        setCompetitionID(id);
         let quickComp = this.props.appState.own_CompetitionArr.find(
             x => x.competitionId == competitionId && x.isQuickCompetition == 1
         );
@@ -521,8 +523,9 @@ class CompetitionCourtAndTimesAssign extends Component {
         this.props.getTeamTimeslotsPreferences(id);
         this.setState({
             getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId,
-            isQuickCompetition: quickComp != undefined
-        })
+            isQuickCompetition: quickComp != undefined,
+            preferenceFormValues: null,
+        });
     }
 
     //add obj on click of time slot allocation based on match duration
@@ -1499,9 +1502,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 {timePreferences.map((field, fieldIdx) => (
                                     <Space 
                                         key={field.key} 
-                                        style={{ marginBottom: 25 }} 
-                                        align="baseline"
-                                        className='d-flex w-100 preference-form-line'
+                                        style={{ marginBottom: 25 }}
+                                        className='d-flex align-items-center w-100 preference-form-line'
                                     >
                                         <Form.Item
                                             {...field}
@@ -1581,8 +1583,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     render() {
-        const timePreferencesProps = this.getTimePreferencesProps();
-    
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
@@ -1609,14 +1609,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </Footer>
                         )}
                     </Form>
-                    {isTeamPreferencesEnable && this.state.isManuallySelected &&
+                    {isTeamPreferencesEnable && this.state.isManuallySelected && !this.state.getDataLoading && this.state.preferenceFormValues &&
                         <Form
                             ref={this.formPreferenceRef}
                             autoComplete="off"
                             noValidate="noValidate"
                             onFinish={this.handleSavePreferences}
                             onFinishFailed={({ errorFields }) => this.formPreferenceRef.current.scrollToField(errorFields[0].name)}
-                            initialValues={{ preferences: [ ...timePreferencesProps]} }
+                            initialValues={{ ...this.state.preferenceFormValues } }
                             onValuesChange={(_, allValues) => this.setState({ preferenceFormValues: allValues })}
                         >
                             <Content>
