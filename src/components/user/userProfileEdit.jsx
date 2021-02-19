@@ -1390,6 +1390,47 @@ class UserProfileEdit extends Component {
         );
     };
 
+    // actual function to call saving a child / parent
+    addChildOrParent = (selectedMatch) => async () => {
+        // if match is not selected, save the user data from the form
+        const { isPossibleMatchShow, titleLabel, tabKey, isSameEmail, userData } = this.state;
+
+        const userToAdd = selectedMatch || userData;
+        const { userId } = this.props.history.location.state.userData;
+        const sameEmail = (isSameEmail || userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
+
+        if (isPossibleMatchShow)
+            this.setState({ isLoading: true });
+        if (titleLabel === AppConstants.addChild) {
+            try {
+                const { status } = await UserAxiosApi.addChild({ userId, sameEmail, body: userToAdd });
+                if ([1, 4].includes(status)) {
+                    history.push({
+                        pathname: '/userPersonal',
+                        state: { tabKey: tabKey, userId: this.props.history.location.state.userData.userId },
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        } else if (titleLabel === AppConstants.addParent_guardian) {
+            try {
+                const { status } = await UserAxiosApi.addParent({ userId, sameEmail, body: userToAdd });
+                if ([1, 4].includes(status)) {
+                    history.push({
+                        pathname: '/userPersonal',
+                        state: { tabKey: tabKey, userId: this.props.history.location.state.userData.userId },
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        if (isPossibleMatchShow)
+            this.setState({ isLoading: false });
+        // this.setState({ saveLoad: true });
+    };
+
     // possible matches view
     // ideally this should be separate from the user profile view
     possibleMatchesDetailView = (matches) => {
@@ -1418,43 +1459,6 @@ class UserProfileEdit extends Component {
             affiliate: u.affiliates && u.affiliates.length ? u.affiliates.join(', ') : '',
         }));
 
-        // actual function to call saving a child / parent
-        const addChildOrParent = async () => {
-            // if match is not selected, save the user data from the form
-            const userToAdd = selectedMatch || this.state.userData;
-            const { userId } = this.props.history.location.state.userData;
-            const sameEmail = (this.state.isSameEmail || this.state.userData.email === this.props.history.location.state.userData.email) ? 1 : 0;
-
-            this.setState({ isLoading: true });
-            if (this.state.titleLabel === AppConstants.addChild) {
-                try {
-                    const { status } = await UserAxiosApi.addChild({ userId, sameEmail, body: userToAdd });
-                    if ([1, 4].includes(status)) {
-                        history.push({
-                            pathname: '/userPersonal',
-                            state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId },
-                        });
-                    }
-                } catch (e) {
-                    console.error(e);
-                }
-            } else if (this.state.titleLabel === AppConstants.addParent_guardian) {
-                try {
-                    const { status } = await UserAxiosApi.addParent({ userId, sameEmail, body: userToAdd });
-                    if ([1, 4].includes(status)) {
-                        history.push({
-                            pathname: '/userPersonal',
-                            state: { tabKey: this.state.tabKey, userId: this.props.history.location.state.userData.userId },
-                        });
-                    }
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-            this.setState({ isLoading: false });
-            // this.setState({ saveLoad: true });
-        };
-
         const onCancel = () => {
             this.setState({ isPossibleMatchShow: false });
         };
@@ -1479,7 +1483,7 @@ class UserProfileEdit extends Component {
                 </div>
                 <div className="d-flex align-items-center justify-content-between mt-4">
                     <Button onClick={onCancel}>{AppConstants.cancel}</Button>
-                    <Button type="primary" onClick={addChildOrParent}>{AppConstants.next}</Button>
+                    <Button type="primary" onClick={this.addChildOrParent(selectedMatch)}>{AppConstants.next}</Button>
                 </div>
             </div>
         );
@@ -1552,7 +1556,11 @@ class UserProfileEdit extends Component {
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
             const { status, result: { data: possibleMatches } } = await UserAxiosApi.findPossibleMerge(data);
             if ([1, 4].includes(status)) {
-                this.setState({ isPossibleMatchShow: true, possibleMatches });
+                if ( possibleMatches.length === 0) {
+                    await this.addChildOrParent(null)();
+                } else {
+                    this.setState({ isPossibleMatchShow: true, possibleMatches });
+                }
             }
         } else {
             if (this.state.displaySection === "1") {
