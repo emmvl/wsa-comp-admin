@@ -1024,3 +1024,11 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
 .team-preferences-header {
     font-weight: bold;
 }
+
+.preference-form-line > *:first-child {
+    width: 25%;
+}
+
+.preference-form-line > *:nth-child(2) {
+    width: 75%;
+}

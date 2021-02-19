@@ -3,11 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CustomTooltip from 'react-png-tooltip';
-import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip, Input, Space } from 'antd';
+import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip, Space } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
-
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import './competition.css';
 
@@ -45,11 +43,6 @@ import DashboardLayout from 'pages/dashboardLayout';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
-const initialTimePrefItem = {
-    teamId: null,
-    competitionTimeslotsIds: null
-}
-
 const isTeamPreferencesEnable = process.env.REACT_APP_TEAM_PREFERENCES_FOR_DRAW === 'true';
 
 class CompetitionCourtAndTimesAssign extends Component {
@@ -66,8 +59,8 @@ class CompetitionCourtAndTimesAssign extends Component {
             nextButtonClicked: false,
             finalTypeRefId: null,
             teams: null,
-            timePreferences: null,
             isManuallySelected: false,
+            preferenceFormValues: null,
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
@@ -174,16 +167,6 @@ class CompetitionCourtAndTimesAssign extends Component {
 
         if (prevProps.competitionTimeSlots.teamList !== this.props.competitionTimeSlots.teamList) {
             this.setState({ teams: this.props.competitionTimeSlots.teamList });
-        }
-
-        if (prevProps.competitionTimeSlots.timePreferences !== this.props.competitionTimeSlots.timePreferences) {
-            const timePreferences = this.props.competitionTimeSlots.timePreferences
-                .map(preferenceItem => ({
-                    teamId: preferenceItem.id,
-                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => time.id)
-                }))
-
-            this.setState({ timePreferences });
         }
 
         if (prevProps.competitionTimeSlots.timeslotsManualRawData !== this.props.competitionTimeSlots.timeslotsManualRawData) {
@@ -474,36 +457,22 @@ class CompetitionCourtAndTimesAssign extends Component {
         }, 0);
     }
 
-    handleChangePrefer = (e, preferItemIdx, key, timePreferencesForChange) => {
-        const preferencesCopy = _.cloneDeep(timePreferencesForChange);
+    getTimePreferencesProps = () => {
+        const timePreferencesProps = !!this.props.competitionTimeSlots?.timePreferences ? 
+            this.props.competitionTimeSlots.timePreferences
+                .map(preferenceItem => ({
+                    teamId: preferenceItem.id,
+                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => time.id)
+                }))
+            : [];
 
-        preferencesCopy[preferItemIdx][key] = e;
-        this.setState({ timePreferences: preferencesCopy });
+        return timePreferencesProps;
     }
 
-    handleRemovePreferLine = preferItemIdx => {
-        const { timePreferences } = this.state;
-        const preferencesNew = timePreferences.filter((_, idx) => idx !== preferItemIdx);
-        this.setState({ timePreferences: preferencesNew });
-    }
-
-    handleAddPrefer = () => {
-        const { timePreferences } = this.state;
-        const preferencesCopy = _.cloneDeep(timePreferences);
-
-        preferencesCopy.push(initialTimePrefItem);
-        this.setState({ timePreferences: preferencesCopy });
-    }
-
-    handleSavePreferences = (values) => {
+    handleSavePreferences = values => {
         console.log('Received values of form:', values);
-        const { timePreferences } = this.state;
         const compIdNumber = getCompetitonId();
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-
-        const payload = {
-            preferences: timePreferences,
-        }
 
         this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, values);
     }
@@ -1514,106 +1483,28 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     teamPreferencesView() {
         const { timeslotsList, weekDays } = this.props.competitionTimeSlots;
-        const { teams, timePreferences } = this.state;
-
-        const timePreferencesForMap =  !!timePreferences?.length ? timePreferences : [initialTimePrefItem];
+        const { teams, preferenceFormValues } = this.state;
 
         return (
             <div className="formView mt-4">
                 <div className="content-view pt-3">
-                    <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>
-
-                    {/* {(timePreferencesForMap || []).map((preferItem, preferItemIdx) => (
-                        <div className="d-flex align-items-start mb-4">
-                            <Form.Item
-                                className="mr-4 w-25"
-                                name={`teamname-${preferItemIdx}`}
-                                rules={[
-                                {
-                                    required: true,
-                                    message: ValidationConstants.pleaseSelectTeam,
-                                },
-                                ]}
-                            >
-                                <Select
-                                    placeholder="Select"
-                                    onChange={e => this.handleChangePrefer(e, preferItemIdx, 'teamId', timePreferencesForMap)}
-                                    value={preferItem.teamId || ''}
-                                    style={{ width: '95%' }}
-                                >
-                                    {(teams || []).map(team => (
-                                        <Option 
-                                            key={team.id}
-                                            value={team.id}
-                                            disabled={timePreferencesForMap.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
-                                        >
-                                            {`${team.name} (${team.divisionName} - ${team.gradeName})`}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                            
-                            <Form.Item
-                                className="w-75"
-                                name={`timeslots-${preferItemIdx}`}
-                                rules={[
-                                {
-                                    required: true,
-                                    message: ValidationConstants.timeSlotPreference,
-                                },
-                                ]}
-                            >
-                                <Select
-                                    mode="multiple"
-                                    placeholder="Select"
-                                    filterOption={false}
-                                    className="d-grid align-content-center"
-                                    value={preferItem.competitionTimeslotsIds || []}
-                                    onChange={e => this.handleChangePrefer(e, preferItemIdx, 'competitionTimeslotsIds', timePreferencesForMap)}
-                                    // onSearch={(value) => this.handleSearch(value, mainDivisionList)}
-                                >
-                                    {!!weekDays.length && (timeslotsList || []).map(timeslot => (
-                                        <Option 
-                                            key={timeslot.id}
-                                            value={timeslot.id}
-                                        >
-                                            {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
-                                        </Option>
-                                    ))}
-                                </Select> 
-                            </Form.Item>
-                            {timePreferencesForMap.length > 1 && (
-                                <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.redCross}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                        onClick={() => this.handleRemovePreferLine(preferItemIdx)}
-                                    />
-                                </span>
-                            )}
-                        </div>
-                    ))} */}
-                    
-                    {/* <span 
-                        className="input-heading-add-another" 
-                        onClick={() => this.handleAddPrefer()}
-                    > 
-                        +{AppConstants.addTeam}
-                    </span> */}
+                    <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>           
 
                     <Form.List name="preferences">
                         {(timePreferences, { add, remove }) => (
                             <>
                                 {timePreferences.map(field => (
-                                    <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                    <Space 
+                                        key={field.key} 
+                                        style={{ marginBottom: 8 }} 
+                                        align="baseline"
+                                        className='d-flex w-100 preference-form-line'
+                                    >
                                         <Form.Item
                                             {...field}
                                             name={[field.name, 'teamId']}
                                             fieldKey={[field.fieldKey, 'teamId']}
-                                            rules={[{ required: true, message: 'Missing first name' }]}
+                                            rules={[{ required: true, message: ValidationConstants.teamName }]}
                                         >
                                              <Select
                                                 placeholder="Select"
@@ -1623,7 +1514,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     <Option 
                                                         key={team.id}
                                                         value={team.id}
-                                                        // disabled={timePreferencesForMap.some(prefer => prefer.teamId === team.id && prefer.teamId !== preferItem.teamId)}
+                                                        // disabled={selectedTeams.some(team => team === team.id && team !== preferItem.teamId)}
+                                                        // disabled={
+                                                        //     preferenceFormValues?.preferences.some(preference => preference?.teamId === team.id && preference?.teamId)
+                                                        // }
                                                     >
                                                         {`${team.name} (${team.divisionName} - ${team.gradeName})`}
                                                     </Option>
@@ -1634,7 +1528,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             {...field}
                                             name={[field.name, 'competitionTimeslotsIds']}
                                             fieldKey={[field.fieldKey, 'competitionTimeslotsIds']}
-                                            rules={[{ required: true, message: 'Missing last name' }]}
+                                            rules={[{ required: true, message: ValidationConstants.timeSlotPreference }]}
                                         >
                                             <Select
                                                 mode="multiple"
@@ -1652,7 +1546,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 ))}
                                             </Select> 
                                         </Form.Item>
-                                        <MinusCircleOutlined onClick={() => remove(field.name)} />
+
+                                        <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
+                                            <img
+                                                className="dot-image"
+                                                src={AppImages.redCross}
+                                                alt=""
+                                                width="16"
+                                                height="16"
+                                                onClick={() => remove(field.name)}
+                                            />
+                                        </span>
                                     </Space>
                                 ))}
                                 <Form.Item>
@@ -1671,14 +1575,15 @@ class CompetitionCourtAndTimesAssign extends Component {
         );
     }
 
+    handleChangePreferences = (_, allValues) => {
+        console.log('allValues', allValues);
+        // const preferenceFormValues = allValues.preferences.map(value => value?.teamId);
+        this.setState({ preferenceFormValues: allValues });
+    }
+;
     render() {
-        const timePreferencesProps = !!this.props.competitionTimeSlots?.timePreferences ? 
-        this.props.competitionTimeSlots.timePreferences
-                .map(preferenceItem => ({
-                    teamId: preferenceItem.id,
-                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => time.id)
-                }))
-                : [];
+        const timePreferencesProps = this.getTimePreferencesProps();
+    
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
@@ -1713,6 +1618,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             onFinish={this.handleSavePreferences}
                             onFinishFailed={({ errorFields }) => this.formPreferenceRef.current.scrollToField(errorFields[0].name)}
                             initialValues={{ preferences: [ ...timePreferencesProps]} }
+                            onValuesChange={(changedValues, allValues) => this.handleChangePreferences(changedValues, allValues)}
                         >
                             <Content>
                                 {this.teamPreferencesView()}
