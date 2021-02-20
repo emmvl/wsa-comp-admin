@@ -25,12 +25,12 @@ import {
     regTransactionUpdateAction,
     exportRegistrationAction,
     setRegistrationListPageSize,
-    setRegistrationListPageNumber,
+    setRegistrationListPageNumber
 } from "store/actions/registrationAction/endUserRegistrationAction";
-import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
+import { getAllCompetitionAction, registrationFailedStatusUpdate } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
-import { liveScorePlayersToCashReceivedAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import { liveScorePlayersToCashReceivedAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 
 import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
@@ -260,6 +260,22 @@ const columns = [
                                 </Menu.Item>
                             )
                             }
+                            {
+                                record.actionView == 4
+                                && (
+                                    <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
+                                        <span>{AppConstants.failed}</span>
+                                    </Menu.Item>
+                                )
+                            }
+                            {
+                                record.actionView == 5
+                                && (
+                                    <Menu.Item key="5" onClick={() => this_Obj.setFailedInstalmentRetry(record)}>
+                                        <span>{AppConstants.retryPayment}</span>
+                                    </Menu.Item>
+                                )
+                            }
 
                         </SubMenu>
 
@@ -299,6 +315,10 @@ class Registration extends Component {
             teamName: null,
             teamId: -1,
             isVoucherPaymentVisible: false,
+            otherModalVisible: false,
+            modalTitle: null,
+            modalMessage: null,
+            actionView: 0
         };
 
         this_Obj = this;
@@ -387,6 +407,13 @@ class Registration extends Component {
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
                 }
+                this.setState({ loading: false });
+                this.handleRegTableList(1);
+            }
+        }
+
+        if(nextProps.registrationDashboardState!= this.props.registrationDashboardState){
+            if(this.state.loading == true && this.props.registrationDashboardState.onRegStatusUpdateLoad == false){
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
             }
@@ -551,6 +578,50 @@ class Registration extends Component {
         this.setState({
             selectedRow: record, isVoucherPaymentVisible: true,
         });
+    }
+
+    setSchoolInvoiceFailed = (record) =>{
+        this.setState({
+            selectedRow: record, otherModalVisible: true,
+            actionView: 4, modalMessage : AppConstants.regFailedModalMsg,
+            modalTitle: "Invoice Fail"
+        });
+    }
+
+    setFailedInstalmentRetry = (record) =>{
+        this.setState({
+            selectedRow: record, otherModalVisible: true,
+            actionView: 4, modalMessage : AppConstants.regRetryInstalmentModalMsg,
+            modalTitle: "Failed Instalment Retry"
+        });
+    }
+
+
+    handleOtherModal = (key) =>{
+        const {selectedRow, actionView} = this.state;
+        if(actionView == 4){
+            if(key == "ok"){
+                let payload = {
+                    registrationId: selectedRow.registrationUniqueKey
+                }
+                this.props.registrationFailedStatusUpdate(payload);
+                this.setState({loading: true})
+            }
+        }
+        else if(actionView == 5){
+            if(key == "ok"){
+                let payload = {
+                    processTypeName: "instalment",
+                    registrationUniqueKey: selectedRow.registrationUniqueKey,
+                    userId: selectedRow.userId,
+                    divisionId: selectedRow.divisionId,
+                    competitionId: selectedRow.competitionUniqueKey
+                }
+                this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ loading: true });
+            }
+        }
+        this.setState({otherModalVisible: false});
     }
     
     receiveCashPayment = (key) => {
@@ -1121,6 +1192,23 @@ class Registration extends Component {
         )
     }
 
+    otherModalView = () => {
+        const { modalTitle, modalMessage } = this.state;
+        return(
+            <Modal
+                title= {modalTitle}
+                visible={this.state.otherModalVisible}
+                onCancel={() => this.handleOtherModal("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText="Update"
+                onOk={() => this.handleOtherModal("ok")}
+                centered
+            >
+               <p style = {{marginLeft: '20px'}}>{modalMessage}</p>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1139,6 +1227,7 @@ class Registration extends Component {
                         {this.contentView()}
                         {this.transferModalView()}
                         {this.voucherReceivedModalView()}
+                        {this.otherModalView()}
                     </Content>
                 </Layout>
             </div>
@@ -1160,6 +1249,8 @@ function mapDispatchToProps(dispatch) {
         liveScorePlayersToCashReceivedAction,
         setRegistrationListPageSize,
         setRegistrationListPageNumber,
+        registrationFailedStatusUpdate,
+        liveScorePlayersToPayRetryPaymentAction
     }, dispatch);
 }
 

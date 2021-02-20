@@ -32,7 +32,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 import { checkLivScoreCompIsParent } from 'util/permissions';
 import Loader from '../../customComponents/loader';
-
+import {registrationFailedStatusUpdate } from "store/actions/registrationAction/registrationDashboardAction";
 
 const { Content } = Layout;
 let this_obj = null;
@@ -595,6 +595,11 @@ const columnsPlayersToPay = [
                             <span>{AppConstants.retryPayment}</span>
                         </Menu.Item>
                     }
+                     {(record.processTypeName == "school_invoice") &&
+                        <Menu.Item key="3" onClick={() => this_obj.invoiceFailed(record)}>
+                            <span>{AppConstants.failed}</span>
+                        </Menu.Item>
+                    }
                 </Menu.SubMenu>
 
             </Menu>
@@ -624,6 +629,7 @@ class LiveScoreDashboard extends Component {
             onload: false,
             page: 1,
             retryPaymentLoad: false,
+            invoiceFailedLoad: false
         }
         this_obj = this
         this.props.initializeCompData()
@@ -663,6 +669,10 @@ class LiveScoreDashboard extends Component {
             }
             this.getPlayersToPayList(this.state.page);
             this.setState({ retryPaymentLoad: false })
+        }
+        if(this.state.invoiceFailedLoad == true && this.props.registrationDashboardState.onRegStatusUpdateLoad == false){
+            this.getPlayersToPayList(this.state.page);
+            this.setState({ invoiceFailedLoad: false })
         }
     }
 
@@ -749,6 +759,14 @@ class LiveScoreDashboard extends Component {
 
         this.setState({ retryPaymentLoad: true })
         this.props.liveScorePlayersToCashReceivedAction(payload);
+    }
+
+    invoiceFailed = (record) =>{
+        let payload = {
+            registrationUniqueKey: record.registrationUniqueKey
+        }
+        this.setState({ invoiceFailedLoad: true })
+        this.props.registrationFailedStatusUpdate(payload);
     }
 
     ////////participatedView view for competition
@@ -1050,12 +1068,14 @@ function mapDispatchToProps(dispatch) {
         liveScorePlayersToCashReceivedAction,
         setPageSizeAction,
         setPageNumberAction,
+        registrationFailedStatusUpdate
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         liveScoreDashboardState: state.LiveScoreDashboardState,
+        registrationDashboardState: state.RegistrationDashboardState,
     };
 }
 

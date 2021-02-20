@@ -82,14 +82,16 @@ function registrationDashboard(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onRegStatusUpdateLoad: false
             };
         case ApiConstants.API_REG_DASHBOARD_LIST_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onRegStatusUpdateLoad: false
             };
 
         /////get the Competition type list 
@@ -163,6 +165,17 @@ function registrationDashboard(state = initialState, action) {
                 ...state,
                 regDashboardListPage: action.pageNum
             }
+         
+        case ApiConstants.API_REGISTRATION_FAILED_STATUS_UPDATE_LOAD:
+        return { ...state, onRegStatusUpdateLoad: true, error: null };
+  
+        case ApiConstants.API_REGISTRATION_FAILED_STATUS_UPDATE_SUCCESS:  
+        return {
+          ...state,
+          onRegStatusUpdateLoad: false,
+          status: action.status,
+          error: null
+        };
 
         default:
             return state;
