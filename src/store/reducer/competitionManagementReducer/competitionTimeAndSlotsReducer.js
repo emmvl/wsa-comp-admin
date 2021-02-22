@@ -170,7 +170,6 @@ function getTimeslotAllVenuePerDay(timeslotData) {
         }
 
     }
-    console.log('allVenuetimeSlotArr 2', allVenuetimeSlotArr)
     return allVenuetimeSlotArr
 }
 

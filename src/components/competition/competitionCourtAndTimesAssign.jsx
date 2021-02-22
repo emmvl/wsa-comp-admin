@@ -170,7 +170,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
 
         if (prevProps.competitionTimeSlots.timeslotsManualRawData !== this.props.competitionTimeSlots.timeslotsManualRawData) {
-            this.setIsManuallySelected();
+            this.setState({ isManuallySelected: !!this.props.competitionTimeSlots.timeslotsManualRawData.length });
         }
 
         if (prevProps.competitionTimeSlots.timePreferences !== this.props.competitionTimeSlots.timePreferences) {
@@ -546,7 +546,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let daysList = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1
         return (
-            <div className="row">
+            <div className="row" key={index}>
                 <div className="col-sm">
                     <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : ' '} />
                     <Form.Item
@@ -936,7 +936,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
 
         return (
-            <div>
+            <div key={venueIndex + '' + index}>
                 <div className="row">
                     <div className="col-sm-3">
                         <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : ' '} />
