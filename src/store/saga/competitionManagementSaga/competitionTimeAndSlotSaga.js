@@ -75,24 +75,24 @@ export function* competitonWithTimeSlotsPostApi(action) {
         if (result.status === 1) {
 
             if (action.isTeamPreferenceActive) {
-                const result1 = yield call(CompetitionAxiosApi.teamsTimeslotsPreferencesGet, action.id);
-                const result2 = yield call(CompetitionAxiosApi.competitionTeamsTimeslotsGet, action.id);
+                const resultPreferences = yield call(CompetitionAxiosApi.teamsTimeslotsPreferencesGet, action.id);
+                const resultTimeslotsList = yield call(CompetitionAxiosApi.competitionTeamsTimeslotsGet, action.id);
     
-                if (result1.status === 1 && result2.status === 1) {
+                if (resultPreferences.status === 1 && resultTimeslotsList.status === 1) {
                     yield put({
                         type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_SUCCESS,
-                        result: result1.result.data,
-                        status: result1.status,
+                        result: resultPreferences.result.data,
+                        status: resultPreferences.status,
                     });
                     yield put({
                         type: ApiConstants.API_COMPETITION_TIMESLOTS_GET_SUCCESS,
-                        result: result2.result.data,
-                        status: result2.status,
+                        result: resultTimeslotsList.result.data,
+                        status: resultTimeslotsList.status,
                     });
-                } else if (result1.status !== 1) {
-                    yield call(failSaga, result1)
+                } else if (resultPreferences.status !== 1) {
+                    yield call(failSaga, resultPreferences)
                 } else {
-                    yield call(failSaga, result2)
+                    yield call(failSaga, resultTimeslotsList)
                 }
             }
 
