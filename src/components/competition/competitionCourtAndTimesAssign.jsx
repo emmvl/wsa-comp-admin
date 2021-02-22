@@ -286,7 +286,6 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     handleTimeslotsFormData = () => {
         let AllVenueData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeSlotManualAllVenue))
-        let timeslotsManualRawData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeslotsManualRawData));
         let timeSlotData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.getcompetitionTimeSlotData))
         timeSlotData['competitionUniqueKey'] = this.state.firstTimeCompId
         timeSlotData['organisationId'] = 1
@@ -334,7 +333,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             for (let l in manualcompetitionTimeslotsEntityOBj) {
                                 manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
                                 manualperVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k]?.competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
+                                    competitionVenueTimeslotsDayTimeId: !!getStartTime[k]?.competitionVenueTimeslotsDayTimeId ? getStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: getTimeSlot[j].dayRefId,
                                     startTime: getStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -343,7 +342,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             }
                         } else {
                             manualperVenueObj = {
-                                competitionVenueTimeslotsDayTimeId: !!getTimeSlot[k]?.competitionVenueTimeslotsDayTimeId ? getTimeSlot[k].competitionVenueTimeslotsDayTimeId : 0,
+                                competitionVenueTimeslotsDayTimeId: !!getStartTime[k]?.competitionVenueTimeslotsDayTimeId ? getStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                 dayRefId: getTimeSlot[j].dayRefId,
                                 startTime: getStartTime[k].startTime,
                                 sortOrder: JSON.parse(k),
@@ -419,6 +418,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         delete timeSlotData['divisions']
         delete timeSlotData['grades']
         delete timeSlotData['mainTimeRotationID']
+        console.log('timeSlotData', timeSlotData);
 
         return timeSlotData;
     }
