@@ -227,6 +227,7 @@ class UserAddAffiliates extends Component {
                 formData.append("street2", affiliate.street2);
                 formData.append("suburb", affiliate.suburb);
                 formData.append("phoneNo", affiliate.phoneNo);
+                formData.append("email", affiliate.email);
                 formData.append("city", affiliate.city);
                 formData.append("postalCode", affiliate.postalCode);
                 formData.append("stateRefId", affiliate.stateRefId);
@@ -426,6 +427,29 @@ class UserAddAffiliates extends Component {
                     value={affiliate.phoneNo}
                     auto_complete="new-phoneNumber"
                 />
+
+                <Form.Item
+                    name="email"
+                    rules={[
+                        {
+                            required: true, message: ValidationConstants.emailField[0],
+                        },
+                        {
+                            type: "email",
+                            pattern: new RegExp(AppConstants.emailExp),
+                            message: ValidationConstants.email_validation,
+                        },
+                    ]}
+                >
+                    <InputWithHead
+                        heading={AppConstants.email}
+                        required="required-field"
+                        placeholder={AppConstants.email}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                        value={affiliate.email}
+                        auto_complete="new-email"
+                    />
+                </Form.Item>
             </div>
         );
     };
