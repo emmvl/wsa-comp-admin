@@ -73,7 +73,7 @@ const AppConstants = {
     additionalInfoReqd: "Additional Information required",
     additionalPersonalInfoReqd: "Additional Personal Information required",
     haveYouEverPlayed: "Have you ever played Netball before:",
-    confirmTransferTo: "Plase confirm who you would like to transfer to",
+    confirmTransferTo: "Please confirm who you would like to transfer to",
     yes: "Yes",
     no: "No",
     loadMore: "Load more",
