@@ -2008,7 +2008,8 @@ const AppConstants = {
     feePaid: "Fee Paid",
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
-    failed: "Failed"
+    failed: "Failed",
+    wouldYouLikeToApprove: "Would you like to Approve?"
 };
 
 export default AppConstants;
