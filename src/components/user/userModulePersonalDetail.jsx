@@ -225,7 +225,7 @@ const columns = [
                         <span>Payment</span>
                     </Menu.Item>
                     {
-                        userRoleId === 2 &&
+                        userRoleId === 1 &&
                             <>
                                 <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                                     <span>
