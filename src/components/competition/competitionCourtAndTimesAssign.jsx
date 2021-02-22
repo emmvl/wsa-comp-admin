@@ -418,7 +418,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         delete timeSlotData['divisions']
         delete timeSlotData['grades']
         delete timeSlotData['mainTimeRotationID']
-        console.log('timeSlotData', timeSlotData);
 
         return timeSlotData;
     }
@@ -426,13 +425,16 @@ class CompetitionCourtAndTimesAssign extends Component {
     // for post api
     saveAPIsActionCall = () => {
         const timeSlotData = this.handleTimeslotsFormData();
+        const compIdNumber = getCompetitonId();
+        const isTeamPreferenceActive = isTeamPreferencesEnable && this.state.isManuallySelected;
 
         if (timeSlotData.competitionUniqueKey == null || timeSlotData.competitionUniqueKey == '') {
             message.error(ValidationConstants.pleaseSelectCompetition)
         } else {
-            this.props.addTimeSlotDataPost(timeSlotData)
+            this.props.addTimeSlotDataPost(timeSlotData, compIdNumber, isTeamPreferenceActive);
             this.setState({
-                onNextLoad: true
+                onNextLoad: true,
+                preferenceFormValues: null,
             })
         }
     }
@@ -1491,6 +1493,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         const { timeslotsList, weekDays } = this.props.competitionTimeSlots;
         const { teams, preferenceFormValues } = this.state;
 
+        // const { getFieldDecorator } = this.formPreferenceRef.current;
+
         return (
             <div className="formView mt-4">
                 <div className="content-view pt-3">
@@ -1511,7 +1515,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             fieldKey={[field.fieldKey, 'teamId']}
                                             rules={[{ required: true, message: ValidationConstants.teamName }]}
                                         >
-                                             <Select
+                                            <Select
                                                 placeholder="Select"
                                             >
                                                 {(teams || []).map(team => (
@@ -1576,10 +1580,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                 </div>
             </div>
         );
-    }
-
-    handleChangePreferences = (_, allValues) => {
-        this.setState({ preferenceFormValues: allValues });
     }
 
     render() {

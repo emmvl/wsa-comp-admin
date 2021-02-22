@@ -88,10 +88,12 @@ function UpdateTimeSlotsDataManual(value, key, contentType, index, mainId, id, p
 }
 
 // post time slot Data
-function addTimeSlotDataPost(payload) {
+function addTimeSlotDataPost(payload, id, isTeamPreferenceActive) {
     const action = {
         type: ApiConstants.API_COMPETITION_TIMESLOT_POST_LOAD,
-        payload
+        payload,
+        id,
+        isTeamPreferenceActive
     }
     return action
 }
