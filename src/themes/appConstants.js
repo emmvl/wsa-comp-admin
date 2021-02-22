@@ -2006,7 +2006,11 @@ const AppConstants = {
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
     cancelTransferReg: "Cancel Transfer registration",
-    feePaid: "Fee Paid"
+    feePaid: "Fee Paid",
+    regFailedModalMsg: "Do you want to mark the invoice as failed?",
+    regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
+    failed: "Failed",
+    wouldYouLikeToApprove: "Would you like to Approve?"
 };
 
 export default AppConstants;

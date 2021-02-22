@@ -596,6 +596,12 @@ const AxiosApi = {
         const url = `/api/registration/export`;
         return Method.dataPostDownload(url, token, body, "registrations");
     },
+
+    updateRegistrationFailedStatus(payload) {
+        const body = payload;
+        const url = `/api/registration/status/update`;
+        return Method.dataPost(url, token, body);
+    },
 };
 
 const Method = {

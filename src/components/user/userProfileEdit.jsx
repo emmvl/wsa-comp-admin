@@ -241,6 +241,11 @@ class UserProfileEdit extends Component {
                 }
             }
 
+            additionalSettings = {
+                ...additionalSettings,
+                isSameEmail: data.isInActive
+            }
+
             setTimeout(() => {
                 this.setState({
                     displaySection: moduleFrom,
@@ -743,10 +748,10 @@ class UserProfileEdit extends Component {
                                         if (this.state.titleLabel === (AppConstants.edit + ' ' + AppConstants.address)) {
                                             await this.setState({
                                                 showParentEmailSelectbox: true,
-                                                showEmailInputbox: false,
-                                                enableEmailInputbox: false,
+                                                showEmailInputbox: parentData.length == 1 ? true : false,
+                                                enableEmailInputbox: parentData.length == 1 ? true : false,
                                             });
-                                            await this.setUserDataContactEmail(parentData[0].email + '.' + this.state.userData.firstName);
+                                            await this.setUserDataContactEmail(!!parentData[0].email ? parentData[0].email + '.' + this.state.userData.firstName : '');
                                         } else {
                                             await this.setUserDataContactEmailDefault();
                                             await this.setState({
@@ -1544,6 +1549,10 @@ class UserProfileEdit extends Component {
             data.mobileNumber = this.props.history.location.state.userData.mobileNumber;
             if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.edit + ' ' + AppConstants.child ) {
                 data["email"] = this.props.userState.personalData.email + '.' + data.firstName;
+            }
+
+            if (this.state.titleLabel === AppConstants.edit + ' ' + AppConstants.address) {
+                data["email"] += '.' + data.firstName;
             }
         }
 

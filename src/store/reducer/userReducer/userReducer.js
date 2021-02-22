@@ -196,6 +196,7 @@ const affiliate = {
   street2: '',
   suburb: '',
   phoneNo: '',
+  email: '',
   city: '',
   postalCode: '',
   stateRefId: 0,
