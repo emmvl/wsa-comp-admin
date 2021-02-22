@@ -107,7 +107,8 @@ function getTimeslotPerVenuePerDay(timeslotData) {
                 sortOrder: matchUpdatedTimeSlot.sortOrder,
                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey,
+                competitionVenueTimeslotsDayTimeId: matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId
             }
             updatedtimeSlotArr[timeSlotStatusData.index].startTime.push(JSON.parse(JSON.stringify(timeslotUpdatedArrayValue)))
         }
@@ -117,7 +118,8 @@ function getTimeslotPerVenuePerDay(timeslotData) {
                 sortOrder: matchUpdatedTimeSlot.sortOrder,
                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey,
+                competitionVenueTimeslotsDayTimeId: matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId
             }
 
             let mainobj = {

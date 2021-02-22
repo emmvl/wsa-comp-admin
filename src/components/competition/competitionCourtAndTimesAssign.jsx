@@ -286,7 +286,9 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     handleTimeslotsFormData = () => {
         let AllVenueData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeSlotManualAllVenue))
+        console.log('this.props.competitionTimeSlots.timeSlotManualAllVenue', this.props.competitionTimeSlots.timeSlotManualAllVenue)
         let timeSlotData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.getcompetitionTimeSlotData))
+        console.log('inside general timeSlotData', timeSlotData);
         timeSlotData['competitionUniqueKey'] = this.state.firstTimeCompId
         timeSlotData['organisationId'] = 1
         ///for filter timeslot data on the basis of generation key
