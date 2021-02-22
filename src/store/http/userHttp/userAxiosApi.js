@@ -334,7 +334,7 @@ let userHttpApi = {
   },
 
   exportAffiliateDirectory(payload) {
-    const url = `api /export/affiliatedirectory`;
+    const url = `api/export/affiliatedirectory`;
     return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
   },
 
