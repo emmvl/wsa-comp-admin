@@ -37,6 +37,7 @@ class UmpireDivisions extends Component {
             selectedDivisions: [],
             isOrganiserView: false,
             algorithmModalVisible: false,
+            selectedRounds: [],
         }
     }
 
@@ -92,9 +93,6 @@ class UmpireDivisions extends Component {
 
             this.setState({ umpirePoolData, selectedDivisions });
         }
-
-        const { roundsData } = this.props.liveScoreTeamState;
-        console.log('roundsData', roundsData);
     }
 
     onChangeComp = compId => {
@@ -160,16 +158,22 @@ class UmpireDivisions extends Component {
         // }
         this.setState({
             algorithmModalVisible: false,
-            // newPoolName: "",
+            selectedRounds: [],
         });
     };
 
     handleCancelAlgorithm = (e) => {
         this.setState({
             algorithmModalVisible: false,
-            // newPoolName: "",
+            selectedRounds: [],
         });
     };
+
+    handleChangeRounds = rounds => {
+        this.setState({
+            selectedRounds: rounds,
+        });
+    }
 
     handleSave = () => {
         const { umpirePoolData, selectedComp } = this.state;
@@ -300,24 +304,36 @@ class UmpireDivisions extends Component {
     }
 
     algorithmModalView = () => {
+        const { roundsData } = this.props.liveScoreTeamState;
+        const { selectedRounds } = this.state;
+
         return (
             <Modal
                 className="add-membership-type-modal"
-                title={AppConstants.addPool}
+                title={AppConstants.allocationAlgorithmModalTitle}
                 visible={this.state.algorithmModalVisible}
                 onOk={this.handleOkAlgorithm}
                 onCancel={this.handleCancelAlgorithm}
             >
                 <div>
-                    {/* <InputWithHead
-                        auto_complete="off"
-                        required="pt-0 mt-0"
-                        heading={AppConstants.addPool}
-                        placeholder={AppConstants.pleaseEnterPoolName}
-                        onChange={(e) => this.setState({ newPoolName: e.target.value })}
-                        value={this.state.newPoolName}
-                    /> */}
-                    some content
+                    <Select
+                        mode="multiple"
+                        placeholder="Select"
+                        className="w-100"
+                        onChange={this.handleChangeRounds}
+                        value={!!selectedRounds ?
+                            selectedRounds : []
+                        }
+                    >
+                        {(roundsData || []).map((item) => (
+                            <Option
+                                key={item.id}
+                                value={item.id}
+                            >
+                                {item.name}
+                            </Option>
+                        ))}
+                    </Select>
                 </div>
             </Modal>
         )

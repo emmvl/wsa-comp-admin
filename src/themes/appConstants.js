@@ -1409,6 +1409,7 @@ const AppConstants = {
     activeUmpireCoach: "Activate Umpire Coaches",
     umpirePoolsDivision: "Umpire Pools Allocation To Divisions/Grades",
     allocationAlgorithm: 'Allocation algorithm',
+    allocationAlgorithmModalTitle: 'Apply allocation algorithm to these rounds',
     noPoolAdded: "Pools were not added to this competition yet.",
     allocatePools: "Allocate Pools To",
     badgeAA: "Badge AA",
