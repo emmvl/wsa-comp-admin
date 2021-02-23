@@ -259,6 +259,24 @@ function* liveScoreTeamPagingSaga(action) {
     }
 }
 
+function* liveScoreGetRoundsSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.getRounds, action.competitionId);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_GET_ROUNDS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 export default function* rootLiveScoreTeamSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_LOAD, liveScoreTeamSaga);
     yield takeEvery(ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_LOAD, liveScoreTeamViewPlayerListSaga);
@@ -270,4 +288,5 @@ export default function* rootLiveScoreTeamSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD, liveScoreGetTeamSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGING_LOAD, liveScoreTeamPagingSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_LOAD, liveScoreDeletePlayerSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_ROUNDS_LOAD, liveScoreGetRoundsSaga);
 }

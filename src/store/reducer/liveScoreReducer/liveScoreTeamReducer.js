@@ -66,7 +66,8 @@ const initialState = {
     livescoreTeamActionObject: null,
     teamCurrentPage: 1,
     teamLoad: false,
-    screenKey: null
+    screenKey: null,
+    roundsData: null,
 };
 
 function getManagerId(managerData) {
@@ -291,6 +292,17 @@ function LiveScoreTeamState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS:
             return { ...state, onLoad: false };
+
+        case ApiConstants.API_LIVE_SCORE_GET_ROUNDS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_GET_ROUNDS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                roundsData: action.result,
+                status: action.status,
+            };
         default:
             return state;
     }

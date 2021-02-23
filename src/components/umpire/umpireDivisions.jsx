@@ -10,7 +10,7 @@ import {
     getUmpirePoolData,
     updateUmpirePoolToDivision
 } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
-import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
+import { liveScoreGetDivision, liveScoreGetRounds } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
 import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -65,6 +65,7 @@ class UmpireDivisions extends Component {
                 if (JSON.parse(getUmpireCompetitonData())) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
                     this.props.liveScoreGetDivision(firstComp);
+                    this.props.liveScoreGetRounds(firstComp);
                 }
 
                 const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
@@ -91,6 +92,9 @@ class UmpireDivisions extends Component {
 
             this.setState({ umpirePoolData, selectedDivisions });
         }
+
+        const { roundsData } = this.props.liveScoreTeamState;
+        console.log('roundsData', roundsData);
     }
 
     onChangeComp = compId => {
@@ -104,6 +108,7 @@ class UmpireDivisions extends Component {
 
         this.props.liveScoreGetDivision(compId);
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId });
+        this.props.liveScoreGetRounds(compId);
 
         this.setState({ 
             selectedComp: compId,
@@ -390,6 +395,7 @@ function mapDispatchToProps(dispatch) {
         getRefBadgeData,
         getUmpirePoolData,
         liveScoreGetDivision,
+        liveScoreGetRounds,
         updateUmpirePoolToDivision,
     }, dispatch)
 }
