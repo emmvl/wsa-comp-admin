@@ -39,17 +39,26 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    communicationList() {
+    communicationList({ userId, organisationId }) {
         try {
-            const url = `${communicationBaseUrl}/`;
+            let url = `${communicationBaseUrl}/admin`;
+            if (userId) {
+                url = `${communicationBaseUrl}/admin?userId=${userId}`;
+            }
+            if (organisationId) {
+                url = `${communicationBaseUrl}/admin?organisationId=${organisationId}`;
+            }
+            if (userId && organisationId) {
+                url = `${communicationBaseUrl}/admin?userId=${userId}&organisationId=${organisationId}`;
+            }
             return Method.dataGet(url, token);
         } catch (e) {
             console.error(e);
         }
     },
-    publishCommunication({ id, silent }) {
+    publishCommunication({ id, silent, isApp }) {
         try {
-            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${silent}`;
+            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${!!silent}&isApp=${!!isApp}`;
             return Method.dataGet(url, token);
         } catch (e) {
             console.error(e);
