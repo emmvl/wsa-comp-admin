@@ -259,9 +259,6 @@ class UmpirePoolAllocation extends Component {
         const { source, destination } = result;
         const { assignedData } = this.state;
 
-        const assignedDataIdx = assignedData.findIndex(item => item.id.toString() === destination.droppableId.toString());
-        const expandableControll = document.querySelector(`.view-more-btn[href='#${assignedDataIdx}']`);
-
         let newData;
 
         // dropped outside the list
@@ -269,15 +266,22 @@ class UmpirePoolAllocation extends Component {
             return;
         }
 
+        const assignedDataIdx = assignedData.findIndex(item => item.id.toString() === destination?.droppableId.toString());
+        const expandableControll = document.querySelector(`.view-more-btn[href='#${assignedDataIdx}'].collapsed`);
+
         // handle drop changes
         if (source.droppableId === 'unassignedZone' && destination.droppableId !== 'unassignedZone') {
             newData = this.unassignedToAssignedMove(source, destination);
-            expandableControll.click();
+            if (!!expandableControll) {
+                expandableControll.click();
+            }
         } else if (source.droppableId !== 'unassignedZone' && destination.droppableId === 'unassignedZone') {
             newData = this.moveToUnassigned(source, destination);
         } else if (source.droppableId !== 'unassignedZone') {
             newData = this.moveToAnotherPool(source, destination);
-            expandableControll.click();
+            if (!!expandableControll) {
+                expandableControll.click();
+            }
         } else {
             newData = this.moveInsideUnassigned(source, destination);
         }
