@@ -38,9 +38,9 @@ function* errorSaga(error) {
     }
 }
 
-export function* communicationListSaga() {
+export function* communicationListSaga(action) {
     try {
-        const result = yield call(communicationAxiosApi.communicationList);
+        const result = yield call(communicationAxiosApi.communicationList, action.data);
 
         if (result.status === 1) {
             yield put({
