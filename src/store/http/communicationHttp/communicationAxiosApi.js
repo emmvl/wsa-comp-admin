@@ -47,9 +47,9 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    publishCommunication({ id, silent }) {
+    publishCommunication({ id, silent, isApp }) {
         try {
-            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${silent}`;
+            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${!!silent}&isApp=${!!isApp}`;
             return Method.dataGet(url, token);
         } catch (e) {
             console.error(e);

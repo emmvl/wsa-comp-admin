@@ -194,9 +194,9 @@ class CommunicationView extends Component {
     }
 
     onSubmitCommunicationPublish = () => {
-        const { id, isNotification } = this.state.communicationItem;
+        const { id, isNotification, isApp } = this.state.communicationItem;
         this.props.communicationPublishAction({
-            id, silent: !isNotification,
+            id, silent: !isNotification, isApp,
         });
     }
 
@@ -242,6 +242,24 @@ class CommunicationView extends Component {
                             }}
                         >
                             {AppConstants.email}
+                        </Checkbox>
+                    </div>
+                    <div
+                        className="col-sm"
+                        style={{ display: "flex", alignItems: "center" }}
+                    >
+                        <Checkbox
+                            className="single-checkbox"
+                            onClick={(e) => {
+                                this.setState({
+                                    communicationItem: {
+                                        ...communicationData,
+                                        isApp: e.target.checked,
+                                    },
+                                });
+                            }}
+                        >
+                            {AppConstants.app}
                         </Checkbox>
                     </div>
                 </div>

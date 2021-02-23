@@ -81,7 +81,7 @@ class AddCommunication extends Component {
             organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
-            roleId: -1,
+            roleId: this.getAdminRoleId(),
             genderRefId: -1,
             linkedEntityId: '-1',
             dobFrom: '-1',
@@ -682,6 +682,7 @@ class AddCommunication extends Component {
         const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : userDefaultData;
 
         const selectedRoleArray = [
+            { label: 'Admin', value: "admin" },
             { label: 'Managers', value: "manager" },
             { label: 'Coaches', value: "coach" },
             { label: 'Scorers', value: "scorer" },
@@ -889,6 +890,14 @@ class AddCommunication extends Component {
         );
     }
 
+    getAdminRoleId = () => {
+        const adminRole = this.props.userState.roles && this.props.userState.roles.length > 0
+            ? this.props.userState.roles.find((role) => role.description.toLowerCase() === 'admin')
+            : null;
+
+        return adminRole ? adminRole.id : -1;
+    }
+
     onSaveButton = () => {
         const mediaArray = [
             this.state.image,
@@ -909,7 +918,7 @@ class AddCommunication extends Component {
             expiryDate: postDate,
             organisationId: this.state.organisationId,
             toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
-            toUserRoleIds: this.state.selectedRoles ? this.state.toUserRoleIds : [],
+            toUserRoleIds: this.state.selectedRoles ? this.state.toUserRoleIds : [this.getAdminRoleId()],
             toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
             imageUrl: this.state.imageUrl,
             videoUrl: this.state.videoUrl,
