@@ -42,6 +42,13 @@ function updateUmpirePoolToDivision(payload) {
     };
 }
 
+function applyUmpireAllocatioAlgorithm(payload) {
+    return {
+        type: ApiConstants.API_APPLY_UMPIRE_ALLOCATION_ALGORITHM_LOAD,
+        payload,
+    };
+}
+
 export {
     getUmpirePoolData,
     saveUmpirePoolData,
@@ -49,4 +56,5 @@ export {
     updateUmpirePoolManyData,
     deleteUmpirePoolData,
     updateUmpirePoolToDivision,
+    applyUmpireAllocatioAlgorithm
 }

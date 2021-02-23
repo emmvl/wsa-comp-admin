@@ -8,7 +8,8 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import {
     getUmpirePoolData,
-    updateUmpirePoolToDivision
+    updateUmpirePoolToDivision,
+    applyUmpireAllocatioAlgorithm
 } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import { liveScoreGetDivision, liveScoreGetRounds } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
@@ -141,21 +142,17 @@ class UmpireDivisions extends Component {
     }
 
     handleOkAlgorithm = (e) => {
-        // const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { selectedRounds, selectedComp } = this.state;
 
-        // if (!!this.state.newPoolName.length) {
+        const body = {
+            rounds: selectedRounds
+        };
 
-        //     let poolObj = {
-        //         name: this.state.newPoolName,
-        //         umpires: []
-        //     }
+        this.props.applyUmpireAllocatioAlgorithm({
+            compId: selectedComp,
+            body,
+        });
 
-        //     this.props.saveUmpirePoolData({
-        //         compId: this.state.selectedComp,
-        //         orgId: organisationId,
-        //         poolObj: poolObj
-        //     });
-        // }
         this.setState({
             algorithmModalVisible: false,
             selectedRounds: [],
@@ -413,6 +410,7 @@ function mapDispatchToProps(dispatch) {
         liveScoreGetDivision,
         liveScoreGetRounds,
         updateUmpirePoolToDivision,
+        applyUmpireAllocatioAlgorithm,
     }, dispatch)
 }
 
