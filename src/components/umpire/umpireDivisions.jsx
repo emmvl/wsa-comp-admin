@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Layout, Button, Select, Breadcrumb, Form, } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form, Modal, } from 'antd';
 
 import { getRefBadgeData } from '../../store/actions/appAction';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
@@ -36,6 +36,7 @@ class UmpireDivisions extends Component {
             umpirePoolData: null,
             selectedDivisions: [],
             isOrganiserView: false,
+            algorithmModalVisible: false,
         }
     }
 
@@ -131,6 +132,39 @@ class UmpireDivisions extends Component {
             selectedDivisions: selectedDivisionsRest,
         });
     }
+
+    handleOpenAlgorithm = () => {
+        this.setState({ algorithmModalVisible: true });
+    }
+
+    handleOkAlgorithm = (e) => {
+        // const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        // if (!!this.state.newPoolName.length) {
+
+        //     let poolObj = {
+        //         name: this.state.newPoolName,
+        //         umpires: []
+        //     }
+
+        //     this.props.saveUmpirePoolData({
+        //         compId: this.state.selectedComp,
+        //         orgId: organisationId,
+        //         poolObj: poolObj
+        //     });
+        // }
+        this.setState({
+            algorithmModalVisible: false,
+            // newPoolName: "",
+        });
+    };
+
+    handleCancelAlgorithm = (e) => {
+        this.setState({
+            algorithmModalVisible: false,
+            // newPoolName: "",
+        });
+    };
 
     handleSave = () => {
         const { umpirePoolData, selectedComp } = this.state;
@@ -260,25 +294,65 @@ class UmpireDivisions extends Component {
         )
     }
 
+    algorithmModalView = () => {
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.addPool}
+                visible={this.state.algorithmModalVisible}
+                onOk={this.handleOkAlgorithm}
+                onCancel={this.handleCancelAlgorithm}
+            >
+                <div>
+                    {/* <InputWithHead
+                        auto_complete="off"
+                        required="pt-0 mt-0"
+                        heading={AppConstants.addPool}
+                        placeholder={AppConstants.pleaseEnterPoolName}
+                        onChange={(e) => this.setState({ newPoolName: e.target.value })}
+                        value={this.state.newPoolName}
+                    /> */}
+                    some content
+                </div>
+            </Modal>
+        )
+    }
+
     footerView = () => {
         const { isOrganiserView, umpirePoolData } = this.state;
 
         return (
             <div className="form-footer-button-wrapper">
                 {isOrganiserView && 
-                    <Button 
-                        className="publish-button save-draft-text m-0" 
-                        type="primary" 
-                        htmlType="submit"
-                        onClick={this.handleSave}
-                        disabled={this.props.appState.onLoad ||
-                            this.props.umpirePoolAllocationState.onLoad ||
-                            this.props.liveScoreTeamState.onLoad
-                            || !umpirePoolData?.length
-                        }
-                    >
-                        {AppConstants.save}
-                    </Button>
+                    <>
+                        <Button 
+                            className="publish-button save-draft-text mr-4"
+                            style={{ minWidth: 'fit-content' }}
+                            type="primary"
+                            onClick={this.handleOpenAlgorithm}
+                            disabled={this.props.appState.onLoad ||
+                                this.props.umpirePoolAllocationState.onLoad ||
+                                this.props.liveScoreTeamState.onLoad
+                                || !umpirePoolData?.length
+                            }
+                        >
+                            {AppConstants.allocationAlgorithm}
+                        </Button>
+
+                        <Button 
+                            className="publish-button save-draft-text m-0" 
+                            type="primary" 
+                            htmlType="submit"
+                            onClick={this.handleSave}
+                            disabled={this.props.appState.onLoad ||
+                                this.props.umpirePoolAllocationState.onLoad ||
+                                this.props.liveScoreTeamState.onLoad
+                                || !umpirePoolData?.length
+                            }
+                        >
+                            {AppConstants.save}
+                        </Button>
+                    </>
                 }
             </div>
         );
@@ -296,6 +370,7 @@ class UmpireDivisions extends Component {
                         <div className="formView">{this.contentView()}</div>
 
                         {this.footerView()}
+                        {this.algorithmModalView()}
                     </Form>
                 </Layout>
                 <Loader 
