@@ -43,9 +43,12 @@ function tableSort(key) {
 
     this_obj.setState({ sortBy, sortOrder });
 
+    let { pageSize } = this_obj.props.liveScorePositionTrackState;
+    pageSize = pageSize ? pageSize : 10;
+
     const body = {
         paging: {
-            limit: 10,
+            limit: pageSize,
             offset: this_obj.state.offset
         }
     }
@@ -564,9 +567,11 @@ class LiveScorePositionTrackReport extends Component {
             const userOrganisationId = orgItem ? orgItem.organisationId : 0;
             let liveScoreCompIsParent = userOrganisationId === organisationId
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
+            let { pageSize } = this.props.liveScorePositionTrackState;
+            pageSize = pageSize ? pageSize : 10;
             const body = {
                 paging: {
-                    limit: 10,
+                    limit: pageSize,
                     offset: 0
                 }
             }
@@ -703,9 +708,11 @@ class LiveScorePositionTrackReport extends Component {
 
     onChangePeriod(reportId) {
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.liveScorePositionTrackState;
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0
             }
         }
@@ -725,9 +732,11 @@ class LiveScorePositionTrackReport extends Component {
 
     onChangeGame(aggregateId) {
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.liveScorePositionTrackState;
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0
             }
         }
@@ -749,10 +758,12 @@ class LiveScorePositionTrackReport extends Component {
     onChangeSearchText = (e) => {
         let { sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
+        let { pageSize } = this.props.liveScorePositionTrackState;
+        pageSize = pageSize ? pageSize : 10;
         if (e.target.value == null || e.target.value == "") {
             const body = {
                 paging: {
-                    limit: 10,
+                    limit: pageSize,
                     offset: 0
                 }
             }
@@ -775,10 +786,12 @@ class LiveScorePositionTrackReport extends Component {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
+        let { pageSize } = this.props.liveScorePositionTrackState;
+        pageSize = pageSize ? pageSize : 10;
         if (code === 13) { // 13 is the enter keycode
             const body = {
                 paging: {
-                    limit: 10,
+                    limit: pageSize,
                     offset: 0
                 }
             }
@@ -800,11 +813,13 @@ class LiveScorePositionTrackReport extends Component {
     onClickSearchIcon = () => {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.liveScorePositionTrackState;
+        pageSize = pageSize ? pageSize : 10;
         if (this.state.searchText == null || this.state.searchText == "") {
         } else {
             const body = {
                 paging: {
-                    limit: 10,
+                    limit: pageSize,
                     offset: 0
                 }
             }

@@ -378,7 +378,9 @@ class Registration extends Component {
                     teamName,
                     teamId
                 });
-                page = Math.floor(offset / 10) + 1;
+                let { userRegDashboardListPageSize } = this.props.userRegistrationState;
+                userRegDashboardListPageSize = userRegDashboardListPageSize ? userRegDashboardListPageSize : 10;
+                page = Math.floor(offset / userRegDashboardListPageSize) + 1;
 
                 this.handleRegTableList(page);
             } else {

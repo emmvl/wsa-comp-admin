@@ -61,7 +61,7 @@ function tableSort(key) {
     this_Obj.setState({ sortBy, sortOrder });
     const { id } = JSON.parse(getLiveScoreCompetiton())
     let { searchText, limit, offset } = this_Obj.state
-    let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+    let { liveScoreIncidentPageSize } = this_Obj.props.liveScoreIncidentState;
     liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
     this_Obj.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, this_Obj.state.liveScoreCompIsParent, this_Obj.state.compOrgId);
 }
@@ -213,20 +213,19 @@ class LiveScoreIncidentList extends Component {
                     const { id, competitionOrganisation } = JSON.parse(getUmpireCompetitonData())
                     let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
                     this.setState({ compOrgId, liveScoreCompIsParent: value })
+                    let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+                    liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
                     if (incidentListActionObject) {
                         let offset = incidentListActionObject.offset
                         let searchText = incidentListActionObject.search
                         sortBy = incidentListActionObject.sortBy
                         sortOrder = incidentListActionObject.sortOrder
                         this.setState({ sortBy, sortOrder, offset, searchText, })
-                        this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder, value, compOrgId);
+                        this.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, value, compOrgId);
                     } else {
                         let { searchText, limit, offset, sortBy, sortOrder } = this.state
-                        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
-                        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
                         this.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, value, compOrgId);
                     }
-
                 })
             } else {
                 history.push('/umpireDashboard')
@@ -237,17 +236,17 @@ class LiveScoreIncidentList extends Component {
                     const { id, competitionOrganisation } = JSON.parse(getLiveScoreCompetiton())
                     let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0
                     this.setState({ competitionId: id, liveScoreCompIsParent: value, compOrgId })
+                    let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
+                    liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
                     if (incidentListActionObject) {
                         let offset = incidentListActionObject.offset
                         let searchText = incidentListActionObject.search
                         sortBy = incidentListActionObject.sortBy
                         sortOrder = incidentListActionObject.sortOrder
                         this.setState({ sortBy, sortOrder, offset, searchText, })
-                        this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder, value, compOrgId);
+                        this.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, value, compOrgId);
                     } else {
                         let { searchText, limit, offset, sortBy, sortOrder } = this.state
-                        let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
-                        liveScoreIncidentPageSize = liveScoreIncidentPageSize ? liveScoreIncidentPageSize : 10;
                         this.props.liveScoreIncidentList(id, searchText, liveScoreIncidentPageSize, offset, sortBy, sortOrder, value, compOrgId);
                     }
                 })

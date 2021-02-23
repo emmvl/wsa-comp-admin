@@ -94,7 +94,7 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-    let { gameTimeStatisticsPageSize } = this.props.liveScoreGameTimeStatisticsState;
+    let { gameTimeStatisticsPageSize } = this_obj.props.liveScoreGameTimeStatisticsState;
     gameTimeStatisticsPageSize = gameTimeStatisticsPageSize ? gameTimeStatisticsPageSize : 10;
     this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, gameTimeStatisticsPageSize, this_obj.state.searchText, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent ,this_obj.state.compOrgId)
 }

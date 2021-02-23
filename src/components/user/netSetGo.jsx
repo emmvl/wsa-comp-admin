@@ -39,12 +39,15 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { netSetGoPageSize } = this_Obj.props.userState;
+    netSetGoPageSize = netSetGoPageSize ? netSetGoPageSize : 10;
+
     let filterData = {
         organisationId: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         paging: {
-            limit: 10,
-            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+            limit: netSetGoPageSize,
+            offset: (this_Obj.state.pageNo ? (netSetGoPageSize * (this_Obj.state.pageNo - 1)) : 0)
         }
     }
 
@@ -137,7 +140,9 @@ class NetSetGo extends Component {
             sortBy = netSetGoListAction.sortBy
             sortOrder = netSetGoListAction.sortOrder
             let yearRefId = netSetGoListAction.payload.yearRefId
-            pageNo = Math.floor(offset / 10) + 1;
+            let { netSetGoPageSize } = this.props.userState;
+            netSetGoPageSize = netSetGoPageSize ? netSetGoPageSize : 10;
+            pageNo = Math.floor(offset / netSetGoPageSize) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleNetSetGoTableList(pageNo);

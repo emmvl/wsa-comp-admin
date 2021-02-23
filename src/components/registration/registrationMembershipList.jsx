@@ -218,7 +218,9 @@ class RegistrationMembershipList extends Component {
                     let yearRefId = regMembershipListAction.yearRefId
 
                     await this.setState({ offset, sortBy, sortOrder, yearRefId, allyearload: false })
-                    page = Math.floor(offset / 10) + 1;
+                    let { regMembershipFeeListPageSize } = this.props.registrationState;
+                    regMembershipFeeListPageSize = regMembershipFeeListPageSize ? regMembershipFeeListPageSize : 10;
+                    page = Math.floor(offset / regMembershipFeeListPageSize) + 1;
                     setGlobalYear(yearRefId)
                     this.handleMembershipTableList(page, yearRefId)
                 } else {

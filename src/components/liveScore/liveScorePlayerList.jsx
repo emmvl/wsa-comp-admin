@@ -45,8 +45,10 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
+    let { pageSize } = _this.props.liveScorePlayerState
+    pageSize = pageSize ? pageSize : 10;
     if (_this.state.competitionId) {
-        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, 10, _this.state.searchText, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.compOrgId);
+        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, pageSize, _this.state.searchText, sortBy, sortOrder, _this.state.liveScoreCompIsParent, _this.state.compOrgId);
     }
 }
 
@@ -218,7 +220,8 @@ class LiveScorePlayerList extends Component {
             this.setState({ competitionId: id, compOrgId: compOrgId })
             if (id !== null) {
                 checkLivScoreCompIsParent().then((value) => {
-
+                    let { pageSize } = this.props.liveScorePlayerState
+                    pageSize = pageSize ? pageSize : 10;
 
                     if (playerListActionObject) {
                         let offset = playerListActionObject.offset
@@ -226,9 +229,9 @@ class LiveScorePlayerList extends Component {
                         let sortBy = playerListActionObject.sortBy
                         let sortOrder = playerListActionObject.sortOrder
                         this.setState({ offset, searchText, sortBy, sortOrder })
-                        this.props.playerListWithPaginationAction(id, offset, 10, searchText, sortBy, sortOrder, value, compOrgId);
+                        this.props.playerListWithPaginationAction(id, offset, pageSize, searchText, sortBy, sortOrder, value, compOrgId);
                     } else {
-                        this.props.playerListWithPaginationAction(id, 0, 10, null, null, null, value, compOrgId)
+                        this.props.playerListWithPaginationAction(id, 0, pageSize, null, null, null, value, compOrgId)
                     }
                 })
             } else {
@@ -283,7 +286,7 @@ class LiveScorePlayerList extends Component {
     }
 
     contentView = () => {
-        let { result, totalCount, currentPage, pageSize, onLoad } = this.props.liveScorePlayerState
+        const { result, totalCount, currentPage, pageSize, onLoad } = this.props.liveScorePlayerState
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -321,8 +324,10 @@ class LiveScorePlayerList extends Component {
     onChangeSearchText = (e) => {
         let { sortBy, sortOrder, competitionId } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
+        let { pageSize } = this.props.liveScorePlayerState
+        pageSize = pageSize ? pageSize : 10;
         if (e.target.value == null || e.target.value === "") {
-            this.props.playerListWithPaginationAction(competitionId, 0, 10, e.target.value, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
+            this.props.playerListWithPaginationAction(competitionId, 0, pageSize, e.target.value, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
         }
     }
 
@@ -330,9 +335,11 @@ class LiveScorePlayerList extends Component {
     onKeyEnterSearchText = (e) => {
         let { sortBy, sortOrder, searchText, competitionId } = this.state
         this.setState({ offset: 0 })
+        let { pageSize } = this.props.liveScorePlayerState
+        pageSize = pageSize ? pageSize : 10;
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
+            this.props.playerListWithPaginationAction(competitionId, 0, pageSize, searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
         }
     }
 
@@ -340,9 +347,11 @@ class LiveScorePlayerList extends Component {
     onClickSearchIcon = () => {
         let { sortBy, sortOrder, searchText, competitionId } = this.state
         this.setState({ offset: 0 })
+        let { pageSize } = this.props.liveScorePlayerState
+        pageSize = pageSize ? pageSize : 10;
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
+            this.props.playerListWithPaginationAction(competitionId, 0, pageSize, searchText, sortBy, sortOrder, this.state.liveScoreCompIsParent, this.state.compOrgId)
         }
     }
 

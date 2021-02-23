@@ -188,7 +188,9 @@ class RegistrationFormList extends Component {
                     let yearRefId = regFormListAction.yearRefId
                     let allyearload = false;
                     await this.setState({ offset, sortBy, sortOrder, yearRefId, allyearload })
-                    page = Math.floor(offset / 10) + 1;
+                    let { pageSize } = this.props.dashboardState;
+                    pageSize = pageSize ? pageSize : 10;
+                    page = Math.floor(offset / pageSize) + 1;
                     this.handleMembershipTableList(page, yearRefId)
 
                 } else {

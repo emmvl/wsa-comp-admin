@@ -32,7 +32,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    let { pageSize } = this.props.liveScoreManagerState;
+    let { pageSize } = _this.props.liveScoreManagerState;
     pageSize = pageSize ? pageSize : 10;
     _this.props.liveScoreManagerListAction(3, 6, _this.state.competitionId, _this.state.searchText, _this.state.offset, pageSize, sortBy, sortOrder, 'managerList', _this.state.compOrgId);
 }

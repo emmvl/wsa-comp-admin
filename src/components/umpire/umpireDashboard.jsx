@@ -63,9 +63,11 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "DESC") {
         sortBy = sortOrder = null;
     }
+    let { pageSize } = this_obj.props.umpireDashboardState;
+    pageSize = pageSize ? pageSize : 10;
     const body = {
         paging: {
-            limit: 10,
+            limit: pageSize,
             offset: this_obj.state.offsetData,
         },
     };
@@ -736,9 +738,11 @@ class UmpireDashboard extends Component {
 
         if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
             if (this.props.umpireDashboardState.onDivisionLoad === false && this.state.divisionLoad === true) {
+                let { pageSize } = this_obj.props.umpireDashboardState;
+                pageSize = pageSize ? pageSize : 10;
                 const body = {
                     paging: {
-                        limit: 10,
+                        limit: pageSize,
                         offset: this.state.offsetData,
                     },
                 };
@@ -887,9 +891,11 @@ class UmpireDashboard extends Component {
 
     onVenueChange = (venueId) => {
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.umpireDashboardState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0,
             },
         };
@@ -911,9 +917,11 @@ class UmpireDashboard extends Component {
     onDivisionChange = (divisionId) => {
         this.setState({ division: divisionId, round: "All" });
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.umpireDashboardState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0,
             },
         };
@@ -941,9 +949,11 @@ class UmpireDashboard extends Component {
             this.props.umpireDashboardUpdate(roundId);
         }
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.umpireDashboardState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0,
             },
         };

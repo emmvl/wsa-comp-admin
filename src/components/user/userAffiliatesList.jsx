@@ -41,7 +41,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let { affiliateListPageSize } = this.props.userState;
+    let { affiliateListPageSize } = this_Obj.props.userState;
     affiliateListPageSize = affiliateListPageSize ? affiliateListPageSize : 10;
 
     const filterData = {

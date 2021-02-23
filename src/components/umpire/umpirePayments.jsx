@@ -50,9 +50,11 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
+    let { pageSize } = this_obj.props.umpirePaymentState
+    pageSize = pageSize ? pageSize : 10;
     const body = {
         paging: {
-            limit: 10,
+            limit: pageSize,
             offset: this_obj.state.offsetData,
         },
     };
@@ -247,7 +249,9 @@ class UmpirePayments extends Component {
             sortBy = umpirePaymentObject.data.sortBy
             sortOrder = umpirePaymentObject.data.sortOrder
             await this.setState({ offset, searchText, sortBy, sortOrder, selectedComp })
-            page = Math.floor(offset / 10) + 1;
+            let { pageSize } = this.props.umpirePaymentState
+            pageSize = pageSize ? pageSize : 10;
+            page = Math.floor(offset / pageSize) + 1;
 
             this.handlePageChange(page)
         } else {
@@ -327,12 +331,14 @@ class UmpirePayments extends Component {
                 // }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-
                 let { sortBy, sortOrder, searchText } = this.state
+                let { pageSize } = this.props.umpirePaymentState
+                pageSize = pageSize ? pageSize : 10;
+
                 const body = {
                     paging: {
                         offset: 0,
-                        limit: 10,
+                        limit: pageSize,
                     },
                 }
 
@@ -350,10 +356,12 @@ class UmpirePayments extends Component {
         }
 
         if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
+            let { pageSize } = this.props.umpirePaymentState
+            pageSize = pageSize ? pageSize : 10;
             const body = {
                 paging: {
                     offset: 0,
-                    limit: 10,
+                    limit: pageSize,
                 },
             }
             this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: this.state.searchText, sortBy: this.state.sortBy, sortOrder: this.state.sortOrder })
@@ -425,10 +433,12 @@ class UmpirePayments extends Component {
     onChangeComp = (compID) => {
         let selectedComp = compID.comp;
         const { searchText, sortBy, sortOrder } = this.state;
+        let { pageSize } = this.props.umpirePaymentState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
                 offset: 0,
-                limit: 10,
+                limit: pageSize,
             },
         }
 
@@ -473,11 +483,12 @@ class UmpirePayments extends Component {
 
         const { selectedComp, sortBy, sortOrder, offsetData } = this.state;
         if (e.target.value === null || e.target.value === '') {
-
+            let { pageSize } = this.props.umpirePaymentState
+            pageSize = pageSize ? pageSize : 10;
             const body = {
                 paging: {
                     offset: offsetData,
-                    limit: 10,
+                    limit: pageSize,
                 },
             };
             this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: e.target.value, sortBy: sortBy, sortOrder: sortOrder })
@@ -490,10 +501,12 @@ class UmpirePayments extends Component {
         const { sortBy, sortOrder, searchText, offsetData, selectedComp } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
+            let { pageSize } = this.props.umpirePaymentState
+            pageSize = pageSize ? pageSize : 10;
             const body = {
                 paging: {
                     offset: offsetData,
-                    limit: 10,
+                    limit: pageSize,
                 },
             };
             this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy, sortOrder })
@@ -506,10 +519,12 @@ class UmpirePayments extends Component {
         const { sortBy, sortOrder, searchText, offsetData, selectedComp } = this.state;
         if (searchText === null || searchText === '') {
         } else {
+            let { pageSize } = this.props.umpirePaymentState
+            pageSize = pageSize ? pageSize : 10;
             const body = {
                 paging: {
                     offset: offsetData,
-                    limit: 10,
+                    limit: pageSize,
                 },
             };
             this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy, sortOrder })
