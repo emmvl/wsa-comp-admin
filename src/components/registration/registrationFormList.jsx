@@ -25,7 +25,7 @@ import { getGlobalYear, setGlobalYear } from "util/sessionStorage";
 const {
     // Footer,
     Content
-} = Layout;
+} = Layout; 
 const { Option } = Select;
 const { SubMenu } = Menu;
 
@@ -43,7 +43,11 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.regDashboardListAction(this_Obj.state.offset, this_Obj.state.yearRefId, sortBy, sortOrder)
+
+    let { pageSize } = this_Obj.props.dashboardState;
+    pageSize = pageSize ? pageSize : 10;
+
+    this_Obj.props.regDashboardListAction(this_Obj.state.offset, pageSize, this_Obj.state.yearRefId, sortBy, sortOrder)
 }
 
 const listeners = (key) => ({

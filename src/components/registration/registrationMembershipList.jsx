@@ -40,7 +40,9 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.regMembershipListAction(this_Obj.state.offset, this_Obj.state.yearRefId, sortBy, sortOrder)
+    let { regMembershipFeeListPageSize } = this_Obj.props.registrationState;
+    regMembershipFeeListPageSize = regMembershipFeeListPageSize ? regMembershipFeeListPageSize : 10;
+    this_Obj.props.regMembershipListAction(this_Obj.state.offset, regMembershipFeeListPageSize, this_Obj.state.yearRefId, sortBy, sortOrder)
 
 }
 const listeners = (key) => ({
