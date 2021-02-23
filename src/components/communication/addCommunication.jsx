@@ -195,7 +195,7 @@ class AddCommunication extends Component {
         }
 
         const toOrganisationIds = data.toOrganisationIds
-            ? data.toOrganisationIds.split(',').map((id) => parseInt(id, 10))
+            ? data.toOrganisationIds.split(',')
             : [];
         const toUserRoleIds = data.toUserRoleIds
             ? data.toUserRoleIds.split(',').map((id) => parseInt(id, 10))
