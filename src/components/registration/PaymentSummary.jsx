@@ -52,8 +52,11 @@ function tableSort(key) {
     }
 
     thisObj.setState({ sortBy, sortOrder });
+    let { paymentSummaryListPageSize } = thisObj.props.paymentState;
+    paymentSummaryListPageSize = paymentSummaryListPageSize ? paymentSummaryListPageSize : 10;
     thisObj.props.getPaymentSummary(
         thisObj.state.offset,
+        paymentSummaryListPageSize,
         sortBy,
         sortOrder,
         -1,

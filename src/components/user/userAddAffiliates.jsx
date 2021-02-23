@@ -419,14 +419,22 @@ class UserAddAffiliates extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead
-                    maxLength={10}                    
-                    heading={AppConstants.phoneNumber}
-                    placeholder={AppConstants.phoneNumber}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
-                    value={affiliate.phoneNo}
-                    auto_complete="new-phoneNumber"
-                />
+                <Form.Item
+                    name="phoneNo"
+                    rules={[{
+                        required: true, message: ValidationConstants.phoneNumberRequired,
+                    }]}
+                >
+                    <InputWithHead
+                        maxLength={10}
+                        required="required-field"
+                        heading={AppConstants.phoneNumber}
+                        placeholder={AppConstants.phoneNumber}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
+                        value={affiliate.phoneNo}
+                        auto_complete="new-phoneNumber"
+                    />
+                </Form.Item>
 
                 <Form.Item
                     name="email"

@@ -81,7 +81,7 @@ class AddCommunication extends Component {
             organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
-            roleId: this.getAdminRoleId(),
+            roleId: -1,
             genderRefId: -1,
             linkedEntityId: '-1',
             dobFrom: '-1',
@@ -668,7 +668,7 @@ class AddCommunication extends Component {
             })) : [];
         if (getOrganisationData()) {
             organisationListData.push({
-                orgId: `${getOrganisationData().organisationId}`,
+                orgId: getOrganisationData().organisationId,
                 name: getOrganisationData().name,
             });
         }
@@ -683,10 +683,10 @@ class AddCommunication extends Component {
 
         const selectedRoleArray = [
             { label: 'Admin', value: "admin" },
-            { label: 'Managers', value: "manager" },
             { label: 'Coaches', value: "coach" },
-            { label: 'Scorers', value: "scorer" },
+            { label: 'Managers', value: "manager" },
             { label: 'Players', value: "player" },
+            { label: 'Player Registration', value: "player registration" },
             { label: 'Umpires', value: "umpire" },
         ];
 
@@ -890,14 +890,6 @@ class AddCommunication extends Component {
         );
     }
 
-    getAdminRoleId = () => {
-        const adminRole = this.props.userState.roles && this.props.userState.roles.length > 0
-            ? this.props.userState.roles.find((role) => role.description.toLowerCase() === 'admin')
-            : null;
-
-        return adminRole ? adminRole.id : -1;
-    }
-
     onSaveButton = () => {
         const mediaArray = [
             this.state.image,
@@ -918,7 +910,9 @@ class AddCommunication extends Component {
             expiryDate: postDate,
             organisationId: this.state.organisationId,
             toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
-            toUserRoleIds: this.state.selectedRoles ? this.state.toUserRoleIds : [this.getAdminRoleId()],
+            toUserRoleIds: this.state.selectedRoles
+                ? this.state.toUserRoleIds
+                : [],
             toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
             imageUrl: this.state.imageUrl,
             videoUrl: this.state.videoUrl,

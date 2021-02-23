@@ -555,13 +555,14 @@ class LiveScoreIncidentList extends Component {
 
     submitSuspensionDialog = () => {
         const { from, to } = this.state.suspendedDates;
-        const { foulPlayerId, id: incidentId, suspension } = this.state.activeIncident;
+        const { incidentPlayers, id: incidentId, suspension } = this.state.activeIncident;
+        const player = incidentPlayers[0];
 
         const dataToAction = {
             incidentId,
             body: {
                 incidentId,
-                playerId: +foulPlayerId,
+                playerId: player.playerId,
                 suspendedFrom: moment(from, 'DD/MM/YYYY'),
                 suspendedTo: moment(to, 'DD/MM/YYYY'),
                 suspensionTypeRefId: 1,

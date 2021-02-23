@@ -49,9 +49,10 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-
+    let { paymentListPageSize } = this_Obj.props.paymentState;
+    paymentListPageSize = paymentListPageSize ? paymentListPageSize : 10;
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo, this_Obj.state.searchText);
+    this_Obj.props.getPaymentList(this_Obj.state.offset, paymentListPageSize, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo, this_Obj.state.searchText);
 }
 
 const columns = [
@@ -133,14 +134,6 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
-        title: AppConstants.feePaid,
-        dataIndex: "paidFee",
-        key: "paidFee",
-        render: (paidFee, record) => currencyFormat(paidFee),
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("paidFee"),
-    },
-    {
         title: AppConstants.portion,
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
@@ -151,6 +144,14 @@ const columns = [
         ),
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
+    },
+    {
+        title: AppConstants.feePaid,
+        dataIndex: "paidFee",
+        key: "paidFee",
+        render: (paidFee, record) => currencyFormat(paidFee),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("paidFee"),
     },
     {
         title: AppConstants.discount,
