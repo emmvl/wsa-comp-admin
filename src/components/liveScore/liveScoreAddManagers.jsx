@@ -57,7 +57,7 @@ class LiveScoreAddManager extends Component {
             const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
             let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
             checkLivScoreCompIsParent().then((value) => {
-                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, compOrgId)
+                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, null, compOrgId)
                 this.props.getliveScoreTeams(id, null, compOrgId)
                 if (this.state.isEdit === true) {
                     this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
