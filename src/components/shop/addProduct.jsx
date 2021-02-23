@@ -135,9 +135,6 @@ class AddProduct extends Component {
                 }
             }
         }
-        if (productDetailData.variantsChecked === false) {
-            productDetailData.variants = []
-        }
         productDetailData.images = urls
 
         let formData = new FormData();

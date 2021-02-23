@@ -88,7 +88,7 @@ function makeDetailDataObject(data) {
             ]
         }
     ]
-    productData['variantsChecked'] = isArrayNotEmpty(productData.variants)
+    productData['variantsChecked'] = !!isArrayNotEmpty(productData.variants.filter((variant) => variant.isDeleted === 0));
     productData['taxApplicable'] = productData.tax > 0
     productData["variants"] = isArrayNotEmpty(productData.variants) ? productData.variants : defaultVariant
     return productData
