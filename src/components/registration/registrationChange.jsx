@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+// import { NavLink } from "react-router-dom";
 import {
     Layout,
     Breadcrumb,
@@ -9,32 +12,36 @@ import {
     Pagination,
     // Modal
 } from "antd";
+
 import "./product.scss";
-// import { NavLink } from "react-router-dom";
+import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
+import history from "../../util/history";
+import { currencyFormat } from "../../util/currencyFormat";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
+import {
+    regCompetitionListAction,
+    clearCompReducerDataAction,
+    regCompetitionListDeleteAction,
+} from "../../store/actions/registrationAction/competitionFeeAction";
+import {
+    getRegistrationChangeDashboard,
+    exportRegistrationChange,
+    setRegistrationChangeListPageSize,
+    setRegistrationChangeListPageNumber,
+} from "../../store/actions/registrationAction/registrationChangeAction";
+import { registrationChangeType } from "../../store/actions/commonAction/commonAction";
+import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
-import { getRegistrationChangeDashboard, setRegistrationChangeListPageSize, setRegistrationChangeListPageNumber } from "../../store/actions/registrationAction/registrationChangeAction";
-import { registrationChangeType } from "../../store/actions/commonAction/commonAction";
-import { currencyFormat } from "../../util/currencyFormat";
-import AppImages from "../../themes/appImages";
-import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
-import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
-import history from "../../util/history";
 
-// const { confirm } = Modal;
 const { Content } = Layout;
 const { Option } = Select;
-// const { SubMenu } = Menu;
-// let this_Obj = null;
 
-/////function to sort table column
+// function to sort table column
 function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
+    const stringA = JSON.stringify(a[key])
+    const stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
 
@@ -64,27 +71,27 @@ const columns = [
                 title: 'Participant',
                 dataIndex: 'userName',
                 key: 'userName',
-                sorter: (a, b) => tableSort(a, b, "userName")
+                sorter: (a, b) => tableSort(a, b, "userName"),
             },
             {
                 title: 'Comp Organiser',
                 dataIndex: 'compOrganiserName',
                 key: 'compOrganiserName',
-                sorter: (a, b) => tableSort(a, b, "compOrganiserName")
+                sorter: (a, b) => tableSort(a, b, "compOrganiserName"),
             },
             {
                 title: 'Affiliate',
                 dataIndex: 'affiliateName',
                 key: 'affiliateName',
-                sorter: (a, b) => tableSort(a, b, "affiliateName")
+                sorter: (a, b) => tableSort(a, b, "affiliateName"),
             },
             {
                 title: 'Competition',
                 dataIndex: 'competitionName',
                 key: 'competitionName',
-                sorter: (a, b) => tableSort(a, b, "competitionName")
+                sorter: (a, b) => tableSort(a, b, "competitionName"),
             },
-        ]
+        ],
     },
     {
         title: "Transfer",
@@ -97,24 +104,25 @@ const columns = [
                 render: (transferCompOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
-                            {record.tCompOrgApproved != "-1" && <div>{transferCompOrgName}</div>}
+                            {record.tCompOrgApproved != "-1" && (
+                                <div>{transferCompOrgName}</div>
+                            )}
                             {transferCompOrgName && (
                                 <div className="transfer-status">
-                                    {record.tCompOrgStatus == 0 ? "(" + record.tCompOrgApproved + ")" : (
+                                    {record.tCompOrgStatus == 0 ? `(${record.tCompOrgApproved})` : (
                                         <div>
                                             {record.tCompOrgStatus != 3 ? (
-                                                <div
-                                                    style={{ color: getColor(record, "tCompOrgApproved") }}>&#x2714;</div>
+                                                <div style={{ color: getColor(record, "tCompOrgApproved") }}>&#x2714;</div>
                                             ) : (
-                                                    <div style={{ color: "red" }}>&#x2718;</div>
-                                                )}
+                                                <div style={{ color: "red" }}>&#x2718;</div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
                             )}
                         </div>
                     </div>
-                )
+                ),
             },
             {
                 title: 'Affiliate',
@@ -124,33 +132,33 @@ const columns = [
                 render: (transferAffOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
-                            {transferAffOrgName != "-1" &&
-                                <div> {transferAffOrgName} </div>
-                            }
+                            {transferAffOrgName != "-1" && (
+                                <div>{transferAffOrgName}</div>
+                            )}
                             {transferAffOrgName && (
                                 <div className="transfer-status">
-                                    {record.tAffStatus == 0 ? "(" + record.tAffApproved + ")" : (
+                                    {record.tAffStatus == 0 ? `(${record.tAffApproved})` : (
                                         <div>
                                             {record.tAffStatus != 3 ? (
                                                 <div style={{ color: getColor(record, "tAffApproved") }}>&#x2714;</div>
                                             ) : (
-                                                    <div style={{ color: "red" }}>&#x2718;</div>
-                                                )}
+                                                <div style={{ color: "red" }}>&#x2718;</div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
                             )}
                         </div>
                     </div>
-                )
+                ),
             },
             {
                 title: 'Competition',
                 dataIndex: 'transferCompName',
                 key: 'transferCompName',
-                sorter: (a, b) => tableSort(a, b, "transferCompName")
+                sorter: (a, b) => tableSort(a, b, "transferCompName"),
             },
-        ]
+        ],
     },
     {
         title: "Approvals",
@@ -159,19 +167,19 @@ const columns = [
                 title: 'Membership Type',
                 dataIndex: 'membershipTypeName',
                 key: 'membershipTypeName',
-                sorter: (a, b) => tableSort(a, b, "membershipTypeName")
+                sorter: (a, b) => tableSort(a, b, "membershipTypeName"),
             },
             {
                 title: 'Paid',
                 dataIndex: 'paid',
                 key: 'paid',
-                sorter: (a, b) => tableSort(a, b, "paid")
+                sorter: (a, b) => tableSort(a, b, "paid"),
             },
             {
                 title: 'Type',
                 dataIndex: 'regChangeType',
                 key: 'regChangeType',
-                sorter: (a, b) => tableSort(a, b, "regChangeType")
+                sorter: (a, b) => tableSort(a, b, "regChangeType"),
             },
             {
                 title: 'Comp Organiser',
@@ -183,20 +191,22 @@ const columns = [
                     <div>
                         <div className="d-flex justify-content-between">
                             <div>
-                                {compOrganiserApproved !== 'N/A' && compOrganiserApproved !== 'P' ? currencyFormat(compOrganiserApproved) : compOrganiserApproved}
+                                {compOrganiserApproved !== 'N/A' && compOrganiserApproved !== 'P'
+                                    ? currencyFormat(compOrganiserApproved)
+                                    : compOrganiserApproved}
                             </div>
                             {compOrganiserApproved !== 'N/A' && compOrganiserApproved !== 'P' && (
                                 <div>
                                     {record.compOrgApprovedStatus != 3 ? (
                                         <div style={{ color: getColor(record, "compOrganiserApproved") }}>&#x2714;</div>
                                     ) : (
-                                            <div style={{ color: "red" }}>&#x2718;</div>
-                                        )}
+                                        <div style={{ color: "red" }}>&#x2718;</div>
+                                    )}
                                 </div>
                             )}
                         </div>
                     </div>
-                )
+                ),
             },
             {
                 title: 'Affiliate',
@@ -215,13 +225,13 @@ const columns = [
                                     {record.affiliateApprovedStatus != 3 ? (
                                         <div style={{ color: getColor(record, "affiliateApproved") }}>&#x2714;</div>
                                     ) : (
-                                            <div style={{ color: "red" }}>&#x2718;</div>
-                                        )}
+                                        <div style={{ color: "red" }}>&#x2718;</div>
+                                    )}
                                 </div>
                             )}
                         </div>
                     </div>
-                )
+                ),
             },
             {
                 title: 'State',
@@ -240,13 +250,13 @@ const columns = [
                                     {record.stateApprovedStatus != 3 ? (
                                         <div style={{ color: getColor(record, "stateApproved") }}>&#x2714;</div>
                                     ) : (
-                                            <div style={{ color: "red" }}>&#x2718;</div>
-                                        )}
+                                        <div style={{ color: "red" }}>&#x2718;</div>
+                                    )}
                                 </div>
                             )}
                         </div>
                     </div>
-                )
+                ),
             },
             // {
             //     title: 'Status',
@@ -282,10 +292,10 @@ const columns = [
                             </Menu.SubMenu>
                         )}
                     </Menu>
-                )
-            }
-        ]
-    }
+                ),
+            },
+        ],
+    },
 ];
 
 class RegistrationChange extends Component {
@@ -301,14 +311,12 @@ class RegistrationChange extends Component {
             competitionId: "-1",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             regChangeTypeRefId: -1,
-
         };
-        // this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
     componentDidMount() {
-        let yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
+        const yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         this.setState({ yearRefId })
         this.props.registrationChangeType();
         this.handleRegChangeList(1);
@@ -321,16 +329,18 @@ class RegistrationChange extends Component {
 
     handleRegChangeList = async (page) => {
         await this.props.setRegistrationChangeListPageNumber(page);
+
         const {
             // yearRefId,
             competitionId,
             organisationId,
-            regChangeTypeRefId
+            regChangeTypeRefId,
         } = this.state;
-        let yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
+        const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
         let { regChangeDashboardListPageSize } = this.props.regChangeState;
-        regChangeDashboardListPageSize = regChangeDashboardListPageSize ? regChangeDashboardListPageSize : 10;
-        let filter = {
+        regChangeDashboardListPageSize = regChangeDashboardListPageSize || 10;
+
+        const filter = {
             organisationId,
             yearRefId,
             competitionId,
@@ -363,14 +373,13 @@ class RegistrationChange extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key === 'yearRefId') {
             await this.setState({
-                'yearRefId': value,
+                yearRefId: value,
             });
             if (value != -1) {
                 setGlobalYear(value)
             }
             this.handleRegChangeList(1);
-        }
-        else {
+        } else {
             await this.setState({
                 [key]: value,
             });
@@ -378,6 +387,30 @@ class RegistrationChange extends Component {
             this.handleRegChangeList(1);
         }
     };
+
+    onExport = () => {
+        const {
+            // yearRefId,
+            competitionId,
+            organisationId,
+            regChangeTypeRefId,
+        } = this.state;
+
+        const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
+
+        const filter = {
+            organisationId,
+            yearRefId,
+            competitionId,
+            regChangeTypeRefId,
+            paging: {
+                limit: -1,
+                offset: 0,
+            },
+        };
+
+        this.props.exportRegistrationChange(filter);
+    }
 
     dropdownView = () => {
         const { regChangeCompetitions } = this.props.regChangeState;
@@ -395,7 +428,7 @@ class RegistrationChange extends Component {
                     <div className="row">
                         <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
-                                <span className="year-select-heading">{AppConstants.year}:</span>
+                                <span className="year-select-heading">{`${AppConstants.year}:`}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     // style={{ width: 90 }}
@@ -403,8 +436,8 @@ class RegistrationChange extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e, "yearRefId")}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => (
-                                        <Option key={'year_' + item.id} value={item.id}>
+                                    {this.props.appState.yearList.map((item) => (
+                                        <Option key={`year_${item.id}`} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -414,7 +447,7 @@ class RegistrationChange extends Component {
 
                         <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
-                                <span className="year-select-heading">{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{`${AppConstants.competition}:`}</span>
                                 <Select
                                     className="year-select reg-filter-select-competition ml-2"
                                     // style={{ minWidth: 200 }}
@@ -423,10 +456,7 @@ class RegistrationChange extends Component {
                                 >
                                     <Option key={-1} value="-1">{AppConstants.all}</Option>
                                     {(competitionList || []).map((item) => (
-                                        <Option
-                                            key={'competition_' + item.competitionId}
-                                            value={item.competitionId}
-                                        >
+                                        <Option key={`competition_${item.competitionId}`} value={item.competitionId}>
                                             {item.competitionName}
                                         </Option>
                                     ))}
@@ -436,7 +466,7 @@ class RegistrationChange extends Component {
 
                         <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
-                                <span className="year-select-heading">{AppConstants.type}:</span>
+                                <span className="year-select-heading">{`${AppConstants.type}:`}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
@@ -445,23 +475,20 @@ class RegistrationChange extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(regChangeTypes || []).map((g) => (
-                                        <Option key={'regChangeType_' + g.id} value={g.id}>{g.description}</Option>
+                                        <Option key={`regChangeType_${g.id}`} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>
                         </div>
 
                         <div className="d-flex align-items-center" style={{ marginRight: '1%' }}>
-                            <div className="d-flex flex-row-reverse button-with-search pb-3"
-                            // <div className="col-sm d-flex justify-content-end"
-                            // onClick={() => this.props.clearCompReducerDataAction("all")}
-                            >
+                            <div className="d-flex flex-row-reverse button-with-search pb-3">
                                 {/* <NavLink
                                     to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
                                     className="text-decoration-none"
                                 > */}
                                 <Button className="primary-add-product" type="primary">
-                                    + {AppConstants.add}
+                                    {`+ ${AppConstants.add}`}
                                 </Button>
                                 {/* </NavLink> */}
                             </div>
@@ -469,7 +496,11 @@ class RegistrationChange extends Component {
 
                         <div className="d-flex align-items-center" style={{ marginRight: '1%' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3">
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                    onClick={this.onExport}
+                                >
                                     <div className="row">
                                         <div className="col-sm">
                                             <img
@@ -490,7 +521,13 @@ class RegistrationChange extends Component {
     }
 
     contentView = () => {
-        const { regChangeDashboardListData, regChangeDashboardListPage, regChangeDashboardListTotalCount, onLoad, regChangeDashboardListPageSize } = this.props.regChangeState;
+        const {
+            regChangeDashboardListData,
+            regChangeDashboardListPage,
+            regChangeDashboardListTotalCount,
+            onLoad,
+            regChangeDashboardListPageSize,
+        } = this.props.regChangeState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -540,10 +577,13 @@ class RegistrationChange extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        regCompetitionListAction, getOnlyYearListAction,
-        clearCompReducerDataAction, regCompetitionListDeleteAction,
+        regCompetitionListAction,
+        getOnlyYearListAction,
+        clearCompReducerDataAction,
+        regCompetitionListDeleteAction,
         CLEAR_OWN_COMPETITION_DATA,
         getRegistrationChangeDashboard,
+        exportRegistrationChange,
         registrationChangeType,
         setRegistrationChangeListPageSize,
         setRegistrationChangeListPageNumber,
@@ -555,7 +595,7 @@ function mapStateToProps(state) {
         competitionFeesState: state.CompetitionFeesState,
         regChangeState: state.RegistrationChangeState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
     }
 }
 
