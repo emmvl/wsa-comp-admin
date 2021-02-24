@@ -2014,7 +2014,8 @@ const AppConstants = {
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
     failed: "Failed",
-    wouldYouLikeToApprove: "Would you like to Approve?"
+    wouldYouLikeToApprove: "Would you like to Approve?",
+    regRetryModalMsg: "Do you want to retry the failed registration?",
 };
 
 export default AppConstants;
