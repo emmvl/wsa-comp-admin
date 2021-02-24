@@ -177,6 +177,16 @@ function registrationDashboard(state = initialState, action) {
           error: null
         };
 
+        case ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD:
+            return{...state,onLoad: true}
+        
+        case ApiConstants.API_REGISTRATION_RETRY_PAYMENT_SUCCESS:
+            return{
+                ...state,
+                onLoad: false,
+                status: action.status
+            }
+
         default:
             return state;
     }

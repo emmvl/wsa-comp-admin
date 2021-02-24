@@ -27,7 +27,7 @@ import {
     setRegistrationListPageSize,
     setRegistrationListPageNumber
 } from "store/actions/registrationAction/endUserRegistrationAction";
-import { getAllCompetitionAction, registrationFailedStatusUpdate } from "store/actions/registrationAction/registrationDashboardAction";
+import { getAllCompetitionAction, registrationFailedStatusUpdate,registrationRetryPaymentAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { liveScorePlayersToCashReceivedAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
@@ -641,6 +641,7 @@ class Registration extends Component {
                 let payload = {
                     registrationId: selectedRow.registrationUniqueKey,
                 }
+                this.props.registrationRetryPaymentAction(payload);
                 this.setState({ loading: true });
             }
         }
@@ -1273,7 +1274,8 @@ function mapDispatchToProps(dispatch) {
         setRegistrationListPageSize,
         setRegistrationListPageNumber,
         registrationFailedStatusUpdate,
-        liveScorePlayersToPayRetryPaymentAction
+        liveScorePlayersToPayRetryPaymentAction,
+        registrationRetryPaymentAction
     }, dispatch);
 }
 
