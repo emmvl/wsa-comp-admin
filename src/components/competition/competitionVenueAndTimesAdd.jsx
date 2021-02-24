@@ -433,7 +433,9 @@ class CompetitionVenueAndTimesAdd extends Component {
     contentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
-        const { affiliateList } = this.props.userState
+        const { affiliateList, impersonationList = [] } = this.props.userState
+        const affiliateCorrectList = affiliateList.length ? affiliateList : impersonationList;
+
         return (
             <div className="content-view">
                 <span className="form-heading">
@@ -603,7 +605,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     placeholder="Select"
                                     optionFilterProp="children"
                                 >
-                                    {affiliateList.map((item) => (
+                                    {affiliateCorrectList.map((item) => (
                                         <Option key={'affiliate_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>

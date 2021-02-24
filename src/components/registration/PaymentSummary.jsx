@@ -52,8 +52,11 @@ function tableSort(key) {
     }
 
     thisObj.setState({ sortBy, sortOrder });
+    let { paymentSummaryListPageSize } = thisObj.props.paymentState;
+    paymentSummaryListPageSize = paymentSummaryListPageSize ? paymentSummaryListPageSize : 10;
     thisObj.props.getPaymentSummary(
         thisObj.state.offset,
+        paymentSummaryListPageSize,
         sortBy,
         sortOrder,
         -1,
@@ -321,7 +324,9 @@ class PaymentSummary extends Component {
                 dateTo,
                 filterOrganisation,
             });
-            page = Math.floor(offset / 10) + 1;
+            let { paymentSummaryListPageSize } = this.props.paymentState;
+            paymentSummaryListPageSize = paymentSummaryListPageSize ? paymentSummaryListPageSize : 10;
+            page = Math.floor(offset / paymentSummaryListPageSize) + 1;
 
             this.handlePaymentTableList(page, userId, registrationId, this.state.searchText);
         } else {
@@ -379,6 +384,7 @@ class PaymentSummary extends Component {
             feeType,
             paymentOption,
             paymentMethod,
+            paymentStatus,
             membershipType,
             offset,
             userId,

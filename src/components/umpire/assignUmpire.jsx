@@ -192,9 +192,11 @@ class AssignUmpire extends Component {
                     let compId = JSON.parse(getUmpireCompetiton())
                     firstComp = compId
                 }
+                let { assignUmpireListPageSize } = this.props.assignUmpireState;
+                assignUmpireListPageSize = assignUmpireListPageSize ? assignUmpireListPageSize : 10;
                 const body = {
                     paging: {
-                        limit: 10,
+                        limit: assignUmpireListPageSize,
                         offset: 0
                     }
                 }
@@ -255,9 +257,11 @@ class AssignUmpire extends Component {
     };
 
     onChangeComp(compID) {
+        let { assignUmpireListPageSize } = this.props.assignUmpireState;
+        assignUmpireListPageSize = assignUmpireListPageSize ? assignUmpireListPageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: assignUmpireListPageSize,
                 offset: 0,
             },
         };

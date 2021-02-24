@@ -56,14 +56,17 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
+    let { affiliateDirectoryPageSize } = this_Obj.props.userState;
+    affiliateDirectoryPageSize = affiliateDirectoryPageSize ? affiliateDirectoryPageSize : 10;
+
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
         yearRefId: this_Obj.state.yearRefId,
         organisationTypeRefId: this_Obj.state.organisationTypeRefId,
         searchText: this_Obj.state.searchText,
         paging: {
-            limit: 10,
-            offset: this_Obj.state.pageNo ? 10 * (this_Obj.state.pageNo - 1) : 0,
+            limit: affiliateDirectoryPageSize,
+            offset: this_Obj.state.pageNo ? affiliateDirectoryPageSize * (this_Obj.state.pageNo - 1) : 0,
         },
     };
 
@@ -201,7 +204,9 @@ class AffiliateDirectory extends Component {
             let organisationTypeRefId = affiliateDirListAction.payload.organisationTypeRefId
 
             await this.setState({ offsetData, sortBy, sortOrder, searchText, yearRefId, organisationTypeRefId })
-            page = Math.floor(offsetData / 10) + 1;
+            let { affiliateDirectoryPageSize } = this_Obj.props.userState;
+            affiliateDirectoryPageSize = affiliateDirectoryPageSize ? affiliateDirectoryPageSize : 10;
+            page = Math.floor(offsetData / affiliateDirectoryPageSize) + 1;
         }
         this.setState({ yearRefId: JSON.parse(yearId) })
         this.handleAffiliateTableList(page);

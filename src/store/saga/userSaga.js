@@ -1332,7 +1332,7 @@ function* getUsersByIdsSaga(action) {
 
 function* getUserParentData(action) {
   try {
-      const result = yield call(UserAxiosApi.getUserParentData);
+      const result = yield call(UserAxiosApi.getUserParentData, action.data);
       if (result.status === 1) {
           yield put({
               type: ApiConstants.API_GET_USER_PARENT_DATA_SUCCESS,

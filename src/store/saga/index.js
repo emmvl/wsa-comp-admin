@@ -104,7 +104,14 @@ import { competitionModuleSaga, competitonGenerateDrawSaga } from './competition
 import * as competitionFormatSaga from './competitionManagementSaga/competitionFormatSaga';
 import * as competitionFinalSaga from './competitionManagementSaga/competitionFinalsSaga';
 import * as ladderFormatSaga from './competitionManagementSaga/ladderFormatSaga';
-import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
+import {
+    competitonWithTimeSlots,
+    competitonWithTimeSlotsPostApi,
+    competitionTeamsGetSaga,
+    competitionTimeslotsGetSaga,
+    teamsTimeslotsPreferencesGetSaga,
+    teamsTimeslotsPreferencesSaveSaga,
+} from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
 import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
 /// /Venue constraints
@@ -156,7 +163,7 @@ import {
     getActiveDrawsRoundsSaga, getVenueAndDivisionSaga,
 } from './competitionManagementSaga/competitionDrawsSaga';
 
-import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from './registrationSaga/registrationDashboardSaga';
+import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga, registrationFailedStatusUpdateSaga } from './registrationSaga/registrationDashboardSaga';
 /// /Competition Dashboard Saga
 import {
     competitionDashboardSaga,
@@ -309,6 +316,10 @@ export default function* rootSaga() {
     /* ************Competition Management Ends************ */
 
     yield takeEvery(ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD, competitonWithTimeSlots);
+    yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_GET_LOAD, competitionTeamsGetSaga);
+    yield takeEvery(ApiConstants.API_COMPETITION_TIMESLOTS_GET_LOAD, competitionTimeslotsGetSaga);
+    yield takeEvery(ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD, teamsTimeslotsPreferencesGetSaga);
+    yield takeEvery(ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_LOAD, teamsTimeslotsPreferencesSaveSaga);
 
     /// /Venue Constraints
     yield takeEvery(ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD, venueTimeSaga);
@@ -566,6 +577,9 @@ export default function* rootSaga() {
     // Get Registration Change Dashboard
     yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD, regChangeSaga.getRegistrationChangeDashboardSaga);
 
+    // Export Registration Change
+    yield takeEvery(ApiConstants.API_EXPORT_REGISTRATION_CHANGE_LOAD, regChangeSaga.exportRegistrationChangeSaga);
+
     // Get Registration Change Dashboard
     yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.getRegistrationChangeReviewSaga);
 
@@ -600,5 +614,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_RETRY_PAYMENT_LOAD, liveScorePlayersToPayRetryPaymentSaga);
 
     yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_LOAD, liveScorePlayersToCashReceivedSaga);
+
+    yield takeEvery(ApiConstants.API_REGISTRATION_FAILED_STATUS_UPDATE_LOAD, registrationFailedStatusUpdateSaga);
 
 }

@@ -385,7 +385,8 @@ function* getPaymentSummarySaga(action) {
 
 function* exportPaymentSummarySaga(action) {
   try {
-    const result = yield call(AxiosApi.exportPaymentSummaryApi,
+    const result = yield call(
+      AxiosApi.exportPaymentSummaryApi,
       action.offset,
       action.sortBy,
       action.sortOrder,
@@ -401,7 +402,8 @@ function* exportPaymentSummarySaga(action) {
       action.paymentType,
       action.paymentMethod,
       action.membershipType,
-      action.paymentStatus);
+      action.paymentStatus
+    );
 
     if (result.status === 1) {
       yield put({

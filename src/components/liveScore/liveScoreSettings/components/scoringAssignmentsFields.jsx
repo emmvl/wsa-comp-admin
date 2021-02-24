@@ -1,11 +1,11 @@
 import React from "react";
-import { Form, Radio } from 'antd'
+import { Form, Radio } from "antd";
 import ValidationConstants from "themes/validationConstant";
 import AppConstants from "themes/appConstants";
 import InputWithHead from "customComponents/InputWithHead";
 import Tooltip from "react-png-tooltip";
 
-const ScoringAssignmentsFields = ({ onInputChange }) => {
+const ScoringAssignmentsFields = ({ onInputChange, values }) => {
     const isScoringEnabled = +process.env.REACT_APP_SCORING_ASSIGNMENTS_FIELDS_ENABLED === 1;
 
     return (
@@ -27,6 +27,7 @@ const ScoringAssignmentsFields = ({ onInputChange }) => {
                         style={{
                             overflowX: "unset",
                         }}
+                        value={values.scoring}
                     >
                         <div className="row mt-0">
                             <div className="col-sm-12 d-flex align-items-center">
@@ -91,6 +92,7 @@ const ScoringAssignmentsFields = ({ onInputChange }) => {
                                 style={{
                                     overflowX: "unset",
                                 }}
+                                value={values.whoScoring}
                             >
                                 <div className="row mt-0">
                                     <div className="col-sm-12 d-flex align-items-center">
@@ -139,6 +141,7 @@ const ScoringAssignmentsFields = ({ onInputChange }) => {
                                 style={{
                                     overflowX: "unset",
                                 }}
+                                value={values.acceptScoring}
                             >
                                 <div className="row mt-0">
                                     <div className="col-sm-12 d-flex align-items-center">
@@ -160,6 +163,11 @@ const ScoringAssignmentsFields = ({ onInputChange }) => {
             )}
         </>
     );
+};
+
+ScoringAssignmentsFields.defaultProps = {
+    onInputChange: () => {},
+    values: {},
 };
 
 export default ScoringAssignmentsFields;

@@ -24,6 +24,7 @@ import {
     communicationPublishAction,
     deleteCommunicationAction,
 } from "../../store/actions/communicationAction/communicationAction";
+import {getOrganisationData} from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -194,9 +195,12 @@ class CommunicationView extends Component {
     }
 
     onSubmitCommunicationPublish = () => {
-        const { id, isNotification } = this.state.communicationItem;
+        const { id } = this.state.communicationItem;
         this.props.communicationPublishAction({
-            id, silent: !isNotification,
+            id,
+            silent: true,
+            isApp: false,
+            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
         });
     }
 
@@ -212,6 +216,7 @@ class CommunicationView extends Component {
                     >
                         <Checkbox
                             className="single-checkbox"
+                            disabled
                             checked={communicationData?.isNotification}
                             onClick={() => {
                                 this.setState({
@@ -231,7 +236,7 @@ class CommunicationView extends Component {
                     >
                         <Checkbox
                             className="single-checkbox"
-                            checked={!communicationData?.isNotification}
+                            checked
                             onClick={() => {
                                 this.setState({
                                     communicationItem: {
@@ -242,6 +247,25 @@ class CommunicationView extends Component {
                             }}
                         >
                             {AppConstants.email}
+                        </Checkbox>
+                    </div>
+                    <div
+                        className="col-sm"
+                        style={{ display: "flex", alignItems: "center" }}
+                    >
+                        <Checkbox
+                            className="single-checkbox"
+                            disabled
+                            onClick={(e) => {
+                                this.setState({
+                                    communicationItem: {
+                                        ...communicationData,
+                                        isApp: e.target.checked,
+                                    },
+                                });
+                            }}
+                        >
+                            {AppConstants.app}
                         </Checkbox>
                     </div>
                 </div>
@@ -309,11 +333,6 @@ class CommunicationView extends Component {
                                     >
                                         {AppConstants.publish}
                                     </Button>
-                                    <div className="align-items-center justify-content-center" style={{ paddingRight: 20 }}>
-                                        <Tooltip>
-                                            <span>{AppConstants.newsPublishMsg}</span>
-                                        </Tooltip>
-                                    </div>
                                 </div>
                             </div>
                         </div>

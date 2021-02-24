@@ -1,8 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function communicationListAction() {
+function communicationListAction(data) {
     const action = {
         type: ApiConstants.API_COMMUNICATION_LIST_LOAD,
+        data,
     };
     return action;
 }

@@ -196,6 +196,7 @@ const affiliate = {
   street2: '',
   suburb: '',
   phoneNo: '',
+  email: '',
   city: '',
   postalCode: '',
   stateRefId: 0,
@@ -738,6 +739,7 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_SUCCESS:
       let personalByCompData = action.result;
+
       return {
         ...state,
         onPersonLoad: false,

@@ -73,7 +73,7 @@ const AppConstants = {
     additionalInfoReqd: "Additional Information required",
     additionalPersonalInfoReqd: "Additional Personal Information required",
     haveYouEverPlayed: "Have you ever played Netball before:",
-    confirmTransferTo: "Plase confirm who you would like to transfer to",
+    confirmTransferTo: "Please confirm who you would like to transfer to",
     yes: "Yes",
     no: "No",
     loadMore: "Load more",
@@ -782,6 +782,7 @@ const AppConstants = {
     enterTimeMatchesEachDay: "Enter time matches should run each day",
     allocateToSameTimeslot: "Allocate to same time slot",
     newCompetition: "New Competition",
+    teamPreferences: "Team Preferences",
 
     // team grading summary
     teamGradingSummary: "Team Grading Summary",
@@ -1901,8 +1902,10 @@ const AppConstants = {
     addTeamMember: "Add Team Member",
     addPool: "Add Pool",
     pleaseEnterPoolName: "Please Enter Pool Name",
-    nationalAccreditationLevelUmpire:
+    nationalAccreditationLevelUmpireQ:
         "What is your national accreditation level (Umpire)?",
+    nationalAccreditationLevelUmpire:
+        "National accreditation level (Umpire)",
     accreditationUmpire: "accreditationUmpire",
     payPerMatch: "Pay per Match",
     teamMemberParentCheck: "I am the Parent/ Guardian",
@@ -1927,8 +1930,10 @@ const AppConstants = {
     somethingWentWrongErrorMsg:
         "Something went wrong.Please contact Administrator",
     tShirtSizeList: "TShirtSize",
-    nationalAccreditationLevelCoach:
+    nationalAccreditationLevelCoachQ:
         "What is your national accreditation level (Coach)?",
+    nationalAccreditationLevelCoach:
+        "National accreditation level (Coach)",
     expiryDate: "Expiry Date",
     byBadge: "By Badge",
     byPool: "By Pool",
@@ -2004,7 +2009,12 @@ const AppConstants = {
     communicationExpiryTime: 'Communication Expiry Time',
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
-    cancelTransferReg: "Cancel Transfer registration"
+    cancelTransferReg: "Cancel Transfer registration",
+    feePaid: "Fee Paid",
+    regFailedModalMsg: "Do you want to mark the invoice as failed?",
+    regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
+    failed: "Failed",
+    wouldYouLikeToApprove: "Would you like to Approve?"
 };
 
 export default AppConstants;

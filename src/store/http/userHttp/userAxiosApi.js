@@ -334,7 +334,7 @@ let userHttpApi = {
   },
 
   exportAffiliateDirectory(payload) {
-    const url = `api /export/affiliatedirectory`;
+    const url = `api/export/affiliatedirectory`;
     return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
   },
 
@@ -527,15 +527,12 @@ let userHttpApi = {
   },
 
   getUsersByIds(ids) {
-      return Method.dataGet(`users/byIds?ids=${ids}`);
+      return Method.dataGet(`users/byIds?ids=${JSON.stringify(ids)}`);
   },
 
-  async getUserParentData() {
-    let userId = await getUserId()
-    if (userId != 0) {
-      var url = `api/parents?userId=${userId}`;
-      return Method.dataGet(url, token)
-    }
+  async getUserParentData(userId) {
+    var url = `api/parents?userId=${userId || 0}`;
+    return Method.dataGet(url, token)
   },
 };
 

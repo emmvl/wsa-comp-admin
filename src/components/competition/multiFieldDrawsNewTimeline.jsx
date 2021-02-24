@@ -50,7 +50,9 @@ import {
     getOrganisationData,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    setLiveScoreUmpireCompition,
+    setLiveScoreUmpireCompitionData
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import './draws.scss';
@@ -2711,6 +2713,23 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
+    handlePublishModal = (key) => {
+        try {
+            if (key === "ok") {
+                let competitiondata = this.props.drawsState.liveScoreCompetiton
+                localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
+                localStorage.removeItem('stateWideMessage')
+                setLiveScoreUmpireCompition(competitiondata.id)
+                setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
+                history.push('/matchDayLadderList')
+            } else {
+                this.setState({ publishModalVisible: false })
+            }
+        } catch (ex) {
+            console.log("Error in handlePublishModal::" + ex)
+        }
+    }
+
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {
         const { publishStatus, activeDrawsRoundsData, teamNames } = this.props.drawsState;
@@ -2938,7 +2957,7 @@ function mapDispatchToProps(dispatch) {
             unlockDrawsAction,
             getActiveRoundsAction,
             changeDrawsDateRangeAction,
-            checkBoxOnChange,
+            checkBoxOnChange
         },
         dispatch
     );

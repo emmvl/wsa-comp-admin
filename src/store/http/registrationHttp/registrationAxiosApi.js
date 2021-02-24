@@ -505,6 +505,10 @@ const AxiosApi = {
         const url = `/api/registrationchange/dashboard`;
         return Method.dataPost(url, token, payload);
     },
+    exportRegistrationChangeDashboard(payload) {
+        const url = `/api/registrationchange/export`;
+        return Method.dataPostDownload(url, token, payload, "RegistrationChange");
+    },
     getRegistrationChangeReview(payload) {
         const url = `/api/registrationchange/review`;
         return Method.dataPost(url, token, payload);
@@ -595,6 +599,12 @@ const AxiosApi = {
         console.log('body for export', body);
         const url = `/api/registration/export`;
         return Method.dataPostDownload(url, token, body, "registrations");
+    },
+
+    updateRegistrationFailedStatus(payload) {
+        const body = payload;
+        const url = `/api/registration/status/update`;
+        return Method.dataPost(url, token, body);
     },
 };
 

@@ -37,9 +37,13 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
+
+    let { pageSize } = this_obj.props.umpireRosterState
+    pageSize = pageSize ? pageSize : 10;
+
     const body = {
         paging: {
-            limit: 10,
+            limit: pageSize,
             offset: this_obj.state.offsetData
         }
     }
@@ -256,9 +260,11 @@ class UmpireRoster extends Component {
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
+                    let { pageSize } = this.props.umpireRosterState
+                    pageSize = pageSize ? pageSize : 10;
                     const body = {
                         paging: {
-                            limit: 10,
+                            limit: pageSize,
                             offset: this.state.offsetData
                         }
                     }
@@ -289,9 +295,11 @@ class UmpireRoster extends Component {
 
         if (nextProps.umpireRosterState !== this.props.umpireRosterState) {
             if (this.props.umpireRosterState.rosterLoading !== this.state.rosterLoad) {
+                let { pageSize } = this.props.umpireRosterState
+                pageSize = pageSize ? pageSize : 10;
                 const body = {
                     paging: {
-                        limit: 10,
+                        limit: pageSize,
                         offset: this.state.offsetData
                     }
                 }
@@ -437,9 +445,11 @@ class UmpireRoster extends Component {
 
         let compKey = compID.competitionUniqueKey
 
+        let { pageSize } = this.props.umpireRosterState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0
             },
         }
@@ -457,9 +467,11 @@ class UmpireRoster extends Component {
 
     onChangeStatus(status) {
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.umpireRosterState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0
             },
         }
@@ -480,9 +492,11 @@ class UmpireRoster extends Component {
 
     onChangeRole(umpireRole) {
         let { sortBy, sortOrder } = this.state
+        let { pageSize } = this.props.umpireRosterState
+        pageSize = pageSize ? pageSize : 10;
         const body = {
             paging: {
-                limit: 10,
+                limit: pageSize,
                 offset: 0
             },
         }

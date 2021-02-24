@@ -384,7 +384,7 @@ class LiveScoreSettingsView extends Component {
             }
         }
 
-        selectionValue = invitedToValue || assocValue || clubValue;
+        selectionValue = invitedToValue || assocValue || clubValue || '';
         localStorage.setItem("yearId", yearRefId);
 
         const timeoutsData = getTimeoutsData({
@@ -478,6 +478,7 @@ class LiveScoreSettingsView extends Component {
                 duration: 1.5,
                 maxCount: 1,
             });
+
             message.error(ValidationConstants.pleaseSelectRegInvitees, 1.5);
             localStorage.setItem("regInvitees", "false");
         } else if (associationChecked === true || clubChecked === true) {
@@ -677,11 +678,15 @@ class LiveScoreSettingsView extends Component {
             record2,
             venue,
             Logo,
+            timerType,
             extraTime,
             extraTimeType,
             extraTimeDuration,
             extraTimeMainBreak,
             extraTimeQuarterBreak,
+            scoring,
+            whoScoring,
+            acceptScoring,
         } = liveScoreSetting.form;
 
         const competition = get(
@@ -1304,6 +1309,11 @@ class LiveScoreSettingsView extends Component {
 
                     <ScoringAssignmentsFields
                         onInputChange={this.handleInputChange}
+                        values={{
+                            scoring,
+                            whoScoring,
+                            acceptScoring
+                        }}
                     />
                 </div>
 
@@ -1312,7 +1322,6 @@ class LiveScoreSettingsView extends Component {
                     <span className="text-heading-large pt-5">
                         {AppConstants.timer}
                     </span>
-
                     <Form.Item
                         name="time"
                         rules={[
@@ -1329,6 +1338,7 @@ class LiveScoreSettingsView extends Component {
                                 key: "timerType",
                                 data: timer,
                             })}
+                            value={timerType}
                         >
                             <Option value="CENTRAL">Central</Option>
                             <Option value="PER_MATCH">Per Match</Option>
@@ -1387,11 +1397,14 @@ class LiveScoreSettingsView extends Component {
                         {AppConstants.competitionInvitees}
                     </span>
                     <LiveScoreSettingsInvitees
-                        stateEditMode={this.props.isEdit}
+                        stateEditMode={this.state.isEdit}
                         localEditMode={this.state.edit}
-                        onOkClick={this.state.onOkClick}
+                        okClick={this.state.onOkClick}
                         organisationTypeRefId={this.state.organisationTypeRefId}
                         onInviteesChange={this.onInviteesChange}
+                        onOpenModel={this.openModel}
+                        onFormChange={this.props.onChangeSettingForm}
+                        onInviteesSearchAction={this.props.onInviteesSearchAction}
                     />
                 </div>
             </div>

@@ -1020,3 +1020,34 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
 .pointer{
     cursor: pointer;
 }
+
+.team-preferences-header {
+    font-weight: bold;
+}
+
+.preference-form-line > *:first-child {
+    width: 25%;
+    min-width: 25%;
+}
+
+.preference-form-line > *:nth-child(2) {
+    width: 75%;
+}
+
+.preference-form-line .ant-form-item-control {
+    position: relative;
+}
+
+.preference-form-line .ant-form-item-explain {
+    position: absolute;
+    bottom: -22px;
+    left: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preference-form-line .ant-form-item-explain > div {
+    display: inline;
+}

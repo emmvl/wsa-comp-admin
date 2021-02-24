@@ -24,6 +24,44 @@ function addRemoveTimeSlot(index, item, key, parentIndex) {
     return action
 }
 
+// get competition teams
+function getCompetitionTeams(id) {
+    const action = {
+        type: ApiConstants.API_COMPETITION_TEAMS_GET_LOAD,
+        id,
+    }
+    return action;
+}
+
+// get competition timeslots
+function getCompetitionTimeslots(id) {
+    const action = {
+        type: ApiConstants.API_COMPETITION_TIMESLOTS_GET_LOAD,
+        id,
+    }
+    return action;
+}
+
+// get competition timeslots
+function getTeamTimeslotsPreferences(id) {
+    const action = {
+        type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD,
+        id,
+    }
+    return action;
+}
+
+// save competition timeslots
+function saveTeamTimeslotsPreferences(id, organisationId, payload) {
+    const action = {
+        type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_LOAD,
+        id,
+        organisationId,
+        payload
+    }
+    return action;
+}
+
 function UpdateTimeSlotsData(value, key, contentType, index, mainId, id) {
     return {
         type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION,
@@ -50,10 +88,12 @@ function UpdateTimeSlotsDataManual(value, key, contentType, index, mainId, id, p
 }
 
 // post time slot Data
-function addTimeSlotDataPost(payload) {
+function addTimeSlotDataPost(payload, id, isTeamPreferenceActive) {
     const action = {
         type: ApiConstants.API_COMPETITION_TIMESLOT_POST_LOAD,
-        payload
+        payload,
+        id,
+        isTeamPreferenceActive
     }
     return action
 }
@@ -81,5 +121,9 @@ export {
     UpdateTimeSlotsDataManual,
     addTimeSlotDataPost,
     searchDivisionList,
-    ClearDivisionArr
+    ClearDivisionArr,
+    getCompetitionTeams,
+    getCompetitionTimeslots,
+    getTeamTimeslotsPreferences,
+    saveTeamTimeslotsPreferences
 }

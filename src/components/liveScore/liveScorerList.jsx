@@ -29,6 +29,7 @@ let _this = null;
 
 /////function to sort table column
 function tableSort(key) {
+
     const body = {
         paging: {
             limit: 10,

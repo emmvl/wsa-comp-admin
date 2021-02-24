@@ -203,7 +203,9 @@ class TeamRegistrations extends Component {
             let yearRefId = JSON.parse(yearId)
             let membershipProductUniqueKey = teamRegListAction.payload.membershipProductUniqueKey
             await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, divisionId, yearRefId, membershipProductUniqueKey })
-            page = Math.floor(offset / 10) + 1;
+            let { teamRegistrationTableListPageSize } = this.props.registrationState;
+            teamRegistrationTableListPageSize = teamRegistrationTableListPageSize ? teamRegistrationTableListPageSize : 10;
+            page = Math.floor(offset / teamRegistrationTableListPageSize) + 1;
 
             this.handleRegTableList(page);
         } else {

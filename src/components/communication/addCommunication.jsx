@@ -78,8 +78,8 @@ class AddCommunication extends Component {
             key: props.location?.state?.key,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
-            yearRefId: -1,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            yearId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
@@ -195,7 +195,7 @@ class AddCommunication extends Component {
         }
 
         const toOrganisationIds = data.toOrganisationIds
-            ? data.toOrganisationIds.split(',').map((id) => parseInt(id, 10))
+            ? data.toOrganisationIds.split(',')
             : [];
         const toUserRoleIds = data.toUserRoleIds
             ? data.toUserRoleIds.split(',').map((id) => parseInt(id, 10))
@@ -356,7 +356,7 @@ class AddCommunication extends Component {
     /// Manager and Scorer view
     scorerView = () => {
         const { scorerListResult } = this.props.liveScoreState
-        let scorerList = isArrayNotEmpty(scorerListResult) ? scorerListResult : []
+        const scorerList = isArrayNotEmpty(scorerListResult) ? scorerListResult : []
 
         return (
             <div className="row">
@@ -370,7 +370,7 @@ class AddCommunication extends Component {
                     // value={editData.title}
                     >
                         {scorerList.map((item) => (
-                            <Option key={'scorer_' + item.firstName} value={item.firstName}>
+                            <Option key={`scorer_${item.firstName}`} value={item.firstName}>
                                 {item.NameWithNumber}
                             </Option>
                         ))}
@@ -383,7 +383,7 @@ class AddCommunication extends Component {
     /// Manager and Scorer view
     managerView = () => {
         const { managerListResult } = this.props.liveScoreManagerState
-        let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
+        const managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
 
         return (
             <div className="row">
@@ -397,8 +397,8 @@ class AddCommunication extends Component {
                     // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
                         {managerList.map((item) => (
-                            <Option key={'manager_' + item.firstName} value={item.firstName}>
-                                {item.firstName + " " + item.lastName}
+                            <Option key={`manager_${item.firstName}`} value={item.firstName}>
+                                {`${item.firstName} ${item.lastName}`}
                             </Option>
                         ))}
                     </Select>
@@ -408,7 +408,7 @@ class AddCommunication extends Component {
     }
 
     html2text(html) {
-        var d = document.createElement('div');
+        const d = document.createElement('div');
         d.innerHTML = html;
         return d.textContent;
     }
@@ -608,23 +608,26 @@ class AddCommunication extends Component {
         this.setState({ isFetchedUsersData: true });
 
         const {
-            yearRefId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
-            linkedEntityId,
+            organisationId,
+            toOrganisationIds,
             dobFrom,
             dobTo,
             postCode,
         } = this.state;
 
         const filter = {
-            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId,
+            organisationId: toOrganisationIds.length > 0 ? toOrganisationIds[0] : organisationId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
-            linkedEntityId,
+            linkedEntityId: toOrganisationIds.length > 0 && toOrganisationIds[0] !== organisationId
+                ? toOrganisationIds[0]
+                : '-1',
             dobFrom,
             dobTo,
             postCode,
@@ -661,6 +664,18 @@ class AddCommunication extends Component {
                     orgId,
                 };
             }) : [];
+        const organisationListData = affiliateToData.length > 0
+            ? affiliateToData.map((aff) => ({
+                orgId: aff.affiliateOrgId,
+                name: aff.affiliateName,
+            })) : [];
+        if (getOrganisationData()) {
+            organisationListData.push({
+                orgId: getOrganisationData().organisationUniqueKey,
+                name: getOrganisationData().name,
+            });
+        }
+
         const userDefaultData = !isFetchedUsersData
             ? usersByIdsList.map((user) => ({
                 userId: user.id,
@@ -670,10 +685,11 @@ class AddCommunication extends Component {
         const userData = isArrayNotEmpty(userDashboardTextualList) ? userDashboardTextualList : userDefaultData;
 
         const selectedRoleArray = [
-            { label: 'Managers', value: "manager" },
+            { label: 'Admin', value: "admin" },
             { label: 'Coaches', value: "coach" },
-            { label: 'Scorers', value: "scorer" },
+            { label: 'Managers', value: "manager" },
             { label: 'Players', value: "player" },
+            { label: 'Player Registration', value: "player registration" },
             { label: 'Umpires', value: "umpire" },
         ];
 
@@ -687,6 +703,7 @@ class AddCommunication extends Component {
                             this.setState({
                                 allOrg: true,
                                 individualOrg: false,
+                                toOrganisationIds: [],
                             });
                         }}
                         checked={allOrg}
@@ -711,27 +728,22 @@ class AddCommunication extends Component {
                 {individualOrg && (
                     <div className="mt-3">
                         <Select
-                            mode="multiple"
                             className="ml-5"
                             style={{ width: '97%', height: '44px' }}
                             placeholder={AppConstants.selectOrganisation}
                             onChange={(value) => {
                                 this.setState({
-                                    toOrganisationIds: value,
+                                    toOrganisationIds: [value],
                                 });
                             }}
                             filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                            value={
-                                affiliateToData
-                                    .filter((org) => this.state.toOrganisationIds.includes(org.orgId))
-                                    .map((role) => role.orgId)
-                            }
+                            value={this.state.toOrganisationIds[0]}
                         >
                             {
-                                affiliateToData.length > 0 && affiliateToData.map((org, index) => (
+                                organisationListData.length > 0 && organisationListData.map((org, index) => (
                                     <Option key={`${org.orgId}_${index}`} value={org.orgId}>
-                                        {org.affiliateName}
+                                        {org.name}
                                     </Option>
                                 ))
                             }
@@ -854,11 +866,12 @@ class AddCommunication extends Component {
                                     this.userSearchApi(value);
                                 }
                             }}
-                            value={
+                            defaultValue={
                                 !isFetchedUsersData && userDefaultData
                                     ? userDefaultData.map((usr) => usr.userId)
                                     : this.state.toUserIds
                             }
+                            value={this.state.toUserIds}
                         >
                             {
                                 userData.length > 0 && userData.map((item) => (
@@ -894,9 +907,11 @@ class AddCommunication extends Component {
             key: this.state.key,
             mediaArray,
             expiryDate: postDate,
-            organisationId: this.state.organisationId,
+            organisationId: getOrganisationData().organisationId,
             toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
-            toUserRoleIds: this.state.selectedRoles ? this.state.toUserRoleIds : [],
+            toUserRoleIds: this.state.selectedRoles
+                ? this.state.toUserRoleIds
+                : [],
             toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
             imageUrl: this.state.imageUrl,
             videoUrl: this.state.videoUrl,

@@ -3,8 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CustomTooltip from 'react-png-tooltip';
-import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message, Tooltip, Space } from 'antd';
 import moment from 'moment';
+import _ from 'lodash';
 
 import './competition.css';
 
@@ -22,13 +23,16 @@ import {
     setOwn_competitionStatus,
     getOwn_CompetitionFinalRefId,
     setOwn_CompetitionFinalRefId,
-    setGlobalYear, getGlobalYear
+    setGlobalYear, getGlobalYear,
+    setCompetitionID, getCompetitonId
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, getVenuesTypeAction, clearYearCompetitionAction } from 'store/actions/appAction';
 import {
     getCompetitionWithTimeSlots, addRemoveTimeSlot,
     UpdateTimeSlotsData, UpdateTimeSlotsDataManual,
     addTimeSlotDataPost, searchDivisionList, ClearDivisionArr,
+    getCompetitionTeams, getCompetitionTimeslots,
+    getTeamTimeslotsPreferences, saveTeamTimeslotsPreferences
 } from 'store/actions/competitionModuleAction/competitionTimeAndSlotsAction';
 import { timeSlotInit } from 'store/actions/commonAction/commonAction';
 import InputWithHead from 'customComponents/InputWithHead';
@@ -38,6 +42,8 @@ import DashboardLayout from 'pages/dashboardLayout';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+
+const isTeamPreferencesEnable = process.env.REACT_APP_TEAM_PREFERENCES_FOR_DRAW === 'true';
 
 class CompetitionCourtAndTimesAssign extends Component {
     constructor(props) {
@@ -51,12 +57,16 @@ class CompetitionCourtAndTimesAssign extends Component {
             isQuickCompetition: false,
             onNextLoad: false,
             nextButtonClicked: false,
-            finalTypeRefId: null
+            finalTypeRefId: null,
+            teams: null,
+            isManuallySelected: false,
+            preferenceFormValues: null,
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
         this.props.getVenuesTypeAction()
         this.formRef = createRef();
+        this.formPreferenceRef = createRef();
     }
 
     // component did mount
@@ -65,6 +75,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
+        const compIdNumber = getCompetitonId();
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -81,6 +92,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                 finalTypeRefId: storedfinalTypeRefId
             })
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
+            this.props.getCompetitionTeams(compIdNumber);
+            this.props.getCompetitionTimeslots(compIdNumber);
+            this.props.getTeamTimeslotsPreferences(compIdNumber);
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
@@ -92,9 +106,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     // component did update
-    componentDidUpdate(nextProps) {
+    componentDidUpdate(prevProps) {
         let competitionTimeSlots = this.props.competitionTimeSlots
-        if (nextProps.competitionTimeSlots !== competitionTimeSlots) {
+        if (prevProps.competitionTimeSlots !== competitionTimeSlots) {
             if (competitionTimeSlots.onGetTimeSlotLoad == false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false,
@@ -103,19 +117,24 @@ class CompetitionCourtAndTimesAssign extends Component {
             }
         }
 
-        if (nextProps.appState !== this.props.appState) {
+        if (prevProps.appState !== this.props.appState) {
             let competitionList = this.props.appState.own_CompetitionArr;
-            if (nextProps.appState.own_CompetitionArr !== competitionList) {
+            if (prevProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
                     let finalTypeRefId = competitionList[0].finalTypeRefId
+                    const { id } = competitionList[0];
+                    setCompetitionID(id);
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(yearId, competitionId);
+                    this.props.getCompetitionTeams(id);
+                    this.props.getCompetitionTimeslots(id);
+                    this.props.getTeamTimeslotsPreferences(id);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
@@ -145,6 +164,26 @@ class CompetitionCourtAndTimesAssign extends Component {
                 })
             }
         }
+
+        if (prevProps.competitionTimeSlots.teamList !== this.props.competitionTimeSlots.teamList) {
+            this.setState({ teams: this.props.competitionTimeSlots.teamList });
+        }
+
+        if (prevProps.competitionTimeSlots.timeslotsManualRawData !== this.props.competitionTimeSlots.timeslotsManualRawData) {
+            this.setState({ isManuallySelected: !!this.props.competitionTimeSlots.timeslotsManualRawData.length });
+        }
+
+        if (prevProps.competitionTimeSlots.timePreferences !== this.props.competitionTimeSlots.timePreferences) {
+            const timePreferencesProps = {
+                preferences: this.getTimePreferencesProps()
+            }
+            this.setState({ preferenceFormValues: timePreferencesProps });
+        }
+    }
+
+    setIsManuallySelected = () => {
+        const { competitionTimeslotManual } = this.handleTimeslotsFormData();
+        this.setState({ isManuallySelected: !!competitionTimeslotManual.length });
     }
 
     // for set default values
@@ -155,8 +194,11 @@ class CompetitionCourtAndTimesAssign extends Component {
             timeslotGenerationRefId: competitionTimeSlots.getcompetitionTimeSlotData.timeslotGenerationRefId,
             applyToVenueRefId: competitionTimeSlots.getcompetitionTimeSlotData.applyToVenueRefId,
             mainTimeRotationID: competitionTimeSlots.getcompetitionTimeSlotData.mainTimeRotationID
-        })
-        let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
+        });
+
+        const competitionVenueTimeslotsDayTime = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime;
+        let timeSlotMatchDuration = competitionVenueTimeslotsDayTime ? competitionVenueTimeslotsDayTime : [];
+
         if (timeSlotMatchDuration.length > 0) {
             timeSlotMatchDuration.forEach((item, index) => {
                 let dayRefId = `dayRefId${index}`
@@ -166,7 +208,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         }
 
-        let timeslotmatchEntityCheck = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity : []
+        const competitionTimeslotsEntity = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity;
+        const timeslotmatchEntityCheck = competitionTimeslotsEntity ? competitionTimeslotsEntity : []
+        
         if (timeslotmatchEntityCheck.length > 0) {
             timeslotmatchEntityCheck.forEach((item, index) => {
                 let timeSlotEntityManualkeyArr = `timeSlotEntityManualkeyArr${index}`
@@ -179,7 +223,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         }
 
-        let timeSlotManualPerVenue = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual : []
+        const competitionTimeslotManual = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
+        const timeSlotManualPerVenue = competitionTimeslotManual ? competitionTimeslotManual : [];
+
         if (timeSlotManualPerVenue.length > 0) {
             timeSlotManualPerVenue.forEach((PerVenueItem) => {
                 if (PerVenueItem.timeslots.length > 0) {
@@ -238,8 +284,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
     }
 
-    // for post api
-    saveAPIsActionCall = () => {
+    handleTimeslotsFormData = () => {
         let AllVenueData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.timeSlotManualAllVenue))
         let timeSlotData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.getcompetitionTimeSlotData))
         timeSlotData['competitionUniqueKey'] = this.state.firstTimeCompId
@@ -288,7 +333,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             for (let l in manualcompetitionTimeslotsEntityOBj) {
                                 manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
                                 manualperVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: 0,
+                                    competitionVenueTimeslotsDayTimeId: !!getStartTime[k]?.competitionVenueTimeslotsDayTimeId ? getStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: getTimeSlot[j].dayRefId,
                                     startTime: getStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -297,7 +342,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             }
                         } else {
                             manualperVenueObj = {
-                                competitionVenueTimeslotsDayTimeId: 0,
+                                competitionVenueTimeslotsDayTimeId: !!getStartTime[k]?.competitionVenueTimeslotsDayTimeId ? getStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                 dayRefId: getTimeSlot[j].dayRefId,
                                 startTime: getStartTime[k].startTime,
                                 sortOrder: JSON.parse(k),
@@ -338,9 +383,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                             if (timeSlotData.mainTimeRotationID == 8) {
                                 for (let l in competitionTimeslotsEntityObj) {
                                     competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
-
+                                    
                                     manualAllVenueObj = {
-                                        competitionVenueTimeslotsDayTimeId: 0,
+                                        competitionVenueTimeslotsDayTimeId: !!manualStartTime[k]?.competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                         dayRefId: timeSloltdataArr[j].dayRefId,
                                         startTime: manualStartTime[k].startTime,
                                         sortOrder: JSON.parse(k),
@@ -349,7 +394,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 }
                             } else {
                                 manualAllVenueObj = {
-                                    competitionVenueTimeslotsDayTimeId: 0,
+                                    competitionVenueTimeslotsDayTimeId: !!manualStartTime[k]?.competitionVenueTimeslotsDayTimeId ? manualStartTime[k].competitionVenueTimeslotsDayTimeId : 0,
                                     dayRefId: timeSloltdataArr[j].dayRefId,
                                     startTime: manualStartTime[k].startTime,
                                     sortOrder: JSON.parse(k),
@@ -373,12 +418,23 @@ class CompetitionCourtAndTimesAssign extends Component {
         delete timeSlotData['divisions']
         delete timeSlotData['grades']
         delete timeSlotData['mainTimeRotationID']
+
+        return timeSlotData;
+    }
+
+    // for post api
+    saveAPIsActionCall = () => {
+        const timeSlotData = this.handleTimeslotsFormData();
+        const compIdNumber = getCompetitonId();
+        const isTeamPreferenceActive = isTeamPreferencesEnable && this.state.isManuallySelected;
+
         if (timeSlotData.competitionUniqueKey == null || timeSlotData.competitionUniqueKey == '') {
             message.error(ValidationConstants.pleaseSelectCompetition)
         } else {
-            this.props.addTimeSlotDataPost(timeSlotData)
+            this.props.addTimeSlotDataPost(timeSlotData, compIdNumber, isTeamPreferenceActive);
             this.setState({
-                onNextLoad: true
+                onNextLoad: true,
+                preferenceFormValues: null,
             })
         }
     }
@@ -403,8 +459,28 @@ class CompetitionCourtAndTimesAssign extends Component {
     changeTimeSlotGeneration(e) {
         this.props.UpdateTimeSlotsData(e.target.value, 'timeslotGenerationRefId', null, null, null, null)
         setTimeout(() => {
-            this.setDetailsFieldValue()
-        }, 800);
+            this.setDetailsFieldValue();
+            this.setIsManuallySelected();
+        }, 0);
+    }
+
+    getTimePreferencesProps = () => {
+        const timePreferencesProps = !!this.props.competitionTimeSlots?.timePreferences ? 
+            this.props.competitionTimeSlots.timePreferences
+                .map(preferenceItem => ({
+                    teamId: preferenceItem.id,
+                    competitionTimeslotsIds: preferenceItem.competitionVenueTimeslotDayTimes.map(time => time.id)
+                }))
+            : [];
+
+        return timePreferencesProps;
+    }
+
+    handleSavePreferences = values => {
+        const compIdNumber = getCompetitonId();
+        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+
+        this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, values);
     }
 
     headerView = () => (
@@ -435,17 +511,23 @@ class CompetitionCourtAndTimesAssign extends Component {
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
+        const { id } = own_CompetitionArr.find(comp => comp.competitionId === competitionId);
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         setOwn_CompetitionFinalRefId(finalTypeRefId)
+        setCompetitionID(id);
         let quickComp = this.props.appState.own_CompetitionArr.find(
             x => x.competitionId == competitionId && x.isQuickCompetition == 1
         );
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
+        this.props.getCompetitionTeams(id);
+        this.props.getCompetitionTimeslots(id);
+        this.props.getTeamTimeslotsPreferences(id);
         this.setState({
             getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId,
-            isQuickCompetition: quickComp != undefined
-        })
+            isQuickCompetition: quickComp != undefined,
+            preferenceFormValues: null,
+        });
     }
 
     //add obj on click of time slot allocation based on match duration
@@ -464,7 +546,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let daysList = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1
         return (
-            <div className="row">
+            <div className="row" key={index}>
                 <div className="col-sm">
                     <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : ' '} />
                     <Form.Item
@@ -648,6 +730,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let commonState = this.props.competitionTimeSlots
         let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
         let disabledStatus = this.state.competitionStatus == 1
+
         return (
             <div className="content-view pt-3">
                 <span className="applicable-to-heading">
@@ -815,6 +898,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                         </div>
                     )}
+                    {!this.state.isQuickCompetition && isTeamPreferencesEnable && this.state.isManuallySelected && this.footerViewSettings()}
                 </div>
             </div>
         )
@@ -852,7 +936,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
 
         return (
-            <div>
+            <div key={venueIndex + '' + index}>
                 <div className="row">
                     <div className="col-sm-3">
                         <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : ' '} />
@@ -928,7 +1012,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     filterOption={false}
                                                     className="d-grid align-content-center"
                                                     onBlur={() => this.props.ClearDivisionArr('divisions')}
-                                                    onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
+                                                    onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(
+                                                        divisions, 
+                                                        'venuePreferenceTypeRefId', 
+                                                        'competitionTimeslotManualAllvenue', 
+                                                        timeIndex, 
+                                                        id, 
+                                                        index, 
+                                                        venueIndex
+                                                    )}
                                                     onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                                                 >
                                                     {division.divisions && division.divisions.map((item) => (
@@ -1336,31 +1428,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Tooltip
-                                className="h-100"
-                                onMouseEnter={() => {
-                                    this.setState({
-                                        tooltipVisibleDelete: isPublished,
-                                    });
-                                }}
-                                onMouseLeave={() => {
-                                    this.setState({ tooltipVisibleDelete: false });
-                                }}
-                                visible={this.state.tooltipVisibleDelete}
-                                title={AppConstants.statusPublishHover}
-                            >
-                                <Button
-                                    id={AppUniqueId.timeSlotSaveBtn}
-                                    disabled={isPublished}
-                                    style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
-                                    className="publish-button save-draft-text"
-                                    htmlType="submit"
-                                    type="primary"
-                                >
-                                    {AppConstants.save}
-                                </Button>
-                            </Tooltip>
                             {/* <NavLink to="/competitionVenueTimesPrioritisation"> */}
+                            <Button
+                                // id={AppUniqueId.timeSlotSaveBtn}
+                                style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                                className="publish-button save-draft-text"
+                                htmlType="submit"
+                                type="primary"
+                                // onClick={this.handleSavePreferences}
+                            >
+                                {AppConstants.save}
+                            </Button>
                             <Button
                                 onClick={() => this.setState({ nextButtonClicked: true })}
                                 htmlType="submit"
@@ -1377,6 +1455,132 @@ class CompetitionCourtAndTimesAssign extends Component {
             </div>
         );
     };
+
+    // footer view containing all the buttons like submit and cancel
+    footerViewSettings = () => {
+        const isPublished = this.state.competitionStatus == 1;
+        return (
+            <div className="d-flex justify-content-end">
+                <Tooltip
+                    className="h-100"
+                    onMouseEnter={() => {
+                        this.setState({
+                            tooltipVisibleDelete: isPublished,
+                        });
+                    }}
+                    onMouseLeave={() => {
+                        this.setState({ tooltipVisibleDelete: false });
+                        }}
+                        visible={this.state.tooltipVisibleDelete}
+                        title={AppConstants.statusPublishHover}
+                >
+                    <Button
+                        id={AppUniqueId.timeSlotSaveBtn}
+                        disabled={isPublished}
+                        style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                        className="publish-button save-draft-text"
+                        htmlType="submit"
+                        type="primary"
+                    >
+                        {AppConstants.save}
+                    </Button>
+                 </Tooltip>
+            </div>
+        );
+    };
+
+    teamPreferencesView() {
+        const { timeslotsList, weekDays } = this.props.competitionTimeSlots;
+        const { teams, preferenceFormValues } = this.state;
+
+        // const { getFieldDecorator } = this.formPreferenceRef.current;
+
+        return (
+            <div className="formView mt-4">
+                <div className="content-view pt-3">
+                    <div className="team-preferences-header my-4">{AppConstants.teamPreferences}</div>           
+
+                    <Form.List name="preferences">
+                        {(timePreferences, { add, remove }) => (
+                            <>
+                                {timePreferences.map((field, fieldIdx) => (
+                                    <Space 
+                                        key={field.key} 
+                                        style={{ marginBottom: 25 }}
+                                        className='d-flex align-items-center w-100 preference-form-line'
+                                    >
+                                        <Form.Item
+                                            {...field}
+                                            name={[field.name, 'teamId']}
+                                            fieldKey={[field.fieldKey, 'teamId']}
+                                            rules={[{ required: true, message: ValidationConstants.teamName }]}
+                                        >
+                                            <Select
+                                                placeholder="Select"
+                                            >
+                                                {(teams || []).map(team => (
+                                                    <Option 
+                                                        key={team.id}
+                                                        value={team.id}
+                                                        disabled={
+                                                            preferenceFormValues?.preferences.some((preference, idx) => preference?.teamId === team.id && idx !== fieldIdx)
+                                                        }
+                                                    >
+                                                        {`${team.name} (${team.divisionName} - ${team.gradeName})`}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            name={[field.name, 'competitionTimeslotsIds']}
+                                            fieldKey={[field.fieldKey, 'competitionTimeslotsIds']}
+                                            rules={[{ required: true, message: ValidationConstants.timeSlotPreference }]}
+                                        >
+                                            <Select
+                                                mode="multiple"
+                                                placeholder="Select"
+                                                filterOption={false}
+                                                className="d-grid align-content-center"
+                                            >
+                                                {!!weekDays.length && (timeslotsList || []).map(timeslot => (
+                                                    <Option 
+                                                        key={timeslot.id}
+                                                        value={timeslot.id}
+                                                    >
+                                                        {`${weekDays.find(day => day.id === timeslot.dayRefId).description} - ${timeslot.startTime}`}
+                                                    </Option>
+                                                ))}
+                                            </Select> 
+                                        </Form.Item>
+
+                                        <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
+                                            <img
+                                                className="dot-image"
+                                                src={AppImages.redCross}
+                                                alt=""
+                                                width="16"
+                                                height="16"
+                                                onClick={() => remove(field.name)}
+                                            />
+                                        </span>
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <span 
+                                        className="input-heading-add-another" 
+                                        onClick={() => add()}
+                                    > 
+                                        +{AppConstants.addTeam}
+                                    </span>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+                </div>
+            </div>
+        );
+    }
 
     render() {
         return (
@@ -1399,10 +1603,30 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
                             </div>
                         </Content>
-                        <Footer>
-                            {!this.state.isQuickCompetition && this.footerView()}
-                        </Footer>
+                        {(!isTeamPreferencesEnable || !this.state.isManuallySelected) && (
+                            <Footer>
+                                {!this.state.isQuickCompetition && this.footerView()}
+                            </Footer>
+                        )}
                     </Form>
+                    {isTeamPreferencesEnable && this.state.isManuallySelected && !this.state.getDataLoading && this.state.preferenceFormValues &&
+                        <Form
+                            ref={this.formPreferenceRef}
+                            autoComplete="off"
+                            noValidate="noValidate"
+                            onFinish={this.handleSavePreferences}
+                            onFinishFailed={({ errorFields }) => this.formPreferenceRef.current.scrollToField(errorFields[0].name)}
+                            initialValues={{ ...this.state.preferenceFormValues } }
+                            onValuesChange={(_, allValues) => this.setState({ preferenceFormValues: allValues })}
+                        >
+                            <Content>
+                                {this.teamPreferencesView()}
+                            </Content>
+                            <Footer>
+                                {!this.state.isQuickCompetition && this.footerView()}
+                            </Footer>
+                        </Form>
+                    }
                 </Layout>
             </div>
         );
@@ -1422,6 +1646,10 @@ function mapDispatchToProps(dispatch) {
         clearYearCompetitionAction,
         searchDivisionList,
         ClearDivisionArr,
+        getCompetitionTeams,
+        getCompetitionTimeslots,
+        getTeamTimeslotsPreferences,
+        saveTeamTimeslotsPreferences,
     }, dispatch);
 }
 

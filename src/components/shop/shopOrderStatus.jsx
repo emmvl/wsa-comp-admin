@@ -49,9 +49,11 @@ function tableSort(key) {
         yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
     } = this_obj.state;
     const page = this_obj.props.shopOrderStatusState.orderStatusCurrentPage;
+    let { orderStatusPageSize } = this_obj.props.shopOrderStatusState;
+    orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
     const params = {
-        limit: 10,
-        offset: (page ? (10 * (page - 1)) : 0),
+        limit: orderStatusPageSize,
+        offset: (page ? (orderStatusPageSize * (page - 1)) : 0),
         search: searchText,
         year: yearRefId,
         paymentStatus,
@@ -236,8 +238,10 @@ class ShopOrderStatus extends Component {
             fulfilmentStatus,
             product,
         } = this.state;
+        let { orderStatusPageSize } = this.props.shopOrderStatusState;
+        orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
         const params = {
-            limit: 10,
+            limit: orderStatusPageSize,
             offset: 0,
             search: searchText,
             year: JSON.parse(yearId),
@@ -381,10 +385,12 @@ class ShopOrderStatus extends Component {
             yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
         } = this_obj.state;
         const { orderStatusCurrentPage } = this.props.shopOrderStatusState;
+        let { orderStatusPageSize } = this_obj.props.shopOrderStatusState;
+        orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
         const params = {
-            limit: 10,
+            limit: orderStatusPageSize,
             offset: orderStatusCurrentPage
-                ? 10 * (orderStatusCurrentPage - 1)
+                ? orderStatusPageSize * (orderStatusCurrentPage - 1)
                 : 0,
             search: searchText,
             year: yearRefId,
