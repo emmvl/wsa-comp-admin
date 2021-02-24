@@ -78,8 +78,8 @@ class AddCommunication extends Component {
             key: props.location?.state?.key,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
-            yearRefId: -1,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            yearId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
@@ -195,7 +195,7 @@ class AddCommunication extends Component {
         }
 
         const toOrganisationIds = data.toOrganisationIds
-            ? data.toOrganisationIds.split(',').map((id) => parseInt(id, 10))
+            ? data.toOrganisationIds.split(',')
             : [];
         const toUserRoleIds = data.toUserRoleIds
             ? data.toUserRoleIds.split(',').map((id) => parseInt(id, 10))
@@ -608,23 +608,26 @@ class AddCommunication extends Component {
         this.setState({ isFetchedUsersData: true });
 
         const {
-            yearRefId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
-            linkedEntityId,
+            organisationId,
+            toOrganisationIds,
             dobFrom,
             dobTo,
             postCode,
         } = this.state;
 
         const filter = {
-            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId,
+            organisationId: toOrganisationIds.length > 0 ? toOrganisationIds[0] : organisationId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
-            linkedEntityId,
+            linkedEntityId: toOrganisationIds.length > 0 && toOrganisationIds[0] !== organisationId
+                ? toOrganisationIds[0]
+                : '-1',
             dobFrom,
             dobTo,
             postCode,
@@ -663,12 +666,12 @@ class AddCommunication extends Component {
             }) : [];
         const organisationListData = affiliateToData.length > 0
             ? affiliateToData.map((aff) => ({
-                orgId: aff.orgId,
+                orgId: aff.affiliateOrgId,
                 name: aff.affiliateName,
             })) : [];
         if (getOrganisationData()) {
             organisationListData.push({
-                orgId: getOrganisationData().organisationId,
+                orgId: getOrganisationData().organisationUniqueKey,
                 name: getOrganisationData().name,
             });
         }
@@ -700,6 +703,7 @@ class AddCommunication extends Component {
                             this.setState({
                                 allOrg: true,
                                 individualOrg: false,
+                                toOrganisationIds: [],
                             });
                         }}
                         checked={allOrg}
@@ -724,22 +728,17 @@ class AddCommunication extends Component {
                 {individualOrg && (
                     <div className="mt-3">
                         <Select
-                            mode="multiple"
                             className="ml-5"
                             style={{ width: '97%', height: '44px' }}
                             placeholder={AppConstants.selectOrganisation}
                             onChange={(value) => {
                                 this.setState({
-                                    toOrganisationIds: value,
+                                    toOrganisationIds: [value],
                                 });
                             }}
                             filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                            value={
-                                organisationListData
-                                    .filter((org) => this.state.toOrganisationIds.includes(org.orgId))
-                                    .map((org) => org.orgId)
-                            }
+                            value={this.state.toOrganisationIds[0]}
                         >
                             {
                                 organisationListData.length > 0 && organisationListData.map((org, index) => (
@@ -908,7 +907,7 @@ class AddCommunication extends Component {
             key: this.state.key,
             mediaArray,
             expiryDate: postDate,
-            organisationId: this.state.organisationId,
+            organisationId: getOrganisationData().organisationId,
             toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
             toUserRoleIds: this.state.selectedRoles
                 ? this.state.toUserRoleIds

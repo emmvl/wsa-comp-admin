@@ -24,6 +24,7 @@ import {
     communicationPublishAction,
     deleteCommunicationAction,
 } from "../../store/actions/communicationAction/communicationAction";
+import {getOrganisationData} from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -196,7 +197,10 @@ class CommunicationView extends Component {
     onSubmitCommunicationPublish = () => {
         const { id } = this.state.communicationItem;
         this.props.communicationPublishAction({
-            id, silent: true, isApp: false,
+            id,
+            silent: true,
+            isApp: false,
+            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
         });
     }
 
@@ -329,11 +333,6 @@ class CommunicationView extends Component {
                                     >
                                         {AppConstants.publish}
                                     </Button>
-                                    <div className="align-items-center justify-content-center" style={{ paddingRight: 20 }}>
-                                        <Tooltip>
-                                            <span>{AppConstants.newsPublishMsg}</span>
-                                        </Tooltip>
-                                    </div>
                                 </div>
                             </div>
                         </div>
