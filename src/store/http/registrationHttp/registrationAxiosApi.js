@@ -606,6 +606,10 @@ const AxiosApi = {
         const url = `/api/registration/status/update`;
         return Method.dataPost(url, token, body);
     },
+    registrationRetryPayment(payload){
+        const url = `api/payments/regitrations/retry`;
+        return Method.dataPost(url, token, payload);
+    }
 };
 
 const Method = {

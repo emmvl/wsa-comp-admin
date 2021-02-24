@@ -163,7 +163,8 @@ import {
     getActiveDrawsRoundsSaga, getVenueAndDivisionSaga,
 } from './competitionManagementSaga/competitionDrawsSaga';
 
-import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga, registrationFailedStatusUpdateSaga } from './registrationSaga/registrationDashboardSaga';
+import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga, registrationFailedStatusUpdateSaga,
+    registrationRetryPaymentSaga } from './registrationSaga/registrationDashboardSaga';
 /// /Competition Dashboard Saga
 import {
     competitionDashboardSaga,
@@ -616,5 +617,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_LOAD, liveScorePlayersToCashReceivedSaga);
 
     yield takeEvery(ApiConstants.API_REGISTRATION_FAILED_STATUS_UPDATE_LOAD, registrationFailedStatusUpdateSaga);
+
+    yield takeEvery(ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD, registrationRetryPaymentSaga);
 
 }

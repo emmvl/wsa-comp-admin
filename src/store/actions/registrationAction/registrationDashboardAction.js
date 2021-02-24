@@ -56,11 +56,20 @@ function registrationFailedStatusUpdate(payload){
     return action
 }
 
+function registrationRetryPaymentAction(payload){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD,
+        payload
+    }
+    return action
+}
+
 export {
     regDashboardListAction,
     getAllCompetitionAction,
     registrationMainDashboardListAction,
     setPageSizeAction,
     setPageNumberAction,
-    registrationFailedStatusUpdate
+    registrationFailedStatusUpdate,
+    registrationRetryPaymentAction
 };
