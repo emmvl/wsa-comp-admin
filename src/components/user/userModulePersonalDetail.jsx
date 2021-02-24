@@ -2427,7 +2427,11 @@ class UserModulePersonalDetail extends Component {
     personalView = () => {
         const { userState } = this.props;
         const personal = userState.personalData;
-        const personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
+        const personalByCompData = userState.personalByCompData || [];
+        console.log('###-personal', personal)
+
+        console.log('###-personalByCompData', personalByCompData)
+
         const primaryContacts = personalByCompData.length > 0
             ? personalByCompData[0].primaryContacts
             : [];
@@ -2447,7 +2451,6 @@ class UserModulePersonalDetail extends Component {
             childrenCheckNumber = personalByCompData[0].childrenCheckNumber;
             childrenCheckExpiryDate = personalByCompData[0].childrenCheckExpiryDate;
         }
-
         return (
             <div className="comp-dash-table-view pt-0">
 
@@ -3713,7 +3716,7 @@ function mapDispatchToProps(dispatch) {
             exportUserRegData,
             getSubmittedRegData,
             transferUserRegistration,
-            cancelDeRegistrationAction
+            cancelDeRegistrationAction,
         },
         dispatch,
     );

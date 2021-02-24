@@ -1104,7 +1104,7 @@ class UserProfileEdit extends Component {
                         </div>
 
                         <div>
-                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required="required-field" />
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpireQ} required="required-field" />
                             <Form.Item name="accreditationLevelUmpireRefId" rules={[{ required: true, message: ValidationConstants.accreditationLevelUmpire }]}>
                                 <Radio.Group
                                     className="registration-radio-group"
@@ -1134,7 +1134,7 @@ class UserProfileEdit extends Component {
                         </div>
 
                         <div>
-                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoach} required="required-field" />
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoachQ} required="required-field" />
                             <Form.Item name="accreditationLevelCoachRefId" rules={[{ required: true, message: ValidationConstants.accreditationLevelCoach }]}>
                                 <Radio.Group
                                     style={{ display: "flex", flexDirection: "column" }}

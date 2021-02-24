@@ -1902,8 +1902,10 @@ const AppConstants = {
     addTeamMember: "Add Team Member",
     addPool: "Add Pool",
     pleaseEnterPoolName: "Please Enter Pool Name",
-    nationalAccreditationLevelUmpire:
+    nationalAccreditationLevelUmpireQ:
         "What is your national accreditation level (Umpire)?",
+    nationalAccreditationLevelUmpire:
+        "National accreditation level (Umpire)",
     accreditationUmpire: "accreditationUmpire",
     payPerMatch: "Pay per Match",
     teamMemberParentCheck: "I am the Parent/ Guardian",
@@ -1928,8 +1930,10 @@ const AppConstants = {
     somethingWentWrongErrorMsg:
         "Something went wrong.Please contact Administrator",
     tShirtSizeList: "TShirtSize",
-    nationalAccreditationLevelCoach:
+    nationalAccreditationLevelCoachQ:
         "What is your national accreditation level (Coach)?",
+    nationalAccreditationLevelCoach:
+        "National accreditation level (Coach)",
     expiryDate: "Expiry Date",
     byBadge: "By Badge",
     byPool: "By Pool",
