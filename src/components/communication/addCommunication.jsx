@@ -79,7 +79,7 @@ class AddCommunication extends Component {
             crossImageIcon: false,
             crossVideoIcon: false,
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId: -1,
+            yearId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
@@ -608,7 +608,7 @@ class AddCommunication extends Component {
         this.setState({ isFetchedUsersData: true });
 
         const {
-            yearRefId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
@@ -621,7 +621,7 @@ class AddCommunication extends Component {
 
         const filter = {
             organisationId: toOrganisationIds.length > 0 ? toOrganisationIds[0] : organisationId,
-            yearRefId,
+            yearId,
             competitionUniqueKey,
             roleId,
             genderRefId,
