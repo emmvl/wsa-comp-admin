@@ -276,6 +276,14 @@ const columns = [
                                     </Menu.Item>
                                 )
                             }
+                            {
+                                record.actionView == 6
+                                && (
+                                    <Menu.Item key="6" onClick={() => this_Obj.setFailedRegistrationRetry(record)}>
+                                        <span>{AppConstants.retryPayment}</span>
+                                    </Menu.Item>
+                                )
+                            }
 
                         </SubMenu>
 
@@ -591,8 +599,15 @@ class Registration extends Component {
     setFailedInstalmentRetry = (record) =>{
         this.setState({
             selectedRow: record, otherModalVisible: true,
-            actionView: 4, modalMessage : AppConstants.regRetryInstalmentModalMsg,
+            actionView: 5, modalMessage : AppConstants.regRetryInstalmentModalMsg,
             modalTitle: "Failed Instalment Retry"
+        });
+    }
+    setFailedRegistrationRetry = (record) =>{
+        this.setState({
+            selectedRow: record, otherModalVisible: true,
+            actionView: 6, modalMessage : AppConstants.regRetryModalMsg,
+            modalTitle: "Failed Registration Retry"
         });
     }
 
@@ -618,6 +633,14 @@ class Registration extends Component {
                     competitionId: selectedRow.competitionUniqueKey
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ loading: true });
+            }
+        }
+        else if(actionView == 6){
+            if(key == "ok"){
+                let payload = {
+                    registrationId: selectedRow.registrationUniqueKey,
+                }
                 this.setState({ loading: true });
             }
         }
