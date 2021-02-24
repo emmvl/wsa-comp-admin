@@ -58,6 +58,10 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 import { getAge, isArrayNotEmpty } from "../../util/helpers";
+import { registrationRetryPaymentAction } from "../../store/actions/registrationAction/registrationDashboardAction";
+import { liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+
+
 
 function tableSort(a, b, key) {
     const stringA = JSON.stringify(a[key]);
@@ -211,6 +215,11 @@ const columns = [
                         />
                     )}
                 >
+                    {(e.paymentStatus == "Failed") && (
+                        <Menu.Item key="7" onClick={() => this_Obj.myRegistrationRetryPayment(e)}>
+                            <span>{AppConstants.retryPayment}</span>
+                        </Menu.Item>
+                    )}
                     {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
                         <Menu.Item key="2" onClick={() => history.push("/deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
@@ -425,6 +434,41 @@ const childOtherRegistrationColumns = [
         title: "Fee Paid",
         key: "feePaid",
         dataIndex: "feePaid",
+    },
+    {
+        title: "Action",
+        key: "action",
+        render: (data, record) => {
+            return (
+                <div>
+                    {(record.invoiceFailedStatus || record.transactionFailedStatus) && (
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <SubMenu
+                                key="sub1"
+                                title={(
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                    />
+                                )}
+                            >
+                                <Menu.Item key="1">
+                                    <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    )}
+                </div>
+            )
+        },
     },
 ];
 
@@ -1529,6 +1573,7 @@ class UserModulePersonalDetail extends Component {
             transferRegistrationPaidBy: '',
             registrationData: [],
             removeTeamMemberRecord: null,
+            retryPaymentOnLoad: false
         };
     }
 
@@ -1663,6 +1708,17 @@ class UserModulePersonalDetail extends Component {
                 "myRegistrations"
                 );
             this.setState({cancelDeRegistrationLoad: false})
+        }
+
+        if((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true){
+            this.setState({retryPaymentOnLoad: false});
+            this.handleRegistrationTableList(
+                1, 
+                this.state.userId,
+                this.state.competition,
+                this.state.yearRefId,
+                "myRegistrations"
+            );
         }
     }
 
@@ -2068,6 +2124,54 @@ class UserModulePersonalDetail extends Component {
             registrationForm: item.registrationForm,
         });
     };
+
+    retryPayment = (record) => {
+        try{
+            if(record.invoiceFailedStatus){
+                let payload = {
+                    registrationId: record.registrationId,
+                }
+                this.props.registrationRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }else if(record.transactionFailedStatus){
+                let payload = {
+                    processTypeName: "instalment",
+                    registrationUniqueKey: record.registrationId,
+                    userId: this.state.userId,
+                    divisionId: record.divisionId,
+                    competitionId: record.competitionUniqueKey
+                }
+                this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }
+        }catch(ex){
+            console.log("Error in retryPayment::"+ex);
+        }
+    }
+
+    myRegistrationRetryPayment = (record) => {
+        try{
+            if(record.paymentStatusFlag == 2){
+                let payload = {
+                    registrationId: record.registrationId,
+                }
+                this.props.registrationRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }else if(record.paymentStatus == "Failed"){
+                let payload = {
+                    processTypeName: "instalment",
+                    registrationUniqueKey: record.registrationId,
+                    userId: this.state.userId,
+                    divisionId: record.divisionId,
+                    competitionId: record.competitionUniqueKey
+                }
+                this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }
+        }catch(ex){
+            console.log("Error in myRegistrationRetryPayment::"+ex);
+        }
+    }
 
     headerView = () => (
         <Header className="comp-player-grades-header-view container mb-n3">
@@ -3732,6 +3836,8 @@ function mapDispatchToProps(dispatch) {
             getSubmittedRegData,
             transferUserRegistration,
             cancelDeRegistrationAction
+            registrationRetryPaymentAction,
+            liveScorePlayersToPayRetryPaymentAction
         },
         dispatch,
     );
@@ -3743,6 +3849,8 @@ function mapStateToProps(state) {
         appState: state.AppState,
         stripeState: state.StripeState,
         shopOrderStatusState: state.ShopOrderStatusState,
+        registrationDashboardState: state.RegistrationDashboardState,
+        liveScoreDashboardState: state.LiveScoreDashboardState,
     };
 }
 
