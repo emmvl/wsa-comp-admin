@@ -2139,7 +2139,7 @@ class UserModulePersonalDetail extends Component {
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
                     divisionId: record.divisionId,
-                    competitionId: record.competitionUniqueKey
+                    competitionId: record.competitionId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
@@ -2163,7 +2163,7 @@ class UserModulePersonalDetail extends Component {
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
                     divisionId: record.divisionId,
-                    competitionId: record.competitionUniqueKey
+                    competitionId: record.competitionId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
