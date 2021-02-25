@@ -254,7 +254,7 @@ class CompetitionPlayerGrades extends Component {
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
-                                                    src={AppImages.import}
+                                                    src={AppImages.export}
                                                     alt=""
                                                     className="export-image"
                                                 />
