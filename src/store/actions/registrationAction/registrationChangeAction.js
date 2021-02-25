@@ -1,81 +1,76 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 function updateRegistrationReviewAction(value, key) {
-    const action = {
+    return {
         type: ApiConstants.API_UPDATE_REG_REVIEW,
-        value, key
+        value,
+        key,
     };
-    return action;
 }
 
-function saveDeRegisterDataAction(payload){
-    const action = {
+function saveDeRegisterDataAction(payload) {
+    return {
         type: ApiConstants.API_SAVE_DE_REGISTRATION_LOAD,
-        payload
+        payload,
     };
-    return action;
 }
 
 function updateDeregistrationData(value, key, subKey) {
-    const action = {
+    return {
         type: ApiConstants.API_UPDATE_DE_REGISTRATION,
-        value, key, subKey
+        value,
+        key,
+        subKey,
     };
-    return action;
 }
 
-function getRegistrationChangeDashboard(payload){
-    const action = {
+function getRegistrationChangeDashboard(payload) {
+    return {
         type: ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD,
-        payload
-    }
-
-    return action;
+        payload,
+    };
 }
 
-function getRegistrationChangeReview(payload){
-    const action = {
+function exportRegistrationChange(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_REGISTRATION_CHANGE_LOAD,
+        payload,
+    };
+}
+
+function getRegistrationChangeReview(payload) {
+    return {
         type: ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD,
-        payload
-    }
-
-    return action;
+        payload,
+    };
 }
 
-function saveRegistrationChangeReview(payload){
-    const action = {
+function saveRegistrationChangeReview(payload) {
+    return {
         type: ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD,
-        payload
-    }
-
-    return action;
+        payload,
+    };
 }
 
-function getTransferCompetitionsAction(payload){
-    const action = {
+function getTransferCompetitionsAction(payload) {
+    return {
         type: ApiConstants.API_GET_TRANSFER_COMPETITIONS_LOAD,
-        payload
-    }
-
-    return action;
+        payload,
+    };
 }
 
 function setRegistrationChangeListPageSize(pageSize) {
-    const action = {
+    return {
         type: ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_SIZE,
         pageSize,
-    }
-
-    return action;
+    };
 }
 
 function setRegistrationChangeListPageNumber(pageNum) {
-    const action = {
+    return {
         type: ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_CURRENT_NUMBER,
         pageNum,
-    }
-
-    return action;
+    };
 }
 
 export {
@@ -83,6 +78,7 @@ export {
     saveDeRegisterDataAction,
     updateDeregistrationData,
     getRegistrationChangeDashboard,
+    exportRegistrationChange,
     getRegistrationChangeReview,
     saveRegistrationChangeReview,
     getTransferCompetitionsAction,

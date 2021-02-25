@@ -104,7 +104,14 @@ import { competitionModuleSaga, competitonGenerateDrawSaga } from './competition
 import * as competitionFormatSaga from './competitionManagementSaga/competitionFormatSaga';
 import * as competitionFinalSaga from './competitionManagementSaga/competitionFinalsSaga';
 import * as ladderFormatSaga from './competitionManagementSaga/ladderFormatSaga';
-import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
+import {
+    competitonWithTimeSlots,
+    competitonWithTimeSlotsPostApi,
+    competitionTeamsGetSaga,
+    competitionTimeslotsGetSaga,
+    teamsTimeslotsPreferencesGetSaga,
+    teamsTimeslotsPreferencesSaveSaga,
+} from './competitionManagementSaga/competitionTimeAndSlotSaga'; 
 
 import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
 /// /Venue constraints
@@ -566,6 +573,9 @@ export default function* rootSaga() {
 
     // Get Registration Change Dashboard
     yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD, regChangeSaga.getRegistrationChangeDashboardSaga);
+
+    // Export Registration Change
+    yield takeEvery(ApiConstants.API_EXPORT_REGISTRATION_CHANGE_LOAD, regChangeSaga.exportRegistrationChangeSaga);
 
     // Get Registration Change Dashboard
     yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.getRegistrationChangeReviewSaga);
