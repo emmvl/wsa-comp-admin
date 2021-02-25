@@ -1609,7 +1609,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </Footer>
                         )}
                     </Form>
-                    {isTeamPreferencesEnable && this.state.isManuallySelected && !this.state.getDataLoading && this.state.preferenceFormValues &&
+                    {!this.state.isQuickCompetition && isTeamPreferencesEnable && this.state.isManuallySelected && !this.state.getDataLoading && this.state.preferenceFormValues &&
                         <Form
                             ref={this.formPreferenceRef}
                             autoComplete="off"
