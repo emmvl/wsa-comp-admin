@@ -388,7 +388,6 @@ class PaymentSummary extends Component {
             membershipType,
             offset,
             userId,
-            paymentStatus,
         } = this.state;
 
         const year = getGlobalYear() ? getGlobalYear() : '-1';
