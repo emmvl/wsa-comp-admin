@@ -192,7 +192,7 @@ const columns = [
         render: (isUsed, record) => {
             return(
                 <div>
-                    {(record.affiliatePortion > 0 && record.paymentType != "Invoice") ?
+                    {(record.canPartialRefund == 1 && record.paymentType != "Invoice") ?
                         <Menu
                             className="action-triple-dot-submenu "
                             theme="light"
