@@ -303,7 +303,7 @@ class CompetitionPlayerGrades extends Component {
     /////on division change
     onDivisionChange = (divisionId) => {
         this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId);
-        this.setState({ divisionId });
+        this.setState({ divisionId, competitionDivisionId: divisionId });
     }
 
     // model visible
