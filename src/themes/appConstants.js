@@ -2011,6 +2011,7 @@ const AppConstants = {
     failed: "Failed",
     wouldYouLikeToApprove: "Would you like to Approve?",
     regRetryModalMsg: "Do you want to retry the failed registration?",
+    addDivOrGrade: "Add Div/Grade",
 };
 
 export default AppConstants;

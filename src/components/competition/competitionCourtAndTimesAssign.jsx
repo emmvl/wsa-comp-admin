@@ -758,7 +758,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 )}
                                             </div>
 
-                                            <span id={AppUniqueId.timeRotation_matchDuration_AddAnotherTimeslot_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addTimeSlot}</span>
+                                            <span id={AppUniqueId.timeRotation_matchDuration_AddAnotherTimeslot_Btn} className="input-heading-add-another font-15" onClick={() => disabledStatus == false && this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addDivOrGrade}</span>
                                         </div>
                                     )}
                                 </div>
