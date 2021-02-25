@@ -152,6 +152,11 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  getUserDashboardTextualSpectatorCount(payload) {
+    const url = `api/user/dashboard/textual/spectatorCount`
+    return Method.dataPost(url, token, payload);
+  },
+
   getUserModulePersonalData(payload) {
     const url = `api/user/personaldetails?userId=${payload.userId}&organisationId=${payload.organisationId}`;
     return Method.dataGet(url, token);
