@@ -3835,7 +3835,7 @@ function mapDispatchToProps(dispatch) {
             exportUserRegData,
             getSubmittedRegData,
             transferUserRegistration,
-            cancelDeRegistrationAction
+            cancelDeRegistrationAction,
             registrationRetryPaymentAction,
             liveScorePlayersToPayRetryPaymentAction
         },
