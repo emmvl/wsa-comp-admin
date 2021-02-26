@@ -247,7 +247,6 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "UserFriends");
   },
 
-
   getUserReferFriendList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
@@ -257,6 +256,11 @@ let userHttpApi = {
       url = `users/dashboard/referfriend`;
     }
     return Method.dataPost(url, token, payload);
+  },
+
+  exportUserReferFriendList(payload) {
+    const url = `users/export/referFriends`;
+    return Method.dataPostDownload(url, token, payload, "ReferFriends");
   },
 
   async getOrgPhotosList(payload) {
