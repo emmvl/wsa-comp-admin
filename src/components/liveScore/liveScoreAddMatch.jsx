@@ -1177,8 +1177,8 @@ class LiveScoreAddMatch extends Component {
                             value={addEditMatch.extraTimeWinByGoals}
                             disabled={this.state.umpireKey === 'umpire'}
                         >
-                            <Radio key={1} value={1}>{AppConstants.oneGoalWins}</Radio>
-                            <Radio key={2} value={2}>{AppConstants.twoGoalsWin}</Radio>
+                            <Radio key={1} value={1}>{AppConstants.winByOneGoal}</Radio>
+                            <Radio key={2} value={2}>{AppConstants.winByTwoGoals}</Radio>
                             <Radio key={0} value={0}>{AppConstants.none}</Radio>
                         </Radio.Group>
                     </div>
