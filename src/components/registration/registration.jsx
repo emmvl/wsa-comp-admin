@@ -205,6 +205,11 @@ const columns = [
         render: new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 2 }).format,
     },
     {
+        title: "Status",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
+    },
+    {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
@@ -230,11 +235,11 @@ const columns = [
                                 />
                             )}
                         >
-                            <Menu.Item key="1">
+                            {/* <Menu.Item key="1">
                                 <NavLink to={{ pathname: "/" }}>
                                     <span>View</span>
                                 </NavLink>
-                            </Menu.Item>
+                            </Menu.Item> */}
                             {
                                 record.actionView == 1
                             && (
