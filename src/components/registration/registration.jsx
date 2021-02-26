@@ -214,7 +214,7 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-            record.actionView
+           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true))
                 ? (
                     <Menu
                         className="action-triple-dot-submenu"
@@ -258,7 +258,7 @@ const columns = [
                             )
                             }
                             {
-                                record.actionView == 3
+                                (record.actionView == 3 && (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration"))
                             && (
                                 <Menu.Item key="3" onClick={() => this_Obj.setVoucherPayment(record)}>
                                     <span>Voucher Payment Received</span>
