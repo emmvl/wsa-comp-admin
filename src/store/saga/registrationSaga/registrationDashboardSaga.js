@@ -84,7 +84,6 @@ export function* registrationMainDashboardListSaga(action) {
                 status: result.status,
                 key: action.key
             });
-            message.success(result.result.data.message);
         } else {
             yield call(failSaga, result)
         }
