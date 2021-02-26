@@ -907,6 +907,18 @@ function userReducer(state = initialState, action) {
         status: action.status
       };
 
+    case ApiConstants.API_EXPORT_USER_REFER_FRIEND_LOAD:
+
+      return { ...state, onExpUserFriendLoad: true };
+
+    case ApiConstants.API_EXPORT_USER_REFER_FRIEND_SUCCESS:
+      return {
+        ...state,
+        onExpUserFriendLoad: false,
+        status: action.status,
+        error: null
+      };
+
     case ApiConstants.API_GET_ORG_PHOTO_LOAD:
       return { ...state, onLoad: true };
 

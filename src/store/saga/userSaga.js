@@ -569,6 +569,25 @@ function* getUserReferFriendListSaga(action) {
   }
 }
 
+// Export Refer a Friend Data
+function* exportReferFriendSaga(action) {
+  try {
+      const result = yield call(UserAxiosApi.exportUserReferFriendList, action.payload);
+      if (result.status === 1) {
+          yield put({
+              type: ApiConstants.API_EXPORT_USER_REFER_FRIEND_SUCCESS,
+              result: result.result.data,
+              status: result.status,
+          });
+          //  message.success(result.result.data.message);
+      } else {
+          yield call(failSaga, result);
+      }
+  } catch (error) {
+      yield call(errorSaga, error);
+  }
+}
+
 // Get the Org Photos List
 function* getOrgPhotosListSaga(action) {
   try {
@@ -1390,6 +1409,7 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_USER_FRIEND_LOAD, getUserFriendListSaga);
   yield takeEvery(ApiConstants.API_EXPORT_USER_FRIEND_LOAD, exportUserFriendSaga);
   yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, getUserReferFriendListSaga);
+  yield takeEvery(ApiConstants.API_EXPORT_USER_REFER_FRIEND_LOAD, exportReferFriendSaga);
   yield takeEvery(ApiConstants.API_GET_ORG_PHOTO_LOAD, getOrgPhotosListSaga);
   yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, saveOrgPhotosSaga);
   yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, deleteOrgPhotosSaga);
