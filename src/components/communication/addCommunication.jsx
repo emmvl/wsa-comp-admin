@@ -32,7 +32,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import ValidationConstants from "../../themes/validationConstant";
 
-import { getOrganisationData } from '../../util/sessionStorage';
+import {getOrganisationData} from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import {
     getAffiliatesListingAction,
@@ -49,6 +49,7 @@ import {
 } from '../../store/actions/communicationAction/communicationAction';
 import Loader from "../../customComponents/loader";
 import history from "../../util/history";
+import { getOnlyYearListAction } from "../../store/actions/appAction";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -79,7 +80,7 @@ class AddCommunication extends Component {
             crossImageIcon: false,
             crossVideoIcon: false,
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearId: -1,
+            yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
             genderRefId: -1,
@@ -106,6 +107,7 @@ class AddCommunication extends Component {
         }
 
         this.props.getRoleAction();
+        this.props.getOnlyYearListAction();
 
         this.setState({ getDataLoading: false, author: name });
         this.formRef.current.setFieldsValue({
@@ -217,6 +219,7 @@ class AddCommunication extends Component {
             toUserIds,
             toOrganisationIds,
             toUserRoleIds,
+            yearRefId: data.yearRefId,
         });
     }
 
@@ -405,17 +408,6 @@ class AddCommunication extends Component {
                 </div>
             </div>
         )
-    }
-
-    html2text(html) {
-        const d = document.createElement('div');
-        d.innerHTML = html;
-        return d.textContent;
-    }
-
-    setRecipientData(recipientName, recipientKey) {
-        this.setState({ recipientSelection: recipientName })
-        this.props.liveScoreUpdateNewsAction(recipientName, recipientKey)
     }
 
     deleteImage() {
@@ -608,7 +600,7 @@ class AddCommunication extends Component {
         this.setState({ isFetchedUsersData: true });
 
         const {
-            yearId,
+            yearRefId,
             competitionUniqueKey,
             roleId,
             genderRefId,
@@ -621,7 +613,7 @@ class AddCommunication extends Component {
 
         const filter = {
             organisationId: toOrganisationIds.length > 0 ? toOrganisationIds[0] : organisationId,
-            yearId,
+            yearId: yearRefId,
             competitionUniqueKey,
             roleId,
             genderRefId,
@@ -885,6 +877,25 @@ class AddCommunication extends Component {
                     </div>
                 )}
 
+                <InputWithHead heading={AppConstants.year} />
+                <div className="mt-3">
+                    <Select
+                        name="yearRefId"
+                        className="year-select user-filter-select-drop"
+                        onChange={(refId) => {
+                            this.setState({ yearRefId: refId })
+                        }}
+                        value={this.state.yearRefId}
+                    >
+                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                        {this.props.appState.yearList.length > 0 && this.props.appState.yearList.map((item) => (
+                            <Option key={`year_${item.id}`} value={item.id}>
+                                {item.description}
+                            </Option>
+                        ))}
+                    </Select>
+                </div>
+
             </div>
         );
     }
@@ -912,6 +923,7 @@ class AddCommunication extends Component {
             toUserRoleIds: this.state.selectedRoles
                 ? this.state.toUserRoleIds
                 : [],
+            yearRefId: this.state.yearRefId,
             toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
             imageUrl: this.state.imageUrl,
             videoUrl: this.state.videoUrl,
@@ -1000,12 +1012,14 @@ function mapDispatchToProps(dispatch) {
         filterByRelations,
         addCommunicationAction,
         getUsersByIds,
+        getOnlyYearListAction,
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         userState: state.UserState,
+        appState: state.AppState,
         communicationState: state.CommunicationState,
     };
 }
