@@ -58,6 +58,23 @@ const AppImages = {
   docsIcon: require("../images/google-docs.png"),
   removeIcon: require("../images/removeIcon.svg"),
   printImage: require("../images/print.png"),
+  chevronRight: require("../images/right-chevron.svg"),
+  venueConfiguration1: require("../images/venue_config_1.png"),
+  venueConfiguration2: require("../images/venue_config_2.png"),
+  venueConfiguration3: require("../images/venue_config_3.png"),
+  venueConfiguration4: require("../images/venue_config_4.png"),
+  venueConfiguration5: require("../images/venue_config_5.png"),
+  venueConfiguration6: require("../images/venue_config_6.png"),
+  venueConfiguration7: require("../images/venue_config_7.png"),
+  venueConfiguration8: require("../images/venue_config_8.png"),
+  venueConfigurationNoText1: require("../images/venue_config_no_text_1.png"),
+  venueConfigurationNoText2: require("../images/venue_config_no_text_2.png"),
+  venueConfigurationNoText3: require("../images/venue_config_no_text_3.png"),
+  venueConfigurationNoText4: require("../images/venue_config_no_text_4.png"),
+  venueConfigurationNoText5: require("../images/venue_config_no_text_5.png"),
+  venueConfigurationNoText6: require("../images/venue_config_no_text_6.png"),
+  venueConfigurationNoText7: require("../images/venue_config_no_text_7.png"),
+  venueConfigurationNoText8: require("../images/venue_config_no_text_8.png"),
 };
 
 export default AppImages;

@@ -142,6 +142,7 @@ let AxiosApi = {
             "stateRefId": venuData.stateRefId,
             "postalCode": venuData.postalCode,
             "statusRefId": venuData.statusRefId,
+            "fieldConfigurationRefId": venuData.fieldConfigurationRefId,
             "contactNumber": venuData.contactNumber,
             "organisations": venuData.organisations,
             "gameDays": venuData.gameDays,

@@ -37,6 +37,7 @@ var venueDataObj = {
     stateRefId: "",
     postalCode: "",
     statusRefId: 1,
+    fieldConfigurationRefId: 1,
     contactNumber: '',
     organisations: [],
     gameDays: [],
@@ -563,7 +564,6 @@ function VenueTimeState(state = initialState, action) {
 
 
         case ApiConstants.API_UPDATE_VENUE_TIME_DATA:
-
             if (action.key == "remove") {
                 let expandedRowKeyRemove = action.index + 1;
                 state.venuData['venueCourts'].splice(action.index, 1);
@@ -606,7 +606,9 @@ function VenueTimeState(state = initialState, action) {
                         upDateData["affiliateData"] = [];
                     upDateData["organisations"] = [];
                 }
-
+                if(action.key === "fieldConfigurationRefId") {
+                    upDateData['fieldConfigurationRefId'] = action.data;
+                }
                 upDateData[action.key] = action.data
                 state.venuData = upDateData
             }
@@ -686,11 +688,13 @@ function VenueTimeState(state = initialState, action) {
                     state.venuData.expandedRowKeys.splice(sortArray, 1);
                     changeData[action.index]["availabilities"] = [];
                 }
-            } else if (action.contentType === 'gameTimeslot') {
+            }
+            else if (action.contentType === 'gameTimeslot') {
                 let changeGameData = state.venuData.gameDays
                 changeGameData[action.index][action.key] = action.data
                 state.venuData.gameDays = changeGameData
-            } else if (action.contentType === 'add_TimeSlot') {
+            }
+            else if (action.contentType === 'add_TimeSlot') {
                 if (action.key === "availabilities") {
                     let timSlotObj = {
                         venueCourtAvailabilityId: "",
@@ -704,11 +708,13 @@ function VenueTimeState(state = initialState, action) {
                 else {
                     state.venuData.venueCourts[action.tableIndex].availabilities.splice(action.index, 1)
                 }
-            } else if (action.contentType === 'addTimeSlotField') {
+            }
+            else if (action.contentType === 'addTimeSlotField') {
                 let timSlotData = state.venuData.venueCourts[action.tableIndex].availabilities
                 timSlotData[action.index][action.key] = action.data
                 state.venuData.venueCourts[action.tableIndex].availabilities = timSlotData
-            } else if (action.index == "organisations") {
+            }
+            else if (action.index == "organisations") {
                 let organisations = getOrganisation(action.data)
                 state.venuData['organisations'] = organisations
                 state.venuData['affiliateData'] = action.data
@@ -741,6 +747,7 @@ function VenueTimeState(state = initialState, action) {
                 stateRefId: "",
                 postalCode: "",
                 statusRefId: 1,
+                fieldConfigurationRefId: 1,
                 contactNumber: '',
                 organisations: [],
                 gameDays: [],
@@ -1225,6 +1232,7 @@ function VenueTimeState(state = initialState, action) {
                 stateRefId: "",
                 postalCode: "",
                 statusRefId: 1,
+                fieldConfigurationRefId: 1,
                 contactNumber: '',
                 organisations: [],
                 gameDays: [],
