@@ -19,6 +19,7 @@ const communicationAxiosApi = {
             form.append('toOrganisationIds', data.toOrganisationIds);
             form.append('toUserRoleIds', data.toUserRoleIds);
             form.append('toUserIds', data.toUserIds);
+            form.append('yearId', data.yearId);
 
             if (data.imageUrl) {
                 form.append('imageUrl', data.imageUrl);
