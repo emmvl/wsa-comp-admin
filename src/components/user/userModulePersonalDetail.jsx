@@ -441,7 +441,7 @@ const childOtherRegistrationColumns = [
         render: (data, record) => {
             return (
                 <div>
-                    {(record.invoiceFailedStatus || record.transactionFailedStatus) && (
+                    {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
                         <Menu
                             className="action-triple-dot-submenu"
                             theme="light"
@@ -465,7 +465,7 @@ const childOtherRegistrationColumns = [
                                 </Menu.Item>
                             </SubMenu>
                         </Menu>
-                    )}
+                    ) : (<div></div>)}
                 </div>
             )
         },
