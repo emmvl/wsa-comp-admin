@@ -57,9 +57,9 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    publishCommunication({ id, silent, isApp, organisationUniqueKey }) {
+    publishCommunication({ id, isNotification, isEmail, isApp, organisationUniqueKey }) {
         try {
-            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${!!silent}&isApp=${!!isApp}&organisationUniqueKey=${organisationUniqueKey}`;
+            const url = `${communicationBaseUrl}/publish?id=${id}&isNotification=${!!isNotification}&isEmail=${!!isEmail}&isApp=${!!isApp}&organisationUniqueKey=${organisationUniqueKey}`;
             return Method.dataGet(url, token);
         } catch (e) {
             console.error(e);
