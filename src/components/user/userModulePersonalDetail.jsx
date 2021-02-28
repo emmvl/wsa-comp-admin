@@ -221,7 +221,7 @@ const columns = [
                             <span>{AppConstants.retryPayment}</span>
                         </Menu.Item>
                     )}
-                    {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
+                    {e.alreadyDeRegistered == 0 && (
                         <Menu.Item key="2" onClick={() => history.push("/deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
@@ -411,7 +411,7 @@ const childOtherRegistrationColumns = [
         render: (data, record) => {
             return (
                 <div>
-                    {(record.invoiceFailedStatus || record.transactionFailedStatus) && (
+                    {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
                         <Menu
                             className="action-triple-dot-submenu"
                             theme="light"
@@ -435,7 +435,7 @@ const childOtherRegistrationColumns = [
                                 </Menu.Item>
                             </SubMenu>
                         </Menu>
-                    )}
+                    ) : (<div></div>)}
                 </div>
             )
         },
