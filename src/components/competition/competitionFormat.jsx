@@ -1,5 +1,5 @@
 import React, { Component, createRef } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip, DatePicker, } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip, DatePicker, InputNumber } from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -740,20 +740,17 @@ class CompetitionFormat extends Component {
                 {data.competitionFormatRefId == 4 && (
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} />
-                        <Select
-                            disabled={disabledStatus}
+                        <InputNumber
                             className="w-100"
                             style={{ paddingRight: 1, minWidth: 182 }}
-                            onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
+                            onChange={(e) =>
+                                this.props.onChangeSetValue(e, 'noOfRounds')
+                            }
+                            min={0}
+                            type="number"
                             value={data.noOfRounds}
-                        >
-                            <Option style={{ height: '30px' }} value={null} key={null}>{ }</Option>
-                            {(data.fixtureTemplates || []).map((fixture) => (
-                                <Option value={fixture.noOfRounds} key={'fixtureTemplate_' + fixture.noOfRounds}>
-                                    {fixture.noOfRounds}
-                                </Option>
-                            ))}
-                        </Select>
+                            disabled={disabledStatus}
+                        />
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
                             disabled={disabledStatus}
