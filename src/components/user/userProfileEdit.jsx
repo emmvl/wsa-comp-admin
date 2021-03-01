@@ -1556,6 +1556,8 @@ class UserProfileEdit extends Component {
             }
         }
 
+        data["email"] = data["email"].toLowerCase();
+
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
 
         if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.addParent_guardian) {
