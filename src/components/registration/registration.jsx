@@ -269,7 +269,7 @@ const columns = [
                                 record.actionView == 4
                                 && (
                                     <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
-                                        <span>{AppConstants.failed}</span>
+                                        <span>{AppConstants.markAsFailedReg}</span>
                                     </Menu.Item>
                                 )
                             }
