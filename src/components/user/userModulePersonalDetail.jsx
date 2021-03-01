@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
-import { get, isEmpty } from 'lodash'
+import { get } from 'lodash'
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {
@@ -58,7 +58,7 @@ import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../th
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
-import { getAge, isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty } from "../../util/helpers";
 import { registrationRetryPaymentAction } from "../../store/actions/registrationAction/registrationDashboardAction";
 import { liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 
@@ -93,19 +93,19 @@ function umpireActivityTableSort(key) {
 
 const {
     Header,
-    // Footer,
-    Content
+    Content,
 } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
-// const section = null;
 
 let userRoleId;
-const setOrganisationData = localStorage.setOrganisationData && JSON.parse(localStorage.setOrganisationData);
-if (setOrganisationData) {
-    userRoleId = setOrganisationData.userRoleId;
+const organisationData = get(localStorage, 'setOrganisationData', "{}")
+
+if (organisationData) {
+    const parsedOrganisationData = JSON.parse(organisationData)
+    userRoleId = parsedOrganisationData.userRoleId;
 }
 
 const columns = [
@@ -222,12 +222,12 @@ const columns = [
                         </Menu.Item>
                     )}
                     {(e.alreadyDeRegistered == 0 && e.paymentStatus != "Failed Registration") && (
-                        <Menu.Item key="2" 
-                        onClick={() => 
-                            history.push("/deregistration", { 
-                                regData: e, 
+                        <Menu.Item key="2"
+                        onClick={() =>
+                            history.push("/deregistration", {
+                                regData: e,
                                 personal: this_Obj.props.userState.personalData,
-                                sourceFrom: AppConstants.ownRegistration 
+                                sourceFrom: AppConstants.ownRegistration
                             })
                         }>
                             <span>{AppConstants.registrationChange}</span>
@@ -242,7 +242,7 @@ const columns = [
                         <span>Payment</span>
                     </Menu.Item>
                     {
-                        userRoleId === 1 &&
+                        userRoleId === 1 && (
                             <>
                                 <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                                     <span>
@@ -250,80 +250,21 @@ const columns = [
                                     </span>
                                 </Menu.Item>
                                 <Menu.Item key="5" onClick={() => {
-                                        this_Obj.setState({ showTransferRegistrationPopup: true });
-                                        this_Obj.setState({ registrationData: e });
-                                    }}>
+                                    this_Obj.setState({ showTransferRegistrationPopup: true });
+                                    this_Obj.setState({ registrationData: e });
+                                }}>
                                     <span>
                                         Transfer registration
                                     </span>
                                 </Menu.Item>
                             </>
+                        )
                     }
                 </SubMenu>
             </Menu>
         ),
     },
 ];
-
-// const cloumnsRegistration = [
-//     {
-//         title: "Name",
-//         dataIndex: "userName",
-//         key: "userName",
-//     },
-//     {
-//         title: "DOB",
-//         dataIndex: "DOB",
-//         key: "DOB",
-//         render: (DOB, record) => (
-//             liveScore_formateDate(DOB)
-//         ),
-//     },
-//     {
-//         title: "Email",
-//         dataIndex: "email",
-//         key: "email",
-//     },
-//     {
-//         title: "Phone",
-//         dataIndex: "mobileNumber",
-//         key: "mobileNumber",
-//     },
-//     {
-//         title: "Affiliate",
-//         dataIndex: "affiliate",
-//         key: "affiliate",
-//     },
-//     {
-//         title: "Competition",
-//         dataIndex: "competitionName",
-//         key: "competitionName",
-//     },
-//     {
-//         title: "Comp Fees Paid",
-//         dataIndex: "compFeesPaid",
-//         key: "compFeesPaid",
-//     },
-//     {
-//         title: "Membership Product",
-//         dataIndex: "productName",
-//         key: "productName",
-//     },
-//     {
-//         title: "Division",
-//         dataIndex: "divisionName",
-//         key: "divisionName",
-//     },
-//     {
-//         title: "Status",
-//         dataIndex: "paymentStatus",
-//         key: "paymentStatus",
-//     },
-//     {
-//         title: "Action",
-//     },
-
-// ];
 
 const teamRegistrationColumns = [
     {
@@ -552,7 +493,7 @@ const teamMembersColumns = [
                                         <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
                                     </Menu.Item>
                                  )}
-                                 {record.paymentStatus != "Pending De-registration" ? 
+                                 {record.paymentStatus != "Pending De-registration" ?
                                     <Menu.Item
                                         key="2"
                                         onClick={() =>
@@ -1754,7 +1695,7 @@ class UserModulePersonalDetail extends Component {
         }
         if(this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelDeRegistrationLoad == true){
             this.handleRegistrationTableList(
-                1, 
+                1,
                 this.state.userId,
                 this.state.competition,
                 this.state.yearRefId,
@@ -1766,7 +1707,7 @@ class UserModulePersonalDetail extends Component {
         if((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true){
             this.setState({retryPaymentOnLoad: false});
             this.handleRegistrationTableList(
-                1, 
+                1,
                 this.state.userId,
                 this.state.competition,
                 this.state.yearRefId,
@@ -3321,7 +3262,7 @@ class UserModulePersonalDetail extends Component {
                         </Dropdown>
                     </div>
                 </div>
-                
+
             </div>
         );
     };
@@ -3776,19 +3717,19 @@ class UserModulePersonalDetail extends Component {
             activityManagerList,
             personalByCompData,
             userRole,
-            personalData,
             onMedicalLoad,
             coachActivityRoster,
             umpireActivityRoster,
             scorerActivityRoster,
+            isPersonalUserLoading,
+            isCompUserLoading,
         } = this.props.userState;
-        const isUserLoaded = !isEmpty(personalData);
+        const isUserLoading = isPersonalUserLoading || isCompUserLoading;
         const personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
         if (personalDetails != null && personalDetails.length > 0) {
             userRegistrationId = personalByCompData[0].userRegistrationId;
         }
-
 
         return (
             <div className="fluid-width default-bg">
@@ -3863,7 +3804,7 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Loader visible={!isUserLoaded || onMedicalLoad} />
+                        <Loader visible={isUserLoading || onMedicalLoad} />
                         {this.unlinkChildConfirmPopup()}
                         {this.unlinkParentConfirmPopup()}
                         {this.cannotUninkPopup()}
