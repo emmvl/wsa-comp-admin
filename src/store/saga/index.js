@@ -514,7 +514,7 @@ export default function* rootSaga() {
     /// /////////////post/save quick competition division
     yield takeEvery(ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_LOAD, competitionQuickSaga.saveQuickCompDivisionSaga);
     /// create quick competition
-    yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickComptitionSaga);
+    yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickCompetitionSaga);
     yield takeEvery(ApiConstants.API_GET_QUICK_COMPETITION_LOAD, competitionQuickSaga.getQuickComptitionSaga);
     // quick competition time slot
     yield takeEvery(ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD, competitionQuickSaga.quickcompetitoTimeSlotsPostApi);
