@@ -101,7 +101,7 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, limit, sortBy, sortOrder, compOrgId, isParent) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, compOrgId, isParent, limit) {
     let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
