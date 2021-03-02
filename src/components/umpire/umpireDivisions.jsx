@@ -354,7 +354,7 @@ class UmpireDivisions extends Component {
                                 || !umpirePoolData?.length
                             }
                         >
-                            {AppConstants.allocationAlgorithm}
+                            {AppConstants.allocateUmpires}
                         </Button>
 
                         <Button 
