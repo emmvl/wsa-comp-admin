@@ -76,7 +76,8 @@ const initialState = {
         invoices: null
     },
     transferOrganisations: [],
-    transferCompetitions: []
+    transferCompetitions: [],
+    deRegisterData: [],
 }
 
 
@@ -212,6 +213,18 @@ function regChangeReducer(state = initialState, action) {
             return {
                 ...state,
                 regChangeDashboardListPage: action.pageNum,
+            }
+
+        case ApiConstants.API_GET_DE_REGISTRATION_LOAD:
+            return {...state, onDeRegisterLoad: true}
+
+        case ApiConstants.API_GET_DE_REGISTRATION_SUCCESS:
+            let deRegisterData = action.result;
+            return {
+                ...state,
+                onDeRegisterLoad: false,
+                status: action.status,
+                deRegisterData: deRegisterData
             }
 
         default:

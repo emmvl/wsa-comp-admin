@@ -73,6 +73,15 @@ function setRegistrationChangeListPageNumber(pageNum) {
     };
 }
 
+function getDeRegisterDataAction(payload){
+    const action = {
+        type: ApiConstants.API_GET_DE_REGISTRATION_LOAD,
+        payload
+    }
+
+    return action;
+}
+
 export {
     updateRegistrationReviewAction,
     saveDeRegisterDataAction,
@@ -84,4 +93,5 @@ export {
     getTransferCompetitionsAction,
     setRegistrationChangeListPageSize,
     setRegistrationChangeListPageNumber,
+    getDeRegisterDataAction
 };

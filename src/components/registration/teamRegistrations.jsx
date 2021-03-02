@@ -19,6 +19,7 @@ import { endUserRegDashboardListAction } from "store/actions/registrationAction/
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
 import moment from "moment";
+import history from '../../util/history'
 
 import "./product.scss";
 
@@ -131,7 +132,7 @@ const columns = [
         title: "Action",
         key: "action",
         dataIndex: "status",
-        render: (status) => (
+        render: (status,record) => (
             status == "Registered" ?
                 <Menu
                     className="action-triple-dot-submenu"
@@ -145,11 +146,17 @@ const columns = [
                             <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                         }
                     >
-                        <Menu.Item key="1">
-
-                            <span>Deregister</span>
-
-                        </Menu.Item>
+                         <Menu.Item
+                            key="1"
+                            onClick={() =>
+                                history.push("/deregistration", {
+                                regData: record,
+                                sourceFrom: AppConstants.teamRegistration
+                                })
+                            }
+                            >
+                                <span>{AppConstants.registrationChange}</span>
+                            </Menu.Item>
                     </SubMenu>
                 </Menu>
                 :

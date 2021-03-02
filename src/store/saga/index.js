@@ -616,4 +616,7 @@ export default function* rootSaga() {
 
     yield takeEvery(ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD, registrationRetryPaymentSaga);
 
+    //Get DeRegister
+  yield takeEvery(ApiConstants.API_GET_DE_REGISTRATION_LOAD, regChangeSaga.getDeRegisterSaga)
+
 }
