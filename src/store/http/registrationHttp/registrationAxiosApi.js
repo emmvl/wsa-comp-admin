@@ -609,7 +609,11 @@ const AxiosApi = {
     registrationRetryPayment(payload){
         const url = `api/payments/regitrations/retry`;
         return Method.dataPost(url, token, payload);
-    }
+    },
+    getDeRegisterData(payload) {
+        var url = `/api/deRegister/details `;
+        return Method.dataPost(url, token, payload);
+    },
 };
 
 const Method = {
