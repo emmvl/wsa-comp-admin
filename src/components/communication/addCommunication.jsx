@@ -32,7 +32,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import ValidationConstants from "../../themes/validationConstant";
 
-import { getOrganisationData } from '../../util/sessionStorage';
+import {getOrganisationData} from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import {
     getAffiliatesListingAction,
@@ -49,6 +49,7 @@ import {
 } from '../../store/actions/communicationAction/communicationAction';
 import Loader from "../../customComponents/loader";
 import history from "../../util/history";
+import { getOnlyYearListAction } from "../../store/actions/appAction";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -78,7 +79,7 @@ class AddCommunication extends Component {
             key: props.location?.state?.key,
             crossImageIcon: false,
             crossVideoIcon: false,
-            organisationId: getOrganisationData() ? getOrganisationData().organisationId : null,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             yearRefId: -1,
             competitionUniqueKey: '-1',
             roleId: -1,
@@ -106,6 +107,7 @@ class AddCommunication extends Component {
         }
 
         this.props.getRoleAction();
+        this.props.getOnlyYearListAction();
 
         this.setState({ getDataLoading: false, author: name });
         this.formRef.current.setFieldsValue({
@@ -195,7 +197,7 @@ class AddCommunication extends Component {
         }
 
         const toOrganisationIds = data.toOrganisationIds
-            ? data.toOrganisationIds.split(',').map((id) => parseInt(id, 10))
+            ? data.toOrganisationIds.split(',')
             : [];
         const toUserRoleIds = data.toUserRoleIds
             ? data.toUserRoleIds.split(',').map((id) => parseInt(id, 10))
@@ -217,6 +219,7 @@ class AddCommunication extends Component {
             toUserIds,
             toOrganisationIds,
             toUserRoleIds,
+            yearRefId: data.yearRefId,
         });
     }
 
@@ -405,17 +408,6 @@ class AddCommunication extends Component {
                 </div>
             </div>
         )
-    }
-
-    html2text(html) {
-        const d = document.createElement('div');
-        d.innerHTML = html;
-        return d.textContent;
-    }
-
-    setRecipientData(recipientName, recipientKey) {
-        this.setState({ recipientSelection: recipientName })
-        this.props.liveScoreUpdateNewsAction(recipientName, recipientKey)
     }
 
     deleteImage() {
@@ -612,19 +604,22 @@ class AddCommunication extends Component {
             competitionUniqueKey,
             roleId,
             genderRefId,
-            linkedEntityId,
+            organisationId,
+            toOrganisationIds,
             dobFrom,
             dobTo,
             postCode,
         } = this.state;
 
         const filter = {
-            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            yearRefId,
+            organisationId: toOrganisationIds.length > 0 ? toOrganisationIds[0] : organisationId,
+            yearId: yearRefId,
             competitionUniqueKey,
             roleId,
             genderRefId,
-            linkedEntityId,
+            linkedEntityId: toOrganisationIds.length > 0 && toOrganisationIds[0] !== organisationId
+                ? toOrganisationIds[0]
+                : '-1',
             dobFrom,
             dobTo,
             postCode,
@@ -663,12 +658,12 @@ class AddCommunication extends Component {
             }) : [];
         const organisationListData = affiliateToData.length > 0
             ? affiliateToData.map((aff) => ({
-                orgId: aff.orgId,
+                orgId: aff.affiliateId,
                 name: aff.affiliateName,
             })) : [];
         if (getOrganisationData()) {
             organisationListData.push({
-                orgId: getOrganisationData().organisationId,
+                orgId: getOrganisationData().organisationUniqueKey,
                 name: getOrganisationData().name,
             });
         }
@@ -700,6 +695,7 @@ class AddCommunication extends Component {
                             this.setState({
                                 allOrg: true,
                                 individualOrg: false,
+                                toOrganisationIds: [],
                             });
                         }}
                         checked={allOrg}
@@ -724,22 +720,17 @@ class AddCommunication extends Component {
                 {individualOrg && (
                     <div className="mt-3">
                         <Select
-                            mode="multiple"
                             className="ml-5"
                             style={{ width: '97%', height: '44px' }}
                             placeholder={AppConstants.selectOrganisation}
                             onChange={(value) => {
                                 this.setState({
-                                    toOrganisationIds: value,
+                                    toOrganisationIds: [value],
                                 });
                             }}
                             filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                            value={
-                                organisationListData
-                                    .filter((org) => this.state.toOrganisationIds.includes(org.orgId))
-                                    .map((org) => org.orgId)
-                            }
+                            value={this.state.toOrganisationIds[0]}
                         >
                             {
                                 organisationListData.length > 0 && organisationListData.map((org, index) => (
@@ -886,6 +877,25 @@ class AddCommunication extends Component {
                     </div>
                 )}
 
+                <InputWithHead heading={AppConstants.year} />
+                <div className="mt-3">
+                    <Select
+                        name="yearRefId"
+                        className="year-select user-filter-select-drop"
+                        onChange={(refId) => {
+                            this.setState({ yearRefId: refId })
+                        }}
+                        value={this.state.yearRefId}
+                    >
+                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                        {this.props.appState.yearList.length > 0 && this.props.appState.yearList.map((item) => (
+                            <Option key={`year_${item.id}`} value={item.id}>
+                                {item.description}
+                            </Option>
+                        ))}
+                    </Select>
+                </div>
+
             </div>
         );
     }
@@ -908,11 +918,12 @@ class AddCommunication extends Component {
             key: this.state.key,
             mediaArray,
             expiryDate: postDate,
-            organisationId: this.state.organisationId,
+            organisationId: getOrganisationData().organisationId,
             toOrganisationIds: this.state.individualOrg ? this.state.toOrganisationIds : [],
             toUserRoleIds: this.state.selectedRoles
                 ? this.state.toUserRoleIds
                 : [],
+            yearRefId: this.state.yearRefId,
             toUserIds: this.state.individualUsers ? this.state.toUserIds : [],
             imageUrl: this.state.imageUrl,
             videoUrl: this.state.videoUrl,
@@ -1001,12 +1012,14 @@ function mapDispatchToProps(dispatch) {
         filterByRelations,
         addCommunicationAction,
         getUsersByIds,
+        getOnlyYearListAction,
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         userState: state.UserState,
+        appState: state.AppState,
         communicationState: state.CommunicationState,
     };
 }

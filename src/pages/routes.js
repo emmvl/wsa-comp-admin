@@ -12,6 +12,7 @@ import HomeDashboard from 'components/home/homeDashboard';
 import CompetitionCourtAndTimesAssign from 'components/competition/competitionCourtAndTimesAssign';
 import CompetitionDashboard from 'components/competition/competitionDashboard';
 import CompetitionDraws from 'components/competition/competitionDraws';
+import CompetitionDrawsImport from 'components/competition/multiFieldDrawsImport';
 import CompetitionDrawEdit from 'components/competition/competitionDrawEditNew';
 import CompetitionException from 'components/competition/comeptitionException';
 import CompetitionFinals from 'components/competition/competitionFinals';
@@ -356,6 +357,10 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/competitionDraws"
                     component={this.haveAccess(userRoleId, '/competitionDraws') ? lazyLoad(MultiFieldDrawsNewTimeline) : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/competitionDrawsImport"
+                    component={this.haveAccess(userRoleId, '/competitionDrawsImport') ? lazyLoad(CompetitionDrawsImport) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/competitionDrawEdit"

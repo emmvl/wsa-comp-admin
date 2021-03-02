@@ -91,34 +91,36 @@ const ExtraTimeFields = ({ values, onInputChange }) => {
                                         },
                                     ]}
                                 >
-                                    <InputWithHead
-                                        inputHeadingStyles={{
-                                            paddingTop: 0,
-                                        }}
-                                        heading={AppConstants.extraTimeType}
-                                    />
-                                    <Select
-                                        showSearch
-                                        className="w-100"
-                                        onChange={(val) => onInputChange({
-                                            target: {
-                                                name: "extraTimeType",
-                                                value: val,
-                                            },
-                                        })}
-                                        placeholder="Select type"
-                                        optionFilterProp="children"
-                                        value={extraTimeType}
-                                    >
-                                        {extraTimeTypes.map((item) => (
-                                            <Option
-                                                key={item.value}
-                                                value={item.value}
-                                            >
-                                                {item.label}
-                                            </Option>
-                                        ))}
-                                    </Select>
+                                    <>
+                                        <InputWithHead
+                                            inputHeadingStyles={{
+                                                paddingTop: 0,
+                                            }}
+                                            heading={AppConstants.extraTimeType}
+                                        />
+                                        <Select
+                                            showSearch
+                                            className="w-100"
+                                            onChange={(val) => onInputChange({
+                                                target: {
+                                                    name: "extraTimeType",
+                                                    value: val,
+                                                },
+                                            })}
+                                            placeholder="Select type"
+                                            optionFilterProp="children"
+                                            value={extraTimeType}
+                                        >
+                                            {extraTimeTypes.map((item) => (
+                                                <Option
+                                                    key={item.value}
+                                                    value={item.value}
+                                                >
+                                                    {item.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </>
                                 </Form.Item>
                             </div>
 

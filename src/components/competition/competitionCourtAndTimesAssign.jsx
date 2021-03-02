@@ -841,7 +841,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 )}
                                             </div>
 
-                                            <span id={AppUniqueId.timeRotation_matchDuration_AddAnotherTimeslot_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addTimeSlot}</span>
+                                            <span id={AppUniqueId.timeRotation_matchDuration_AddAnotherTimeslot_Btn} className="input-heading-add-another font-15" onClick={() => disabledStatus == false && this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addDivOrGrade}</span>
                                         </div>
                                     )}
                                 </div>
@@ -1609,7 +1609,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </Footer>
                         )}
                     </Form>
-                    {isTeamPreferencesEnable && this.state.isManuallySelected && !this.state.getDataLoading && this.state.preferenceFormValues &&
+                    {!this.state.isQuickCompetition && isTeamPreferencesEnable && this.state.isManuallySelected && !this.state.getDataLoading && this.state.preferenceFormValues &&
                         <Form
                             ref={this.formPreferenceRef}
                             autoComplete="off"

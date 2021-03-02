@@ -101,7 +101,7 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, limit, sortBy, sortOrder, compOrgId, isParent) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, compOrgId, isParent, limit) {
     let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
@@ -149,6 +149,11 @@ let userHttpApi = {
       url = `api/user/dashboard/textual`
     }
 
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserDashboardTextualSpectatorCount(payload) {
+    const url = `api/user/dashboard/textual/spectatorCount`
     return Method.dataPost(url, token, payload);
   },
 
@@ -242,7 +247,6 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "UserFriends");
   },
 
-
   getUserReferFriendList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
@@ -252,6 +256,11 @@ let userHttpApi = {
       url = `users/dashboard/referfriend`;
     }
     return Method.dataPost(url, token, payload);
+  },
+
+  exportUserReferFriendList(payload) {
+    const url = `users/export/referFriends`;
+    return Method.dataPostDownload(url, token, payload, "ReferFriends");
   },
 
   async getOrgPhotosList(payload) {

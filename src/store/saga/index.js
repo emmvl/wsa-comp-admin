@@ -104,7 +104,7 @@ import { competitionModuleSaga, competitonGenerateDrawSaga } from './competition
 import * as competitionFormatSaga from './competitionManagementSaga/competitionFormatSaga';
 import * as competitionFinalSaga from './competitionManagementSaga/competitionFinalsSaga';
 import * as ladderFormatSaga from './competitionManagementSaga/ladderFormatSaga';
-import { 
+import {
     competitonWithTimeSlots,
     competitonWithTimeSlotsPostApi,
     competitionTeamsGetSaga,
@@ -163,7 +163,8 @@ import {
     getActiveDrawsRoundsSaga, getVenueAndDivisionSaga,
 } from './competitionManagementSaga/competitionDrawsSaga';
 
-import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga, registrationFailedStatusUpdateSaga } from './registrationSaga/registrationDashboardSaga';
+import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga, registrationFailedStatusUpdateSaga,
+    registrationRetryPaymentSaga } from './registrationSaga/registrationDashboardSaga';
 /// /Competition Dashboard Saga
 import {
     competitionDashboardSaga,
@@ -513,7 +514,7 @@ export default function* rootSaga() {
     /// /////////////post/save quick competition division
     yield takeEvery(ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_LOAD, competitionQuickSaga.saveQuickCompDivisionSaga);
     /// create quick competition
-    yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickComptitionSaga);
+    yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickCompetitionSaga);
     yield takeEvery(ApiConstants.API_GET_QUICK_COMPETITION_LOAD, competitionQuickSaga.getQuickComptitionSaga);
     // quick competition time slot
     yield takeEvery(ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD, competitionQuickSaga.quickcompetitoTimeSlotsPostApi);
@@ -577,6 +578,9 @@ export default function* rootSaga() {
     // Get Registration Change Dashboard
     yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD, regChangeSaga.getRegistrationChangeDashboardSaga);
 
+    // Export Registration Change
+    yield takeEvery(ApiConstants.API_EXPORT_REGISTRATION_CHANGE_LOAD, regChangeSaga.exportRegistrationChangeSaga);
+
     // Get Registration Change Dashboard
     yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.getRegistrationChangeReviewSaga);
 
@@ -613,5 +617,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_LOAD, liveScorePlayersToCashReceivedSaga);
 
     yield takeEvery(ApiConstants.API_REGISTRATION_FAILED_STATUS_UPDATE_LOAD, registrationFailedStatusUpdateSaga);
+
+    yield takeEvery(ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD, registrationRetryPaymentSaga);
 
 }

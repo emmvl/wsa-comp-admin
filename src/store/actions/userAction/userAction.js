@@ -133,6 +133,13 @@ function getUserDashboardTextualAction(payload, sortBy, sortOrder) {
     };
 }
 
+function getUserDashboardTextualSpectatorCountAction(payload) {
+    return {
+        type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_LOAD,
+        payload,
+    };
+}
+
 function getUserModulePersonalDetailsAction(userId) {
     return {
         type: ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD,
@@ -226,6 +233,13 @@ function getUserReferFriendAction(payload, sortBy, sortOrder) {
         sortBy,
         sortOrder,
     };
+}
+
+function exportUserReferFriendAction(payload) {
+    return {
+        type: ApiConstants.API_EXPORT_USER_REFER_FRIEND_LOAD,
+        payload,
+    }
 }
 
 function getOrganisationPhotoAction(payload) {
@@ -719,6 +733,7 @@ export {
     getUserFriendAction,
     exportUserFriendAction,
     getUserReferFriendAction,
+    exportUserReferFriendAction,
     getOrganisationPhotoAction,
     saveOrganisationPhotoAction,
     deleteOrganisationPhotoAction,
@@ -780,5 +795,6 @@ export {
     setAffiliateTableListPageNumberAction,
     setTextualTableListPageSizeAction,
     setTextualTableListPageNumberAction,
-    cancelDeRegistrationAction
+    cancelDeRegistrationAction,
+    getUserDashboardTextualSpectatorCountAction,
 };

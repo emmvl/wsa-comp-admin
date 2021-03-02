@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input } from 'antd';
 import Tooltip from 'react-png-tooltip';
+import { isString } from 'lodash';
 
 function InputWithHead(props) {
     const {
@@ -21,8 +22,19 @@ function InputWithHead(props) {
         headingId,
         auto_complete,
         isOptional,
-        inputHeadingStyles = {}
+        inputHeadingStyles = {},
     } = props;
+
+    const getInputProps = () => {
+        const {
+            marginTop,
+            conceptulHelp,
+            conceptulHelpMsg,
+            ...inputProps
+        } = props;
+
+        return inputProps;
+    }
 
     return (
         <div>
@@ -47,7 +59,7 @@ function InputWithHead(props) {
                 </div>
             )}
 
-            {placeholder && (
+            {isString(placeholder) && (
                 <Input
                     autoComplete={auto_complete}
                     id={id}
@@ -61,7 +73,7 @@ function InputWithHead(props) {
                     type={type}
                     value={value}
                     // defaultValue="xyz"
-                    {...props}
+                    {...getInputProps()}
                 />
             )}
         </div>

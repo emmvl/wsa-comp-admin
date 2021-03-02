@@ -27,7 +27,7 @@ import {
     setRegistrationListPageSize,
     setRegistrationListPageNumber
 } from "store/actions/registrationAction/endUserRegistrationAction";
-import { getAllCompetitionAction, registrationFailedStatusUpdate } from "store/actions/registrationAction/registrationDashboardAction";
+import { getAllCompetitionAction, registrationFailedStatusUpdate,registrationRetryPaymentAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { liveScorePlayersToCashReceivedAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
@@ -205,11 +205,16 @@ const columns = [
         render: new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 2 }).format,
     },
     {
+        title: "Status",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
+    },
+    {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-            record.actionView
+           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true))
                 ? (
                     <Menu
                         className="action-triple-dot-submenu"
@@ -230,11 +235,11 @@ const columns = [
                                 />
                             )}
                         >
-                            <Menu.Item key="1">
+                            {/* <Menu.Item key="1">
                                 <NavLink to={{ pathname: "/" }}>
                                     <span>View</span>
                                 </NavLink>
-                            </Menu.Item>
+                            </Menu.Item> */}
                             {
                                 record.actionView == 1
                             && (
@@ -253,7 +258,7 @@ const columns = [
                             )
                             }
                             {
-                                record.actionView == 3
+                                (record.actionView == 3 && (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration"))
                             && (
                                 <Menu.Item key="3" onClick={() => this_Obj.setVoucherPayment(record)}>
                                     <span>Voucher Payment Received</span>
@@ -264,7 +269,7 @@ const columns = [
                                 record.actionView == 4
                                 && (
                                     <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
-                                        <span>{AppConstants.failed}</span>
+                                        <span>{AppConstants.markAsFailedReg}</span>
                                     </Menu.Item>
                                 )
                             }
@@ -272,6 +277,14 @@ const columns = [
                                 record.actionView == 5
                                 && (
                                     <Menu.Item key="5" onClick={() => this_Obj.setFailedInstalmentRetry(record)}>
+                                        <span>{AppConstants.retryPayment}</span>
+                                    </Menu.Item>
+                                )
+                            }
+                            {
+                                record.actionView == 6
+                                && (
+                                    <Menu.Item key="6" onClick={() => this_Obj.setFailedRegistrationRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
                                     </Menu.Item>
                                 )
@@ -593,8 +606,15 @@ class Registration extends Component {
     setFailedInstalmentRetry = (record) =>{
         this.setState({
             selectedRow: record, otherModalVisible: true,
-            actionView: 4, modalMessage : AppConstants.regRetryInstalmentModalMsg,
+            actionView: 5, modalMessage : AppConstants.regRetryInstalmentModalMsg,
             modalTitle: "Failed Instalment Retry"
+        });
+    }
+    setFailedRegistrationRetry = (record) =>{
+        this.setState({
+            selectedRow: record, otherModalVisible: true,
+            actionView: 6, modalMessage : AppConstants.regRetryModalMsg,
+            modalTitle: "Failed Registration Retry"
         });
     }
 
@@ -620,6 +640,15 @@ class Registration extends Component {
                     competitionId: selectedRow.competitionUniqueKey
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ loading: true });
+            }
+        }
+        else if(actionView == 6){
+            if(key == "ok"){
+                let payload = {
+                    registrationId: selectedRow.registrationUniqueKey,
+                }
+                this.props.registrationRetryPaymentAction(payload);
                 this.setState({ loading: true });
             }
         }
@@ -1252,7 +1281,8 @@ function mapDispatchToProps(dispatch) {
         setRegistrationListPageSize,
         setRegistrationListPageNumber,
         registrationFailedStatusUpdate,
-        liveScorePlayersToPayRetryPaymentAction
+        liveScorePlayersToPayRetryPaymentAction,
+        registrationRetryPaymentAction
     }, dispatch);
 }
 

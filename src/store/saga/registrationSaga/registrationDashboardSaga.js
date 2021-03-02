@@ -84,7 +84,6 @@ export function* registrationMainDashboardListSaga(action) {
                 status: result.status,
                 key: action.key
             });
-            message.success(result.result.data.message);
         } else {
             yield call(failSaga, result)
         }
@@ -103,6 +102,23 @@ export function* registrationFailedStatusUpdateSaga(action) {
                 result: result.result.data,
                 status: result.status,
                 key: action.key
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* registrationRetryPaymentSaga(action) {
+    try {
+        const result = yield call(AxiosApi.registrationRetryPayment, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_REGISTRATION_RETRY_PAYMENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
             });
         } else {
             yield call(failSaga, result)

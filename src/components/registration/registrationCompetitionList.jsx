@@ -40,12 +40,13 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
         sortOrder = 'DESC';
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
-        sortBy = sortOrder = null;
+        sortBy = null;
+        sortOrder = null;
     }
 
     this_Obj.setState({ sortBy, sortOrder });
     let { pageSize } = this_Obj.props.competitionFeesState;
-    pageSize = pageSize ? pageSize : 10;
+    pageSize = pageSize || 10;
     this_Obj.props.regCompetitionListAction(this_Obj.state.offset, pageSize, this_Obj.state.yearRefId, this_Obj.state.searchText, sortBy, sortOrder);
 }
 
@@ -73,10 +74,10 @@ function totalSeasonalFees(seasonalFees1, record) {
                 {record.feeOrgId == null ? 'N/A' : (record.seasonalFees == null && record.seasonalGST == null) ? 'N/A' : 'Affiliate fee not set!'}
             </span>
         ) : (
-                <span>
-                    {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
-                </span>
-            )
+            <span>
+                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
+            </span>
+        )
     );
 }
 
@@ -104,10 +105,10 @@ function totalCasualFees(casualFees1, record) {
                 {record.feeOrgId == null ? 'N/A' : (record.casualFees == null && record.casualGST == null) ? 'N/A' : 'Affiliate fee not set!'}
             </span>
         ) : (
-                <span>
-                    {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
-                </span>
-            )
+            <span>
+                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
+            </span>
+        )
     );
 }
 
@@ -219,7 +220,12 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: '/registrationCompetitionFee',
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId, yearRefId: this_Obj.state.yearRefId,isEdit:true },
+                                state: {
+                                    id: record.competitionUniqueKey,
+                                    affiliateOrgId: record.affiliateOrgId,
+                                    yearRefId: this_Obj.state.yearRefId,
+                                    isEdit: true,
+                                },
                             }}
                         >
                             <span>Edit</span>
@@ -280,14 +286,14 @@ class RegistrationCompetitionList extends Component {
                 let page = 1;
                 let { sortBy } = this.state;
                 let { sortOrder } = this.state;
-                let yearId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
+                const yearId = getGlobalYear() ? getGlobalYear() : getCurrentYear(this.props.appState.yearList);
                 setGlobalYear(yearId)
                 if (competitionListAction) {
                     const { offset } = competitionListAction;
                     sortBy = competitionListAction.sortBy;
                     sortOrder = competitionListAction.sortOrder;
                     // const { yearRefId } = competitionListAction;
-                    let yearRefId = JSON.parse(yearId);
+                    const yearRefId = JSON.parse(yearId);
                     const { searchText } = competitionListAction;
 
                     this.setState({
@@ -375,8 +381,7 @@ class RegistrationCompetitionList extends Component {
                     <div className="col-sm-2">
                         <div className="com-year-select-heading-view pb-3">
                             <span className="year-select-heading" style={{ width: 50 }}>
-                                {AppConstants.year}
-                                :
+                                {`${AppConstants.year}:`}
                             </span>
                             <Select
                                 style={{ width: 90 }}
@@ -422,13 +427,11 @@ class RegistrationCompetitionList extends Component {
                             onClick={() => this.props.clearCompReducerDataAction('all')}
                         >
                             <NavLink
-                                to={{ pathname: '/registrationCompetitionFee', state: { id: null,isEdit:false } }}
+                                to={{ pathname: '/registrationCompetitionFee', state: { id: null, isEdit: false } }}
                                 className="text-decoration-none"
                             >
                                 <Button className="primary-add-product" type="primary">
-                                    +
-                                    {' '}
-                                    {AppConstants.addCompetition}
+                                    {`+ ${AppConstants.addCompetition}`}
                                 </Button>
                             </NavLink>
                         </div>
@@ -449,14 +452,20 @@ class RegistrationCompetitionList extends Component {
 
         const { sortBy, sortOrder } = this.state;
         let { pageSize } = this.props.competitionFeesState;
-        pageSize = pageSize ? pageSize : 10;
+        pageSize = pageSize || 10;
         const offset = page ? pageSize * (page - 1) : 0;
         this.setState({ offset });
         this.props.regCompetitionListAction(offset, pageSize, yearRefId, searchText, sortBy, sortOrder);
     };
 
     contentView = () => {
-        const { regCompetitonFeeListTotalCount, regCompetitionFeeListData, regCompetitonFeeListPage, onLoad, pageSize } = this.props.competitionFeesState;
+        const {
+            regCompetitonFeeListTotalCount,
+            regCompetitionFeeListData,
+            regCompetitonFeeListPage,
+            onLoad,
+            pageSize,
+        } = this.props.competitionFeesState;
 
         return (
             <div className="comp-dash-table-view mt-2">

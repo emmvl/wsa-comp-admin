@@ -85,7 +85,7 @@ class UmpirePaymentSetting extends Component {
             if (!this.props.umpireCompetitionState.onLoad) {
                 const competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = !!competitionList.length && competitionList[0].id;
-                
+
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
                     firstComp = compId
@@ -112,7 +112,7 @@ class UmpirePaymentSetting extends Component {
 
                 const isOrganiser = competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser;
 
-                this.setState({ 
+                this.setState({
                     competitionList: competitionListCopy,
                     isOrganiserView: isOrganiser,
                     selectedComp: firstComp,
@@ -133,14 +133,14 @@ class UmpirePaymentSetting extends Component {
                 organisationId,
                 competitionId: this.state.selectedComp,
             };
-    
+
             this.props.getUmpirePaymentSettings(reqData);
         }
 
         if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
                 && !this.props.umpirePaymentSettingState.onLoad
             ) {
-            this.modifyGetSettingsData(); 
+            this.modifyGetSettingsData();
         }
     }
 
@@ -151,12 +151,12 @@ class UmpirePaymentSetting extends Component {
 
         const selectedDivisions = [];
 
-        const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ? 
+        const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ?
             umpirePaymentSettings.map(settingsItem => ({
                 allDivisions: settingsItem.allDivisions,
                 divisions: settingsItem.divisions,
                 UmpirePaymentFeeType: settingsItem.UmpirePaymentFeeType,
-                byBadge: !!settingsItem.byBadge.length ? 
+                byBadge: !!settingsItem.byBadge.length ?
                         settingsItem.byBadge.map(byBadgeSetting => ({
                             accreditationUmpireRefId: byBadgeSetting.accreditationUmpireRefId,
                             rates: byBadgeSetting.rates.map(rate => ({
@@ -164,7 +164,7 @@ class UmpirePaymentSetting extends Component {
                                 rate: rate.rate,
                             }))
                         })) : [],
-                byPool: !!settingsItem.byPool.length ? 
+                byPool: !!settingsItem.byPool.length ?
                         settingsItem.byPool.map(byPoolSetting => ({
                             umpirePoolId: byPoolSetting.umpirePoolId,
                             rates: byPoolSetting.rates.map(rate => ({
@@ -175,12 +175,12 @@ class UmpirePaymentSetting extends Component {
                 hasSettings: true,
             })) : [];
 
-        const allowedDivisionsSettingArray = !!allowedDivisionsSetting ? [{ 
+        const allowedDivisionsSettingArray = !!allowedDivisionsSetting ? [{
             allDivisions: allowedDivisionsSetting.allDivisions,
             divisions: allowedDivisionsSetting.divisions,
             hasSettings: false,
         }] : [];
-        
+
         const affiliateViewSettingsArray = !isOrganiserView && !umpirePaymentSettings.length ?
             [initialPaymentSettingsData] : umpirePaymentSettingsArray;
 
@@ -201,7 +201,7 @@ class UmpirePaymentSetting extends Component {
 
         const newSelectedDivisions = [];
         let newSettingsData;
-        
+
         if (isBoxHasSettings) {
             const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
             const noSettingsDataState = paymentSettingsData.filter(item => !item.hasSettings);
@@ -210,13 +210,13 @@ class UmpirePaymentSetting extends Component {
                 newSettingsData = [ ...noSettingsDataState, initialSettingsBoxData ];
             } else {
                 newSettingsData = [ ...noSettingsDataState  ];
-            }  
+            }
         } else {
             if (e.target.checked) {
                 newSettingsData = [ ...paymentSettingsData, initialNoSettingsData ];
             } else {
                 newSettingsData = [ ...paymentSettingsData.filter(item => !!item.hasSettings) ];
-            }  
+            }
         }
 
         newSettingsData.forEach(item => {
@@ -242,8 +242,8 @@ class UmpirePaymentSetting extends Component {
         }
 
         const newPaymentSettingsData = [ ...sectionDataCopy, ...paymentSettingsData.filter(item => !item.hasSettings) ]
-        
-        this.setState({ 
+
+        this.setState({
             paymentSettingsData: newPaymentSettingsData,
         });
     }
@@ -284,7 +284,7 @@ class UmpirePaymentSetting extends Component {
 
         const newPaymentSettingsData = [ targetSectionData[sectionDataIndex] ];
 
-        this.setState({ 
+        this.setState({
             allDivisionVisible: !!value,
             tempPaymentSettingsData: !!value ? newPaymentSettingsData : null,
             paymentSettingsData: !value ? newPaymentSettingsData : paymentSettingsData,
@@ -322,8 +322,8 @@ class UmpirePaymentSetting extends Component {
                 .allDivisions = true;
         }
 
-        this.setState({ 
-            paymentSettingsData: newSettingsData, 
+        this.setState({
+            paymentSettingsData: newSettingsData,
             selectedDivisions: updatedSelectedDivisions
         });
     }
@@ -353,22 +353,22 @@ class UmpirePaymentSetting extends Component {
 
         if (!rateLineDataForChange) {
             rateList.push({
-                [cellLineIdKey]: rateLineDataId, 
+                [cellLineIdKey]: rateLineDataId,
                 rates: rateLineData
             });
         }
 
         const newPaymentSettingsData = [ ...sectionDataCopy, ...paymentSettingsData.filter(item => !item.hasSettings) ];
-        
-        this.setState({ 
+
+        this.setState({
             paymentSettingsData: newPaymentSettingsData,
         });
     }
 
     handleClickDeleteModal = sectionDataIndex => {
-        this.setState({ 
+        this.setState({
             deleteModalVisible: true,
-            sectionDataToDeleteIndex: sectionDataIndex 
+            sectionDataToDeleteIndex: sectionDataIndex
         });
     }
 
@@ -397,14 +397,14 @@ class UmpirePaymentSetting extends Component {
         const { tempPaymentSettingsData, tempSelectedDivisions } = this.state;
 
         if (key === "ok") {
-            this.setState({ 
+            this.setState({
                 paymentSettingsData: tempPaymentSettingsData,
                 selectedDivisions: tempSelectedDivisions,
             });
         }
 
-        this.setState({ 
-            allDivisionVisible: false, 
+        this.setState({
+            allDivisionVisible: false,
             tempPaymentSettingsData: null,
             tempSelectedDivisions: null,
         });
@@ -412,7 +412,7 @@ class UmpirePaymentSetting extends Component {
 
     handleAddBox = () => {
         const { paymentSettingsData } = this.state;
-        
+
         const initialSettingsBoxData = JSON.parse(JSON.stringify(initialPaymentSettingsData));
 
         const newPaymentSettingsData = [ ...paymentSettingsData, initialSettingsBoxData ];
@@ -434,7 +434,7 @@ class UmpirePaymentSetting extends Component {
     modifyPostArray = arr => {
         arr.forEach(item => {
             item.divisions = item.allDivisions ? [] : item.divisions.map(division => division.id);
-            delete item.hasSettings; 
+            delete item.hasSettings;
         });
 
         return arr;
@@ -448,15 +448,15 @@ class UmpirePaymentSetting extends Component {
 
         const affiliateSettingArray = paymentSettingsDataCopy
             .filter(item => !item.hasSettings && !!item.divisions.length);
-        
+
         const umpirePaymentSettingsArray = paymentSettingsDataCopy
             .filter(item => !!item.hasSettings && (!!item.divisions.length || !!item.allDivisions));
 
         this.modifyPostArray(affiliateSettingArray);
         this.modifyPostArray(umpirePaymentSettingsArray);
 
-        const allowedDivisionsSetting = !!affiliateSettingArray[0]?.divisions.length || !!affiliateSettingArray[0]?.allDivisions 
-            ? affiliateSettingArray[0] 
+        const allowedDivisionsSetting = !!affiliateSettingArray[0]?.divisions.length || !!affiliateSettingArray[0]?.allDivisions
+            ? affiliateSettingArray[0]
             :  null;
 
         const umpirePaymentSettings = !!umpirePaymentSettingsArray.length ? umpirePaymentSettingsArray : [];
@@ -528,7 +528,7 @@ class UmpirePaymentSetting extends Component {
 
         return (
             <div className="content-view pt-4 mt-5">
-                {isOrganiserView ? 
+                {isOrganiserView ?
                     <>
                         <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
                         <div className="d-flex flex-column">
@@ -541,7 +541,7 @@ class UmpirePaymentSetting extends Component {
                         {this.umpireSettingsSectionView(null, true)}
                     </div>
                 }
-                
+
                 {this.deleteConfirmModalView()}
                 {this.allDivisionModalView()}
             </div>
@@ -551,11 +551,14 @@ class UmpirePaymentSetting extends Component {
     umpireSettingsSectionView = (sectionTitle, hasSettings) => {
         const { paymentSettingsData, selectedDivisions, allowedDivisionList } = this.state;
 
-        const sectionData = hasSettings && !!paymentSettingsData 
-            ? paymentSettingsData.filter(item => item.hasSettings) 
-            : !!paymentSettingsData 
-            ? paymentSettingsData.filter(item => !item.hasSettings) 
+        const sectionData = hasSettings && !!paymentSettingsData
+            ? paymentSettingsData.filter(item => item.hasSettings)
+            : !!paymentSettingsData
+            ? paymentSettingsData.filter(item => !item.hasSettings)
             : [];
+
+        console.log('###-sectionData', sectionData)
+
 
         return (
             <>
@@ -565,7 +568,7 @@ class UmpirePaymentSetting extends Component {
                         checked={!!sectionData?.length}
                         className="mx-0 mb-2"
                     >
-                    
+
                         {sectionTitle}
                     </Checkbox>
                 }
@@ -590,7 +593,7 @@ class UmpirePaymentSetting extends Component {
                             >
                                 {AppConstants.allDivisions}
                             </Checkbox>
-                            
+
                             <Select
                                 mode="multiple"
                                 placeholder={AppConstants.select}
@@ -602,7 +605,7 @@ class UmpirePaymentSetting extends Component {
                                     <Option
                                         key={'compOrgDivision_' + item.id}
                                         disabled={
-                                            (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id 
+                                            (selectedDivisions.some(selectedDivision => selectedDivision.id === item.id
                                             && !boxData.allDivisions && !boxData.divisions.find(division => division.id === item.id)))
                                         }
                                         value={item.id}
@@ -615,10 +618,10 @@ class UmpirePaymentSetting extends Component {
                         </div>
                         ))}
                         {!!allowedDivisionList && selectedDivisions.length < allowedDivisionList.length
-                            && hasSettings 
+                            && hasSettings
                             && (
                                 <div className="row mb-5 position-absolute">
-                                    <div 
+                                    <div
                                         className="col-sm"
                                         onClick={() => this.handleAddBox()}
                                     >
@@ -671,7 +674,7 @@ class UmpirePaymentSetting extends Component {
                     </Radio>
                     {UmpirePaymentFeeType === 'BY_POOL' && (
                         <>
-                            {!!umpirePoolData.length ? 
+                            {!!umpirePoolData.length ?
                                 <div>
                                     {umpirePoolData.map((poolDataItem, i) => (
                                         <div key={"poolDataItem" + i}>
@@ -709,7 +712,7 @@ class UmpirePaymentSetting extends Component {
                             disabled
                         />
                     </div>
-                        
+
                     {this.rateCellView(itemRates, 15, AppConstants.umpireRate, sectionData, sectionDataIndex, radioListKey, id )}
                     {this.rateCellView(itemRates, 19, AppConstants.umpireResRate, sectionData, sectionDataIndex, radioListKey, id )}
                     {this.rateCellView(itemRates, 20, AppConstants.umpireCoachRate, sectionData, sectionDataIndex, radioListKey, id )}
@@ -720,7 +723,7 @@ class UmpirePaymentSetting extends Component {
 
     rateCellView = (poolItemRates, rateRoleId, heading, sectionData, sectionDataIndex, radioListKey, id ) => {
         const value = (poolItemRates || []).find(rate => rate.roleId === rateRoleId)?.rate;
-        
+
         return (
             <div className='col-sm input-width d-flex align-items-end'>
                 <InputNumberWithHead
@@ -732,7 +735,7 @@ class UmpirePaymentSetting extends Component {
                     heading={heading}
                     onChange={e => this.handleChangeRateCell(e, sectionData, sectionDataIndex, radioListKey, rateRoleId, id )}
                     value={!!value ? value : 0}
-                /> 
+                />
             </div>
         )
     }
@@ -779,12 +782,12 @@ class UmpirePaymentSetting extends Component {
 
         return (
             <div className="form-footer-button-wrapper">
-                <Button 
+                <Button
                     onClick={this.handleSave}
-                    className="publish-button save-draft-text mr-0" 
-                    type="primary" 
+                    className="publish-button save-draft-text mr-0"
+                    type="primary"
                     htmlType="submit"
-                    disabled={someNoPoolSettings 
+                    disabled={someNoPoolSettings
                         || this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
                         || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
                 >
@@ -812,7 +815,7 @@ class UmpirePaymentSetting extends Component {
                         {this.footerView()}
                     </Form>
                     <Loader visible={this.props.umpireCompetitionState.onLoad || this.props.umpirePaymentSettingState.onLoad
-                            || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad} 
+                            || this.props.liveScoreTeamState.onLoad || this.props.umpirePoolAllocationState.onLoad}
                     />
                 </Layout>
             </div>

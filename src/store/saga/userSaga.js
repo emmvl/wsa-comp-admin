@@ -305,6 +305,25 @@ function* getUserDashboardTextualListingSaga(action) {
   }
 }
 
+// Get the User Dashboard Textual Spectator Count
+function* getUserDashboardTextualSpectatorCountSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserDashboardTextualSpectatorCount, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get the User Module Personal Data
 function* getUserModulePersonalDataSaga(action) {
   try {
@@ -566,6 +585,25 @@ function* getUserReferFriendListSaga(action) {
     }
   } catch (error) {
     yield call(errorSaga, error);
+  }
+}
+
+// Export Refer a Friend Data
+function* exportReferFriendSaga(action) {
+  try {
+      const result = yield call(UserAxiosApi.exportUserReferFriendList, action.payload);
+      if (result.status === 1) {
+          yield put({
+              type: ApiConstants.API_EXPORT_USER_REFER_FRIEND_SUCCESS,
+              result: result.result.data,
+              status: result.status,
+          });
+          //  message.success(result.result.data.message);
+      } else {
+          yield call(failSaga, result);
+      }
+  } catch (error) {
+      yield call(errorSaga, error);
   }
 }
 
@@ -1377,6 +1415,7 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_AFFILIATE_DELETE_LOAD, deleteAffiliateSaga);
   yield takeEvery(ApiConstants.API_GET_USER_ORGANISATION_LOAD, getUserOrganisationSaga);
   yield takeEvery(ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD, getUserDashboardTextualListingSaga);
+  yield takeEvery(ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_LOAD, getUserDashboardTextualSpectatorCountSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD, getUserModulePersonalDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD, getUserModulePersonalByCompDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, getUserModuleMedicalInfoSaga);
@@ -1390,6 +1429,7 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_USER_FRIEND_LOAD, getUserFriendListSaga);
   yield takeEvery(ApiConstants.API_EXPORT_USER_FRIEND_LOAD, exportUserFriendSaga);
   yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, getUserReferFriendListSaga);
+  yield takeEvery(ApiConstants.API_EXPORT_USER_REFER_FRIEND_LOAD, exportReferFriendSaga);
   yield takeEvery(ApiConstants.API_GET_ORG_PHOTO_LOAD, getOrgPhotosListSaga);
   yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, saveOrgPhotosSaga);
   yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, deleteOrgPhotosSaga);

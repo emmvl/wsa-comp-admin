@@ -359,14 +359,6 @@ class CompetitionPartProposedTeamGrading extends Component {
         this.props.exportProposedTeamsAction(payload);
     }
 
-    exportPlayers = () => {
-        let payload = {
-            competitionId: this.state.firstTimeCompId,
-            yearRefId: this.state.yearRefId
-        }
-        this.props.exportProposedPlayersAction(payload);
-    }
-
     headerView = () => {
         let disabledStatus = this.state.competitionStatus == 1
         return (
@@ -390,22 +382,6 @@ class CompetitionPartProposedTeamGrading extends Component {
                                                     className="export-image"
                                                 />
                                                 {AppConstants.exportTeams}
-                                            </div>
-                                        </div>
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile">
-                                    <Button disabled={disabledStatus} className="primary-add-comp-form" type="primary" onClick={() => this.exportPlayers()}>
-                                        <div className="row">
-                                            <div className="col-sm">
-                                                <img
-                                                    src={AppImages.export}
-                                                    alt=""
-                                                    className="export-image"
-                                                />
-                                                {AppConstants.exportPlayers}
                                             </div>
                                         </div>
                                     </Button>

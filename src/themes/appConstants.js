@@ -84,20 +84,17 @@ const AppConstants = {
     playWithFriend: "Play with a friend",
     referFriend: "Refer a friend",
     friend: "Friend",
-    referfriend_friendLiketoPlay:
-        "Refer a friend : Do you have a friend you think would like to play?",
+    referfriend_friendLiketoPlay: "Refer a friend : Do you have a friend you think would like to play?",
     friendLikeToPlay: "Do you have a friend you think would like to play?",
     existingMedConditions: "Existing Medical Conditions",
     regularMedicalConditions: "Regular Medications",
     hearAboutTheCompetition: "How did you hear about this Netball Competition?",
     who_fav_bird: "Who is your favourite Firebird?",
-    consentForPhotos:
-        "Do you give consent for photos to be taken and used for promotional purposes",
+    consentForPhotos: "Do you give consent for photos to be taken and used for promotional purposes",
     addOtherReg: "Add Another Registration",
     favouriteTeam: "Favourite Netball Team",
     OtherInfoReqd: "Other information required",
-    yourSupportImportant:
-        "Your Support is important for the continued success of our Club. Can you help?",
+    yourSupportImportant: "Your Support is important for the continued success of our Club. Can you help?",
     childrenNumber: "Children Check Number",
     checkExpiryDate: "Check Expiry Date",
     childrenCheckNumberInfo:
@@ -121,8 +118,7 @@ const AppConstants = {
     addParent_guardian: "Add Parent/Guardian",
     addFriend: "Add Friend",
 
-    usernamePasswordIncorrect:
-        "Login Unsuccessful. Incorrect Username or Password",
+    usernamePasswordIncorrect: "Login Unsuccessful. Incorrect Username or Password",
     home: "Home",
     user: "User",
     userId: "User ID",
@@ -183,8 +179,14 @@ const AppConstants = {
     witnesses: "Witnesses",
     offences: "Offences",
     clarifyingQuestions: "Clarifying Questions",
+    foul: "Foul",
     foulPlayerName: "Foul Player Name",
     foulPlayerRole: "Foul Player Role",
+    personal: "Personal",
+    technical: "Technical",
+    unsportsmanlike: "Unsportsmanlike",
+    disqualifying: "Disqualifying",
+    enterCountFouls: "Enter count of fouls",
     suspendedFrom: "Suspended From",
     suspendedTo: "Suspended Till",
     mandatePlayerAge: "Mandate Player Age Restrictions",
@@ -263,8 +265,8 @@ const AppConstants = {
     extraTimeBreak: "Extra Time Break",
     beforeExtraTime: "Before Extra Time",
     extraTimeIfDraw2: "Extra time if a Draw - 2nd Time",
-    oneGoalWins: "1st Goal Wins",
-    twoGoalWins: "2nd Goal Wins",
+    winByOneGoal: "Win by one Goal",
+    winByTwoGoals: "Win by two Goals",
     addAnotherFinalFormat: "Add Another Finals Format",
     setAsDefault: "Set as Default",
     applyFinalFormat: "Apply Final Format",
@@ -416,10 +418,8 @@ const AppConstants = {
     applyTo: "Apply to",
     courtPrioritisation: "Court Prioritisation",
     randomAllocation: "Random Allocation",
-    automaticallyAssign_LowestCourt_highestGrade:
-        "Automatically assign - lowest court  to highest grade",
-    automaticallyAssign_LowestCourt_LowerGrade:
-        "Automatically assign - lowest court to lowest grade",
+    automaticallyAssign_LowestCourt_highestGrade: "Automatically assign - lowest court  to highest grade",
+    automaticallyAssign_LowestCourt_LowerGrade: "Automatically assign - lowest court to lowest grade",
     preferenceSettings: "Preference Settings",
     addAnother: "Add another",
     courtDetails: "Court Details",
@@ -766,19 +766,16 @@ const AppConstants = {
     allocateToSameCourt: "Allocate to same court",
     noPreference: "No Preference",
     startingSaturday: "Starting Sat 08/02",
-    anyGradePreference2:
-        "Do you have any court preferences for divisions or grades?",
+    anyGradePreference2: "Do you have any court preferences for divisions or grades?",
     timeSlotRotation: "TimeSlot rotation",
     proceedLowerGrade: "Precede lower grades with higher grades",
 
     saveAsDefault: "Save as Default",
 
     // time slot constants
-    anyTimePreference:
-        "Do you have any timeslot preferences for divisions or grades?",
+    anyTimePreference: "Do you have any timeslot preferences for divisions or grades?",
     none: "None",
-    timeslotsAllocatedBasedOnMatches:
-        "Timeslots allocated based on match duration",
+    timeslotsAllocatedBasedOnMatches: "Timeslots allocated based on match duration",
     enterTimeMatchesEachDay: "Enter time matches should run each day",
     allocateToSameTimeslot: "Allocate to same time slot",
     newCompetition: "New Competition",
@@ -837,11 +834,9 @@ const AppConstants = {
     yesAsAPlayer: "Yes, as a Player",
     yesAsANonPlayer: "Yes, as a Non-Player",
     registeringSomeoneElse: "No, Registering someone else",
-    competitionMembershipProductDivision:
-        "Competition, Membership Product and Division",
+    competitionMembershipProductDivision: "Competition, Membership Product and Division",
     participantDetails: "Participant Details",
-    indicatePreferredPlayerPosition:
-        "Indicate two preferred playing positions:",
+    indicatePreferredPlayerPosition: "Indicate two preferred playing positions:",
     fullName: "Full Name",
     playWithFriendSubtitle:
         "We may be able to accommodate friends playing with each other. Please note, this is normally only available for lower graded teams. You can choose up to three friends.",
@@ -902,8 +897,7 @@ const AppConstants = {
     totalGame: "TOTAL GAMES",
     voucherDeleteConfirmMsg: "Are you sure you want to delete this voucher?",
     productDeleteConfirmMsg: "Are you sure you want to delete this product?",
-    participantDeleteConfirmMsg:
-        "Are you sure you want to delete this participant?",
+    participantDeleteConfirmMsg: "Are you sure you want to delete this participant?",
     friendDeleteConfirmMsg: "Are you sure you want to delete this friend?",
     registrationOptionConfirmMsg:
         "Changing the registration type will clear the information you have entered already. Please confirm you wish to proceed.",
@@ -918,7 +912,10 @@ const AppConstants = {
     addImages: "Add Images",
     addVideos: "Add Video",
     time: "Time",
+    sinBin: "Sin bin",
+    includeInPersonalFouls: "Include in Personal Fouls",
     addIncident: "Add Incident",
+    refereeReport: "Referee report",
     addRefereeReport: "Add Referee Report",
     selectRound: "Select Round",
     linked: "Linked",
@@ -959,14 +956,14 @@ const AppConstants = {
         "https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d",
     totalCompetitions: "Total Competitions",
     livescoreCompetitions: "Live score competitions",
-    toEditRegistrationDeatils: "To edit registration details, please go to",
+    toEditRegistrationDetails: "To edit registration details, please go to",
     registrationArea: "registration area",
 
     friends: "Friends",
     referFriends: "Referred Friends",
 
     logoImageSize: "Selected file must be less then 2 MB",
-    logoType: "Selected file must be PNG, GIF or JPEG formate",
+    logoType: "Selected file must be PNG, GIF or JPEG format",
     logo_size: 2000000,
     referaFriend: "Refer a Friend",
     playWithAFriend: "Play with a Friend",
@@ -980,13 +977,11 @@ const AppConstants = {
     types: "Types",
     payment: "Payment",
 
-    SeasonFixtureUrl:
-        "https://netball-comp-admin-dev.worldsportaction.com/liveScoreSeasonFixture?organisationId=3",
+    SeasonFixtureUrl: "https://netball-comp-admin-dev.worldsportaction.com/liveScoreSeasonFixture?organisationId=3",
     anyAssociation: "anyAssociation",
     anyClub: "anyClub",
 
-    firstlevelAffiliate:
-        "Affiliates - 1st level Affiliates - Association/Leagues",
+    firstlevelAffiliate: "Affiliates - 1st level Affiliates - Association/Leagues",
     secondlevelAffiliate: "Affiliates - 2nd level Affiliates - Club/ School",
     anyOrgAssociation: "Any organisation - Association/Leagues",
     anyOrgClub: "Any organisation - Clubs/ Schools",
@@ -1072,11 +1067,9 @@ const AppConstants = {
     deleteDivision: "Delete Competition Division",
     changeDivision: "Change Division",
     action: "Action",
-    competitionDivisionValidation:
-        "If there are any players graded to this division, they will be unassigned.",
+    competitionDivisionValidation: "If there are any players graded to this division, they will be unassigned.",
     exception: "Exception",
-    exceptionHeading:
-        "This allows you to schedule a match at a venue or time outside the automatic scheduling",
+    exceptionHeading: "This allows you to schedule a match at a venue or time outside the automatic scheduling",
 
     // Add Venue ToolTip Messages
 
@@ -1087,23 +1080,19 @@ const AppConstants = {
 
     overRideSlotMsg:
         "Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am",
-    gameDayMsg:
-        "Add the days of the week, matches can be played at this venue. Click + Add Day.",
+    gameDayMsg: "Add the days of the week, matches can be played at this venue. Click + Add Day.",
     courtsMsg:
         "Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.",
 
-    activeNewsMsg:
-        "A list of all of the news that currently appears in the Game Day App",
+    activeNewsMsg: "A list of all of the news that currently appears in the Game Day App",
     todayMatchMsg:
-        "A list of all the matches being played on this day. This list shows whether scorers have been set , attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.",
-    playersToPayMsg:
-        "A list of Players who have registered and are required to pay either with cash or a voucher.",
+        "A list of all the matches being played on this day. This list shows whether scorers have been set, attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.",
+    playersToPayMsg: "A list of Players who have registered and are required to pay either with cash or a voucher.",
     todayIncidentMsg:
-        "If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.",
-    matchDurationMsg:
-        "Game time only (in minutes). This time should exclude time for breaks.",
+        "If enabled, a list of all of the incidents that have occurred on this day including injuries and disciplinary.",
+    matchDurationMsg: "Game time only (in minutes). This time should exclude time for breaks.",
     mainBreakMsg: "Half time break (in minutes).",
-    qtrBreatMsg: "Break after 1st and 3rd quaters (in minutes).",
+    qtrBreatMsg: "Break after 1st and 3rd quarters (in minutes).",
     teamAliasMsg: "The name that is used for the Team on the draw and media.",
     managerNewMsg:
         "Add a user who has not registered in the App or Web platform as a ",
@@ -1115,21 +1104,17 @@ const AppConstants = {
       End Matches - End one, a number or all matches.\n\n
       Double Header - Create a double header where two rounds are played in the one round allocation ie. Round 2 is rained out and the association decides to play Round 2 and Round 3 together as two half matches.`,
 
-    courtChangeMsg:
-        "Move the matches on one, many or all Venues, Courts to another Venue, Court.",
-    shortNameMsg:
-        "The short name is used in the APP to make it easier for users to search.",
-    recordUmpireMsg:
-        "The Scorer or Manager of a match will document the Umpire names and the Clubs they belong to.",
+    courtChangeMsg: "Move the matches on one, many or all Venues, Courts to another Venue, Court.",
+    shortNameMsg: "The short name is used in the APP to make it easier for users to search.",
+    recordUmpireMsg: "The Scorer or Manager of a match will document the Umpire names and the Clubs they belong to.",
     gameTimeTrackMsg:
         "If selected it portrays the Game Time played by the team and players of that team in the Game Day App.",
-    positionTrackMsg:
-        "If Selected allows tracking of team positions by player.",
+    positionTrackMsg: "If Selected allows tracking of team positions by player.",
     recordGoalAttemptMsg:
         "If selected allows for the recording of Goal Attempts, Misses and Penalty Misses by player.",
     centerPassEnableMsg: "Enable Centre Pass display. ",
     incidentEnableMsg:
-        "Enable the trackng of incidents including disciplinary, injury- first aid and injury - ambulance.",
+        "Enable the tracking of incidents including disciplinary, injury- first aid and injury - ambulance.",
     recordMsg:
         "Choose between allowing scorers to record their own team, both teams or the oppositions team attendance.",
     reportMsg:
@@ -1144,12 +1129,9 @@ const AppConstants = {
     buzzerMsg: `Click on Turn off the Buzzer so it doesnt signal the start, breaks or end of the game.\n\n
       Click on 30 second warning so it doesnt sound with a 30 second warning for players to take the court.`,
     newsPublishMsg: "Publish the news/ message to the App only.",
-    newsPublishNotifyMsg:
-        "Publish the news/ message to the App and notify App users.",
-    participateCompMsg:
-        "A list of all Competitions your Organisation is competing in.",
-    ownedCompetitionMsg:
-        "A List of all Competitions your Organisation is responsible for.",
+    newsPublishNotifyMsg: "Publish the news/ message to the App and notify App users.",
+    participateCompMsg: "A list of all Competitions your Organisation is competing in.",
+    ownedCompetitionMsg: "A List of all Competitions your Organisation is responsible for.",
     compDetailsMsg:
         "If you have opened Registrations for this Competition than Competition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.",
     knockOutMsg:
@@ -1159,22 +1141,17 @@ const AppConstants = {
         "Teams play each as many times as required in the number of rounds specified. Finals are optional.",
     compDivisionMsg:
         "You must add a Division to move to the next screen.Divisions can be age related or any category you choice. Example could include 11,12,13 etc or Junior, Senior. ",
-    genderRestrictionMsg:
-        "Restricts Users who register to a particular division based on their gender.",
-    ageRestrictionMsg:
-        "Restricts Users who register to a particular division based on their DOB.",
+    genderRestrictionMsg: "Restricts Users who register to a particular division based on their gender.",
+    ageRestrictionMsg: "Restricts Users who register to a particular division based on their DOB.",
     playerGradingMsg:
         "For Direct Competitions only. Create Teams and then Drag and Drop Players from Unassigned in to their teams.",
     playerGradingToggleMsg:
         "Displays a running tally of the number of teams required for each division and the number of players in each team.",
     teamGradingSummaryMsg:
         "Teams will remain ungraded until you move them into Grades. Click on the square titled 'Unassigned' (which contains the number of teams) to begin grading.You can also re-name grades by clicking on the letter or name.",
-    timeSloteNoPrefMsg:
-        "There is no preference for the timeslots Divisions, Grades and Teams play in.",
-    timeSloteEvenRotationMsg:
-        "Divisions, Grades and Teams equally rotate through the timeslots.",
-    allocateToSameTimeslotMsg:
-        "Divisions and Grades can be allocated to a Timeslot.",
+    timeSloteNoPrefMsg: "There is no preference for the timeslots Divisions, Grades and Teams play in.",
+    timeSloteEvenRotationMsg: "Divisions, Grades and Teams equally rotate through the timeslots.",
+    allocateToSameTimeslotMsg: "Divisions and Grades can be allocated to a Timeslot.",
 
     affiliateDirectory: "Affiliate Directory",
 
@@ -1184,18 +1161,13 @@ const AppConstants = {
         "Add a user who has either created an account in the App, is an administrator or has registered.",
     evenRotationMsgFor_V_T: "Evenly rotate Divisions or Grades to Courts.",
     allocateToSameCourtMsg: "Allocate Divisions or Grades to the same courts.",
-    noPreferenceMsgFor_V_T:
-        "There is No Preference for Court Rotations or Allocations",
+    noPreferenceMsgFor_V_T: "There is No Preference for Court Rotations or Allocations",
 
-    teamNewMsg:
-        "Add a user who has NOT created an account in the App, is an administrator or has registered.",
-    teamExistingMsg:
-        "Add a user who has either created an account in the App, is an administrator or has registered.",
+    teamNewMsg: "Add a user who has NOT created an account in the App, is an administrator or has registered.",
+    teamExistingMsg: "Add a user who has either created an account in the App, is an administrator or has registered.",
     doubleRoundRobinMsg: "Teams play each other twice. Finals are optional.",
-    timeSlote_BasedOnMatchDurationMsg:
-        "Timeslots are determined based on the match duration. ",
-    manuallyAddTimeSloteMsg:
-        "Manually create Timeslots. You can apply these timeslots to all or individual Venues.",
+    timeSlote_BasedOnMatchDurationMsg: "Timeslots are determined based on the match duration.",
+    manuallyAddTimeSloteMsg: "Manually create Timeslots. You can apply these timeslots to all or individual Venues.",
     equallyRotateHomeAwayMsg:
         "Choose Equally rotate teams home/away venue competition if competition features Home and Away venues.",
     equallyRotateCentralizedVenueMsg:
@@ -1205,7 +1177,7 @@ const AppConstants = {
     applyMatchFormatMsg:
         "Choose whether the match format is applied to all Divisions or whether it is different for particular Divisions.",
     applyFinalFormatMsg:
-        "Choose to enable Finals. Apply Final format to all Divsions or by particular Division. ",
+        "Choose to enable Finals. Apply Final format to all Divisions or by particular Division. ",
     matchDurationCompFormatMsg: "Total Match time NOT including breaks.",
     mainBreakCompFormatMsg: "Break Duration at half-time.",
     qtrBreakCompFormatMsg: "Break Duration at end of 1st and 3rd quarters.",
@@ -1221,23 +1193,18 @@ const AppConstants = {
     /// /Registration Form List
     regFormDashBoardMsg:
         "After you have added your Competition Fees, locate the Competition in the Registration Form table and click on edit (three dots in Action) to add Registration details and open registrations.",
-    regFormOpenMsg:
-        "List the date you want Registrations to open and be made available to users.",
+    regFormOpenMsg: "List the date you want Registrations to open and be made available to users.",
     regFormCloseMsg:
         "List the date you want Registrations to close. Please note registrations can still be taken after this date if required.",
-    regLockMsg:
-        "Registration Lock immediately closes registration for those divisions it is applied to.",
-    regFormTrainingMsg:
-        "Show users training details like Date, Time and Venue.",
-    regFormSpecialNoteMsg:
-        "Detail any special notes you would like to include on the Registration Form.",
+    regLockMsg: "Registration Lock immediately closes registration for those divisions it is applied to.",
+    regFormTrainingMsg: "Show users training details like Date, Time and Venue.",
+    regFormSpecialNoteMsg: "Detail any special notes you would like to include on the Registration Form.",
     regFormPhotoMsg:
         'These are stored in "Our Organisation" Photos. You can display as many photos as you would like to Users to show them your uniform, courts, logo etc.',
     replyContactDetailMsg:
         "Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.",
     howUserRegisterMsg: "Define how Users can Register for your Competition.",
-    additionQuesMsg:
-        "Click on the Questions you would like to ask Users who are Registering to your Competition.",
+    additionQuesMsg: "Click on the Questions you would like to ask Users who are Registering to your Competition.",
     allDivisionsMsg: "All Divisions are charged the same Fees.",
     perDivisionMsg: "Each Division can be charged a different Fee. ",
     paymentSeasonalFeeMsg:
@@ -1253,8 +1220,7 @@ const AppConstants = {
 
     /// /Registration Membership Fee
 
-    membershipProductNameMsg:
-        "Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee",
+    membershipProductNameMsg: "Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee",
     validityMsg: `Add how long you want the membership product to be available:\n\n
       * Calendar Year - 1st Jan to 31st Dec in that year\n\n
       * 12 months from date of Registration`,
@@ -1284,8 +1250,7 @@ const AppConstants = {
     selectedTeams: "Selected Teams Array",
     importCoach: "Import Coaches",
     ladderLink: "Ladder Link",
-    public_Ladder_Url:
-        "https://netball-registration-dev.worldsportaction.com/liveScorePublicLadder?",
+    public_Ladder_Url: "https://netball-registration-dev.worldsportaction.com/liveScorePublicLadder?",
     inviteTypeRef: "InviteType",
     inviteType: "Type",
     DobMoreThan: "DOB more than",
@@ -1306,11 +1271,9 @@ const AppConstants = {
     addUmpire: "Add Umpire",
     editUmpire: "Edit Umpire",
     umpireSearch: "Umpire Search",
-    nonPlayerDivisionMessage:
-        "Divisions are not required for your selected membership type.",
+    nonPlayerDivisionMessage: "Divisions are not required for your selected membership type.",
     drawsLink: "Draws Link",
-    public_draws_Url:
-        "https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?",
+    public_draws_Url: "https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?",
     finalsMessage: "Finals has not been enabled for this Competition",
     allowTeamRegistration: "Allow Team Registrations",
     individualRegistrations: "Individual User Registrations",
@@ -1334,8 +1297,7 @@ const AppConstants = {
     barcodeHeading: "Barcode(ISBN, UPC, GTIN etc)",
     barcode: "Barcode",
     quantity: "Quantity",
-    allowCustomerToPurchase:
-        "Allow customers to purchase this product when it's out of stock",
+    allowCustomerToPurchase: "Allow customers to purchase this product when it's out of stock",
     variants: "Variants",
     enableVariants: "Enable Variants",
     variantName: "Variant Name",
@@ -1370,8 +1332,7 @@ const AppConstants = {
     _hours: "Hours",
     _minutes: "Minutes",
 
-    lineUpSelectionMsg:
-        "We can’t enable lineup selection without position tracking",
+    lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
     // umpireListExport: "https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
     umpireListExport: "users/byRole/export/org?",
     disabilityCareNumber: "Disability care Number",
@@ -1439,20 +1400,17 @@ const AppConstants = {
     childDetails: "Child Details",
     registrationDivision: "Registration Divisions",
     addRegDivision: "Add Registration Divisions",
-    downLoadImportHeading:
-        "Download the matches list first then populate umpires details to upload ",
+    downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
     assignUmpireToMatch: "Assign Umpires To Matches",
     participateInCompReg: "Participating-In Competition Registrations",
     ownedCompetitionsReg: "Owned Competition Registrations",
     newCompetitionReg: "New Competition Registration",
     rosterExport: "/roster/export/umpire?",
     Registrations: "Registrations",
-    ladderAllDivisionRmvMsg:
-        "Would you like to set this ladder format for 'All Divisions'?",
+    ladderAllDivisionRmvMsg: "Would you like to set this ladder format for 'All Divisions'?",
     ladderFormat: "Ladder Format",
     ladderRemoveMsg: "Are you sure you want to remove ladder format?",
-    competitionEnabled:
-        "Competition not enabled for Integrated Umpires, Click here to enable.",
+    competitionEnabled: "Competition not enabled for Integrated Umpires, Click here to enable.",
     bulkScoreUpload: "Bulk Scores Upload",
     umpireRoster: "Umpire Roster",
     registrationDivisions: "Registration Divisions",
@@ -1510,13 +1468,10 @@ const AppConstants = {
     dateCompStart: "Date Competition Start",
     regChangeType: "Registration Change Type",
     generateFixtures: "Generate Fixtures",
-    doTheySayForGame:
-        "Do they say they have taken the court for training, grading or a competition game?",
+    doTheySayForGame: "Do they say they have taken the court for training, grading or a competition game?",
     reasonToDeRegister: "Reasons why they would like to de-register?",
-    overCommitted:
-        "I am over committed with other activities and can't fit in time for netball",
-    injuredOrHealthReason:
-        "I have been injured or health reason (not netball related)",
+    overCommitted: "I am over committed with other activities and can't fit in time for netball",
+    injuredOrHealthReason: "I have been injured or health reason (not netball related)",
     decideNotToParticipate: "Decided not to participate in netball",
     moveToDiffGeographicalArea: "Moving to different geographical area",
     otherReason: "Other",
@@ -1526,8 +1481,7 @@ const AppConstants = {
     stateWideMsg: "State-wide messages",
     allOrganisation: "All Organisations",
     individualOrganisation: "Individual Organisation",
-    firstLevelAffiliatesAssociationLeague:
-        "1st Level Affiliates - Association/ League",
+    firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
     secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/ School",
     teamSeasonalFee: "Team Seasonal Fee",
     instalmentDate: "Instalment Date",
@@ -1535,13 +1489,10 @@ const AppConstants = {
     settingsAddedMessage: "Settings added successfully.",
     addressAddedMessage: "Address added successfully.",
     deleteVariantOption: "Delete variant option",
-    deleteVariantOptionDescription:
-        "Please confirm you want to delete this variant option?",
+    deleteVariantOptionDescription: "Please confirm you want to delete this variant option?",
     deleteProductType: "Delete product type",
-    deleteProductTypeDescription:
-        "Please confirm you want to delete this product type?",
-    emailChangedWarning:
-        "You will need to log in with your new email address on your next login.",
+    deleteProductTypeDescription: "Please confirm you want to delete this product type?",
+    emailChangedWarning: "You will need to log in with your new email address on your next login.",
     settingsUpdatedMessage: "Settings updated successfully.",
     charity: "Charity",
     termsAndCond: "T&Cs",
@@ -1593,13 +1544,10 @@ const AppConstants = {
     successMessage: "Successfully inserted",
     videoSize: "Selected file must be less then 2 MB",
     video_size: 2048000,
-    qcTimeslotNotApplicable:
-        "Timeslots are not applicable for quick competition",
-    qcVenueConstraintNotApplicable:
-        "Venue Constraints are not applicable for quick competition",
+    qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
+    qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition",
     publishModalInfo: "You have changed the grade of the following teams:",
-    publishModalConfirmationMsg:
-        "Would you like to adjust their ladder points?",
+    publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
     videoSizeMessage: "The maximum file size can be 2 MB",
     childrenCheckNumber: "Requires Working with Children Check",
     regenerateDrawTitle: "Regenerate draw from which Round?",
@@ -1651,8 +1599,7 @@ const AppConstants = {
     update: "Update",
     invalidRecords: "Invalid Records",
     resetLadder: "Reset Ladder",
-    resetLadderConformation:
-        "Please select one of the following to Reset Ladder",
+    resetLadderConformation: "Please select one of the following to Reset Ladder",
     selectedDivision: "Selected Division",
     fullReset: "Full Reset",
     divisionSettings: "Division settings",
@@ -1670,28 +1617,24 @@ const AppConstants = {
     combine: "Combine",
     whatRegistrationChange: "What registration change do you need to make?",
     registrationChangeRef: "RegistrationChange",
-    reasonWhyYourAreDecline:
-        "Reason why you are declining the request for de-registration?",
+    reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
     whoPayUmpire: "Who pays Umpires",
     refundAmount: "Refund Amount",
     toDate: "To date",
     fromDate: "From date",
     apply: "Apply",
-    noFixturesMessage:
-        "No fixtures are available within the provided date range",
+    noFixturesMessage: "No fixtures are available within the provided date range",
     noCompetitionYear: "There are no competitions for the selected year",
     attendance: "Attendance",
     umpireAllocationSettings: "Umpire Assignment Settings",
     whoAssignsUmpires: "Who Assigns Umpires",
     affiliateOrganisations: "Affiliate Organisations",
     noUmpires: "No Umpires",
-    takenCourtForTraining:
-        "Have you taken the court for training, grading or a competition game",
+    takenCourtForTraining: "Have you taken the court for training, grading or a competition game",
     exportAttendance: "Export Attendance",
     exportAttendanceMessage: "Attendance exported successfully",
     singleUseDiscount: "Single Use Discount - No Fee Charged",
-    singleUseDiscountSubject:
-        "Your Single Use discount voucher to use with your Netball Registration",
+    singleUseDiscountSubject: "Your Single Use discount voucher to use with your Netball Registration",
     addCode: "Add Code",
     go: "Go",
     matchCalender: "Match Calendar",
@@ -1711,6 +1654,7 @@ const AppConstants = {
     umpireActivity: "Umpire Activity",
     showFilter: "Show Filter",
     hide: "Hide",
+    importDraws: "Import Draws",
 
     heroImageForCompetition: "Hero Image for Registration Form",
     heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
@@ -1835,8 +1779,7 @@ const AppConstants = {
     mergeUser: "Merge User",
     userToMerge: "User to Merge",
     possibleMatches: "Possible Matches",
-    possibleMatchesDescription:
-        "Select the user you want to merge with and press Next",
+    possibleMatchesDescription: "Select the user you want to merge with and press Next",
     selectDetailsToKeep: "Select which details to keep",
     merge: "Merge",
     userMergedSuccessfully: "User merged successfully",
@@ -1884,8 +1827,7 @@ const AppConstants = {
     howManyGames: "How many games?",
 
     divisionRemoveMsg: "Are you sure you want to remove division settings?",
-    divisionAllDivisionMsg:
-        "This will clear your other settings. Ok to proceed?",
+    divisionAllDivisionMsg: "This will clear your other settings. Ok to proceed?",
     manuallyAllocate: "Manually Allocate",
     allocateViaPools: "Allocate Via Pools",
     umpireYourOwnTeam: "Umpire Your Own - Team",
@@ -1904,8 +1846,8 @@ const AppConstants = {
     addTeamMember: "Add Team Member",
     addPool: "Add Pool",
     pleaseEnterPoolName: "Please Enter Pool Name",
-    nationalAccreditationLevelUmpire:
-        "What is your national accreditation level (Umpire)?",
+    nationalAccreditationLevelUmpireQ: "What is your national accreditation level (Umpire)?",
+    nationalAccreditationLevelUmpire: "National accreditation level (Umpire)",
     accreditationUmpire: "accreditationUmpire",
     payPerMatch: "Pay per Match",
     teamMemberParentCheck: "I am the Parent/ Guardian",
@@ -1927,11 +1869,10 @@ const AppConstants = {
   above.`,
     securePaymentMsg: "There is no payment required",
     securePaymentOptions: "Secure Payment Options",
-    somethingWentWrongErrorMsg:
-        "Something went wrong.Please contact Administrator",
+    somethingWentWrongErrorMsg: "Something went wrong.Please contact Administrator",
     tShirtSizeList: "TShirtSize",
-    nationalAccreditationLevelCoach:
-        "What is your national accreditation level (Coach)?",
+    nationalAccreditationLevelCoachQ: "What is your national accreditation level (Coach)?",
+    nationalAccreditationLevelCoach: "National accreditation level (Coach)",
     expiryDate: "Expiry Date",
     byBadge: "By Badge",
     byPool: "By Pool",
@@ -1952,6 +1893,7 @@ const AppConstants = {
 
     removed: "Removed",
     removeFromTeam: "Remove from Team",
+    removedFromGame: "Removed from game",
     addToTeam: "Add to Team",
     removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
 
@@ -1966,8 +1908,8 @@ const AppConstants = {
     confirmUnassignMsg:
         "This umpire is also added to another pool. Would you like to move him to Unassigned section?",
     removeFromAllPools: "Remove from all pools",
-    poolAddedSuccessMsg: "New pool was added succesfully",
-    poolRemovedSuccessMsg: "Pool was removed succesfully",
+    poolAddedSuccessMsg: "New pool was added successfully",
+    poolRemovedSuccessMsg: "Pool was removed successfully",
 
     yourOrder: "Your Order",
 
@@ -2012,7 +1954,10 @@ const AppConstants = {
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
     failed: "Failed",
-    wouldYouLikeToApprove: "Would you like to Approve?"
+    wouldYouLikeToApprove: "Would you like to Approve?",
+    regRetryModalMsg: "Do you want to retry the failed registration?",
+    addDivOrGrade: "Add Div/Grade",
+    markAsFailedReg: "Mark as Failed Registration"
 };
 
 export default AppConstants;

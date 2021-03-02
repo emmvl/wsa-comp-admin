@@ -19,6 +19,7 @@ const communicationAxiosApi = {
             form.append('toOrganisationIds', data.toOrganisationIds);
             form.append('toUserRoleIds', data.toUserRoleIds);
             form.append('toUserIds', data.toUserIds);
+            form.append('yearRefId', data.yearRefId);
 
             if (data.imageUrl) {
                 form.append('imageUrl', data.imageUrl);
@@ -56,9 +57,9 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    publishCommunication({ id, silent, isApp }) {
+    publishCommunication({ id, isNotification, isEmail, isApp, organisationUniqueKey }) {
         try {
-            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${!!silent}&isApp=${!!isApp}`;
+            const url = `${communicationBaseUrl}/publish?id=${id}&isNotification=${!!isNotification}&isEmail=${!!isEmail}&isApp=${!!isApp}&organisationUniqueKey=${organisationUniqueKey}`;
             return Method.dataGet(url, token);
         } catch (e) {
             console.error(e);

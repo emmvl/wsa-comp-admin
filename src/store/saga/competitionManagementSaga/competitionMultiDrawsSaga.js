@@ -1,18 +1,16 @@
-import { put, call, takeEvery } from 'redux-saga/effects'
-import ApiConstants from "../../../themes/apiConstants";
-import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
-import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
+import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
-import history from "../../../util/history";
-import AppConstants from "../../../themes/appConstants";
 import moment from "moment"
 
+import history from "util/history";
+import { receiptImportResult } from "util/showImportResult";
+import ApiConstants from "themes/apiConstants";
+import AppConstants from "themes/appConstants";
+import CompetitionAxiosApi from "store/http/competitionHttp/competitionAxiosApi";
+import RegstrartionAxiosApi from "store/http/registrationHttp/registrationAxiosApi";
+
 function getRangeCheck(action) {
-    if (action.competitionId == "-1" || action.dateRangeCheck) {
-        return false
-    } else {
-        return true
-    }
+    return !(action.competitionId == "-1" || action.dateRangeCheck);
 }
 
 function* failSaga(result) {
@@ -20,12 +18,12 @@ function* failSaga(result) {
     yield put({
         type: ApiConstants.API_COMPETITION_MULTI_DRAWS_FAIL,
         error: result,
-        status: result.status
+        status: result.status,
     });
     setTimeout(() => {
         message.config({
             duration: 1.5,
-            maxCount: 1
+            maxCount: 1,
         })
         message.error(result.message)
     }, 800);
@@ -35,30 +33,38 @@ function* errorSaga(error) {
     console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_COMPETITION_MULTI_DRAWS_ERROR,
-        error: error,
-        status: error.status
+        error,
+        status: error.status,
     });
     setTimeout(() => {
         message.config({
             duration: 1.5,
-            maxCount: 1
+            maxCount: 1,
         })
         message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 
-///////get competition draws
+// get competition draws
 function* getCompetitionDrawsSaga(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.getCompetitionDraws,
-            action.yearRefId, action.competitionId, 0, action.roundId, action.orgId, action.startDate, action.endDate);
+        const result = yield call(
+            CompetitionAxiosApi.getCompetitionDraws,
+            action.yearRefId,
+            action.competitionId,
+            0,
+            action.roundId,
+            action.orgId,
+            action.startDate,
+            action.endDate
+        );
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
                 competitionId: action.competitionId,
-                dateRangeCheck: action.dateRangeCheck
+                dateRangeCheck: action.dateRangeCheck,
             });
         } else {
             yield call(failSaga, result)
@@ -68,16 +74,15 @@ function* getCompetitionDrawsSaga(action) {
     }
 }
 
-////get rounds in the competition draws
+// get rounds in the competition draws
 function* getDrawsRoundsSaga(action) {
-    let dateRangeCheck = getRangeCheck(action)
+    const dateRangeCheck = getRangeCheck(action)
     try {
         let startDate
         let endDate
-        const result = dateRangeCheck ? yield call(CompetitionAxiosApi.getDrawsRounds,
-            action.yearRefId, action.competitionId) : {
-                status: 1, result: []
-            };
+        const result = dateRangeCheck
+            ? yield call(CompetitionAxiosApi.getDrawsRounds, action.yearRefId, action.competitionId)
+            : { status: 1, result: [] };
         if (result.status === 1) {
             if (action.startDate) {
                 startDate = dateRangeCheck ? null : action.startDate;
@@ -89,14 +94,14 @@ function* getDrawsRoundsSaga(action) {
             }
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
-                const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);
-                if (division_Result.status === 1) {
+                const divisionResult = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);
+                if (divisionResult.status === 1) {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_SUCCESS,
                         result: dateRangeCheck ? result.result.data : [],
                         dateRangeResult: dateRangeCheck ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
-                        division_Result: division_Result.result.data,
+                        division_Result: divisionResult.result.data,
                         status: result.status,
                     });
                 } else {
@@ -109,8 +114,7 @@ function* getDrawsRoundsSaga(action) {
                         status: result.status,
                     });
                 }
-            }
-            else {
+            } else {
                 yield put({
                     type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_SUCCESS,
                     result: action.competitionId != "-1" || action.dateRangeCheck ? result.result.data : [],
@@ -128,60 +132,78 @@ function* getDrawsRoundsSaga(action) {
     }
 }
 
-//// Update Competition Draws
-
+// Update Competition Draws
 function* updateCompetitionDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateDraws, action.data);
         if (result.status === 1) {
-            if(action.sourceDuplicate || action.targetDuplicate){
-                const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, 0, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
+            if (action.sourceDuplicate || action.targetDuplicate) {
+                const getResult = yield call(
+                    CompetitionAxiosApi.getCompetitionDraws,
+                    action.apiData.yearRefId,
+                    action.apiData.competitionId,
+                    0,
+                    action.apiData.roundId,
+                    action.apiData.orgId,
+                    action.apiData.startDate,
+                    action.apiData.endDate,
+                );
                 if (getResult.status === 1) {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,
                         result: getResult.result.data,
                         status: getResult.status,
                         competitionId: action.apiData.competitionId,
-                        dateRangeCheck: action.dateRangeCheck
+                        dateRangeCheck: action.dateRangeCheck,
                     });
+                } else {
+                    yield call(failSaga, getResult)
+                }
+            } else {
+                yield put({
+                    type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_SUCCESS,
+                    result: result.result.data,
+                    status: result.status,
+                    sourceArray: action.sourceArray,
+                    targetArray: action.targetArray,
+                    actionType: action.actionType,
+                    drawData: action.drawData,
+                });
             }
-            else {
-                yield call(failSaga, getResult)
-            }
-        }
-            else{
-            yield put({
-                type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-                sourceArray: action.sourceArray,
-                targetArray: action.targetArray,
-                actionType: action.actionType,
-                drawData: action.drawData
-            });
-        }
             message.success(result.result.data.message)
         } else {
             yield call(failSaga, result)
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
-//// Update Competition Draws Timeline
-
+// Update Competition Draws Timeline
 function* updateCompetitionDrawsTimeline(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.updateDraws,
-            action.data, action.source, action.target, action.actionType, action.drawData);
-        
+        const result = yield call(
+            CompetitionAxiosApi.updateDraws,
+            action.data,
+            action.source,
+            action.target,
+            action.actionType,
+            action.drawData,
+        );
+
         yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data.draws[0]);
         yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data.draws[1]);
 
-        const getDataResult = yield call(CompetitionAxiosApi.getCompetitionDraws,
-            action.yearRefId, action.competitionId, 0, action.roundId, action.orgId, action.startDate, action.endDate);
+        const getDataResult = yield call(
+            CompetitionAxiosApi.getCompetitionDraws,
+            action.yearRefId,
+            action.competitionId,
+            0,
+            action.roundId,
+            action.orgId,
+            action.startDate,
+            action.endDate,
+        );
 
         if (result.status === 1) {
             yield put({
@@ -192,7 +214,7 @@ function* updateCompetitionDrawsTimeline(action) {
                 targetArray: action.targetArray,
                 actionType: action.actionType,
                 drawData: action.drawData,
-                dateRangeCheck:action.dateRangeCheck
+                dateRangeCheck: action.dateRangeCheck,
             });
 
             yield put({
@@ -200,7 +222,7 @@ function* updateCompetitionDrawsTimeline(action) {
                 result: getDataResult.result.data,
                 status: getDataResult.status,
                 competitionId: action.competitionId,
-                dateRangeCheck: action.dateRangeCheck
+                dateRangeCheck: action.dateRangeCheck,
             });
 
             message.success(result.result.data.message)
@@ -212,7 +234,7 @@ function* updateCompetitionDrawsTimeline(action) {
     }
 }
 
-///// Save Draws saga
+// Save Draws saga
 function* saveDrawsSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.saveDrawsApi, action.yearId, action.competitionId, action.drawsMasterId);
@@ -228,11 +250,10 @@ function* saveDrawsSaga(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
-//// Get Competition venues saga
+// Get Competition venues saga
 function* getCompetitionVenues(action) {
     try {
         const result = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId);
@@ -250,13 +271,21 @@ function* getCompetitionVenues(action) {
     }
 }
 
-
-//////////update draws court timing where N/A(null) is there
+// update draws court timing where N/A(null) is there
 function* updateCourtTimingsDrawsAction(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data);
         if (result.status === 1) {
-            const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, 0, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
+            const getResult = yield call(
+                CompetitionAxiosApi.getCompetitionDraws,
+                action.apiData.yearRefId,
+                action.apiData.competitionId,
+                0,
+                action.apiData.roundId,
+                action.apiData.orgId,
+                action.apiData.startDate,
+                action.apiData.endDate,
+            );
             if (getResult.status === 1) {
                 yield put({
                     type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS,
@@ -268,7 +297,7 @@ function* updateCourtTimingsDrawsAction(action) {
                     targetArray: action.targetArray,
                     actionType: action.actionType,
                     drawData: action.drawData,
-                    dateRangeCheck:action.dateRangeCheck
+                    dateRangeCheck: action.dateRangeCheck,
                 });
             }
             message.success(result.result.data.message)
@@ -277,12 +306,10 @@ function* updateCourtTimingsDrawsAction(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
-
-////draws division grade names list
+// draws division grade names list
 function* getDivisionGradeNameListSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId);
@@ -297,7 +324,6 @@ function* getDivisionGradeNameListSaga(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
@@ -336,9 +362,33 @@ function* drawsMatchesListExportSaga(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
+
+function* drawsImportSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.importDraws, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_IMPORT_DRAWS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+            if (Object.keys(result.result.data.error).length === 0) {
+                history.push('/competitionDraws');
+                message.success('Draws Imported Successfully.');
+            } else {
+                receiptImportResult(result.result);
+            }
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 function* getDivisionSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId);
@@ -353,11 +403,10 @@ function* getDivisionSaga(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
-//////////update draws court timing where N/A(null) is there
+// update draws court timing where N/A(null) is there
 function* updateDrawsLock(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateDrawsLock, action.drawsId);
@@ -369,7 +418,7 @@ function* updateDrawsLock(action) {
                 roundId: action.roundId,
                 drawsId: action.drawsId,
                 venueCourtId: action.venueCourtId,
-                key: action.key
+                key: action.key,
             });
             message.success(result.result.data.message)
         } else {
@@ -377,16 +426,13 @@ function* updateDrawsLock(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
 
-
-////get active rounds in the competition draws
+// get active rounds in the competition draws
 function* getActiveDrawsRoundsSaga(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.getActiveDrawsRounds,
-            action.yearRefId, action.competitionId);
+        const result = yield call(CompetitionAxiosApi.getActiveDrawsRounds, action.yearRefId, action.competitionId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_MULTI_DRAWS_ACTIVE_ROUNDS_SUCCESS,
@@ -405,16 +451,15 @@ function* getVenueAndDivisionSaga(action) {
     try {
         const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, action.startDate, action.endDate);
         if (VenueResult.status === 1) {
-            const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, action.startDate, action.endDate);
-            if (division_Result.status === 1) {
+            const divisionResult = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, action.startDate, action.endDate);
+            if (divisionResult.status === 1) {
                 yield put({
                     type: ApiConstants.API_MULTI_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
                     Venue_Result: VenueResult.result.data,
-                    division_Result: division_Result.result.data,
-                    status: division_Result.status,
+                    division_Result: divisionResult.result.data,
+                    status: divisionResult.status,
                 });
-            }
-            else {
+            } else {
                 yield put({
                     type: ApiConstants.API_MULTI_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
                     Venue_Result: VenueResult.result.data,
@@ -429,8 +474,6 @@ function* getVenueAndDivisionSaga(action) {
         yield call(errorSaga, error)
     }
 }
-
-
 
 export default function* rootCompetitionMultiDrawSaga() {
     yield takeEvery(ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_LOAD, getCompetitionDrawsSaga);
@@ -447,4 +490,5 @@ export default function* rootCompetitionMultiDrawSaga() {
     yield takeEvery(ApiConstants.API_UPDATE_MULTI_DRAWS_LOCK_LOAD, updateDrawsLock);
     yield takeEvery(ApiConstants.API_GET_MULTI_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga);
     yield takeEvery(ApiConstants.API_MULTI_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga);
+    yield takeEvery(ApiConstants.API_IMPORT_DRAWS_LOAD, drawsImportSaga);
 }

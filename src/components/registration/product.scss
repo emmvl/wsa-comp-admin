@@ -63,6 +63,7 @@
 
 .content-view {
   padding: 39px 40px 40px;
+  background-color: #ffb8611f;
 }
 
 .form-heading {
@@ -135,6 +136,30 @@
 
 .file {
   display: none;
+}
+
+.venue-configuration-image {
+    margin-right: 10px;
+}
+
+.venue-configuration-control {
+    cursor: pointer;
+}
+
+.venue-configuration-modal {
+    min-width: 600px;
+    text-align: center;
+
+    img {
+        margin: 10px;
+        cursor: pointer;
+    }
+    img:hover {
+        border: 3px solid #ff8237;
+    }
+    .selected {
+        border: 3px solid #ff8237;
+    }
 }
 
 .single-checkbox {
