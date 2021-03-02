@@ -17,6 +17,7 @@ import {
     Modal,
     message,
     Tooltip,
+    InputNumber,
 } from "antd";
 import moment from "moment";
 
@@ -1127,20 +1128,18 @@ class RegistrationCompetitionForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field" />
                         <Form.Item name='numberOfRounds' rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
-                            <Select
+                            <InputNumber
                                 className="w-100"
                                 style={{ paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectRound}
-                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                // value={detailsData.competitionDetailData.noOfRounds}
+                                onChange={(e) =>
+                                    this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')
+                                }
+                                min={0}
+                                type="number"
+                                value={detailsData.competitionDetailData.noOfRounds}
                                 disabled={compDetailDisable}
-                            >
-                                {roundsArray.map(item => (
-                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
-                                        {item.noOfRounds}
-                                    </Option>
-                                ))}
-                            </Select>
+                            />
                         </Form.Item>
                     </div>
                 )}

@@ -133,3 +133,21 @@ export function* getTransferOrganisationsSaga(action) {
         yield call(errorSaga, error);
     }
 }
+
+ ////// Get DeRegister Data
+ export function* getDeRegisterSaga(action) {
+    try {
+      const result = yield call(AxiosApi.getDeRegisterData, action.payload);
+      if (result.status === 1) {
+        yield put({
+          type: ApiConstants.API_GET_DE_REGISTRATION_SUCCESS,
+          result: result.result.data,
+          status: result.status
+        });
+      } else {
+        yield call(failSaga, result)
+      }
+    } catch (error) {
+      yield call(errorSaga, error)
+    }
+  }
