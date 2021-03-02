@@ -171,7 +171,6 @@ class LiveScoreAddManager extends Component {
                         <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.managerSearch} />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchManager }]}>
                             <AutoComplete
-                                loading
                                 style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
