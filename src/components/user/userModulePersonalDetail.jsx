@@ -104,12 +104,20 @@ const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
-let userRoleId;
-const organisationData = get(localStorage, 'setOrganisationData', "{}")
+const isUserSuperAdmin = (userRolesFromState = []) => {
+    const superAdminRoleId = 1;
+    const organisationData = get(localStorage, 'setOrganisationData', "{}")
+    const isLoggedUserHasSuperAdminRole = userRolesFromState.find((role) => role.roleId === superAdminRoleId)
+    let isUserSuperAdmin = isLoggedUserHasSuperAdminRole;
 
-if (organisationData) {
-    const parsedOrganisationData = JSON.parse(organisationData)
-    userRoleId = parsedOrganisationData.userRoleId;
+    if (organisationData) {
+        const parsedOrganisationData = JSON.parse(organisationData)
+        const isOrganisationUserSuperAdmin = parsedOrganisationData.userRoleId === superAdminRoleId
+
+        isUserSuperAdmin = isOrganisationUserSuperAdmin || isUserSuperAdmin;
+    }
+
+    return isUserSuperAdmin;
 }
 
 const columns = [
@@ -248,7 +256,7 @@ const columns = [
                         <span>Payment</span>
                     </Menu.Item>
                     {
-                        userRoleId === 1 && (
+                        isUserSuperAdmin(this_Obj.props.userState.userRoleEntity) && (
                             <>
                                 <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                                     <span>
@@ -258,9 +266,9 @@ const columns = [
                                 <Menu.Item
                                     key="5"
                                     onClick={() => {
-                                    this_Obj.setState({ showTransferRegistrationPopup: true });
-                                    this_Obj.setState({ registrationData: e });
-                                }}
+                                        this_Obj.setState({ showTransferRegistrationPopup: true });
+                                        this_Obj.setState({ registrationData: e });
+                                    }}
                                 >
                                     <span>
                                         Transfer registration
