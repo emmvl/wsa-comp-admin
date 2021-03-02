@@ -41,7 +41,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let { friendPageSize } = this.props.userState;
+    let { friendPageSize } = this_Obj.props.userState;
     friendPageSize = friendPageSize ? friendPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
