@@ -1955,7 +1955,9 @@ const AppConstants = {
     wouldYouLikeToApprove: "Would you like to Approve?",
     regRetryModalMsg: "Do you want to retry the failed registration?",
     addDivOrGrade: "Add Div/Grade",
-    markAsFailedReg: "Mark as Failed Registration"
+    markAsFailedReg: "Mark as Failed Registration",
+    addAnotherMembershipCap: "Add Another Membership Cap",
+    successfullyUpdated: "Successfully updated"
 };
 
 export default AppConstants;
