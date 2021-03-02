@@ -47,46 +47,46 @@ class DashboardLayout extends React.Component {
     }
 
     async componentDidUpdate(nextProps) {
-        if (this.props.userState !== nextProps.userState) {
-            if (this.props.userState.onLoad === false && this.state.dataOnload === true) {
-                const organisationData = this.props.userState.getUserOrganisation;
+        const { userState } = this.props;
+        const { dataOnload } = this.state;
+
+        if (userState !== nextProps.userState) {
+            if (userState.onLoad === false && dataOnload === true) {
+                const organisationData = userState.getUserOrganisation;
 
                 if (organisationData.length > 0) {
-                    const impersonationRole = this.props.userState.userRoleEntity.find((role) => role.roleId === 10);
+                    const impersonationRole = userState.userRoleEntity.find((role) => role.roleId === 10);
                     const isImpersonation = !!impersonationRole;
-
                     const entityId = impersonationRole?.entityId;
-
                     const presetOrganisation = organisationData.find((org) => org.organisationId === entityId);
-
                     const orgData = presetOrganisation || getOrganisationData();
                     const organisationItem = orgData || organisationData[0];
 
                     await setOrganisationData(organisationItem);
                     this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
                     setImpersonation(!!isImpersonation);
-                    await this.setState({
+                    this.setState({
                         dataOnload: false,
-                        // impersonationOrgData: isImpersonation ? orgData : null,
                         impersonationAffiliateOrgId: isImpersonation ? entityId : null,
                     });
                 }
             }
 
-            if (this.props.userState.impersonation !== nextProps.userState.impersonation) {
-                if (this.props.userState.impersonation) {
-                    const impersonationAffiliate = this.state.impersonationAffiliateOrgId
-                        ? this.props.userState.affiliateList.find(
-                            (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+            if (userState.impersonation !== nextProps.userState.impersonation) {
+                const { impersonationAffiliateOrgId } = this.state;
+                if (userState.impersonation) {
+                    const impersonationAffiliate = impersonationAffiliateOrgId
+                        ? userState.affiliateList.find(
+                            (affiliate) => affiliate.affiliateOrgId === impersonationAffiliateOrgId,
                         )
                         : null;
 
-                    await this.setState({
+                    this.setState({
                         impersonationOrgData: impersonationAffiliate,
-                        impersonationAffiliateOrgId: this.state.impersonationAffiliateOrgId,
+                        impersonationAffiliateOrgId,
                     });
 
-                    if (!this.props.userState.impersonationLoad) {
+                    if (!userState.impersonationLoad) {
                         history.push("/");
                     }
                     window.location.reload();
@@ -94,9 +94,9 @@ class DashboardLayout extends React.Component {
             }
 
             if (
-                this.props.userState.impersonation
+                userState.impersonation
                 && this.state.impersonationLoad
-                && !this.props.userState.impersonationLoad
+                && !userState.impersonationLoad
             ) {
                 if (this.state.logout) {
                     localStorage.clear();
@@ -110,8 +110,8 @@ class DashboardLayout extends React.Component {
                 }
             }
 
-            if (this.props.userState.userRoleEntity !== nextProps.userState.userRoleEntity) {
-                const isImpersonation = this.props.userState.userRoleEntity.findIndex((role) => role.roleId === 10) > -1;
+            if (userState.userRoleEntity !== nextProps.userState.userRoleEntity) {
+                const isImpersonation = userState.userRoleEntity.findIndex((role) => role.roleId === 10) > -1;
 
                 const orgData = await getOrganisationData();
                 setImpersonation(!!isImpersonation);
@@ -128,24 +128,20 @@ class DashboardLayout extends React.Component {
     }
 
     setOrganisationKey = () => {
-        const organisationData = getOrganisationData();
-        if (!organisationData) {
-            if (this.props.userState.getUserOrganisation.length === 0) {
-                this.props.getUserOrganisationAction();
-            }
-            this.setState({ dataOnload: true });
-        } else {
-            if (this.props.userState.getUserOrganisation.length === 0) {
-                this.props.getUserOrganisationAction();
-            }
-            this.setState({ dataOnload: true });
+        const { userState, getUserOrganisationAction } = this.props;
+
+        if (userState.getUserOrganisation.length === 0) {
+            getUserOrganisationAction();
         }
+        this.setState({ dataOnload: true });
     }
 
     endImpersonation = async () => {
-        if (this.state.impersonationOrgData) {
+        const { impersonationOrgData } = this.state;
+
+        if (impersonationOrgData) {
             this.props.impersonationAction({
-                orgId: this.state.impersonationOrgData.organisationUniqueKey,
+                orgId: impersonationOrgData.organisationUniqueKey,
                 access: false,
             });
 
@@ -160,9 +156,11 @@ class DashboardLayout extends React.Component {
     };
 
     logout = async () => {
-        if (this.state.impersonationOrgData) {
+        const { impersonationOrgData } = this.state;
+
+        if (impersonationOrgData) {
             this.props.impersonationAction({
-                orgId: this.state.impersonationOrgData.organisationUniqueKey,
+                orgId: impersonationOrgData.organisationUniqueKey,
                 access: false,
             });
 
@@ -228,7 +226,6 @@ class DashboardLayout extends React.Component {
 
     onOrganisationChange = async (organisationData) => {
         this.props.onOrganisationChangeAction(organisationData, "organisationChange");
-        this.setFullStory(organisationData);
         setOrganisationData(organisationData);
         this.props.clearHomeDashboardData("user");
         clearUmpireStorage();
@@ -236,19 +233,6 @@ class DashboardLayout extends React.Component {
         history.push("./homeDashboard", { orgChange: "changeOrg" });
         window.location.reload();
     }
-
-    setFullStory = (/* organisationData */) => {
-        // if (organisationData != null) {
-        //   let exOrgData = getOrganisationData();
-        //   if (exOrgData == null || organisationData.organisationUniqueKey !== exOrgData.organisationUniqueKey) {
-        //     setUserVars({
-        //       displayName: organisationData.firstName + " " + organisationData.lastName,
-        //       email: organisationData.userEmail,
-        //       organisation: organisationData.name,
-        //     });
-        //   }
-        // }
-    };
 
     handleImpersonation = () => {
         const organisationData = getOrganisationData();
@@ -285,8 +269,8 @@ class DashboardLayout extends React.Component {
     };
 
     userProfileDropdown = () => {
-        const { menuName } = this.props;
-        const userData = this.props.userState.getUserOrganisation;
+        const { menuName, userState } = this.props;
+        const userData = userState.getUserOrganisation;
         const selectedOrgData = getOrganisationData();
         const userImage = (selectedOrgData && selectedOrgData.photoUrl)
             ? selectedOrgData.photoUrl
@@ -372,19 +356,24 @@ class DashboardLayout extends React.Component {
     };
 
     render() {
-        const { menuName } = this.props;
-        const { userRoleId } = this.state;
+        const { menuName, userState } = this.props;
+        const {
+            userRoleId,
+            impersonationOrgData,
+            impersonationLoad,
+        } = this.state;
+
         return (
             <>
                 {this.state.impersonationOrgData && (
                     <div className="col-sm-12 d-flex impersonation-bar">
-                        {`You are impersonating access to ${this.state.impersonationOrgData.name}.`}
+                        {`You are impersonating access to ${impersonationOrgData.name}.`}
                         <a onClick={this.endImpersonation}>End access</a>
                     </div>
                 )}
 
                 <header
-                    className={`site-header ${this.state.impersonationLoad && this.state.impersonationOrgData ? "impersonation-site-header" : ""}`}
+                    className={`site-header ${impersonationLoad && impersonationOrgData ? "impersonation-site-header" : ""}`}
                 >
                     <div className="header-wrap">
                         <div className="row m-0-res">
@@ -570,9 +559,9 @@ class DashboardLayout extends React.Component {
                             placeholder="Organisation"
                             showSearch
                             filterOption={(input, data) => data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            loading={this.props.userState.onImpersonationLoad}
+                            loading={userState.onImpersonationLoad}
                         >
-                            {(this.props.userState.impersonationList || []).map((affiliate) => (
+                            {(userState.impersonationList || []).map((affiliate) => (
                                 <Option key={`organization_${affiliate.affiliateOrgId}`} value={affiliate.affiliateOrgId}>
                                     {affiliate.affiliateName}
                                 </Option>
@@ -580,7 +569,7 @@ class DashboardLayout extends React.Component {
                         </Select>
                     </Modal>
 
-                    <Loader visible={this.props.userState.impersonationLoad} />
+                    <Loader visible={userState.impersonationLoad} />
                 </header>
             </>
         );
