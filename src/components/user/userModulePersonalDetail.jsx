@@ -49,7 +49,7 @@ import {
     exportUserRegData,
     getSubmittedRegData,
     transferUserRegistration,
-    cancelDeRegistrationAction
+    cancelDeRegistrationAction,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -62,8 +62,6 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { registrationRetryPaymentAction } from "../../store/actions/registrationAction/registrationDashboardAction";
 import { liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 
-
-
 function tableSort(a, b, key) {
     const stringA = JSON.stringify(a[key]);
     const stringB = JSON.stringify(b[key]);
@@ -73,22 +71,28 @@ function tableSort(a, b, key) {
 function umpireActivityTableSort(key) {
     let sortBy = key;
     let sortOrder = null;
-    if (this_Obj.state.UmpireActivityListSortBy !== key) {
+    const {
+        UmpireActivityListSortBy,
+        UmpireActivityListSortOrder,
+        umpireActivityOffset, userId,
+    } = this_Obj.state;
+    const { getUmpireActivityListAction } = this_Obj.props;
+    if (UmpireActivityListSortBy !== key) {
         sortOrder = 'ASC';
-    } else if (this_Obj.state.UmpireActivityListSortBy === key && this_Obj.state.UmpireActivityListSortOrder === 'ASC') {
+    } else if (UmpireActivityListSortBy === key && UmpireActivityListSortOrder === 'ASC') {
         sortOrder = 'DESC';
-    } else if (this_Obj.state.UmpireActivityListSortBy === key && this_Obj.state.UmpireActivityListSortOrder === 'DESC') {
+    } else if (UmpireActivityListSortBy === key && UmpireActivityListSortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
     const payload = {
         paging: {
             limit: 10,
-            offset: this_Obj.state.umpireActivityOffset,
+            offset: umpireActivityOffset,
         },
     };
     this_Obj.setState({ UmpireActivityListSortBy: sortBy, UmpireActivityListSortOrder: sortOrder });
 
-    this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
+    getUmpireActivityListAction(payload, JSON.stringify([15]), userId, sortBy, sortOrder);
 }
 
 const {
@@ -125,7 +129,14 @@ const columns = [
         key: "expiryDate",
         render: (expiryDate, record) => (
             <span>
-                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Single Game' && expiryDate !== 'Pay each Match' ? moment(expiryDate, "YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate, "YYYY-MM-DD").format("DD/MM/YYYY")}
+                {expiryDate != null ? (
+                    expiryDate !== 'Single Use'
+                    && expiryDate !== 'Single Game'
+                    && expiryDate !== 'Pay each Match'
+                        ? moment(expiryDate, "YYYY-MM-DD").format("DD/MM/YYYY")
+                        : expiryDate
+                )
+                    : moment(record.competitionEndDate, "YYYY-MM-DD").format("DD/MM/YYYY")}
             </span>
         ),
     },
@@ -159,7 +170,7 @@ const columns = [
         render: (paidByUsers, record) => (
             <div>
                 {(record.paidByUsers || []).map((item) => (
-                    this_Obj.state.userId == item.paidByUserId ? (
+                    this_Obj.state.userId === item.paidByUserId ? (
                         <div>Self</div>
                     ) : (
                         <div>
@@ -180,11 +191,6 @@ const columns = [
             </div>
         ),
     },
-    // {
-    //   title: "Shop Purchases",
-    //   dataIndex: "shopPurchases",
-    //   key: "shopPurchases",
-    // },
     {
         title: "Status",
         dataIndex: "paymentStatus",
@@ -249,10 +255,13 @@ const columns = [
                                         Registration Form
                                     </span>
                                 </Menu.Item>
-                                <Menu.Item key="5" onClick={() => {
+                                <Menu.Item
+                                    key="5"
+                                    onClick={() => {
                                     this_Obj.setState({ showTransferRegistrationPopup: true });
                                     this_Obj.setState({ registrationData: e });
-                                }}>
+                                }}
+                                >
                                     <span>
                                         Transfer registration
                                     </span>
@@ -272,7 +281,12 @@ const teamRegistrationColumns = [
         dataIndex: "teamName",
         key: "teamName",
         render: (teamName, record) => (
-            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.showTeamMembers(record, 1)}>{teamName}</span>
+            <span
+                className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.showTeamMembers(record, 1)}
+            >
+                {teamName}
+            </span>
         ),
     },
 
@@ -394,37 +408,35 @@ const childOtherRegistrationColumns = [
     {
         title: "Action",
         key: "action",
-        render: (data, record) => {
-            return (
-                <div>
-                    {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
-                        <Menu
-                            className="action-triple-dot-submenu"
-                            theme="light"
-                            mode="horizontal"
-                            style={{ lineHeight: "25px" }}
+        render: (data, record) => (
+            <div>
+                {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
+                    <Menu
+                        className="action-triple-dot-submenu"
+                        theme="light"
+                        mode="horizontal"
+                        style={{ lineHeight: "25px" }}
+                    >
+                        <SubMenu
+                            key="sub1"
+                            title={(
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.moreTripleDot}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                />
+                            )}
                         >
-                            <SubMenu
-                                key="sub1"
-                                title={(
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.moreTripleDot}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                )}
-                            >
-                                <Menu.Item key="1">
-                                    <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
-                                </Menu.Item>
-                            </SubMenu>
-                        </Menu>
-                    ) : (<div></div>)}
-                </div>
-            )
-        },
+                            <Menu.Item key="1">
+                                <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu>
+                ) : (<div />)}
+            </div>
+        ),
     },
 ];
 
@@ -465,29 +477,30 @@ const teamMembersColumns = [
         key: "action",
         dataIndex: "isActive",
         render: (data, record) => {
-            let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-            let compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
+            const organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+            const compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
             return (
                 <div>
-                    {record.actionFlag == 1 &&
-                        <Menu
-                            className="action-triple-dot-submenu"
-                            theme="light"
-                            mode="horizontal"
-                            style={{ lineHeight: "25px" }}
-                        >
-                            <SubMenu
-                                key="sub1"
-                                title={(
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.moreTripleDot}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                )}
+                    {record.actionFlag == 1
+                        && (
+                            <Menu
+                                className="action-triple-dot-submenu"
+                                theme="light"
+                                mode="horizontal"
+                                style={{ lineHeight: "25px" }}
                             >
+                                <SubMenu
+                                    key="sub1"
+                                    title={(
+                                        <img
+                                            className="dot-image"
+                                            src={AppImages.moreTripleDot}
+                                            alt=""
+                                            width="16"
+                                            height="16"
+                                        />
+                                    )}
+                                >
                                  {compOrgId == organistaionId && record.isRemove == 1 && (
                                     <Menu.Item key="1">
                                         <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
@@ -514,12 +527,11 @@ const teamMembersColumns = [
                                         <span>{AppConstants.cancelDeRegistrtaion}</span>
                                     </Menu.Item>
                                 }
-                            </SubMenu>
-                        </Menu>
-                    }
+                                </SubMenu>
+                            </Menu>
+                        )}
                 </div>
             )
-
         },
 
     },
@@ -1557,7 +1569,7 @@ class UserModulePersonalDetail extends Component {
             transferRegistrationPaidBy: '',
             registrationData: [],
             removeTeamMemberRecord: null,
-            retryPaymentOnLoad: false
+            retryPaymentOnLoad: false,
         };
     }
 
@@ -1684,7 +1696,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
-                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
+                competitionMembershipProductDivisionId: record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -1693,25 +1705,25 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleTeamMembersAction(payload);
             this.setState({ removeTeamMemberLoad: false });
         }
-        if(this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelDeRegistrationLoad == true){
+        if (this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelDeRegistrationLoad == true) {
             this.handleRegistrationTableList(
                 1,
                 this.state.userId,
                 this.state.competition,
                 this.state.yearRefId,
-                "myRegistrations"
-                );
-            this.setState({cancelDeRegistrationLoad: false})
+                "myRegistrations",
+            );
+            this.setState({ cancelDeRegistrationLoad: false })
         }
 
-        if((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true){
-            this.setState({retryPaymentOnLoad: false});
+        if ((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
+            this.setState({ retryPaymentOnLoad: false });
             this.handleRegistrationTableList(
                 1,
                 this.state.userId,
                 this.state.competition,
                 this.state.yearRefId,
-                "myRegistrations"
+                "myRegistrations",
             );
         }
 
@@ -1757,14 +1769,14 @@ class UserModulePersonalDetail extends Component {
     }
 
     cancelDeRegistrtaion = (deRegisterId) => {
-        try{
-            let payload = {
-                deRegisterId: deRegisterId
+        try {
+            const payload = {
+                deRegisterId,
             }
             this.props.cancelDeRegistrationAction(payload);
-            this.setState({cancelDeRegistrationLoad: true})
-        } catch(ex) {
-            console.log("Error in cancelDeRegistrtaion::" +ex)
+            this.setState({ cancelDeRegistrationLoad: true })
+        } catch (ex) {
+            console.log(`Error in cancelDeRegistrtaion::${ex}`)
         }
     }
 
@@ -2065,7 +2077,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
-                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
+                competitionMembershipProductDivisionId: record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -2137,50 +2149,50 @@ class UserModulePersonalDetail extends Component {
     };
 
     retryPayment = (record) => {
-        try{
-            if(record.invoiceFailedStatus){
-                let payload = {
+        try {
+            if (record.invoiceFailedStatus) {
+                const payload = {
                     registrationId: record.registrationId,
                 }
                 this.props.registrationRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
-            }else if(record.transactionFailedStatus){
-                let payload = {
+            } else if (record.transactionFailedStatus) {
+                const payload = {
                     processTypeName: "instalment",
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
                     divisionId: record.divisionId,
-                    competitionId: record.competitionId
+                    competitionId: record.competitionId,
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
             }
-        }catch(ex){
-            console.log("Error in retryPayment::"+ex);
+        } catch (ex) {
+            console.log(`Error in retryPayment::${ex}`);
         }
     }
 
     myRegistrationRetryPayment = (record) => {
-        try{
-            if(record.paymentStatusFlag == 2){
-                let payload = {
+        try {
+            if (record.paymentStatusFlag == 2) {
+                const payload = {
                     registrationId: record.registrationId,
                 }
                 this.props.registrationRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
-            }else if(record.paymentStatus == "Failed Registration"){
-                let payload = {
+            } else if (record.paymentStatus == "Failed Registration") {
+                const payload = {
                     processTypeName: "instalment",
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
                     divisionId: record.divisionId,
-                    competitionId: record.competitionId
+                    competitionId: record.competitionId,
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
             }
-        }catch(ex){
-            console.log("Error in myRegistrationRetryPayment::"+ex);
+        } catch (ex) {
+            console.log(`Error in myRegistrationRetryPayment::${ex}`);
         }
     }
 
@@ -2633,33 +2645,33 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 {/* )} */}
                 {/* {(!personal.dateOfBirth || getAge(personal.dateOfBirth) > 18) && ( */}
-                    <div>
-                        <div
-                            className="user-module-row-heading"
-                            style={{ marginTop: 30 }}
-                        >
-                            {AppConstants.childDetails}
-                        </div>
-                        <NavLink
-                            to={{
-                                pathname: `/userProfileEdit`,
-                                state: { moduleFrom: "7", userData: personal },
-                            }}
-                        >
-                            <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
-                                {`+ ${AppConstants.addChild}`}
-                            </span>
-                        </NavLink>
-                        <div className="table-responsive home-dash-table-view">
-                            <Table
-                                className="home-dashboard-table"
-                                columns={columnsPersonalChildContacts}
-                                dataSource={childContacts}
-                                pagination={false}
-                                loading={userState.onPersonLoad && true}
-                            />
-                        </div>
+                <div>
+                    <div
+                        className="user-module-row-heading"
+                        style={{ marginTop: 30 }}
+                    >
+                        {AppConstants.childDetails}
                     </div>
+                    <NavLink
+                        to={{
+                            pathname: `/userProfileEdit`,
+                            state: { moduleFrom: "7", userData: personal },
+                        }}
+                    >
+                        <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
+                            {`+ ${AppConstants.addChild}`}
+                        </span>
+                    </NavLink>
+                    <div className="table-responsive home-dash-table-view">
+                        <Table
+                            className="home-dashboard-table"
+                            columns={columnsPersonalChildContacts}
+                            dataSource={childContacts}
+                            pagination={false}
+                            loading={userState.onPersonLoad && true}
+                        />
+                    </div>
+                </div>
                 {/* )} */}
                 <div className="user-module-row-heading" style={{ marginTop: 30 }}>
                     {AppConstants.emergencyContacts}
@@ -2888,7 +2900,7 @@ class UserModulePersonalDetail extends Component {
         const teamMembers = userState.teamMembersDetails ? userState.teamMembersDetails.teamMembers : [];
         const teamMembersCurrentPage = userState.teamMembersDetails?.page ? userState.teamMembersDetails?.page.currentPage : 1;
         const teamMembersTotalCount = userState.teamMembersDetails?.page.totalCount;
-        let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        const organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         return (
             <div>
                 {this.state.isShowRegistrationTeamMembers == false ? (
@@ -3043,15 +3055,15 @@ class UserModulePersonalDetail extends Component {
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove ?
-                                <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
+                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove
+                                ? (
+                                    <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
                                     +
-                                    {' '}
-                                    {AppConstants.addTeamMembers}
-                                </div>
-                                :
-                                null
-                            }
+                                        {' '}
+                                        {AppConstants.addTeamMembers}
+                                    </div>
+                                )
+                                : null}
                         </div>
                         <div className="user-module-row-heading font-18 mt-2">
                             {`${AppConstants.team}: ${this.state.registrationTeam.teamName}`}
@@ -3196,7 +3208,7 @@ class UserModulePersonalDetail extends Component {
     exportUserRegistrationData = () => {
         const { userState } = this.props;
         const personal = userState.personalData;
-        const userId = personal.userId;
+        const { userId } = personal;
 
         this.props.exportUserRegData({ userId });
     }
@@ -3648,7 +3660,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     transferRegistrationSubmit = async () => {
-        const {transferRegistrationUserId, transferRegistrationPaidBy, registrationData} = this.state;
+        const { transferRegistrationUserId, transferRegistrationPaidBy, registrationData } = this.state;
 
         const requestBodyObj = {
             userIdTrasferingTo: Number(transferRegistrationUserId),
@@ -3668,9 +3680,8 @@ class UserModulePersonalDetail extends Component {
 
         this.setState({
             transferRegistrationUserId: '',
-            transferRegistrationPaidBy: ''
+            transferRegistrationPaidBy: '',
         });
-
     }
 
     transferRegistrationPopup = () => (
@@ -3687,7 +3698,7 @@ class UserModulePersonalDetail extends Component {
             <div className="transfer-modal-body">
                 <div className="transfer-modal-form">
                     <div>User ID</div>
-                    {/*<div>Paid By</div>*/}
+                    {/* <div>Paid By</div> */}
                 </div>
                 <div className="transfer-modal-form">
                     <input
@@ -3697,15 +3708,15 @@ class UserModulePersonalDetail extends Component {
                         value={this.state.transferRegistrationUserId}
                         onChange={(e) => this.handleUserPaidIdsChange(e)}
                     />
-                    {/*{ Uncomment when transactions trasfering is ready }*/}
+                    {/* { Uncomment when transactions trasfering is ready } */}
 
-                    {/*<input*/}
-                    {/*    className="transfer-modal-form-input"*/}
-                    {/*    type="text"*/}
-                    {/*    name="transferRegistrationPaidBy"*/}
-                    {/*    value={this.state.transferRegistrationPaidBy}*/}
-                    {/*    onChange={(e) => this.handleUserPaidIdsChange(e)}*/}
-                    {/*/>*/}
+                    {/* <input */}
+                    {/*    className="transfer-modal-form-input" */}
+                    {/*    type="text" */}
+                    {/*    name="transferRegistrationPaidBy" */}
+                    {/*    value={this.state.transferRegistrationPaidBy} */}
+                    {/*    onChange={(e) => this.handleUserPaidIdsChange(e)} */}
+                    {/* /> */}
                 </div>
             </div>
         </Modal>
@@ -3850,7 +3861,7 @@ function mapDispatchToProps(dispatch) {
             transferUserRegistration,
             cancelDeRegistrationAction,
             registrationRetryPaymentAction,
-            liveScorePlayersToPayRetryPaymentAction
+            liveScorePlayersToPayRetryPaymentAction,
         },
         dispatch,
     );
