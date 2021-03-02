@@ -837,15 +837,17 @@ const CompetitionAxiosApi = {
         return Method.dataPost(url, token, action.payload);
     },
 
-    async deconsteTeam(payload) {
-        payload.organisationId = await getOrganisationData().organisationUniqueKey;
-        const url = `/api/team/deconste`
+    async deleteTeam(payload) {
+        const organisationId = await getOrganisationData().organisationUniqueKey;
+        payload = { ...payload, organisationId };
+        const url = `/api/team/delete`;
         return Method.dataPost(url, token, payload);
     },
 
-    async deconsteTeamAction(payload) {
-        payload.organisationId = await getOrganisationData().organisationUniqueKey;
-        const url = `/api/team/action`
+    async deleteTeamAction(payload) {
+        const organisationId = await getOrganisationData().organisationUniqueKey;
+        payload = { ...payload, organisationId };
+        const url = `/api/team/action`;
         return Method.dataPost(url, token, payload);
     },
 
