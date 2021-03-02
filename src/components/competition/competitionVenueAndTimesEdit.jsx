@@ -11,7 +11,7 @@ import {
     Checkbox,
     TimePicker,
     message,
-    Form
+    Form, Modal
 } from "antd";
 // import CSVReader from 'react-csv-reader';
 import moment from "moment";
@@ -69,6 +69,8 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueAddress: null,
             venueAddressError: '',
             isCreator: null,
+            fieldConfigurationRefIdIndex: null,
+            venueConfigurationModalIsOpened: false,
             courtColumns: [
                 {
                     title: "Court Number",
@@ -165,6 +167,34 @@ class CompetitionVenueAndTimesEdit extends Component {
                 },
                 {
                     title: "",
+                    dataIndex: "fieldConfigurationRefId",
+                    key: "fieldConfigurationRefId",
+                    width: process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED ? 200 : 0,
+                    render: (fieldConfigurationRefId, record, index) => (
+                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED ?
+                            <div>
+                                <img
+                                    className="venue-configuration-image"
+                                    src={this.state.venueConfigurationImages[fieldConfigurationRefId-1]}
+                                    alt=""
+                                    height={80}
+                                />
+                                <img
+                                    className="venue-configuration-control"
+                                    src={AppImages.chevronRight}
+                                    alt=""
+                                    height={25}
+                                    onClick={() => {
+                                        this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
+                                    }}
+                                />
+                            </div>
+                            :
+                            <></>
+                    )
+                },
+                {
+                    title: "",
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
@@ -184,6 +214,16 @@ class CompetitionVenueAndTimesEdit extends Component {
                 }
             ],
             manualAddress: false,
+            venueConfigurationImages: [
+                AppImages.venueConfiguration1,
+                AppImages.venueConfiguration2,
+                AppImages.venueConfiguration3,
+                AppImages.venueConfiguration4,
+                AppImages.venueConfiguration5,
+                AppImages.venueConfiguration6,
+                AppImages.venueConfiguration7,
+                AppImages.venueConfiguration8,
+            ],
 
         };
         // this_Obj = this;
@@ -255,6 +295,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         addressOne: venueData.street1,
                         suburb: venueData.suburb,
                         stateRefId: venueData.stateRefId,
+                        fieldConfigurationRefId: venueData.fieldConfigurationRefId,
                         postcode: venueData.postalCode,
                         lat: venueData.lat,
                         lng: venueData.lng,
@@ -286,6 +327,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             addressOne: venueData.street1,
             suburb: venueData.suburb,
             stateRefId: venueData.stateRefId,
+            fieldConfigurationRefId: venueData.fieldConfigurationRefId,
             postcode: venueData.postalCode
         });
         this.setVenuCourtFormFields();
@@ -443,6 +485,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
         if (address.addressOne) {
             this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+            this.props.updateVenuAndTimeDataAction(venuData.fieldConfigurationRefId, 'Venue', 'fieldConfigurationRefId');
             this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
             this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
             this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
@@ -1174,10 +1217,45 @@ class CompetitionVenueAndTimesEdit extends Component {
         message.error(ValidationConstants.plzReviewPage)
     };
 
+    venueConfigurationModal = () => (
+        <Modal
+            title="Venue Configuration"
+            visible={this.state.venueConfigurationModalIsOpened}
+            className="venue-configuration-modal"
+            onCancel={() => {this.setState({venueConfigurationModalIsOpened: false})}}
+            onOk={() => {this.setState({venueConfigurationModalIsOpened: false})}}
+            foter={[]}>
+            {
+                this.state.venueConfigurationImages.map((item, key) => (
+                    <img
+                        className={"venue-configuration-image " + ( this.isSelected(key) ? "selected" : "" ) }
+                        src={item}
+                        key={"venue_configuration_images" + key}
+                        alt=""
+                        height={150}
+                        onClick={() => {
+                            this.setState({fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
+                            this.props.updateVenuAndTimeDataAction(
+                                key+1,
+                                this.state.fieldConfigurationRefIdIndex,
+                                'fieldConfigurationRefId',
+                                'courtData',
+                            )
+                        }}
+                    />
+                ))
+            }
+        </Modal>
+    )
+
+    isSelected = (id = 0) => {
+        return this.state.fieldConfigurationRefId === id;
+    }
 
     render() {
         return (
             <div className="fluid-width default-bg">
+                {this.venueConfigurationModal()}
                 <DashboardLayout
                     menuHeading={AppConstants.user}
                     menuName={AppConstants.user}

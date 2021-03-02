@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
+import { get, isEmpty } from 'lodash'
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {
@@ -58,6 +59,10 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 import { getAge, isArrayNotEmpty } from "../../util/helpers";
+import { registrationRetryPaymentAction } from "../../store/actions/registrationAction/registrationDashboardAction";
+import { liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+
+
 
 function tableSort(a, b, key) {
     const stringA = JSON.stringify(a[key]);
@@ -211,11 +216,20 @@ const columns = [
                         />
                     )}
                 >
-                    <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
-                        <span>View</span>
-                    </Menu.Item>
-                    {e.alreadyDeRegistered == 0 && e.paymentStatusFlag == 1 && (
-                        <Menu.Item key="2" onClick={() => history.push("/deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
+                    {(e.paymentStatus == "Failed") && (
+                        <Menu.Item key="7" onClick={() => this_Obj.myRegistrationRetryPayment(e)}>
+                            <span>{AppConstants.retryPayment}</span>
+                        </Menu.Item>
+                    )}
+                    {e.alreadyDeRegistered == 0 && (
+                        <Menu.Item key="2" 
+                        onClick={() => 
+                            history.push("/deregistration", { 
+                                regData: e, 
+                                personal: this_Obj.props.userState.personalData,
+                                sourceFrom: AppConstants.ownRegistration 
+                            })
+                        }>
                             <span>{AppConstants.registrationChange}</span>
                         </Menu.Item>
                     )}
@@ -228,7 +242,7 @@ const columns = [
                         <span>Payment</span>
                     </Menu.Item>
                     {
-                        userRoleId === 2 &&
+                        userRoleId === 1 &&
                             <>
                                 <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                                     <span>
@@ -364,37 +378,36 @@ const teamRegistrationColumns = [
         dataIndex: "status",
         key: "status",
     },
-
     {
-        title: "Action",
-        key: "action",
-        dataIndex: "teamName",
-        render: (action, record) => (
+        title: 'Action',
+        dataIndex: 'status',
+        key: 'status',
+        width: 80,
+        render: (data, record) => (
             <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
+                className="action-triple-dot-submenu" theme="light" mode="horizontal"
+                style={{ lineHeight: "25px" }}>
                 <SubMenu
                     key="sub1"
-                    title={(
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    )}
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16" />}
                 >
-                    <Menu.Item key="1">
-                        <span onClick={() => this_Obj.showTeamMembers(record, 1)}>View</span>
+                    <Menu.Item
+                    key="1"
+                    onClick={() =>
+                        history.push("/deregistration", {
+                        regData: record,
+                        personal: this_Obj.props.userState.personalData,
+                        sourceFrom: AppConstants.teamRegistration
+                        })
+                    }
+                    >
+                    <span>{AppConstants.registrationChange}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
-        ),
-    },
+        )
+    }
 ];
 
 const childOtherRegistrationColumns = [
@@ -428,6 +441,41 @@ const childOtherRegistrationColumns = [
         title: "Fee Paid",
         key: "feePaid",
         dataIndex: "feePaid",
+    },
+    {
+        title: "Action",
+        key: "action",
+        render: (data, record) => {
+            return (
+                <div>
+                    {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: "25px" }}
+                        >
+                            <SubMenu
+                                key="sub1"
+                                title={(
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                    />
+                                )}
+                            >
+                                <Menu.Item key="1">
+                                    <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    ) : (<div></div>)}
+                </div>
+            )
+        },
     },
 ];
 
@@ -467,7 +515,6 @@ const teamMembersColumns = [
             let compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
             return (
                 <div>
-                    {compOrgId == organistaionId && record.isRemove == 1 &&
                         <Menu
                             className="action-triple-dot-submenu"
                             theme="light"
@@ -486,12 +533,25 @@ const teamMembersColumns = [
                                     />
                                 )}
                             >
-                                <Menu.Item key="1">
-                                    <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
+                                 {compOrgId == organistaionId && record.isRemove == 1 && (
+                                    <Menu.Item key="1">
+                                        <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
+                                    </Menu.Item>
+                                 )}
+                                <Menu.Item
+                                    key="2"
+                                    onClick={() =>
+                                        history.push("/deregistration", {
+                                        regData: record,
+                                        personal: this_Obj.props.userState.personalData,
+                                        sourceFrom: AppConstants.teamMembers
+                                        })
+                                    }
+                                >
+                                    <span>{AppConstants.registrationChange}</span>
                                 </Menu.Item>
                             </SubMenu>
                         </Menu>
-                    }
                 </div>
             )
 
@@ -1532,6 +1592,7 @@ class UserModulePersonalDetail extends Component {
             transferRegistrationPaidBy: '',
             registrationData: [],
             removeTeamMemberRecord: null,
+            retryPaymentOnLoad: false
         };
     }
 
@@ -1546,37 +1607,47 @@ class UserModulePersonalDetail extends Component {
         this.setState({ yearRefId });
         const isAdmin = getOrganisationData() ? getOrganisationData().userRole == 'admin' : false;
         this.props.getReferenceOrderStatus();
-        if (
-            this.props.location.state != null
-            && this.props.location.state != undefined
-        ) {
-            const { userId } = this.props.location.state;
-            const { screenKey } = this.props.location.state;
-            const { screen } = this.props.location.state;
-            const tabKey = this.props.location.state.tabKey != undefined
-                ? this.props.location.state.tabKey
-                : "1";
-            await this.setState({
+
+        const profileRouterStateKey = "profileRouterState";
+        const routerState = get(this.props, 'location.state', null);
+        const storageRouterState = JSON.parse(localStorage.getItem(profileRouterStateKey));
+        const profileState = routerState || storageRouterState || {};
+        const storageUserId = localStorage.getItem("userId");
+
+        if (routerState) {
+            localStorage.setItem(profileRouterStateKey, JSON.stringify(routerState))
+        }
+
+        const {
+            userId: stateUserId, screenKey, screen, tabKey,
+        } = profileState;
+        const currentTabKey = tabKey || this.state.tabKey;
+        const userId = stateUserId || storageUserId;
+
+        if (profileState) {
+            this.setState({
                 userId,
                 screenKey,
                 screen,
                 tabKey,
             });
-            this.tabApiCalls(
-                tabKey,
-                this.state.competition,
+        }
+
+        this.tabApiCalls(
+            tabKey,
+            this.state.competition,
+            userId,
+            yearRefId,
+        );
+        this.apiCalls(userId);
+
+        if (currentTabKey === "1") {
+            this.handleActivityTableList(
+                1,
                 userId,
-                yearRefId,
+                this.state.competition,
+                "parent",
             );
-            this.apiCalls(userId);
-            if (this.state.tabKey == "1") {
-                this.handleActivityTableList(
-                    1,
-                    userId,
-                    this.state.competition,
-                    "parent",
-                );
-            }
         }
 
         this.setState({
@@ -1666,6 +1737,17 @@ class UserModulePersonalDetail extends Component {
                 "myRegistrations"
                 );
             this.setState({cancelDeRegistrationLoad: false})
+        }
+
+        if((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true){
+            this.setState({retryPaymentOnLoad: false});
+            this.handleRegistrationTableList(
+                1, 
+                this.state.userId,
+                this.state.competition,
+                this.state.yearRefId,
+                "myRegistrations"
+            );
         }
     }
 
@@ -1943,7 +2025,7 @@ class UserModulePersonalDetail extends Component {
         const filter = {
             competitionId: competition.competitionUniqueKey,
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
-            userId: this.state.userId,
+            userId: userId || this.state.userId,
             yearRefId,
             paging: {
                 limit: 10,
@@ -2071,6 +2153,54 @@ class UserModulePersonalDetail extends Component {
             registrationForm: item.registrationForm,
         });
     };
+
+    retryPayment = (record) => {
+        try{
+            if(record.invoiceFailedStatus){
+                let payload = {
+                    registrationId: record.registrationId,
+                }
+                this.props.registrationRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }else if(record.transactionFailedStatus){
+                let payload = {
+                    processTypeName: "instalment",
+                    registrationUniqueKey: record.registrationId,
+                    userId: this.state.userId,
+                    divisionId: record.divisionId,
+                    competitionId: record.competitionId
+                }
+                this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }
+        }catch(ex){
+            console.log("Error in retryPayment::"+ex);
+        }
+    }
+
+    myRegistrationRetryPayment = (record) => {
+        try{
+            if(record.paymentStatusFlag == 2){
+                let payload = {
+                    registrationId: record.registrationId,
+                }
+                this.props.registrationRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }else if(record.paymentStatus == "Failed"){
+                let payload = {
+                    processTypeName: "instalment",
+                    registrationUniqueKey: record.registrationId,
+                    userId: this.state.userId,
+                    divisionId: record.divisionId,
+                    competitionId: record.competitionId
+                }
+                this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+                this.setState({ retryPaymentOnLoad: true });
+            }
+        }catch(ex){
+            console.log("Error in myRegistrationRetryPayment::"+ex);
+        }
+    }
 
     headerView = () => (
         <Header className="comp-player-grades-header-view container mb-n3">
@@ -2450,7 +2580,11 @@ class UserModulePersonalDetail extends Component {
     personalView = () => {
         const { userState } = this.props;
         const personal = userState.personalData;
-        const personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
+        const personalByCompData = userState.personalByCompData || [];
+        console.log('###-personal', personal)
+
+        console.log('###-personalByCompData', personalByCompData)
+
         const primaryContacts = personalByCompData.length > 0
             ? personalByCompData[0].primaryContacts
             : [];
@@ -2470,7 +2604,6 @@ class UserModulePersonalDetail extends Component {
             childrenCheckNumber = personalByCompData[0].childrenCheckNumber;
             childrenCheckExpiryDate = personalByCompData[0].childrenCheckExpiryDate;
         }
-
         return (
             <div className="comp-dash-table-view pt-0">
 
@@ -3603,19 +3736,21 @@ class UserModulePersonalDetail extends Component {
         const {
             activityPlayerList,
             activityManagerList,
-            // activityScorerList,
-            // activityParentList,
             personalByCompData,
             userRole,
+            personalData,
+            onMedicalLoad,
             coachActivityRoster,
             umpireActivityRoster,
             scorerActivityRoster,
         } = this.props.userState;
+        const isUserLoaded = !isEmpty(personalData);
         const personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
         if (personalDetails != null && personalDetails.length > 0) {
             userRegistrationId = personalByCompData[0].userRegistrationId;
         }
+
 
         return (
             <div className="fluid-width default-bg">
@@ -3690,7 +3825,7 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Loader visible={this.props.userState.onMedicalLoad} />
+                        <Loader visible={!isUserLoaded || onMedicalLoad} />
                         {this.unlinkChildConfirmPopup()}
                         {this.unlinkParentConfirmPopup()}
                         {this.cannotUninkPopup()}
@@ -3734,7 +3869,9 @@ function mapDispatchToProps(dispatch) {
             exportUserRegData,
             getSubmittedRegData,
             transferUserRegistration,
-            cancelDeRegistrationAction
+            cancelDeRegistrationAction,
+            registrationRetryPaymentAction,
+            liveScorePlayersToPayRetryPaymentAction
         },
         dispatch,
     );
@@ -3746,6 +3883,8 @@ function mapStateToProps(state) {
         appState: state.AppState,
         stripeState: state.StripeState,
         shopOrderStatusState: state.ShopOrderStatusState,
+        registrationDashboardState: state.RegistrationDashboardState,
+        liveScoreDashboardState: state.LiveScoreDashboardState,
     };
 }
 

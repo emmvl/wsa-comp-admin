@@ -19,6 +19,7 @@ import { endUserRegDashboardListAction } from "store/actions/registrationAction/
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
 import moment from "moment";
+import history from '../../util/history'
 
 import "./product.scss";
 
@@ -131,7 +132,7 @@ const columns = [
         title: "Action",
         key: "action",
         dataIndex: "status",
-        render: (status) => (
+        render: (status,record) => (
             status == "Registered" ?
                 <Menu
                     className="action-triple-dot-submenu"
@@ -145,11 +146,17 @@ const columns = [
                             <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                         }
                     >
-                        <Menu.Item key="1">
-
-                            <span>Deregister</span>
-
-                        </Menu.Item>
+                         <Menu.Item
+                            key="1"
+                            onClick={() =>
+                                history.push("/deregistration", {
+                                regData: record,
+                                sourceFrom: AppConstants.teamRegistration
+                                })
+                            }
+                            >
+                                <span>{AppConstants.registrationChange}</span>
+                            </Menu.Item>
                     </SubMenu>
                 </Menu>
                 :
@@ -203,7 +210,9 @@ class TeamRegistrations extends Component {
             let yearRefId = JSON.parse(yearId)
             let membershipProductUniqueKey = teamRegListAction.payload.membershipProductUniqueKey
             await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, divisionId, yearRefId, membershipProductUniqueKey })
-            page = Math.floor(offset / 10) + 1;
+            let { teamRegistrationTableListPageSize } = this.props.registrationState;
+            teamRegistrationTableListPageSize = teamRegistrationTableListPageSize ? teamRegistrationTableListPageSize : 10;
+            page = Math.floor(offset / teamRegistrationTableListPageSize) + 1;
 
             this.handleRegTableList(page);
         } else {

@@ -64,7 +64,8 @@ import {
     buzzerCheckboxes,
     mediumSelectStyles,
     trackFullPeriod,
-} from "components/liveScore/liveScoreSettings/constants/liveScoreSettingsConstants";
+} from 'components/liveScore/liveScoreSettings/constants/liveScoreSettingsConstants'
+import FoulsFields from 'components/liveScore/liveScoreSettings/components/foulsFields'
 
 const { Header, Footer } = Layout;
 const { Option } = Select;
@@ -211,6 +212,7 @@ class LiveScoreSettingsView extends Component {
             extraTimeDuration,
             extraTimeMainBreak,
             extraTimeQuarterBreak,
+            foulsSettings,
         } = form;
 
         this.formRef.current.setFieldsValue({
@@ -230,6 +232,7 @@ class LiveScoreSettingsView extends Component {
             extraTimeDuration,
             extraTimeMainBreak,
             extraTimeQuarterBreak,
+            foulsSettings,
         });
     };
 
@@ -327,6 +330,7 @@ class LiveScoreSettingsView extends Component {
             extraTimeDuration,
             extraTimeMainBreak,
             extraTimeQuarterBreak,
+            foulsSettings
         } = this.props.liveScoreSetting.form;
 
         const {
@@ -452,6 +456,7 @@ class LiveScoreSettingsView extends Component {
         formData.append("extraTimeDuration", extraTimeDuration);
         formData.append("extraTimeMainBreak", extraTimeMainBreak);
         formData.append("extraTimeQuarterBreak", extraTimeQuarterBreak);
+        formData.append("foulsSettings", JSON.stringify(foulsSettings));
 
         if (attendenceRecordingTime) {
             formData.append("attendanceSelectionTime", attendenceRecordingTime);
@@ -478,6 +483,7 @@ class LiveScoreSettingsView extends Component {
                 duration: 1.5,
                 maxCount: 1,
             });
+
             message.error(ValidationConstants.pleaseSelectRegInvitees, 1.5);
             localStorage.setItem("regInvitees", "false");
         } else if (associationChecked === true || clubChecked === true) {
@@ -686,6 +692,7 @@ class LiveScoreSettingsView extends Component {
             scoring,
             whoScoring,
             acceptScoring,
+            foulsSettings
         } = liveScoreSetting.form;
 
         const competition = get(
@@ -699,28 +706,26 @@ class LiveScoreSettingsView extends Component {
                 <div className="formView content-view pt-4 mb-5">
                     <div className="row">
                         <div className="col-sm">
-                            <Form.Item>
-                                <InputWithHead
-                                    auto_complete="off"
-                                    required="required-field"
-                                    heading={AppConstants.year}
-                                />
-                                <Select
-                                    style={{ width: 100 }}
-                                    className="year-select reg-filter-select-year"
-                                    onChange={(yearId) => this.onYearClick(yearId)}
-                                    value={yearRefId}
-                                >
-                                    {appState.yearList.map((item) => (
-                                        <Option
-                                            key={`year_${item.id}`}
-                                            value={item.id}
-                                        >
-                                            {item.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
+                            <InputWithHead
+                                auto_complete="off"
+                                required="required-field"
+                                heading={AppConstants.year}
+                            />
+                            <Select
+                                style={{ width: 100 }}
+                                className="year-select reg-filter-select-year"
+                                onChange={(yearId) => this.onYearClick(yearId)}
+                                value={yearRefId}
+                            >
+                                {appState.yearList.map((item) => (
+                                    <Option
+                                        key={`year_${item.id}`}
+                                        value={item.id}
+                                    >
+                                        {item.name}
+                                    </Option>
+                                ))}
+                            </Select>
                         </div>
                     </div>
 
@@ -838,7 +843,7 @@ class LiveScoreSettingsView extends Component {
                                 },
                             ]}
                         >
-                            <div>
+                            <>
                                 <Select
                                     mode="multiple"
                                     placeholder={AppConstants.selectVenue}
@@ -868,7 +873,7 @@ class LiveScoreSettingsView extends Component {
                                             ),
                                         )}
                                 </Select>
-                            </div>
+                            </>
                         </Form.Item>
                     </div>
                 </div>
@@ -1330,24 +1335,26 @@ class LiveScoreSettingsView extends Component {
                             },
                         ]}
                     >
-                        <Select
-                            placeholder="Select Timer"
-                            style={mediumSelectStyles}
-                            onChange={(timer) => this.props.onChangeSettingForm({
-                                key: "timerType",
-                                data: timer,
-                            })}
-                            value={timerType}
-                        >
-                            <Option value="CENTRAL">Central</Option>
-                            <Option value="PER_MATCH">Per Match</Option>
-                            <Option value="CENTRAL_WITH_MATCH_OVERRIDE">
-                                Central with Per Match Override
-                            </Option>
-                        </Select>
-                        <Tooltip>
-                            <span>{AppConstants.timerMsg}</span>
-                        </Tooltip>
+                        <>
+                            <Select
+                                placeholder="Select Timer"
+                                style={mediumSelectStyles}
+                                onChange={(timer) => this.props.onChangeSettingForm({
+                                    key: "timerType",
+                                    data: timer,
+                                })}
+                                value={timerType}
+                            >
+                                <Option value="CENTRAL">Central</Option>
+                                <Option value="PER_MATCH">Per Match</Option>
+                                <Option value="CENTRAL_WITH_MATCH_OVERRIDE">
+                                    Central with Per Match Override
+                                </Option>
+                            </Select>
+                            <Tooltip>
+                                <span>{AppConstants.timerMsg}</span>
+                            </Tooltip>
+                        </>
                     </Form.Item>
 
                     {/* Buzzer button view */}
@@ -1364,6 +1371,7 @@ class LiveScoreSettingsView extends Component {
 
                             return (
                                 <Checkbox
+                                    key={checkbox.key}
                                     className={`single-checkbox w-100 ${className}`}
                                     onChange={(e) => this.props.onChangeSettingForm({
                                         key: checkbox.key,
@@ -1393,16 +1401,28 @@ class LiveScoreSettingsView extends Component {
 
                 <div className="formView content-view pt-4 mb-5">
                     <span className="text-heading-large pt-5">
+                        {AppConstants.foul}
+                    </span>
+
+                    <FoulsFields
+                        values={foulsSettings}
+                        onChange={this.handleInputChange}
+                    />
+                </div>
+
+                <div className="formView content-view pt-4 mb-5">
+                    <span className="text-heading-large pt-5">
                         {AppConstants.competitionInvitees}
                     </span>
                     <LiveScoreSettingsInvitees
                         stateEditMode={this.state.isEdit}
                         localEditMode={this.state.edit}
-                        onOkClick={this.state.onOkClick}
+                        okClick={this.state.onOkClick}
                         organisationTypeRefId={this.state.organisationTypeRefId}
                         onInviteesChange={this.onInviteesChange}
                         onOpenModel={this.openModel}
                         onFormChange={this.props.onChangeSettingForm}
+                        onInviteesSearchAction={this.props.onInviteesSearchAction}
                     />
                 </div>
             </div>

@@ -1,6 +1,15 @@
 import React, { Component, createRef } from "react";
 import {
-    Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message,
+    Layout,
+    Breadcrumb,
+    Select,
+    Checkbox,
+    Button,
+    Radio,
+    Form,
+    Modal,
+    message,
+    InputNumber,
 } from 'antd';
 import './competition.css';
 // import { NavLink } from 'react-router-dom';
@@ -562,19 +571,16 @@ class QuickCompetitionMatchFormat extends Component {
                 {data.competitionFormatRefId == 4 && (
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} />
-                        <Select
+                        <InputNumber
                             className="w-100"
                             style={{ paddingRight: 1, minWidth: 182 }}
-                            onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
+                            onChange={(e) =>
+                                this.props.onChangeSetValue(e, 'noOfRounds')
+                            }
+                            min={0}
+                            type="number"
                             value={data.noOfRounds}
-                        >
-                            <Option style={{ height: '30px' }} value={null} key={null}>{ }</Option>
-                            {(data.fixtureTemplates || []).map((fixture) => (
-                                <Option value={`fixtureTemplate_${fixture.noOfRounds}`} key={fixture.noOfRounds}>
-                                    {fixture.noOfRounds}
-                                </Option>
-                            ))}
-                        </Select>
+                        />
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
                             className="w-100"

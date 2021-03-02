@@ -54,10 +54,10 @@ class LiveScoreAddManager extends Component {
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
-            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
             checkLivScoreCompIsParent().then((value) => {
-                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, compOrgId)
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, null, value ? id : compOrgId)
                 this.props.getliveScoreTeams(id, null, compOrgId)
                 if (this.state.isEdit === true) {
                     this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
@@ -171,7 +171,6 @@ class LiveScoreAddManager extends Component {
                         <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.managerSearch} />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchManager }]}>
                             <AutoComplete
-                                loading
                                 style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {

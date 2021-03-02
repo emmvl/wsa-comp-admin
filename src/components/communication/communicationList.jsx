@@ -10,7 +10,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate';
 import AppImages from "../../themes/appImages";
-import { getKeyForStateWideMessage } from "../../util/sessionStorage";
+import { getKeyForStateWideMessage, getOrganisationData } from "../../util/sessionStorage";
 import { communicationListAction } from "../../store/actions/communicationAction/communicationAction";
 
 const { Content } = Layout;
@@ -132,7 +132,7 @@ class CommunicationList extends Component {
     }
 
     componentDidMount() {
-        this.props.communicationListAction();
+        this.props.communicationListAction({ organisationId: getOrganisationData().organisationId });
     }
 
     // view for breadcrumb

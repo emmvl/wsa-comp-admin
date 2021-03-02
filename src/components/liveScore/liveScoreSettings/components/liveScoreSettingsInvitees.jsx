@@ -10,7 +10,7 @@ const { Option } = Select;
 const LiveScoreSettingsInvitees = ({
     stateEditMode,
     localEditMode,
-    onOkClick,
+    okClick,
     onFormChange,
     onInviteesChange,
     onInviteesSearchAction,
@@ -41,8 +41,9 @@ const LiveScoreSettingsInvitees = ({
     const invitees = get(liveScoreSettingState, "registrationInvitees", []);
     const orgLevelId = JSON.stringify(organisationTypeRefId);
     const isEditMode = stateEditMode === "edit" || localEditMode === "edit";
-    const disabledComponent = isEditMode && onOkClick;
+    const disabledComponent = isEditMode && okClick;
     const isEdit = (stateEditMode || localEditMode) || "add";
+    const isEditButtonShow = (isEdit.edit === "edit" || isEdit === "edit") && okClick;
 
     const onInviteeSearch = (value, inviteesType) => {
         dispatch(onInviteesSearchAction(value, inviteesType));
@@ -52,11 +53,11 @@ const LiveScoreSettingsInvitees = ({
         <div
             className={
                 (isEdit.edit === "edit" || isEdit === "edit")
-                && onOkClick
+                && okClick
                 && "inside-container-view"
             }
         >
-            {(isEdit.edit === "edit" || isEdit === "edit") && onOkClick && (
+            {isEditButtonShow && (
                 <div className="transfer-image-view">
                     <Button
                         onClick={onOpenModel}
@@ -73,7 +74,7 @@ const LiveScoreSettingsInvitees = ({
                     className={
                         `reg-competition-radio${
                             (isEdit.edit === "edit" || isEdit === "edit")
-                            && onOkClick
+                            && okClick
                         }`
                             ? ""
                             : " mt-5"
@@ -87,7 +88,7 @@ const LiveScoreSettingsInvitees = ({
                 >
                     {(invitees || []).map(
                         (item, index) => index === 0 && (
-                            <div>
+                            <div key={item.id}>
                                 {item.subReferences.length === 0 ? (
                                     <Radio value={item.id}>
                                         {item.description}
@@ -117,7 +118,7 @@ const LiveScoreSettingsInvitees = ({
                                                     </Radio>
                                                 </div>
                                             ) : (
-                                                <>
+                                                <div key={subItem.id}>
                                                     {(orgLevelId === "2"
                                                             || orgLevelId
                                                                 === "3")
@@ -185,7 +186,7 @@ const LiveScoreSettingsInvitees = ({
                                                             </div>
                                                         </>
                                                     )}
-                                                </>
+                                                </div>
                                             )))}
                                     </div>
                                 )}
@@ -202,7 +203,7 @@ const LiveScoreSettingsInvitees = ({
                 >
                     {(invitees || []).map(
                         (item, index) => index === 1 && (
-                            <div>
+                            <div key={item.id}>
                                 {item.subReferences.length === 0 ? (
                                     <Radio value={item.id}>
                                         {item.description}
@@ -424,7 +425,7 @@ const LiveScoreSettingsInvitees = ({
                 >
                     {(invitees || []).map(
                         (item, index) => index > 1 && (
-                            <div>
+                            <div key={item.description}>
                                 {item.subReferences ? (
                                     <div>
                                         <div className="applicable-to-heading invitees-main">
@@ -471,5 +472,16 @@ const LiveScoreSettingsInvitees = ({
         </div>
     );
 };
+
+LiveScoreSettingsInvitees.defaultProps = {
+    stateEditMode: '',
+    localEditMode: '',
+    okClick: false,
+    onFormChange: () => {},
+    onInviteesChange: () => {},
+    onInviteesSearchAction: () => {},
+    organisationTypeRefId: {},
+    onOpenModel: () => {},
+}
 
 export default LiveScoreSettingsInvitees;

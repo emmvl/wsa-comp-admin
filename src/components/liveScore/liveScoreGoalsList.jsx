@@ -38,7 +38,7 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-    let { pageSize } = this.props.liveScoreGoalState;
+    let { pageSize } = this_obj.props.liveScoreGoalState;
     pageSize = pageSize ? pageSize : 10;
     let offset = 0
     this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, pageSize, sortBy, sortOrder , this_obj.state.liveScoreCompIsParent , this_obj.state.compOrgId)

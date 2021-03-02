@@ -257,6 +257,7 @@ class UmpirePoolAllocation extends Component {
 
     onDragEnd = result => {
         const { source, destination } = result;
+        const { assignedData } = this.state;
 
         let newData;
 
@@ -265,13 +266,22 @@ class UmpirePoolAllocation extends Component {
             return;
         }
 
+        const assignedDataIdx = assignedData.findIndex(item => item.id.toString() === destination?.droppableId.toString());
+        const expandableControll = document.querySelector(`.view-more-btn[href='#${assignedDataIdx}'].collapsed`);
+
         // handle drop changes
-        if (source.droppableId === '1' && destination.droppableId !== '1') {
+        if (source.droppableId === 'unassignedZone' && destination.droppableId !== 'unassignedZone') {
             newData = this.unassignedToAssignedMove(source, destination);
-        } else if (source.droppableId !== '1' && destination.droppableId === '1') {
+            if (!!expandableControll) {
+                expandableControll.click();
+            }
+        } else if (source.droppableId !== 'unassignedZone' && destination.droppableId === 'unassignedZone') {
             newData = this.moveToUnassigned(source, destination);
-        } else if (source.droppableId !== '1') {
+        } else if (source.droppableId !== 'unassignedZone') {
             newData = this.moveToAnotherPool(source, destination);
+            if (!!expandableControll) {
+                expandableControll.click();
+            }
         } else {
             newData = this.moveInsideUnassigned(source, destination);
         }
@@ -894,7 +904,7 @@ class UmpirePoolAllocation extends Component {
 
         return (
             <div>
-                <Droppable droppableId="1">
+                <Droppable droppableId="unassignedZone">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">

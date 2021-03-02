@@ -35,7 +35,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+    let { liveScoreMatchListPageSize } = _this.props.liveScoreMatchListState;
     liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
     _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, liveScoreMatchListPageSize, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder, _this.state.competitionOrganisationId);
 }
@@ -242,7 +242,9 @@ class LiveScoreMatchesList extends Component {
             sortBy = matchListActionObject.sortBy
             sortOrder = matchListActionObject.sortOrder
             await this.setState({ offset, searchText, selectedDivision, selectedRound, sortBy, sortOrder })
-            page = Math.floor(offset / 10) + 1;
+            let { liveScoreMatchListPageSize } = this.props.liveScoreMatchListState;
+            liveScoreMatchListPageSize = liveScoreMatchListPageSize ? liveScoreMatchListPageSize : 10;
+            page = Math.floor(offset / liveScoreMatchListPageSize) + 1;
         }
 
         if (this.state.umpireKey === 'umpire') {

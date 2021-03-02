@@ -39,7 +39,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let { spectatorPageSize } = this.props.userState;
+    let { spectatorPageSize } = this_Obj.props.userState;
     spectatorPageSize = spectatorPageSize ? spectatorPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,

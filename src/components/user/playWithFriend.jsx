@@ -41,7 +41,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let { friendPageSize } = this.props.userState;
+    let { friendPageSize } = this_Obj.props.userState;
     friendPageSize = friendPageSize ? friendPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
@@ -147,7 +147,9 @@ class PlayWithFriend extends Component {
             sortBy = userFriendListAction.sortBy
             sortOrder = userFriendListAction.sortOrder
             let yearRefId = JSON.parse(yearId)
-            pageNo = Math.floor(offset / this.props.friendPageSize) + 1;
+            let { friendPageSize } = this.props.userState;
+            friendPageSize = friendPageSize ? friendPageSize : 10;
+            pageNo = Math.floor(offset / friendPageSize) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
 
             this.handleFriendTableList(pageNo);
@@ -199,14 +201,13 @@ class PlayWithFriend extends Component {
         this.setState({
             pageNo: 1
         })
-        let { friendPageSize } = this.props.userState;
-        friendPageSize = friendPageSize ? friendPageSize : 10;
+        let { friendTotalCount } = this.props.userState;
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId === -1 ? this.state.yearRefId : JSON.parse(yearId),
             paging: {
-                limit: friendPageSize,
+                limit: friendTotalCount,
                 offset: 0
             }
         }
@@ -279,7 +280,13 @@ class PlayWithFriend extends Component {
     }
 
     contentView = () => {
-        const { friendList, total, friendPage, friendPageSize, onLoad } = this.props.userState;
+        const {
+            friendList,
+            friendPage,
+            friendPageSize,
+            friendTotalCount,
+            onLoad
+        } = this.props.userState;
 
         return (
             <div className="comp-dash-table-view mt-2">
@@ -298,7 +305,7 @@ class PlayWithFriend extends Component {
                         current={friendPage}
                         defaultCurrent={friendPage}
                         defaultPageSize={friendPageSize}
-                        total={total}
+                        total={friendTotalCount}
                         onChange={this.handleFriendTableList}
                         onShowSizeChange={this.handleShowSizeChange}
                     />

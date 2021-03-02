@@ -48,10 +48,28 @@ function setPageNumberAction(pageNum) {
     }
 }
 
+function registrationFailedStatusUpdate(payload){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_FAILED_STATUS_UPDATE_LOAD,
+        payload
+    }
+    return action
+}
+
+function registrationRetryPaymentAction(payload){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD,
+        payload
+    }
+    return action
+}
+
 export {
     regDashboardListAction,
     getAllCompetitionAction,
     registrationMainDashboardListAction,
     setPageSizeAction,
     setPageNumberAction,
+    registrationFailedStatusUpdate,
+    registrationRetryPaymentAction
 };

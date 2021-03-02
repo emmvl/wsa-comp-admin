@@ -1,40 +1,27 @@
 import React, { Component } from "react";
-import { Layout, Button, Tooltip, Menu, Select, DatePicker, Checkbox, message, Spin, Modal, Radio } from "antd";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import history from "../../util/history";
-import { NavLink } from 'react-router-dom';
-import DrawsPublishModel from '../../customComponents/drawsPublishModel'
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    Layout,
+    Button,
+    Tooltip,
+    Menu,
+    Select,
+    DatePicker,
+    Checkbox,
+    message,
+    Spin,
+    Modal,
+    Radio,
+} from "antd";
 import _ from "lodash";
-import loadjs from 'loadjs';
-import moment from 'moment';
-import AppImages from "../../themes/appImages";
-import Swappable from '../../customComponents/SwappableComponentTimeline';
-import { isArrayNotEmpty } from '../../util/helpers';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import Loader from '../../customComponents/loader';
-import {
-    getCompetitionDrawsAction,
-    getDrawsRoundsAction,
-    updateCompetitionDrawsTimeline,
-    saveDraws,
-    getCompetitionVenue,
-    updateCourtTimingsDrawsAction,
-    clearMultiDraws,
-    publishDraws,
-    matchesListDrawsAction,
-    unlockDrawsAction,
-    getActiveRoundsAction,
-    changeDrawsDateRangeAction,
-    checkBoxOnChange,
-} from '../../store/actions/competitionModuleAction/competitionMultiDrawsAction';
-import {
-    getYearAndCompetitionOwnAction,
-    getVenuesTypeAction,
-} from '../../store/actions/appAction';
-import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
+import loadjs from "loadjs";
+import moment from "moment";
+
+import getColor from "util/coloredCheckbox";
+import { isArrayNotEmpty } from "util/helpers";
+import history from "util/history";
 import {
     setGlobalYear,
     getGlobalYear,
@@ -50,13 +37,41 @@ import {
     getOrganisationData,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId,
+    getOwn_CompetitionFinalRefId,
+    setOwn_CompetitionFinalRefId,
     setLiveScoreUmpireCompition,
-    setLiveScoreUmpireCompitionData
-} from '../../util/sessionStorage';
-import ValidationConstants from '../../themes/validationConstant';
-import './draws.scss';
-import getColor from "../../util/coloredCheckbox";
+    setLiveScoreUmpireCompitionData,
+} from "util/sessionStorage";
+import AppConstants from "themes/appConstants";
+import AppImages from "themes/appImages";
+import ValidationConstants from "themes/validationConstant";
+import {
+    getYearAndCompetitionOwnAction,
+    getVenuesTypeAction,
+} from "store/actions/appAction";
+import { generateDrawAction } from "store/actions/competitionModuleAction/competitionModuleAction";
+import {
+    getCompetitionDrawsAction,
+    getDrawsRoundsAction,
+    updateCompetitionDrawsTimeline,
+    saveDraws,
+    getCompetitionVenue,
+    updateCourtTimingsDrawsAction,
+    clearMultiDraws,
+    publishDraws,
+    matchesListDrawsAction,
+    unlockDrawsAction,
+    getActiveRoundsAction,
+    changeDrawsDateRangeAction,
+    checkBoxOnChange,
+} from "store/actions/competitionModuleAction/competitionMultiDrawsAction";
+import DrawsPublishModel from "customComponents/drawsPublishModel";
+import Loader from "customComponents/loader";
+import Swappable from "customComponents/SwappableComponentTimeline";
+import InnerHorizontalMenu from "pages/innerHorizontalMenu";
+import DashboardLayout from "pages/dashboardLayout";
+
+import "./draws.scss";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -874,12 +889,12 @@ class MultifieldDrawsNewTimeline extends Component {
 
     drawsFieldMove = e => {
         const { draggableElMouseX, draggableElMouseY } = !!this.state.draggableElMouse && this.state.draggableElMouse;
-        const { 
-            dragDayTimeRestrictions, 
-            tooltipSwappableTime, 
-            dragDayTarget, 
-            ePageHoverTooltip, 
-            hoverTooltipFunc, 
+        const {
+            dragDayTimeRestrictions,
+            tooltipSwappableTime,
+            dragDayTarget,
+            ePageHoverTooltip,
+            hoverTooltipFunc,
             isDragging
         } = this.state;
 
@@ -949,9 +964,9 @@ class MultifieldDrawsNewTimeline extends Component {
         if (targetCourtId) {
             const bounds = e.currentTarget.getBoundingClientRect();
 
-            const draggableElXStart = isAxisInverted ? 
+            const draggableElXStart = isAxisInverted ?
                 Math.trunc(((e.pageY - bounds.top - draggableElMouseY) / ONE_MIN_WIDTH))
-                : 
+                :
                 Math.trunc(((e.pageX - bounds.left - draggableElMouseX) / ONE_MIN_WIDTH));
 
             const newTime = startDayDate.clone().add(draggableElXStart, 'minutes');
@@ -1284,19 +1299,19 @@ class MultifieldDrawsNewTimeline extends Component {
         return (
             <>
                 {this.state.screenKey &&
-                    <div className="row" style={{ marginTop: "15px" }}>
-                        <div className="col-sm d-flex justify-content-end">
-                            <div className="reg-add-save-button">
-                                <Button
-                                    onClick={() => history.push(this.state.screenKey)}
-                                    className="primary-add-comp-form"
-                                    type="primary"
-                                >
-                                    {AppConstants.backToMatchDay}
-                                </Button>
-                            </div>
+                <div className="row" style={{ marginTop: "15px" }}>
+                    <div className="col-sm d-flex justify-content-end">
+                        <div className="reg-add-save-button">
+                            <Button
+                                onClick={() => history.push(this.state.screenKey)}
+                                className="primary-add-comp-form"
+                                type="primary"
+                            >
+                                {AppConstants.backToMatchDay}
+                            </Button>
                         </div>
                     </div>
+                </div>
                 }
                 <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
                     <div className="multi-draw-list-top-head row">
@@ -1413,7 +1428,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             href="#venue-collapsable-div"
                             role="button"
                             aria-expanded="false"
-                        // aria-controls={teamIndex}
+                            // aria-controls={teamIndex}
                         >
                             <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
@@ -1477,7 +1492,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             href="#comp-collapsable-div"
                             role="button"
                             aria-expanded="true"
-                        // aria-controls={teamIndex}
+                            // aria-controls={teamIndex}
                         >
                             <i className="fa fa-angle-up" style={{ color: "#ff8237" }} aria-hidden="true" />
                         </a>
@@ -1596,40 +1611,40 @@ class MultifieldDrawsNewTimeline extends Component {
                         )}
                     </div>
                 ) : (
-                        <div id="division-collapsable-div" className="pt-0 collapse in">
-                            <Checkbox
-                                className="single-checkbox-radio-style"
-                                style={{ paddingTop: 8 }}
-                                checked={mainCheckboxValue}
-                                onChange={e => this.changeAllVenueStatus(e.target.checked, "singleCompDivisionCheked")}
-                            >
-                                {AppConstants.all}
-                            </Checkbox>
-                            {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
-                                return (
-                                    index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div key={"divisionGrade_" + item.competitionDivisionGradeId} className="column pl-5">
-                                        <Checkbox
-                                            className={`single-checkbox-radio-style ${getColor(item.colorCode)}`}
-                                            style={{ paddingTop: 8 }}
-                                            checked={item.checked}
-                                            onChange={e => this.props.checkBoxOnChange(e.target.checked, "singleCompeDivision", index)}
-                                        >
-                                            {item.name}
-                                        </Checkbox>
-                                    </div>
-                                )
-                            })}
+                    <div id="division-collapsable-div" className="pt-0 collapse in">
+                        <Checkbox
+                            className="single-checkbox-radio-style"
+                            style={{ paddingTop: 8 }}
+                            checked={mainCheckboxValue}
+                            onChange={e => this.changeAllVenueStatus(e.target.checked, "singleCompDivisionCheked")}
+                        >
+                            {AppConstants.all}
+                        </Checkbox>
+                        {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
+                            return (
+                                index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div key={"divisionGrade_" + item.competitionDivisionGradeId} className="column pl-5">
+                                    <Checkbox
+                                        className={`single-checkbox-radio-style ${getColor(item.colorCode)}`}
+                                        style={{ paddingTop: 8 }}
+                                        checked={item.checked}
+                                        onChange={e => this.props.checkBoxOnChange(e.target.checked, "singleCompeDivision", index)}
+                                    >
+                                        {item.name}
+                                    </Checkbox>
+                                </div>
+                            )
+                        })}
 
-                            {(isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5) && (
-                                <span
-                                    className="input-heading-add-another pt-4"
-                                    onClick={() => this.changeShowAllStatus("division")}
-                                >
+                        {(isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5) && (
+                            <span
+                                className="input-heading-add-another pt-4"
+                                onClick={() => this.changeShowAllStatus("division")}
+                            >
                                     {showAllDivision ? AppConstants.hide : AppConstants.showAll}
                                 </span>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
+                )}
             </>
         )
     }
@@ -1719,13 +1734,13 @@ class MultifieldDrawsNewTimeline extends Component {
                         <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                     </div>
                 ) : (
-                        <div
-                            className="d-flex align-items-center mt-1 pointer"
-                            onClick={() => this.filterOnClick()}
-                        >
-                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
-                        </div>
-                    )}
+                    <div
+                        className="d-flex align-items-center mt-1 pointer"
+                        onClick={() => this.filterOnClick()}
+                    >
+                        <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
+                    </div>
+                )}
                 {filterEnable && this.venueLeftView()}
                 {this.state.firstTimeCompId !== "-1" || !this.state.filterDates || (filterEnable && this.competitionLeftView())}
                 {filterEnable && this.divisionLeftView()}
@@ -1774,6 +1789,28 @@ class MultifieldDrawsNewTimeline extends Component {
                             <img className="dot-image" src={AppImages.downloadIcon} alt="" width="16" height="16" />
                             <span className="input-heading-add-another pt-0 pr-5 pl-3">{AppConstants.matchesList}</span>
                         </div>
+
+                        <NavLink
+                            to={{
+                                pathname: "/competitionDrawsImport",
+                                state: { competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId },
+                            }}
+                            className="text-decoration-none mr-5"
+                        >
+                            <Button className="primary-add-comp-form" type="primary">
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <img
+                                            src={AppImages.import}
+                                            alt=""
+                                            className="export-image"
+                                        />
+                                        {AppConstants.import}
+                                    </div>
+                                </div>
+                            </Button>
+                        </NavLink>
+
                         <Button className="multi-field-draw-edit-button" type="primary" onClick={() => this.navigateToDrawEdit()}>
                             {AppConstants.edit}
                         </Button>
@@ -1814,23 +1851,23 @@ class MultifieldDrawsNewTimeline extends Component {
                             ))}
                         </div>
                     ) : (
-                            <div className="draggable-wrap draw-data-table">
-                                <Loader visible={this.props.drawsState.updateLoad} />
+                        <div className="draggable-wrap draw-data-table">
+                            <Loader visible={this.props.drawsState.updateLoad} />
 
-                                {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                    <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
-                                        {this.state.firstTimeCompId != "-1" && (
-                                            <div className="draws-round-view">
+                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
+                                    {this.state.firstTimeCompId != "-1" && (
+                                        <div className="draws-round-view">
                                                 <span className="draws-round">
                                                     {dateItem.roundName}
                                                 </span>
-                                            </div>
-                                        )}
-                                        {this.draggableView(dateItem)}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                        </div>
+                                    )}
+                                    {this.draggableView(dateItem)}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -1948,7 +1985,7 @@ class MultifieldDrawsNewTimeline extends Component {
         }
 
         const horizontalDashedBg = {
-            backgroundImage: 
+            backgroundImage:
                 'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%),' +
                 'linear-gradient(to bottom, rgba(170,170,170,1) 0%, rgba(170,170,170,0) 3%, rgba(170,170,170,0) 100%)',
             backgroundSize: `5px ${ONE_MIN_WIDTH * 30}px`
@@ -1963,8 +2000,8 @@ class MultifieldDrawsNewTimeline extends Component {
         const { isAxisInverted } = this.state;
 
         return (
-            <div 
-                className={`draws-x-head d-flex ${isAxisInverted ? 'flex-column align-items-end' : ''}`} 
+            <div
+                className={`draws-x-head d-flex ${isAxisInverted ? 'flex-column align-items-end' : ''}`}
                 style={{
                     margin: isAxisInverted ? 0 : '0 0 0 34px',
                     top: isAxisInverted ? -8 : 0,
@@ -2024,8 +2061,8 @@ class MultifieldDrawsNewTimeline extends Component {
 
     courtHorizontalHeadView = (dateItem) => {
         return (
-            <div 
-                className="table-head-wrap d-flex position-relative" 
+            <div
+                className="table-head-wrap d-flex position-relative"
                 style={{
                     left: 160,
                 }}
@@ -2033,7 +2070,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
                     return (
                         <div
-                            key={"court" + index} 
+                            key={"court" + index}
                             className="d-flex justify-content-center"
                             style={{ width: 70 }}
                         >
@@ -2051,7 +2088,7 @@ class MultifieldDrawsNewTimeline extends Component {
         const { isAxisInverted } = this.state;
 
         return (
-            <span 
+            <span
                 className={`text-capitalize ${isAxisInverted ? '' : 'text-overflow'}`}
                 style={{
                     transform: isAxisInverted ? 'rotate(-90deg)' : 'none',
@@ -2069,9 +2106,9 @@ class MultifieldDrawsNewTimeline extends Component {
             <div
                 key={"slot" + fieldItemDateIndex}
                 className={isAxisInverted ? 'position-absolute' : 'position-relative'}
-                style={{ 
+                style={{
                     width: `calc(100%) - ${prevDaysWidth}`,
-                    height: '100%', 
+                    height: '100%',
                     left: isAxisInverted ? '50%' : 75,
                 }}
             >
@@ -2126,7 +2163,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 date.push(dateNew);
             }
         });
-        
+
         const dayBgAvailable = this.defineDayBg();
 
         return (
@@ -2138,9 +2175,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     }}
                 >
                     {/* Horizontal head */}
-                    {isAxisInverted ?    
+                    {isAxisInverted ?
                         this.courtHorizontalHeadView(dateItem)
-                        : 
+                        :
                         <div className="table-head-wrap">
                             {this.dayHeadView(date, dateNewArray, dayMargin)}
                         </div>
@@ -2179,10 +2216,10 @@ class MultifieldDrawsNewTimeline extends Component {
                         let diffDayScheduleTime = 0;
 
                         return (
-                            <div 
-                                key={"court" + index} 
+                            <div
+                                key={"court" + index}
                                 style={{
-                                    display: 'flex', 
+                                    display: 'flex',
                                     flexShrink: 0,
                                     alignItems: 'center',
                                     ...(isAxisInverted ? {
@@ -2194,18 +2231,18 @@ class MultifieldDrawsNewTimeline extends Component {
                                     })
                                 }}
                             >
-                                {!isAxisInverted && 
-                                    <div
-                                        className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
-                                        style={{
-                                            width: 95,
-                                            height: 48,
-                                        }}
-                                    >
+                                {!isAxisInverted &&
+                                <div
+                                    className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
+                                    style={{
+                                        width: 95,
+                                        height: 48,
+                                    }}
+                                >
                                         <span className="venueCourt-text">
                                             {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                                         </span>
-                                    </div>
+                                </div>
                                 }
 
                                 {date.map((fieldItemDate, fieldItemDateIndex) => {
@@ -2251,8 +2288,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                         <div
                                             key={"slot" + fieldItemDateIndex}
                                             className={isAxisInverted ? 'position-absolute' : 'position-relative'}
-                                            style={{ 
-                                                width: `calc(100%) - ${prevDaysWidth}`, 
+                                            style={{
+                                                width: `calc(100%) - ${prevDaysWidth}`,
                                                 height: '100%',
                                                 left: isAxisInverted ? '50%' : 75,
                                             }}
@@ -2344,7 +2381,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         const endTimeEvent = moment(fieldItemDate + slotObject.endTime);
                                                         const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes') * ONE_MIN_WIDTH;
                                                         return (
-                                                            <div 
+                                                            <div
                                                                 key={"slot" + slotIndex}
                                                                 style={{
                                                                     position: 'absolute',
@@ -2397,8 +2434,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 "1"
                                                                             }
                                                                             content={1}
-                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus 
-                                                                                ? false 
+                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
+                                                                                ? false
                                                                                 : this.checkSwap(slotObject)
                                                                             }
                                                                             onSwap={(source, target) =>
@@ -2413,9 +2450,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 isDayInPast || disabledStatus
                                                                                     ? false
                                                                                     : this.checkCurrentSwapObjects(
-                                                                                        source,
-                                                                                        target,
-                                                                                        dateItem.draws,
+                                                                                    source,
+                                                                                    target,
+                                                                                    dateItem.draws,
                                                                                     )
                                                                             }
                                                                         >
@@ -2424,59 +2461,59 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                     {slotObject.divisionName + "-" + slotObject.gradeName}
                                                                                 </span>
                                                                             ) : (
-                                                                                    <span className="text-overflow">
+                                                                                <span className="text-overflow">
                                                                                         {slotObject.homeTeamName} <br />
-                                                                                        {slotObject.awayTeamName}
+                                                                                    {slotObject.awayTeamName}
                                                                                     </span>
-                                                                                )
+                                                                            )
                                                                             }
                                                                         </Swappable>
                                                                     ) : (
-                                                                            <Swappable
-                                                                                id={
-                                                                                    index.toString() +
-                                                                                    ':' +
-                                                                                    slotIndex.toString()
-                                                                                    +
-                                                                                    ':' +
-                                                                                    dateItem.roundId.toString()
-                                                                                }
-                                                                                content={1}
-                                                                                swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus 
-                                                                                    ? false 
-                                                                                    : this.checkSwap(slotObject)
-                                                                                }
-                                                                                onSwap={(source, target) =>
-                                                                                    this.onSwap(
-                                                                                        source,
-                                                                                        target,
-                                                                                        dateItem.draws,
-                                                                                        dateItem.roundId,
+                                                                        <Swappable
+                                                                            id={
+                                                                                index.toString() +
+                                                                                ':' +
+                                                                                slotIndex.toString()
+                                                                                +
+                                                                                ':' +
+                                                                                dateItem.roundId.toString()
+                                                                            }
+                                                                            content={1}
+                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
+                                                                                ? false
+                                                                                : this.checkSwap(slotObject)
+                                                                            }
+                                                                            onSwap={(source, target) =>
+                                                                                this.onSwap(
+                                                                                    source,
+                                                                                    target,
+                                                                                    dateItem.draws,
+                                                                                    dateItem.roundId,
+                                                                                )
+                                                                            }
+                                                                            isCurrentSwappable={(source, target) =>
+                                                                                isDayInPast || disabledStatus
+                                                                                    ? false
+                                                                                    : this.checkCurrentSwapObjects(
+                                                                                    source,
+                                                                                    target,
+                                                                                    dateItem.draws,
                                                                                     )
-                                                                                }
-                                                                                isCurrentSwappable={(source, target) =>
-                                                                                    isDayInPast || disabledStatus
-                                                                                        ? false
-                                                                                        : this.checkCurrentSwapObjects(
-                                                                                            source,
-                                                                                            target,
-                                                                                            dateItem.draws,
-                                                                                        )
-                                                                                }
-                                                                            >
-                                                                                {this.state.isDivisionNameShow ? (
-                                                                                    <span className="text-overflow">
+                                                                            }
+                                                                        >
+                                                                            {this.state.isDivisionNameShow ? (
+                                                                                <span className="text-overflow">
                                                                                         {slotObject.divisionName + "-" + slotObject.gradeName}
                                                                                     </span>
-                                                                                ) : (
-                                                                                        <span className="text-overflow">
+                                                                            ) : (
+                                                                                <span className="text-overflow">
                                                                                             {slotObject.homeTeamName} <br />
-                                                                                            {slotObject.awayTeamName}
+                                                                                    {slotObject.awayTeamName}
                                                                                         </span>
-                                                                                    )
-                                                                                }
-                                                                            </Swappable>
-                                                                        )}
+                                                                            )
+                                                                            }
+                                                                        </Swappable>
+                                                                    )}
                                                                 </div>
 
                                                                 {slotObject.drawsId !== null && (
@@ -2502,9 +2539,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                             className="action-triple-dot-draws"
                                                                             theme="light"
                                                                             mode="horizontal"
-                                                                            style={{ 
-                                                                                lineHeight: '16px', 
-                                                                                borderBottom: 0, 
+                                                                            style={{
+                                                                                lineHeight: '16px',
+                                                                                borderBottom: 0,
                                                                                 cursor: disabledStatus && "no-drop",
                                                                             }}
                                                                         >
@@ -2525,17 +2562,17 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                                 />
 
                                                                                             ) : (
-                                                                                                    <img
-                                                                                                        className="dot-image"
-                                                                                                        src={AppImages.moreTripleDot}
-                                                                                                        alt=""
-                                                                                                        width="16"
-                                                                                                        height="10"
-                                                                                                        style={{ 
-                                                                                                            transform: isAxisInverted ? 'rotate(-90deg)' : 'none' 
-                                                                                                        }}
-                                                                                                    />
-                                                                                                )}
+                                                                                                <img
+                                                                                                    className="dot-image"
+                                                                                                    src={AppImages.moreTripleDot}
+                                                                                                    alt=""
+                                                                                                    width="16"
+                                                                                                    height="10"
+                                                                                                    style={{
+                                                                                                        transform: isAxisInverted ? 'rotate(-90deg)' : 'none'
+                                                                                                    }}
+                                                                                                />
+                                                                                            )}
                                                                                         </div>
                                                                                     )
                                                                                 }

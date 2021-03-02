@@ -44,7 +44,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     this_Obj.setState({ sortBy, sortOrder });
-    let { pageSize } = this.props.liveScoreDivisionState;
+    let { pageSize } = this_Obj.props.liveScoreDivisionState;
     pageSize = pageSize ? pageSize : 10;
     this_Obj.props.getMainDivisionListAction(id, this_Obj.state.offset, pageSize, sortBy, sortOrder);
 }

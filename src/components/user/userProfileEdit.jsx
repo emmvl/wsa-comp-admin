@@ -241,6 +241,11 @@ class UserProfileEdit extends Component {
                 }
             }
 
+            additionalSettings = {
+                ...additionalSettings,
+                isSameEmail: data.isInActive
+            }
+
             setTimeout(() => {
                 this.setState({
                     displaySection: moduleFrom,
@@ -743,10 +748,10 @@ class UserProfileEdit extends Component {
                                         if (this.state.titleLabel === (AppConstants.edit + ' ' + AppConstants.address)) {
                                             await this.setState({
                                                 showParentEmailSelectbox: true,
-                                                showEmailInputbox: false,
-                                                enableEmailInputbox: false,
+                                                showEmailInputbox: parentData.length == 1 ? true : false,
+                                                enableEmailInputbox: parentData.length == 1 ? true : false,
                                             });
-                                            await this.setUserDataContactEmail(parentData[0].email + '.' + this.state.userData.firstName);
+                                            await this.setUserDataContactEmail(!!parentData[0].email ? parentData[0].email + '.' + this.state.userData.firstName : '');
                                         } else {
                                             await this.setUserDataContactEmailDefault();
                                             await this.setState({
@@ -1099,7 +1104,7 @@ class UserProfileEdit extends Component {
                         </div>
 
                         <div>
-                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpire} required="required-field" />
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelUmpireQ} required="required-field" />
                             <Form.Item name="accreditationLevelUmpireRefId" rules={[{ required: true, message: ValidationConstants.accreditationLevelUmpire }]}>
                                 <Radio.Group
                                     className="registration-radio-group"
@@ -1129,7 +1134,7 @@ class UserProfileEdit extends Component {
                         </div>
 
                         <div>
-                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoach} required="required-field" />
+                            <InputWithHead heading={AppConstants.nationalAccreditationLevelCoachQ} required="required-field" />
                             <Form.Item name="accreditationLevelCoachRefId" rules={[{ required: true, message: ValidationConstants.accreditationLevelCoach }]}>
                                 <Radio.Group
                                     style={{ display: "flex", flexDirection: "column" }}
@@ -1549,7 +1554,13 @@ class UserProfileEdit extends Component {
             if (this.state.titleLabel === AppConstants.addChild || this.state.titleLabel === AppConstants.edit + ' ' + AppConstants.child ) {
                 data["email"] = this.props.userState.personalData.email + '.' + data.firstName;
             }
+
+            if (this.state.titleLabel === AppConstants.edit + ' ' + AppConstants.address) {
+                data["email"] += '.' + data.firstName;
+            }
         }
+
+        data["email"] = data["email"].toLowerCase();
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
 
