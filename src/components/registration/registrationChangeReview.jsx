@@ -524,25 +524,27 @@ class RegistrationChangeReview extends Component {
                             )}
                         </div>
                     )}
-                <div>
-                    <InputWithHead heading={AppConstants.approvals} />
-                    {(regChangeReviewData.approvals || []).map((item, index) => (
-                        <div key={item.orgRefTypeId + "approval" + index}>
-                            <div className="d-flex">
-                                <div>{item.payingOrgName} - {this.getOrgRefName(item.orgRefTypeId)}</div>
-                                {item.refundTypeRefId != null && (
-                                    <div>
-                                        {item.refundTypeRefId != 3 ? (
-                                            <div style={{ color: this.getApprovalsIconColor(item), paddingLeft: "10px" }}>&#x2714;</div>
-                                        ) : (
-                                                <div style={{ color: "red", paddingLeft: "10px" }}>&#x2718;</div>
-                                            )}
-                                    </div>
-                                )}
+                {regChangeReviewData.approvals?.length && (
+                    <div>
+                        <InputWithHead heading={AppConstants.approvals} />
+                        {(regChangeReviewData.approvals || []).map((item, index) => (
+                            <div key={item.orgRefTypeId + "approval" + index}>
+                                <div className="d-flex">
+                                    <div>{item.payingOrgName} - {this.getOrgRefName(item.orgRefTypeId)}</div>
+                                    {item.refundTypeRefId != null && (
+                                        <div>
+                                            {item.refundTypeRefId != 3 ? (
+                                                <div style={{ color: this.getApprovalsIconColor(item), paddingLeft: "10px" }}>&#x2714;</div>
+                                            ) : (
+                                                    <div style={{ color: "red", paddingLeft: "10px" }}>&#x2718;</div>
+                                                )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
         );
     }
