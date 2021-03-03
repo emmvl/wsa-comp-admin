@@ -319,7 +319,7 @@ class RegistrationChange extends Component {
         const yearRefId = getGlobalYear() ? JSON.parse(getGlobalYear()) : -1
         this.setState({ yearRefId })
         this.props.registrationChangeType();
-        this.handleRegChangeList(1);
+        this.handleRegChangeList(this.props.regChangeState.regChangeDashboardListPage);
     }
 
     handleShowSizeChange = async (page, pageSize) => {
