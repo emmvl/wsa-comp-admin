@@ -72,7 +72,7 @@ class UmpireAllocation extends Component {
                             onChange={(competition) => this.setState({ competition })}
                             value={this.state.competition}
                         >
-                            <Option value="2019winter">{AppConstants.winter2019}</Option>
+                            <Option value="2019winter">{AppConstants.deprecated}</Option>
                             <Option value="sapphire">Sapphire Series</Option>
                             <Option value="junior">Junior Premier</Option>
                         </Select>

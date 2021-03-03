@@ -108,7 +108,7 @@ class CompetitionVenueAndCourts extends Component {
                                     onChange={(competition) => this.setState({ competition })}
                                     value={this.state.competition}
                                 >
-                                    <Option value="2019winter">{AppConstants.winter2019}</Option>
+                                    <Option value="2019winter">{AppConstants.deprecated}</Option>
                                 </Select>
                             </div>
                         </div>

@@ -131,7 +131,7 @@ class CompetitionReGrading extends Component {
                                     onChange={(competition) => this.setState({ competition })}
                                     value={this.state.competition}
                                 >
-                                    <Option value="2019winters">{AppConstants.winter2019}</Option>
+                                    <Option value="2019winters">{AppConstants.deprecated}</Option>
                                 </Select>
                             </div>
                         </div>
