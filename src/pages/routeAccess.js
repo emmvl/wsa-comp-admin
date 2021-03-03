@@ -29,7 +29,6 @@ const routeAdminRole = [
     "/quickCompetitionMatchFormat",
     "/competitionPartTeamGradeCalculate",
     "/registrationList",
-    "/matchDayPlayerProfile",
     "/registrationPayments",
     "/homeDashboard",
     "/competitionDraws",

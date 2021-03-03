@@ -157,7 +157,6 @@ class LiveScorePlayerView extends Component {
             <div className="fluid-width mt-2">
                 <div className='profile-image-view mr-5'>
                     <span className="user-contact-heading">{AppConstants.playerProfile}</span>
-                    {/* <img className="user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" /> */}
 
                     {data && data.profilePicture ?
                         <img className="user-image" src={data.profilePicture} alt="" height="80" width="80" />

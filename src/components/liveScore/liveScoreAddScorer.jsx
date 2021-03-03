@@ -360,7 +360,7 @@ class LiveScoreAddScorer extends Component {
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
                             <div className="mt-n10 ml-n10 width-50 mt-1">
                                 <Tooltip>
-                                    <span>{AppConstants.newMsgForScorerManager}</span>
+                                    <span>{AppConstants.newTeamUserMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>
@@ -371,7 +371,7 @@ class LiveScoreAddScorer extends Component {
                             </Radio>
                             <div className="mt-n10 ml-n10 mt-1">
                                 <Tooltip>
-                                    <span>{AppConstants.existingMsgForScorerManager}</span>
+                                    <span>{AppConstants.existingTeamUserMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>

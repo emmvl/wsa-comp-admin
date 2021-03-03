@@ -142,7 +142,6 @@ import LiveScoreNewsList from 'components/liveScore/liveScoreNewsList';
 import LiveScoreNewsView from 'components/liveScore/liveScoreNewsView';
 import LiveScorerPlayerImport from 'components/liveScore/liveScorePlayerImport';
 import LiveScorePlayerList from 'components/liveScore/liveScorePlayerList';
-import LiveScorePlayerProfile from 'components/liveScore/liveScorePlayerProfile';
 import LiveScorePlayerView from 'components/liveScore/liveScorePlayerView';
 import LiveScorePositionTrackReport from 'components/liveScore/liveScorePositionTrackReport';
 import LiveScorePublicLadder from 'components/liveScore/liveScorePublicLadder';
@@ -467,10 +466,6 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationList"
                     component={this.haveAccess(userRoleId, '/registrationList') ? lazyLoad(RegistrationList) : lazyLoad(NotFound)}
-                />
-                <PrivateRoute
-                    path="/matchDayPlayerProfile"
-                    component={this.haveAccess(userRoleId, '/matchDayPlayerProfile') ? lazyLoad(LiveScorePlayerProfile) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/registrationPayments"

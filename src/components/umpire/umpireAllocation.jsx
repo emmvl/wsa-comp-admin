@@ -98,7 +98,7 @@ class UmpireAllocation extends Component {
                                         onChange={(venue) => this.setState({ venue })}
                                         value={this.state.venue}
                                     >
-                                        <Option value="abbott">{AppConstants.AbbottAddress}</Option>
+                                        <Option value="abbott">{AppConstants.deprecated}</Option>
                                     </Select>
                                 </div>
                             </div>

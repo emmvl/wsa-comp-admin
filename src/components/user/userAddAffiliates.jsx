@@ -676,7 +676,7 @@ class UserAddAffiliates extends Component {
                                         this.setState({ buttonPressed: "save" })
                                     }}
                                 >
-                                    {AppConstants.addAffiliates}
+                                    {AppConstants.addAffiliate}
                                 </Button>
                             </div>
                         </div>

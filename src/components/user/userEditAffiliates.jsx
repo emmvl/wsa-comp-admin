@@ -514,7 +514,7 @@ class UserEditAffiliates extends Component {
                             </div>
                             <div className="col-sm d-flex align-items-center">
                                 <InputWithHead
-                                    auto_complete="new-affilatedTo"
+                                    auto_complete="new-affiliatedTo"
                                     heading={affiliate.affiliatedToOrgName}
                                     onChange={(e) =>
                                         this.onChangeSetValue(e, AppConstants.organisationTypeRefId)

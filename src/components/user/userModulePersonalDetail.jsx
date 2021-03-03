@@ -2226,7 +2226,6 @@ class UserModulePersonalDetail extends Component {
         return (
             <div className="fluid-width mt-2">
                 <div className="profile-image-view mr-5" style={{ marginTop: 20 }}>
-                    {/* <span className="user-contact-heading">{AppConstants.playerProfile}</span> */}
                     <div className="circular--landscape">
                         {personal.photoUrl ? (
                             <img src={personal.photoUrl} alt="" />
