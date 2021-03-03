@@ -300,9 +300,23 @@ class UmpireDivisions extends Component {
         )
     }
 
+    getRoundsNames = () => {
+        const { divisionList, roundsData } = this.props.liveScoreTeamState;
+        const roundsWithDivision = (!roundsData || !roundsData.length) ? [] : (
+            roundsData.map(round => {
+                const curDivision = (divisionList && divisionList.length) 
+                    ? divisionList.find(division => division.id === round.divisionId)
+                    : ({ name: '' });
+                const divName = curDivision.name;
+                return ({ id: round.id, name: divName ? `${divName} - ${round.name}` : round.name})
+            })
+        );
+        return  roundsWithDivision;
+    }
     algorithmModalView = () => {
         const { roundsData } = this.props.liveScoreTeamState;
         const { selectedRounds } = this.state;
+        const roundNames = this.getRoundsNames();
 
         return (
             <Modal
@@ -322,7 +336,7 @@ class UmpireDivisions extends Component {
                             selectedRounds : []
                         }
                     >
-                        {(roundsData || []).map((item) => (
+                        {roundNames.map((item) => (
                             <Option
                                 key={item.id}
                                 value={item.id}
