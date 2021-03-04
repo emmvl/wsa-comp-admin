@@ -587,7 +587,7 @@ function* exportFilesSaga(action) {
 
 function* userExportFilesSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.userExportFiles, action.URL);
+    const result = yield call(UserAxiosApi.userExportFiles, action.URL, action.userType);
 
     if (result.status === 1) {
       yield put({

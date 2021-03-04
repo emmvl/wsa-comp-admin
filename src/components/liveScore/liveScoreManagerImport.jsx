@@ -113,7 +113,7 @@ class LiveScoreManagerImport extends Component {
 
     onExport = () => {
         let url = AppConstants.coachExport + this.state.competitionId;
-        this.props.userExportFilesAction(url);
+        this.props.userExportFilesAction(url, 'manager');
     };
 
     contentView = () => (

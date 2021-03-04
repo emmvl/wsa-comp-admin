@@ -605,7 +605,7 @@ class Umpire extends Component {
 
     onExport = () => {
         const url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleId=${15}`;
-        this.props.userExportFilesAction(url);
+        this.props.userExportFilesAction(url, 'umpire');
     };
 
     headerView = () => {

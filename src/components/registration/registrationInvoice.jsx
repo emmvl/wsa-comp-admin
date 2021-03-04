@@ -14,6 +14,7 @@ import { getInvoice } from "../../store/actions/stripeAction/stripeAction";
 import Loader from '../../customComponents/loader';
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from "../../util/history";
+import { NavLink } from 'react-router-dom';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -489,15 +490,17 @@ class RegistrationInvoice extends Component {
                     </div>
                     <div className="col-sm pt-5 invoice-image-main ">
                         <label>
-                            <img
-                                src={AppImages.netballLogoMain}
-                                height="100%"
-                                width="100%"
-                                name="image"
-                                onError={(ev) => {
-                                    ev.target.src = AppImages.netballLogoMain;
-                                }}
-                            />
+                            <NavLink to="/" className="site-brand">
+                                <img
+                                    src={AppImages.netballLogoMain}
+                                    height="100%"
+                                    width="100%"
+                                    name="image"
+                                    onError={(ev) => {
+                                        ev.target.src = AppImages.netballLogoMain;
+                                    }}
+                                />
+                            </NavLink>
                         </label>
                     </div>
                 </div>

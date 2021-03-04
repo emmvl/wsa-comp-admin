@@ -1,5 +1,6 @@
 // import { DataManager } from './../../Components';
 import http from "./shopHttp";
+import * as moment from 'moment';
 import {
     // getUserId,
     getAuthToken,
@@ -110,7 +111,8 @@ let AxiosApi = {
             sorterBy
         } = params
         var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
-        return Method.dataGetDownload(url, token, "orderSummary");
+        let _now = moment().utc().format('Y-M-D');
+        return Method.dataGetDownload(url, token, `orderSummary-${_now}`);
     },
 
     // export order status  API

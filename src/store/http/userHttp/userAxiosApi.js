@@ -1,4 +1,5 @@
 import { message } from "antd";
+import * as moment from 'moment';
 
 import userHttp from "./userHttp";
 import history from "../../../util/history";
@@ -312,7 +313,8 @@ let userHttpApi = {
 
   exportOrgRegQuestions(payload) {
     const url = `api/export/registration/questions`;
-    return Method.dataPostDownload(url, token, payload, "RegistrationQuestions");
+    let _now = moment().utc().format('Y-M-D');
+    return Method.dataPostDownload(url, token, payload, `userTextualDashboard-${_now}`);
   },
 
   exportUserRegData(payload) {
@@ -403,8 +405,8 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  userExportFiles(url) {
-    return Method.dataGetDownload(url, localStorage.token);
+  userExportFiles(url, userType) {
+    return Method.dataGetDownload(url, localStorage.token, userType);
   },
 
   getUserHistory(payload) {
@@ -523,12 +525,12 @@ let userHttpApi = {
 
   addChild(payload) {
     const url = `/users/admin/child/create?parentUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
-    return Method.dataPost(url, token, {childUser: payload.body});
+    return Method.dataPost(url, token, { childUser: payload.body });
   },
 
   addParent(payload) {
     const url = `/users/admin/parent/create?childUserId=${payload.userId}&sameEmail=${payload.sameEmail}`;
-    return Method.dataPost(url, token, {parentUser: payload.body});
+    return Method.dataPost(url, token, { parentUser: payload.body });
   },
 
   findPossibleMerge(payload) {
@@ -536,7 +538,7 @@ let userHttpApi = {
   },
 
   getUsersByIds(ids) {
-      return Method.dataGet(`users/byIds?ids=${JSON.stringify(ids)}`);
+    return Method.dataGet(`users/byIds?ids=${JSON.stringify(ids)}`);
   },
 
   async getUserParentData(userId) {
@@ -888,7 +890,7 @@ let Method = {
     });
   },
 
-  async dataGetDownload(newUrl, authorization) {
+  async dataGetDownload(newUrl, authorization, userType) {
     const url = newUrl;
     return await new Promise((resolve, reject) => {
       userHttp
@@ -907,7 +909,16 @@ let Method = {
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'filecsv.csv'); //or any other extension
+            let _now = moment().utc().format('Y-M-D');
+            let fileName = "filecsv";
+            if (userType === 'manager') {
+              fileName = `matchDayManagerList-${_now}`;
+            } else if (userType === 'coach') {
+              fileName = `matchDayCoaches-${_now}`;
+            } else {
+              fileName = `umpire-${_now}`;
+            }
+            link.setAttribute('download', `${fileName}.csv`); //or any other extension
             document.body.appendChild(link);
             link.click();
             return resolve({

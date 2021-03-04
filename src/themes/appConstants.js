@@ -1662,7 +1662,7 @@ const AppConstants = {
     allMembershipProducts: "All Membership Products",
     fromDob: "From DOB",
     toDob: "To DOB",
-    maxMembershipFeePayable: "Maximum Membership Fee Payable",
+    maxMembershipFeePayable: "Maximum Membership Fee Payable (excl. GST)",
     addAnotherMembershipProduct: "Add Another Membership Product",
     becsSetupNotificationTitle: "BECS Debit setup done",
     becsSetupNotificationBody:

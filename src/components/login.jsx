@@ -45,7 +45,9 @@ class Login extends Component {
     contentView = (values, errors, setFieldValue, touched, handleChange, handleBlur) => (
         <div className="content-view login-form">
             <div className="d-flex justify-content-center">
-                <img src={AppImages.netballLogo1} alt="" />
+                <NavLink to="/" className="site-brand">
+                    <img src={AppImages.netballLogo1} alt="" />
+                </NavLink>
             </div>
 
             <InputWithHead
