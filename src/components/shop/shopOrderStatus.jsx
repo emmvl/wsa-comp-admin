@@ -194,7 +194,7 @@ const columns = [
                         <span>{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, 6)}>
+                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, 8)}>
                         <span>{AppConstants.pickedUp}</span>
                     </Menu.Item>
 
