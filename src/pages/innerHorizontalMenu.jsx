@@ -870,16 +870,11 @@ class InnerHorizontalMenu extends React.Component {
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu
-                            key="sub1"
-                            title={<span>{AppConstants.products}</span>}
-                        >
-                            <Menu.Item key="2">
-                                <NavLink to="/listProducts">
-                                    <span>{AppConstants.products}</span>
-                                </NavLink>
-                            </Menu.Item>
-                        </SubMenu>
+                        <Menu.Item key="2">
+                            <NavLink to="/listProducts">
+                                <span>{AppConstants.products}</span>
+                            </NavLink>
+                        </Menu.Item>
                         <Menu.Item key="4">
                             <NavLink to="/shopSettings">
                                 <span>{AppConstants.settings}</span>
