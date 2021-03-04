@@ -216,7 +216,7 @@ const columns = [
                         />
                     )}
                 >
-                    {(e.paymentStatus == "Failed") && (
+                    {(e.paymentStatus == "Failed Registration") && (
                         <Menu.Item key="7" onClick={() => this_Obj.myRegistrationRetryPayment(e)}>
                             <span>{AppConstants.retryPayment}</span>
                         </Menu.Item>
@@ -2186,7 +2186,7 @@ class UserModulePersonalDetail extends Component {
                 }
                 this.props.registrationRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
-            }else if(record.paymentStatus == "Failed"){
+            }else if(record.paymentStatus == "Failed Registration"){
                 let payload = {
                     processTypeName: "instalment",
                     registrationUniqueKey: record.registrationId,
