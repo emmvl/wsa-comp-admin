@@ -175,7 +175,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             <div>
                                 <img
                                     className="venue-configuration-image"
-                                    src={this.state.venueConfigurationImages[fieldConfigurationRefId-1]}
+                                    src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
                                     alt=""
                                     height={80}
                                 />
@@ -188,6 +188,10 @@ class CompetitionVenueAndTimesEdit extends Component {
                                         this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
                                     }}
                                 />
+
+                                <Form.Item name={`fieldConfigurationRefId${index}`}>
+                                    <Input type="hidden" value={fieldConfigurationRefId} />
+                                </Form.Item>
                             </div>
                             :
                             <></>
@@ -318,6 +322,19 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     }
 
+    getImageForVenueConfig = (index, fieldConfigurationRefId) => {
+        let image = '';
+        let i = 1;
+        while (!image) {
+            image = !!fieldConfigurationRefId
+                ? this.state.venueConfigurationImages[fieldConfigurationRefId - i]
+                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[index - i].fieldConfigurationRefId - 1]
+            i++;
+        }
+
+        return image;
+    }
+
     setFormFieldValue = () => {
         let venueData = this.props.venueTimeState.venuData;
 
@@ -340,6 +357,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                 [`venueCourtName${index}`]: item.venueCourtName,
                 [`lat${index}`]: item.lat,
                 [`lng${index}`]: item.lng,
+                [`fieldConfigurationRefId${index}`]: !!item.fieldConfigurationRefId
+                                                        ? item.fieldConfigurationRefId
+                                                        : !!venueData.venueCourts[index-1]
+                                                            ? venueData.venueCourts[index-1].fieldConfigurationRefId
+                                                            : 1,
             });
             // (item.availabilities || []).map((av, avIndex) => {
             //     this.formRef.current.setFieldsValue({
