@@ -398,6 +398,7 @@ class RegistrationMembershipCap extends Component {
                                         rules={[{ required: true, message: ValidationConstants.membershipFeeRequired }]}
                                     >
                                         <InputWithHead
+                                            prefix="$"
                                             setFieldsValue={feeCap.amount}
                                             style={{height: 46}}
                                             placeholder=" "
