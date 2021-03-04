@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { message } from "antd";
+import * as moment from 'moment';
 
 import { getAuthToken, getOrganisationData, getUserId } from "util/sessionStorage";
 import history from "util/history";
@@ -1081,7 +1082,8 @@ const CompetitionAxiosApi = {
         const userId = await getUserId()
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const url = `/api/proposedplayerlist/export?userId=${userId}&competitionMembershipProductDivisionId=${division}&competitionUniqueKey=${competition}&organisationId=${organisationUniqueKey}`
-        return Method.dataGetDownload(url, token, "proposedplayerlist");
+        let _now = moment().utc().format('Y-M-D');
+        return Method.dataGetDownload(url, token, `competitionPlayerGrades-${_now}`);
     },
 };
 

@@ -357,7 +357,7 @@ class LiveScoreCoaches extends Component {
     // on Export
     onExport = () => {
         let url = AppConstants.coachExport + this.state.compOrgId
-        this.props.userExportFilesAction(url)
+        this.props.userExportFilesAction(url, 'coach')
     }
 
     // on change search text

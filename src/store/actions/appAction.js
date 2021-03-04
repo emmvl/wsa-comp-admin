@@ -177,10 +177,11 @@ function CLEAR_OWN_COMPETITION_DATA(key) {
   };
 }
 
-function userExportFilesAction(URL) {
+function userExportFilesAction(URL, userType) {
   return {
     type: ApiConstants.API_USER_EXPORT_FILES_LOAD,
-    URL
+    URL,
+    userType
   };
 }
 

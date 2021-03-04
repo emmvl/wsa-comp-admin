@@ -295,7 +295,7 @@ class LiveScoreManagerList extends Component {
     onExport = () => {
         // let url = AppConstants.managerExport + this.state.competitionId
         let url = AppConstants.managerExport + this.state.compOrgId
-        this.props.userExportFilesAction(url)
+        this.props.userExportFilesAction(url, 'manager')
     }
 
     headerView = () => {

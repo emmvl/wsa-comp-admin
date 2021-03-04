@@ -1,5 +1,6 @@
 // import { DataManager } from './../../Components';
 import http from "./stripeHttp";
+import * as moment from 'moment';
 import {
     // getUserId,
     getAuthToken,
@@ -275,7 +276,8 @@ let AxiosApi = {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`;
         }
 
-        return Method.dataPostDownload(url, token, key, body);
+        let _now = moment().utc().format('Y-M-D');
+        return Method.dataPostDownload(url, token, `${key}-${_now}`, body);
     },
 
     async exportPaymentDashboardApi(offset,
@@ -321,7 +323,8 @@ let AxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        return Method.dataPostDownload(url, token, "dashboard", body);
+        let _now = moment().utc().format('Y-M-D');
+        return Method.dataPostDownload(url, token, `paymentDashboard-${_now}`, body);
     },
 
     async exportPaymentSummaryApi(offset,
@@ -366,7 +369,8 @@ let AxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        return Method.dataPostDownload(url, token, "dashboard", body);
+        let _now = moment().utc().format('Y-M-D');
+        return Method.dataPostDownload(url, token, `paymentSummary-${_now}`, body);
     },
 
     async getStripeRefundList(page, startingAfter, endingBefore) {
