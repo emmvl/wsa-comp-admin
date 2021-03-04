@@ -5820,14 +5820,11 @@ class RegistrationCompetitionFee extends Component {
                             }]}
                         >
                             <InputNumber
-                                className="w-100"
                                 style={{ paddingRight: 1, minWidth: 182 }}
-                                onChange={(e) =>
-                                    this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')
-                                }
-                                placeholder={AppConstants.selectRound}
-                                min={0}
-                                type="number"
+                                onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')}
+                                min={1}
+                                max={50}
                                 value={detailsData.competitionDetailData.noOfRounds}
                                 disabled={compDetailDisable}
                             />
