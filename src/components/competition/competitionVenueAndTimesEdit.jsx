@@ -33,6 +33,7 @@ import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 import { getOrganisationData } from "../../util/sessionStorage";
+import { captializedString, removeFirstSpace } from "../../util/helpers";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -92,15 +93,18 @@ class CompetitionVenueAndTimesEdit extends Component {
                         return (
                             <Form.Item
                                 name={`venueCourtName${index}`}
-                                rules={[{ required: true, message: ValidationConstants.courtField[3] }]}
+                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
                             >
                                 <Input
                                     // disabled={record.isDisabled}
                                     required="required-field pt-0 pb-0"
                                     className="input-inside-table-fees"
-                                    onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, index, 'venueCourtName', 'courtData')}
                                     value={courtName}
                                     placeholder="Court Name"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`venueCourtName${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
@@ -120,9 +124,12 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Input
                                     className="input-inside-table-venue-court"
                                     // disabled={record.isDisabled}
-                                    onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, index, 'lng', 'courtData')}
                                     value={lng}
                                     placeholder="Longitude"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`lng${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
@@ -141,9 +148,12 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Input
                                     className="input-inside-table-venue-court"
                                     // disabled={record.isDisabled}
-                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, index, 'lat', 'courtData')}
                                     value={lat}
                                     placeholder="Latitude"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`lat${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
@@ -545,8 +555,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
+                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(e.target.value)), 'Venue', 'name')}
                         value={venuData.name}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'name': captializedString(removeFirstSpace(e.target.value))
+                        })}
                     />
                 </Form.Item>
 
@@ -561,20 +574,28 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.short_Name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.short_Name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(e.target.value)), 'Venue', 'shortName')}
                         value={venuData.shortName}
+                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                            'shortName': captializedString(removeFirstSpace(i.target.value))
+                        })}
                     />
                 </Form.Item>
 
                 {
                     !this.state.manualAddress &&
-                    <Form.Item name="venueAddress">
+                    <Form.Item name="venueAddress" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
                         <PlacesAutocomplete
                             defaultValue={defaultVenueAddress}
                             heading={AppConstants.venueSearch}
                             required
                             error={this.state.venueAddressError}
                             onSetData={this.handlePlacesAutocomplete}
+                            otherProps={{
+                                onBlur: (i) => this.formRef.current.setFieldsValue({
+                                    "venueAddress": removeFirstSpace(i.target.value),
+                                }),
+                            }}
                         />
                     </Form.Item>
 
@@ -590,40 +611,51 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="addressOne">
+                    <Form.Item name="addressOne" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
                         <InputWithHead
                             auto_complete="new-addressOne"
                             required="required-field"
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
-                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street1.target.value), 'Venue', 'street1')}
                             value={venuData.street1}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'addressOne': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
 
                 {
                     this.state.manualAddress &&
-                    <InputWithHead
-                        auto_complete="new-addressTwo"
-                        heading={AppConstants.addressTwo}
-                        placeholder={AppConstants.addressTwo}
-                        onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
-                        value={venuData.street2}
-                    />
+                    <Form.Item name="addressTwo">
+                        <InputWithHead
+                            auto_complete="new-addressTwo"
+                            heading={AppConstants.addressTwo}
+                            placeholder={AppConstants.addressTwo}
+                            onChange={(street2) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street2.target.value), 'Venue', 'street2')}
+                            value={venuData.street2}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'addressTwo': removeFirstSpace(e.target.value)
+                            })}
+                        />
+                    </Form.Item>
                 }
 
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="suburb">
+                    <Form.Item name="suburb" rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
                         <InputWithHead
                             auto_complete="new-suburb"
                             required="required-field"
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
-                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
+                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(suburb.target.value), 'Venue', 'suburb')}
                             value={venuData.suburb}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'suburb': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
@@ -638,7 +670,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="stateRefId">
+                    <Form.Item name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <Select
                             className="w-100"
                             placeholder={AppConstants.select}
@@ -655,26 +687,35 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="postcode">
+                    <Form.Item name="postcode" rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
                         <InputWithHead
                             auto_complete="new-postcode"
                             required="required-field"
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
-                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
+                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(postalCode.target.value), 'Venue', 'postalCode')}
                             value={venuData.postalCode}
                             maxLength={4}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'postcode': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
 
-                <InputWithHead
-                    auto_complete="new-contactNumber"
-                    heading={AppConstants.contactNumber}
-                    placeholder={AppConstants.contactNumber}
-                    onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
-                    value={venuData.contactNumber}
-                />
+                <Form.Item className="formLineHeight" name="contact">
+                    <InputWithHead
+                        auto_complete="new-contactNumber"
+                        heading={AppConstants.contactNumber}
+                        placeholder={AppConstants.contactNumber}
+                        onChange={(contactNumber) => this.props
+                            .updateVenuAndTimeDataAction(removeFirstSpace(contactNumber.target.value), 'Venue', 'contactNumber')}
+                        value={venuData.contactNumber}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'contact': removeFirstSpace(e.target.value)
+                        })}
+                    />
+                </Form.Item>
 
                 <div className="fluid-width" style={{ marginTop: 25 }}>
                     <div className="row">
@@ -745,8 +786,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
+                        onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(name.target.value)), 'Venue', 'name')}
                         value={venuData.name}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'name': captializedString(removeFirstSpace(e.target.value))
+                        })}
                     />
                 </Form.Item>
 
@@ -761,8 +805,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.short_Name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.short_Name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                        onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(name.target.value)), 'Venue', 'shortName')}
                         value={venuData.shortName}
+                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                            'shortName': captializedString(removeFirstSpace(i.target.value))
+                        })}
                     />
                 </Form.Item>
 
@@ -776,36 +823,47 @@ class CompetitionVenueAndTimesEdit extends Component {
                 />
 
 
-                <Form.Item name="addressOne">
+                <Form.Item name="addressOne" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
                     <InputWithHead
                         auto_complete="new-addressOne"
                         required="required-field"
                         heading={AppConstants.addressOne}
                         placeholder={AppConstants.addressOne}
-                        onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                        onChange={(street1) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street1.target.value), 'Venue', 'street1')}
                         value={venuData.street1}
                         disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'addressOne': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 
-                <InputWithHead
-                    auto_complete="new-addressTwo"
-                    heading={AppConstants.addressTwo}
-                    placeholder={AppConstants.addressTwo}
-                    onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
-                    value={venuData.street2}
-                    disabled={this.state.isUsed || !this.state.isCreator}
-                />
+                <Form.Item name="addressTwo">
+                    <InputWithHead
+                        auto_complete="new-addressTwo"
+                        heading={AppConstants.addressTwo}
+                        placeholder={AppConstants.addressTwo}
+                        onChange={(street2) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street2.target.value), 'Venue', 'street2')}
+                        value={venuData.street2}
+                        disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'addressTwo': removeFirstSpace(e.target.value)
+                        })}
+                    />
+                </Form.Item>
 
-                <Form.Item name="suburb">
+                <Form.Item name="suburb" rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
                     <InputWithHead
                         auto_complete="new-suburb"
                         required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
-                        onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
+                        onChange={(suburb) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(suburb.target.value), 'Venue', 'suburb')}
                         value={venuData.suburb}
                         disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'suburb': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 
@@ -814,7 +872,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     heading={AppConstants.stateHeading}
                 />
 
-                <Form.Item name="stateRefId">
+                <Form.Item name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                     <Select
                         className="w-100"
                         placeholder={AppConstants.select}
@@ -828,27 +886,36 @@ class CompetitionVenueAndTimesEdit extends Component {
                     </Select>
                 </Form.Item>
 
-                <Form.Item name="postcode">
+                <Form.Item name="postcode" rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
                     <InputWithHead
                         auto_complete="new-postcode"
                         required="required-field"
                         heading={AppConstants.postcode}
                         placeholder={AppConstants.postcode}
-                        onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
+                        onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(postalCode.target.value), 'Venue', 'postalCode')}
                         value={venuData.postalCode}
                         maxLength={4}
                         disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'postcode': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 
-                <InputWithHead
-                    auto_complete="new-contactNumber"
-                    heading={AppConstants.contactNumber}
-                    placeholder={AppConstants.contactNumber}
-                    onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
-                    value={venuData.contactNumber}
-                    disabled={this.state.isUsed || !this.state.isCreator}
-                />
+                <Form.Item name="contact">
+                    <InputWithHead
+                        auto_complete="new-contactNumber"
+                        heading={AppConstants.contactNumber}
+                        placeholder={AppConstants.contactNumber}
+                        onChange={(contactNumber) => this.props
+                            .updateVenuAndTimeDataAction(removeFirstSpace(contactNumber.target.value), 'Venue', 'contactNumber')}
+                        value={venuData.contactNumber}
+                        disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'contact': removeFirstSpace(e.target.value)
+                        })}
+                    />
+                </Form.Item>
 
                 <div className="fluid-width" style={{ marginTop: 25 }}>
                     <div className="row">
