@@ -87,7 +87,7 @@ const columns = [
     },
     // Affiliate
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         sorter: true,

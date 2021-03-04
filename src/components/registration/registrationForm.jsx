@@ -619,7 +619,7 @@ class RegistrationForm extends Component {
                     </div>
                     <div className="col-sm">
                         <InputWithHead
-                            heading={AppConstants.registration_close}
+                            heading={AppConstants.registrationClose}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.regFormCloseMsg}
                             marginTop={0}

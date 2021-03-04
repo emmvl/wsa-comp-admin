@@ -11,7 +11,7 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: 'Court Numbers',
+        title: AppConstants.courtNumbers,
         dataIndex: 'courtNumbers',
         key: 'courtNumbers',
         render: courtNumbers => <Input className="input-inside-table-fees" value={courtNumbers} />,

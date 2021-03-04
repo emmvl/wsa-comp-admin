@@ -31,7 +31,7 @@ const columns = [
         sorter: (a, b) => a.minTeamsPerGarde.length - b.minTeamsPerGarde.length,
     },
     {
-        title: 'Divisions/Grades',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisionGrades',
         key: 'divisionGrades',
         render: divisionGrades => <Input className="input-inside-player-grades-table-for-grade" value={divisionGrades} />,

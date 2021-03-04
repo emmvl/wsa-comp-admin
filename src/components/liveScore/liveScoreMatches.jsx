@@ -156,7 +156,7 @@ const columns = [
         render: (venueCourt, record) => <span>{getVenueName(venueCourt)}</span>
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         sorter: true,

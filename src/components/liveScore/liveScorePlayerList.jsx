@@ -127,7 +127,7 @@ const columns = [
         )
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         sorter: true,

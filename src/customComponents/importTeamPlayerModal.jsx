@@ -40,7 +40,7 @@ const columns = [
         key: 'team'
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division'
     },

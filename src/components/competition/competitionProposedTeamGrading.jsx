@@ -220,7 +220,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
     },
     {
-        title: 'Comments',
+        title: AppConstants.comments,
         dataIndex: 'responseComments',
         key: 'responseComments',
         width: 110,

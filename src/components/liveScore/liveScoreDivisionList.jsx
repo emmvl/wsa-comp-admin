@@ -62,7 +62,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: true,
@@ -147,7 +147,7 @@ const participateColumns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: true,

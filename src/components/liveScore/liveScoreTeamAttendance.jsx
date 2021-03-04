@@ -124,7 +124,7 @@ const columns = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'divisionGradeName',
         key: 'divisionGradeName',
         sorter: true,
@@ -221,7 +221,7 @@ const borrowedColumns = [
             {lastName}</span>
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: true,

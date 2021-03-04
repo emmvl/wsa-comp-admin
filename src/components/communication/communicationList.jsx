@@ -54,7 +54,7 @@ function checkDate(expiryDate, publishedDate) {
 
 const columns = [
     {
-        title: 'Title',
+        title: AppConstants.title,
         dataIndex: 'title',
         key: 'title',
         sorter: (a, b) => a.title.length - b.title.length,
@@ -69,40 +69,40 @@ const columns = [
         ),
     },
     {
-        title: 'Author',
+        title: AppConstants.author,
         dataIndex: 'author',
         key: 'author',
         sorter: (a, b) => checkSorting(a, b, 'author'),
     },
     {
-        title: 'Expiry',
+        title: AppConstants.expiry,
         dataIndex: 'expiryDate',
         key: 'expiryDate',
         sorter: (a, b) => checkSorting(a, b, 'expiryDate'),
         render: (expiryDate) => <span>{expiryDate ? liveScore_MatchFormate(expiryDate) : ""}</span>,
     },
     {
-        title: "Published",
+        title: AppConstants.published,
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
         render: (isActive) => <span>{isActive === 1 ? "Yes" : "NO"}</span>,
     },
     {
-        title: "Published Date",
+        title: AppConstants.publishedDate,
         dataIndex: 'publishedAt',
         key: 'publishedAt',
         render: (publishedAt) => <span>{publishedAt && liveScore_formateDate(publishedAt)}</span>,
     },
     {
-        title: 'Notification',
+        title: AppConstants.notification,
         dataIndex: 'isNotification',
         key: 'isNotification',
         sorter: (a, b) => checkSorting(a, b, 'isNotification'),
         render: (isNotification) => <span>{isNotification === 1 ? "Yes" : "NO"}</span>,
     },
     {
-        title: 'Active',
+        title:  AppConstants.active,
         dataIndex: 'expiryDate',
         key: 'communication_expire_date_Active',
         render: (expiryDate, record) => (

@@ -21,8 +21,8 @@ const columns = [
         sorter: (a, b) => a.regDate.length - b.regDate.length,
     },
     {
-        title: 'Division/ Grade',
-        dataIndex: 'divisionGrade',
+        title: AppConstants.registratnt,
+        dataIndex: AppConstants.divisionGrad,
         key: 'divisionGrade',
         sorter: (a, b) => a.divisionGrade.length - b.divisionGrade.length,
     },

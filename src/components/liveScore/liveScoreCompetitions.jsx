@@ -94,7 +94,7 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Divisions/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisions',
         key: 'divisions',
         sorter: true,
@@ -251,7 +251,7 @@ const columnsParticipate = [
         ),
     },
     {
-        title: 'Divisions/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisions',
         key: 'divisions',
         sorter: true,

@@ -117,7 +117,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -300,7 +300,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -480,7 +480,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -765,7 +765,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1050,7 +1050,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1335,7 +1335,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1619,7 +1619,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1927,7 +1927,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -2235,7 +2235,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -2432,7 +2432,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -2737,7 +2737,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -3043,7 +3043,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -5889,7 +5889,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 </div>
                 <InputWithHead
-                    heading={AppConstants.registration_close}
+                    heading={AppConstants.registrationClose}
                     required="required-field"
                 />
                 <Form.Item

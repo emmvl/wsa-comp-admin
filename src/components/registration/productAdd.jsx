@@ -15,7 +15,7 @@ const columns = [
         render: category => <Input className="input-inside-table-fees" value={category} />,
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         render: division => <Input className="input-inside-table-fees" value={division} />,

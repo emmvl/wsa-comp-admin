@@ -446,7 +446,7 @@ class CompetitionReplicate extends Component {
                             checked={replicateSave.details.replicateSettings.registrationTypes == 1}
                             onChange={(e) => this.onChangeReplicateValue(e.target.checked ? 1 : 0, "replicateSettings", "registrationTypes")}
                         >
-                            {AppConstants.registration_type}
+                            {AppConstants.registrationType}
                         </Checkbox>
                     </div>
                     <div className="row">
