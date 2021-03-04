@@ -529,7 +529,6 @@ class LiveScoreAddManager extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.onSaveClick}
-                        className="login-form"
                         noValidate="noValidate"
                     >
                         <Content>

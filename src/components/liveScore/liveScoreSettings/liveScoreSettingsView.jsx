@@ -1610,7 +1610,6 @@ class LiveScoreSettingsView extends Component {
                         autoComplete="off"
                         onFinish={this.handleSubmit}
                         onFinishFailed={this.onFinishFailed}
-                        className="login-form"
                         noValidate="noValidate"
                     >
                         {this.contentView()}
