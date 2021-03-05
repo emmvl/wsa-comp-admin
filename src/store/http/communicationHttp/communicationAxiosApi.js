@@ -40,7 +40,7 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    communicationList({ userId, organisationId }) {
+    communicationList({ userId, organisationId, offset, limit, sortBy, sortOrder }) {
         try {
             let url = `${communicationBaseUrl}/admin`;
             if (userId) {
@@ -52,14 +52,22 @@ const communicationAxiosApi = {
             if (userId && organisationId) {
                 url = `${communicationBaseUrl}/admin?userId=${userId}&organisationId=${organisationId}`;
             }
-            return Method.dataGet(url, token);
+            const body = {
+                sortBy,
+                sortOrder,
+                paging: {
+                    offset,
+                    limit,
+                },
+            };
+            return Method.dataPost(url, token, body);
         } catch (e) {
             console.error(e);
         }
     },
-    publishCommunication({ id, silent, isApp, organisationUniqueKey }) {
+    publishCommunication({ id, isNotification, isEmail, isApp, organisationUniqueKey }) {
         try {
-            const url = `${communicationBaseUrl}/publish?id=${id}&silent=${!!silent}&isApp=${!!isApp}&organisationUniqueKey=${organisationUniqueKey}`;
+            const url = `${communicationBaseUrl}/publish?id=${id}&isNotification=${!!isNotification}&isEmail=${!!isEmail}&isApp=${!!isApp}&organisationUniqueKey=${organisationUniqueKey}`;
             return Method.dataGet(url, token);
         } catch (e) {
             console.error(e);

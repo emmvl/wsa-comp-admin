@@ -52,11 +52,11 @@ function* liveScoreManagerListSaga(action) {
       action.entityId,
       action.searchText,
       action.offset,
-      action.limit,
       action.sortBy,
       action.sortOrder,
       action.compOrgId,
-      action.isParent
+      action.isParent,
+      action.limit,
     );
 
     if (result.status === 1) {

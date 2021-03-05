@@ -29,11 +29,11 @@ const routeAdminRole = [
     "/quickCompetitionMatchFormat",
     "/competitionPartTeamGradeCalculate",
     "/registrationList",
-    "/matchDayPlayerProfile",
     "/registrationPayments",
     "/homeDashboard",
     "/competitionDraws",
     "/competitionDrawEdit",
+    "/competitionDrawsImport",
     "/umpireAllocation",
     "/competitionFixtures",
     "/quickCompetition",
@@ -164,8 +164,8 @@ const routeAdminRole = [
     "/submittedRegData",
     "/umpireRoster",
     "/addTeamMember",
-    "/teamMemberRegPayment"
-]
+    "/teamMemberRegPayment",
+];
 
 const routeUmpireRole = [
     "/homeDashboard",
@@ -202,8 +202,8 @@ const routeUmpireRole = [
     "/matchDayTeamView",
     "/matchDaySettingsView",
     "/addTeamMember",
-    "/teamMemberRegPayment"
-]
+    "/teamMemberRegPayment",
+];
 
 const routeFinanceRole = [
     "/homeDashboard",
@@ -227,7 +227,7 @@ const routeFinanceRole = [
     "/matchDayAddTeam",
     "/registrationPayoutTransaction",
     "/addTeamMember",
-    "/teamMemberRegPayment"
+    "/teamMemberRegPayment",
 
     // "/shopDashboard",
     // "/listProducts",
@@ -235,5 +235,6 @@ const routeFinanceRole = [
     // "/orderSummary",
     // "/orderStatus",
     // "/shopSettings"
-]
+];
+
 export { routeAdminRole, routeUmpireRole, routeFinanceRole }

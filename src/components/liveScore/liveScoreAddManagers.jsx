@@ -54,10 +54,10 @@ class LiveScoreAddManager extends Component {
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
-            let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
             checkLivScoreCompIsParent().then((value) => {
-                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, compOrgId)
+                const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
+                let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
+                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, null, value ? id : compOrgId)
                 this.props.getliveScoreTeams(id, null, compOrgId)
                 if (this.state.isEdit === true) {
                     this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
@@ -171,7 +171,6 @@ class LiveScoreAddManager extends Component {
                         <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.managerSearch} />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchManager }]}>
                             <AutoComplete
-                                loading
                                 style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
@@ -380,7 +379,7 @@ class LiveScoreAddManager extends Component {
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
                             <div className="mt-n10 ml-n10 width-50 mt-1">
                                 <Tooltip>
-                                    <span>{AppConstants.newMsgForScorerManager}</span>
+                                    <span>{AppConstants.newTeamUserMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>
@@ -390,7 +389,7 @@ class LiveScoreAddManager extends Component {
                             </Radio>
                             <div className="mt-n10 ml-n10 mt-1">
                                 <Tooltip>
-                                    <span>{AppConstants.existingMsgForScorerManager}</span>
+                                    <span>{AppConstants.existingTeamUserMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>
@@ -530,7 +529,6 @@ class LiveScoreAddManager extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.onSaveClick}
-                        className="login-form"
                         noValidate="noValidate"
                     >
                         <Content>

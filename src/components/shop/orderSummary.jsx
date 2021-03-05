@@ -46,9 +46,11 @@ function tableSort(key) {
     this_obj.setState({ sortBy, sortOrder });
     let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this_obj.state
     let page = this_obj.props.shopOrderSummaryState.orderSummaryCurrentPage
+    let { orderSummaryPageSize } = this_obj.props.shopOrderSummaryState
+    orderSummaryPageSize = orderSummaryPageSize ? orderSummaryPageSize : 10;
     let params = {
-        limit: 10,
-        offset: (page ? (10 * (page - 1)) : 0),
+        limit: orderSummaryPageSize,
+        offset: (page ? (orderSummaryPageSize * (page - 1)) : 0),
         search: searchText,
         year: yearRefId,
         postcode: postcode,
@@ -290,9 +292,11 @@ class OrderSummary extends Component {
     onExport = () => {
         let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
         let { orderSummaryCurrentPage } = this.props.shopOrderSummaryState
+        let { orderSummaryPageSize } = this.props.shopOrderSummaryState
+        orderSummaryPageSize = orderSummaryPageSize ? orderSummaryPageSize : 10;
         let params = {
-            limit: 10,
-            offset: (orderSummaryCurrentPage ? (10 * (orderSummaryCurrentPage - 1)) : 0),
+            limit: orderSummaryPageSize,
+            offset: (orderSummaryCurrentPage ? (orderSummaryPageSize * (orderSummaryCurrentPage - 1)) : 0),
             search: searchText,
             year: yearRefId,
             postcode: postcode,

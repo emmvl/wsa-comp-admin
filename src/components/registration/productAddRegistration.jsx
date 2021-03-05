@@ -202,7 +202,7 @@ class ProductAddRegistration extends Component {
             <div className="content-view pt-5">
                 <span className="form-heading">{AppConstants.productDetails}</span>
 
-                <InputWithHead heading={AppConstants.registration_type} />
+                <InputWithHead heading={AppConstants.registrationType} />
                 <Select
                     className="w-100"
                     style={{ paddingRight: 1, minWidth: 182 }}

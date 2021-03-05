@@ -729,7 +729,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         return (
             <div>
                 <span className="applicable-to-heading required-field">
-                    {AppConstants.anyGradePreference2}
+                    {AppConstants.anyGradePreference}
                 </span>
 
                 <Radio.Group

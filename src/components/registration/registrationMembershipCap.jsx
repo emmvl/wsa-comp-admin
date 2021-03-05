@@ -453,7 +453,7 @@ class RegistrationMembershipCap extends Component {
                             className="orange-action-txt" 
                             style={{ alignSelf: "center"}}
                             onClick={() => this.addOrRemoveMembershipProductBox("add")}>
-                            +{AppConstants.addAnotherMembershipProduct}
+                            +{AppConstants.addAnotherMembershipCap}
                         </span>
                     </div>
                 </div>

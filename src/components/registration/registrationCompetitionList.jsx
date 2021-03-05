@@ -45,7 +45,6 @@ function tableSort(key) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-
     let { pageSize } = this_Obj.props.competitionFeesState;
     pageSize = pageSize || 10;
     this_Obj.props.regCompetitionListAction(this_Obj.state.offset, pageSize, this_Obj.state.yearRefId, this_Obj.state.searchText, sortBy, sortOrder);

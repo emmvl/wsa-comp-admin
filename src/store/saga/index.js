@@ -111,7 +111,7 @@ import {
     competitionTimeslotsGetSaga,
     teamsTimeslotsPreferencesGetSaga,
     teamsTimeslotsPreferencesSaveSaga,
-} from './competitionManagementSaga/competitionTimeAndSlotSaga'; 
+} from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
 import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
 /// /Venue constraints
@@ -235,7 +235,7 @@ export default function* rootSaga() {
         fork(shopProductSaga),
         fork(shopSettingSaga),
         fork(shopOrderStatusSaga),
-        
+
         // Stripe
         fork(stripeSaga),
 
@@ -317,6 +317,10 @@ export default function* rootSaga() {
     /* ************Competition Management Ends************ */
 
     yield takeEvery(ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD, competitonWithTimeSlots);
+    yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_GET_LOAD, competitionTeamsGetSaga);
+    yield takeEvery(ApiConstants.API_COMPETITION_TIMESLOTS_GET_LOAD, competitionTimeslotsGetSaga);
+    yield takeEvery(ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD, teamsTimeslotsPreferencesGetSaga);
+    yield takeEvery(ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_LOAD, teamsTimeslotsPreferencesSaveSaga);
 
     /// /Venue Constraints
     yield takeEvery(ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD, venueTimeSaga);
@@ -510,7 +514,7 @@ export default function* rootSaga() {
     /// /////////////post/save quick competition division
     yield takeEvery(ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_LOAD, competitionQuickSaga.saveQuickCompDivisionSaga);
     /// create quick competition
-    yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickComptitionSaga);
+    yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickCompetitionSaga);
     yield takeEvery(ApiConstants.API_GET_QUICK_COMPETITION_LOAD, competitionQuickSaga.getQuickComptitionSaga);
     // quick competition time slot
     yield takeEvery(ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD, competitionQuickSaga.quickcompetitoTimeSlotsPostApi);

@@ -324,7 +324,7 @@ class LiveScoreLadderSettings extends Component {
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}
-                    <Form onFinish={this.handleSubmit} className="login-form">
+                    <Form onFinish={this.handleSubmit}>
                         <div className="formView">{this.contentView()}</div>
                         <div className="formView">{this.publicLadderLink()}</div>
                         <div className="formView">{this.publiDrawsLink()}</div>

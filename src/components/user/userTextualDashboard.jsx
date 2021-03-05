@@ -14,6 +14,7 @@ import { getOnlyYearListAction } from 'store/actions/appAction';
 import { getGenderAction } from 'store/actions/commonAction/commonAction';
 import {
     getUserDashboardTextualAction,
+    getUserDashboardTextualSpectatorCountAction,
     exportOrgRegQuestionAction,
     userDeleteAction,
     setTextualTableListPageSizeAction,
@@ -34,7 +35,7 @@ const { confirm } = Modal;
 
 let thisObj = null;
 
-function tableSort(key) {
+const tableSort = async (key) => {
     let sortBy = key;
     let sortOrder = null;
     if (thisObj.state.sortBy !== key) {
@@ -45,9 +46,8 @@ function tableSort(key) {
         sortBy = null;
         sortOrder = null;
     }
-
+    await thisObj.props.getUserDashboardTextualAction(thisObj.state.filter, sortBy, sortOrder);
     thisObj.setState({ sortBy, sortOrder });
-    thisObj.props.getUserDashboardTextualAction(thisObj.state.filter, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -249,7 +249,6 @@ class UserTextualDashboard extends Component {
 
             this.handleTextualTableList(1);
         }
-
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({ loading: false });
@@ -400,8 +399,8 @@ class UserTextualDashboard extends Component {
         };
 
         this.props.getUserDashboardTextualAction(filter, this.state.sortBy, this.state.sortOrder);
-
-        this.setState({ filter });
+        this.props.getUserDashboardTextualSpectatorCountAction(filter);
+        this.setState({ filter } );
     };
 
     exportOrgRegistrationQuestions = () => {
@@ -655,7 +654,7 @@ class UserTextualDashboard extends Component {
     };
 
     countView = () => {
-        const { userDashboardCounts } = this.props.userState;
+        const { userDashboardCounts, userDashboardSpectatorCount } = this.props.userState;
         const noOfRegisteredUsers = userDashboardCounts !== null ? userDashboardCounts.noOfRegisteredUsers : 0;
         const noOfUsers = userDashboardCounts !== null ? userDashboardCounts.noOfUsers : 0;
         return (
@@ -681,7 +680,7 @@ class UserTextualDashboard extends Component {
                     <div className="col-sm-4">
                         <div className="registration-count">
                             <div className="reg-payment-paid-reg-text">No. of Spectators - Un-named</div>
-                            <div className="reg-payment-price-text">{noOfRegisteredUsers}</div>
+                            <div className="reg-payment-price-text">{userDashboardSpectatorCount}</div>
                         </div>
                     </div>
                 </div>
@@ -748,6 +747,7 @@ class UserTextualDashboard extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserDashboardTextualAction,
+        getUserDashboardTextualSpectatorCountAction,
         getOnlyYearListAction,
         getGenderAction,
         exportOrgRegQuestionAction,

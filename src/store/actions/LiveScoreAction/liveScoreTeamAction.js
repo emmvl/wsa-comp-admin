@@ -45,6 +45,13 @@ function liveScoreGetDivision(payload) {
     };
 }
 
+function liveScoreGetRounds(competitionId) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_GET_ROUNDS_LOAD,
+        competitionId,
+    };
+}
+
 function liveScoreGetAffiliate(payload) {
     return {
         type: ApiConstants.GET_AFFILIATE_TEAM,
@@ -111,4 +118,5 @@ export {
     liveScoreGetTeamDataAction,
     getTeamsWithPagination,
     liveScoreDeletePlayerAction,
+    liveScoreGetRounds,
 };

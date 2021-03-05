@@ -221,7 +221,7 @@ const columns = [
                             <span>{AppConstants.retryPayment}</span>
                         </Menu.Item>
                     )}
-                    {e.alreadyDeRegistered == 0 && (
+                    {(e.alreadyDeRegistered == 0 && e.paymentStatus != "Failed Registration") && (
                         <Menu.Item key="2" 
                         onClick={() => 
                             history.push("/deregistration", { 
@@ -383,30 +383,38 @@ const teamRegistrationColumns = [
         dataIndex: 'status',
         key: 'status',
         width: 80,
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu" theme="light" mode="horizontal"
-                style={{ lineHeight: "25px" }}>
-                <SubMenu
-                    key="sub1"
-                    title={<img className="dot-image" src={AppImages.moreTripleDot}
-                        alt="" width="16" height="16" />}
-                >
-                    <Menu.Item
-                    key="1"
-                    onClick={() =>
-                        history.push("/deregistration", {
-                        regData: record,
-                        personal: this_Obj.props.userState.personalData,
-                        sourceFrom: AppConstants.teamRegistration
-                        })
+        render: (data, record) => {
+            return(
+                <div>
+                    {record.status == "Registered" ?
+                        <Menu
+                            className="action-triple-dot-submenu" theme="light" mode="horizontal"
+                            style={{ lineHeight: "25px" }}>
+                            <SubMenu
+                                key="sub1"
+                                title={<img className="dot-image" src={AppImages.moreTripleDot}
+                                    alt="" width="16" height="16" />}
+                            >
+                                <Menu.Item
+                                key="1"
+                                onClick={() =>
+                                    history.push("/deregistration", {
+                                    regData: record,
+                                    personal: this_Obj.props.userState.personalData,
+                                    sourceFrom: AppConstants.teamRegistration
+                                    })
+                                }
+                                >
+                                <span>{AppConstants.registrationChange}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                        :
+                        null
                     }
-                    >
-                    <span>{AppConstants.registrationChange}</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        )
+                </div>
+            )
+        }
     }
 ];
 
@@ -515,6 +523,7 @@ const teamMembersColumns = [
             let compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
             return (
                 <div>
+                    {record.actionFlag == 1 &&
                         <Menu
                             className="action-triple-dot-submenu"
                             theme="light"
@@ -538,20 +547,30 @@ const teamMembersColumns = [
                                         <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
                                     </Menu.Item>
                                  )}
-                                <Menu.Item
-                                    key="2"
-                                    onClick={() =>
-                                        history.push("/deregistration", {
-                                        regData: record,
-                                        personal: this_Obj.props.userState.personalData,
-                                        sourceFrom: AppConstants.teamMembers
-                                        })
-                                    }
-                                >
-                                    <span>{AppConstants.registrationChange}</span>
-                                </Menu.Item>
+                                 {record.paymentStatus != "Pending De-registration" ? 
+                                    <Menu.Item
+                                        key="2"
+                                        onClick={() =>
+                                            history.push("/deregistration", {
+                                            regData: record,
+                                            personal: this_Obj.props.userState.personalData,
+                                            sourceFrom: AppConstants.teamMembers
+                                            })
+                                        }
+                                    >
+                                        <span>{AppConstants.registrationChange}</span>
+                                    </Menu.Item>
+                                    :
+                                    <Menu.Item
+                                        key="3"
+                                        onClick={() => this_Obj.cancelTeamMemberDeRegistrtaion(record.deRegisterId)}
+                                    >
+                                        <span>{AppConstants.cancelDeRegistrtaion}</span>
+                                    </Menu.Item>
+                                }
                             </SubMenu>
                         </Menu>
+                    }
                 </div>
             )
 
@@ -1749,6 +1768,11 @@ class UserModulePersonalDetail extends Component {
                 "myRegistrations"
             );
         }
+
+        if(this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelTeamMemberDeRegistrationLoad == true){
+            this.showTeamMembers(this.state.registrationTeam,1)
+            this.setState({cancelTeamMemberDeRegistrationLoad: false})
+        }
     }
 
     apiCalls = (userId) => {
@@ -1795,6 +1819,18 @@ class UserModulePersonalDetail extends Component {
             this.setState({cancelDeRegistrationLoad: true})
         } catch(ex) {
             console.log("Error in cancelDeRegistrtaion::" +ex)
+        }
+    }
+
+    cancelTeamMemberDeRegistrtaion = (deRegisterId) => {
+        try{
+            let payload = {
+                deRegisterId: deRegisterId
+            }
+            this.props.cancelDeRegistrationAction(payload);
+            this.setState({cancelTeamMemberDeRegistrationLoad: true})
+        } catch(ex) {
+            console.log("Error in cancelTeamMemberDeRegistrtaion::" +ex)
         }
     }
 
@@ -2226,7 +2262,6 @@ class UserModulePersonalDetail extends Component {
         return (
             <div className="fluid-width mt-2">
                 <div className="profile-image-view mr-5" style={{ marginTop: 20 }}>
-                    {/* <span className="user-contact-heading">{AppConstants.playerProfile}</span> */}
                     <div className="circular--landscape">
                         {personal.photoUrl ? (
                             <img src={personal.photoUrl} alt="" />
@@ -3085,7 +3120,8 @@ class UserModulePersonalDetail extends Component {
                                 dataSource={teamMembers}
                                 pagination={false}
                                 loading={
-                                    this.props.userState.getTeamMembersOnLoad
+                                    this.props.userState.getTeamMembersOnLoad ||
+                                    this.state.cancelTeamMemberDeRegistrationLoad
                                 }
                             />
                         </div>

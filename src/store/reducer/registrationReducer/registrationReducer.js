@@ -1314,7 +1314,7 @@ function registration(state = initialState, action) {
           }
         }
       }else{
-        membershipCapListTemp[0] = membershipCapListDefObj;
+        membershipCapListTemp[0] = deepCopyFunction(membershipCapListDefObj);
       }
       return{
         ...state,

@@ -13,7 +13,8 @@ import {
     Form,
     Modal,
     message,
-    Tooltip
+    Tooltip,
+    InputNumber,
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
@@ -1208,20 +1209,17 @@ class CompetitionOpenRegForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field pb-1" />
                         <Form.Item name="numberOfRounds" rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
-                            <Select
+                            <InputNumber
                                 className="w-100"
                                 style={{ paddingRight: 1, minWidth: 182 }}
+                                onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')}
                                 placeholder={AppConstants.selectRound}
-                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                min={1}
+                                max={50}
                                 value={detailsData.competitionDetailData.noOfRounds}
                                 disabled={disabledStatus || compDetailDisable}
-                            >
-                                {roundsArray.map(item => (
-                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
-                                        {item.noOfRounds}
-                                    </Option>
-                                ))}
-                            </Select>
+                            />
                         </Form.Item>
                     </div>
                 )}

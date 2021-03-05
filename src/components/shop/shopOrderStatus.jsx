@@ -49,9 +49,11 @@ function tableSort(key) {
         yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
     } = this_obj.state;
     const page = this_obj.props.shopOrderStatusState.orderStatusCurrentPage;
+    let { orderStatusPageSize } = this_obj.props.shopOrderStatusState;
+    orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
     const params = {
-        limit: 10,
-        offset: (page ? (10 * (page - 1)) : 0),
+        limit: orderStatusPageSize,
+        offset: (page ? (orderStatusPageSize * (page - 1)) : 0),
         search: searchText,
         year: yearRefId,
         paymentStatus,
@@ -192,7 +194,7 @@ const columns = [
                         <span>{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, 6)}>
+                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, 8)}>
                         <span>{AppConstants.pickedUp}</span>
                     </Menu.Item>
 
@@ -236,8 +238,10 @@ class ShopOrderStatus extends Component {
             fulfilmentStatus,
             product,
         } = this.state;
+        let { orderStatusPageSize } = this.props.shopOrderStatusState;
+        orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
         const params = {
-            limit: 10,
+            limit: orderStatusPageSize,
             offset: 0,
             search: searchText,
             year: JSON.parse(yearId),
@@ -381,10 +385,12 @@ class ShopOrderStatus extends Component {
             yearRefId, searchText, paymentStatus, fulfilmentStatus, product,
         } = this_obj.state;
         const { orderStatusCurrentPage } = this.props.shopOrderStatusState;
+        let { orderStatusPageSize } = this_obj.props.shopOrderStatusState;
+        orderStatusPageSize = orderStatusPageSize ? orderStatusPageSize : 10;
         const params = {
-            limit: 10,
+            limit: orderStatusPageSize,
             offset: orderStatusCurrentPage
-                ? 10 * (orderStatusCurrentPage - 1)
+                ? orderStatusPageSize * (orderStatusCurrentPage - 1)
                 : 0,
             search: searchText,
             year: yearRefId,
@@ -426,13 +432,6 @@ class ShopOrderStatus extends Component {
                                         allowClear
                                     />
                                 </div>
-                            </div>
-                        </div>
-                        <div className="col-sm pt-1">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                <Button className="primary-add-comp-form" type="primary">
-                                    {AppConstants.addOrder}
-                                </Button>
                             </div>
                         </div>
                         <div className="col-sm pt-1">

@@ -35,7 +35,7 @@ const columns = [
         key: 'name'
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division'
     },

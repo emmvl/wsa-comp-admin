@@ -494,7 +494,6 @@ class LiveScoreEditBanners extends Component {
                     <Form
                         ref={this.formRef}
                         onFinish={this.handleSubmit}
-                        className="login-form"
                         noValidate="noValidate"
                     >
                         <Content>

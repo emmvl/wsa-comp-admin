@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import {
     Layout,
     Breadcrumb,
@@ -13,16 +16,28 @@ import {
     Form,
     Modal,
     message,
-    Tooltip
+    Tooltip,
+    InputNumber,
 } from "antd";
-import InputWithHead from "../../customComponents/InputWithHead";
-import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import moment from "moment";
+
+import { getCurrentYear } from "util/permissions";
+import { captializedString, isImageFormatValid, isImageSizeValid } from "util/helpers";
+import history from "util/history";
+import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
+import AppConstants from "themes/appConstants";
+import AppImages from "themes/appImages";
+import AppUniqueId from "themes/appUniqueId";
+import ValidationConstants from "themes/validationConstant";
+import {
+    competitionFeeInit,
+    getVenuesTypeAction,
+    getCommonDiscountTypeTypeAction,
+    getOnlyYearListAction,
+    clearFilter,
+    searchVenueList,
+    CLEAR_OWN_COMPETITION_DATA,
+} from "store/actions/appAction";
 import {
     getAllCompetitionFeesDeatilsAction,
     saveCompetitionFeesDetailsAction,
@@ -39,23 +54,14 @@ import {
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
     clearCompReducerDataAction,
-    removeCompetitionDivisionAction
-} from "../../store/actions/registrationAction/competitionFeeAction";
-import {
-    competitionFeeInit, getVenuesTypeAction,
-    getCommonDiscountTypeTypeAction, getOnlyYearListAction,
-    clearFilter, searchVenueList, CLEAR_OWN_COMPETITION_DATA
-} from "../../store/actions/appAction";
-import moment from "moment";
-import history from "../../util/history";
-import ValidationConstants from "../../themes/validationConstant";
-import { NavLink } from "react-router-dom";
-import Loader from '../../customComponents/loader';
-import { venueListAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage"
-import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
-import AppUniqueId from "../../themes/appUniqueId";
-import { getCurrentYear } from "util/permissions";
+    removeCompetitionDivisionAction,
+} from "store/actions/registrationAction/competitionFeeAction";
+import { venueListAction } from "store/actions/commonAction/commonAction"
+import { fixtureTemplateRoundsAction } from "store/actions/competitionModuleAction/competitionDashboardAction";
+import Loader from "customComponents/loader";
+import InputWithHead from "customComponents/InputWithHead";
+import InnerHorizontalMenu from "pages/innerHorizontalMenu";
+import DashboardLayout from "pages/dashboardLayout";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -73,7 +79,7 @@ const permissionObject = {
     paymentsDisable: false,
     discountsDisable: false,
     allDisable: false,
-    isPublished: false
+    isPublished: false,
 }
 
 class RegistrationCompetitionForm extends Component {
@@ -128,7 +134,7 @@ class RegistrationCompetitionForm extends Component {
                                 />
                             </Form.Item>
                         )
-                    }
+                    },
                 },
                 {
                     title: "Gender Restriction",
@@ -143,7 +149,7 @@ class RegistrationCompetitionForm extends Component {
                                 onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
                             />
                         </div>
-                    )
+                    ),
                 },
                 {
                     dataIndex: "genderRefId",
@@ -816,7 +822,7 @@ class RegistrationCompetitionForm extends Component {
                         <div className="content-view pt-3">
                             <div className="row-view-text">
                                 <span className="registation-screen-nav-text">
-                                    {AppConstants.toEditRegistrationDeatils}
+                                    {AppConstants.toEditRegistrationDetails}
                                 </span>
                                 <span
                                     className="registation-screen-nav-text-appColor pointer ml-5"
@@ -1122,20 +1128,17 @@ class RegistrationCompetitionForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field" />
                         <Form.Item name='numberOfRounds' rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
-                            <Select
+                            <InputNumber
                                 className="w-100"
                                 style={{ paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectRound}
-                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                // value={detailsData.competitionDetailData.noOfRounds}
+                                onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')}
+                                min={1}
+                                max={50}
+                                value={detailsData.competitionDetailData.noOfRounds}
                                 disabled={compDetailDisable}
-                            >
-                                {roundsArray.map(item => (
-                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
-                                        {item.noOfRounds}
-                                    </Option>
-                                ))}
-                            </Select>
+                            />
                         </Form.Item>
                     </div>
                 )}

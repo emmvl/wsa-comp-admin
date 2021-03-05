@@ -54,13 +54,13 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'sortOrder',
         key: 'sortOrder',
         sorter: (a, b) => tableSort(a, b, "sortOrder")
     },
     {
-        title: 'Team Name',
+        title: AppConstants.teamName,
         dataIndex: 'teamName',
         key: 'teamName',
         render: (teamName, record, index) => <Input
@@ -73,7 +73,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "teamName")
     },
     {
-        title: 'History',
+        title: AppConstants.history,
         dataIndex: 'playerHistory',
         key: 'playerHistory',
         render: (playerHistory, record, key) => (
@@ -113,7 +113,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "playerHistory")
     },
     {
-        title: 'Proposed Grade',
+        title: AppConstants.proposedGrade,
         dataIndex: 'proposedGradeRefId',
         key: 'proposedGradeRefId',
         render: (proposedGradeRefId, record, index) => (
@@ -133,13 +133,13 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
     },
     {
-        title: 'Finalised Grade',
+        title: AppConstants.finalisedGrade,
         dataIndex: 'finalGradeName',
         key: 'finalGradeName',
         sorter: (a, b) => tableSort(a, b, "finalGradeName")
     },
     {
-        title: 'Comments',
+        title: AppConstants.comments,
         dataIndex: 'comments',
         key: 'comments',
         width: 110,
@@ -359,14 +359,6 @@ class CompetitionPartProposedTeamGrading extends Component {
         this.props.exportProposedTeamsAction(payload);
     }
 
-    exportPlayers = () => {
-        let payload = {
-            competitionId: this.state.firstTimeCompId,
-            yearRefId: this.state.yearRefId
-        }
-        this.props.exportProposedPlayersAction(payload);
-    }
-
     headerView = () => {
         let disabledStatus = this.state.competitionStatus == 1
         return (
@@ -390,22 +382,6 @@ class CompetitionPartProposedTeamGrading extends Component {
                                                     className="export-image"
                                                 />
                                                 {AppConstants.exportTeams}
-                                            </div>
-                                        </div>
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile">
-                                    <Button disabled={disabledStatus} className="primary-add-comp-form" type="primary" onClick={() => this.exportPlayers()}>
-                                        <div className="row">
-                                            <div className="col-sm">
-                                                <img
-                                                    src={AppImages.export}
-                                                    alt=""
-                                                    className="export-image"
-                                                />
-                                                {AppConstants.exportPlayers}
                                             </div>
                                         </div>
                                     </Button>

@@ -195,10 +195,11 @@ class CommunicationView extends Component {
     }
 
     onSubmitCommunicationPublish = () => {
-        const { id, isNotification, isApp } = this.state.communicationItem;
+        const { id, isNotification, isEmail, isApp } = this.state.communicationItem;
         this.props.communicationPublishAction({
             id,
-            silent: !isNotification,
+            isNotification,
+            isEmail,
             isApp,
             organisationUniqueKey: getOrganisationData().organisationUniqueKey,
         });
@@ -217,11 +218,11 @@ class CommunicationView extends Component {
                         <Checkbox
                             className="single-checkbox"
                             checked={communicationData?.isNotification}
-                            onClick={() => {
+                            onClick={(e) => {
                                 this.setState({
                                     communicationItem: {
                                         ...communicationData,
-                                        isNotification: true,
+                                        isNotification: e.target.checked,
                                     },
                                 });
                             }}
@@ -235,12 +236,12 @@ class CommunicationView extends Component {
                     >
                         <Checkbox
                             className="single-checkbox"
-                            checked={!communicationData?.isNotification}
-                            onClick={() => {
+                            checked={communicationData?.isEmail}
+                            onClick={(e) => {
                                 this.setState({
                                     communicationItem: {
                                         ...communicationData,
-                                        isNotification: false,
+                                        isEmail: e.target.checked,
                                     },
                                 });
                             }}
@@ -254,6 +255,7 @@ class CommunicationView extends Component {
                     >
                         <Checkbox
                             className="single-checkbox"
+                            checked={communicationData?.isApp}
                             onClick={(e) => {
                                 this.setState({
                                     communicationItem: {

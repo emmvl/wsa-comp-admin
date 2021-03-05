@@ -12,6 +12,7 @@ import HomeDashboard from 'components/home/homeDashboard';
 import CompetitionCourtAndTimesAssign from 'components/competition/competitionCourtAndTimesAssign';
 import CompetitionDashboard from 'components/competition/competitionDashboard';
 import CompetitionDraws from 'components/competition/competitionDraws';
+import CompetitionDrawsImport from 'components/competition/multiFieldDrawsImport';
 import CompetitionDrawEdit from 'components/competition/competitionDrawEditNew';
 import CompetitionException from 'components/competition/comeptitionException';
 import CompetitionFinals from 'components/competition/competitionFinals';
@@ -141,7 +142,6 @@ import LiveScoreNewsList from 'components/liveScore/liveScoreNewsList';
 import LiveScoreNewsView from 'components/liveScore/liveScoreNewsView';
 import LiveScorerPlayerImport from 'components/liveScore/liveScorePlayerImport';
 import LiveScorePlayerList from 'components/liveScore/liveScorePlayerList';
-import LiveScorePlayerProfile from 'components/liveScore/liveScorePlayerProfile';
 import LiveScorePlayerView from 'components/liveScore/liveScorePlayerView';
 import LiveScorePositionTrackReport from 'components/liveScore/liveScorePositionTrackReport';
 import LiveScorePublicLadder from 'components/liveScore/liveScorePublicLadder';
@@ -358,6 +358,10 @@ class Routes extends React.Component {
                     component={this.haveAccess(userRoleId, '/competitionDraws') ? lazyLoad(MultiFieldDrawsNewTimeline) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
+                    path="/competitionDrawsImport"
+                    component={this.haveAccess(userRoleId, '/competitionDrawsImport') ? lazyLoad(CompetitionDrawsImport) : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
                     path="/competitionDrawEdit"
                     component={this.haveAccess(userRoleId, '/competitionDrawEdit') ? lazyLoad(CompetitionDrawEdit) : lazyLoad(NotFound)}
                 />
@@ -462,10 +466,6 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/registrationList"
                     component={this.haveAccess(userRoleId, '/registrationList') ? lazyLoad(RegistrationList) : lazyLoad(NotFound)}
-                />
-                <PrivateRoute
-                    path="/matchDayPlayerProfile"
-                    component={this.haveAccess(userRoleId, '/matchDayPlayerProfile') ? lazyLoad(LiveScorePlayerProfile) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/registrationPayments"

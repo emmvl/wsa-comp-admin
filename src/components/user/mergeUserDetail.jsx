@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { bindActionCreators } from 'redux';
-import AppConstants from "../../themes/appConstants";
 import {
     Breadcrumb,
     Button,
@@ -11,198 +10,178 @@ import {
     Radio,
     Row,
     Typography,
-    notification
+    notification,
 } from "antd";
-import DashboardLayout from "../../pages/dashboardLayout";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import userHttp from '../../store/http/userHttp/userHttp'
+import { get } from "lodash";
 import { useHistory } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+import { connect, useSelector } from 'react-redux'
+import { getOrganisationData } from 'util/sessionStorage'
+import UserAxiosApi from 'store/http/userHttp/userAxiosApi'
+import Loader from 'customComponents/loader'
+import { liveScore_formateDate } from 'themes/dateformate'
+import userHttp from '../../store/http/userHttp/userHttp'
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import DashboardLayout from "../../pages/dashboardLayout";
+import AppConstants from "../../themes/appConstants";
+
 const { Content } = Layout;
 const { Text } = Typography;
 
-const HeaderView = () => {
-    return (
-        <div className="comp-player-grades-header-view-design">
-            <div className="row">
-                <div className="col-sm d-flex align-content-center">
-                    <Breadcrumb separator=" > ">
-                        <Breadcrumb.Item className="breadcrumb-add">
-                            {AppConstants.mergeUser}
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </div>
+const HeaderView = () => (
+    <div className="comp-player-grades-header-view-design">
+        <div className="row">
+            <div className="col-sm d-flex align-content-center">
+                <Breadcrumb separator=" > ">
+                    <Breadcrumb.Item className="breadcrumb-add">
+                        {AppConstants.mergeUser}
+                    </Breadcrumb.Item>
+                </Breadcrumb>
             </div>
         </div>
-    );
-};
+    </div>
+);
 
+const selectAll = 'selectAll';
+const userTypes = {
+    master: "master",
+    second: "second",
+}
 const MatchesDetailView = () => {
+    const { usersToBeMerged } = useSelector((state) => state.UserState);
+    const master = usersToBeMerged[0];
+    const second = usersToBeMerged[1];
+    const history = useHistory();
 
-    const [masterUser, setMasterUser] = useState(false);
-    const [secondUser, setSecondUser] = useState(false);
+    const [masterUserData, setMasterUserData] = useState(null);
+    const [secondUserData, setSecondUserData] = useState(null);
+    const [values, setValues] = useState({});
 
-    const [masterUserFirstName, setMasterUserFirstName] = useState(false);
-    const [secondUserFirstName, setSecondUserFirstName] = useState(false);
+    const getMasterValue = (keyPath) => get(masterUserData, keyPath) || "";
+    const getSecondValue = (keyPath) => get(secondUserData, keyPath) || "";
+    const getDateTypeValue = (value) => liveScore_formateDate(value) || "";
+    const isMasterSelected = (radioKey) => values[radioKey] === userTypes.master;
+    const isSecondSelected = (radioKey) => values[radioKey] === userTypes.second;
 
-    const [masterUserLastName, setMasterUserLastName] = useState(false);
-    const [secondUserLastName, setSecondUserLastName] = useState(false);
+    const fields = [
+        { key: "firstName", title: AppConstants.firstName },
+        { key: "lastName", title: AppConstants.lastName },
+        {
+            key: "dateOfBirth",
+            title: AppConstants.dateOfBirth,
+            onValueFormat: getDateTypeValue,
+        },
+        { key: "email", title: AppConstants.emailAdd },
+        { key: "mobileNumber", title: AppConstants.contactNumber },
+        { key: "address", title: AppConstants.address },
+        { key: "gender", title: AppConstants.gender },
+        {
+            key: "accreditationUmpireExpiryDate",
+            title: AppConstants.nationalAccreditationLevelUmpire,
+            value: `${getMasterValue(
+                "umpireAccreditationLevel",
+            )} ${getDateTypeValue(
+                getMasterValue("accreditationUmpireExpiryDate"),
+            )}`,
+        },
+        {
+            key: "accreditationCoachExpiryDate",
+            title: AppConstants.nationalAccreditationLevelCoach,
+            value: `${getMasterValue(
+                "coachAccreditationLevel",
+            )} ${getDateTypeValue(
+                getMasterValue("accreditationCoachExpiryDate"),
+            )}`,
+        },
+        { key: "childrenCheckNumber", title: AppConstants.childrenNumber },
+        {
+            key: "childrenCheckExpiryDate",
+            title: AppConstants.checkExpiryDate,
+            onValueFormat: getDateTypeValue,
+        },
+    ];
 
-    const [masterUserDateOfBirth, setMasterUserDateOfBirth] = useState(false);
-    const [secondUserDateOfBirth, setSecondUserDateOfBirth] = useState(false);
+    const getNewValuesByKey = (userKey) => {
+        const newValues = {}
+        fields.forEach((field) => newValues[field.key] = userKey)
 
-    const [masterUserEmail, setMasterUserEmail] = useState(false);
-    const [secondUserEmail, setSecondUserEmail] = useState(false);
+        return newValues;
+    }
 
-    const [masterUserMobile, setMasterUserMobile] = useState(false);
-    const [secondUserMobile, setSecondUserMobile] = useState(false);
+    const handleRadioSelected = (radioKey, userTypeKey) => {
+        if (radioKey === selectAll) {
+            const newValues = {
+                [radioKey]: userTypes[userTypeKey],
+                ...getNewValuesByKey(userTypes[userTypeKey]),
+            }
 
-    const [masterUserAddress, setMasterUserAddress] = useState(false);
-    const [secondUserAddress, setSecondUserAddress] = useState(false);
-
-    const checkFullSelection = () => {
-        if (
-            masterUserFirstName &&
-            masterUserLastName &&
-            masterUserDateOfBirth &&
-            masterUserEmail &&
-            masterUserMobile &&
-            masterUserAddress
-        ) {
-            setMasterUser(true)
-            setSecondUser(false)
-        } else if (
-            secondUserFirstName &&
-            secondUserLastName &&
-            secondUserDateOfBirth &&
-            secondUserEmail &&
-            secondUserMobile &&
-            secondUserAddress
-        ) {
-            setSecondUser(true)
-            setMasterUser(false)
+            setValues(newValues)
         } else {
-            setMasterUser(false)
-            setSecondUser(false)
+            setValues({
+                ...values,
+                selectAll: values.selectAll === userTypes[userTypeKey] ? userTypes[userTypeKey] : null,
+                [radioKey]: userTypes[userTypeKey],
+            })
         }
     }
 
-    const masterUserChanged = (e) => {
-        setMasterUser(true)
-        setSecondUser(false)
-
-        setMasterUserFirstName(true)
-        setMasterUserLastName(true)
-        setMasterUserDateOfBirth(true)
-        setMasterUserEmail(true)
-        setMasterUserMobile(true)
-        setMasterUserAddress(true)
-
-        setSecondUserFirstName(false)
-        setSecondUserLastName(false)
-        setSecondUserDateOfBirth(false)
-        setSecondUserEmail(false)
-        setSecondUserMobile(false)
-        setSecondUserAddress(false)
+    const handleMasterRadioSelected = (radioKey) => {
+        handleRadioSelected(radioKey, userTypes.master)
     }
 
-    const secondUserChanged = (e) => {
-        setSecondUser(true)
-        setMasterUser(false)
-
-        setSecondUserFirstName(true)
-        setSecondUserLastName(true)
-        setSecondUserDateOfBirth(true)
-        setSecondUserEmail(true)
-        setSecondUserMobile(true)
-        setSecondUserAddress(true)
-
-        setMasterUserFirstName(false)
-        setMasterUserLastName(false)
-        setMasterUserDateOfBirth(false)
-        setMasterUserEmail(false)
-        setMasterUserMobile(false)
-        setMasterUserAddress(false)
-    }
-    const masterUserFirstNameChanged = (e) => {
-        setMasterUserFirstName(true)
-        setSecondUserFirstName(false)
-    }
-    const secondUserFirstNameChanged = (e) => {
-        setSecondUserFirstName(true)
-        setMasterUserFirstName(false)
-    }
-    const masterUserLastNameChanged = (e) => {
-        setMasterUserLastName(true)
-        setSecondUserLastName(false)
-    }
-    const secondUserLastNameChanged = (e) => {
-        setSecondUserLastName(true)
-        setMasterUserLastName(false)
-    }
-    const masterUserDateOfBirthChanged = (e) => {
-        setMasterUserDateOfBirth(true)
-        setSecondUserDateOfBirth(false)
-    }
-    const secondUserDateOfBirthChanged = (e) => {
-        setSecondUserDateOfBirth(true)
-        setMasterUserDateOfBirth(false)
-    }
-    const masterUserEmailChanged = (e) => {
-        setMasterUserEmail(true)
-        setSecondUserEmail(false)
-    }
-    const secondUserEmailChanged = (e) => {
-        setSecondUserEmail(true)
-        setMasterUserEmail(false)
-    }
-    const masterUserMobileChanged = (e) => {
-        setMasterUserMobile(true)
-        setSecondUserMobile(false)
-    }
-    const secondUserMobileChanged = (e) => {
-        setSecondUserMobile(true)
-        setMasterUserMobile(false)
-    }
-    const masterUserAddressChanged = (e) => {
-        setMasterUserAddress(true)
-        setSecondUserAddress(false)
-    }
-    const secondUserAddressChanged = (e) => {
-        setSecondUserAddress(true)
-        setMasterUserAddress(false)
+    const handleSecondRadioSelected = (radioKey) => {
+        handleRadioSelected(radioKey, userTypes.second)
     }
 
-    const triggerMerge = async () => {
+    const getUserValueByKeys = (valueKey, userTypeKey) => {
+        const isMasterValue = userTypeKey === userTypes.master;
+        const payloadValue = isMasterValue ? masterUserData[valueKey] : secondUserData[valueKey];
+
+        return payloadValue;
+    }
+
+    const getCorrectedUserData = (valueKey, value, userTypeKey) => {
+        switch (valueKey) {
+            case "gender": {
+                const correctedKey = "genderRefId";
+                const correctedValue = getUserValueByKeys(correctedKey, userTypeKey);
+
+                return {
+                    correctedKey,
+                    correctedValue,
+                }
+            }
+            default:
+                return {
+                    correctedKey: valueKey,
+                    correctedValue: value,
+                }
+        }
+    }
+
+    const mergeUser = async () => {
         const payload = {}
-        if (masterUserFirstName || secondUserFirstName) {
-            payload.firstName = masterUserFirstName ? master.firstName: second.firstName
-        }
 
-        if (masterUserLastName || secondUserLastName) {
-            payload.lastName = masterUserLastName ? master.lastName: second.lastName
-        }
+        if (values.selectAll) {
+            const isMasterSelected = values.selectAll === userTypes.master;
+            const fromValues = isMasterSelected ? masterUserData : secondUserData;
 
-        if (masterUserEmail || secondUserEmail) {
-            payload.email = masterUserEmail ? master.email: second.email
-        }
+            fields.forEach(field => {
+                payload[field.key] = fromValues[field.key];
+            })
+        } else {
+            Object.keys(values).forEach((valueKey) => {
+                const radioValue = values[valueKey];
+                const payloadValue = getUserValueByKeys(valueKey, radioValue);
 
-        if (masterUserDateOfBirth || secondUserDateOfBirth) {
-            payload.dateOfBirth = masterUserDateOfBirth ? master.dateOfBirth: second.dateOfBirth
-        }
-
-        if (masterUserMobile || secondUserMobile) {
-            payload.mobileNumber = masterUserMobile ? master.mobileNumber: second.mobileNumber
-        }
-
-        if (masterUserAddress || secondUserAddress) {
-            payload.address = masterUserAddress ? master.address: second.address
+                const { correctedKey, correctedValue } = getCorrectedUserData(valueKey, payloadValue, radioValue);
+                payload[correctedKey] = correctedValue;
+            })
         }
 
         const openNotificationWithIcon = (type, message) => {
             notification[type]({
                 message: AppConstants.success,
-                description: message || AppConstants.userMergedSuccessfully
+                description: message || AppConstants.userMergedSuccessfully,
             });
         };
 
@@ -211,153 +190,140 @@ const MatchesDetailView = () => {
                 `${process.env.REACT_APP_USER_API_URL}/userMerge/merge`, {
                     masterUserId: master.userId,
                     otherUserId: second.id,
-                    payload: payload
+                    payload,
                 }
             )
             openNotificationWithIcon('success')
             return history.push("/userTextualDashboard");
-        } catch(e) {
+        } catch (e) {
             console.error(e)
             openNotificationWithIcon('error', AppConstants.somethingWentWrong)
         }
     }
 
-    useEffect(() => {
-        checkFullSelection()
-    })
+    const fetchUserData = async (userId) => {
+        const organisationId = get(getOrganisationData(), 'organisationUniqueKey', null);
+        const PersonalInfoResultPromise = UserAxiosApi.getUserModulePersonalData({
+            userId,
+            organisationId,
+        });
+        const CompInfoResultPromise = UserAxiosApi.getUserModulePersonalByCompData({
+            userId,
+            organisationId,
+        });
 
-    const { usersToBeMerged } = useSelector(state => state.UserState);
-    const master = usersToBeMerged[0];
-    const second = usersToBeMerged[1];
-    
-    const history = useHistory();
+        const [PersonalInfoResult, CompInfoResult] = await Promise.all([PersonalInfoResultPromise, CompInfoResultPromise])
+
+        return {
+            ...PersonalInfoResult.result.data,
+            ...CompInfoResult.result.data[0],
+        };
+    }
+
+    useEffect(() => {
+        (async function anyNameFunction() {
+            const masterData = await fetchUserData(master.userId)
+            const secondData = await fetchUserData(second.id)
+
+            setMasterUserData(masterData);
+            setSecondUserData(secondData);
+        }());
+    }, [])
+
     if (!usersToBeMerged.length) {
         return history.replace("/userPersonal");
     }
 
     return (
-        <Row>
-            <Col span={19}>
-                <div className="comp-dash-table-view">
-                    <Text type="secondary">
-                        {AppConstants.possibleMatchesDescription}
-                    </Text>
-                    <Card className="mt-4">
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.userInformation}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUser} onChange={masterUserChanged}>
-                                    <Text strong>{AppConstants.selectAllFromThisUser}</Text>
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUser} onChange={secondUserChanged}>
-                                    <Text strong>{AppConstants.selectAllFromThisUser}</Text>
-                                </Radio>
-                            </Col>
-                        </Row>
-                        <Divider style={{ margin: '8px' }} />
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.firstName}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUserFirstName} onChange={masterUserFirstNameChanged}>
-                                    {master.firstName}
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUserFirstName} onChange={secondUserFirstNameChanged}>
-                                    {second.firstName}
-                                </Radio>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.lastName}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUserLastName} onChange={masterUserLastNameChanged}>
-                                    {master.lastName}
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUserLastName} onChange={secondUserLastNameChanged}>
-                                    {second.lastName}
-                                </Radio>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.dateOfBirth}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUserDateOfBirth} onChange={masterUserDateOfBirthChanged}>
-                                    {master.dateOfBirth}
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUserDateOfBirth} onChange={secondUserDateOfBirthChanged}>
-                                    {second.dateOfBirth}
-                                </Radio>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.emailAdd}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUserEmail} onChange={masterUserEmailChanged}>
-                                    {master.email}
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUserEmail} onChange={secondUserEmailChanged}>
-                                    {second.email}
-                                </Radio>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.contactNumber}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUserMobile} onChange={masterUserMobileChanged}>
-                                    {master.mobileNumber}
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUserMobile} onChange={secondUserMobileChanged}>
-                                    {second.mobileNumber}
-                                </Radio>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}><Text strong>{AppConstants.address}</Text></Col>
-                            <Col span={8}>
-                                <Radio checked={masterUserAddress} onChange={masterUserAddressChanged}>
-                                    {master.address}
-                                </Radio>
-                            </Col>
-                            <Col span={8}>
-                                <Radio checked={secondUserAddress} onChange={secondUserAddressChanged}>
-                                    {second.address}
-                                </Radio>
-                            </Col>
-                        </Row>
-                    </Card>
-                    <div className="d-flex align-items-center justify-content-between mt-4">
-                        <Button onClick={history.goBack}>{AppConstants.cancel}</Button>
-                        <Button onClick={triggerMerge} type="primary">{AppConstants.merge}</Button>
+        <>
+            <Loader visible={!(masterUserData && secondUserData)} />
+
+            <div className="row">
+                <div className="col-sm-12">
+
+                    <div className="comp-dash-table-view">
+                        <Text type="secondary">
+                            {AppConstants.possibleMatchesDescription}
+                        </Text>
+                        <Card className="mt-4">
+                            <Row>
+                                <Col span={8} className="pr-4"><Text strong>{AppConstants.userInformation}</Text></Col>
+                                <Col span={8}>
+                                    <Radio
+                                        checked={isMasterSelected("selectAll")}
+                                        onChange={() => handleMasterRadioSelected("selectAll")}
+                                    >
+                                        {AppConstants.selectAllFromThisUser}
+                                    </Radio>
+                                </Col>
+                                <Col span={8}>
+                                    <Radio
+                                        checked={isSecondSelected("selectAll")}
+                                        onChange={() => handleSecondRadioSelected("selectAll")}
+                                    >
+                                        {AppConstants.selectAllFromThisUser}
+                                    </Radio>
+                                </Col>
+                            </Row>
+                            <Divider style={{ margin: '8px' }} />
+
+                            { fields.map((field) => {
+                                const defaultMasterValue = getMasterValue(field.key);
+                                const defaultSecondValue = getSecondValue(field.key);
+                                const masterValue = field.value || defaultMasterValue;
+                                const secondValue = field.value || defaultSecondValue;
+
+                                const formattedMasterValue = field.onValueFormat ? field.onValueFormat(masterValue) : masterValue;
+                                const formattedSecondValue = field.onValueFormat ? field.onValueFormat(secondValue) : secondValue;
+
+                                return (
+                                    <Row key={field.key}>
+                                        <Col span={8} className="pr-4"><Text strong>{field.title}</Text></Col>
+                                        <Col span={8}>
+                                            <Radio
+                                                checked={isMasterSelected(field.key)}
+                                                onChange={() => handleMasterRadioSelected(field.key)}
+                                            >
+                                                {formattedMasterValue || ''}
+                                            </Radio>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Radio
+                                                checked={isSecondSelected(field.key)}
+                                                onChange={() => handleSecondRadioSelected(field.key)}
+                                            >
+                                                {formattedSecondValue || ''}
+                                            </Radio>
+                                        </Col>
+                                    </Row>
+                                )
+                            })}
+
+                        </Card>
+                        <div className="d-flex align-items-center justify-content-between mt-4">
+                            <Button onClick={history.goBack}>{AppConstants.cancel}</Button>
+                            <Button onClick={mergeUser} type="primary">{AppConstants.merge}</Button>
+                        </div>
                     </div>
                 </div>
-            </Col>
-        </Row>
+            </div>
+        </>
     );
 };
 
 function MergeUserDetail() {
     return (
         <div className="fluid-width default-bg">
+
             <DashboardLayout
                 menuHeading={AppConstants.user}
                 menuName={AppConstants.user}
             />
             <InnerHorizontalMenu menu="user" userSelectedKey="1" />
             <Layout>
-                <HeaderView></HeaderView>
+                <HeaderView />
                 <Content>
-                    <MatchesDetailView></MatchesDetailView>
+                    <MatchesDetailView />
                 </Content>
             </Layout>
         </div>
@@ -372,7 +338,7 @@ function mapStateToProps(state) {
     return {
         userState: state.UserState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
     };
 }
 

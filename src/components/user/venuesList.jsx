@@ -36,7 +36,7 @@ function tableSort(key) {
 
     this_Obj.setState({ sortBy, sortOrder });
 
-    let { venuesListPageSize } = this.props.commonReducerState;
+    let { venuesListPageSize } = this_Obj.props.commonReducerState;
     venuesListPageSize = venuesListPageSize ? venuesListPageSize : 10;
     const filter = {
         searchText: this_Obj.state.searchText,

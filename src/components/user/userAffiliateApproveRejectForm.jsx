@@ -76,7 +76,7 @@ class UserAffiliateApproveRejectForm extends Component {
                         onChange={(affiliatedTo) => this.setState({ affiliatedTo })}
                         value={this.state.affiliatedTo}
                     >
-                        <Option value="peninsulaNetballAssociation">{AppConstants.peninsulaNetballAssociation}</Option>
+                        <Option value="peninsulaNetballAssociation">{AppConstants.deprecated}</Option>
                     </Select>
                 </div>
             </div>

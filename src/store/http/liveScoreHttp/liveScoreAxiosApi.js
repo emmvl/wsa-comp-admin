@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define, no-unused-vars */
 import { message } from 'antd';
+import * as moment from 'moment';
 
 import ValidationConstants from 'themes/validationConstant';
 import {
@@ -657,6 +658,9 @@ const LiveScoreAxiosApi = {
         body.append('news_expire_date', data.editData.news_expire_date);
         body.append('recipientRefId', 12);
         body.append('entityTypeId', 1);
+        body.append('toUserRoleIds', JSON.stringify(data.editData.toUserRoleIds));
+        body.append('toRosterRoleIds', JSON.stringify(data.editData.toRosterRoleIds));
+        body.append('toUserIds', JSON.stringify(data.editData.toUserIds));
 
         if (data.newsImage) {
             body.append('newsImage', data.newsImage);
@@ -1595,6 +1599,11 @@ const LiveScoreAxiosApi = {
     umpirePaymentExport(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
+
+    getRounds(competitionId) {
+        const url = `/round?competitionId=${competitionId}`;
+        return Method.dataGet(url, token);
+    },
 };
 
 const Method = {
@@ -1804,7 +1813,18 @@ const Method = {
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', 'filecsv.csv'); // or any other extension
+                        let _now = moment().utc().format('Y-M-D');
+                        let fileName = "filecsv";
+                        if (newurl.includes('payments')) {
+                            fileName = `umpirePayments-${_now}`;
+                        } else if (newurl.includes('matches')) {
+                            fileName = `matchDayMatches-${_now}`;
+                        } else if (newurl.includes('teams')) {
+                            fileName = `matchDayTeam-${_now}`;
+                        } else if (newurl.includes('exportScore')) {
+                            fileName = `matchDayScorerList-${_now}`;
+                        }
+                        link.setAttribute('download', `${fileName}.csv`); // or any other extension
                         document.body.appendChild(link);
                         link.click();
                         return resolve({

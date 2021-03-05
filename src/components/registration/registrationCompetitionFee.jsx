@@ -15,7 +15,8 @@ import {
     Modal,
     message,
     Tooltip,
-    Switch
+    Switch,
+    InputNumber
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
 import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
@@ -116,7 +117,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -299,7 +300,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -479,7 +480,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -764,7 +765,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1049,7 +1050,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1334,7 +1335,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1618,7 +1619,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -1926,7 +1927,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -2234,7 +2235,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -2431,7 +2432,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -2736,7 +2737,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -3042,7 +3043,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         width: 84,
@@ -5818,22 +5819,15 @@ class RegistrationCompetitionFee extends Component {
                                 message: ValidationConstants.numberOfRoundsNameIsRequired,
                             }]}
                         >
-                            <Select
-                                className="w-100"
+                            <InputNumber
                                 style={{ paddingRight: 1, minWidth: 182 }}
-                                placeholder={AppConstants.selectRound}
-                                onChange={(e) =>
-                                    this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')
-                                }
+                                onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')}
+                                min={1}
+                                max={50}
                                 value={detailsData.competitionDetailData.noOfRounds}
                                 disabled={compDetailDisable}
-                            >
-                                {roundsArray.map((item) => (
-                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
-                                        {item.noOfRounds}
-                                    </Option>
-                                ))}
-                            </Select>
+                            />
                         </Form.Item>
                     </div>
                 )}
@@ -5892,7 +5886,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 </div>
                 <InputWithHead
-                    heading={AppConstants.registration_close}
+                    heading={AppConstants.registrationClose}
                     required="required-field"
                 />
                 <Form.Item

@@ -58,9 +58,9 @@ function tableSort(key, tableName) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-    let { participatePageSize } = this.props.liveScoreCompetition;
+    let { participatePageSize } = this_Obj.props.liveScoreCompetition;
     participatePageSize = participatePageSize ? participatePageSize : 10;
-    let { ownedPageSize } = this.props.liveScoreCompetition;
+    let { ownedPageSize } = this_Obj.props.liveScoreCompetition;
     ownedPageSize = ownedPageSize ? ownedPageSize : 10;
     const body = {
         paging: {
@@ -94,7 +94,7 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Divisions/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisions',
         key: 'divisions',
         sorter: true,
@@ -251,7 +251,7 @@ const columnsParticipate = [
         ),
     },
     {
-        title: 'Divisions/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisions',
         key: 'divisions',
         sorter: true,

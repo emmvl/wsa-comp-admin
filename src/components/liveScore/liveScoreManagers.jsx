@@ -32,7 +32,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    let { pageSize } = this.props.liveScoreManagerState;
+    let { pageSize } = _this.props.liveScoreManagerState;
     pageSize = pageSize ? pageSize : 10;
     _this.props.liveScoreManagerListAction(3, 6, _this.state.competitionId, _this.state.searchText, _this.state.offset, pageSize, sortBy, sortOrder, 'managerList', _this.state.compOrgId);
 }
@@ -224,9 +224,9 @@ class LiveScoreManagerList extends Component {
                     let sortBy = managerListActionObject.sortBy
                     let sortOrder = managerListActionObject.sortOrder
                     this.setState({ offset, searchText, sortBy, sortOrder })
-                    this.props.liveScoreManagerListAction(3, 6, id, searchText, offset, pageSize, sortBy, sortOrder, 'managerList', compOrgId, value);
+                    this.props.liveScoreManagerListAction(3, 6, id, searchText, offset, sortBy, sortOrder, 'managerList', compOrgId, value, pageSize);
                 } else {
-                    this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, offset, pageSize, null, null, 'managerList', compOrgId, value)
+                    this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, offset, null, null, 'managerList', compOrgId, value, pageSize);
                 }
             })
         } else {
@@ -254,7 +254,7 @@ class LiveScoreManagerList extends Component {
         this.setState({
             offset
         })
-        this.props.liveScoreManagerListAction(3, 6, this.state.competitionId, this.state.searchText, offset, pageSize, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
+        this.props.liveScoreManagerListAction(3, 6, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent, pageSize)
     }
 
     contentView = () => {
@@ -295,7 +295,7 @@ class LiveScoreManagerList extends Component {
     onExport = () => {
         // let url = AppConstants.managerExport + this.state.competitionId
         let url = AppConstants.managerExport + this.state.compOrgId
-        this.props.userExportFilesAction(url)
+        this.props.userExportFilesAction(url, 'manager')
     }
 
     headerView = () => {
@@ -395,7 +395,7 @@ class LiveScoreManagerList extends Component {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
             let { pageSize } = this.props.liveScoreManagerState;
             pageSize = pageSize ? pageSize : 10;
-            this.props.liveScoreManagerListAction(3, 6, id, e.target.value, 0, pageSize, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
+            this.props.liveScoreManagerListAction(3, 6, id, e.target.value, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent, pageSize)
         }
     }
 
@@ -408,7 +408,7 @@ class LiveScoreManagerList extends Component {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
             let { pageSize } = this.props.liveScoreManagerState;
             pageSize = pageSize ? pageSize : 10;
-            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, pageSize, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
+            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent, pageSize)
         }
     }
 
@@ -421,7 +421,7 @@ class LiveScoreManagerList extends Component {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
             let { pageSize } = this.props.liveScoreManagerState;
             pageSize = pageSize ? pageSize : 10;
-            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, pageSize, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent)
+            this.props.liveScoreManagerListAction(3, 6, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList', this.state.compOrgId, this.state.liveScoreCompIsParent, pageSize)
         }
     }
 

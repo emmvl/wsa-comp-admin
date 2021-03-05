@@ -49,9 +49,10 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-
+    let { paymentListPageSize } = this_Obj.props.paymentState;
+    paymentListPageSize = paymentListPageSize ? paymentListPageSize : 10;
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo, this_Obj.state.searchText);
+    this_Obj.props.getPaymentList(this_Obj.state.offset, paymentListPageSize, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo, this_Obj.state.searchText);
 }
 
 const columns = [
@@ -133,14 +134,6 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
-        title: AppConstants.feePaid,
-        dataIndex: "paidFee",
-        key: "paidFee",
-        render: (paidFee, record) => currencyFormat(paidFee),
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("paidFee"),
-    },
-    {
         title: AppConstants.portion,
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
@@ -151,6 +144,14 @@ const columns = [
         ),
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
+    },
+    {
+        title: AppConstants.feePaid,
+        dataIndex: "paidFee",
+        key: "paidFee",
+        render: (paidFee, record) => currencyFormat(paidFee),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("paidFee"),
     },
     {
         title: AppConstants.discount,
@@ -292,7 +293,9 @@ class PaymentDashboard extends Component {
             await this.setState({
                 offset, sortBy, sortOrder, registrationId, userId, yearRefId: JSON.parse(yearRefId), competitionUniqueKey, dateFrom, dateTo, filterOrganisation,
             });
-            page = Math.floor(offset / 10) + 1;
+            let { paymentListPageSize } = this.props.paymentState;
+            paymentListPageSize = paymentListPageSize ? paymentListPageSize : 10;
+            page = Math.floor(offset / paymentListPageSize) + 1;
 
             this.handlePaymentTableList(page, userId, registrationId, this.state.searchText);
         } else {
@@ -1113,7 +1116,7 @@ class PaymentDashboard extends Component {
     contentView = () => {
         const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
-        const { paymentListTotalCount, paymentListData, paymentListPage, onLoad, pageSize } = this.props.paymentState;
+        const { paymentListTotalCount, paymentListData, paymentListPage, onLoad, paymentListPageSize } = this.props.paymentState;
         return (
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
@@ -1133,7 +1136,7 @@ class PaymentDashboard extends Component {
                         total={paymentListTotalCount}
                         current={paymentListPage}
                         defaultCurrent={paymentListPage}
-                        defaultPageSize={pageSize}
+                        defaultPageSize={paymentListPageSize}
                         onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
                         onShowSizeChange={this.handleShowSizeChange}
                     />

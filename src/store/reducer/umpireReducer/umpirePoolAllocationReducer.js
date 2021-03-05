@@ -106,6 +106,20 @@ function umpirePoolAllocationState(state = initialState, action) {
                 umpirePoolData: action.result,
             };
 
+        case ApiConstants.API_APPLY_UMPIRE_ALLOCATION_ALGORITHM_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            };
+            
+        case ApiConstants.API_APPLY_UMPIRE_ALLOCATION_ALGORITHM_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                // umpirePoolData: action.result,
+            };
+
         case ApiConstants.API_UMPIRE_POOL_ALLOCATION_FAIL:
             return {
                 ...state,

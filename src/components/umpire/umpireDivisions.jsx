@@ -2,15 +2,16 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Layout, Button, Select, Breadcrumb, Form, } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form, Modal, } from 'antd';
 
 import { getRefBadgeData } from '../../store/actions/appAction';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import {
     getUmpirePoolData,
-    updateUmpirePoolToDivision
+    updateUmpirePoolToDivision,
+    applyUmpireAllocatioAlgorithm
 } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
-import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
+import { liveScoreGetDivision, liveScoreGetRounds } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 
 import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -36,6 +37,8 @@ class UmpireDivisions extends Component {
             umpirePoolData: null,
             selectedDivisions: [],
             isOrganiserView: false,
+            algorithmModalVisible: false,
+            selectedRounds: [],
         }
     }
 
@@ -64,6 +67,7 @@ class UmpireDivisions extends Component {
                 if (JSON.parse(getUmpireCompetitonData())) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
                     this.props.liveScoreGetDivision(firstComp);
+                    this.props.liveScoreGetRounds(firstComp);
                 }
 
                 const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
@@ -103,6 +107,7 @@ class UmpireDivisions extends Component {
 
         this.props.liveScoreGetDivision(compId);
         this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId });
+        this.props.liveScoreGetRounds(compId);
 
         this.setState({ 
             selectedComp: compId,
@@ -129,6 +134,41 @@ class UmpireDivisions extends Component {
         this.setState({ 
             umpirePoolData: umpirePoolDataCopy,
             selectedDivisions: selectedDivisionsRest,
+        });
+    }
+
+    handleOpenAlgorithm = () => {
+        this.setState({ algorithmModalVisible: true });
+    }
+
+    handleOkAlgorithm = (e) => {
+        const { selectedRounds, selectedComp } = this.state;
+
+        const body = {
+            rounds: selectedRounds
+        };
+
+        this.props.applyUmpireAllocatioAlgorithm({
+            compId: selectedComp,
+            body,
+        });
+
+        this.setState({
+            algorithmModalVisible: false,
+            selectedRounds: [],
+        });
+    };
+
+    handleCancelAlgorithm = (e) => {
+        this.setState({
+            algorithmModalVisible: false,
+            selectedRounds: [],
+        });
+    };
+
+    handleChangeRounds = rounds => {
+        this.setState({
+            selectedRounds: rounds,
         });
     }
 
@@ -260,25 +300,91 @@ class UmpireDivisions extends Component {
         )
     }
 
+    getRoundsNames = () => {
+        const { divisionList, roundsData } = this.props.liveScoreTeamState;
+        const roundsWithDivision = (!roundsData || !roundsData.length) ? [] : (
+            roundsData.map(round => {
+                const curDivision = (divisionList && divisionList.length) 
+                    ? divisionList.find(division => division.id === round.divisionId)
+                    : ({ name: '' });
+                const divName = curDivision.name;
+                return ({ id: round.id, name: divName ? `${divName} - ${round.name}` : round.name})
+            })
+        );
+        return  roundsWithDivision;
+    }
+    algorithmModalView = () => {
+        const { roundsData } = this.props.liveScoreTeamState;
+        const { selectedRounds } = this.state;
+        const roundNames = this.getRoundsNames();
+
+        return (
+            <Modal
+                className="add-membership-type-modal"
+                title={AppConstants.allocationAlgorithmModalTitle}
+                visible={this.state.algorithmModalVisible}
+                onOk={this.handleOkAlgorithm}
+                onCancel={this.handleCancelAlgorithm}
+            >
+                <div>
+                    <Select
+                        mode="multiple"
+                        placeholder="Select"
+                        className="w-100"
+                        onChange={this.handleChangeRounds}
+                        value={!!selectedRounds ?
+                            selectedRounds : []
+                        }
+                    >
+                        {roundNames.map((item) => (
+                            <Option
+                                key={item.id}
+                                value={item.id}
+                            >
+                                {item.name}
+                            </Option>
+                        ))}
+                    </Select>
+                </div>
+            </Modal>
+        )
+    }
+
     footerView = () => {
         const { isOrganiserView, umpirePoolData } = this.state;
 
         return (
             <div className="form-footer-button-wrapper">
                 {isOrganiserView && 
-                    <Button 
-                        className="publish-button save-draft-text m-0" 
-                        type="primary" 
-                        htmlType="submit"
-                        onClick={this.handleSave}
-                        disabled={this.props.appState.onLoad ||
-                            this.props.umpirePoolAllocationState.onLoad ||
-                            this.props.liveScoreTeamState.onLoad
-                            || !umpirePoolData?.length
-                        }
-                    >
-                        {AppConstants.save}
-                    </Button>
+                    <>
+                        <Button 
+                            className="publish-button save-draft-text mr-4"
+                            style={{ minWidth: 'fit-content' }}
+                            type="primary"
+                            onClick={this.handleOpenAlgorithm}
+                            disabled={this.props.appState.onLoad ||
+                                this.props.umpirePoolAllocationState.onLoad ||
+                                this.props.liveScoreTeamState.onLoad
+                                || !umpirePoolData?.length
+                            }
+                        >
+                            {AppConstants.allocateUmpires}
+                        </Button>
+
+                        <Button 
+                            className="publish-button save-draft-text m-0" 
+                            type="primary" 
+                            htmlType="submit"
+                            onClick={this.handleSave}
+                            disabled={this.props.appState.onLoad ||
+                                this.props.umpirePoolAllocationState.onLoad ||
+                                this.props.liveScoreTeamState.onLoad
+                                || !umpirePoolData?.length
+                            }
+                        >
+                            {AppConstants.save}
+                        </Button>
+                    </>
                 }
             </div>
         );
@@ -292,10 +398,11 @@ class UmpireDivisions extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form autoComplete="off" onFinish={this.handleSubmit} className="login-form">
+                    <Form autoComplete="off" onFinish={this.handleSubmit}>
                         <div className="formView">{this.contentView()}</div>
 
                         {this.footerView()}
+                        {this.algorithmModalView()}
                     </Form>
                 </Layout>
                 <Loader 
@@ -315,7 +422,9 @@ function mapDispatchToProps(dispatch) {
         getRefBadgeData,
         getUmpirePoolData,
         liveScoreGetDivision,
+        liveScoreGetRounds,
         updateUmpirePoolToDivision,
+        applyUmpireAllocatioAlgorithm,
     }, dispatch)
 }
 

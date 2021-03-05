@@ -38,7 +38,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let { referFriendPageSize } = this.props.userState;
+    let { referFriendPageSize } = this_Obj.props.userState;
     referFriendPageSize = referFriendPageSize ? referFriendPageSize : 10;
     let filterData = {
         organisationUniqueKey: this_Obj.state.organisationId,
@@ -81,7 +81,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: true,
@@ -144,7 +144,7 @@ class ReferFriend extends Component {
             sortBy = userReferFriendListAction.sortBy
             sortOrder = userReferFriendListAction.sortOrder
             let yearRefId = JSON.parse(yearId)
-            const { referFriendPageSize } = this.props.userState;
+            let { referFriendPageSize } = this.props.userState;
             referFriendPageSize = referFriendPageSize ? referFriendPageSize : 10;
             pageNo = Math.floor(offset / referFriendPageSize) + 1;
             await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })

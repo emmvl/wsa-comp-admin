@@ -88,7 +88,7 @@ const LiveScoreSettingsInvitees = ({
                 >
                     {(invitees || []).map(
                         (item, index) => index === 0 && (
-                            <div>
+                            <div key={item.id}>
                                 {item.subReferences.length === 0 ? (
                                     <Radio value={item.id}>
                                         {item.description}
@@ -118,7 +118,7 @@ const LiveScoreSettingsInvitees = ({
                                                     </Radio>
                                                 </div>
                                             ) : (
-                                                <>
+                                                <div key={subItem.id}>
                                                     {(orgLevelId === "2"
                                                             || orgLevelId
                                                                 === "3")
@@ -186,7 +186,7 @@ const LiveScoreSettingsInvitees = ({
                                                             </div>
                                                         </>
                                                     )}
-                                                </>
+                                                </div>
                                             )))}
                                     </div>
                                 )}
@@ -203,7 +203,7 @@ const LiveScoreSettingsInvitees = ({
                 >
                     {(invitees || []).map(
                         (item, index) => index === 1 && (
-                            <div>
+                            <div key={item.id}>
                                 {item.subReferences.length === 0 ? (
                                     <Radio value={item.id}>
                                         {item.description}
@@ -425,7 +425,7 @@ const LiveScoreSettingsInvitees = ({
                 >
                     {(invitees || []).map(
                         (item, index) => index > 1 && (
-                            <div>
+                            <div key={item.description}>
                                 {item.subReferences ? (
                                     <div>
                                         <div className="applicable-to-heading invitees-main">

@@ -97,7 +97,12 @@ let UmpireAxiosApi = {
             rank: payload.umpireRank,
             updateRankType: payload.updateRankType,
         });
-    }
+    },
+
+    applyUmpireAllocationAlgorithm(payload) {
+        const url = `/competitions/` + payload.compId + `/umpires/allocation`;
+        return Method.dataPost(url, token, payload.body);
+    },
 }
 
 const Method = {

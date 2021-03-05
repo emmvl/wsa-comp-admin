@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import AppConstants from "../../themes/appConstants";
 import { Button, Breadcrumb, Layout, notification, Table, Typography } from "antd";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -7,7 +7,6 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { bindActionCreators } from "redux";
 import { useHistory } from "react-router-dom";
 import userHttp from '../../store/http/userHttp/userHttp'
-import { useDispatch } from 'react-redux'
 import { addUsersToBeCompared } from '../../store/actions/userAction/userAction'
 const { Content } = Layout;
 const { Text } = Typography;
@@ -104,7 +103,7 @@ const MatchesDetailView = () => {
 
     const getMatches = async (userId) => {
         const result = await userHttp.get(
-            `${process.env.REACT_APP_USER_API_URL}/userMerge/matches/${userId}`
+            `${process.env.REACT_APP_USER_API_URL}/userMerge/matches/${userId}`,
         )
         setMatches(result.data)
     }
@@ -130,8 +129,7 @@ const MatchesDetailView = () => {
         email: user.email,
         mobile: user.mobileNumber,
         affiliate: user.affiliates && user.affiliates.length ? user.affiliates.join(', ') : '',
-    })
-    )
+    }));
 
     const columns = [
         {
@@ -178,7 +176,7 @@ const MatchesDetailView = () => {
         }
         dispatch(addUsersToBeCompared([
             selectedUser,
-            matches.find(match => match.id == userToBeMerged[0].id)
+            matches.find(match => match.id === userToBeMerged[0].id)
         ]))
         history.push("/mergeUserDetail")
     }

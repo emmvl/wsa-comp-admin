@@ -70,7 +70,7 @@ class CompetitionDraws extends Component {
                             onChange={(competition) => this.setState({ competition })}
                             value={this.state.competition}
                         >
-                            <Option value="2019winter">{AppConstants.winter2019}</Option>
+                            <Option value="2019winter">{AppConstants.deprecated}</Option>
                             <Option value="sapphire">Sapphire Series</Option>
                             <Option value="junior">Junior Premier</Option>
                         </Select>
@@ -96,7 +96,7 @@ class CompetitionDraws extends Component {
                                         onChange={(venue) => this.setState({ venue })}
                                         value={this.state.venue}
                                     >
-                                        <Option value="abbott">{AppConstants.AbbottAddress}</Option>
+                                        <Option value="abbott">{AppConstants.deprecated}</Option>
                                     </Select>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@ class CompetitionDraws extends Component {
                                 </div>
                                 <div className="col-sm-8">
                                     <div className="w-100 d-flex flex-row align-items-center">
-                                        <span className="year-select-heading pt-2">{AppConstants.startingSaturday}</span>
+                                        <span className="year-select-heading pt-2">{AppConstants.deprecated}</span>
                                     </div>
                                 </div>
                             </div>

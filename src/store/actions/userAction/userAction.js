@@ -133,6 +133,13 @@ function getUserDashboardTextualAction(payload, sortBy, sortOrder) {
     };
 }
 
+function getUserDashboardTextualSpectatorCountAction(payload) {
+    return {
+        type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_LOAD,
+        payload,
+    };
+}
+
 function getUserModulePersonalDetailsAction(userId) {
     return {
         type: ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD,
@@ -788,5 +795,6 @@ export {
     setAffiliateTableListPageNumberAction,
     setTextualTableListPageSizeAction,
     setTextualTableListPageNumberAction,
-    cancelDeRegistrationAction
+    cancelDeRegistrationAction,
+    getUserDashboardTextualSpectatorCountAction,
 };

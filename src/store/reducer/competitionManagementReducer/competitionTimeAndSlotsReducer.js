@@ -45,8 +45,12 @@ const initialState = {
     timeSlotEntityManualkey: [],
     allResult: [],
     competitionVenues: [],
-    timeSlotRotationHelpMessage: [AppConstants.timeSloteNoPrefMsg, AppConstants.timeSloteEvenRotationMsg, AppConstants.allocateToSameTimeslotMsg],
-    timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg]
+    timeSlotRotationHelpMessage: [AppConstants.timeSlotNoPrefMsg, AppConstants.timeSlotEvenRotationMsg, AppConstants.allocateToSameTimeslotMsg],
+    timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg],
+    teamList: null,
+    timeslotsList: null,
+    timeslotsManualRawData: null,
+    timePreferences: null,
 };
 
 //time slot Entity
@@ -103,7 +107,8 @@ function getTimeslotPerVenuePerDay(timeslotData) {
                 sortOrder: matchUpdatedTimeSlot.sortOrder,
                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey,
+                competitionVenueTimeslotsDayTimeId: matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId
             }
             updatedtimeSlotArr[timeSlotStatusData.index].startTime.push(JSON.parse(JSON.stringify(timeslotUpdatedArrayValue)))
         }
@@ -113,11 +118,11 @@ function getTimeslotPerVenuePerDay(timeslotData) {
                 sortOrder: matchUpdatedTimeSlot.sortOrder,
                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey,
+                competitionVenueTimeslotsDayTimeId: matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId
             }
 
             let mainobj = {
-                "competitionVenueTimeslotsDayTimeId": matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId,
                 dayRefId: matchUpdatedTimeSlot.dayRefId,
                 startTime: [timeslotUpdatedArray]
             }
@@ -142,24 +147,23 @@ function getTimeslotAllVenuePerDay(timeslotData) {
                 sortOrder: matchUpdatedTimeSlot.sortOrder,
                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey,
+                competitionVenueTimeslotsDayTimeId: matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId,
             }
 
             allVenuetimeSlotArr[timeSlotStatusData.index].startTime.push(JSON.parse(JSON.stringify(timeslotUpdatedArrayValue)))
-
         }
         else {
-
             let timeslotUpdatedArray = {
                 startTime: matchUpdatedTimeSlot.startTime,
                 sortOrder: matchUpdatedTimeSlot.sortOrder,
                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey,
+                competitionVenueTimeslotsDayTimeId: matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId,
             }
 
             let mainobj = {
-                "competitionVenueTimeslotsDayTimeId": matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId,
                 dayRefId: matchUpdatedTimeSlot.dayRefId,
                 startTime: [timeslotUpdatedArray]
             }
@@ -424,7 +428,6 @@ function checkPerVenueManual(data, rotaionId) {
     let perVenueObj = {
         'venueId': 0,
         "timeslots": [{
-            "competitionVenueTimeslotsDayTimeId": 0,
             dayRefId: null,
             startTime: [{
                 startTime: "00:00",
@@ -437,7 +440,8 @@ function checkPerVenueManual(data, rotaionId) {
                 }
                 ],
                 "timeSlotEntityManualkey": [],
-                "timeSlotEntityGradeKey": []
+                "timeSlotEntityGradeKey": [],
+                competitionVenueTimeslotsDayTimeId: 0,
             }
             ]
         }],
@@ -476,7 +480,6 @@ function checkSelectedVenueDetails(allVenues, selectedVenues, rotationId) {
                 "venueName": allVenues[i].name,
                 "venueId": allVenues[i].id,
                 "timeslots": [{
-                    "competitionVenueTimeslotsDayTimeId": 0,
                     dayRefId: null,
                     startTime: [{
                         startTime: "00:00",
@@ -489,7 +492,8 @@ function checkSelectedVenueDetails(allVenues, selectedVenues, rotationId) {
                         }
                         ],
                         "timeSlotEntityManualkey": [],
-                        "timeSlotEntityGradeKey": []
+                        "timeSlotEntityGradeKey": [],
+                        competitionVenueTimeslotsDayTimeId: 0,
                     }
                     ]
                 }],
@@ -564,7 +568,6 @@ function CompetitionTimeSlots(state = initialState, action) {
             let timeSlotEntityKey = getTimeSlotEntity(action.result.competitionTimeslotsEntity, SelectedTimeRotationData.subParentId)
             let timeSlotsManualVenue = checkSelectedVenueDetails(resultData.competitionVenues, resultData.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
             let timeSlotsPerVenue = checkPerVenueManual(action.result.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
-            state.timeSlotManualAllVenue = timeSlotsManualVenue
             state.defaultDataAllVenue = timeSlotsManualVenue
             timeSlotResult["competitionTimeslotsEntity"] = timeSlotEntityKey
             timeSlotResult['competitionTimeslotManual'] = timeSlotsPerVenue
@@ -576,6 +579,8 @@ function CompetitionTimeSlots(state = initialState, action) {
             state.mainGradeList = resultData.grades
             return {
                 ...state,
+                timeslotsManualRawData: resultData.competitionTimeslotManual,
+                timeSlotManualAllVenue: timeSlotsManualVenue,
                 status: action.status,
                 onLoad: false,
                 error: null,
@@ -694,7 +699,8 @@ function CompetitionTimeSlots(state = initialState, action) {
                     }
                     ],
                     "timeSlotEntityManualkey": [],
-                    "timeSlotEntityGradeKey": []
+                    "timeSlotEntityGradeKey": [],
+                    competitionVenueTimeslotsDayTimeId: 0,
                 }
                 state.timeSlotManualAllVenue[action.parentIndex].timeslots[action.index].startTime.push(timeSlotPerVenueObj)
             }
@@ -733,7 +739,6 @@ function CompetitionTimeSlots(state = initialState, action) {
                 }
                 let timeSlotManaualObj =
                 {
-                    "competitionVenueTimeslotsDayTimeId": 0,
                     dayRefId: null,
                     startTime: [{
                         startTime: "00:00",
@@ -746,7 +751,8 @@ function CompetitionTimeSlots(state = initialState, action) {
                         }
                         ],
                         "timeSlotEntityManualkey": [],
-                        "timeSlotEntityGradeKey": []
+                        "timeSlotEntityGradeKey": [],
+                        competitionVenueTimeslotsDayTimeId: 0,
                     }]
 
                 }
@@ -755,7 +761,6 @@ function CompetitionTimeSlots(state = initialState, action) {
             else if (action.key === "competitionTimeslotManualAllVenue") {
                 let timeSlotManaualAllVenueObj =
                 {
-                    "competitionVenueTimeslotsDayTimeId": 0,
                     dayRefId: null,
                     startTime: [{
                         startTime: "00:00",
@@ -768,7 +773,8 @@ function CompetitionTimeSlots(state = initialState, action) {
                         }
                         ],
                         "timeSlotEntityManualkey": [],
-                        "timeSlotEntityGradeKey": []
+                        "timeSlotEntityGradeKey": [],
+                        competitionVenueTimeslotsDayTimeId: 0,
                     }
                     ]
                 }
@@ -857,6 +863,55 @@ function CompetitionTimeSlots(state = initialState, action) {
             return {
                 ...state,
                 result: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+        
+        case ApiConstants.API_COMPETITION_TEAMS_GET_LOAD:
+            return { ...state, onLoad: true, error: null }
+    
+        case ApiConstants.API_COMPETITION_TEAMS_GET_SUCCESS:
+            return {
+                ...state,
+                teamList: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
+        case ApiConstants.API_COMPETITION_TIMESLOTS_GET_LOAD:
+            return { ...state, onLoad: true, error: null }
+        
+        case ApiConstants.API_COMPETITION_TIMESLOTS_GET_SUCCESS:
+            return {
+                ...state,
+                timeslotsList: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
+
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_LOAD:
+            return { ...state, onLoad: true, error: null }
+            
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_SUCCESS:
+            return {
+                ...state,
+                timePreferences: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_LOAD:
+            return { ...state, onLoad: true, error: null }
+                
+        case ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_SUCCESS:
+            return {
+                ...state,
+                timePreferences: action.result,
                 onLoad: false,
                 error: null,
                 status: action.status

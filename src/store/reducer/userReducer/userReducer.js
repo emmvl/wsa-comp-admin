@@ -196,6 +196,7 @@ const affiliate = {
   street2: '',
   suburb: '',
   phoneNo: '',
+  email: '',
   city: '',
   postalCode: '',
   stateRefId: 0,
@@ -287,6 +288,7 @@ const initialState = {
   referFriendTotalCount: 1,
   orgPhotosList: [],
   userDashboardCounts: null,
+  userDashboardSpectatorCount: 0,
   onAffiliateDirLoad: false,
   affiliateDirectoryList: [],
   affiliateDirectoryPage: 1,
@@ -710,6 +712,15 @@ function userReducer(state = initialState, action) {
         status: action.status
       };
 
+    case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_LOAD:
+      return { ...state }
+
+    case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_SUCCESS:
+      return {
+        ...state,
+        userDashboardSpectatorCount: action.result.spectatorCount,
+      }
+
     case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
       return { ...state, onLoad: true };
 
@@ -738,6 +749,7 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_SUCCESS:
       let personalByCompData = action.result;
+
       return {
         ...state,
         onPersonLoad: false,

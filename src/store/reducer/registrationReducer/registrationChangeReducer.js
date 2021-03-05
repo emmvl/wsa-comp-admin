@@ -1,9 +1,24 @@
 import ApiConstants from "../../../themes/apiConstants";
 import {
     isArrayNotEmpty,
+    deepCopyFunction,
     // isNotNullOrEmptyString
 } from "../../../util/helpers";
 
+
+const saveDataTemp = {
+        isAdmin:1,
+        regChangeTypeRefId: 0,         // DeRegister/ Transfer
+        deRegistrationOptionId: 0,   /// Yes/No
+        reasonTypeRefId: 0,
+        deRegisterOther: null,
+        transfer: {
+            transferOther: null,
+            reasonTypeRefId: 0,
+            organisationId: null,
+            competitionId: null
+        }
+}
 
 const initialState = {
     onLoad: false,
@@ -35,19 +50,7 @@ const initialState = {
 
     ],
     reloadFormData:0,
-    saveData : {
-        isAdmin:1,
-        regChangeTypeRefId: 0,         // DeRegister/ Transfer
-        deRegistrationOptionId: 0,   /// Yes/No
-        reasonTypeRefId: 0,
-        deRegisterOther: null,
-        transfer: {
-            transferOther: null,
-            reasonTypeRefId: 0,
-            organisationId: null,
-            competitionId: null
-        }
-    },
+    saveData : deepCopyFunction(saveDataTemp),
     regChangeDashboardListData: [], ////////registration change Dashboard list
     regChangeDashboardListPage: 1,
     regChangeDashboardListPageSize: 10,
@@ -121,6 +124,9 @@ function regChangeReducer(state = initialState, action) {
                 if(action.key === "regChangeTypeRefId"){
                     state.saveData[action.key] = action.value;
                     state.saveData["deRegistrationOptionId"] = 1;
+                }
+                else if(action.key === "clear"){
+                    state.saveData = deepCopyFunction(saveDataTemp)
                 }
                 else {
                     state.saveData[action.key] = action.value;

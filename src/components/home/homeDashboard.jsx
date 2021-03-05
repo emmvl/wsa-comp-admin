@@ -100,21 +100,6 @@ const columnsInbox = [
     },
 ];
 
-// const dataInbox = [
-//     {
-//         key: '1',
-//         name: 'Netball QLD',
-//         description: 'Re: Action required! Netball Australia has released NetSetGo',
-//         time: 'Thu 22/08/2019, 5.43pm',
-//     },
-//     {
-//         key: '2',
-//         name: 'Netball QLD',
-//         description: 'Payment Reconciliation',
-//         time: 'Wed 21/08/2019, 11.23am',
-//     },
-// ];
-
 const columnsOwned = [
     {
         title: <div className="home-dash-name-table-title">Name</div>,
@@ -123,7 +108,7 @@ const columnsOwned = [
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Division/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisionAge',
         key: 'divisionAge',
         sorter: (a, b) => a.divisionAge.length - b.divisionAge.length,
@@ -136,13 +121,13 @@ const columnsOwned = [
         sorter: (a, b) => a.teams.length - b.teams.length,
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'players',
         key: 'players',
         sorter: (a, b) => a.players.length - b.players.length,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => a.players.length - b.players.length,
@@ -194,7 +179,7 @@ const columnsParticipate = [
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Division/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisionAge',
         key: 'divisionAge',
         sorter: (a, b) => a.divisionAge.length - b.divisionAge.length,

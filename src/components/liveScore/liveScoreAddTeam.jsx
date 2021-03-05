@@ -391,7 +391,7 @@ class LiveScoreAddTeam extends Component {
                                 </Radio>
                                 <div className="mt-n10 ml-n10 width-50 mt-1">
                                     <Tooltip>
-                                        <span>{AppConstants.teamNewMsg}</span>
+                                        <span>{AppConstants.newTeamUserMsg}</span>
                                     </Tooltip>
                                 </div>
                             </div>
@@ -403,7 +403,7 @@ class LiveScoreAddTeam extends Component {
                                 </Radio>
                                 <div className="mt-n10 ml-n10 mt-1">
                                     <Tooltip>
-                                        <span>{AppConstants.teamExistingMsg}</span>
+                                        <span>{AppConstants.existingTeamUserMsg}</span>
                                     </Tooltip>
                                 </div>
                             </div>

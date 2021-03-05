@@ -73,14 +73,113 @@ export function* competitonWithTimeSlotsPostApi(action) {
     try {
         const result = yield call(CompetitionAxiosApi.postTimeSlotData, action.payload);
         if (result.status === 1) {
+
+            if (action.isTeamPreferenceActive) {
+                const resultPreferences = yield call(CompetitionAxiosApi.teamsTimeslotsPreferencesGet, action.id);
+                const resultTimeslotsList = yield call(CompetitionAxiosApi.competitionTeamsTimeslotsGet, action.id);
+    
+                if (resultPreferences.status === 1 && resultTimeslotsList.status === 1) {
+                    yield put({
+                        type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_SUCCESS,
+                        result: resultPreferences.result.data,
+                        status: resultPreferences.status,
+                    });
+                    yield put({
+                        type: ApiConstants.API_COMPETITION_TIMESLOTS_GET_SUCCESS,
+                        result: resultTimeslotsList.result.data,
+                        status: resultTimeslotsList.status,
+                    });
+                } else if (resultPreferences.status !== 1) {
+                    yield call(failSaga, resultPreferences)
+                } else {
+                    yield call(failSaga, resultTimeslotsList)
+                }
+            }
+
             yield put({
                 type: ApiConstants.API_COMPETITION_TIMESLOT_POST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
+
             setTimeout(() => {
                 message.success(result.result.data.message)
             }, 500);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition team list get
+export function* competitionTeamsGetSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.competitionTeamsGet, action.id);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_TEAMS_GET_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition team list get
+export function* competitionTimeslotsGetSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.competitionTeamsTimeslotsGet, action.id);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_TIMESLOTS_GET_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition team list get
+export function* teamsTimeslotsPreferencesGetSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.teamsTimeslotsPreferencesGet, action.id);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_GET_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition team list get
+export function* teamsTimeslotsPreferencesSaveSaga(action) {
+    const { id, organisationId, payload } = action;
+    
+    try {
+        const result = yield call(CompetitionAxiosApi.teamsTimeslotsPreferencesSave, id, organisationId, payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_TEAM_TIMESLOTS_PREFERENCES_SAVE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.settingsUpdatedMessage);
         } else {
             yield call(failSaga, result)
         }
