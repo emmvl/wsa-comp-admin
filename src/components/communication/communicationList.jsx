@@ -173,9 +173,10 @@ class CommunicationList extends Component {
         await this.props.setCommunicationTableListPageNumberAction(page);
 
         let { communicationPageSize } = this.props.communicationState;
+        const { sortOrder, sortBy } = this.state;
         communicationPageSize = communicationPageSize ? communicationPageSize : 10;
         let offset = page ? communicationPageSize * (page - 1) : 0;
-        await this.props.communicationListAction({ organisationId: getOrganisationData().organisationId, offset, limit: communicationPageSize });
+        await this.props.communicationListAction({ organisationId: getOrganisationData().organisationId, offset, limit: communicationPageSize, sortBy, sortOrder });
     }
 
     // view for breadcrumb
