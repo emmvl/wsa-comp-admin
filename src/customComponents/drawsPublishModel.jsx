@@ -17,7 +17,8 @@ class DrawsPublishModel extends React.Component {
         const { modalPublish, modalDivisions, modalRounds, publishVisible,
             modelCheckDivision, modelCheckRound, modelCancel, modelRadio,
             modalRadioValue, modalIsShowPart, modalIsShowDivision,
-            modalIsShowRound, divisionGradeNameList, getDrawsRoundsData } = this.props;
+            modalIsShowRound, divisionGradeNameList, getDrawsRoundsData, 
+            modalPublishPastMatchRadio, modalPublishPastMatch, isPastMatchAvailable } = this.props;
         let filteredDivisions = divisionGradeNameList.filter(x => x.competitionDivisionGradeId != 0);
         let filteredRounds = getDrawsRoundsData.filter(x => x.roundId != 0)
         return (
@@ -90,6 +91,25 @@ class DrawsPublishModel extends React.Component {
                             )}
                         </Radio.Group>
                     </div>
+                    {isPastMatchAvailable == 1 && 
+                        <div>
+                            <div className="d-flex">
+                                <div className="breadcrumb-add" style={{ fontSize: 15, fontWeight: 700, marginLeft: 10 }}>
+                                    {AppConstants.publishPastMatches}
+                                </div>
+                            </div>
+                            <div>
+                                <Radio.Group id={AppUniqueId.publish_Past_Matches} onChange={modalPublishPastMatchRadio} value={modalPublishPastMatch} className="radio-model-popup">
+                                    <Radio value={0}>
+                                        {AppConstants.no}
+                                    </Radio>
+                                    <Radio value={1}>
+                                        {AppConstants.yes}
+                                    </Radio>
+                                </Radio.Group>
+                            </div>
+                        </div>
+                    }
                 </div>
             </Modal>
         )

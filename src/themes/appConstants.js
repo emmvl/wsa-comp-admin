@@ -1864,7 +1864,8 @@ const AppConstants = {
     addDivOrGrade: "Add Div/Grade",
     markAsFailedReg: "Mark as Failed Registration",
     addAnotherMembershipCap: "Add Another Membership Cap",
-    successfullyUpdated: "Successfully updated"
+    successfullyUpdated: "Successfully updated",
+    publishPastMatches: "Publish past matches?"
 };
 
 export default AppConstants;
