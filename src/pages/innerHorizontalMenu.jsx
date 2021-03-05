@@ -639,7 +639,7 @@ class InnerHorizontalMenu extends React.Component {
                                     style={{ width: "fit-content", minWidth: 190, maxWidth: 220 }}
                                     className="year-select reg-filter-select1 innerSelect-value"
                                     onChange={this.setCompetitionID}
-                                    value={this.state.selectedComp}
+                                    value={!!compList.length ? this.state.selectedComp : ''}
                                 >
                                     {compList.map((item) => (
                                         <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
