@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-    Layout, Button, Table, Breadcrumb,
+    Layout, Button, Table, Breadcrumb, Pagination
 } from "antd";
 import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
@@ -11,9 +11,14 @@ import AppConstants from "../../themes/appConstants";
 import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate';
 import AppImages from "../../themes/appImages";
 import { getKeyForStateWideMessage, getOrganisationData } from "../../util/sessionStorage";
-import { communicationListAction } from "../../store/actions/communicationAction/communicationAction";
+import {
+    communicationListAction,
+    setCommunicationTableListPageSizeAction,
+    setCommunicationTableListPageNumberAction
+} from "../../store/actions/communicationAction/communicationAction";
 
 const { Content } = Layout;
+let _this = null;
 
 /// /columens data
 
@@ -22,13 +27,23 @@ function checkSorting(a, b, key) {
         return a[key].length - b[key].length;
     }
 }
-/// //function to sort table column
-function tableSort(a, b, key) {
-    // if (a[key] && b[key]) {
-    const stringA = JSON.stringify(a[key]);
-    const stringB = JSON.stringify(b[key]);
-    return stringA.localeCompare(stringB);
-    // }
+
+//function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (_this.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (_this.state.sortBy === key && _this.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    _this.setState({ sortBy, sortOrder });
+    let { communicationPageSize, communicationPage } = _this.props.communicationState;
+    communicationPageSize = communicationPageSize ? communicationPageSize : 10;
+    let offset = communicationPage ? communicationPageSize * (communicationPage - 1) : 0;
+    _this.props.communicationListAction({ organisationId: getOrganisationData().organisationId, offset, limit: communicationPageSize, sortBy, sortOrder });
 }
 
 // compare dates
@@ -52,12 +67,17 @@ function checkDate(expiryDate, publishedDate) {
     return 'red';
 }
 
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
 const columns = [
     {
         title: AppConstants.title,
         dataIndex: 'title',
         key: 'title',
-        sorter: (a, b) => a.title.length - b.title.length,
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (title, record) => (
             <NavLink to={{
                 pathname: '/communicationView',
@@ -72,20 +92,23 @@ const columns = [
         title: AppConstants.author,
         dataIndex: 'author',
         key: 'author',
-        sorter: (a, b) => checkSorting(a, b, 'author'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: AppConstants.expiry,
         dataIndex: 'expiryDate',
         key: 'expiryDate',
-        sorter: (a, b) => checkSorting(a, b, 'expiryDate'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (expiryDate) => <span>{expiryDate ? liveScore_MatchFormate(expiryDate) : ""}</span>,
     },
     {
         title: AppConstants.published,
         dataIndex: 'isActive',
         key: 'isActive',
-        sorter: (a, b) => tableSort(a, b, 'isActive'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (isActive) => <span>{isActive === 1 ? "Yes" : "NO"}</span>,
     },
     {
@@ -98,7 +121,8 @@ const columns = [
         title: AppConstants.notification,
         dataIndex: 'isNotification',
         key: 'isNotification',
-        sorter: (a, b) => checkSorting(a, b, 'isNotification'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (isNotification) => <span>{isNotification === 1 ? "Yes" : "NO"}</span>,
     },
     {
@@ -128,11 +152,30 @@ const columns = [
 class CommunicationList extends Component {
     constructor(props) {
         super(props);
-        this.state = { screenKey: props?.location?.state?.screenKey };
+        this.state = {
+            screenKey: props?.location?.state?.screenKey,
+            sortBy: null,
+            sortOrder: null,
+        };
+        _this = this;
     }
 
-    componentDidMount() {
-        this.props.communicationListAction({ organisationId: getOrganisationData().organisationId });
+    async componentDidMount() {
+        await this.handleCommunicationTableList(1);
+    }
+
+    handleShowSizeChange = async (page, pageSize) => {
+        await this.props.setCommunicationTableListPageSizeAction(pageSize);
+        this.handleCommunicationTableList(page);
+    }
+
+    handleCommunicationTableList = async ( page ) => {
+        await this.props.setCommunicationTableListPageNumberAction(page);
+
+        let { communicationPageSize } = this.props.communicationState;
+        communicationPageSize = communicationPageSize ? communicationPageSize : 10;
+        let offset = page ? communicationPageSize * (page - 1) : 0;
+        await this.props.communicationListAction({ organisationId: getOrganisationData().organisationId, offset, limit: communicationPageSize });
     }
 
     // view for breadcrumb
@@ -189,6 +232,7 @@ class CommunicationList extends Component {
     tableView = () => {
         const { communicationState } = this.props;
         const communicationData = communicationState.communicationList || [];
+        const { communicationPage, communicationPageSize, communicationTotalCount } = communicationState;
         const stateWideMsg = getKeyForStateWideMessage();
         return (
             <div className="comp-dash-table-view mt-4 pb-5">
@@ -200,6 +244,19 @@ class CommunicationList extends Component {
                         dataSource={communicationData}
                         pagination={false}
                         rowKey={(record, index) => `communicationData${index}`}
+                    />
+                </div>
+
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        showSizeChanger
+                        current={communicationPage}
+                        defaultcurrent={communicationPage}
+                        defaultPageSize={communicationPageSize}
+                        total={communicationTotalCount}
+                        onChange={this.handleCommunicationTableList}
+                        onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
 
@@ -242,7 +299,11 @@ class CommunicationList extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ communicationListAction }, dispatch);
+    return bindActionCreators({
+        communicationListAction,
+        setCommunicationTableListPageSizeAction,
+        setCommunicationTableListPageNumberAction
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

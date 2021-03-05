@@ -49,6 +49,22 @@ function deleteCommunicationAction(id) {
     return action;
 }
 
+// set Communication page size
+function setCommunicationTableListPageSizeAction(pageSize) {
+    return {
+        type: ApiConstants.SET_COMMUNICATION_LIST_PAGE_SIZE,
+        pageSize,
+    }
+}
+
+// set Communication current page
+function setCommunicationTableListPageNumberAction(pageNum) {
+    return {
+        type: ApiConstants.SET_COMMUNICATION_LIST_PAGE_CURRENT_NUMBER,
+        pageNum,
+    }
+}
+
 export {
     communicationListAction,
     addCommunicationAction,
@@ -56,4 +72,6 @@ export {
     communicationPublishAction,
     deleteCommunicationAction,
     updateCommunicationModuleData,
+    setCommunicationTableListPageSizeAction,
+    setCommunicationTableListPageNumberAction,
 };

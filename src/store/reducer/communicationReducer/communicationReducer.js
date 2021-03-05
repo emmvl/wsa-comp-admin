@@ -10,6 +10,9 @@ const initialState = {
 
     addedCommunication: null,
     communicationList: [],
+    communicationPage: 1,
+    communicationPageSize: 10,
+    communicationTotalCount: 1,
 
     error: null,
     status: 0,
@@ -24,6 +27,8 @@ function CommunicationState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 communicationList: action.result,
+                communicationPage: action.currentPage,
+                communicationTotalCount: action.totalCount,
                 status: action.status,
             };
 
@@ -131,6 +136,16 @@ function CommunicationState(state = initialState, action) {
                 error: action.error,
                 status: action.status,
             };
+        case ApiConstants.SET_COMMUNICATION_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                communicationPageSize: action.pageSize,
+            }
+        case ApiConstants.SET_COMMUNICATION_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                communicationPage: action.pageNum,
+            }
         default:
             return state;
     }

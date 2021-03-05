@@ -45,7 +45,9 @@ export function* communicationListSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_COMMUNICATION_LIST_SUCCESS,
-                result: result.result.data,
+                result: result.result.data.communications,
+                totalCount: result.result.data.page.totalCount,
+                currentPage: result.result.data.page.currentPage,
                 status: result.status,
             });
         } else {
