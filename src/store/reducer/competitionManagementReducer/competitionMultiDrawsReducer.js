@@ -41,6 +41,7 @@ const initialState = {
     drawDivisions: [],
     drawsCompetitionArray: [],
     onImportLoad: false,
+    isPastMatchAvailable :null
 };
 
 const gradeColorArray = [];
@@ -865,6 +866,7 @@ function CompetitionMultiDraws(state = initialState, action) {
 
                 state.publishStatus = action.result.drawsPublish
                 state.isTeamInDraw = action.result.isTeamNotInDraws
+                state.isPastMatchAvailable = action.result.isPastMatchAvailable
                 // state.drawDivisions = action.competitionId === "-1" || action.dateRangeCheck
                 //     ? resultData.data ? resultData.data.legendsArray : []
                 //     : []

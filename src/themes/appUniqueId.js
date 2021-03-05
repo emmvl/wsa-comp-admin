@@ -177,6 +177,7 @@ const AppUniqueId = {
     main_draws_round_tableview: "main_draws_round_tableview",
     draw_rounds_dpdn: "draw_rounds_dpdn",
     apply_date_btn: "apply_date-btn",
+    publish_Past_Matches: "drawpublish_past_matches_radiobtn",
 
     //// Unique Ids for Competition Finals ////////
 

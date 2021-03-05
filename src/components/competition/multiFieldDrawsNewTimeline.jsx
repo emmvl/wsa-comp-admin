@@ -156,7 +156,8 @@ class MultifieldDrawsNewTimeline extends Component {
             ePageHoverTooltip: null,
             hoverTooltipFunc: null,
             isDragging: false,
-            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null
+            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null,
+            publishPastMatches: 0
         };
         this.props.clearMultiDraws();
         this.dragTimeRef = React.createRef();
@@ -2769,7 +2770,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {
-        const { publishStatus, activeDrawsRoundsData, teamNames } = this.props.drawsState;
+        const { publishStatus, activeDrawsRoundsData, teamNames, isPastMatchAvailable } = this.props.drawsState;
         const isTeamNotInDraws = this.props.drawsState.isTeamInDraw;
         const isPublish = this.state.competitionStatus == 1;
         return (
@@ -2847,6 +2848,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     modalIsShowPart={this.state.publishPartModel.isShowPart}
                     modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
                     modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
+                    modalPublishPastMatch={this.state.publishPastMatches}
+                    modalPublishPastMatchRadio={this.onChangePublishPastMatches}
+                    isPastMatchAvailable = {isPastMatchAvailable}
                 />
 
                 <Modal
@@ -2911,6 +2915,7 @@ class MultifieldDrawsNewTimeline extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
+            publishPastMatches: 0
         });
         this.state.publishPartModel.publishPart.isShowRound = false;
         this.state.publishPartModel.publishPart.isShowDivision = false;
@@ -2932,11 +2937,18 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     };
 
+    onChangePublishPastMatches = e => {
+        this.setState({
+            publishPastMatches: e.target.value
+        })
+    }
+
     publishDraw = () => {
         const payload = {
             isPartial: this.state.publishPartModel.isShowPart,
             divisions: [],
-            rounds: []
+            rounds: [],
+            publishPastMatches: this.state.publishPastMatches
         }
         if (this.state.publishPartModel.isShowPart) {
             payload.divisions = this.state.selectedDivisions;

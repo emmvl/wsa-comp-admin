@@ -151,7 +151,8 @@ const columns = [
                             onClick={() =>
                                 history.push("/deregistration", {
                                 regData: record,
-                                sourceFrom: AppConstants.teamRegistration
+                                sourceFrom: AppConstants.teamRegistration,
+                                fromTeamDashboard: true
                                 })
                             }
                             >
