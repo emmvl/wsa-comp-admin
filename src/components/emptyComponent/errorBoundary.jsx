@@ -11,7 +11,7 @@ class ErrorBoundary extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { error: null, errorInfo: null };
+        this.state = { hasError: false, error: null, errorInfo: null };
     }
 
     componentDidCatch(error, errorInfo) {
@@ -23,13 +23,19 @@ class ErrorBoundary extends Component {
         }
     }
 
+    static getDerivedStateFromError(error) {
+        if (process.env.REACT_APP_FRIENDLY_ERROR === 'true') {
+            return { hasError: true };
+        }
+    }
+
     navigateToHome = () => {
         history.push('/');
         window.location.reload();
     }
 
     render() {
-        if (this.state.errorInfo) {
+        if (this.state.hasError) {
             return (
                 <div>
                     <DashboardLayout isManuNotVisible />
