@@ -140,7 +140,7 @@ class DeRegistration extends Component {
                 saveData["userId"] = deRegisterData.userId;
                 saveData["organisationId"] = regData.organisationId;
                 saveData["competitionId"] = regData.competitionId;
-                saveData["membershipMappingId"] = isArrayNotEmpty(deRegisterData.membershipTypes) ? this.state.membershipMappingId : deRegisterData.membershipMappingId;
+                saveData["membershipMappingId"] = deRegisterData.membershipMappingId;
                 saveData["teamId"] = regData.teamId;
                 saveData["divisionId"] = deRegisterData.divisionId;
                 saveData["registrationId"] = this.props.location.state.sourceFrom == AppConstants.teamMembers ? regData.registrationUniqueKey : regData.registrationId;
@@ -391,30 +391,7 @@ class DeRegistration extends Component {
                     value={deRegisterData ? deRegisterData.competitionName : ''}
                     placeholder="Competition Name"
                 />
-                {isArrayNotEmpty(deRegisterData?.membershipTypes) ? 
-                    <div>
-                        {sourceFrom == AppConstants.teamMembers &&
-                            <div>
-                                <InputWithHead heading={AppConstants.membershipProduct} required={"required-field"} />
-                                <Form.Item
-                                name= "membershipProduct"
-                                rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipProduct }]} >
-                                    <Select
-                                        style={{ width: "100%" }}
-                                        placeholder={AppConstants.select}
-                                        className="input-inside-table-venue-court team-mem_prod_type"
-                                        onChange={(e) => this.setState({membershipMappingId: e})}
-                                        >
-                                        {(deRegisterData?.membershipTypes || []).map((item) => (
-                                            < Option key={item.membershipMappingId} value={item.membershipMappingId}> {item.membershipProduct + ' - ' + item.membershipType}</Option>
-                                        ))
-                                        }
-                                    </Select>
-                                </Form.Item>
-                            </div>
-                        }
-                    </div>
-                    :
+                {sourceFrom != AppConstants.teamRegistration &&
                     <div>    
                         <InputWithHead
                             disabled
@@ -426,7 +403,7 @@ class DeRegistration extends Component {
                             placeholder={AppConstants.membershipProduct}
                         />  
                     </div>
-                }
+                }            
                 <InputWithHead
                     disabled
                     heading={AppConstants.division}
