@@ -780,6 +780,7 @@ const AppConstants = {
     unassigned: "Unassigned",
     gameTimeStatistics: "Game Time Statistics",
     searchManager: "Search Manager",
+    searchScorer: "Search Scorer",
     divisionList: "Division List",
 
     /// add news
@@ -1864,7 +1865,15 @@ const AppConstants = {
     addDivOrGrade: "Add Div/Grade",
     markAsFailedReg: "Mark as Failed Registration",
     addAnotherMembershipCap: "Add Another Membership Cap",
-    successfullyUpdated: "Successfully updated"
+    successfullyUpdated: "Successfully updated",
+
+    // LiveScoreAddNew
+    allManagers: "All Managers",
+    allScorers: "All Scorers",
+    allManagersAndScorers: "All Managers and Scorers",
+    allUsers: "All Users",
+    individualManager: "Individual Manager",
+    individualScorer: "Individual Scorer",
 };
 
 export default AppConstants;

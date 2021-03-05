@@ -2,6 +2,7 @@ import ApiConstants from '../../../themes/apiConstants'
 import moment from 'moment';
 // import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
 import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
+import AppConstants from 'themes/appConstants';
 
 var object = {
     id: '',
@@ -155,14 +156,29 @@ function liveScoreNewsState(state = initialState, action) {
             } else if (action.key === "body") {
                 state.newsBody = action.data
             }
-            else if (action.key === "allOrg" || action.key === "indivisualOrg") {
-                state[action.key] = action.data
-            }
-            else if (action.key === "newsImage" || action.key === "newsVideo") {
+            else if (action.key === "allOrg" || action.key === "indivisualOrg" || action.key === "newsImage" || action.key === "newsVideo") {
                 state[action.key] = action.data
             }
             else {
                 state.addEditNews[action.key] = action.data
+            }
+
+            if (action.key === 'recipients') {
+                state.addEditNews["toUserRoleIds"] = null;
+                state.addEditNews["toRosterRoleIds"] = null;
+                state.addEditNews["toUserIds"] = null;
+                switch (action.data) {
+                    case AppConstants.allManagers:
+                        state.addEditNews["toUserRoleIds"] = [3];
+                        break;
+                    case AppConstants.allScorers:
+                        state.addEditNews["toRosterRoleIds"] = [4];
+                        break;
+                    case AppConstants.allManagersAndScorers:
+                        state.addEditNews["toUserRoleIds"] = [3];
+                        state.addEditNews["toRosterRoleIds"] = [4];
+                        break;
+                }
             }
 
             return {
