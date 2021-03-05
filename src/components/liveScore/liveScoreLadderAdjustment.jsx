@@ -377,7 +377,7 @@ class LiveScoreLadderAdjustment extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick} className="login-form">
+                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick}>
                         <div className="formView">{this.contentView()}</div>
                         <Footer>
                             {this.footerView()}

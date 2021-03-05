@@ -15,6 +15,7 @@ import {
     getTransferCompetitionsAction,
     getDeRegisterDataAction
 } from '../../store/actions/registrationAction/registrationChangeAction'
+import { isArrayNotEmpty } from "util/helpers";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -68,8 +69,8 @@ class DeRegistration extends Component {
                 registrationId: regData.registrationUniqueKey,
                 competitionId: regData.competitionId,
                 organisationId: regData.organisationId,
-                division: 0,
-                membershipMappingId: 0
+                division: regData.divisionId,
+                membershipMappingId: regData.membershipMappingId
             }
         }
         this.apiCall(payload);
@@ -82,14 +83,20 @@ class DeRegistration extends Component {
 
     componentDidUpdate(nextProps) {
         let deRegisterState = this.props.deRegistrationState;
-
         if (this.state.saveLoad && deRegisterState.onSaveLoad == false) {
-            history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+            this.goBack()
         }
     }
     
     goBack = () => {
-        history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+        let fromTeamDashboard = this.props.location.state.fromTeamDashboard ? this.props.location.state.fromTeamDashboard : false
+        this.updateDeregistrationData(null, 'clear', 'deRegister');
+        if(fromTeamDashboard) {
+            history.push({pathname: '/teamRegistrations'})
+        }
+        else{
+            history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+        }
     }
 
     updateDeregistrationData = (value, key, subKey) => {
@@ -133,7 +140,7 @@ class DeRegistration extends Component {
                 saveData["userId"] = deRegisterData.userId;
                 saveData["organisationId"] = regData.organisationId;
                 saveData["competitionId"] = regData.competitionId;
-                saveData["membershipMappingId"] = this.props.location.state.sourceFrom == AppConstants.teamMembers ? this.state.membershipMappingId : deRegisterData.membershipMappingId;
+                saveData["membershipMappingId"] = isArrayNotEmpty(deRegisterData.membershipTypes) ? this.state.membershipMappingId : deRegisterData.membershipMappingId;
                 saveData["teamId"] = regData.teamId;
                 saveData["divisionId"] = deRegisterData.divisionId;
                 saveData["registrationId"] = this.props.location.state.sourceFrom == AppConstants.teamMembers ? regData.registrationUniqueKey : regData.registrationId;
@@ -384,35 +391,40 @@ class DeRegistration extends Component {
                     value={deRegisterData ? deRegisterData.competitionName : ''}
                     placeholder="Competition Name"
                 />
-                {sourceFrom == AppConstants.ownRegistration &&
-                    <InputWithHead
-                        disabled
-                        heading={AppConstants.membershipProduct}
-                        required="pb-1"
-                        style={{ paddingRight: 1 }}
-                        className="input-inside-table-venue-court team-mem_prod_type w-100"
-                        value={(deRegisterData ? deRegisterData.membershipProduct : '') + ' - ' + (deRegisterData ? deRegisterData.membershipType : '')}
-                        placeholder={AppConstants.membershipProduct}
-                    />
-                }
-                {sourceFrom == AppConstants.teamMembers &&
+                {isArrayNotEmpty(deRegisterData?.membershipTypes) ? 
                     <div>
-                        <InputWithHead heading={AppConstants.membershipProduct} required={"required-field"} />
-                        <Form.Item
-                        name= "membershipProduct"
-                        rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipProduct }]} >
-                            <Select
-                                style={{ width: "100%" }}
-                                placeholder={AppConstants.select}
-                                className="input-inside-table-venue-court team-mem_prod_type"
-                                onChange={(e) => this.setState({membershipMappingId: e})}
-                                >
-                                {(deRegisterData?.membershipTypes || []).map((item) => (
-                                    < Option key={item.membershipMappingId} value={item.membershipMappingId}> {item.membershipProduct + ' - ' + item.membershipType}</Option>
-                                ))
-                                }
-                            </Select>
-                        </Form.Item>
+                        {sourceFrom == AppConstants.teamMembers &&
+                            <div>
+                                <InputWithHead heading={AppConstants.membershipProduct} required={"required-field"} />
+                                <Form.Item
+                                name= "membershipProduct"
+                                rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipProduct }]} >
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        placeholder={AppConstants.select}
+                                        className="input-inside-table-venue-court team-mem_prod_type"
+                                        onChange={(e) => this.setState({membershipMappingId: e})}
+                                        >
+                                        {(deRegisterData?.membershipTypes || []).map((item) => (
+                                            < Option key={item.membershipMappingId} value={item.membershipMappingId}> {item.membershipProduct + ' - ' + item.membershipType}</Option>
+                                        ))
+                                        }
+                                    </Select>
+                                </Form.Item>
+                            </div>
+                        }
+                    </div>
+                    :
+                    <div>    
+                        <InputWithHead
+                            disabled
+                            heading={AppConstants.membershipProduct}
+                            required="pb-1"
+                            style={{ paddingRight: 1 }}
+                            className="input-inside-table-venue-court team-mem_prod_type w-100"
+                            value={(deRegisterData ? deRegisterData.membershipProduct : '') + ' - ' + (deRegisterData ? deRegisterData.membershipType : '')}
+                            placeholder={AppConstants.membershipProduct}
+                        />  
                     </div>
                 }
                 <InputWithHead
@@ -421,7 +433,7 @@ class DeRegistration extends Component {
                     required="pb-1"
                     style={{ paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type w-100"
-                    value={deRegisterData ? deRegisterData.teamName : ''}
+                    value={deRegisterData ? deRegisterData.divisionName : ''}
                     placeholder={AppConstants.division}
                 />
 

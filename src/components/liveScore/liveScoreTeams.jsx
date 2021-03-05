@@ -170,11 +170,12 @@ class LiveScoreTeam extends Component {
                     let searchText = livescoreTeamActionObject.search
                     let sortBy = livescoreTeamActionObject.sortBy
                     let sortOrder = livescoreTeamActionObject.sortOrder
-                    this.setState({ offset, searchText, sortBy, sortOrder, compOrgId })
                     this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, compOrgId)
+                    this.setState({ offset, searchText, sortBy, sortOrder})
                 } else {
                     this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, compOrgId)
                 }
+                this.setState({ compOrgId })
             } else {
                 history.push("/matchDayCompetitions")
             }
@@ -192,34 +193,34 @@ class LiveScoreTeam extends Component {
     /// Handle Page change
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({ offset })
-        this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
+        this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId);
+        this.setState({ offset });
     }
 
     // on change search text
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value == "") {
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
+        this.setState({ searchText: e.target.value, offset: 0 })
     }
 
     // search key
     onKeyEnterSearchText = (e) => {
-        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
+        this.setState({ offset: 0 })
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
-        this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText == "") {
         } else {
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
+        this.setState({ offset: 0 })
     }
 
     // on Export

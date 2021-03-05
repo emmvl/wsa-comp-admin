@@ -67,7 +67,7 @@ const columns = [
         dataIndex: 'noOfTeams',
         key: 'noOfTeams',
         render: noOfTeams => <Input disabled className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
-        sorter: (a, b) => tableSosrt(a, b, "noOfTeams")
+        sorter: (a, b) => tableSort(a, b, "noOfTeams")
     },
     {
         title: AppConstants.extraPlayers,

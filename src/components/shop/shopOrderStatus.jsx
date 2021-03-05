@@ -436,13 +436,6 @@ class ShopOrderStatus extends Component {
                         </div>
                         <div className="col-sm pt-1">
                             <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                <Button className="primary-add-comp-form" type="primary">
-                                    {AppConstants.addOrder}
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="col-sm pt-1">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                 <Button className="primary-add-comp-form" type="primary" onClick={this.handleTableExport}>
                                     <div className="row">
                                         <div className="col-sm">

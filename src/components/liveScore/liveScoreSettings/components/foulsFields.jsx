@@ -56,9 +56,8 @@ const FoulsFields = ({ onChange, values = [] }) => {
     };
 
     const getFieldValuePath = (rowName, fieldName) => {
-        const currentRowIndex = currentValues.findIndex((row) => row.name === rowName);
-
-        return `[${currentRowIndex}].values.${fieldName}`
+        const currentRowIndex = currentValues?.findIndex((row) => row.name === rowName);
+        return `[${currentRowIndex}].values.${fieldName}`;
     }
 
     const renderHeaders = () => (

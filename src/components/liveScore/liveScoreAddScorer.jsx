@@ -484,7 +484,7 @@ class LiveScoreAddScorer extends Component {
                 <Loader visible={this.props.liveScoreScorerState.onLoad} />
                 <Layout>
                     {this.headerView()}
-                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick} className="login-form" noValidate="noValidate">
+                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick} noValidate="noValidate">
                         <Content>
                             <div className="formView">
                                 {/* {this.contentView(getFieldDecorator)} */}

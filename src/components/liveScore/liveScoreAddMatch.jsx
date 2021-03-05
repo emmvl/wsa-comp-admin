@@ -1733,7 +1733,6 @@ class LiveScoreAddMatch extends Component {
                         autoComplete="off"
                         onFinish={this.addMatchDetails}
                         onFinishFailed={this.onFinishFailed}
-                        className="login-form"
                     >
                         <Content>
                             <div className="formView">

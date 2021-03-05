@@ -658,6 +658,9 @@ const LiveScoreAxiosApi = {
         body.append('news_expire_date', data.editData.news_expire_date);
         body.append('recipientRefId', 12);
         body.append('entityTypeId', 1);
+        body.append('toUserRoleIds', JSON.stringify(data.editData.toUserRoleIds));
+        body.append('toRosterRoleIds', JSON.stringify(data.editData.toRosterRoleIds));
+        body.append('toUserIds', JSON.stringify(data.editData.toUserIds));
 
         if (data.newsImage) {
             body.append('newsImage', data.newsImage);
