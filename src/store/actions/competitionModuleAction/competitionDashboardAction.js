@@ -24,6 +24,17 @@ function updateCompetitionStatus(payload, yearId) {
     return action
 }
 
+function saveCompetitionDivisionsAction(competitionId, organisationId, payload) {
+    const action = {
+        type: ApiConstants.API_SAVE_COMPETITION_DIVISIONS_LOAD,
+        competitionId,
+        organisationId,
+        payload,
+    };
+
+    return action;
+}
+
 function deleteCompetitionAction(competitionId,targetValue) {
     const action = {
         type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD,
@@ -76,5 +87,6 @@ export {
     updateReplicateSaveObjAction,
     replicateSaveAction,
     getOldMembershipProductsByCompIdAction,
-    getNewMembershipProductByYearAction
+    getNewMembershipProductByYearAction,
+    saveCompetitionDivisionsAction,
 }

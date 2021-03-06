@@ -84,6 +84,13 @@ function nationalityReferenceAction() {
     return action;
 }
 
+function getDivisionFieldConfigAction() {
+    const action = {
+        type: ApiConstants.API_DIVISION_FIELD_CONFIG_LOAD,
+    };
+    return action;
+}
+
 //////get the Nationality Reference Action
 function heardByReferenceAction() {
     const action = {
@@ -360,4 +367,5 @@ export {
     combinedAccreditationUmpieCoachRefrence,
     setVenuesTableListPageSizeAction,
     setVenuesTableListPageNumberAction,
+    getDivisionFieldConfigAction,
 }

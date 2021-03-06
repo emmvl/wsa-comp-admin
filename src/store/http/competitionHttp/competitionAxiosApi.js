@@ -1085,6 +1085,11 @@ const CompetitionAxiosApi = {
         let _now = moment().utc().format('Y-M-D');
         return Method.dataGetDownload(url, token, `competitionPlayerGrades-${_now}`);
     },
+
+    saveCompetitionDivisions(competitionId, organisationId, payload) {
+        const url = `api/competition/${competitionId}/competitionDivisions?organisationId=${organisationId}`
+        return Method.dataPatch(url, token, payload)
+    },
 };
 
 export default CompetitionAxiosApi;

@@ -499,6 +499,11 @@ const teamMembersColumns = [
         key: "paymentStatus",
     },
     {
+        title: "Membership Type",
+        dataIndex: "membershipTypeName",
+        key: "membershipTypeName",
+    },
+    {
         title: "Paid Fee",
         dataIndex: "paidFee",
         key: "paidFee",
@@ -2616,9 +2621,6 @@ class UserModulePersonalDetail extends Component {
         const { userState } = this.props;
         const personal = userState.personalData;
         const personalByCompData = userState.personalByCompData || [];
-        console.log('###-personal', personal)
-
-        console.log('###-personalByCompData', personalByCompData)
 
         const primaryContacts = personalByCompData.length > 0
             ? personalByCompData[0].primaryContacts

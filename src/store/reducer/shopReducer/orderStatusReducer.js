@@ -105,6 +105,7 @@ function shopOrderStatusState(state = initialState, action) {
             if (orderStatusIndex > -1) {
                 state.orderStatusListingData[orderStatusIndex].paymentStatus = updatedOrderStatus.paymentStatus
                 state.orderStatusListingData[orderStatusIndex].fulfilmentStatus = updatedOrderStatus.fulfilmentStatus
+                state.orderStatusListingData[orderStatusIndex].refundedAmount = updatedOrderStatus.refundedAmount;
             }
             return {
                 ...state,

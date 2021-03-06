@@ -172,8 +172,8 @@ import {
     competitionDashboardDeleteSaga,
     saveReplicateSaga,
     getOldMembershipProductsByCompId,
-    getNewMembershipProductsByYear,
-} from './competitionManagementSaga/competitionDashboardSaga';
+    getNewMembershipProductsByYear, saveCompetitionDivisionSaga,
+} from './competitionManagementSaga/competitionDashboardSaga'
 
 // EndUserRegistrationSaga
 import * as endUserRegSaga from './registrationSaga/endUserRegistrationSaga';
@@ -562,6 +562,7 @@ export default function* rootSaga() {
 
     yield takeEvery(ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD, competitionQuickSaga.mergeCompetitionProceedSaga);
     /// /Competition Delete
+    yield takeEvery(ApiConstants.API_SAVE_COMPETITION_DIVISIONS_LOAD, saveCompetitionDivisionSaga);
     yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga);
 
     yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);

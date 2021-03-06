@@ -580,6 +580,7 @@ class LiveScoreMatchDetails extends Component {
 
                             </div>
 
+                            { false &&
                             <div className="col-sm pt-2">
                                 <div className="w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
@@ -599,6 +600,7 @@ class LiveScoreMatchDetails extends Component {
                                     </NavLink>
                                 </div>
                             </div>
+                            }
 
                             {
                                 liveScoreCompIsParent &&
