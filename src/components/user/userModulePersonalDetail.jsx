@@ -499,6 +499,11 @@ const teamMembersColumns = [
         key: "paymentStatus",
     },
     {
+        title: "Membership Type",
+        dataIndex: "membershipTypeName",
+        key: "membershipTypeName",
+    },
+    {
         title: "Paid Fee",
         dataIndex: "paidFee",
         key: "paidFee",
