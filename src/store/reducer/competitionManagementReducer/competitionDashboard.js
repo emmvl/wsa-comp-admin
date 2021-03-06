@@ -206,8 +206,15 @@ function CompetitionDashboardState(state = initialState, action) {
                 deleteCompLoad: false
             };
 
+        case ApiConstants.API_SAVE_COMPETITION_DIVISIONS_LOAD:
         case ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD:
             return { ...state, updateLoad: true }
+
+        case ApiConstants.API_SAVE_COMPETITION_DIVISIONS_SUCCESS:
+            return {
+                ...state,
+                updateLoad: false,
+            }
 
         case ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS:
             let ownCompetion_Array = genrateOwnedCompArray(action.updateDashboardResult)

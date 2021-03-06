@@ -47,7 +47,7 @@ function updateVenueConstraintsData(data, index, key, contentType, tableIndex) {
         data,
         index,
         key,
-        contentType: contentType,
+        contentType,
         tableIndex
     };
     return action;

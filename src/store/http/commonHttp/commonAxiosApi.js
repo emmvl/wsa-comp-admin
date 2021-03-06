@@ -37,6 +37,12 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
+    // get the Division Field Configuration
+    getDivisionFieldConfiguration() {
+        var url = `/common/reference/DivisionFieldConfiguration`;
+        return Method.dataGet(url, token);
+    },
+
     /////get the common year list reference
     getYearList() {
         var url = `/common/reference/year`;

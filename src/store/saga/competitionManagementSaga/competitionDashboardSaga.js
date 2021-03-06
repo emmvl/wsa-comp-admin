@@ -80,7 +80,7 @@ export function* competitionDashboardDeleteSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.competitionDashboardDelete,action.competitionId,action.targetValue);
         if (result.status === 1) {
-            
+
             yield put({
                 type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_SUCCESS,
                 result: result.result.data,
@@ -134,6 +134,28 @@ export function* getOldMembershipProductsByCompId(action){
     }
 }
 
+// Save Competition Division from Comp Details
+export function* saveCompetitionDivisionSaga(action) {
+    try {
+        const result = yield call(
+            CompetitionAxiosApi.saveCompetitionDivisions,
+            action.competitionId,
+            action.organisationId,
+            action.payload
+        );
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SAVE_COMPETITION_DIVISIONS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
 
 export function* getNewMembershipProductsByYear(action){
     try{
