@@ -1399,16 +1399,17 @@ class LiveScoreSettingsView extends Component {
                     />
                 </div>
 
+                {isTimeoutsEnabled &&
                 <div className="formView content-view pt-4 mb-5">
                     <span className="text-heading-large pt-5">
                         {AppConstants.foul}
                     </span>
-
-                    <FoulsFields
+                        <FoulsFields
                         values={foulsSettings}
                         onChange={this.handleInputChange}
-                    />
+                        />
                 </div>
+                }
 
                 <div className="formView content-view pt-4 mb-5">
                     <span className="text-heading-large pt-5">
