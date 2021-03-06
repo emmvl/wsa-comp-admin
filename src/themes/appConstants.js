@@ -1532,7 +1532,7 @@ const AppConstants = {
     whoAssignsUmpires: "Who Assigns Umpires",
     affiliateOrganisations: "Affiliate Organisations",
     noUmpires: "No Umpires",
-    takenCourtForTraining: "Have you taken the court for training, grading or a competition game",
+    takenCourtForTraining: "Have you taken the court for training, grading or a competition game?",
     exportAttendance: "Export Attendance",
     exportAttendanceMessage: "Attendance exported successfully",
     singleUseDiscount: "Single Use Discount - No Fee Charged",
