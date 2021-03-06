@@ -257,7 +257,7 @@ class LiveScoreTeam extends Component {
                     </div>
                     <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
                         <div className="row">
-                            {sourceIdAvailable && (
+                            {liveScoreCompIsParent == true && sourceIdAvailable && (
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button
