@@ -91,13 +91,14 @@ class OrderDetails extends Component {
                                 <div className="w-50 d-flex align-items-center order-detail-prd-name-view">
                                     <div style={{ flexDirection: "column" }}>
                                         <span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{item.product.productName}</span>
-                                        <span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{"SKU: " + (item.SKU ? item.SKU.id : 0)}</span>
+                                        {!!item.sku.skuCode && (<span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{"SKU: " + item.sku.skuCode}</span>)}
+                                        {!!item.sku.barcode && (<span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{"Barcode: " + (item.sku.barcode)}</span>)}
                                     </div>
                                 </div>
                                 <div className="w-25 d-flex justify-content-center align-items-center">
-                                    <span className="order-details-desc-text">{(item.SKU ? item.quantity : 0)}</span>
+                                    <span className="order-details-desc-text">{(item.sku ? item.quantity : 0)}</span>
                                     <span className="order-details-desc-text ml-2">{"x"}</span>
-                                    <span className="order-details-desc-text ml-2">{currencyFormat(item.SKU ? item.SKU.price : 0)}</span>
+                                    <span className="order-details-desc-text ml-2">{currencyFormat(item.sku ? item.sku.price : 0)}</span>
                                 </div>
                             </div>
                         )
@@ -116,11 +117,11 @@ class OrderDetails extends Component {
                     <div className="col-sm">
                         <span className="form-heading">{AppConstants.shippingAndBillingAddress}</span>
                     </div>
-                    <div className="col-sm d-flex justify-content-end">
+                    {/* <div className="col-sm d-flex justify-content-end">
                         <Button className="primary-add-comp-form" type="primary">
                             {AppConstants.edit}
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="row">
                     <div className="col-sm">
