@@ -179,9 +179,9 @@ class CompetitionVenueAndTimesEdit extends Component {
                     title: "",
                     dataIndex: "fieldConfigurationRefId",
                     key: "fieldConfigurationRefId",
-                    width: process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED ? 200 : 0,
+                    width: process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED  === true ? 200 : 0,
                     render: (fieldConfigurationRefId, record, index) => (
-                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED ?
+                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true ?
                             <div>
                                 <img
                                     className="venue-configuration-image"
