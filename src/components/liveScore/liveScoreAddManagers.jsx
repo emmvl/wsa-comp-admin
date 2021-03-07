@@ -57,7 +57,7 @@ class LiveScoreAddManager extends Component {
             checkLivScoreCompIsParent().then((value) => {
                 const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(getLiveScoreCompetiton())
                 let compOrgId = competitionOrganisation ? competitionOrganisation.id : competitionOrganisationId ? competitionOrganisationId : 0
-                this.props.liveScoreManagerListAction(5, value ? 1 : 6, null, null, null, null, null, null, null, value ? id : compOrgId)
+                this.props.liveScoreManagerListAction(5, value ? 1 : 6, id, null, null, null, null, null, null, value ? id : compOrgId)
                 this.props.getliveScoreTeams(id, null, compOrgId)
                 if (this.state.isEdit === true) {
                     this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
@@ -163,7 +163,6 @@ class LiveScoreAddManager extends Component {
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
         // const { teamId } = this.props.liveScoreManagerState
         let teamData = isArrayNotEmpty(this.props.liveScoreManagerState.teamResult) ? this.props.liveScoreManagerState.teamResult : []
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -194,7 +193,7 @@ class LiveScoreAddManager extends Component {
                                 {
                                     this.state.exsitingValue &&
                                     managerList.map((item) => (
-                                        <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
+                                        <Option key={item.id} value={item.firstName + " " + item.lastName}>
                                             {item.NameWithNumber}
                                         </Option>
                                     ))
