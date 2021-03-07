@@ -92,9 +92,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                 finalTypeRefId: storedfinalTypeRefId
             })
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
-            this.props.getCompetitionTeams(compIdNumber);
-            this.props.getCompetitionTimeslots(compIdNumber);
-            this.props.getTeamTimeslotsPreferences(compIdNumber);
+            if (!!compIdNumber) {
+                this.props.getCompetitionTeams(compIdNumber);
+                this.props.getCompetitionTimeslots(compIdNumber);
+                this.props.getTeamTimeslotsPreferences(compIdNumber);
+            }
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
