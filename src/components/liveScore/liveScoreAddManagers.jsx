@@ -163,7 +163,6 @@ class LiveScoreAddManager extends Component {
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
         // const { teamId } = this.props.liveScoreManagerState
         let teamData = isArrayNotEmpty(this.props.liveScoreManagerState.teamResult) ? this.props.liveScoreManagerState.teamResult : []
-
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -194,7 +193,7 @@ class LiveScoreAddManager extends Component {
                                 {
                                     this.state.exsitingValue &&
                                     managerList.map((item) => (
-                                        <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
+                                        <Option key={item.id} value={item.firstName + " " + item.lastName}>
                                             {item.NameWithNumber}
                                         </Option>
                                     ))
