@@ -1491,7 +1491,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     </div>
                 </div>
 
-                { this.divisionOfFieldLinkageView() }
+                { process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true && this.divisionOfFieldLinkageView() }
 
                 <Modal
                     title={AppConstants.removeFixture}
