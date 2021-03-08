@@ -968,7 +968,7 @@ class LiveScoreDashboard extends Component {
                         </Tooltip>
                     </div>
                 </div>
-                {this.state.liveScoreCompIsParent &&
+                {/* {this.state.liveScoreCompIsParent &&
                     <div className="col-sm text-right">
                         <NavLink
                             to={{
@@ -982,7 +982,7 @@ class LiveScoreDashboard extends Component {
                             </Button>
                         </NavLink>
                     </div>
-                }
+                } */}
             </div>
         )
     }
