@@ -42,12 +42,12 @@ const getOwnCompetitionYear = () => {
   return localStorage.own_year
 }
 
-// Set  own competition 
+// Set  own competition
 const setOwn_competition = own_competition => {
   localStorage.setItem("own_competition", own_competition)
 }
 
-// get own competition 
+// get own competition
 const getOwn_competition = () => {
   return localStorage.own_competition
 }
@@ -80,7 +80,7 @@ const getParticipatingYear = () => {
   return localStorage.Participate_year
 }
 
-// Set  Participating competition 
+// Set  Participating competition
 const setParticipating_competition = Participating_competition => {
   localStorage.setItem("Participating_competition", Participating_competition)
 }
