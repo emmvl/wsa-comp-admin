@@ -74,7 +74,6 @@ const routeAdminRole = [
     "/matchDayManagerImport",
     "/matchDayManagerView",
     "/matchDayTeamView",
-    "/matchDayScorerView",
     "/matchDayMatchImport",
     "/matchDayTeamImport",
     "/matchDayUmpireList",
