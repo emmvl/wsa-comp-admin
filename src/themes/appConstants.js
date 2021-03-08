@@ -1351,6 +1351,7 @@ const AppConstants = {
     cost: "Cost",
     history: "History",
     somethingWentWrong: "Something went wrong.",
+    payoutTimedoutError: "Your report is still being generated, please check back in half an hour!",
     variantDeletedMessage: "Variant deleted successfully.",
     refreshDownloads: "Refresh Downloads",
 
