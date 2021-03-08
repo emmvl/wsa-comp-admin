@@ -214,7 +214,9 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true))
+           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
+           (record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+           record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee")))
                 ? (
                     <Menu
                         className="action-triple-dot-submenu"
@@ -286,6 +288,22 @@ const columns = [
                                 && (
                                     <Menu.Item key="6" onClick={() => this_Obj.setFailedRegistrationRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
+                                    </Menu.Item>
+                                )
+                            }
+                            {
+                                record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+                                record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
+                                    <Menu.Item key="7" 
+                                    onClick={() =>  
+                                        history.push("/deregistration", { 
+                                            regData: record, 
+                                            personal: record,
+                                            sourceFrom: AppConstants.ownRegistration,
+                                            subSourceFrom: "RegistrationListPage" 
+                                        })}
+                                    >
+                                        <span>{AppConstants.registrationChange}</span>
                                     </Menu.Item>
                                 )
                             }

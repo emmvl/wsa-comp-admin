@@ -46,11 +46,11 @@ class DeRegistration extends Component {
             payload = {
                 userId: personal.userId,
                 teamId: 0,
-                registrationId: regData.registrationId,
-                competitionId: regData.competitionId,
+                registrationId: this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.registrationUniqueKey : regData.registrationId,
+                competitionId: this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.competitionUniqueKey : regData.competitionId,
                 organisationId: regData.organisationId,
-                division: regData.divisionId,
-                membershipMappingId: regData.membershipMappingId
+                division: this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.competitionDivisionId : regData.divisionId,
+                membershipMappingId: this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.membershipProductMappingId : regData.membershipMappingId
             }
         } else if(this.props.location.state.sourceFrom == AppConstants.teamRegistration){
             payload = {
@@ -89,13 +89,18 @@ class DeRegistration extends Component {
     }
     
     goBack = () => {
-        let fromTeamDashboard = this.props.location.state.fromTeamDashboard ? this.props.location.state.fromTeamDashboard : false
+        let fromTeamDashboard = this.props.location.state.fromTeamDashboard ? this.props.location.state.fromTeamDashboard : false;
+        let fromRegistrationListPage = this.props.location.state.subSourceFrom ? this.props.location.state.subSourceFrom : null; 
         this.updateDeregistrationData(null, 'clear', 'deRegister');
-        if(fromTeamDashboard) {
-            history.push({pathname: '/teamRegistrations'})
-        }
-        else{
-            history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+        if(fromRegistrationListPage != "RegistrationListPage"){
+            if(fromTeamDashboard) {
+                history.push({pathname: '/teamRegistrations'})
+            }
+            else{
+                history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+            }
+        }else{
+            history.push({pathname: '/registration'})
         }
     }
 
@@ -139,11 +144,11 @@ class DeRegistration extends Component {
                 saveData["isTeam"] = 0;
                 saveData["userId"] = deRegisterData.userId;
                 saveData["organisationId"] = regData.organisationId;
-                saveData["competitionId"] = regData.competitionId;
-                saveData["membershipMappingId"] = deRegisterData.membershipMappingId;
+                saveData["competitionId"] = this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.competitionUniqueKey : regData.competitionId;
+                saveData["membershipMappingId"] = this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.membershipProductMappingId : deRegisterData.membershipMappingId;
                 saveData["teamId"] = regData.teamId;
-                saveData["divisionId"] = deRegisterData.divisionId;
-                saveData["registrationId"] = this.props.location.state.sourceFrom == AppConstants.teamMembers ? regData.registrationUniqueKey : regData.registrationId;
+                saveData["divisionId"] = this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.competitionDivisionId : deRegisterData.divisionId;
+                saveData["registrationId"] = this.props.location.state.sourceFrom == AppConstants.teamMembers || this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.registrationUniqueKey : regData.registrationId;
                 this.props.saveDeRegisterDataAction(saveData);
                 this.setState({ saveLoad: true });
             }else{
