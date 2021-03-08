@@ -1789,14 +1789,14 @@ class UserModulePersonalDetail extends Component {
     }
 
     cancelTeamMemberDeRegistrtaion = (deRegisterId) => {
-        try{
-            let payload = {
-                deRegisterId: deRegisterId
+        try {
+            const payload = {
+                deRegisterId,
             }
             this.props.cancelDeRegistrationAction(payload);
-            this.setState({cancelTeamMemberDeRegistrationLoad: true})
-        } catch(ex) {
-            console.log("Error in cancelTeamMemberDeRegistrtaion::" +ex)
+            this.setState({ cancelTeamMemberDeRegistrationLoad: true })
+        } catch (ex) {
+            console.log(`Error in cancelTeamMemberDeRegistrtaion::${ex}`)
         }
     }
 
