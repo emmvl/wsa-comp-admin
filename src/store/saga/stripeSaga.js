@@ -21,7 +21,7 @@ function* failSaga(result) {
   }, 800);
 }
 
-function* errorSaga(error) {
+function* errorSaga(error, responseMessage="") {
   yield put({
     type: ApiConstants.API_STRIPE_API_ERROR,
     error: error,
@@ -33,7 +33,11 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error(AppConstants.somethingWentWrong);
+
+    if (responseMessage)
+      message.error(responseMessage);
+    else
+      message.error(AppConstants.somethingWentWrong);
   }, 800);
 }
 
@@ -288,7 +292,11 @@ function* exportPayoutsTransactionSaga(action) {
             yield call(failSaga, result);
         }
     } catch (error) {
+      if (error.status === 5) { // timedout
+        yield call(errorSaga, error, AppConstants.payoutTimedoutError);
+      } else {
         yield call(errorSaga, error);
+      }
     }
 }
 
