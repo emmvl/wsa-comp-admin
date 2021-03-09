@@ -123,10 +123,16 @@ function* liveScorePlayerImportSaga(action) {
 
 // Delete Player Saga
 function* liveScoreDeletePlayerSaga(action) {
+    const { playerListActionObject } = action;
+    const correctLimit = playerListActionObject.limit || 10;
+    const newTotalCount = playerListActionObject.totalCount - 1;
+    const lastPlayerOnPage = (newTotalCount - playerListActionObject.offset) === 0;
+    const correctOffset = lastPlayerOnPage ? playerListActionObject.offset - correctLimit : playerListActionObject.offset;
+
     try {
         const deleteResult = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId);
         if (deleteResult.status === 1) {
-            if (action.key) {
+            if (playerListActionObject.key) {
                 yield put({
                     type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
                     status: deleteResult.status,
@@ -136,12 +142,13 @@ function* liveScoreDeletePlayerSaga(action) {
             } else {
                 const result = yield call(
                     LiveScoreAxiosApi.getPlayerWithPagination,
-                    action.competitionId,
-                    action.offset,
-                    10,
-                    action.search,
-                    action.sortBy,
-                    action.sortOrder,
+                    playerListActionObject.competitionId,
+                    correctOffset,
+                    correctLimit,
+                    playerListActionObject.search,
+                    playerListActionObject.sortBy,
+                    playerListActionObject.sortOrder,
+                    playerListActionObject.isParent,
                 );
                 if (result.status === 1) {
                     yield put({
