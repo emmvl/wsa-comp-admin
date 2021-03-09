@@ -199,7 +199,11 @@ class LiveScoreTeamView extends Component {
 
     // Delete Player
     deletePlayer = (playerId, competitionId) => {
-        this.props.liveScoreDeletePlayerAction(playerId, competitionId, 0, "team")
+        this.props.liveScoreDeletePlayerAction(playerId, {
+            competitionId,
+            offset: 0,
+            key: "team",
+        })
     }
 
     showDeleteConfirmPlayer = (playerId, competitionId) => {

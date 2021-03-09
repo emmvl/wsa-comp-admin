@@ -86,7 +86,9 @@ class RegistrationPayoutTransaction extends Component {
     }
 
     onExport = () => {
-        this.props.exportPayoutTransaction(this.props.location.state ? this.props.location.state.id : null);
+        if (!this.props.stripeState.onExportLoad) {
+            this.props.exportPayoutTransaction(this.props.location.state ? this.props.location.state.id : null);
+        }
     }
 
     headerView = () => (

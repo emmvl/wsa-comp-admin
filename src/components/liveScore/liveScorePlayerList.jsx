@@ -249,7 +249,13 @@ class LiveScorePlayerList extends Component {
 
     // Delete player
     deletePlayer = (playerId) => {
-        this.props.liveScoreDeletePlayerAction(playerId, this.state.competitionId, this.state.offset)
+        let { playerListActionObject, totalCount } = this.props.liveScorePlayerState
+
+        this.props.liveScoreDeletePlayerAction(playerId, {
+            competitionId: this.state.competitionId,
+            totalCount,
+            ...playerListActionObject,
+        })
     }
 
     showDeleteConfirm = (playerId) => {
@@ -309,7 +315,7 @@ class LiveScorePlayerList extends Component {
                             showSizeChanger
                             current={currentPage}
                             defaultCurrent={currentPage}
-                            defaultPageSize={pageSize}                            
+                            defaultPageSize={pageSize}
                             total={totalCount}
                             onChange={this.handlePageChange}
                             onShowSizeChange={this.handleShowSizeChange}
