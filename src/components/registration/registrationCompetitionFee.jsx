@@ -7937,6 +7937,9 @@ class RegistrationCompetitionFee extends Component {
         let discountData = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts;
         discountData[index].membershipProductUniqueKey = data;
         this.props.updatedDiscountMemberPrd(data, discountData, index);
+        setTimeout(() => {
+            this.setDetailsFieldValue()
+        },600);
     };
 
     ////to check discount fields would be enable or disable
@@ -8048,7 +8051,7 @@ class RegistrationCompetitionFee extends Component {
                                         style={{ paddingRight: 1, minWidth: 182 }}
                                         placeholder="Select"
                                         // value={item.membershipProductUniqueKey}
-                                        onChange={(item) => this.onChangeMembershipProduct(item, index)}
+                                        onChange={(membershipProductTypeItem) => this.onChangeMembershipProduct(membershipProductTypeItem, index)}
                                         disabled={this.checkDiscountDisable(item.organisationId)}
                                     >
                                         {membershipPrdArr && membershipPrdArr.membershipProducts && membershipPrdArr.membershipProducts.map((item) => (
