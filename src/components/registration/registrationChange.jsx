@@ -174,6 +174,9 @@ const columns = [
                 dataIndex: 'paid',
                 key: 'paid',
                 sorter: (a, b) => tableSort(a, b, "paid"),
+                render: (paid, record) => (
+                    <div>{paid !== 'N/A' && paid !== 'P' ? currencyFormat(paid) : paid}</div>
+                )
             },
             {
                 title: 'Type',

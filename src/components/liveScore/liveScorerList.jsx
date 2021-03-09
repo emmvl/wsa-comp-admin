@@ -66,9 +66,8 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: '/matchDayScorerView',
-                    // pathname: '/userPersonal',
-                    state: { tableRecord: record, userId: record.id }
+                    pathname: '/userPersonal',
+                    state: { userId: record.id, screenKey: "matchDayScorerList", screen: "/matchDayScorerList" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -84,8 +83,8 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: '/matchDayScorerView',
-                    state: { tableRecord: record, userId: record.id }
+                    pathname: '/userPersonal',
+                    state: { userId: record.id, screenKey: "matchDayScorerList", screen: "/matchDayScorerList" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -119,9 +118,8 @@ const columns = [
                         <div key={`teams${i}` + item.id}>
                             <NavLink
                                 to={{
-                                    pathname: '/matchDayScorerView',
-                                    // pathname: '/userPersonal',
-                                    state: { tableRecord: record, userId: record.id }
+                                    pathname: '/userPersonal',
+                                    state: { userId: record.id, screenKey: "matchDayScorerList", screen: "/matchDayScorerList" }
                                 }}
                             >
                                 <div className="d-flex flex-column">
