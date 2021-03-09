@@ -2193,7 +2193,7 @@ class UserModulePersonalDetail extends Component {
                     processTypeName: "instalment",
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
-                    divisionId: record.divisionId,
+                    divisionId: record.competitionMembershipProductDivisionId,
                     competitionId: record.competitionId,
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
