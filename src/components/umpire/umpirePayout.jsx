@@ -87,7 +87,7 @@ class UmpirePayout extends Component {
                             {AppConstants.payouts}
                         </span>
                     </div>
-                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
+                    {/* <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm pt-1">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
@@ -106,7 +106,7 @@ class UmpirePayout extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

@@ -495,7 +495,8 @@ const AxiosApi = {
     exportTeamRegistrations(payload) {
         const body = payload;
         const url = `/api/teamregistration/export`;
-        return Method.dataPostDownload(url, token, body, "TeamRegistration");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, body, `teamRegistration-${_now}`);
     },
     saveDeRegister(payload) {
         const url = `/api/deregister`;
@@ -507,7 +508,8 @@ const AxiosApi = {
     },
     exportRegistrationChangeDashboard(payload) {
         const url = `/api/registrationchange/export`;
-        return Method.dataPostDownload(url, token, payload, "RegistrationChange");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, payload, `registrationChange-${_now}`);
     },
     getRegistrationChangeReview(payload) {
         const url = `/api/registrationchange/review`;
@@ -598,7 +600,8 @@ const AxiosApi = {
         };
         console.log('body for export', body);
         const url = `/api/registration/export`;
-        return Method.dataPostDownload(url, token, body, "registrations");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, body, `registrations-${_now}`);
     },
 
     updateRegistrationFailedStatus(payload) {

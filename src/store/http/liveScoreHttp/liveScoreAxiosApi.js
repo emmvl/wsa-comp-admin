@@ -1813,7 +1813,7 @@ const Method = {
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        let _now = moment().utc().format('Y-M-D');
+                        let _now = moment().utc().format('Y-MM-DD');
                         let fileName = "filecsv";
                         if (newurl.includes('payments')) {
                             fileName = `umpirePayments-${_now}`;
@@ -1823,6 +1823,10 @@ const Method = {
                             fileName = `matchDayTeam-${_now}`;
                         } else if (newurl.includes('exportScore')) {
                             fileName = `matchDayScorerList-${_now}`;
+                        } else if (newurl.includes('matchUmpire')) {
+                            fileName = `umpireDashboard-${_now}`;
+                        } else if (newurl.includes('roster')) {
+                            fileName = `umpireRoster-${_now}`;
                         }
                         link.setAttribute('download', `${fileName}.csv`); // or any other extension
                         document.body.appendChild(link);
