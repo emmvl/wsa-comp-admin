@@ -744,7 +744,7 @@ class CompetitionFormat extends Component {
                             className="w-100"
                             style={{ paddingRight: 1, minWidth: 182 }}
                             onKeyDown={(e) => e.key === '.' && e.preventDefault()}
-                            onChange={(e) => this.props.onChangeSetValue(e, 'noOfRounds')}
+                            onChange={(e) => this.onChangeSetValue(e, 'noOfRounds')}
                             min={1}
                             max={5}
                             value={data.noOfRounds}
