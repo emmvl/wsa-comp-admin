@@ -17,6 +17,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
+import { exportFilesAction } from "store/actions/appAction";
 
 const {
     // Header,
@@ -77,6 +78,11 @@ class UmpirePayout extends Component {
         };
     }
 
+    // onExport() {
+    //     let url = AppConstants.umpirePayoutsExport;
+    //     this.props.exportFilesAction(url);
+    // }
+
     /// ////view for breadcrumb
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view">
@@ -87,11 +93,11 @@ class UmpirePayout extends Component {
                             {AppConstants.payouts}
                         </span>
                     </div>
-                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
+                    {/* <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm pt-1">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.onExport()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -106,7 +112,7 @@ class UmpirePayout extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
@@ -254,7 +260,7 @@ class UmpirePayout extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        exportFilesAction
     }, dispatch);
 }
 
