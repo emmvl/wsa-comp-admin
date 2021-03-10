@@ -1816,7 +1816,7 @@ const Method = {
                         let _now = moment().utc().format('Y-MM-DD');
                         let fileName = "filecsv";
                         if (newurl.includes('payments')) {
-                            fileName = `umpirePayments-${_now}`;
+                            fileName = `umpirePayment-${_now}`;
                         } else if (newurl.includes('matches')) {
                             fileName = `matchDayMatches-${_now}`;
                         } else if (newurl.includes('teams')) {

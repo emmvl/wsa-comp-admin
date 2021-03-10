@@ -601,7 +601,7 @@ const AxiosApi = {
         console.log('body for export', body);
         const url = `/api/registration/export`;
         let _now = moment().utc().format('Y-MM-DD');
-        return Method.dataPostDownload(url, token, body, `registrations-${_now}`);
+        return Method.dataPostDownload(url, token, body, `registration-${_now}`);
     },
 
     updateRegistrationFailedStatus(payload) {

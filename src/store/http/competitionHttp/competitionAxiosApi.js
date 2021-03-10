@@ -882,7 +882,7 @@ const CompetitionAxiosApi = {
         const { competitionId, yearRefId } = payload;
         const url = `/api/export/teams/proposed?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
         let _now = moment().utc().format('Y-MM-DD');
-        return Method.dataGetDownload(url, token, `proposedTeams-${_now}`);
+        return Method.dataGetDownload(url, token, `competitionPartProposedTeamGrading-${_now}`);
     },
 
     async finalPlayersExportApi(payload) {
