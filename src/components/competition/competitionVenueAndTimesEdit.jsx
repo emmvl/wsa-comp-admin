@@ -526,6 +526,30 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     };
 
+    getAddress = (addressObject) => {
+        try {
+            const { stateList, countryList } = this.props.commonReducerState;
+            const state = stateList.length > 0 && addressObject.stateRefId > 0
+                ? stateList.find((state) => state.id === addressObject.stateRefId).name
+                : null;
+            const country = countryList.length > 0 && addressObject.countryRefId > 0
+                ? countryList.find((country) => country.id === addressObject.countryRefId).description
+                : null;
+
+            let defaultAddress = '';
+            if (state) {
+                defaultAddress = (addressObject.street1 ? addressObject.street1 + ', ' : '') +
+                    (addressObject.suburb ? addressObject.suburb + ', ' : '') +
+                    (addressObject.postalCode ? addressObject.postalCode + ', ' : '') +
+                    (state ? state + ', ' : '') +
+                    (country ? country + '.' : '');
+                return defaultAddress;
+            }
+        } catch (ex) {
+            console.log("Error in getPartcipantParentAddress" + ex);
+        }
+    }
+
     enabledContentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
@@ -584,9 +608,13 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     !this.state.manualAddress &&
-                    <Form.Item name="venueAddress" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
+                    <Form.Item
+                        name="venueAddress"
+                        help={this.state.venueAddressError && ValidationConstants.addressField[0]}
+                        validateStatus={this.state.venueAddressError ? "error" : 'validating'}
+                    >
                         <PlacesAutocomplete
-                            defaultValue={defaultVenueAddress}
+                            defaultValue={this.getAddress(venuData)}
                             heading={AppConstants.venueSearch}
                             required
                             error={this.state.venueAddressError}
@@ -595,6 +623,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 onBlur: (i) => this.formRef.current.setFieldsValue({
                                     "venueAddress": removeFirstSpace(i.target.value),
                                 }),
+                            }}
+                            onBlur={() => {
+                                this.setState({
+                                    venueAddressError: ''
+                                })
                             }}
                         />
                     </Form.Item>
@@ -670,12 +703,13 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
+                    <Form.Item rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <Select
                             className="w-100"
                             placeholder={AppConstants.select}
                             onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             value={venuData.stateRefId}
+                            name="stateRefId"
                         >
                             {stateList.map((item) => (
                                 <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
@@ -765,7 +799,6 @@ class CompetitionVenueAndTimesEdit extends Component {
         const state = stateList.length > 0 && venuData.stateRefId
             ? stateList.find((state) => state.id === venuData.stateRefId).name
             : null;
-
         let defaultVenueAddress = `${venuData.street1 ? `${venuData.street1},` : ''
             } ${venuData.suburb ? `${venuData.suburb},` : ''
             } ${state ? `${state},` : ''

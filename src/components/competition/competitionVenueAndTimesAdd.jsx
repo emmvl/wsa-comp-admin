@@ -578,14 +578,14 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
+                    <Form.Item className="formLineHeight" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <InputWithHead required="required-field" heading={AppConstants.stateHeading} />
                         <Select
                             style={{ width: '100%' }}
                             placeholder={AppConstants.select}
                             value={venuData.stateRefId}
+                            name="stateRefId"
                             onChange={(value) => this.props.updateVenuAndTimeDataAction(value, 'Venue', 'stateRefId')}
-                        // disabled
                         >
                             {stateList.map((item) => (
                                 <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
