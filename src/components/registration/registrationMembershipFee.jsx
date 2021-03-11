@@ -16,6 +16,7 @@ import {
     Modal,
     message,
     Tooltip,
+    InputNumber,
 } from "antd";
 import CustomTooltip from 'react-png-tooltip'
 import moment from "moment";
@@ -982,14 +983,16 @@ class RegistrationMembershipFee extends Component {
                         </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
-                                    suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
-                                    type="number"
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
@@ -1067,14 +1070,16 @@ class RegistrationMembershipFee extends Component {
                         />
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
-                                    suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
-                                    type="number"
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
@@ -1197,13 +1202,16 @@ class RegistrationMembershipFee extends Component {
                         </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
-                                    type="number"
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
