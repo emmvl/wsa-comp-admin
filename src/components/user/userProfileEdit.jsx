@@ -1560,7 +1560,7 @@ class UserProfileEdit extends Component {
             }
         }
 
-        data["email"] = data["email"].toLowerCase();
+        data["email"] = data["email"]?.toLowerCase();
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
 
