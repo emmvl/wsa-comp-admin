@@ -2395,6 +2395,8 @@ const ApiConstants = {
     // Get Deregistration data
     API_GET_DE_REGISTRATION_LOAD: "API_GET_DE_REGISTRATION_LOAD",
     API_GET_DE_REGISTRATION_SUCCESS: "API_GET_DE_REGISTRATION_SUCCESS",
+
+    SET_TIMELINE_MODE: "SET_TIMELINE_MODE",
 };
 
 export default ApiConstants;
