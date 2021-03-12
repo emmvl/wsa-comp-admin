@@ -1639,7 +1639,6 @@ const AppConstants = {
     usernameEmail: "Username/Email",
     proceedText: "Proceed",
     categories: "Categories",
-    comunityWideMsg: "Community Wide Messaging",
 
     umpirePaymentExport: "/matchUmpire/payments/export?",
 

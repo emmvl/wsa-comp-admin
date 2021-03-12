@@ -537,26 +537,6 @@ class LiveScoreCompetitions extends Component {
                 </div>
 
                 <div className="row fluid-width">
-                    {this.state.orgLevel === 'state' && (
-                        <div className="col-sm">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                <Button
-                                    type="primary"
-                                    className="primary-add-comp-form"
-                                    onClick={() => {
-                                        setKeyForStateWideMessage('stateWideMessage');
-                                        this.props.history.push({
-                                            pathname: '/matchDayNewsList',
-                                            state: { screenKey: 'stateWideMsg' },
-                                        });
-                                    }}
-                                >
-                                    {AppConstants.comunityWideMsg}
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-
                     <div className="col-sm">
                         <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                             <Button
