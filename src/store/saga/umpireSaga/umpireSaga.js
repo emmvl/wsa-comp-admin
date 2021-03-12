@@ -46,7 +46,7 @@ function* errorSaga(error) {
 export function* umpireListSaga(action) {
     try {
         const result = yield call(UserAxiosApi.umpireList, action.data);
-        
+
         if (result.status === 1) {
 
             yield put({
@@ -85,9 +85,8 @@ export function* newUmpireListSaga(action) {
 }
 export function* addEditUmpireSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.addEditUmpire, action.data, action.affiliateId, action.exsitingUmpireId, action.isUmpire, action.isUmpireCoach);
+        const result = yield call(LiveScoreAxiosApi.addEditUmpire, action.data, action.isUmpire, action.isUmpireCoach);
         if (result.status === 1) {
-
             yield put({
                 type: ApiConstants.API_ADD_UMPIRE_SUCCESS,
                 result: result.result.data,
@@ -205,9 +204,9 @@ export function* updateUmpireRank(action) {
             result: newRankedUmpiresCount.result.data,
             status: newRankedUmpiresCount.status,
         });
-        
+
         const newUmpiresList = yield call(UmpireAxiosApi.umpireListGet, action.data);
-        
+
         if (newUmpiresList.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_LIST_SUCCESS,
@@ -219,6 +218,22 @@ export function* updateUmpireRank(action) {
         }
 
     }catch(error) {
+        yield call(errorSaga, error);
+    }
+}
+
+export function* getUmpireInfoSaga(action) {
+    try {
+        const result = yield call(UmpireAxiosApi.getUmpireEditInfo, action.data);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.GET_UMPIRE_SUCCESS,
+                data: result.result.data
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
         yield call(errorSaga, error);
     }
 }

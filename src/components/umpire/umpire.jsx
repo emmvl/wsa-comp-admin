@@ -15,7 +15,7 @@ import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { 
+import {
     umpireMainListAction,
     setUmpireListPageSizeAction,
     setUmpireListPageNumberAction,
@@ -113,9 +113,9 @@ class Umpire extends Component {
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                     render: (rank, record) => {
                         const { rankedUmpiresCount } = this.props.umpireState;
-                        const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
-                        const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
-                        
+                        const currentOrganisationId = JSON.parse(localStorage.getItem("setOrganisationData"))?.organisationId;
+                        const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData"))?.organisationId;
+
                         return (
                             <Form>
                                 {
@@ -127,8 +127,8 @@ class Umpire extends Component {
                                             {
                                                 Array.apply(null, { length: rankedUmpiresCount + 1 }).map((rank, i, arr) => {
                                                     return (
-                                                        <Option 
-                                                            style={ i === arr.length - 1 ? {backgroundColor: 'lightgreen'} : {}} 
+                                                        <Option
+                                                            style={ i === arr.length - 1 ? {backgroundColor: 'lightgreen'} : {}}
                                                             key={i}>
                                                                 {i+1}
                                                         </Option>
@@ -288,7 +288,7 @@ class Umpire extends Component {
     }
 
     handleSelectChange = (i, option, id) => {
-        const { rankedUmpiresCount } = this.props.umpireState; 
+        const { rankedUmpiresCount } = this.props.umpireState;
         const { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         if(option.children === rankedUmpiresCount + 1) {
             this.props.updateUmpireRank({
@@ -340,14 +340,14 @@ class Umpire extends Component {
                 <div className="umpire-modal">
                     <span className="umpire-modal-text">Would you like to</span>
                     <div className="umpire-modal-button-group">
-                        <Button 
+                        <Button
                             className="primary-add-comp-form umpire-modal-button"
                             type="primary"
                             onClick={() => this.switchShiftHandler('replace')}
                         >
                             Switch ratings
                         </Button>
-                        <Button 
+                        <Button
                             className="primary-add-comp-form umpire-modal-button"
                             type="primary"
                             onClick={() => this.switchShiftHandler('shift')}

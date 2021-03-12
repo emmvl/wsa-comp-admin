@@ -1214,7 +1214,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    addEditUmpire(data, teamId, existingManagerId, isUmpire, isUmpireCoach) {
+    addEditUmpire(data, isUmpire, isUmpireCoach) {
         const body = data;
         const id = JSON.parse(localStorage.getItem('umpireCompetitionId'));
         const compData = JSON.parse(getUmpireCompetitonData());
