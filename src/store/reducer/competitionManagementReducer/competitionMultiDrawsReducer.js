@@ -41,7 +41,8 @@ const initialState = {
     drawDivisions: [],
     drawsCompetitionArray: [],
     onImportLoad: false,
-    isPastMatchAvailable :null
+    isPastMatchAvailable :null,
+    isTimelineMode: false,
 };
 
 const gradeColorArray = [];
@@ -1305,6 +1306,13 @@ function CompetitionMultiDraws(state = initialState, action) {
                 onLoad: false,
                 error: null,
             };
+
+        case ApiConstants.SET_TIMELINE_MODE:
+            console.log(action.value);
+            return {
+                ...state,
+                isTimelineMode: action.value,
+            }
 
         default:
             return state;

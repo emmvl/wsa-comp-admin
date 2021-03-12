@@ -1879,6 +1879,10 @@ const AppConstants = {
     allUsers: "All Users",
     individualManager: "Individual Manager",
     individualScorer: "Individual Scorer",
-    publishPastMatches: "Publish past matches?"};
+    publishPastMatches: "Publish past matches?",
+
+    toggleTimeline: "Toggle timeline",
+    timeline: "Timeline",
+};
 
 export default AppConstants;

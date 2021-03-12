@@ -64,6 +64,7 @@ import {
     getActiveRoundsAction,
     changeDrawsDateRangeAction,
     checkBoxOnChange,
+    setTimelineModeAction,
 } from "store/actions/competitionModuleAction/competitionMultiDrawsAction";
 import DrawsPublishModel from "customComponents/drawsPublishModel";
 import Loader from "customComponents/loader";
@@ -141,7 +142,7 @@ class MultifieldDrawsNewTimeline extends Component {
             allOrgChecked: true,
             singleCompDivisionCheked: true,
             filterDates: false,
-            isFilterSchedule: false,
+            isFilterSchedule: true,
             isDivisionNameShow: false,
             isAxisInverted: false,
             regenerateDrawExceptionModalVisible: false,
@@ -337,6 +338,9 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     componentDidMount() {
+        if (this.props.drawsState.isTimelineMode === false) {
+            history.push('/competitionDrawsOld');
+        }
         loadjs('assets/js/custom.js');
         this.apiCalls();
     }
@@ -1296,6 +1300,15 @@ class MultifieldDrawsNewTimeline extends Component {
         return dayTimeRestrictions;
     }
 
+    handleToggleTimeline = () => {
+        const { isTimelineMode } = this.props.drawsState;
+        if (isTimelineMode) {
+            history.push('/competitionDraws');
+        } else {
+            history.push('/competitionDrawsOld');
+        }
+    }
+
     headerView = () => {
         return (
             <>
@@ -1756,6 +1769,16 @@ class MultifieldDrawsNewTimeline extends Component {
                 <div className="multi-draw-list-top-head row align-content-center">
                     <div className="col-sm-7 mt-3 pr-0" style={{ minWidth: 310 }}>
                         <span className="form-heading">{AppConstants.matchCalender}</span>
+                        <Checkbox
+                            className="single-checkbox"
+                            checked={this.props.drawsState.isTimelineMode}
+                            onChange={async (e) => {
+                                await this.props.setTimelineModeAction(e.target.checked);
+                                this.handleToggleTimeline();
+                            }}
+                        >
+                            {AppConstants.timeline}
+                        </Checkbox>
                         <Checkbox
                             className="single-checkbox-radio-style my-2"
                             checked={this.state.isFilterSchedule}
@@ -3006,7 +3029,8 @@ function mapDispatchToProps(dispatch) {
             unlockDrawsAction,
             getActiveRoundsAction,
             changeDrawsDateRangeAction,
-            checkBoxOnChange
+            checkBoxOnChange,
+            setTimelineModeAction,
         },
         dispatch
     );

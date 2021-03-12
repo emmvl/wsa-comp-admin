@@ -205,6 +205,13 @@ function checkBoxOnChange(value, key, index, subIndex) {
     };
 }
 
+function setTimelineModeAction(value) {
+    return {
+        type:  ApiConstants.SET_TIMELINE_MODE,
+        value,
+    }
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -225,4 +232,5 @@ export {
     changeDrawsDateRangeAction,
     checkBoxOnChange,
     importDrawsAction,
+    setTimelineModeAction,
 }
