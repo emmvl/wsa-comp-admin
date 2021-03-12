@@ -109,7 +109,7 @@ const refundPartialAmountColumns = [
                     <Input
                         value={reviewSaveData.invoices[index].refundAmount}
                         style={{ height: "25px", width: "100px", fontSize: "10px" }} type="number" min= "0"
-                        onChange={(e) => this_Obj.updateInvoices(parseInt(e.target.value) > 0 ? e.target.value : null , index)}
+                        onChange={(e) => this_Obj.updateInvoices(parseInt(e.target.value) >= 0 ? e.target.value : null , index)}
                     />
                 </div>
             );
