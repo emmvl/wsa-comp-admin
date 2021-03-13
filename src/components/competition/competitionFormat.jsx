@@ -746,7 +746,7 @@ class CompetitionFormat extends Component {
                             onKeyDown={(e) => e.key === '.' && e.preventDefault()}
                             onChange={(e) => this.onChangeSetValue(e, 'noOfRounds')}
                             min={1}
-                            max={5}
+                            max={50}
                             value={data.noOfRounds}
                             disabled={disabledStatus}
                         />
