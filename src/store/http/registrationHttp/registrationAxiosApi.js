@@ -502,8 +502,13 @@ const AxiosApi = {
         const url = `/api/deregister`;
         return Method.dataPost(url, token, payload);
     },
-    getRegistrationChangeDashboard(payload) {
-        const url = `/api/registrationchange/dashboard`;
+    getRegistrationChangeDashboard(payload, sortBy, sortOrder) {
+        let url;
+        if (sortBy && sortOrder) {
+            url = `/api/registrationchange/dashboard?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        } else {
+            url = `/api/registrationchange/dashboard`;
+        }
         return Method.dataPost(url, token, payload);
     },
     exportRegistrationChangeDashboard(payload) {
