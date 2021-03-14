@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { SearchOutlined } from "@ant-design/icons";
 // import { NavLink } from "react-router-dom";
 import {
     Layout,
@@ -10,6 +11,7 @@ import {
     Select,
     Menu,
     Pagination,
+    Input,
     // Modal
 } from "antd";
 
@@ -338,6 +340,7 @@ class RegistrationChange extends Component {
             competitionId,
             organisationId,
             regChangeTypeRefId,
+            searchText,
         } = this.state;
         const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
         let { regChangeDashboardListPageSize } = this.props.regChangeState;
@@ -352,12 +355,33 @@ class RegistrationChange extends Component {
                 limit: regChangeDashboardListPageSize,
                 offset: (page ? (regChangeDashboardListPageSize * (page - 1)) : 0),
             },
+            searchText,
         };
 
         this.props.getRegistrationChangeDashboard(filter);
 
         this.setState({ filter });
     }
+
+    onKeyEnterSearchText = async (e) => {
+        const code = e.keyCode || e.which;
+        if (code === 13) {
+            this.handleRegChangeList(1);
+        }
+    };
+
+    onChangeSearchText = async (e) => {
+        const { value } = e.target;
+        await this.setState({ searchText: value });
+
+        if (!value) {
+            this.handleRegChangeList(1);
+        }
+    };
+
+    onClickSearchIcon = async () => {
+        this.handleRegChangeList(1);
+    };
 
     headerView = () => (
         <div className="comp-player-grades-header-view-design">
@@ -368,6 +392,25 @@ class RegistrationChange extends Component {
                             {AppConstants.registrationChange}
                         </Breadcrumb.Item>
                     </Breadcrumb>
+                </div>
+
+                <div className="col-sm-3 d-flex align-items-center justify-content-end margin-top-24-mobile">
+                    <div className="comp-product-search-inp-width">
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
+                            placeholder="Search..."
+                            onKeyPress={this.onKeyEnterSearchText}
+                            value={this.state.searchText}
+                            prefix={(
+                                <SearchOutlined
+                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            )}
+                            allowClear
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -397,6 +440,7 @@ class RegistrationChange extends Component {
             competitionId,
             organisationId,
             regChangeTypeRefId,
+            searchText,
         } = this.state;
 
         const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
@@ -410,6 +454,7 @@ class RegistrationChange extends Component {
                 limit: -1,
                 offset: 0,
             },
+            searchText
         };
 
         this.props.exportRegistrationChange(filter);
