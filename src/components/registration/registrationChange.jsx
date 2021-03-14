@@ -38,11 +38,22 @@ import DashboardLayout from "../../pages/dashboardLayout";
 const { Content } = Layout;
 const { Option } = Select;
 
+let this_Obj = null;
+
 // function to sort table column
-function tableSort(a, b, key) {
-    const stringA = JSON.stringify(a[key])
-    const stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+const tableSort = async (key) => {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
+    }
+
+    await this_Obj.props.getRegistrationChangeDashboard(this_Obj.state.filter, sortBy, sortOrder);
+    this_Obj.setState({ sortBy, sortOrder });
 }
 
 function getColor(record, key) {
@@ -71,25 +82,29 @@ const columns = [
                 title: 'Participant',
                 dataIndex: 'userName',
                 key: 'userName',
-                sorter: (a, b) => tableSort(a, b, "userName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
                 title: 'Comp Organiser',
                 dataIndex: 'compOrganiserName',
                 key: 'compOrganiserName',
-                sorter: (a, b) => tableSort(a, b, "compOrganiserName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
                 title: 'Affiliate',
                 dataIndex: 'affiliateName',
                 key: 'affiliateName',
-                sorter: (a, b) => tableSort(a, b, "affiliateName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
                 title: 'Competition',
                 dataIndex: 'competitionName',
                 key: 'competitionName',
-                sorter: (a, b) => tableSort(a, b, "competitionName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
         ],
     },
@@ -100,7 +115,8 @@ const columns = [
                 title: 'Comp Organiser',
                 dataIndex: 'transferCompOrgName',
                 key: 'transferCompOrgName',
-                sorter: (a, b) => tableSort(a, b, "transferCompOrgName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (transferCompOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
@@ -128,7 +144,8 @@ const columns = [
                 title: 'Affiliate',
                 dataIndex: 'transferAffOrgName',
                 key: 'transferAffOrgName',
-                sorter: (a, b) => tableSort(a, b, "transferAffOrgName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (transferAffOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
@@ -156,7 +173,8 @@ const columns = [
                 title: 'Competition',
                 dataIndex: 'transferCompName',
                 key: 'transferCompName',
-                sorter: (a, b) => tableSort(a, b, "transferCompName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
         ],
     },
@@ -167,13 +185,15 @@ const columns = [
                 title: 'Membership Type',
                 dataIndex: 'membershipTypeName',
                 key: 'membershipTypeName',
-                sorter: (a, b) => tableSort(a, b, "membershipTypeName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
                 title: 'Paid',
                 dataIndex: 'paid',
                 key: 'paid',
-                sorter: (a, b) => tableSort(a, b, "paid"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (paid, record) => (
                     <div>{paid !== 'N/A' && paid !== 'P' ? currencyFormat(paid) : paid}</div>
                 )
@@ -182,13 +202,14 @@ const columns = [
                 title: 'Type',
                 dataIndex: 'regChangeType',
                 key: 'regChangeType',
-                sorter: (a, b) => tableSort(a, b, "regChangeType"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
                 title: 'Comp Organiser',
                 dataIndex: 'compOrganiserApproved',
                 key: 'compOrganiserApproved',
-                sorter: (a, b) => tableSort(a, b, "compOrganiserApproved"),
+                sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (compOrganiserApproved, record) => (
                     <div>
@@ -215,7 +236,7 @@ const columns = [
                 title: 'Affiliate',
                 dataIndex: 'affiliateApproved',
                 key: 'affiliateApproved',
-                sorter: (a, b) => tableSort(a, b, "affiliateApproved"),
+                sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (affiliateApproved, record) => (
                     <div>
@@ -240,7 +261,7 @@ const columns = [
                 title: 'State',
                 dataIndex: 'stateApproved',
                 key: 'stateApproved',
-                sorter: (a, b) => tableSort(a, b, "stateApproved"),
+                sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (stateApproved, record) => (
                     <div>
@@ -314,7 +335,10 @@ class RegistrationChange extends Component {
             competitionId: "-1",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             regChangeTypeRefId: -1,
+            sortBy: null,
+            sortOrder: null,
         };
+        this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
@@ -338,6 +362,8 @@ class RegistrationChange extends Component {
             competitionId,
             organisationId,
             regChangeTypeRefId,
+            sortBy,
+            sortOrder
         } = this.state;
         const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
         let { regChangeDashboardListPageSize } = this.props.regChangeState;
@@ -354,7 +380,7 @@ class RegistrationChange extends Component {
             },
         };
 
-        this.props.getRegistrationChangeDashboard(filter);
+        this.props.getRegistrationChangeDashboard(filter, sortBy, sortOrder);
 
         this.setState({ filter });
     }
