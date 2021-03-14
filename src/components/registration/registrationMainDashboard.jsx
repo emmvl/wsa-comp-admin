@@ -42,14 +42,14 @@ function tableSort(key, tableName) {
 
 const columns = [
     {
-        title: "Competition Name",
+        title: AppConstants.competitionName,
         dataIndex: "competitionName",
         key: "competitionName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("pcompetitionName", 'part'),
     },
     {
-        title: "Registration Divisions",
+        title: AppConstants.registrationDivisions,
         dataIndex: "divisions",
         key: "divisions",
         render: divisions => {
@@ -72,7 +72,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("pregistrationDivisions", 'part'),
     },
     {
-        title: "Registration Type",
+        title: AppConstants.registrationType,
         dataIndex: "invitees",
         key: "invitees",
         render: invitees => {
@@ -88,7 +88,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("pregistrationType", 'part'),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "statusName",
         key: "statusName",
         sorter: true,
@@ -98,14 +98,14 @@ const columns = [
 
 const columnsOwned = [
     {
-        title: "Competition Name",
+        title: AppConstants.competitionName,
         dataIndex: "competitionName",
         key: "competitionName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("ocompetitionName", 'own'),
     },
     {
-        title: "Registration Divisions",
+        title: AppConstants.registrationDivisions,
         dataIndex: "divisions",
         key: "divisions",
         render: divisions => {
@@ -128,7 +128,7 @@ const columnsOwned = [
         onHeaderCell: ({ dataIndex }) => listeners("oregistrationDivisions", 'own'),
     },
     {
-        title: "Registration Type",
+        title: AppConstants.registrationType,
         dataIndex: "invitees",
         key: "invitees",
         render: invitees => {
@@ -144,7 +144,7 @@ const columnsOwned = [
         onHeaderCell: ({ dataIndex }) => listeners("oregistrationType", 'own'),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "statusName",
         key: "statusName",
         sorter: true,

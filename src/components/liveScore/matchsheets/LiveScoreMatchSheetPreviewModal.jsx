@@ -4,6 +4,7 @@ import {
     Modal,
 } from 'antd';
 // import { PDFDownloadLink } from '@react-pdf/renderer';
+import AppConstants from 'themes/appConstants';
 
 import './styles.css';
 
@@ -72,7 +73,7 @@ LiveScoreMatchSheetPreviewModal.defaultProps = {
     matchId: null,
     matchTemplateTypes: [],
     matchList: [],
-    modalTitle: 'LiveScores Match Sheet',
+    modalTitle: AppConstants.liveScoreMatchSheetPreviewModalTitle,
     handleOK: () => {},
     handleCancel: () => {}
 };

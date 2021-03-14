@@ -131,7 +131,7 @@ function checkUmpireReserve(reserveArray, key) {
 
 const columnsInvite = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "id",
         key: "id",
         sorter: true,
@@ -148,7 +148,7 @@ const columnsInvite = [
         ),
     },
     {
-        title: "Start Time",
+        title: AppConstants.startTime,
         dataIndex: "startTime",
         key: "startTime",
         sorter: true,
@@ -172,7 +172,7 @@ const columnsInvite = [
         render: (team2) => <span>{team2.name}</span>,
     },
     {
-        title: "Round",
+        title: AppConstants.round,
         dataIndex: "round",
         key: "round",
         sorter: true,
@@ -276,7 +276,7 @@ const columnsInvite = [
         ),
     },
     {
-        title: 'Umpire Reserve',
+        title: AppConstants.umpireReservePref,
         dataIndex: 'umpireReserves',
         key: 'umpireReserves',
         sorter: false,
@@ -294,7 +294,7 @@ const columnsInvite = [
         }
     },
     {
-        title: 'Umpire Coach',
+        title: AppConstants.umpireCoach,
         dataIndex: 'umpireCoaches',
         key: 'umpireCoaches',
         sorter: false,
@@ -312,7 +312,7 @@ const columnsInvite = [
         }
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "action",
         key: "action",
         render: (umpires, record) => (
@@ -377,7 +377,7 @@ const columnsInvite = [
 
 const columns = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "id",
         key: "_id",
         sorter: true,
@@ -394,7 +394,7 @@ const columns = [
         ),
     },
     {
-        title: "Start Time",
+        title: AppConstants.startTime,
         dataIndex: "startTime",
         key: "_startTime",
         sorter: true,
@@ -418,7 +418,7 @@ const columns = [
         render: (team2) => <span>{team2.name}</span>,
     },
     {
-        title: "Round",
+        title: AppConstants.round,
         dataIndex: "round",
         key: "_round",
         sorter: true,
@@ -520,7 +520,7 @@ const columns = [
         ),
     },
     {
-        title: 'Umpire Reserve',
+        title: AppConstants.umpireReservePref,
         dataIndex: 'umpireReserves',
         key: 'umpireReserves',
         sorter: false,
@@ -538,7 +538,7 @@ const columns = [
         }
     },
     {
-        title: 'Umpire Coach',
+        title: AppConstants.umpireCoach,
         dataIndex: 'umpireCoaches',
         key: 'umpireCoaches',
         sorter: false,
@@ -556,7 +556,7 @@ const columns = [
         }
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "action",
         key: "_action",
         render: (umpires, record) => (

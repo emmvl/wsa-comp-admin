@@ -10,19 +10,19 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: 'Rank',
+        title: AppConstants.rank,
         dataIndex: 'rank',
         key: 'rank',
         sorter: (a, b) => a.rank.length - b.rank.length,
     },
     {
-        title: 'Team Name',
+        title: AppConstants.teamName,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: (a, b) => a.teamName.length - b.teamName.length,
     },
     {
-        title: 'Season Results',
+        title: AppConstants.seasonResults,
         dataIndex: 'seasonResults',
         key: 'seasonResults',
         render: seasonResults => (
@@ -37,13 +37,13 @@ const columns = [
         sorter: (a, b) => a.seasonResults.length - b.seasonResults.length,
     },
     {
-        title: 'Current Grade',
+        title: AppConstants.currentGrade,
         dataIndex: 'currentGrade',
         key: 'currentGrade',
         sorter: (a, b) => a.currentGrade.length - b.currentGrade.length,
     },
     {
-        title: 'New Grade',
+        title: AppConstants.newGrade,
         dataIndex: 'newGrade',
         key: 'newGrade',
         render: newGrade => <Input className="input-inside-player-grades-table-for-grade" value={newGrade} />,

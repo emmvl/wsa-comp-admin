@@ -58,7 +58,7 @@ function tableSort(key) {
 const columns = [
 
     {
-        title: 'Registered User',
+        title: AppConstants.registeredUser,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -70,14 +70,14 @@ const columns = [
         ),
     },
     {
-        title: 'Affiliate Name',
+        title: AppConstants.affiliateName,
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Competition Name',
+        title: AppConstants.competitionName,
         dataIndex: 'competitionName',
         key: 'competitionName',
         sorter: true,
@@ -91,21 +91,21 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("division"),
     },
     {
-        title: 'Friend Name',
+        title: AppConstants.friendName,
         dataIndex: 'friendName',
         key: 'friendName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Friend Status',
+        title: AppConstants.friendStatus,
         dataIndex: 'friendStatus',
         key: 'friendStatus',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Competition Name',
+        title: AppConstants.competitionName,
         dataIndex: 'friendCompetitionName',
         key: 'friendCompetitionName',
         sorter: true,

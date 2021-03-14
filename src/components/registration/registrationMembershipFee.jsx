@@ -431,11 +431,11 @@ class RegistrationMembershipFee extends Component {
         let membershipProductId = this.props.registrationState.membershipProductId
         let this_ = this
         confirm({
-            title: 'Are you sure delete this product?',
+            titie: AppConstants.productDeleteConfirmMsg,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 if (membershipProductId.length > 0) {
                     this_.deleteProduct(membershipProductId)

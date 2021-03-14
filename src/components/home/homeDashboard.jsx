@@ -44,7 +44,7 @@ let thisObj = null;
 
 const columnsInbox = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'organisationName',
         key: 'organisationName',
         width: '20%',
@@ -53,12 +53,12 @@ const columnsInbox = [
         ),
     },
     {
-        title: 'Description',
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
     },
     {
-        title: 'Time',
+        title: AppConstants.time,
         dataIndex: 'createdOn',
         key: 'createdOn',
         width: '15%',
@@ -67,7 +67,7 @@ const columnsInbox = [
         ),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isActionRequired',
         key: 'isActionRequired',
         render: (isActionRequired, e) => (
@@ -115,7 +115,7 @@ const columnsOwned = [
     },
 
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teams',
         key: 'teams',
         sorter: (a, b) => a.teams.length - b.teams.length,
@@ -185,19 +185,19 @@ const columnsParticipate = [
         sorter: (a, b) => a.divisionAge.length - b.divisionAge.length,
     },
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teams',
         key: 'teams',
         sorter: (a, b) => a.teams.length - b.teams.length,
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'players',
         key: 'players',
         sorter: (a, b) => a.players.length - b.players.length,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => a.status.length - b.status.length,

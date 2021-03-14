@@ -56,7 +56,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -68,7 +68,7 @@ const columns = [
         ),
     },
     {
-        title: 'Role',
+        title: AppConstants.role,
         dataIndex: 'role',
         key: 'role',
         sorter: true,
@@ -82,7 +82,7 @@ const columns = [
         ),
     },
     {
-        title: 'Linked',
+        title: AppConstants.linked,
         dataIndex: 'linked',
         key: 'linked',
         sorter: true,
@@ -96,7 +96,7 @@ const columns = [
         ),
     },
     {
-        title: 'Competition',
+        title: AppConstants.competition,
         dataIndex: 'competition',
         key: 'competition',
         sorter: false,
@@ -110,7 +110,7 @@ const columns = [
         ),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: false,
@@ -124,7 +124,7 @@ const columns = [
         ),
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
         sorter: true,
@@ -136,7 +136,7 @@ const columns = [
         ),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isUsed',
         key: 'isUsed',
         render: (isUsed, e) => (
@@ -266,9 +266,9 @@ class UserTextualDashboard extends Component {
         const { name } = user;
         confirm({
             title: `Do you really want to delete the user "${name}"?`,
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             className: 'user-delete-text',
             onOk() {
                 this_.deleteUserId(user);

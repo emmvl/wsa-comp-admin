@@ -25,37 +25,37 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "First Name",
         key: "First Name",
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "Last Name",
         key: "Last Name",
     },
     {
-        title: "DOB",
+        title: AppConstants.dOB,
         dataIndex: "DOB",
         key: "DOB",
     },
     {
-        title: "mnbPlayerId",
+        title: AppConstants.mnbPlayerId,
         dataIndex: "mnbPlayerId",
         key: "mnbPlayerId",
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: "Team",
         key: "Team",
     },
     {
-        title: "Division Grade",
+        title: AppConstants.divisionGrade,
         dataIndex: "Division Grade",
         key: "Division Grade",
     },
     {
-        title: "Contact No",
+        title: AppConstants.contact_No,
         dataIndex: "Contact No",
         key: "Contact No",
     },

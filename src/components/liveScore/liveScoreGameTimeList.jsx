@@ -101,7 +101,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'id',
         key: 'id',
         sorter: true,
@@ -114,7 +114,7 @@ const columns = [
         // </NavLink>
     },
     {
-        title: 'First name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
@@ -129,7 +129,7 @@ const columns = [
         )
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -144,7 +144,7 @@ const columns = [
         )
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: true,
@@ -158,7 +158,7 @@ const columns = [
             </NavLink> : <span>{team.name}</span>
     },
     {
-        title: 'DIV',
+        title: AppConstants.div,
         dataIndex: 'division',
         key: 'division',
         sorter: true,
@@ -166,7 +166,7 @@ const columns = [
         render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
-        title: 'Play Time',
+        title: AppConstants.playTime,
         dataIndex: 'playTime',
         key: 'playTime',
         sorter: false,
@@ -174,7 +174,7 @@ const columns = [
         render: (playTime, record) => <span>{checkPlayTime(record)}</span>
     },
     {
-        title: 'Play %',
+        title: AppConstants.playPercent,
         dataIndex: 'playPercent',
         key: 'playPercent',
         sorter: true,
@@ -182,7 +182,7 @@ const columns = [
         render: (playTime, record) => <span>{checkPlay(record)}</span>
     },
     // {
-    //     title: 'Playing Up %',
+    //     title: AppConstants.playingUp,
     //     dataIndex: 'playingUp',
     //     key: 'playingUp',
     //     sorter: (a, b) => a.playingUp.length - b.playingUp.length,

@@ -55,7 +55,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -69,14 +69,14 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Grade',
+        title: AppConstants.grade,
         dataIndex: 'grade',
         key: 'grade',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Position Tracking',
+        title: AppConstants.positionTracking,
         dataIndex: 'positionTracking',
         key: 'positionTracking',
         sorter: true,
@@ -88,7 +88,7 @@ const columns = [
         }
     },
     {
-        title: 'Goal Attempts',
+        title: AppConstants.goalAttempts,
         dataIndex: 'recordGoalAttempts',
         key: 'recordGoalAttempts',
         sorter: true,
@@ -100,7 +100,7 @@ const columns = [
         },
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isUsed',
         key: 'isUsed',
         // width: 20,
@@ -140,7 +140,7 @@ const columns = [
 
 const participateColumns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -154,14 +154,14 @@ const participateColumns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Grade',
+        title: AppConstants.grade,
         dataIndex: 'grade',
         key: 'grade',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Position Tracking',
+        title: AppConstants.positionTracking,
         dataIndex: 'positionTracking',
         key: 'positionTracking',
         sorter: true,
@@ -173,7 +173,7 @@ const participateColumns = [
         }
     },
     {
-        title: 'Goal Attempts',
+        title: AppConstants.goalAttempts,
         dataIndex: 'recordGoalAttempts',
         key: 'recordGoalAttempts',
         sorter: true,
@@ -374,10 +374,10 @@ class LiveScoreDivisionList extends Component {
     showDeleteConfirm = (divisionId) => {
         let this_ = this
         confirm({
-            title: 'Are you sure you want to delete this division?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.divisionDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteTeam(divisionId)
             },

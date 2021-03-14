@@ -46,7 +46,7 @@ function checkScorerMatch(data) {
 ///columens data
 // const columns1 = [
 //     {
-//         title: 'Match Id',
+//         title: AppConstants.tableMatchID,
 //         dataIndex: 'id',
 //         key: 'id',
 //         sorter: (a, b) => tableSort(a, b, "id"),
@@ -58,14 +58,14 @@ function checkScorerMatch(data) {
 //         </NavLink>
 //     },
 //     {
-//         title: 'Start Time',
+//         title: AppConstants.startTime,
 //         dataIndex: 'startTime',
 //         key: 'startTime',
 //         sorter: (a, b) => tableSort(a, b, "startTime"),
 //         render: (startTime) => <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
 //     },
 //     {
-//         title: 'Team 1',
+//         title: AppConstants.team1,
 //         dataIndex: 'team1',
 //         key: 'team1',
 //         width: "80%",
@@ -96,7 +96,7 @@ function checkScorerMatch(data) {
 
 const columns2 = [
     {
-        title: 'Match Id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, "id"),
@@ -108,7 +108,7 @@ const columns2 = [
         </NavLink>
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, "startTime"),
@@ -116,7 +116,7 @@ const columns2 = [
             <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
     },
     {
-        title: 'Team 1',
+        title: AppConstants.team1,
         dataIndex: 'team1',
         key: 'team1',
         width: "40%",
@@ -148,7 +148,7 @@ const columns2 = [
         }
     },
     {
-        title: 'Team 2',
+        title: AppConstants.team2,
         dataIndex: 'team2',
         key: 'team2',
         width: "40%",

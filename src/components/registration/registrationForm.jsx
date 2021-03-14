@@ -72,17 +72,17 @@ const columns = [
         )
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipProductTypeName",
         key: "membershipProductTypeName",
     },
     {
-        title: "Registration Type",
+        title: AppConstants.registrationType,
         dataIndex: "registrationType",
         key: "registrationType",
     },
     {
-        title: "Registration Divisions",
+        title: AppConstants.registrationDivisions,
         dataIndex: "divisionName",
         key: "divisionName",
         width: "25%",
@@ -116,7 +116,7 @@ const columns = [
     },
 
     {
-        title: "Registration Cap",
+        title: AppConstants.registrationCap,
         dataIndex: "registrationType",
         key: "registrationCap",
         render: (registrationCap, record, index) => {

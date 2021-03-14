@@ -58,7 +58,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Profile Picture',
+        title: AppConstants.profilePic,
         dataIndex: 'profilePicture',
         key: 'profilePicture',
         render: (profilePicture) => {
@@ -72,14 +72,14 @@ const columns = [
         }
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'playerId',
         key: 'playerId',
         sorter: true,
         onHeaderCell: () => listeners('id'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstsName',
         sorter: true,
@@ -98,7 +98,7 @@ const columns = [
         // </NavLink>
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -117,7 +117,7 @@ const columns = [
         // </NavLink>
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dob',
         key: 'dob',
         sorter: true,
@@ -137,7 +137,7 @@ const columns = [
         )
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: true,
@@ -156,14 +156,14 @@ const columns = [
             )
     },
     {
-        title: 'Contact No',
+        title: AppConstants.contact_No,
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         key: 'action',
         render: (data, record, playerId) => (
             <Menu
@@ -261,10 +261,10 @@ class LiveScorePlayerList extends Component {
     showDeleteConfirm = (playerId) => {
         let this_ = this
         confirm({
-            title: 'Are you sure you want to delete this player?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.playerDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deletePlayer(playerId)
             },

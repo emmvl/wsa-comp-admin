@@ -74,7 +74,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueConfigurationModalIsOpened: false,
             courtColumns: [
                 {
-                    title: "Court Number",
+                    title: AppConstants.courtNumbers,
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber, record, index) => {
@@ -86,7 +86,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Court Name",
+                    title: AppConstants.courtName,
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
@@ -112,7 +112,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 },
 
                 {
-                    title: "Longitude",
+                    title: AppConstants.longitude,
                     dataIndex: "lng",
                     key: "lng",
                     render: (lng, record, index) => {
@@ -136,7 +136,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Latitude",
+                    title: AppConstants.latitude,
                     dataIndex: "lat",
                     key: "lat",
                     render: (lat, record, index) => {
@@ -160,7 +160,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Override Venue Timeslots?",
+                    title: AppConstants.overrideVenueTimeslots,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
                     width: 200,
