@@ -450,6 +450,79 @@ function* partialRefundAmountSaga(action) {
   }
 }
 
+function* getParticipantSummarySaga(action) {
+  try {
+    const result = yield call(
+      AxiosApi.getParticipantSummary,
+      action.offset,
+      action.limit,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType,
+      action.paymentStatus
+    );
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_PARTICIPANT_SUMMARY_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+function* exportParticipantSummarySaga(action) {
+  try {
+    const result = yield call(
+      AxiosApi.exportParticipantSummaryApi,
+      action.offset,
+      action.sortBy,
+      action.sortOrder,
+      action.userId,
+      action.registrationId,
+      action.yearId,
+      action.competitionKey,
+      action.paymentFor,
+      action.dateFrom,
+      action.dateTo,
+      action.searchValue,
+      action.feeType,
+      action.paymentType,
+      action.paymentMethod,
+      action.membershipType,
+      action.paymentStatus
+    );
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_EXPORT_PARTICIPANT_SUMMARY_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, accountBalanceSaga);
   yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, chargingPaymentSaga);
@@ -468,4 +541,6 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD, getPaymentSummarySaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD, exportPaymentSummarySaga);
   yield takeEvery(ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD, partialRefundAmountSaga);
+  yield takeEvery(ApiConstants.API_PARTICIPANT_SUMMARY_LIST_LOAD, getParticipantSummarySaga);
+  yield takeEvery(ApiConstants.API_EXPORT_PARTICIPANT_SUMMARY_LOAD, exportParticipantSummarySaga);
 }

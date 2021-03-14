@@ -52,6 +52,8 @@ const AppConstants = {
     dob: "Date of Birth",
     competitionCategory: "Competition Category",
     competitionInvitees: "Competition Invitees",
+    participant_id: "Participant ID",
+    participant_fullName: "Participant Full Name",
     participant_firstName: "Participant First Name",
     participant_middleName: "Alternative or Middle Name",
     participant_lastName: "Participant Last Name",
@@ -1821,6 +1823,8 @@ const AppConstants = {
     yourOrder: "Your Order",
 
     paymentSummary: "Payment Summary",
+    salesSummary: "Sales Summary",
+    summaryByParticipant: "Summary by participant",
     nominationFeesPaid: "Nomination Fees Paid",
     nominationFeesDeclined: "Nomination Fees Declined",
     nominationFeesOwing: "Nomination Fees Owing",
