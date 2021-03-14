@@ -146,7 +146,7 @@ class DeRegistration extends Component {
                 saveData["organisationId"] = regData.organisationId;
                 saveData["competitionId"] = this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.competitionUniqueKey : regData.competitionId;
                 saveData["membershipMappingId"] = this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.membershipProductMappingId : deRegisterData.membershipMappingId;
-                saveData["teamId"] = regData.teamId;
+                saveData["teamId"] = 0;
                 saveData["divisionId"] = this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.competitionDivisionId : deRegisterData.divisionId;
                 saveData["registrationId"] = this.props.location.state.sourceFrom == AppConstants.teamMembers || this.props.location.state.subSourceFrom == "RegistrationListPage" ? regData.registrationUniqueKey : regData.registrationId;
                 this.props.saveDeRegisterDataAction(saveData);

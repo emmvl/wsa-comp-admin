@@ -276,7 +276,7 @@ let AxiosApi = {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`;
         }
 
-        let _now = moment().utc().format('Y-M-D');
+        let _now = moment().utc().format('Y-MM-DD');
         return Method.dataPostDownload(url, token, `${key}-${_now}`, body);
     },
 
@@ -323,7 +323,7 @@ let AxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        let _now = moment().utc().format('Y-M-D');
+        let _now = moment().utc().format('Y-MM-DD');
         return Method.dataPostDownload(url, token, `paymentDashboard-${_now}`, body);
     },
 
@@ -369,7 +369,7 @@ let AxiosApi = {
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
-        let _now = moment().utc().format('Y-M-D');
+        let _now = moment().utc().format('Y-MM-DD');
         return Method.dataPostDownload(url, token, `paymentSummary-${_now}`, body);
     },
 

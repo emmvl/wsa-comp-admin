@@ -789,7 +789,7 @@ class LiveScoreIncidentList extends Component {
     }
 
     render() {
-        const { liveScoreIncidentState, location } = this.props.liveScoreIncidentState
+        const { liveScoreIncidentState, location } = this.props
         const { umpireKey } = liveScoreIncidentState
         const screen = get(location, 'state.screenName', null);
 
