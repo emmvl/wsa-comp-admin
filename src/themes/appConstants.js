@@ -1882,6 +1882,8 @@ const AppConstants = {
 
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
+
+    incorrectProductDetails: "You have entered incorrect product details.",
 };
 
 export default AppConstants;
