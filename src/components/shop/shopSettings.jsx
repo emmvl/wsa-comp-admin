@@ -112,9 +112,9 @@ class ShopSettings extends Component {
         confirm({
             title: AppConstants.deleteProductType,
             content: AppConstants.deleteProductTypeDescription,
-            okText: 'Confirm',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            okText: AppConstants.confirm,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 let { settingDetailsData } = this_.props.shopSettingState;
                 let types = settingDetailsData.types;

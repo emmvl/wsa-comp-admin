@@ -72,7 +72,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'First Name',
         sorter: true,
@@ -81,7 +81,7 @@ const columns = [
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName}</span>
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'Last Name',
         sorter: true,
@@ -90,7 +90,7 @@ const columns = [
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.lastName}</span>
     },
     {
-        title: 'Organisation',
+        title: AppConstants.organisation,
         dataIndex: 'organisation',
         key: 'Organisation',
         sorter: true,
@@ -109,7 +109,7 @@ const columns = [
         },
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -126,7 +126,7 @@ const columns = [
         }
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'Start Time',
         sorter: true,
@@ -135,7 +135,7 @@ const columns = [
             <span>{moment(record.match.startTime).format("DD/MM/YYYY HH:mm")}</span>
     },
     {
-        title: 'Role',
+        title: AppConstants.role,
         dataIndex: 'roleId',
         key: 'roleId',
         sorter: false,
@@ -143,14 +143,14 @@ const columns = [
             <span>{this_obj.getUmpireRole(roleId)}</span>
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: 'action',
         key: 'action',
         render: (data, record) => <Menu
@@ -189,7 +189,7 @@ class UmpireRoster extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
-            status: 'All',
+            status: AppConstants.all,
             rosterLoad: false,
             compArray: [],
             offsetData: 0,

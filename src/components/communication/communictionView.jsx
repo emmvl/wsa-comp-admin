@@ -112,10 +112,10 @@ class CommunicationView extends Component {
     showDeleteConfirm = () => {
         const this_ = this;
         confirm({
-            title: 'Are you sure you want to delete this communication?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.competitionDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteCommunication();
             },

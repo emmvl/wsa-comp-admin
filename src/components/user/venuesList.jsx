@@ -57,63 +57,63 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Venue Name',
+        title: AppConstants.venueName,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
         onHeaderCell: () => listeners('venueName'),
     },
     {
-        title: 'Address1',
+        title: AppConstants.address1,
         dataIndex: 'street1',
         key: 'street1',
         sorter: true,
         onHeaderCell: () => listeners('address1'),
     },
     {
-        title: 'Address2',
+        title: AppConstants.address2,
         dataIndex: 'street2',
         key: 'street2',
         sorter: true,
         onHeaderCell: () => listeners('address2'),
     },
     {
-        title: 'Suburb',
+        title: AppConstants.suburb,
         dataIndex: 'suburb',
         key: 'suburb',
         sorter: true,
         onHeaderCell: () => listeners('suburb'),
     },
     {
-        title: 'State',
+        title: AppConstants.stateTitle,
         dataIndex: 'state',
         key: 'state',
         sorter: true,
         onHeaderCell: () => listeners('state'),
     },
     {
-        title: 'Postal Code',
+        title: AppConstants.postalCode,
         dataIndex: 'postalCode',
         key: 'postalCode',
         sorter: true,
         onHeaderCell: () => listeners('postalCode'),
     },
     {
-        title: 'Contact Number',
+        title: AppConstants.contactNumber,
         dataIndex: 'contactNumber',
         key: 'contactNumber',
         sorter: true,
         onHeaderCell: () => listeners('contactNumber'),
     },
     {
-        title: '# Of Courts',
+        title: AppConstants.ofCourts,
         dataIndex: 'noOfCourts',
         key: 'noOfCourts',
         sorter: true,
         onHeaderCell: () => listeners('noOfCourts'),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isUsed',
         key: 'isUsed',
         render: (isUsed, e) => (
@@ -251,11 +251,11 @@ class VenuesList extends Component {
     showDeleteConfirm = (venueId) => {
         let this_ = this;
         confirm({
-            title: 'Are you sure you want to delete this venue?',
+            title: AppConstants.venueDeleteConfirm,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteVenue(venueId);
             },

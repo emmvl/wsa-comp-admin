@@ -651,7 +651,14 @@ const CompetitionAxiosApi = {
         const url = `/api/competitionmanagement/dashboard?userId=${userId}`
         return Method.dataPost(url, token, body);
     },
-
+    async emptySideEffect(data){
+        return new Promise((resolve, reject) => {
+            return resolve({
+                status: 1,
+                result:data,
+            });
+        });
+    },
     // update Draws
     async updateDraws(data) {
         const body = data

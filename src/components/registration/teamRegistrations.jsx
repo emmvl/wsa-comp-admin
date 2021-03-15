@@ -50,7 +50,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: "Team Name",
+        title: AppConstants.teamName,
         dataIndex: "teamName",
         key: "teamName",
         sorter: true,
@@ -63,7 +63,7 @@ const columns = [
     },
 
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: "organisationName",
         key: "organisationName",
         sorter: true,
@@ -71,7 +71,7 @@ const columns = [
     },
 
     {
-        title: "Division",
+        title: AppConstants.division,
         key: "divisionName",
         dataIndex: "divisionName",
         sorter: true,
@@ -79,7 +79,7 @@ const columns = [
     },
 
     {
-        title: "Product",
+        title: AppConstants.product,
         key: "productName",
         dataIndex: "productName",
         sorter: true,
@@ -87,7 +87,7 @@ const columns = [
     },
 
     {
-        title: "Registered By",
+        title: AppConstants.registeredBy,
         dataIndex: "registeredBy",
         key: "registeredBy",
         sorter: true,
@@ -100,7 +100,7 @@ const columns = [
     },
 
     {
-        title: "Registration Date",
+        title: AppConstants.registrationDate,
         key: "registrationDate",
         dataIndex: "registrationDate",
         sorter: true,
@@ -113,7 +113,7 @@ const columns = [
     },
 
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
         // filterDropdown: true,
@@ -129,7 +129,7 @@ const columns = [
     },
 
     {
-        title: "Action",
+        title: AppConstants.action,
         key: "action",
         dataIndex: "status",
         render: (status,record) => (

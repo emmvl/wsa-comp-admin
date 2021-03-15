@@ -44,6 +44,11 @@ const initialState = {
     paymentSummaryListTotalCount: 1,
     paymentSummaryListPage: 1,
     paymentSummaryListPageSize: 10,
+    participantSummaryList: [],
+    participantCompetitionList: [],
+    participantSummaryListTotalCount: 1,
+    participantSummaryListPage: 1,
+    participantSummaryListPageSize: 10,
 }
 
 
@@ -457,6 +462,19 @@ function stripe(state = initialState, action) {
                 refundAmountLoad: false,
                 error: null,
                 status: action.status
+            }
+
+        case ApiConstants.API_PARTICIPANT_SUMMARY_LIST_LOAD:
+            return { ...state, onLoad: true, paymentDashboardListAction: action }
+
+        case ApiConstants.API_PARTICIPANT_SUMMARY_LIST_SUCCESS:
+            let participantSummary = action.result;
+            return {
+                ...state, onLoad: false,
+                participantSummaryList: participantSummary.participantSummary,
+                participantCompetitionList: participantSummary.competitionList,
+                participantSummaryListTotalCount: participantSummary.page.totalCount,
+                participantSummaryListPage: participantSummary.page ? participantSummary.page.currentPage : 1,
             }
 
         default:

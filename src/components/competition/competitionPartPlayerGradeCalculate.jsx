@@ -78,7 +78,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "extraPlayers")
     },
     // {
-    //     title: 'Comments',
+    //     title: AppConstants.comments,
     //     dataIndex: 'comments',
     //     key: 'comments',
     //     width: 110,

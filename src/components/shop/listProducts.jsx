@@ -62,9 +62,9 @@ class ListProducts extends Component {
         confirm({
             title: AppConstants.deleteProduct,
             content: AppConstants.deleteProductDescription,
-            okText: 'Confirm',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            okText: AppConstants.confirm,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 if (id) {
                     this_.props.deleteProductAction(id)

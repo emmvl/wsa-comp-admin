@@ -10,25 +10,25 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Role',
+        title: AppConstants.role,
         dataIndex: 'role',
         key: 'role',
         sorter: (a, b) => a.role.length - b.role.length,
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dob',
         key: 'dob',
         sorter: (a, b) => a.dob.length - b.dob.length,
     },
     {
-        title: 'Phone',
+        title: AppConstants.phone,
         dataIndex: 'phone',
         key: 'phone',
         sorter: (a, b) => a.phone.length - b.phone.length,

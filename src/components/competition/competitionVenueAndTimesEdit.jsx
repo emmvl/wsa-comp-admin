@@ -71,10 +71,13 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueAddressError: '',
             isCreator: null,
             fieldConfigurationRefIdIndex: null,
+            fieldConfigurationRefIdIndexSeparateTime: null,
             venueConfigurationModalIsOpened: false,
+            isModalTableIndex: null,
+            elementIndex: null,
             courtColumns: [
                 {
-                    title: "Court Number",
+                    title: AppConstants.courtNumbers,
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber, record, index) => {
@@ -86,7 +89,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Court Name",
+                    title: AppConstants.courtName,
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
@@ -112,7 +115,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 },
 
                 {
-                    title: "Longitude",
+                    title: AppConstants.longitude,
                     dataIndex: "lng",
                     key: "lng",
                     render: (lng, record, index) => {
@@ -136,7 +139,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Latitude",
+                    title: AppConstants.latitude,
                     dataIndex: "lat",
                     key: "lat",
                     render: (lat, record, index) => {
@@ -160,7 +163,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Override Venue Timeslots?",
+                    title: AppConstants.overrideVenueTimeslots,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
                     width: 200,
@@ -179,32 +182,30 @@ class CompetitionVenueAndTimesEdit extends Component {
                     title: "",
                     dataIndex: "fieldConfigurationRefId",
                     key: "fieldConfigurationRefId",
-                    width: process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED  === true ? 200 : 0,
+                    width: 200,
                     render: (fieldConfigurationRefId, record, index) => (
-                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true ?
-                            <div>
-                                <img
-                                    className="venue-configuration-image"
-                                    src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
-                                    alt=""
-                                    height={80}
-                                />
-                                <img
-                                    className="venue-configuration-control"
-                                    src={AppImages.chevronRight}
-                                    alt=""
-                                    height={25}
-                                    onClick={() => {
-                                        this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
-                                    }}
-                                />
+                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED &&
+                        <div>
+                            <img
+                                className="venue-configuration-image"
+                                src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
+                                alt=""
+                                height={80}
+                            />
+                            <img
+                                className="venue-configuration-control"
+                                src={AppImages.chevronRight}
+                                alt=""
+                                height={25}
+                                onClick={() => {
+                                    this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
+                                }}
+                            />
 
-                                <Form.Item name={`fieldConfigurationRefId${index}`}>
-                                    <Input type="hidden" value={fieldConfigurationRefId} />
-                                </Form.Item>
-                            </div>
-                            :
-                            <></>
+                            <Form.Item name={`fieldConfigurationRefId${index}`}>
+                                <Input type="hidden" value={fieldConfigurationRefId} />
+                            </Form.Item>
+                        </div>
                     )
                 },
                 {
@@ -332,13 +333,13 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     }
 
-    getImageForVenueConfig = (index, fieldConfigurationRefId) => {
+    getImageForVenueConfig = (index, fieldConfigurationRefId, tableIndex = null) => {
         let image = '';
         let i = 1;
         while (!image) {
             image = !!fieldConfigurationRefId
                 ? this.state.venueConfigurationImages[fieldConfigurationRefId - i]
-                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[index - i].fieldConfigurationRefId - 1]
+                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[!!tableIndex ? tableIndex : index - i].fieldConfigurationRefId - 1]
             i++;
         }
 
@@ -1137,8 +1138,32 @@ class CompetitionVenueAndTimesEdit extends Component {
                         use12Hours={false}
                     />
                 </div>
+                {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED && (
+                    <div className="col-sm-1">
+                        <img
+                            className="venue-configuration-image"
+                            src={this.getImageForVenueConfig(index, item.fieldConfigurationRefId, tableIndex)}
+                            alt=""
+                            height={80}
+                        />
+                        <img
+                            className="venue-configuration-control"
+                            src={AppImages.chevronRight}
+                            alt=""
+                            height={25}
+                            onClick={() => {
+                                this.setState({isModalTableIndex: tableIndex, elementIndex: index, venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndexSeparateTime: index})
+                            }}
+                        />
+
+                        <Form.Item style={{height: 0}} name={`fieldConfigurationRefIdIndexSeparateTime${index}`}>
+                            <Input type="hidden" value={item.fieldConfigurationRefIdIndexSeparateTime} />
+                        </Form.Item>
+                    </div>
+                )}
+
                 {!item.isDisabled && (
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
+                    <div className="col-sm-1 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
                         <span className="user-remove-btn">
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
@@ -1356,13 +1381,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                         alt=""
                         height={150}
                         onClick={() => {
-                            this.setState({fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
                             this.props.updateVenuAndTimeDataAction(
                                 key+1,
-                                this.state.fieldConfigurationRefIdIndex,
+                                !!this.state.isModalTableIndex ? this.state.elementIndex : this.state.fieldConfigurationRefIdIndex,
                                 'fieldConfigurationRefId',
-                                'courtData',
+                                !!this.state.isModalTableIndex ? 'addTimeSlotField' : 'courtData',
+                                this.state.isModalTableIndex,
                             )
+                            this.setState({isModalTableIndex: null, elementIndex: null, fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
                         }}
                     />
                 ))
