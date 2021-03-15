@@ -2023,6 +2023,7 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
+    competition_name: "Competition name"
 };
 
 export default AppConstants;
