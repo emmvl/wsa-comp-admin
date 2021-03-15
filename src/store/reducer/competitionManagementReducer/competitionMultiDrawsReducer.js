@@ -1078,6 +1078,16 @@ function CompetitionMultiDraws(state = initialState, action) {
                 ...state,
                 updateLoad: true,
             };
+        case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD:
+            return {
+                ...state,
+                updateLoad: true, //todo remove loading once UI can update without loading
+            };
+        case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_SUCCESS:
+            return {
+                ...state,
+                updateLoad: false,
+            };
 
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:
             let resultDataNew

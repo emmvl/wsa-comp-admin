@@ -231,6 +231,7 @@ const AppConstants = {
     betweenGames: "Between Games",
     assignManually: "Assign Manually",
     regenerateDraw: "Regenerate",
+    saveDraw: "Save Draws",
 
     /// *****Competition Finals */
     extraTimeIfDraw1: "Extra time if a Draw - 1st Time",
