@@ -398,7 +398,7 @@ class UmpireDivisions extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form autoComplete="off" onFinish={this.handleSubmit} className="login-form">
+                    <Form autoComplete="off" onFinish={this.handleSubmit}>
                         <div className="formView">{this.contentView()}</div>
 
                         {this.footerView()}

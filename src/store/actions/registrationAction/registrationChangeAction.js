@@ -24,10 +24,12 @@ function updateDeregistrationData(value, key, subKey) {
     };
 }
 
-function getRegistrationChangeDashboard(payload) {
+function getRegistrationChangeDashboard(payload, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD,
         payload,
+        sortBy,
+        sortOrder,
     };
 }
 

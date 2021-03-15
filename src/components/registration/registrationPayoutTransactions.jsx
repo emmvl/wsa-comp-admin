@@ -7,6 +7,7 @@ import {
     Button,
     Table,
 } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 
 import "./product.scss";
 import AppConstants from "../../themes/appConstants";
@@ -23,13 +24,13 @@ const { Content } = Layout;
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.transactionId,
         dataIndex: 'id',
         key: 'id',
         sorter: false,
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'source_transfer',
         key: 'source_transfer',
         sorter: false,
@@ -38,7 +39,7 @@ const columns = [
         ),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: false,
@@ -51,7 +52,7 @@ const columns = [
         },
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         render: (amount) => (
@@ -60,7 +61,7 @@ const columns = [
         sorter: false,
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: false,
@@ -85,7 +86,9 @@ class RegistrationPayoutTransaction extends Component {
     }
 
     onExport = () => {
-        this.props.exportPayoutTransaction(this.props.location.state ? this.props.location.state.id : null);
+        if (!this.props.stripeState.onExportLoad) {
+            this.props.exportPayoutTransaction(this.props.location.state ? this.props.location.state.id : null);
+        }
     }
 
     headerView = () => (
@@ -106,13 +109,14 @@ class RegistrationPayoutTransaction extends Component {
                                     type="primary"
                                 >
                                     <div className="row">
-                                        <div className="col-sm">
+                                        <div className="col-sm d-flex align-items-center">
                                             <img
                                                 src={AppImages.export}
                                                 alt=""
                                                 className="export-image"
                                             />
                                             {AppConstants.export}
+                                            {this.props.stripeState.onExportLoad && <LoadingOutlined className="exporting-icon"/>}
                                         </div>
                                     </div>
                                 </Button>

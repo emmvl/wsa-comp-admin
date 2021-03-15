@@ -47,6 +47,15 @@ const captializedString = (value) => {
     }
 };
 
+const removeFirstSpace = (value) => {
+    const result = value.trim();
+    if (result.length) {
+        return value;
+    }
+
+    return '';
+}
+
 const teamListData = (value) => {
     if (value == 1) {
         return false;
@@ -138,5 +147,6 @@ module.exports = {
     isImageSizeValid,
     formatValue,
     feeIsNull,
-    isNullOrUndefined
+    isNullOrUndefined,
+    removeFirstSpace,
 };

@@ -334,8 +334,9 @@ class RegistrationMembershipCap extends Component {
                     </Checkbox>
                     <Form.Item 
                     name={`membershipProducts${index}`} 
-                    rules={[{ required: true, message: ValidationConstants.membershipProductsRequired }]}>
+                    rules={[{ required: item.isAllMembershipProduct == 1 ? false : true, message: ValidationConstants.membershipProductsRequired }]}>
                         <Select
+                            disabled={item.isAllMembershipProduct == 1 ? true : false}
                             mode="multiple"
                             showArrow
                             showSearch
@@ -398,6 +399,7 @@ class RegistrationMembershipCap extends Component {
                                         rules={[{ required: true, message: ValidationConstants.membershipFeeRequired }]}
                                     >
                                         <InputWithHead
+                                            prefix="$"
                                             setFieldsValue={feeCap.amount}
                                             style={{height: 46}}
                                             placeholder=" "
@@ -447,14 +449,17 @@ class RegistrationMembershipCap extends Component {
                     {(membershipFeeCapList || []).map((item,index) => (
                         <div className="mb-5">{this.membershipProductView(item,index)}</div>
                     ))}
-                    <div className=" center-align-70">
-                        <span 
-                            className="orange-action-txt" 
-                            style={{ alignSelf: "center"}}
-                            onClick={() => this.addOrRemoveMembershipProductBox("add")}>
-                            +{AppConstants.addAnotherMembershipCap}
-                        </span>
-                    </div>
+                    {!(membershipFeeCapList.find(x => x.isAllMembershipProduct == 1)) && (
+                        <div className=" center-align-70">
+                            <span 
+                                className="orange-action-txt" 
+                                style={{ alignSelf: "center"}}
+                                onClick={() => this.addOrRemoveMembershipProductBox("add")}>
+                                +{AppConstants.addAnotherMembershipCap}
+                            </span>
+                        </div>
+                    )}
+                   
                 </div>
             )
         }catch(ex){

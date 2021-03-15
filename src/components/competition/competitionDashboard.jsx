@@ -43,13 +43,13 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'competitionName',
         key: 'competitionName',
         sorter: (a, b) => tableSort(a, b, 'competitionName'),
     },
     {
-        title: 'Divisions',
+        title: AppConstants.divisions,
         dataIndex: 'divisions',
         key: 'divisions',
         render: divisions => {
@@ -71,7 +71,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, 'divisions'),
     },
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teamCount',
         key: 'teamCount',
         sorter: (a, b) => tableSort(a, b, 'teamCount'),
@@ -80,7 +80,7 @@ const columns = [
         ),
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'playersCount',
         key: 'playersCount',
         sorter: (a, b) => tableSort(a, b, 'playersCount'),
@@ -89,7 +89,7 @@ const columns = [
         ),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'statusName',
         key: 'statusName',
         sorter: (a, b) => tableSort(a, b, 'statusName'),
@@ -98,13 +98,13 @@ const columns = [
 
 const columnsOwned = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'competitionName',
         key: 'competitionName',
         sorter: (a, b) => tableSort(a, b, 'competitionName'),
     },
     {
-        title: 'Divisions',
+        title: AppConstants.divisions,
         dataIndex: 'divisions',
         key: 'divisions',
         render: divisions => {
@@ -126,7 +126,7 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, 'divisions'),
     },
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teamCount',
         key: 'teamCount',
         sorter: (a, b) => tableSort(a, b, 'teamCount'),
@@ -135,7 +135,7 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'playersCount',
         key: 'playersCount',
         sorter: (a, b) => tableSort(a, b, 'playersCount'),
@@ -144,13 +144,13 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'statusName',
         key: 'statusName',
         sorter: (a, b) => tableSort(a, b, 'statusName'),
     },
     {
-        title: 'Registration Type',
+        title: AppConstants.registrationType,
         dataIndex: 'invitees',
         key: 'invitees',
         render: invitees => {
@@ -165,7 +165,7 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, 'invitees'),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'statusRefId',
         key: 'statusRefId',
         render: (statusRefId, record) => (
@@ -418,11 +418,11 @@ class CompetitionDashboard extends Component {
         // let competitionId = this.props.competitionFeesState.competitionId;
         let this_ = this;
         confirm({
-            title: 'Do you want to add registration?',
+            title: AppConstants.registrationAddConfirm,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 // [
                 // <NavLink

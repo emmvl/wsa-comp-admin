@@ -65,6 +65,7 @@ const initialState = {
     coachAccreditation: [],
     tShirtSizeList: [],
     stateListData: [],
+    divisionFieldConfigList: [],
 };
 
 function commonReducerState(state = initialState, action) {
@@ -203,6 +204,18 @@ function commonReducerState(state = initialState, action) {
                 ...state,
                 status: action.status,
                 nationalityList: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                error: null,
+            };
+
+        case ApiConstants.API_DIVISION_FIELD_CONFIG_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_DIVISION_FIELD_CONFIG_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                divisionFieldConfigList: isArrayNotEmpty(action.result) ? action.result : [],
                 onLoad: false,
                 error: null,
             };

@@ -1337,6 +1337,7 @@ function registration(state = initialState, action) {
     case ApiConstants.UPDATE_MEMBERSHIP_FEE_CAP_LIST:
       if(action.key == 'membershipFeeCapList'){
         state.membershipFeeCapList = action.value;
+        state.membershipFeeCapListCopy = deepCopyFunction(action.value);
       }else if(action.key == 'isAllMembershipProductChanged'){
         state.isAllMembershipProductChanged = action.value;
       }else if(action.key == 'productsInfo'){
@@ -1366,6 +1367,7 @@ function registration(state = initialState, action) {
           state.membershipFeeCapList[0][action.key] = action.value;
         }else{
           state.membershipFeeCapList = deepCopyFunction(state.membershipFeeCapListCopy);
+          state.membershipFeeCapList[0][action.key] = action.value;
         }
         state.isAllMembershipProductChanged = true;
       }else{

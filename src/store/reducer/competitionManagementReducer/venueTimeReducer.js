@@ -20,6 +20,7 @@ let objData = {
     "courtRotationRefId": 8,
     "homeTeamRotationRefId": 3,
     "courtPreferences": [],
+    competitionDivisionsFieldsConfigurations: [],
     // "courtDivisionPref": [],
     // "courtGradePref": []
 }
@@ -479,6 +480,23 @@ function VenueTimeState(state = initialState, action) {
 
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS:
             // state.selectedVenueId = []
+
+            const competitionDivisionsFieldsConfigurations = [];
+            action.result.competitionDivisions
+                .filter((div) => !div.isDeleted)
+                .forEach((div) => {
+                    if (div.divisionFieldConfigurationId) {
+                        competitionDivisionsFieldsConfigurations.push({
+                            competitionDivisionId: div.id,
+                            divisionFieldConfigurationId: div.divisionFieldConfigurationId,
+                        });
+                    }
+            })
+
+            if (competitionDivisionsFieldsConfigurations.length) {
+                state.venueConstrainstData.competitionDivisionsFieldsConfigurations = competitionDivisionsFieldsConfigurations
+            }
+
             state.courtRotation = getCourtRotation(action.commResult.CourtRotation)
 
             const courtRotationHelpMsg = getCourtRotationHelpMsg(state.courtRotation, state.courtPrefHelpMsg)
@@ -489,6 +507,7 @@ function VenueTimeState(state = initialState, action) {
             state.allocateToSameCourt = action.commResult.CourtRotation[1].subReferences[0].id
 
             state.venueConstrainstData = {
+                ...state.venueConstrainstData,
                 ...action.result,
                 venueConstrainstData: objData,
             };
@@ -781,8 +800,6 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_UPDATE_VENUE_CONSTRAINTS_DATA:
-
-
             if (action.key === 'clearData' && action.contentType == null) {
                 state.selectedVenueIdAdd = null
                 state.selectedVenueId = []
@@ -814,7 +831,8 @@ function VenueTimeState(state = initialState, action) {
 
                 clearVenueFromCourtPreferences(state);
 
-            } else if (action.contentType === 'addAnotherNonPlayingDate') {
+            }
+            else if (action.contentType === 'addAnotherNonPlayingDate') {
                 let nonPlayingDatesObj = {
                     competitionNonPlayingDatesId: 0,
                     name: "",
@@ -823,15 +841,14 @@ function VenueTimeState(state = initialState, action) {
                 state.venueConstrainstData[action.key].push(nonPlayingDatesObj)
                 state.nonPlayingDates.push(nonPlayingDatesObj) //// add nonplaying date object*
 
-            } else if (action.contentType === 'nonPlayingDates') {
+            }
+            else if (action.contentType === 'nonPlayingDates') {
 
                 let nonPlayingData = state.venueConstrainstData[action.contentType]
                 nonPlayingData[action.index][action.key] = action.data
                 state.venueConstrainstData[action.contentType] = nonPlayingData
-
-
-
-            } else if (action.contentType === 'radioButton') {
+            }
+            else if (action.contentType === 'radioButton') {
                 let prefrenceArr = state.courtRotation
                 for (let i in state.courtRotation) {
                     if (prefrenceArr[i].id == action.data) {
@@ -844,18 +861,20 @@ function VenueTimeState(state = initialState, action) {
                 state.courtRotation = prefrenceArr
                 state.radioButton = action.data
 
-            } else if (action.contentType === 'radioButtonValue') {
+            }
+            else if (action.contentType === 'radioButtonValue') {
                 state[action.key] = action.data
                 state.venueConstrainstData['courtRotationRefId'] = action.data
-
-            } else if (action.contentType === 'evenRotationValue') {
+            }
+            else if (action.contentType === 'evenRotationValue') {
                 state.evenRotation = action.data
                 state.venueConstrainstData['courtRotationRefId'] = action.data
             }
             else if (action.contentType === 'homeRotationValue') {
                 // state.homeRotation = action.data
                 state.venueConstrainstData.homeTeamRotationRefId = action.data
-            } else if (action.contentType === "courtPreferences") {
+            }
+            else if (action.contentType === "courtPreferences") {
 
 
                 // let selectedCourt_PrefArray = craeteSelectedCourtPrefArray(state.venueConstrainstData.courtPreferences, state.courtArray)
@@ -896,7 +915,8 @@ function VenueTimeState(state = initialState, action) {
             ////add non playing date fields
             else if (action.contentType === 'nonPLayingDateFields') {
                 state.nonPlayingDates[action.index][action.key] = action.data
-            } else if (action.contentType === 'courtParentSelection') {
+            }
+            else if (action.contentType === 'courtParentSelection') {
                 state.selectedRadioBtn = action.data
                 if (action.data == 1) {
                     state.evenRotation = 2
@@ -922,7 +942,7 @@ function VenueTimeState(state = initialState, action) {
                     }
                 }
             }
-            else if (action.contentType == "matchPreference") {
+            else if (action.contentType === "matchPreference") {
                 // let matchPreference = state.venueConstrainstData.matchPreference;
                 if (action.key === "addMatchPreference") {
                     let obj = {
@@ -1000,7 +1020,7 @@ function VenueTimeState(state = initialState, action) {
                     state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
                 }
             }
-            else if (action.contentType == "lockedDraws") {
+            else if (action.contentType === "lockedDraws") {
                 // let matchPreference = state.venueConstrainstData.matchPreference;
                 if (action.key === "competitionMembershipProductDivisionId") {
 
@@ -1060,7 +1080,23 @@ function VenueTimeState(state = initialState, action) {
                 }
                 state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
             }
+            else if (action.contentType === "competitionDivisionsFieldsConfigurations") {
+                const { competitionDivisionId, divisionFieldConfigurationId } = action.data;
+                const config = state.venueConstrainstData[action.contentType] || [];
+                const existFieldConfigIndex = config.findIndex(c => {
+                    return c && c.divisionFieldConfigurationId === divisionFieldConfigurationId
+                })
+                const configField = {
+                    competitionDivisionId,
+                    divisionFieldConfigurationId,
+                }
 
+                if (existFieldConfigIndex !== -1) {
+                    config[existFieldConfigIndex] = configField
+                } else {
+                    config[action.index] = configField
+                }
+            }
             else {
                 // let venueConstrainstDetails = state.venueConstrainstData
                 if (action.contentType === 'addCourtPreferences') {

@@ -67,7 +67,7 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'sortOrder',
         key: 'sortOrder',
         sorter: (a, b) => tableSort(a, b, "sortOrder"),
@@ -104,7 +104,7 @@ const columns = [
         )
     },
     {
-        title: 'Team Name',
+        title: AppConstants.teamName,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: (a, b) => tableSort(a, b, "teamName"),
@@ -138,7 +138,7 @@ const columns = [
         )
     },
     {
-        title: 'Affiliate Name',
+        title: AppConstants.affiliateName,
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: (a, b) => tableSort(a, b, "affiliateName"),
@@ -151,7 +151,7 @@ const columns = [
         )
     },
     {
-        title: 'History',
+        title: AppConstants.history,
         dataIndex: 'playerHistory',
         key: 'playerHistory',
         render: (playerHistory, record, key) => (
@@ -220,7 +220,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
     },
     {
-        title: 'Comments',
+        title: AppConstants.comments,
         dataIndex: 'responseComments',
         key: 'responseComments',
         width: 110,
@@ -234,7 +234,7 @@ const columns = [
         ),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e, index) => (

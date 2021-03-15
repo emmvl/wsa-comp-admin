@@ -658,7 +658,7 @@ class AddCommunication extends Component {
             }) : [];
         const organisationListData = affiliateToData.length > 0
             ? affiliateToData.map((aff) => ({
-                orgId: aff.affiliateId,
+                orgId: aff.affiliateOrgId,
                 name: aff.affiliateName,
             })) : [];
         if (getOrganisationData()) {

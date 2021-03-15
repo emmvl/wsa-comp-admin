@@ -172,8 +172,8 @@ import {
     competitionDashboardDeleteSaga,
     saveReplicateSaga,
     getOldMembershipProductsByCompId,
-    getNewMembershipProductsByYear,
-} from './competitionManagementSaga/competitionDashboardSaga';
+    getNewMembershipProductsByYear, saveCompetitionDivisionSaga,
+} from './competitionManagementSaga/competitionDashboardSaga'
 
 // EndUserRegistrationSaga
 import * as endUserRegSaga from './registrationSaga/endUserRegistrationSaga';
@@ -489,6 +489,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_NEW_UMPIRE_LIST_LOAD, umpireSaga.newUmpireListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga);
     yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireSaga.getAffiliateSaga);
+    // yield takeEvery(ApiConstants.GET_UMPIRE_LOAD, umpireSaga.getUmpireInfoSaga); 
     yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireSaga.umpireSearchSaga);
     yield takeEvery(ApiConstants.API_ADD_UMPIRE_LOAD, umpireSaga.addEditUmpireSaga);
     yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga);
@@ -562,6 +563,7 @@ export default function* rootSaga() {
 
     yield takeEvery(ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD, competitionQuickSaga.mergeCompetitionProceedSaga);
     /// /Competition Delete
+    yield takeEvery(ApiConstants.API_SAVE_COMPETITION_DIVISIONS_LOAD, saveCompetitionDivisionSaga);
     yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga);
 
     yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);

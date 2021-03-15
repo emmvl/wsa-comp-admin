@@ -41,6 +41,8 @@ const initialState = {
     drawDivisions: [],
     drawsCompetitionArray: [],
     onImportLoad: false,
+    isPastMatchAvailable :null,
+    isTimelineMode: false,
 };
 
 const gradeColorArray = [];
@@ -865,6 +867,7 @@ function CompetitionMultiDraws(state = initialState, action) {
 
                 state.publishStatus = action.result.drawsPublish
                 state.isTeamInDraw = action.result.isTeamNotInDraws
+                state.isPastMatchAvailable = action.result.isPastMatchAvailable
                 // state.drawDivisions = action.competitionId === "-1" || action.dateRangeCheck
                 //     ? resultData.data ? resultData.data.legendsArray : []
                 //     : []
@@ -1074,6 +1077,16 @@ function CompetitionMultiDraws(state = initialState, action) {
             return {
                 ...state,
                 updateLoad: true,
+            };
+        case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD:
+            return {
+                ...state,
+                updateLoad: true, //todo remove loading once UI can update without loading
+            };
+        case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_SUCCESS:
+            return {
+                ...state,
+                updateLoad: false,
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:
@@ -1303,6 +1316,13 @@ function CompetitionMultiDraws(state = initialState, action) {
                 onLoad: false,
                 error: null,
             };
+
+        case ApiConstants.SET_TIMELINE_MODE:
+            console.log(action.value);
+            return {
+                ...state,
+                isTimelineMode: action.value,
+            }
 
         default:
             return state;

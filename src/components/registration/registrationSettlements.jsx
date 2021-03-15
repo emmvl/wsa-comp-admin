@@ -86,7 +86,7 @@ const columns = [
         sorter: false,
     },
     // {
-    //     title: 'Action',
+    //     title: AppConstants.action,
     //     dataIndex: 'refund',
     //     key: 'refund',
     //     render: (refund, record) =>

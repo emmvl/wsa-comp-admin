@@ -33,7 +33,7 @@ const productAddRegistrationSchema = Yup.object().shape({
 let this_Obj = null;
 const columns = [
     {
-        title: "Category",
+        title: AppConstants.category,
         dataIndex: "category",
         key: "category",
         render: category => (
@@ -41,7 +41,7 @@ const columns = [
         )
     },
     {
-        title: "Division",
+        title: AppConstants.division,
         dataIndex: "division",
         key: "division",
         render: division => (
@@ -50,13 +50,13 @@ const columns = [
     },
 
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
         render: state => <Input className="input-inside-table-fees" value={state} />
     },
     {
-        title: "Start Date",
+        title: AppConstants.startDate,
         dataIndex: "startDate",
         key: "startDate",
         width: "20%",
@@ -72,7 +72,7 @@ const columns = [
         )
     },
     {
-        title: "End Date",
+        title: AppConstants.endDate,
         dataIndex: "endDate",
         key: "endDate",
         width: "20%",
@@ -88,7 +88,7 @@ const columns = [
         )
     },
     {
-        title: "Frequency",
+        title: AppConstants.frequency,
         dataIndex: "frequency",
         key: "frequency",
         render: frequency => (
@@ -105,7 +105,7 @@ const columns = [
         )
     },
     {
-        title: "Total",
+        title: AppConstants.total,
         dataIndex: "total",
         key: "total"
     },
@@ -202,7 +202,7 @@ class ProductAddRegistration extends Component {
             <div className="content-view pt-5">
                 <span className="form-heading">{AppConstants.productDetails}</span>
 
-                <InputWithHead heading={AppConstants.registration_type} />
+                <InputWithHead heading={AppConstants.registrationType} />
                 <Select
                     className="w-100"
                     style={{ paddingRight: 1, minWidth: 182 }}
@@ -526,11 +526,11 @@ class ProductAddRegistration extends Component {
     vouchersView = () => {
         const voucherSetting = [
             {
-                title: "Enable use of vouchers",
+                title: AppConstants.enableUseOfVouchers,
                 children: [
-                    { title: "NSW Active Kids", children: [] },
-                    { title: "QLD Active Kids", children: [] },
-                    { title: "N/A", children: [] }
+                    { title: AppConstants.nswActiveKids, children: [] },
+                    { title: AppConstants.qldActiveKids, children: [] },
+                    { title: AppConstants.noValue, children: [] }
                 ]
             }
         ];

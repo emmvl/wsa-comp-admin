@@ -113,19 +113,19 @@ function getAssociationName(data) {
 
 const columnActiveNews = [
     {
-        title: "Title",
+        title: AppConstants.title,
         dataIndex: 'title',
         key: 'title',
         sorter: (a, b) => tableSort(a, b, "title")
     },
     {
-        title: 'Author',
+        title: AppConstants.author,
         dataIndex: 'author',
         key: 'author',
         sorter: (a, b) => tableSort(a, b, "author")
     },
     {
-        title: 'Expiry',
+        title: AppConstants.expiry,
         dataIndex: 'news_expire_date',
         key: 'news_expire_date',
         sorter: (a, b) => tableSort(a, b, "news_expire_date"),
@@ -133,27 +133,27 @@ const columnActiveNews = [
             <span>{news_expire_date && liveScore_formateDate(news_expire_date)}</span>
     },
     {
-        title: 'Recipients',
+        title: AppConstants.recipients,
         dataIndex: 'recipients',
         key: 'recipients',
         sorter: (a, b) => tableSort(a, b, 'recipients'),
     },
     {
-        title: "Published",
+        title: AppConstants.published,
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
         render: isActive => <span>{isActive == 1 ? "Yes" : "NO"}</span>
     },
     {
-        title: "Published Date",
+        title: AppConstants.publishedDate,
         dataIndex: 'published_at',
         key: 'published_at',
         sorter: (a, b) => tableSort(a, b, 'published_at'),
         render: (published_at) => <span>{published_at && liveScore_formateDate(published_at)}</span>
     },
     {
-        title: "Notification",
+        title: AppConstants.notification,
         dataIndex: 'isNotification',
         key: 'isNotification',
         sorter: (a, b) => tableSort(a, b, 'isNotification'),
@@ -163,7 +163,7 @@ const columnActiveNews = [
 
 const columnsTodaysMatch = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
@@ -175,14 +175,14 @@ const columnsTodaysMatch = [
         </NavLink>
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, 'startTime'),
         render: (startTime) => <span>{liveScore_formateDateTime(startTime)}</span>
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
@@ -199,7 +199,7 @@ const columnsTodaysMatch = [
             )
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
@@ -215,21 +215,21 @@ const columnsTodaysMatch = [
             )
     },
     {
-        title: 'Venue',
+        title: AppConstants.venue,
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
         render: (venueCourt) => <span>{getVenueName(venueCourt)}</span>
     },
     {
-        title: "Div",
+        title: AppConstants.div,
         dataIndex: 'division',
         key: 'division',
         sorter: (a, b, division) => checkSorting(a, b, division.name),
         render: (division) => <span>{division.name}</span>
     },
     {
-        title: "Score",
+        title: AppConstants.score,
         dataIndex: 'score',
         key: 'score',
         sorter: (a, b, score) => checkSorting(a, b, score),
@@ -239,7 +239,7 @@ const columnsTodaysMatch = [
                 state: { matchId: records.id, key: 'dashboard' }
             }}><span className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
-        title: "Umpire",
+        title: AppConstants.umpire,
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b, umpires) => checkSorting(a, b, umpires),
@@ -251,7 +251,7 @@ const columnsTodaysMatch = [
                 >{item.umpireName}</span>
             ))
     }, {
-        title: "Scorer 1",
+        title: AppConstants.scorer1,
         dataIndex: 'scorer1Status',
         key: 'scorer1Status',
         sorter: (a, b, scorer1Status) => checkSorting(a, b, scorer1Status),
@@ -259,7 +259,7 @@ const columnsTodaysMatch = [
             <span>{scorer1Status ? scorer1Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
 
     }, {
-        title: "Scorer 2",
+        title: AppConstants.scorer2,
         dataIndex: 'scorer2Status',
         key: 'scorer2Status',
         sorter: (a, b, scorer2Status) => checkSorting(a, b, scorer2Status),
@@ -267,7 +267,7 @@ const columnsTodaysMatch = [
             <span>{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
     },
     {
-        title: "Player Att. Team A",
+        title: AppConstants.playerAttTeamA,
         dataIndex: 'teamAttendanceCountA',
         key: 'teamAttendanceCountA',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
@@ -275,7 +275,7 @@ const columnsTodaysMatch = [
             <span>{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
-        title: "Player Att. Team B",
+        title: AppConstants.playerAttTeamB,
         dataIndex: 'teamAttendanceCountB',
         key: 'teamAttendanceCountB',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
@@ -283,7 +283,7 @@ const columnsTodaysMatch = [
             <span>{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'matchStatus',
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
@@ -306,7 +306,7 @@ const columnsTodaysMatch_1 = [
         </NavLink>
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, 'startTime'),
@@ -314,7 +314,7 @@ const columnsTodaysMatch_1 = [
             <span className="column-width-style">{liveScore_formateDateTime(startTime)}</span>
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
@@ -331,7 +331,7 @@ const columnsTodaysMatch_1 = [
             )
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
@@ -348,7 +348,7 @@ const columnsTodaysMatch_1 = [
             )
     },
     {
-        title: 'Venue',
+        title: AppConstants.venue,
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
@@ -356,14 +356,14 @@ const columnsTodaysMatch_1 = [
 
     },
     {
-        title: "Div",
+        title: AppConstants.div,
         dataIndex: 'division',
         key: 'division',
         sorter: (a, b, division) => checkSorting(a, b, division.name),
         render: (division) => <span>{division.name}</span>
     },
     {
-        title: "Score",
+        title: AppConstants.score,
         dataIndex: 'score',
         key: 'score',
         sorter: (a, b, score) => checkSorting(a, b, score),
@@ -375,7 +375,7 @@ const columnsTodaysMatch_1 = [
                 <span className="input-heading-add-another pt-0">{setMatchResult(records)}</span>
             </NavLink>
     }, {
-        title: "Umpire",
+        title: AppConstants.umpire,
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b, umpires) => checkSorting(a, b, umpires),
@@ -414,7 +414,7 @@ const columnsTodaysMatch_1 = [
         render: (teamAttendanceCountB) => <span>{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'matchStatus',
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
@@ -425,7 +425,7 @@ const columnsTodaysMatch_1 = [
 
 const columnsTodaysIncient = [
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'incidentTime',
         key: 'incidentTime',
         sorter: (a, b) => tableSort(a, b, 'incidentTime'),
@@ -438,13 +438,13 @@ const columnsTodaysIncient = [
             </NavLink>
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, 'matchId'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'incidentPlayers',
         key: 'First Name',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
@@ -454,7 +454,7 @@ const columnsTodaysIncient = [
             ))
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'incidentPlayers',
         key: 'Last Name',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
@@ -464,7 +464,7 @@ const columnsTodaysIncient = [
             ))
     },
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: 'incidentPlayers',
         key: 'Organisation',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
@@ -485,7 +485,7 @@ const columnsTodaysIncient = [
     //     sorter: (a, b) => checkSorting(a, b, "club"),
     // },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: 'incidentPlayers',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
@@ -517,7 +517,7 @@ const columnsTodaysIncient = [
         }
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: (a, b, description) => tableSort(a, b, "description"),
@@ -526,55 +526,55 @@ const columnsTodaysIncient = [
 
 const columnsPlayersToPay = [
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => checkSorting(a, b, "lastName"),
     },
     {
-        title: "Linked",
+        title: AppConstants.linked,
         dataIndex: 'linked',
         key: 'linked',
         sorter: (a, b) => checkSorting(a, b, "linked"),
     },
     {
-        title: "Division",
+        title: AppConstants.division,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: (a, b) => checkSorting(a, b, "division"),
     },
     {
-        title: "Grade",
+        title: AppConstants.grade,
         dataIndex: 'gradeName',
         key: 'gradeName',
         sorter: (a, b) => checkSorting(a, b, "grade"),
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: (a, b) => checkSorting(a, b, "team"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b, payReq) => checkSorting(a, b, payReq),
     },
     {
-        title: "Payment Method",
+        title: AppConstants.paymentMethod,
         dataIndex: 'paymentMethod',
         key: 'paymentMethod',
         sorter: (a, b, payMethod) => checkSorting(a, b, payMethod),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: 'action',
         key: 'action',
         render: (data, record) => (
@@ -968,7 +968,7 @@ class LiveScoreDashboard extends Component {
                         </Tooltip>
                     </div>
                 </div>
-                {this.state.liveScoreCompIsParent &&
+                {/* {this.state.liveScoreCompIsParent &&
                     <div className="col-sm text-right">
                         <NavLink
                             to={{
@@ -982,7 +982,7 @@ class LiveScoreDashboard extends Component {
                             </Button>
                         </NavLink>
                     </div>
-                }
+                } */}
             </div>
         )
     }

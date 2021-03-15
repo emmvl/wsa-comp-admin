@@ -86,7 +86,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'id',
         key: 'id',
         sorter: true,
@@ -98,7 +98,7 @@ const columns = [
         }
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: true,
@@ -106,7 +106,7 @@ const columns = [
         render: (startTime) => <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'team1',
         key: 'team1',
         sorter: true,
@@ -128,7 +128,7 @@ const columns = [
             )
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'team2',
         key: 'team2',
         sorter: true,
@@ -147,7 +147,7 @@ const columns = [
             )
     },
     {
-        title: 'Venue',
+        title: AppConstants.venue,
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: true,
@@ -156,7 +156,7 @@ const columns = [
         render: (venueCourt, record) => <span>{getVenueName(venueCourt)}</span>
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         sorter: true,
@@ -164,7 +164,7 @@ const columns = [
         render: (division) => <span>{division.name}</span>
     },
     {
-        title: 'Score',
+        title: AppConstants.score,
         dataIndex: 'score',
         key: 'score',
         sorter: true,
@@ -177,28 +177,28 @@ const columns = [
         }
     },
     {
-        title: 'Type',
+        title: AppConstants.type,
         dataIndex: 'type',
         key: 'type',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Match Duration',
+        title: AppConstants.matchDuration,
         dataIndex: 'matchDuration',
         key: 'matchDuration',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Main Break',
+        title: AppConstants.mainBreak,
         dataIndex: 'mainBreakDuration',
         key: 'mainBreakDuration',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Quarter Break',
+        title: AppConstants.quarterBreak,
         dataIndex: 'qtrBreak',
         key: 'qtrBreak',
         sorter: true,
@@ -213,8 +213,8 @@ class LiveScoreMatchesList extends Component {
             competitionId: null,
             searchText: "",
             umpireKey: (this.props.location && this.props.location.state) ? this.props.location.state.umpireKey : null,
-            selectedDivision: 'All',
-            selectedRound: 'All',
+            selectedDivision: AppConstants.all,
+            selectedRound: AppConstants.all,
             isBulkUpload: false,
             isScoreChanged: false,
             onScoreUpdate: false,
@@ -647,7 +647,7 @@ class LiveScoreMatchesList extends Component {
     }
 
     onChangeDivision(division) {
-        this.setState({ selectedDivision: division, selectedRound: 'All' })
+        this.setState({ selectedDivision: division, selectedRound: AppConstants.all })
         let offset = 0;
         let start = 1;
         const { competitionId, searchText } = this.state;

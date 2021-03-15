@@ -495,19 +495,26 @@ const AxiosApi = {
     exportTeamRegistrations(payload) {
         const body = payload;
         const url = `/api/teamregistration/export`;
-        return Method.dataPostDownload(url, token, body, "TeamRegistration");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, body, `teamRegistration-${_now}`);
     },
     saveDeRegister(payload) {
         const url = `/api/deregister`;
         return Method.dataPost(url, token, payload);
     },
-    getRegistrationChangeDashboard(payload) {
-        const url = `/api/registrationchange/dashboard`;
+    getRegistrationChangeDashboard(payload, sortBy, sortOrder) {
+        let url;
+        if (sortBy && sortOrder) {
+            url = `/api/registrationchange/dashboard?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        } else {
+            url = `/api/registrationchange/dashboard`;
+        }
         return Method.dataPost(url, token, payload);
     },
     exportRegistrationChangeDashboard(payload) {
         const url = `/api/registrationchange/export`;
-        return Method.dataPostDownload(url, token, payload, "RegistrationChange");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, payload, `registrationChange-${_now}`);
     },
     getRegistrationChangeReview(payload) {
         const url = `/api/registrationchange/review`;
@@ -598,7 +605,8 @@ const AxiosApi = {
         };
         console.log('body for export', body);
         const url = `/api/registration/export`;
-        return Method.dataPostDownload(url, token, body, "registrations");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, body, `registration-${_now}`);
     },
 
     updateRegistrationFailedStatus(payload) {

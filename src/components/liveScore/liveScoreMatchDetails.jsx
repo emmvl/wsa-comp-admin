@@ -54,7 +54,7 @@ let this_ = null;
 
 const columns = [
     {
-        title: 'Profile Picture',
+        title: AppConstants.profilePic,
         dataIndex: 'photoUrl',
         key: 'photoUrl',
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
@@ -65,19 +65,19 @@ const columns = [
                 <span>{'No Image'}</span>
     },
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "team"),
     },
     {
-        title: 'Played?',
+        title: AppConstants.playedAttendance,
         dataIndex: 'attendance',
         key: 'attendance',
         sorter: (a, b) => tableSort(a, b, "attendance"),
@@ -98,7 +98,7 @@ const columns = [
 
 const columnsTeam1 = [
     {
-        title: 'Profile Picture',
+        title: AppConstants.profilePic,
         dataIndex: 'photoUrl',
         key: 'photoUrl',
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
@@ -109,19 +109,19 @@ const columnsTeam1 = [
                 <span>{'No Image'}</span>
     },
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "team"),
     },
     {
-        title: 'Playing?',
+        title: AppConstants.playingAttended,
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
@@ -141,7 +141,7 @@ const columnsTeam1 = [
 
 const columnsTeam2 = [
     {
-        title: 'Profile Picture',
+        title: AppConstants.profilePic,
         dataIndex: 'photoUrl',
         key: 'photoUrl',
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
@@ -152,19 +152,19 @@ const columnsTeam2 = [
                 <span>{'No Image'}</span>
     },
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "team"),
     },
     {
-        title: 'Playing?',
+        title: AppConstants.playingAttended,
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
@@ -500,10 +500,10 @@ class LiveScoreMatchDetails extends Component {
     showDeleteConfirm = (matchId) => {
         this_ = this;
         confirm({
-            title: 'Are you sure you want to delete this match?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.matchDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteMatch(matchId)
             },
@@ -580,6 +580,7 @@ class LiveScoreMatchDetails extends Component {
 
                             </div>
 
+                            { false &&
                             <div className="col-sm pt-2">
                                 <div className="w-100 d-flex flex-row align-items-center justify-content-end">
                                     <NavLink
@@ -599,6 +600,7 @@ class LiveScoreMatchDetails extends Component {
                                     </NavLink>
                                 </div>
                             </div>
+                            }
 
                             {
                                 liveScoreCompIsParent &&
@@ -916,16 +918,16 @@ class LiveScoreMatchDetails extends Component {
             if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position1',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -967,7 +969,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played1',
                                 width: 60,
                                 render: (p, row) => {
@@ -988,10 +990,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position2',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1034,7 +1036,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) => {
@@ -1060,16 +1062,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (!pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played1',
                                 width: 60,
                                 render: (p, row) => (
@@ -1085,10 +1087,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) =>
@@ -1108,16 +1110,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (pt && !gtt && art === 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position1',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1163,7 +1165,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec1',
                                 width: 60,
                                 render: (p, row) =>
@@ -1178,10 +1180,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position2',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1225,7 +1227,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec2',
                                 width: 60,
                                 render: (p, row) =>
@@ -1245,16 +1247,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (!pt && !gtt && art === 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Played Full Period',
+                                title: AppConstants.playedFullPeriod,
                                 key: 'playedFullPeriod1',
                                 width: 60,
                                 render: (p, row) => (
@@ -1268,7 +1270,7 @@ class LiveScoreMatchDetails extends Component {
                                 )
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec1',
                                 width: 60,
                                 render: (p, row) =>
@@ -1283,10 +1285,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Played Full Period',
+                                title: AppConstants.playedFullPeriod,
                                 key: 'playedFullPeriod2',
                                 width: 60,
                                 render: (p, row) => {
@@ -1302,7 +1304,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec2',
                                 width: 60,
                                 render: (p, row) =>
@@ -1322,16 +1324,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (!pt && !gtt && art !== "MINUTE") {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played1',
                                 width: 60,
                                 render: (p, row) =>
@@ -1346,10 +1348,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) =>
@@ -1368,16 +1370,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (pt && !gtt && art !== 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position1',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1422,10 +1424,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position2',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1476,16 +1478,16 @@ class LiveScoreMatchDetails extends Component {
             if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position1',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1527,7 +1529,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played1',
                                 width: 60,
                                 render: (p, row) => {
@@ -1548,10 +1550,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position2',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1594,7 +1596,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) => {
@@ -1617,10 +1619,10 @@ class LiveScoreMatchDetails extends Component {
                         ]
                     },
                     {
-                        title: 'Period 3',
+                        title: AppConstants.period3,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position3',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1665,7 +1667,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played3',
                                 width: 60,
                                 render: (p, row) => {
@@ -1686,10 +1688,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 4',
+                        title: AppConstants.period4,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position4',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1734,7 +1736,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played4',
                                 width: 60,
                                 render: (p, row) => {
@@ -1760,16 +1762,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (!pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played1',
                                 width: 60,
                                 render: (p, row) =>
@@ -1784,10 +1786,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) =>
@@ -1801,10 +1803,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 3',
+                        title: AppConstants.period3,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played3',
                                 width: 60,
                                 render: (p, row) =>
@@ -1818,10 +1820,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 4',
+                        title: AppConstants.period4,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played4',
                                 width: 60,
                                 render: (p, row) =>
@@ -1841,16 +1843,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (pt && !gtt && art === 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position1',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1895,7 +1897,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec1',
                                 width: 60,
                                 render: (p, row) =>
@@ -1910,10 +1912,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position2',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -1956,7 +1958,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec2',
                                 width: 60,
                                 render: (p, row) =>
@@ -1970,10 +1972,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 3',
+                        title: AppConstants.period3,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position3',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -2018,7 +2020,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec3',
                                 width: 60,
                                 render: (p, row) =>
@@ -2033,10 +2035,10 @@ class LiveScoreMatchDetails extends Component {
                         ]
                     },
                     {
-                        title: 'Period 4',
+                        title: AppConstants.period4,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position4',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -2081,7 +2083,7 @@ class LiveScoreMatchDetails extends Component {
                                 }
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec4',
                                 width: 60,
                                 render: (p, row) => (
@@ -2101,16 +2103,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (!pt && !gtt && art === 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Played Full Period',
+                                title: AppConstants.playedFullPeriod,
                                 key: 'playedFullPeriod1',
                                 width: 60,
                                 render: (p, row) => (
@@ -2124,7 +2126,7 @@ class LiveScoreMatchDetails extends Component {
                                 )
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec1',
                                 width: 60,
                                 render: (p, row) => (
@@ -2139,10 +2141,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Played Full Period',
+                                title: AppConstants.playedFullPeriod,
                                 key: 'playedFullPeriod2',
                                 width: 60,
                                 render: (p, row) => (
@@ -2156,7 +2158,7 @@ class LiveScoreMatchDetails extends Component {
                                 )
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec2',
                                 width: 60,
                                 render: (p, row) => (
@@ -2170,10 +2172,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 3',
+                        title: AppConstants.period3,
                         children: [
                             {
-                                title: 'Played Full Period',
+                                title: AppConstants.playedFullPeriod,
                                 key: 'playedFullPeriod3',
                                 width: 60,
                                 render: (p, row) => (
@@ -2187,7 +2189,7 @@ class LiveScoreMatchDetails extends Component {
                                 )
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec3',
                                 width: 60,
                                 render: (p, row) => (
@@ -2201,10 +2203,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 4',
+                        title: AppConstants.period4,
                         children: [
                             {
-                                title: 'Played Full Period',
+                                title: AppConstants.playedFullPeriod,
                                 key: 'playedFullPeriod4',
                                 width: 60,
                                 render: (p, row) => (
@@ -2218,7 +2220,7 @@ class LiveScoreMatchDetails extends Component {
                                 )
                             },
                             {
-                                title: 'Secs',
+                                title: AppConstants.seconds,
                                 key: 'sec4',
                                 width: 60,
                                 render: (p, row) => (
@@ -2238,16 +2240,16 @@ class LiveScoreMatchDetails extends Component {
             } else if (!pt && !gtt && art !== "MINUTE") {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played1',
                                 width: 60,
                                 render: (p, row) => (
@@ -2263,10 +2265,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) => (
@@ -2281,10 +2283,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 3',
+                        title: AppConstants.period3,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played3',
                                 width: 60,
                                 render: (p, row) => (
@@ -2299,10 +2301,10 @@ class LiveScoreMatchDetails extends Component {
                             },
                         ]
                     }, {
-                        title: 'Period 4',
+                        title: AppConstants.period4,
                         children: [
                             {
-                                title: 'Played',
+                                title: AppConstants.played,
                                 key: 'played4',
                                 width: 60,
                                 render: (p, row) => (
@@ -2322,16 +2324,16 @@ class LiveScoreMatchDetails extends Component {
             } if (pt && !gtt && art !== 'MINUTE') {
                 const columns = [
                     {
-                        title: 'Name',
+                        title: AppConstants.name,
                         dataIndex: 'name',
                         key: 'name',
                         width: 120,
                     },
                     {
-                        title: 'Period 1',
+                        title: AppConstants.period1,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position1',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -2376,10 +2378,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 2',
+                        title: AppConstants.period2,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position2',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -2424,10 +2426,10 @@ class LiveScoreMatchDetails extends Component {
                         ]
                     },
                     {
-                        title: 'Period 3',
+                        title: AppConstants.period3,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position3',
                                 width: 150,
                                 render: (p, row, index) => {
@@ -2472,10 +2474,10 @@ class LiveScoreMatchDetails extends Component {
                         ],
                     },
                     {
-                        title: 'Period 4',
+                        title: AppConstants.period4,
                         children: [
                             {
-                                title: 'Position',
+                                title: AppConstants.position,
                                 key: 'position4',
                                 width: 150,
                                 render: (p, row, index) => {

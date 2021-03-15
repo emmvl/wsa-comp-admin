@@ -42,43 +42,43 @@ function checkSorting(a, b, key) {
 
 const columns = [
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => checkSorting(a, b, "lastName"),
     },
     {
-        title: "Linked",
+        title: AppConstants.linked,
         dataIndex: 'linked',
         key: 'linked',
         sorter: (a, b) => checkSorting(a, b, "linked"),
     },
     {
-        title: "Division",
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         sorter: (a, b) => checkSorting(a, b, "division"),
     },
     {
-        title: "Grade",
+        title: AppConstants.grade,
         dataIndex: 'grade',
         key: 'grade',
         sorter: (a, b) => checkSorting(a, b, "grade"),
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'team',
         sorter: (a, b) => checkSorting(a, b, "team"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         render: (status, record) => (
@@ -88,7 +88,7 @@ const columns = [
 
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: 'action',
         key: 'action',
         render: (data, record) => (

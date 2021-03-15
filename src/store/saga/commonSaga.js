@@ -287,6 +287,24 @@ function* heardByReferenceSaga(/* action */) {
   }
 }
 
+function* getDivisionFieldConfigurationSaga() {
+  try {
+    const result = yield call(CommonAxiosApi.getDivisionFieldConfiguration);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_DIVISION_FIELD_CONFIG_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get the Player Position Saga
 function* playerPositionReferenceSaga(/* action */) {
   try {
@@ -837,6 +855,7 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_REGISTRATION_OTHER_INFO_REFERENCE_LOAD, registrationOtherInfoReferenceSaga);
   yield takeEvery(ApiConstants.API_COUNTRY_REFERENCE_LOAD, countryReferenceSaga);
   yield takeEvery(ApiConstants.API_NATIONALITY_REFERENCE_LOAD, nationalityReferenceSaga);
+  yield takeEvery(ApiConstants.API_DIVISION_FIELD_CONFIG_LOAD, getDivisionFieldConfigurationSaga);
   yield takeEvery(ApiConstants.API_HEARDBY_REFERENCE_LOAD, heardByReferenceSaga);
   yield takeEvery(ApiConstants.API_PLAYER_POSITION_REFERENCE_LOAD, playerPositionReferenceSaga);
   yield takeEvery(ApiConstants.API_VENUES_LIST_LOAD, venuesListSaga);

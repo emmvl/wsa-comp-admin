@@ -489,7 +489,6 @@ class LiveScoreAddDivision extends Component {
                         autoComplete="off"
                         onFinish={this.onSaveClick}
                         noValidate="novalidate"
-                        className="login-form"
                     >
                         <Content>
                             <div className="formView">

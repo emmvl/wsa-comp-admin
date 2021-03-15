@@ -421,11 +421,10 @@ class LiveScoreAddNews extends Component {
                         mode="tags"
                         placeholder={AppConstants.searchScorer}
                         className="w-100"
-                    // onChange={(scorerId) => this.props.liveScoreUpdateNewsAction(scorerId, "title")}
-                    // value={editData.title}
+                        onChange={value => this.props.liveScoreUpdateNewsAction(value, "toUserIds")}
                     >
                         {scorerList.map((item) => (
-                            <Option key={'scorer_' + item.firstName} value={item.firstName}>
+                            <Option key={'scorer_' + item.id} value={item.id}>
                                 {item.NameWithNumber}
                             </Option>
                         ))}
@@ -448,11 +447,10 @@ class LiveScoreAddNews extends Component {
                         mode="tags"
                         placeholder="Select Manager"
                         className="w-100"
-                    // onChange={e => this.venueChange(e)}
-                    // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
+                        onChange={value => this.props.liveScoreUpdateNewsAction(value, "toUserIds")}
                     >
                         {managerList.map((item) => (
-                            <Option key={'manager_' + item.firstName} value={item.firstName}>
+                            <Option key={'manager_' + item.id} value={item.id}>
                                 {item.firstName + " " + item.lastName}
                             </Option>
                         ))}
@@ -490,6 +488,7 @@ class LiveScoreAddNews extends Component {
         let expiryTime = expire_time
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
         let stateWideMsg = getKeyForStateWideMessage()
+
         return (
             <div className="content-view pt-4">
                 <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
@@ -535,16 +534,16 @@ class LiveScoreAddNews extends Component {
                         onChange={recipientSelection => this.setRecipientData(recipientSelection, 'recipients')}
                         value={editData.recipients}
                     >
-                        <Option value="All Managers">All Managers</Option>
-                        <Option value="All Scorers">All Scorers</Option>
-                        <Option value="All Managers and Scorers">All Managers and Scorers</Option>
-                        <Option value="All Users">All Users</Option>
-                        <Option value="Individual Manager">Individual Manager</Option>
-                        <Option value="Individual Scorer">Individual Scorer</Option>
+                        <Option value={AppConstants.allManagers}>{AppConstants.allManagers}</Option>
+                        <Option value={AppConstants.allScorers}>{AppConstants.allScorers}</Option>
+                        <Option value={AppConstants.allManagersAndScorers}>{AppConstants.allManagersAndScorers}</Option>
+                        <Option value={AppConstants.allUsers}>{AppConstants.allUsers}</Option>
+                        <Option value={AppConstants.individualManager}>{AppConstants.individualManager}</Option>
+                        <Option value={AppConstants.individualScorer}>{AppConstants.individualScorer}</Option>
                     </Select>
                 </div>
-                {this.state.recipientSelection === "Individual Manager" && this.managerView()}
-                {this.state.recipientSelection === "Individual Scorer" && this.scorerView()}
+                {this.state.recipientSelection === AppConstants.individualManager && this.managerView()}
+                {this.state.recipientSelection === AppConstants.individualScorer && this.scorerView()}
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.newsImage} />

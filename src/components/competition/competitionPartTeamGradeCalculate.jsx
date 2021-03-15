@@ -38,13 +38,13 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: 'Divisions',
+        title: AppConstants.divisions,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: (a, b) => tableSort(a, b, 'divisionName')
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'statusData',
         key: 'statusData',
         // sorter: (a, b) => tableSort(a, b, 'finalGradeOrganisationCount'),
@@ -82,13 +82,13 @@ class CompetitionPartTeamGradeCalculate extends Component {
             showButton: null,
             columns: [
                 {
-                    title: 'Divisions',
+                    title: AppConstants.divisions,
                     dataIndex: 'divisionName',
                     key: 'divisionName',
                     sorter: (a, b) => tableSort(a, b, 'divisionName')
                 },
                 {
-                    title: 'Status',
+                    title: AppConstants.status,
                     dataIndex: 'statusData',
                     key: 'statusData',
                     render: (statusData) => <span>{statusData}</span>,

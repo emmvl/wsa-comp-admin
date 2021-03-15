@@ -10,20 +10,20 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: 'Summary',
+        title: AppConstants.summary,
         dataIndex: 'summary',
         key: 'summary',
         sorter: (a, b) => a.summary.length - b.summary.length,
     },
     {
-        title: 'Team Numbers',
+        title: AppConstants.teamNumbers,
         dataIndex: 'teamNumbers',
         key: 'teamNumbers',
         render: teamNumbers => <Input className="input-inside-player-grades-table-for-grade" value={teamNumbers} />,
         sorter: (a, b) => a.teamNumbers.length - b.teamNumbers.length,
     },
     {
-        title: 'Min. Teams/Grade or Division',
+        title: AppConstants.minTeamsGradeOrDivision,
         dataIndex: 'minTeamsPerGarde',
         key: 'minTeamsPerGarde',
         render: minTeamsPerGarde => <Input className="input-inside-player-grades-table-for-grade" value={minTeamsPerGarde} />,
@@ -31,7 +31,7 @@ const columns = [
         sorter: (a, b) => a.minTeamsPerGarde.length - b.minTeamsPerGarde.length,
     },
     {
-        title: 'Divisions/Grades',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisionGrades',
         key: 'divisionGrades',
         render: divisionGrades => <Input className="input-inside-player-grades-table-for-grade" value={divisionGrades} />,

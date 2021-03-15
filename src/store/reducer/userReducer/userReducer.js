@@ -375,6 +375,8 @@ const initialState = {
   netSetGoPage: 1,
   netSetGoPageSize: 10,
   netSetGoTotalCount: 1,
+  isPersonalUserLoading: false,
+  isCompUserLoading: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -721,7 +723,10 @@ function userReducer(state = initialState, action) {
       }
 
     case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onLoad: true, isPersonalUserLoading: true };
+
+    case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_ERROR:
+      return { ...state, onLoad: true, isPersonalUserLoading: false };
 
     case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_SUCCESS:
       let personalData = action.result;
@@ -731,7 +736,7 @@ function userReducer(state = initialState, action) {
           emergencyFirstName: personalData.emergencyFirstName,
           emergencyLastName: personalData.emergencyLastName,
           emergencyContactNumber: personalData.emergencyContactNumber,
-          userId: personalData.userId
+          userId: personalData.userId,
         };
         arr.push(obj);
       }
@@ -740,11 +745,15 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         personalData: personalData,
         personalEmergency: arr,
-        status: action.status
+        status: action.status,
+        isPersonalUserLoading: false,
       };
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD:
-      return { ...state, onPersonLoad: true };
+      return { ...state, onPersonLoad: true, isCompUserLoading: true };
+
+    case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_ERROR:
+      return { ...state, onPersonLoad: false, isCompUserLoading: false };
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_SUCCESS:
       let personalByCompData = action.result;
@@ -753,7 +762,8 @@ function userReducer(state = initialState, action) {
         ...state,
         onPersonLoad: false,
         personalByCompData: personalByCompData,
-        status: action.status
+        status: action.status,
+        isCompUserLoading: false,
       };
 
     case ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD:

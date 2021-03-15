@@ -117,10 +117,10 @@ class LiveScoreNewsView extends Component {
     showDeleteConfirm = (newsId) => {
         const this_ = this;
         confirm({
-            title: 'Are you sure you want to delete this news?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.newsDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteTeam(newsId);
             },

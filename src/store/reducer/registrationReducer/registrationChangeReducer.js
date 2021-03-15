@@ -1,41 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 import {
     isArrayNotEmpty,
+    deepCopyFunction,
     // isNotNullOrEmptyString
 } from "../../../util/helpers";
 
 
-const initialState = {
-    onLoad: false,
-    onChangeReviewLoad: false,
-    error: null,
-    result: null,
-    status: 0,
-    onDeRegisterLoad: false,
-    onSaveLoad: false,
-
-    registrationSelection: [
-        { id: 1, value: "De-register", helpMsg: "What is de-registration? I am leaving netball and no longer want to participate in Netball.I have not taken the court in training, grading or competition games." }
-    ],
-    DeRegistionMainOption: [
-        { id: 1, value: "Yes" },
-        { id: 2, value: "No" }
-    ],
-    deRegistionOption: [
-        { id: 1, value: "I am over committed with other activities and can't fit in time for netball" },
-        { id: 2, value: "I have been injured or health reason (not netball related)" },
-        { id: 3, value: "Decided not to participant in netball" },
-        { id: 4, value: "Moving to a different geographical area" },
-        { id: 5, value: "Other" },
-    ],
-    transferOption: [
-        { id: 1, value: "Moving to another Netball Club or Association for the upcoming season" },
-        { id: 2, value: "No team available in current Club or Association" },
-        { id: 3, value: "Other" },
-
-    ],
-    reloadFormData:0,
-    saveData : {
+const saveDataTemp = {
         isAdmin:1,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
@@ -47,7 +18,39 @@ const initialState = {
             organisationId: null,
             competitionId: null
         }
-    },
+}
+
+const initialState = {
+    onLoad: false,
+    onChangeReviewLoad: false,
+    error: null,
+    result: null,
+    status: 0,
+    onDeRegisterLoad: false,
+    onSaveLoad: false,
+
+    registrationSelection: [
+        { id: 1, value: "De-register", helpMsg: "What is de-registration? I am leaving netball and no longer want to participate in netball. I have not taken the court for training, grading or competition games." }
+    ],
+    DeRegistionMainOption: [
+        { id: 1, value: "Yes" },
+        { id: 2, value: "No" }
+    ],
+    deRegistionOption: [
+        { id: 1, value: "I am over committed with other activities and can't fit in time for netball" },
+        { id: 2, value: "I have been injured or for other health reason (not netball related)" },
+        { id: 3, value: "Decided not to participate in netball" },
+        { id: 4, value: "Moving to a different geographical area" },
+        { id: 5, value: "Other" },
+    ],
+    transferOption: [
+        { id: 1, value: "Moving to another Netball Club or Association for the upcoming season" },
+        { id: 2, value: "No team available in current Club or Association" },
+        { id: 3, value: "Other" },
+
+    ],
+    reloadFormData:0,
+    saveData : deepCopyFunction(saveDataTemp),
     regChangeDashboardListData: [], ////////registration change Dashboard list
     regChangeDashboardListPage: 1,
     regChangeDashboardListPageSize: 10,
@@ -121,6 +124,9 @@ function regChangeReducer(state = initialState, action) {
                 if(action.key === "regChangeTypeRefId"){
                     state.saveData[action.key] = action.value;
                     state.saveData["deRegistrationOptionId"] = 1;
+                }
+                else if(action.key === "clear"){
+                    state.saveData = deepCopyFunction(saveDataTemp)
                 }
                 else {
                     state.saveData[action.key] = action.value;
@@ -201,14 +207,14 @@ function regChangeReducer(state = initialState, action) {
                 transferOrganisations: transferOrgData,
                 status: action.status,
             }
-        
+
         case ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_SIZE:
             console.log('pagesize ', action.pageSize);
             return {
                 ...state,
                 regChangeDashboardListPageSize: action.pageSize,
             }
-        
+
         case ApiConstants.SET_REGISTRATION_CHANGE_LIST_PAGE_CURRENT_NUMBER:
             return {
                 ...state,

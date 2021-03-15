@@ -58,7 +58,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
@@ -66,9 +66,8 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: '/matchDayScorerView',
-                    // pathname: '/userPersonal',
-                    state: { tableRecord: record, userId: record.id }
+                    pathname: '/userPersonal',
+                    state: { userId: record.id, screenKey: "matchDayScorerList", screen: "/matchDayScorerList" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -76,7 +75,7 @@ const columns = [
         )
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -84,8 +83,8 @@ const columns = [
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: '/matchDayScorerView',
-                    state: { tableRecord: record, userId: record.id }
+                    pathname: '/userPersonal',
+                    state: { userId: record.id, screenKey: "matchDayScorerList", screen: "/matchDayScorerList" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{firstName}</span>
@@ -93,21 +92,21 @@ const columns = [
         )
     },
     {
-        title: 'Email',
+        title: AppConstants.email,
         dataIndex: 'email',
         key: 'email',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Contact No',
+        title: AppConstants.contact_No,
         dataIndex: 'mobileNumber',
         key: 'mobileNumber',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teams',
         key: 'teams',
         sorter: true,
@@ -119,9 +118,8 @@ const columns = [
                         <div key={`teams${i}` + item.id}>
                             <NavLink
                                 to={{
-                                    pathname: '/matchDayScorerView',
-                                    // pathname: '/userPersonal',
-                                    state: { tableRecord: record, userId: record.id }
+                                    pathname: '/userPersonal',
+                                    state: { userId: record.id, screenKey: "matchDayScorerList", screen: "/matchDayScorerList" }
                                 }}
                             >
                                 <div className="d-flex flex-column">
@@ -142,7 +140,7 @@ const columns = [
         )
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         render: (data, record) => (
             <Menu
                 className="action-triple-dot-submenu"

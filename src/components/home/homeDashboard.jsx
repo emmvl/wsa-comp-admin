@@ -45,7 +45,7 @@ let thisObj = null;
 
 const columnsInbox = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'organisationName',
         key: 'organisationName',
         width: '20%',
@@ -54,12 +54,12 @@ const columnsInbox = [
         ),
     },
     {
-        title: 'Description',
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
     },
     {
-        title: 'Time',
+        title: AppConstants.time,
         dataIndex: 'createdOn',
         key: 'createdOn',
         width: '15%',
@@ -68,7 +68,7 @@ const columnsInbox = [
         ),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isActionRequired',
         key: 'isActionRequired',
         render: (isActionRequired, e) => (
@@ -101,21 +101,6 @@ const columnsInbox = [
     },
 ];
 
-// const dataInbox = [
-//     {
-//         key: '1',
-//         name: 'Netball QLD',
-//         description: 'Re: Action required! Netball Australia has released NetSetGo',
-//         time: 'Thu 22/08/2019, 5.43pm',
-//     },
-//     {
-//         key: '2',
-//         name: 'Netball QLD',
-//         description: 'Payment Reconciliation',
-//         time: 'Wed 21/08/2019, 11.23am',
-//     },
-// ];
-
 const columnsOwned = [
     {
         title: <div className="home-dash-name-table-title">Name</div>,
@@ -124,26 +109,26 @@ const columnsOwned = [
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Division/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisionAge',
         key: 'divisionAge',
         sorter: (a, b) => a.divisionAge.length - b.divisionAge.length,
     },
 
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teams',
         key: 'teams',
         sorter: (a, b) => a.teams.length - b.teams.length,
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'players',
         key: 'players',
         sorter: (a, b) => a.players.length - b.players.length,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => a.players.length - b.players.length,
@@ -195,25 +180,25 @@ const columnsParticipate = [
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Division/Age',
+        title: AppConstants.divisionAge,
         dataIndex: 'divisionAge',
         key: 'divisionAge',
         sorter: (a, b) => a.divisionAge.length - b.divisionAge.length,
     },
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teams',
         key: 'teams',
         sorter: (a, b) => a.teams.length - b.teams.length,
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'players',
         key: 'players',
         sorter: (a, b) => a.players.length - b.players.length,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => a.status.length - b.status.length,

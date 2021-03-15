@@ -92,10 +92,10 @@ class LiveScoreAddMatch extends Component {
     openModel = (matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, umpireKey, umpireData, scorerData, recordUmpireType, screenName) => {
         const this_ = this;
         confirm({
-            title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend you make all match changes in the Competition Management Draws screen. Do you want to Proceed anyway?',
-            okText: 'OK',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            title: AppConstants.liveScoreAddConfirm,
+            okText: AppConstants.ok,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 this_.props.liveScoreCreateMatchAction(matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, null, umpireKey, umpireData, scorerData, recordUmpireType, screenName);
             },
@@ -1733,7 +1733,6 @@ class LiveScoreAddMatch extends Component {
                         autoComplete="off"
                         onFinish={this.addMatchDetails}
                         onFinishFailed={this.onFinishFailed}
-                        className="login-form"
                     >
                         <Content>
                             <div className="formView">

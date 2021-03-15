@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
-import { get, isEmpty } from 'lodash'
+import { get } from 'lodash'
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {
@@ -49,7 +49,7 @@ import {
     exportUserRegData,
     getSubmittedRegData,
     transferUserRegistration,
-    cancelDeRegistrationAction
+    cancelDeRegistrationAction,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData, getGlobalYear, setGlobalYear } from "../../util/sessionStorage";
@@ -58,11 +58,9 @@ import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../th
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
-import { getAge, isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty } from "../../util/helpers";
 import { registrationRetryPaymentAction } from "../../store/actions/registrationAction/registrationDashboardAction";
 import { liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
-
-
 
 function tableSort(a, b, key) {
     const stringA = JSON.stringify(a[key]);
@@ -73,44 +71,58 @@ function tableSort(a, b, key) {
 function umpireActivityTableSort(key) {
     let sortBy = key;
     let sortOrder = null;
-    if (this_Obj.state.UmpireActivityListSortBy !== key) {
+    const {
+        UmpireActivityListSortBy,
+        UmpireActivityListSortOrder,
+        umpireActivityOffset, userId,
+    } = this_Obj.state;
+    const { getUmpireActivityListAction } = this_Obj.props;
+    if (UmpireActivityListSortBy !== key) {
         sortOrder = 'ASC';
-    } else if (this_Obj.state.UmpireActivityListSortBy === key && this_Obj.state.UmpireActivityListSortOrder === 'ASC') {
+    } else if (UmpireActivityListSortBy === key && UmpireActivityListSortOrder === 'ASC') {
         sortOrder = 'DESC';
-    } else if (this_Obj.state.UmpireActivityListSortBy === key && this_Obj.state.UmpireActivityListSortOrder === 'DESC') {
+    } else if (UmpireActivityListSortBy === key && UmpireActivityListSortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
     const payload = {
         paging: {
             limit: 10,
-            offset: this_Obj.state.umpireActivityOffset,
+            offset: umpireActivityOffset,
         },
     };
     this_Obj.setState({ UmpireActivityListSortBy: sortBy, UmpireActivityListSortOrder: sortOrder });
 
-    this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
+    getUmpireActivityListAction(payload, JSON.stringify([15]), userId, sortBy, sortOrder);
 }
 
 const {
     Header,
-    // Footer,
-    Content
+    Content,
 } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
-// const section = null;
 
-let userRoleId;
-const setOrganisationData = localStorage.setOrganisationData && JSON.parse(localStorage.setOrganisationData);
-if (setOrganisationData) {
-    userRoleId = setOrganisationData.userRoleId;
+const isUserSuperAdmin = (userRolesFromState = []) => {
+    const superAdminRoleId = 1;
+    const organisationData = get(localStorage, 'setOrganisationData', "{}")
+    const isLoggedUserHasSuperAdminRole = userRolesFromState.find((role) => role.roleId === superAdminRoleId)
+    let isUserSuperAdmin = isLoggedUserHasSuperAdminRole;
+
+    if (organisationData) {
+        const parsedOrganisationData = JSON.parse(organisationData)
+        const isOrganisationUserSuperAdmin = parsedOrganisationData.userRoleId === superAdminRoleId
+
+        isUserSuperAdmin = isOrganisationUserSuperAdmin || isUserSuperAdmin;
+    }
+
+    return isUserSuperAdmin;
 }
 
 const columns = [
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
     },
@@ -125,7 +137,14 @@ const columns = [
         key: "expiryDate",
         render: (expiryDate, record) => (
             <span>
-                {expiryDate != null ? (expiryDate !== 'Single Use' && expiryDate !== 'Single Game' && expiryDate !== 'Pay each Match' ? moment(expiryDate, "YYYY-MM-DD").format("DD/MM/YYYY") : expiryDate) : moment(record.competitionEndDate, "YYYY-MM-DD").format("DD/MM/YYYY")}
+                {expiryDate != null ? (
+                    expiryDate !== 'Single Use'
+                    && expiryDate !== 'Single Game'
+                    && expiryDate !== 'Pay each Match'
+                        ? moment(expiryDate, "YYYY-MM-DD").format("DD/MM/YYYY")
+                        : expiryDate
+                )
+                    : moment(record.competitionEndDate, "YYYY-MM-DD").format("DD/MM/YYYY")}
             </span>
         ),
     },
@@ -140,12 +159,12 @@ const columns = [
         key: "membershipProduct",
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipType",
         key: "membershipType",
     },
     {
-        title: "Division",
+        title: AppConstants.division,
         dataIndex: "divisionName",
         key: "divisionName",
         render: (divisionName) => (
@@ -153,13 +172,13 @@ const columns = [
         ),
     },
     {
-        title: "Paid By",
+        title: AppConstants.paidBy,
         dataIndex: "paidByUsers",
         key: "paidByUsers",
         render: (paidByUsers, record) => (
             <div>
                 {(record.paidByUsers || []).map((item) => (
-                    this_Obj.state.userId == item.paidByUserId ? (
+                    this_Obj.state.userId === item.paidByUserId ? (
                         <div>Self</div>
                     ) : (
                         <div>
@@ -180,13 +199,8 @@ const columns = [
             </div>
         ),
     },
-    // {
-    //   title: "Shop Purchases",
-    //   dataIndex: "shopPurchases",
-    //   key: "shopPurchases",
-    // },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
         render: (paymentStatus) => (
@@ -194,7 +208,7 @@ const columns = [
         ),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "regForm",
         key: "regForm",
         render: (regForm, e) => (
@@ -221,13 +235,13 @@ const columns = [
                             <span>{AppConstants.retryPayment}</span>
                         </Menu.Item>
                     )}
-                    {e.alreadyDeRegistered == 0 && (
-                        <Menu.Item key="2" 
-                        onClick={() => 
-                            history.push("/deregistration", { 
-                                regData: e, 
+                    {(e.alreadyDeRegistered == 0 && e.paymentStatus != "Failed Registration") && (
+                        <Menu.Item key="2"
+                        onClick={() =>
+                            history.push("/deregistration", {
+                                regData: e,
                                 personal: this_Obj.props.userState.personalData,
-                                sourceFrom: AppConstants.ownRegistration 
+                                sourceFrom: AppConstants.ownRegistration
                             })
                         }>
                             <span>{AppConstants.registrationChange}</span>
@@ -242,22 +256,26 @@ const columns = [
                         <span>Payment</span>
                     </Menu.Item>
                     {
-                        userRoleId === 1 &&
+                        isUserSuperAdmin(this_Obj.props.userState.userRoleEntity) && (
                             <>
                                 <Menu.Item key="4" onClick={() => this_Obj.registrationFormClicked(e.registrationId)}>
                                     <span>
                                         Registration Form
                                     </span>
                                 </Menu.Item>
-                                <Menu.Item key="5" onClick={() => {
+                                <Menu.Item
+                                    key="5"
+                                    onClick={() => {
                                         this_Obj.setState({ showTransferRegistrationPopup: true });
                                         this_Obj.setState({ registrationData: e });
-                                    }}>
+                                    }}
+                                >
                                     <span>
                                         Transfer registration
                                     </span>
                                 </Menu.Item>
                             </>
+                        )
                     }
                 </SubMenu>
             </Menu>
@@ -265,96 +283,41 @@ const columns = [
     },
 ];
 
-// const cloumnsRegistration = [
-//     {
-//         title: "Name",
-//         dataIndex: "userName",
-//         key: "userName",
-//     },
-//     {
-//         title: "DOB",
-//         dataIndex: "DOB",
-//         key: "DOB",
-//         render: (DOB, record) => (
-//             liveScore_formateDate(DOB)
-//         ),
-//     },
-//     {
-//         title: "Email",
-//         dataIndex: "email",
-//         key: "email",
-//     },
-//     {
-//         title: "Phone",
-//         dataIndex: "mobileNumber",
-//         key: "mobileNumber",
-//     },
-//     {
-//         title: "Affiliate",
-//         dataIndex: "affiliate",
-//         key: "affiliate",
-//     },
-//     {
-//         title: "Competition",
-//         dataIndex: "competitionName",
-//         key: "competitionName",
-//     },
-//     {
-//         title: "Comp Fees Paid",
-//         dataIndex: "compFeesPaid",
-//         key: "compFeesPaid",
-//     },
-//     {
-//         title: "Membership Product",
-//         dataIndex: "productName",
-//         key: "productName",
-//     },
-//     {
-//         title: "Division",
-//         dataIndex: "divisionName",
-//         key: "divisionName",
-//     },
-//     {
-//         title: "Status",
-//         dataIndex: "paymentStatus",
-//         key: "paymentStatus",
-//     },
-//     {
-//         title: "Action",
-//     },
-
-// ];
-
 const teamRegistrationColumns = [
     {
-        title: "Team Name",
+        title: AppConstants.teamName,
         dataIndex: "teamName",
         key: "teamName",
         render: (teamName, record) => (
-            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.showTeamMembers(record, 1)}>{teamName}</span>
+            <span
+                className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.showTeamMembers(record, 1)}
+            >
+                {teamName}
+            </span>
         ),
     },
 
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: "organisationName",
         key: "organisationName",
     },
 
     {
-        title: "Division",
+        title: AppConstants.division,
         key: "divisionName",
         dataIndex: "divisionName",
     },
 
     {
-        title: "Product",
+        title: AppConstants.product,
         key: "productName",
         dataIndex: "productName",
     },
 
     {
-        title: "Registered By",
+        title: AppConstants.registeredBy,
         dataIndex: "registeredBy",
         key: "registeredBy",
         render: (registeredBy, record) => (
@@ -365,7 +328,7 @@ const teamRegistrationColumns = [
     },
 
     {
-        title: "Registration Date",
+        title: AppConstants.registrationDate,
         key: "registrationDate",
         dataIndex: "registrationDate",
         render: (registrationDate) => (
@@ -374,51 +337,59 @@ const teamRegistrationColumns = [
     },
 
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'status',
         key: 'status',
         width: 80,
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu" theme="light" mode="horizontal"
-                style={{ lineHeight: "25px" }}>
-                <SubMenu
-                    key="sub1"
-                    title={<img className="dot-image" src={AppImages.moreTripleDot}
-                        alt="" width="16" height="16" />}
-                >
-                    <Menu.Item
-                    key="1"
-                    onClick={() =>
-                        history.push("/deregistration", {
-                        regData: record,
-                        personal: this_Obj.props.userState.personalData,
-                        sourceFrom: AppConstants.teamRegistration
-                        })
+        render: (data, record) => {
+            return(
+                <div>
+                    {record.status == "Registered" ?
+                        <Menu
+                            className="action-triple-dot-submenu" theme="light" mode="horizontal"
+                            style={{ lineHeight: "25px" }}>
+                            <SubMenu
+                                key="sub1"
+                                title={<img className="dot-image" src={AppImages.moreTripleDot}
+                                    alt="" width="16" height="16" />}
+                            >
+                                <Menu.Item
+                                key="1"
+                                onClick={() =>
+                                    history.push("/deregistration", {
+                                    regData: record,
+                                    personal: this_Obj.props.userState.personalData,
+                                    sourceFrom: AppConstants.teamRegistration
+                                    })
+                                }
+                                >
+                                <span>{AppConstants.registrationChange}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                        :
+                        null
                     }
-                    >
-                    <span>{AppConstants.registrationChange}</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        )
+                </div>
+            )
+        }
     }
 ];
 
 const childOtherRegistrationColumns = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "name",
         key: "name",
     },
 
     {
-        title: "DOB",
+        title: AppConstants.dOB,
         dataIndex: "dateOfBirth",
         key: "dateOfBirth",
         render: (dateOfBirth) => (
@@ -427,7 +398,7 @@ const childOtherRegistrationColumns = [
     },
 
     {
-        title: "Email",
+        title: AppConstants.email,
         key: "email",
         dataIndex: "email",
     },
@@ -443,52 +414,55 @@ const childOtherRegistrationColumns = [
         dataIndex: "feePaid",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         key: "action",
-        render: (data, record) => {
-            return (
-                <div>
-                    {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
-                        <Menu
-                            className="action-triple-dot-submenu"
-                            theme="light"
-                            mode="horizontal"
-                            style={{ lineHeight: "25px" }}
+        render: (data, record) => (
+            <div>
+                {(record.invoiceFailedStatus || record.transactionFailedStatus) ? (
+                    <Menu
+                        className="action-triple-dot-submenu"
+                        theme="light"
+                        mode="horizontal"
+                        style={{ lineHeight: "25px" }}
+                    >
+                        <SubMenu
+                            key="sub1"
+                            title={(
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.moreTripleDot}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                />
+                            )}
                         >
-                            <SubMenu
-                                key="sub1"
-                                title={(
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.moreTripleDot}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                )}
-                            >
-                                <Menu.Item key="1">
-                                    <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
-                                </Menu.Item>
-                            </SubMenu>
-                        </Menu>
-                    ) : (<div></div>)}
-                </div>
-            )
-        },
+                            <Menu.Item key="1">
+                                <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu>
+                ) : (<div />)}
+            </div>
+        ),
     },
 ];
 
 const teamMembersColumns = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "name",
         key: "name",
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
+    },
+    {
+        title: AppConstants.membershipType,
+        dataIndex: "membershipTypeName",
+        key: "membershipTypeName",
     },
     {
         title: "Paid Fee",
@@ -507,54 +481,65 @@ const teamMembersColumns = [
         render: (r) => new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 2 }).format(r),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         key: "action",
         dataIndex: "isActive",
         render: (data, record) => {
-            let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
-            let compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
+            const organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+            const compOrgId = this_Obj.state.registrationTeam.organisationUniqueKey
             return (
                 <div>
-                        <Menu
-                            className="action-triple-dot-submenu"
-                            theme="light"
-                            mode="horizontal"
-                            style={{ lineHeight: "25px" }}
-                        >
-                            <SubMenu
-                                key="sub1"
-                                title={(
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.moreTripleDot}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                )}
+                    {record.actionFlag == 1
+                        && (
+                            <Menu
+                                className="action-triple-dot-submenu"
+                                theme="light"
+                                mode="horizontal"
+                                style={{ lineHeight: "25px" }}
                             >
+                                <SubMenu
+                                    key="sub1"
+                                    title={(
+                                        <img
+                                            className="dot-image"
+                                            src={AppImages.moreTripleDot}
+                                            alt=""
+                                            width="16"
+                                            height="16"
+                                        />
+                                    )}
+                                >
                                  {compOrgId == organistaionId && record.isRemove == 1 && (
                                     <Menu.Item key="1">
                                         <span onClick={() => this_Obj.removeTeamMember(record)}>{record.isActive ? AppConstants.removeFromTeam : AppConstants.addToTeam}</span>
                                     </Menu.Item>
                                  )}
-                                <Menu.Item
-                                    key="2"
-                                    onClick={() =>
-                                        history.push("/deregistration", {
-                                        regData: record,
-                                        personal: this_Obj.props.userState.personalData,
-                                        sourceFrom: AppConstants.teamMembers
-                                        })
-                                    }
-                                >
-                                    <span>{AppConstants.registrationChange}</span>
-                                </Menu.Item>
-                            </SubMenu>
-                        </Menu>
+                                 {record.paymentStatus != "Pending De-registration" ?
+                                    <Menu.Item
+                                        key="2"
+                                        onClick={() =>
+                                            history.push("/deregistration", {
+                                            regData: record,
+                                            personal: this_Obj.props.userState.personalData,
+                                            sourceFrom: AppConstants.teamMembers
+                                            })
+                                        }
+                                    >
+                                        <span>{AppConstants.registrationChange}</span>
+                                    </Menu.Item>
+                                    :
+                                    <Menu.Item
+                                        key="3"
+                                        onClick={() => this_Obj.cancelTeamMemberDeRegistrtaion(record.deRegisterId)}
+                                    >
+                                        <span>{AppConstants.cancelDeRegistrtaion}</span>
+                                    </Menu.Item>
+                                }
+                                </SubMenu>
+                            </Menu>
+                        )}
                 </div>
             )
-
         },
 
     },
@@ -562,13 +547,13 @@ const teamMembersColumns = [
 
 const columnsPlayer = [
     {
-        title: "Match Id",
+        title: AppConstants.tableMatchID,
         dataIndex: "matchId",
         key: "matchId",
         sorter: (a, b) => tableSort(a, b, "matchId"),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: "stateDate",
         key: "stateDate",
         sorter: (a, b) => tableSort(a, b, "stateDate"),
@@ -614,7 +599,7 @@ const columnsPlayer = [
         sorter: (a, b) => tableSort(a, b, "gameTime"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => tableSort(a, b, "status"),
@@ -626,7 +611,7 @@ const columnsPlayer = [
         sorter: (a, b) => tableSort(a, b, "competitionName"),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => tableSort(a, b, "affiliate"),
@@ -635,19 +620,19 @@ const columnsPlayer = [
 
 const columnsParent = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "firstName",
         key: "firstName",
         sorter: (a, b) => a.firstName.localeCompare(b.firstName),
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "lastName",
         key: "lastName",
         sorter: (a, b) => a.lastName.localeCompare(b.lastName),
     },
     {
-        title: "DOB",
+        title: AppConstants.dOB,
         dataIndex: "dateOfBirth",
         key: "dateOfBirth",
         sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
@@ -658,19 +643,19 @@ const columnsParent = [
         ),
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: "team",
         key: "team",
         sorter: (a, b) => a.team.localeCompare(b.team),
     },
     {
-        title: "Div",
+        title: AppConstants.div,
         dataIndex: "divisionName",
         key: "divisionName",
         sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
@@ -690,19 +675,19 @@ const columnsScorer = [
         ),
     },
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "matchId",
         key: "matchId",
         sorter: (a, b) => a.matchId.localeCompare(b.matchId),
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: "teamName",
         key: "teamName",
         sorter: (a, b) => a.teamName.localeCompare(b.teamName),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
@@ -714,7 +699,7 @@ const columnsScorer = [
         sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
@@ -723,13 +708,13 @@ const columnsScorer = [
 
 const columnsManager = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "matchId",
         key: "matchId",
         sorter: (a, b) => a.matchId.localeCompare(b.matchId),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: "startTime",
         key: "startTime",
         sorter: (a, b) => a.startTime.localeCompare(b.startTime),
@@ -764,7 +749,7 @@ const columnsManager = [
         sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
@@ -783,7 +768,7 @@ const columnsPersonalAddress = [
         key: "suburb",
     },
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
     },
@@ -793,12 +778,12 @@ const columnsPersonalAddress = [
         key: "postalCode",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         width: 80,
@@ -839,7 +824,7 @@ const columnsPersonalAddress = [
 
 const columnsPersonalPrimaryContacts = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "parentName",
         key: "parentName",
         render: (parentName, record) => (
@@ -869,7 +854,7 @@ const columnsPersonalPrimaryContacts = [
         key: "suburb",
     },
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
     },
@@ -884,17 +869,17 @@ const columnsPersonalPrimaryContacts = [
         key: "mobileNumber",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUser",
         key: "isUser",
         width: 80,
@@ -939,7 +924,7 @@ const columnsPersonalPrimaryContacts = [
 
 const columnsPersonalChildContacts = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "childName",
         key: "childName",
         render: (childName, record) => (
@@ -969,7 +954,7 @@ const columnsPersonalChildContacts = [
         key: "suburb",
     },
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
     },
@@ -984,17 +969,17 @@ const columnsPersonalChildContacts = [
         key: "mobileNumber",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUser",
         key: "isUser",
         width: 80,
@@ -1039,12 +1024,12 @@ const columnsPersonalChildContacts = [
 
 const columnsPersonalEmergency = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "emergencyFirstName",
         key: "emergencyFirstName",
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "emergencyLastName",
         key: "emergencyLastName",
     },
@@ -1054,7 +1039,7 @@ const columnsPersonalEmergency = [
         key: "emergencyContactNumber",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUser",
         key: "isUser",
         width: 80,
@@ -1095,17 +1080,17 @@ const columnsPersonalEmergency = [
 
 const columnsFriends = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "firstName",
         key: "firstName",
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "lastName",
         key: "lastName",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
@@ -1180,17 +1165,17 @@ const columnsMedical = [
 
 const columnsHistory = [
     // {
-    //     title: 'Competition Name',
+    //     title: AppConstants.competitionName,
     //     dataIndex: 'competitionName',
     //     key: 'competitionName'
     // },
     // {
-    //     title: 'Team Name',
+    //     title: AppConstants.teamName,
     //     dataIndex: 'teamName',
     //     key: 'teamName'
     // },
     {
-        title: "Division Grade",
+        title: AppConstants.divisionGrade,
         dataIndex: "divisionGrade",
         key: "divisionGrade",
     },
@@ -1203,41 +1188,41 @@ const columnsHistory = [
 
 const columnsIncident = [
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'incidentTime',
         key: 'incidentTime',
         sorter: (a, b) => tableSort(a, b, "incidentTime"),
         render: (incidentTime) => <span>{liveScore_MatchFormate(incidentTime)}</span>,
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, "matchId"),
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'playerId',
         key: 'incident Players',
         sorter: (a, b) => tableSort(a, b, "playerId"),
 
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'Incident Players First Name',
         sorter: (a, b) => tableSort(a, b, "firstName"),
 
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'Incident Players Last Name',
         sorter: (a, b) => tableSort(a, b, "lastName"),
 
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: (a, b) => tableSort(a, b, "teamName"),
@@ -1260,7 +1245,7 @@ const columnsIncident = [
         ),
     },
     {
-        title: 'Type',
+        title: AppConstants.type,
         dataIndex: 'incidentTypeName',
         key: 'incidentTypeName',
         sorter: (a, b) => a.incidentTypeName.localeCompare(b.incidentTypeName),
@@ -1274,14 +1259,14 @@ const listeners = (key) => ({
 
 const umpireActivityColumn = [
     {
-        title: 'Match Id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'date',
         key: 'date',
         sorter: true,
@@ -1289,14 +1274,14 @@ const umpireActivityColumn = [
         render: (date, record) => <span>{record?.match?.startTime ? liveScore_formateDate(record.match.startTime) : ""}</span>,
     },
     {
-        title: 'Time',
+        title: AppConstants.time,
         dataIndex: 'time',
         key: 'time',
         // sorter: true,
         render: (time, record) => <span>{record?.match?.startTime ? getTime(record.match.startTime) : ""}</span>,
     },
     {
-        title: 'Competition',
+        title: AppConstants.competition,
         dataIndex: 'competition',
         key: 'competition',
         sorter: true,
@@ -1304,7 +1289,7 @@ const umpireActivityColumn = [
         render: (date, record) => <span>{record?.match?.competition ? record.match.competition.longName : ""}</span>,
     },
     {
-        title: 'Affiliate',
+        title: AppConstants.affiliate,
         dataIndex: 'affiliate',
         key: 'affiliate',
         sorter: true,
@@ -1323,7 +1308,7 @@ const umpireActivityColumn = [
         },
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'home',
         key: 'home',
         sorter: true,
@@ -1331,7 +1316,7 @@ const umpireActivityColumn = [
         render: (home, record) => <span>{record?.match?.team1 ? record.match.team1.name : ""}</span>,
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'away',
         key: 'away',
         sorter: true,
@@ -1339,7 +1324,7 @@ const umpireActivityColumn = [
         render: (away, record) => <span>{record?.match?.team2 ? record.match.team2.name : ""}</span>,
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         // sorter: true,
@@ -1347,7 +1332,7 @@ const umpireActivityColumn = [
         render: (amount, record) => <span>N/A</span>,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         // sorter: true,
@@ -1358,14 +1343,14 @@ const umpireActivityColumn = [
 
 const coachColumn = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'coach matchId',
         sorter: true,
 
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'startTime',
         key: 'coach date',
         sorter: (a, b) => a.startTime.localeCompare(b.startTime),
@@ -1376,21 +1361,21 @@ const coachColumn = [
         ),
     },
     {
-        title: 'Home Team',
+        title: AppConstants.homeTeam,
         dataIndex: 'homeTeam',
         key: 'coach homeTeam',
         sorter: (a, b) => a.homeTeam.localeCompare(b.homeTeam),
 
     },
     {
-        title: 'Away Team',
+        title: AppConstants.awayTeam,
         dataIndex: 'awayTeam',
         key: 'coach awayTeam',
         sorter: (a, b) => a.awayTeam.localeCompare(b.awayTeam),
 
     },
     {
-        title: 'Result',
+        title: AppConstants.results,
         dataIndex: 'resultStatus',
         key: 'coach result',
         sorter: (a, b) => a.resultStatus.localeCompare(b.resultStatus),
@@ -1400,14 +1385,14 @@ const coachColumn = [
 
 const umpireColumn = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'Umpire matchId',
         sorter: true,
 
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'startTime',
         key: 'Umpire date',
         sorter: (a, b) => a.startTime.localeCompare(b.startTime),
@@ -1418,21 +1403,21 @@ const umpireColumn = [
         ),
     },
     {
-        title: 'Home Team',
+        title: AppConstants.homeTeam,
         dataIndex: 'homeTeam',
         key: 'Umpire homeTeam',
         sorter: (a, b) => a.homeTeam.localeCompare(b.homeTeam),
 
     },
     {
-        title: 'Away Team',
+        title: AppConstants.awayTeam,
         dataIndex: 'awayTeam',
         key: 'Umpire awayTeam',
         sorter: (a, b) => a.awayTeam.localeCompare(b.awayTeam),
 
     },
     {
-        title: 'Result',
+        title: AppConstants.results,
         dataIndex: 'resultStatus',
         key: 'Umpire result',
         sorter: (a, b) => a.resultStatus.localeCompare(b.resultStatus),
@@ -1467,7 +1452,7 @@ const purchaseListeners = (key) => ({
 
 const purchaseActivityColumn = [
     {
-        title: 'Order ID',
+        title: AppConstants.orderId,
         dataIndex: 'orderId',
         key: 'orderId',
         sorter: true,
@@ -1483,7 +1468,7 @@ const purchaseActivityColumn = [
         ),
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'date',
         key: 'date',
         sorter: true,
@@ -1491,7 +1476,7 @@ const purchaseActivityColumn = [
         render: (date) => <span>{date ? liveScore_formateDate(date) : ""}</span>,
     },
     // {
-    //   title: 'Transaction ID',
+    //   title: AppConstants.transactionId,
     //   dataIndex: 'transactionId',
     //   key: 'transactionId',
     //   sorter: true,
@@ -1500,7 +1485,7 @@ const purchaseActivityColumn = [
     //       <span className="input-heading-add-another pt-0">{transactionId}</span>
     // },
     {
-        title: 'Products',
+        titie: AppConstants.products,
         dataIndex: 'orderDetails',
         key: 'orderDetails',
         // sorter: true,
@@ -1514,14 +1499,14 @@ const purchaseActivityColumn = [
         ),
     },
     {
-        title: 'Organisation',
+        title: AppConstants.organisation,
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => purchaseListeners("organisationId"),
     },
     {
-        title: 'Payment Status',
+        title: AppConstants.paymentStatus,
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
         sorter: true,
@@ -1531,14 +1516,14 @@ const purchaseActivityColumn = [
         ),
     },
     {
-        title: 'Payment Method',
+        title: AppConstants.paymentMethod,
         dataIndex: 'paymentMethod',
         key: 'paymentMethod',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
     },
     {
-        title: 'Fulfillment Status',
+        title: AppConstants.fulfilmentStatus,
         dataIndex: 'fulfilmentStatus',
         key: 'fulfilmentStatus',
         sorter: true,
@@ -1592,7 +1577,7 @@ class UserModulePersonalDetail extends Component {
             transferRegistrationPaidBy: '',
             registrationData: [],
             removeTeamMemberRecord: null,
-            retryPaymentOnLoad: false
+            retryPaymentOnLoad: false,
         };
     }
 
@@ -1719,7 +1704,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
-                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
+                competitionMembershipProductDivisionId: record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -1728,26 +1713,31 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleTeamMembersAction(payload);
             this.setState({ removeTeamMemberLoad: false });
         }
-        if(this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelDeRegistrationLoad == true){
+        if (this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelDeRegistrationLoad == true) {
             this.handleRegistrationTableList(
-                1, 
+                1,
                 this.state.userId,
                 this.state.competition,
                 this.state.yearRefId,
-                "myRegistrations"
-                );
-            this.setState({cancelDeRegistrationLoad: false})
+                "myRegistrations",
+            );
+            this.setState({ cancelDeRegistrationLoad: false })
         }
 
-        if((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true){
-            this.setState({retryPaymentOnLoad: false});
+        if ((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
+            this.setState({ retryPaymentOnLoad: false });
             this.handleRegistrationTableList(
-                1, 
+                1,
                 this.state.userId,
                 this.state.competition,
                 this.state.yearRefId,
-                "myRegistrations"
+                "myRegistrations",
             );
+        }
+
+        if(this.props.userState.cancelDeRegistrationLoad == false && this.state.cancelTeamMemberDeRegistrationLoad == true){
+            this.showTeamMembers(this.state.registrationTeam,1)
+            this.setState({cancelTeamMemberDeRegistrationLoad: false})
         }
     }
 
@@ -1787,14 +1777,26 @@ class UserModulePersonalDetail extends Component {
     }
 
     cancelDeRegistrtaion = (deRegisterId) => {
-        try{
-            let payload = {
-                deRegisterId: deRegisterId
+        try {
+            const payload = {
+                deRegisterId,
             }
             this.props.cancelDeRegistrationAction(payload);
-            this.setState({cancelDeRegistrationLoad: true})
-        } catch(ex) {
-            console.log("Error in cancelDeRegistrtaion::" +ex)
+            this.setState({ cancelDeRegistrationLoad: true })
+        } catch (ex) {
+            console.log(`Error in cancelDeRegistrtaion::${ex}`)
+        }
+    }
+
+    cancelTeamMemberDeRegistrtaion = (deRegisterId) => {
+        try {
+            const payload = {
+                deRegisterId,
+            }
+            this.props.cancelDeRegistrationAction(payload);
+            this.setState({ cancelTeamMemberDeRegistrationLoad: true })
+        } catch (ex) {
+            console.log(`Error in cancelTeamMemberDeRegistrtaion::${ex}`)
         }
     }
 
@@ -2083,7 +2085,7 @@ class UserModulePersonalDetail extends Component {
             const payload = {
                 userId: record.userId,
                 teamId: record.teamId,
-                competitionMembershipProductDivisionId : record.competitionMembershipProductDivisionId,
+                competitionMembershipProductDivisionId: record.competitionMembershipProductDivisionId,
                 teamMemberPaging: {
                     limit: 10,
                     offset: page ? 10 * (page - 1) : 0,
@@ -2155,50 +2157,50 @@ class UserModulePersonalDetail extends Component {
     };
 
     retryPayment = (record) => {
-        try{
-            if(record.invoiceFailedStatus){
-                let payload = {
+        try {
+            if (record.invoiceFailedStatus) {
+                const payload = {
                     registrationId: record.registrationId,
                 }
                 this.props.registrationRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
-            }else if(record.transactionFailedStatus){
-                let payload = {
+            } else if (record.transactionFailedStatus) {
+                const payload = {
                     processTypeName: "instalment",
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
                     divisionId: record.divisionId,
-                    competitionId: record.competitionId
+                    competitionId: record.competitionId,
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
             }
-        }catch(ex){
-            console.log("Error in retryPayment::"+ex);
+        } catch (ex) {
+            console.log(`Error in retryPayment::${ex}`);
         }
     }
 
     myRegistrationRetryPayment = (record) => {
-        try{
-            if(record.paymentStatusFlag == 2){
-                let payload = {
+        try {
+            if (record.paymentStatusFlag == 2) {
+                const payload = {
                     registrationId: record.registrationId,
                 }
                 this.props.registrationRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
-            }else if(record.paymentStatus == "Failed Registration"){
-                let payload = {
+            } else if (record.paymentStatus == "Failed Registration") {
+                const payload = {
                     processTypeName: "instalment",
                     registrationUniqueKey: record.registrationId,
                     userId: this.state.userId,
-                    divisionId: record.divisionId,
-                    competitionId: record.competitionId
+                    divisionId: record.competitionMembershipProductDivisionId,
+                    competitionId: record.competitionId,
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
             }
-        }catch(ex){
-            console.log("Error in myRegistrationRetryPayment::"+ex);
+        } catch (ex) {
+            console.log(`Error in myRegistrationRetryPayment::${ex}`);
         }
     }
 
@@ -2580,9 +2582,6 @@ class UserModulePersonalDetail extends Component {
         const { userState } = this.props;
         const personal = userState.personalData;
         const personalByCompData = userState.personalByCompData || [];
-        console.log('###-personal', personal)
-
-        console.log('###-personalByCompData', personalByCompData)
 
         const primaryContacts = personalByCompData.length > 0
             ? personalByCompData[0].primaryContacts
@@ -2654,33 +2653,33 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 {/* )} */}
                 {/* {(!personal.dateOfBirth || getAge(personal.dateOfBirth) > 18) && ( */}
-                    <div>
-                        <div
-                            className="user-module-row-heading"
-                            style={{ marginTop: 30 }}
-                        >
-                            {AppConstants.childDetails}
-                        </div>
-                        <NavLink
-                            to={{
-                                pathname: `/userProfileEdit`,
-                                state: { moduleFrom: "7", userData: personal },
-                            }}
-                        >
-                            <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
-                                {`+ ${AppConstants.addChild}`}
-                            </span>
-                        </NavLink>
-                        <div className="table-responsive home-dash-table-view">
-                            <Table
-                                className="home-dashboard-table"
-                                columns={columnsPersonalChildContacts}
-                                dataSource={childContacts}
-                                pagination={false}
-                                loading={userState.onPersonLoad && true}
-                            />
-                        </div>
+                <div>
+                    <div
+                        className="user-module-row-heading"
+                        style={{ marginTop: 30 }}
+                    >
+                        {AppConstants.childDetails}
                     </div>
+                    <NavLink
+                        to={{
+                            pathname: `/userProfileEdit`,
+                            state: { moduleFrom: "7", userData: personal },
+                        }}
+                    >
+                        <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
+                            {`+ ${AppConstants.addChild}`}
+                        </span>
+                    </NavLink>
+                    <div className="table-responsive home-dash-table-view">
+                        <Table
+                            className="home-dashboard-table"
+                            columns={columnsPersonalChildContacts}
+                            dataSource={childContacts}
+                            pagination={false}
+                            loading={userState.onPersonLoad && true}
+                        />
+                    </div>
+                </div>
                 {/* )} */}
                 <div className="user-module-row-heading" style={{ marginTop: 30 }}>
                     {AppConstants.emergencyContacts}
@@ -2909,7 +2908,7 @@ class UserModulePersonalDetail extends Component {
         const teamMembers = userState.teamMembersDetails ? userState.teamMembersDetails.teamMembers : [];
         const teamMembersCurrentPage = userState.teamMembersDetails?.page ? userState.teamMembersDetails?.page.currentPage : 1;
         const teamMembersTotalCount = userState.teamMembersDetails?.page.totalCount;
-        let organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
+        const organistaionId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         return (
             <div>
                 {this.state.isShowRegistrationTeamMembers == false ? (
@@ -3064,15 +3063,15 @@ class UserModulePersonalDetail extends Component {
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove ?
-                                <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
+                            {(this.state.registrationTeam.organisationUniqueKey == organistaionId) && this.state.registrationTeam.isRemove
+                                ? (
+                                    <div className="add-team-member-action-txt" onClick={() => this.gotoAddTeamMember()}>
                                     +
-                                    {' '}
-                                    {AppConstants.addTeamMembers}
-                                </div>
-                                :
-                                null
-                            }
+                                        {' '}
+                                        {AppConstants.addTeamMembers}
+                                    </div>
+                                )
+                                : null}
                         </div>
                         <div className="user-module-row-heading font-18 mt-2">
                             {`${AppConstants.team}: ${this.state.registrationTeam.teamName}`}
@@ -3084,7 +3083,8 @@ class UserModulePersonalDetail extends Component {
                                 dataSource={teamMembers}
                                 pagination={false}
                                 loading={
-                                    this.props.userState.getTeamMembersOnLoad
+                                    this.props.userState.getTeamMembersOnLoad ||
+                                    this.state.cancelTeamMemberDeRegistrationLoad
                                 }
                             />
                         </div>
@@ -3216,7 +3216,7 @@ class UserModulePersonalDetail extends Component {
     exportUserRegistrationData = () => {
         const { userState } = this.props;
         const personal = userState.personalData;
-        const userId = personal.userId;
+        const { userId } = personal;
 
         this.props.exportUserRegData({ userId });
     }
@@ -3282,7 +3282,7 @@ class UserModulePersonalDetail extends Component {
                         </Dropdown>
                     </div>
                 </div>
-                
+
             </div>
         );
     };
@@ -3668,7 +3668,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     transferRegistrationSubmit = async () => {
-        const {transferRegistrationUserId, transferRegistrationPaidBy, registrationData} = this.state;
+        const { transferRegistrationUserId, transferRegistrationPaidBy, registrationData } = this.state;
 
         const requestBodyObj = {
             userIdTrasferingTo: Number(transferRegistrationUserId),
@@ -3688,9 +3688,8 @@ class UserModulePersonalDetail extends Component {
 
         this.setState({
             transferRegistrationUserId: '',
-            transferRegistrationPaidBy: ''
+            transferRegistrationPaidBy: '',
         });
-
     }
 
     transferRegistrationPopup = () => (
@@ -3707,7 +3706,7 @@ class UserModulePersonalDetail extends Component {
             <div className="transfer-modal-body">
                 <div className="transfer-modal-form">
                     <div>User ID</div>
-                    {/*<div>Paid By</div>*/}
+                    {/* <div>Paid By</div> */}
                 </div>
                 <div className="transfer-modal-form">
                     <input
@@ -3717,15 +3716,15 @@ class UserModulePersonalDetail extends Component {
                         value={this.state.transferRegistrationUserId}
                         onChange={(e) => this.handleUserPaidIdsChange(e)}
                     />
-                    {/*{ Uncomment when transactions trasfering is ready }*/}
+                    {/* { Uncomment when transactions trasfering is ready } */}
 
-                    {/*<input*/}
-                    {/*    className="transfer-modal-form-input"*/}
-                    {/*    type="text"*/}
-                    {/*    name="transferRegistrationPaidBy"*/}
-                    {/*    value={this.state.transferRegistrationPaidBy}*/}
-                    {/*    onChange={(e) => this.handleUserPaidIdsChange(e)}*/}
-                    {/*/>*/}
+                    {/* <input */}
+                    {/*    className="transfer-modal-form-input" */}
+                    {/*    type="text" */}
+                    {/*    name="transferRegistrationPaidBy" */}
+                    {/*    value={this.state.transferRegistrationPaidBy} */}
+                    {/*    onChange={(e) => this.handleUserPaidIdsChange(e)} */}
+                    {/* /> */}
                 </div>
             </div>
         </Modal>
@@ -3737,19 +3736,19 @@ class UserModulePersonalDetail extends Component {
             activityManagerList,
             personalByCompData,
             userRole,
-            personalData,
             onMedicalLoad,
             coachActivityRoster,
             umpireActivityRoster,
             scorerActivityRoster,
+            isPersonalUserLoading,
+            isCompUserLoading,
         } = this.props.userState;
-        const isUserLoaded = !isEmpty(personalData);
+        const isUserLoading = isPersonalUserLoading || isCompUserLoading;
         const personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
         if (personalDetails != null && personalDetails.length > 0) {
             userRegistrationId = personalByCompData[0].userRegistrationId;
         }
-
 
         return (
             <div className="fluid-width default-bg">
@@ -3824,7 +3823,7 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Loader visible={!isUserLoaded || onMedicalLoad} />
+                        <Loader visible={isUserLoading || onMedicalLoad} />
                         {this.unlinkChildConfirmPopup()}
                         {this.unlinkParentConfirmPopup()}
                         {this.cannotUninkPopup()}
@@ -3870,7 +3869,7 @@ function mapDispatchToProps(dispatch) {
             transferUserRegistration,
             cancelDeRegistrationAction,
             registrationRetryPaymentAction,
-            liveScorePlayersToPayRetryPaymentAction
+            liveScorePlayersToPayRetryPaymentAction,
         },
         dispatch,
     );

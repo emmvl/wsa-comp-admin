@@ -33,6 +33,7 @@ import {
     getActiveRoundsAction,
     changeDrawsDateRangeAction,
     checkBoxOnChange,
+    setTimelineModeAction,
 } from '../../store/actions/competitionModuleAction/competitionMultiDrawsAction';
 import {
     getYearAndCompetitionOwnAction,
@@ -819,6 +820,15 @@ class MultifieldDrawsNew extends Component {
         this.setState({ filterDates: val, startDate: startDate, endDate: endDate, venueLoad: true, });
     }
 
+    handleToggleTimeline = () => {
+        const { isTimelineMode } = this.props.drawsState;
+        if (isTimelineMode) {
+            history.push('/competitionDraws');
+        } else {
+            history.push('/competitionDrawsOld');
+        }
+    }
+
     headerView = () => {
         return (
             <>
@@ -1274,6 +1284,16 @@ class MultifieldDrawsNew extends Component {
                 <div className="multi-draw-list-top-head row align-content-center">
                     <div className="col-sm-3 mt-3">
                         <span className="form-heading">{AppConstants.matchCalender}</span>
+                        <Checkbox
+                            className="single-checkbox"
+                            checked={this.props.drawsState.isTimelineMode}
+                            onChange={async (e) => {
+                                await this.props.setTimelineModeAction(e.target.checked);
+                                this.handleToggleTimeline();
+                            }}
+                        >
+                            {AppConstants.timeline}
+                        </Checkbox>
                     </div>
                     <div className="col-sm-3 mt-3">
                         <div
@@ -1711,10 +1731,10 @@ class MultifieldDrawsNew extends Component {
     openModel = (props, e) => {
         let this_ = this;
         confirm({
-            title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.proceedConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             maskClosable: true,
             mask: true,
             onOk() {
@@ -2012,6 +2032,7 @@ function mapDispatchToProps(dispatch) {
             getActiveRoundsAction,
             changeDrawsDateRangeAction,
             checkBoxOnChange,
+            setTimelineModeAction,
         },
         dispatch
     );

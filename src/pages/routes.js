@@ -48,6 +48,8 @@ import AppRegistrationForm from 'components/registration/appRegistrationForm';
 import deRegistration from 'components/registration/deRegistration';
 import PaymentDashboard from 'components/registration/paymentDashboard';
 import PaymentSummary from 'components/registration/PaymentSummary';
+import SalesSummary from 'components/registration/SalesSummary';
+import SummaryByParticipant from 'components/registration/SummaryByParticipant';
 import ProductAdd from 'components/registration/productAdd';
 import ProductAddRegistration from 'components/registration/productAddRegistration';
 import ProductRegistrationClub from 'components/registration/productRegistrationClub';
@@ -147,7 +149,6 @@ import LiveScorePositionTrackReport from 'components/liveScore/liveScorePosition
 import LiveScorePublicLadder from 'components/liveScore/liveScorePublicLadder';
 import LiveScorerCoachImport from 'components/liveScore/liveScoreCoachImport';
 import LiveScorerList from 'components/liveScore/liveScorerList';
-import LiveScorerView from 'components/liveScore/liveScorerView';
 import LiveScoreSeasonFixture from 'components/liveScore/liveScoreSeasonFixture';
 import LiveScoreSettingsView from 'components/liveScore/liveScoreSettings/liveScoreSettingsView';
 import LiveScoreSocialSheet from 'components/liveScore/liveScoreSocialSheet';
@@ -606,11 +607,6 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute
-                    path="/matchDayScorerView"
-                    component={this.haveAccess(userRoleId, '/matchDayScorerView') ? lazyLoad(LiveScorerView) : lazyLoad(NotFound)}
-                />
-
-                <PrivateRoute
                     path="/matchDayMatchImport"
                     component={this.haveAccess(userRoleId, '/matchDayMatchImport') ? lazyLoad(LiveScoreMatchImport) : lazyLoad(NotFound)}
                 />
@@ -885,6 +881,16 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/paymentSummary"
                     component={this.haveAccess(userRoleId, '/paymentSummary') ? lazyLoad(PaymentSummary) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/salesSummary"
+                    component={this.haveAccess(userRoleId, '/salesSummary') ? lazyLoad(SalesSummary) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/summaryByParticipant"
+                    component={this.haveAccess(userRoleId, '/summaryByParticipant') ? lazyLoad(SummaryByParticipant) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

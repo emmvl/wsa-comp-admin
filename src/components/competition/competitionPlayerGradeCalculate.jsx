@@ -41,20 +41,20 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: 'Divisions',
+        title: AppConstants.divisions,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: (a, b) => tableSort(a, b, "divisionName")
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'playerCount',
         key: 'playerCount',
         render: playerCount => <Input disabled className="input-inside-player-grades-table-for-grade" value={playerCount} />,
         sorter: (a, b) => tableSort(a, b, "playerCount")
     },
     {
-        title: 'Min. players/Team',
+        title: AppConstants.minPlayersTeam,
         dataIndex: 'minimumPlayers',
         key: 'minimumPlayers',
         render: (minimumPlayers, record, index) => <Input
@@ -67,21 +67,21 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "minimumPlayers")
     },
     {
-        title: '# Teams',
+        title: AppConstants.numberOfTeams,
         dataIndex: 'noOfTeams',
         key: 'noOfTeams',
         render: noOfTeams => <Input disabled className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
         sorter: (a, b) => tableSort(a, b, "noOfTeams")
     },
     {
-        title: 'Extra Players',
+        title: AppConstants.extraPlayers,
         dataIndex: 'extraPlayers',
         key: 'extraPlayers',
         render: extraPlayers => <Input disabled className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
         sorter: (a, b) => tableSort(a, b, "extraPlayers")
     },
     // {
-    //     title: 'Comments',
+    //     title: AppConstants.comments,
     //     dataIndex: 'comments',
     //     key: 'comments',
     //     width: 110,

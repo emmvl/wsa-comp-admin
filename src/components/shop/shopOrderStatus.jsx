@@ -67,7 +67,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Order ID',
+        title: AppConstants.orderId,
         dataIndex: 'orderId',
         key: 'orderId',
         sorter: true,
@@ -83,14 +83,14 @@ const columns = [
         ),
     },
     {
-        title: 'Booking ID',
+        title: AppConstants.bookingId,
         dataIndex: 'courierBookingId',
         key: 'courierBookingId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'date',
         key: 'date',
         sorter: true,
@@ -100,7 +100,7 @@ const columns = [
         ),
     },
     {
-        title: 'Customer',
+        title: AppConstants.customer,
         dataIndex: 'customer',
         key: 'customer',
         sorter: true,
@@ -116,7 +116,7 @@ const columns = [
         ),
     },
     {
-        title: 'Product',
+        title: AppConstants.product,
         dataIndex: 'product',
         key: 'product',
         sorter: true,
@@ -127,7 +127,7 @@ const columns = [
         ),
     },
     {
-        title: 'Payment Status',
+        title: AppConstants.paymentStatus,
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
         sorter: true,
@@ -137,7 +137,7 @@ const columns = [
         ),
     },
     {
-        title: 'Fulfilment Status',
+        title: AppConstants.fulfilmentStatus,
         dataIndex: 'fulfilmentStatus',
         key: 'fulfilmentStatus',
         sorter: true,
@@ -147,7 +147,7 @@ const columns = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         sorter: true,
@@ -157,7 +157,7 @@ const columns = [
         ),
     },
     {
-        title: 'Refunded Amount',
+        title: AppConstants.refundedAmount,
         dataIndex: 'refundedAmount',
         key: 'refundedAmount',
         sorter: false,
@@ -166,7 +166,7 @@ const columns = [
         ),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "action",
         key: "action",
         render: (action, record) => (
@@ -432,13 +432,6 @@ class ShopOrderStatus extends Component {
                                         allowClear
                                     />
                                 </div>
-                            </div>
-                        </div>
-                        <div className="col-sm pt-1">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                <Button className="primary-add-comp-form" type="primary">
-                                    {AppConstants.addOrder}
-                                </Button>
                             </div>
                         </div>
                         <div className="col-sm pt-1">

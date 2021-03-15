@@ -12,7 +12,6 @@ import { bindActionCreators } from 'redux';
 import { getUmpireCompetiton, getUmpireCompetitonData, getOrganisationData } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
-// import history from "../../util/history";
 import {
     umpireListAction,
     updateAddUmpireData,
@@ -21,6 +20,7 @@ import {
     umpireSearchAction,
     umpireClear
 } from '../../store/actions/umpireAction/umpireAction'
+import { getUmpire } from '../../store/actions/umpireAction/umpireEditForm'
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 
@@ -42,7 +42,7 @@ class AddUmpire extends Component {
             competition_id: null,
             teamLoad: false,
             affiliateLoader: false,
-            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
+            screenName: (props.location && props.location.state && props.location.state.screenName) ? props.location.state.screenName : null,
             isUserNotFound: false,
             exsitingValue: '',
             isUmpireCoach: false,
@@ -75,16 +75,23 @@ class AddUmpire extends Component {
         }
     }
 
-    componentDidUpdate(nextProps) {
-        if (this.props.umpireState.affilateList == nextProps.umpireState.affilateList) {
+   async componentDidUpdate(nextProps) {
+        if (this.props.umpireState.affilateList === nextProps.umpireState.affilateList) {
             if (this.state.isUmpireAffiliate === true && this.props.umpireState.onAffiliateLoad === false) {
                 let compId = JSON.parse(getUmpireCompetiton())
+                let orgItem = await getOrganisationData();
                 if (this.state.isEdit === true) {
                     this.props.updateAddUmpireData(this.state.tableRecord, 'isEditUmpire')
                     this.setState({ loader: true })
                 } else {
                     this.props.updateAddUmpireData('', 'isAddUmpire')
                 }
+                console.log('UMPIRE IS HERE')
+                this.props.getUmpire({
+                    competitionId: compId,
+                    organisationId: orgItem.organisationId || 0,
+                    umpireId: this.props.umpireState.umpireData.id
+                })
                 this.setState({ load: true, competition_id: compId, isUmpireAffiliate: false })
             }
         }
@@ -105,42 +112,47 @@ class AddUmpire extends Component {
             }
         }
 
-        if (this.props.umpireState.affiliateId !== nextProps.umpireState.affiliateId) {
+        if (this.props.umpireState.umpireData.affiliates !== nextProps.umpireState.umpireData.affiliates) {
             if (this.state.affiliateLoader === true) {
-                const { affiliateId } = this.props.umpireState
-                this.setSelectedAffiliateValue(affiliateId)
+                const { umpireData } = this.props.umpireState
+                this.setSelectedAffiliateValue(umpireData.affiliates)
                 this.setState({ affiliateLoader: false })
                 this.setInitialFieldValue()
             }
         }
     }
 
-    setSelectedAffiliateValue = (affiliateId) => {
+    setSelectedAffiliateValue = (affiliateIds) => {
         this.formRef.current.setFieldsValue({
-            'umpireAffiliateName': affiliateId
+            'umpireAffiliateName': affiliateIds,
         })
     }
 
     setInitialFieldValue = () => {
-        const { umpireData, affiliateId } = this.props.umpireState
-        let compData = JSON.parse(getUmpireCompetitonData())
-        let competitionOrgId = compData.competitionOrganisation ? compData.competitionOrganisation.id : null
-        let umpireNewAffiliateName = !this.state.isCompParent ? competitionOrgId : affiliateId
+        const { umpireData } = this.props.umpireState
+        const compData = JSON.parse(getUmpireCompetitonData())
+        const competitionOrgId = compData.competitionOrganisation ? compData.competitionOrganisation.id : null
+        const affiliates = umpireData.affiliates.map(affiliate => affiliate.id)
+        const umpireNewAffiliateName = !this.state.isCompParent ? competitionOrgId : affiliates
+
         if (this.state.isEdit) {
             this.formRef.current.setFieldsValue({
                 'First Name': umpireData.firstName,
                 'Last Name': umpireData.lastName,
                 'Email Address': umpireData.email,
                 'Contact no': umpireData.mobileNumber,
-                'umpireNewAffiliateName': umpireNewAffiliateName
+                umpireNewAffiliateName,
             })
         } else {
-            !this.state.isCompParent && this.props.updateAddUmpireData([umpireNewAffiliateName], 'partcipateAffiliateId')
-            umpireNewAffiliateName && this.formRef.current.setFieldsValue({
-                'umpireNewAffiliateName': umpireNewAffiliateName
-            })
+            if (!this.state.isCompParent) {
+                this.props.updateAddUmpireData([umpireNewAffiliateName], 'partcipateAffiliateId')
+            }
+            if (umpireNewAffiliateName) {
+                this.formRef.current.setFieldsValue({
+                    umpireNewAffiliateName,
+                })
+            }
         }
-
     }
 
     filterUmpireList = () => {
@@ -187,9 +199,10 @@ class AddUmpire extends Component {
     }
 
     umpireExistingRadioButton = () => {
-        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad, umpireListData } = this.props.umpireState
+        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad, umpireListData, umpireData } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
+        const teamData = umpireData.teams
 
         return (
             <div className="content-view pt-4">
@@ -253,12 +266,35 @@ class AddUmpire extends Component {
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
                                 className="w-100"
-                                onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
+                                onChange={(affiliateIds) => this.props.updateAddUmpireData(affiliateIds, 'affiliates')}
                                 notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
                                 optionFilterProp="children"
                             >
                                 {affilateData.map((item) => (
                                     <Option key={'organisation_' + item.id} value={item.id}>{item.name}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.team} />
+                        <Form.Item
+                            name="teamsNames"
+                            rules={[{ required: true, message: ValidationConstants.teamName }]}
+                            className="slct-in-add-manager-livescore"
+                        >
+                            <Select
+                                mode="multiple"
+                                showSearch
+                                placeholder={AppConstants.selectTeam}
+                                className="w-100"
+                                // onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
+                                optionFilterProp="children"
+                            >
+                                {teamData.map((item) => (
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -287,6 +323,7 @@ class AddUmpire extends Component {
         const { affilateList } = this.props.umpireState
         const { hasError } = this.state
         const affiliateListResult = isArrayNotEmpty(affilateList) ? affilateList : []
+        let teamData = [{id: 7779, name: "ASN  2 Team 2"}, { id: 7777, name: "ASN  2 Team 1"}];
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -383,14 +420,36 @@ class AddUmpire extends Component {
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
                                 className="w-100"
-                                onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                // value={affiliateId}
+                                onChange={(affiliateIds) => this.props.updateAddUmpireData(affiliateIds, 'affiliates')}
                                 optionFilterProp="children"
                             // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
                             // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
                             >
                                 {affiliateListResult.map((item) => (
                                     <Option key={'organisation_' + item.id} value={item.id}>{item.name}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.team} />
+                        <Form.Item
+                            name="teamsNames"
+                            rules={[{ required: true, message: ValidationConstants.teamName }]}
+                            className="slct-in-add-manager-livescore"
+                        >
+                            <Select
+                                mode="multiple"
+                                showSearch
+                                placeholder={AppConstants.selectTeam}
+                                className="w-100"
+                                onChange={(teamId) => this.props.updateAddUmpireData(teamId, 'teamId')}
+                                optionFilterProp="children"
+                            >
+                                {teamData.map((item) => (
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -489,134 +548,58 @@ class AddUmpire extends Component {
             affiliateId,
             umpireRadioBtn,
             exsitingUmpireId,
-            // umpireListResult,
             umpireListData
         } = this.props.umpireState
-        // let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
 
         if (umpireRadioBtn === 'new') {
             if (umpireData.mobileNumber.length !== 10) {
                 this.setState({
                     hasError: true
                 })
-            } else {
-                let body = ''
-                if (umpireRadioBtn === 'new') {
-                    if (this.state.isEdit === true) {
-                        body = {
-                            id: umpireData.id,
-                            firstName: umpireData.firstName,
-                            lastName: umpireData.lastName,
-                            mobileNumber: regexNumberExpression(umpireData.mobileNumber),
-                            email: umpireData.email,
-                            affiliates: umpireData.affiliates,
-                        }
-                    } else {
-                        body = {
-                            firstName: umpireData.firstName,
-                            lastName: umpireData.lastName,
-                            mobileNumber: regexNumberExpression(umpireData.mobileNumber),
-                            email: umpireData.email,
-                            affiliates: umpireData.affiliates,
-                        }
-                    }
-                    if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
-                        message.config({ maxCount: 1, duration: 0.9 })
-                        message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                    } else {
-                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
-                    }
-                } else if (umpireRadioBtn === 'existing') {
-                    body = {
-                        id: exsitingUmpireId,
-                        affiliates: umpireData.affiliates,
-                    }
-
-                    if (umpireListData.length === 0) {
-                        this.setState({ isUserNotFound: true })
-                    } else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
-                        message.config({ maxCount: 1, duration: 0.9 })
-                        message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                    } else {
-                        let getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
-                        let getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
-                        if (getUmpireObject !== null) {
-                            body = {
-                                id: getUmpireObject.id,
-                                firstName: getUmpireObject.firstName ? getUmpireObject.firstName : "",
-                                lastName: getUmpireObject.lastName ? getUmpireObject.lastName : "",
-                                mobileNumber: getUmpireObject.mobileNumber ? getUmpireObject.mobileNumber : "",
-                                email: getUmpireObject.email ? getUmpireObject.email : "",
-                                affiliates: umpireData.affiliates,
-                            }
-                            // body = {
-                            //     id: exsitingUmpireId,
-                            //
-                            // }
-                            this.setState({ isUserNotFound: false })
-                            this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
-                        }
-                        else {
-                            this.setState({ isUserNotFound: true })
-                        }
-                    }
-                }
             }
-        } else {
-            let body = ''
-            if (umpireRadioBtn === 'new') {
+            else {
+                const body = {
+                    firstName: umpireData.firstName,
+                    lastName: umpireData.lastName,
+                    mobileNumber: regexNumberExpression(umpireData.mobileNumber),
+                    email: umpireData.email,
+                    affiliates: umpireData.affiliates,
+                    teams: umpireData.teams,
+                    teamIds: umpireData.teamId
+                }
                 if (this.state.isEdit === true) {
-                    body = {
-                        id: umpireData.id,
-                        firstName: umpireData.firstName,
-                        lastName: umpireData.lastName,
-                        mobileNumber: regexNumberExpression(umpireData.mobileNumber),
-                        email: umpireData.email,
-                        affiliates: umpireData.affiliates,
-                    }
-                } else {
-                    body = {
-                        firstName: umpireData.firstName,
-                        lastName: umpireData.lastName,
-                        mobileNumber: regexNumberExpression(umpireData.mobileNumber),
-                        email: umpireData.email,
-                        affiliates: umpireData.affiliates,
-                    }
+                    body.id = umpireData.id;
                 }
                 if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
                     message.config({ maxCount: 1, duration: 0.9 })
                     message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
                 } else {
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
+                    this.props.addUmpireAction(body, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
                 }
-            } else if (umpireRadioBtn === 'existing') {
-                if (umpireListData.length === 0) {
+            }
+        } else if (umpireRadioBtn === 'existing') {
+            if (umpireListData.length === 0) {
+                this.setState({ isUserNotFound: true })
+            } else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
+                message.config({ maxCount: 1, duration: 0.9 })
+                message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
+            } else {
+                const getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
+                const getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
+                if (getUmpireObject !== null) {
+                    const body = {
+                        id: getUmpireObject.id,
+                        firstName: getUmpireObject.firstName ? getUmpireObject.firstName : "",
+                        lastName: getUmpireObject.lastName ? getUmpireObject.lastName : "",
+                        mobileNumber: getUmpireObject.mobileNumber ? getUmpireObject.mobileNumber : "",
+                        email: getUmpireObject.email ? getUmpireObject.email : "",
+                        affiliates: umpireData.affiliates,
+                    }
+                    this.setState({ isUserNotFound: false })
+                    this.props.addUmpireAction(body, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
+                }
+                else {
                     this.setState({ isUserNotFound: true })
-                } else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
-                    message.config({ maxCount: 1, duration: 0.9 })
-                    message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                } else {
-                    let getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
-                    let getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
-                    if (getUmpireObject !== null) {
-                        body = {
-                            id: getUmpireObject.id,
-                            firstName: getUmpireObject.firstName ? getUmpireObject.firstName : "",
-                            lastName: getUmpireObject.lastName ? getUmpireObject.lastName : "",
-                            mobileNumber: getUmpireObject.mobileNumber ? getUmpireObject.mobileNumber : "",
-                            email: getUmpireObject.email ? getUmpireObject.email : "",
-                            affiliates: umpireData.affiliates,
-                        }
-                        // body = {
-                        //     id: exsitingUmpireId,
-                        //
-                        // }
-                        this.setState({ isUserNotFound: false })
-                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
-                    }
-                    else {
-                        this.setState({ isUserNotFound: true })
-                    }
                 }
             }
         }
@@ -634,7 +617,6 @@ class AddUmpire extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.onSaveClick}
-                        className="login-form"
                         noValidate="noValidate"
                     >
                         <Content>
@@ -659,7 +641,8 @@ function mapDispatchToProps(dispatch) {
         addUmpireAction,
         getUmpireAffiliateList,
         umpireSearchAction,
-        umpireClear
+        umpireClear,
+        getUmpire
     }, dispatch)
 }
 

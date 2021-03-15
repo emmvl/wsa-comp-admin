@@ -11,19 +11,19 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: 'Court Numbers',
+        title: AppConstants.courtNumbers,
         dataIndex: 'courtNumbers',
         key: 'courtNumbers',
         render: courtNumbers => <Input className="input-inside-table-fees" value={courtNumbers} />,
     },
     {
-        title: 'Longitude',
+        title: AppConstants.longitude,
         dataIndex: 'longitude',
         key: 'longitude',
         render: longitude => <Input className="input-inside-table-venue-court" value={longitude} />,
     },
     {
-        title: 'Latitude',
+        title: AppConstants.latitude,
         dataIndex: 'latitude',
         key: 'latitude',
         render: latitude => <Input className="input-inside-table-venue-court" value={latitude} />,

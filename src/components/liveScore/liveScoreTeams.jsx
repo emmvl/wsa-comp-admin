@@ -48,14 +48,14 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Logo',
+        title: AppConstants.logo,
         dataIndex: 'logoUrl',
         key: 'logoUrl',
         sorter: false,
         render: (logoUrl) => logoUrl ? <img style={{ height: 60, width: 80 }} src={logoUrl} alt="" /> : <span>{AppConstants.noImage}</span>,
     },
     {
-        title: 'Team Name',
+        title: AppConstants.teamName,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -70,7 +70,7 @@ const columns = [
             <span>{name}</span>
     },
     {
-        title: 'Team Alias Name',
+        title: AppConstants.teamAliasName,
         dataIndex: 'alias',
         key: 'alias',
         sorter: true,
@@ -78,7 +78,7 @@ const columns = [
         render: (alias) => <span>{alias}</span>
     },
     {
-        title: 'Affiliate',
+        title: AppConstants.affiliate,
         dataIndex: 'linkedCompetitionOrganisation',
         key: 'organisation',
         sorter: true,
@@ -87,7 +87,7 @@ const columns = [
     },
     // Affiliate
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division',
         sorter: true,
@@ -95,7 +95,7 @@ const columns = [
         render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
-        title: '#Players',
+        title: AppConstants.players,
         dataIndex: 'playersCount',
         key: 'playersCount',
         sorter: true,
@@ -103,7 +103,7 @@ const columns = [
         render: (playersCount) => <span>{playersCount}</span>
     },
     {
-        title: 'Manager',
+        title: AppConstants.manager,
         dataIndex: 'managers',
         key: 'managers_1',
         sorter: true,
@@ -115,7 +115,7 @@ const columns = [
         </div>
     },
     {
-        title: 'Contact',
+        title: AppConstants.contact,
         dataIndex: 'managers',
         key: 'managers_2',
         sorter: true,
@@ -127,7 +127,7 @@ const columns = [
         </div>
     },
     {
-        title: 'Email',
+        title: AppConstants.email,
         dataIndex: 'managers',
         key: 'managers_3',
         sorter: true,
@@ -170,11 +170,12 @@ class LiveScoreTeam extends Component {
                     let searchText = livescoreTeamActionObject.search
                     let sortBy = livescoreTeamActionObject.sortBy
                     let sortOrder = livescoreTeamActionObject.sortOrder
-                    this.setState({ offset, searchText, sortBy, sortOrder, compOrgId })
                     this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder, compOrgId)
+                    this.setState({ offset, searchText, sortBy, sortOrder})
                 } else {
                     this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText, null, null, compOrgId)
                 }
+                this.setState({ compOrgId })
             } else {
                 history.push("/matchDayCompetitions")
             }
@@ -192,34 +193,34 @@ class LiveScoreTeam extends Component {
     /// Handle Page change
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({ offset })
-        this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
+        this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId);
+        this.setState({ offset });
     }
 
     // on change search text
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value == "") {
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
+        this.setState({ searchText: e.target.value, offset: 0 })
     }
 
     // search key
     onKeyEnterSearchText = (e) => {
-        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { // 13 is the enter keycode
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
+        this.setState({ offset: 0 })
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
-        this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText == "") {
         } else {
             this.props.getTeamsWithPagination(this.state.competitionId, 0, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder, this.state.compOrgId)
         }
+        this.setState({ offset: 0 })
     }
 
     // on Export
@@ -256,7 +257,7 @@ class LiveScoreTeam extends Component {
                     </div>
                     <div className="col-sm-8 d-flex flex-row align-items-center justify-content-end w-100">
                         <div className="row">
-                            {sourceIdAvailable && (
+                            {liveScoreCompIsParent == true && sourceIdAvailable && (
                                 <div className="col-sm pt-1">
                                     <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                                         <Button

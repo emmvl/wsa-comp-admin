@@ -10,52 +10,52 @@ import { bindActionCreators } from 'redux';
 import { quickCompImportDataCleanUpAction, quickCompetitionPlayerImportAction, updateSelectedTeamPlayer } from '../store/actions/competitionModuleAction/competitionQuickCompetitionAction'
 const columns = [
     {
-        title: 'FirstName',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName'
     },
     {
-        title: 'LastName',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName'
     },
     {
-        title: 'DateOfBirth',
+        title: AppConstants.dateOfBirth,
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth'
     },
     {
-        title: 'Phone No',
+        title: AppConstants.phoneNumber,
         dataIndex: 'mobileNumber',
         key: 'mobileNumber'
     },
     {
-        title: 'Email',
+        title: AppConstants.email,
         dataIndex: 'email',
         key: 'email'
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team'
     },
     {
-        title: 'Division',
+        title: AppConstants.division,
         dataIndex: 'division',
         key: 'division'
     },
     {
-        title: 'Grade',
+        title: AppConstants.grade,
         dataIndex: 'grade',
         key: 'grade'
     },
     {
-        title: 'Historical Grade',
+        title: AppConstants.historicalGrade,
         dataIndex: 'historicalGrade',
         key: 'historicalGrade'
     },
     {
-        title: 'Historical Result',
+        title: AppConstants.historicalResult,
         dataIndex: 'historicalResult',
         key: 'historicalResult'
     },

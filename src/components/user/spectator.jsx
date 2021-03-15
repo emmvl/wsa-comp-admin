@@ -56,7 +56,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
@@ -68,26 +68,26 @@ const columns = [
         ),
     },
     {
-        title: 'Role',
+        title: AppConstants.role,
         dataIndex: 'role',
         key: 'role',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Linked',
+        title: AppConstants.linked,
         dataIndex: 'organisationName',
         key: 'organisationName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Competition',
+        title: AppConstants.competition,
         dataIndex: 'competitionName',
         key: 'competitionName',
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
         sorter: true,
@@ -99,7 +99,7 @@ const columns = [
         ),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         render: (id, e) => (
             <Menu
                 className="action-triple-dot-submenu"

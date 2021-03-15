@@ -339,7 +339,9 @@ function* getUserModulePersonalDataSaga(action) {
       yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error);
+      yield put({
+          type: ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_ERROR,
+      });
   }
 }
 

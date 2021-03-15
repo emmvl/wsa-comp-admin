@@ -81,7 +81,7 @@ const payments = [
 
 const columns = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "name",
         key: "name",
         sorter: true,
@@ -103,7 +103,7 @@ const columns = [
         ),
     },
     {
-        title: "Registration date",
+        title: AppConstants.registrationDate,
         dataIndex: "registrationDate",
         key: "registrationDate",
         sorter: true,
@@ -115,21 +115,21 @@ const columns = [
         ),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Registration Divisions",
+        title: AppConstants.registrationDivisions,
         dataIndex: "divisionName",
         key: "divisionName",
         sorter: true,
         onHeaderCell: () => listeners("registrationDivisions"),
     },
     {
-        title: "DOB",
+        title: AppConstants.dOB,
         dataIndex: "dateOfBirth",
         key: "dateOfBirth",
         sorter: true,
@@ -141,7 +141,7 @@ const columns = [
         ),
     },
     {
-        title: "Paid By",
+        title: AppConstants.paidBy,
         dataIndex: "paidByUsers",
         key: "paidByUsers",
         render: (paidBy, record, index) => (
@@ -170,7 +170,7 @@ const columns = [
         ),
     },
     {
-        title: "Paid Fee (incl. GST)",
+        title: AppConstants.paidFeeInclGst,
         dataIndex: "paidFee",
         key: "paidFee",
         sorter: true,
@@ -182,7 +182,7 @@ const columns = [
         ),
     },
     {
-        title: "Pending Fee (incl. GST)",
+        title: AppConstants.pendingFeeInclGst,
         dataIndex: "pendingFee",
         key: "pendingFee",
         sorter: true,
@@ -194,27 +194,29 @@ const columns = [
         ),
     },
     {
-        title: "Due per Match",
+        title: AppConstants.duePerMatch,
         dataIndex: "duePenMatch",
         key: "duePenMatch",
     },
     {
-        title: "Due per Instalment",
+        title: AppConstants.duePerInstalment,
         dataIndex: "duePerInstalment",
         key: "duePerInstalment",
         render: new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 2 }).format,
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true))
+           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
+           (record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+           record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee")))
                 ? (
                     <Menu
                         className="action-triple-dot-submenu"
@@ -286,6 +288,22 @@ const columns = [
                                 && (
                                     <Menu.Item key="6" onClick={() => this_Obj.setFailedRegistrationRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
+                                    </Menu.Item>
+                                )
+                            }
+                            {
+                                record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+                                record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
+                                    <Menu.Item key="7" 
+                                    onClick={() =>  
+                                        history.push("/deregistration", { 
+                                            regData: record, 
+                                            personal: record,
+                                            sourceFrom: AppConstants.ownRegistration,
+                                            subSourceFrom: "RegistrationListPage" 
+                                        })}
+                                    >
+                                        <span>{AppConstants.registrationChange}</span>
                                     </Menu.Item>
                                 )
                             }
@@ -599,7 +617,7 @@ class Registration extends Component {
         this.setState({
             selectedRow: record, otherModalVisible: true,
             actionView: 4, modalMessage : AppConstants.regFailedModalMsg,
-            modalTitle: "Invoice Fail"
+            modalTitle: AppConstants.invoiceFail
         });
     }
 
@@ -607,14 +625,14 @@ class Registration extends Component {
         this.setState({
             selectedRow: record, otherModalVisible: true,
             actionView: 5, modalMessage : AppConstants.regRetryInstalmentModalMsg,
-            modalTitle: "Failed Instalment Retry"
+            modalTitle: AppConstants.failedInstalmentRetry
         });
     }
     setFailedRegistrationRetry = (record) =>{
         this.setState({
             selectedRow: record, otherModalVisible: true,
             actionView: 6, modalMessage : AppConstants.regRetryModalMsg,
-            modalTitle: "Failed Registration Retry"
+            modalTitle: AppConstants.failedRegistrationRetry
         });
     }
 

@@ -9,43 +9,43 @@ const { Footer, Content } = Layout;
 const { Option } = Select;
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Reg. date',
+        titie: AppConstants.regDate,
         dataIndex: 'regDate',
         key: 'regDate',
         sorter: (a, b) => a.regDate.length - b.regDate.length,
     },
     {
-        title: 'Division/ Grade',
-        dataIndex: 'divisionGrade',
+        title: AppConstants.registratnt,
+        dataIndex: AppConstants.divisionGrad,
         key: 'divisionGrade',
         sorter: (a, b) => a.divisionGrade.length - b.divisionGrade.length,
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dob',
         key: 'dob',
         sorter: (a, b) => a.dob.length - b.dob.length,
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => a.team.length - b.team.length,
     },
     {
-        title: 'Products',
+        titie: AppConstants.products,
         dataIndex: 'products',
         key: 'products',
         sorter: (a, b) => a.products.length - b.products.length,
     },
     {
-        title: 'Fee',
+        titie: AppConstants.fee,
         dataIndex: 'fee',
         key: 'fee',
         sorter: (a, b) => a.fee.length - b.fee.length,

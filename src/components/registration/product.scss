@@ -66,7 +66,7 @@
 }
 
 .login-form {
-  background-color: #ffb8611f;
+  background-color: var(--app-ffb8611f);
 }
 
 .form-heading {
@@ -143,6 +143,7 @@
 
 .venue-configuration-image {
     margin-right: 10px;
+    margin-top: 10px;
 }
 
 .venue-configuration-control {
@@ -1362,4 +1363,8 @@ input[type="number"] {
 
 .dereg-modal-content{
   padding: 0px 24px;
+}
+
+.exporting-icon {
+  margin-left: 10px;;
 }

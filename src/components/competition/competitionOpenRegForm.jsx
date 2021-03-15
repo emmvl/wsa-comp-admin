@@ -89,7 +89,7 @@ const permissionObject = {
 
 const divisionTableColumns = [
     {
-        title: "Division Name",
+        title: AppConstants.divisionName,
         dataIndex: "divisionName",
         key: "divisionName",
         render: (divisionName, record, index) => (
@@ -108,7 +108,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "Gender Restriction",
+        title: AppConstants.genderRestriction,
         dataIndex: "genderRestriction",
         key: AppUniqueId.div_gender_chkbox,
         filterDropdown: true,
@@ -156,7 +156,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "Age Restriction",
+        title: AppConstants.ageRestrictions,
         dataIndex: "ageRestriction",
         key: AppUniqueId.div_ageres_chkbox,
         filterDropdown: true,
@@ -177,7 +177,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "DOB From",
+        title: AppConstants.dobFrom,
         dataIndex: "fromDate",
         key: AppUniqueId.div_ageres_fromdate,
         width: "25%",
@@ -202,7 +202,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "DOB To",
+        title: AppConstants.dobTo,
         dataIndex: "toDate",
         width: "25%",
         key: AppUniqueId.div_ageres_todate,
@@ -1212,12 +1212,11 @@ class CompetitionOpenRegForm extends Component {
                             <InputNumber
                                 className="w-100"
                                 style={{ paddingRight: 1, minWidth: 182 }}
-                                onChange={(e) =>
-                                    this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')
-                                }
+                                onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, 'noOfRounds')}
                                 placeholder={AppConstants.selectRound}
-                                min={0}
-                                type="number"
+                                min={1}
+                                max={50}
                                 value={detailsData.competitionDetailData.noOfRounds}
                                 disabled={disabledStatus || compDetailDisable}
                             />
@@ -1404,11 +1403,11 @@ class CompetitionOpenRegForm extends Component {
         let competitionId = this.props.competitionFeesState.competitionId
         let this_ = this
         confirm({
-            title: 'Are you sure delete this product?',
+            title: AppConstants.productDeleteConfirmMsg,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 if (competitionId.length > 0) {
                     this_.deleteProduct(competitionId)

@@ -34,7 +34,7 @@ import { getAffiliatesListingAction } from '../../store/actions/userAction/userA
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from '../../themes/appImages';
-import { captializedString } from '../../util/helpers';
+import { captializedString, removeFirstSpace } from '../../util/helpers';
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 import Loader from "../../customComponents/loader";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -65,7 +65,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             venueAddressError: '',
             courtColumns: [
                 {
-                    title: "Court Numbers",
+                    title: AppConstants.courtNumbers,
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber) => (
@@ -75,19 +75,27 @@ class CompetitionVenueAndTimesAdd extends Component {
                     )
                 },
                 {
-                    title: "Court Name",
+                    title: AppConstants.courtName,
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
                         return (
-                            <Form.Item name={`venueCourtName${index}`} rules={[{ required: true, message: ValidationConstants.courtField[3] }]}>
-                                <Input
+                            <Form.Item
+                                name={`venueCourtName${index}`}
+                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
+                            >
+                                <InputWithHead
                                     disabled={record.isDisabled}
                                     required="required-field pt-0"
                                     className="input-inside-table-venue-court"
-                                    onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(
+                                        removeFirstSpace(e.target.value), index, 'venueCourtName', 'courtData',
+                                    )}
                                     value={courtName}
                                     placeholder="Court Name"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`venueCourtName${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
@@ -95,7 +103,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 },
 
                 {
-                    title: "Longitude",
+                    title: AppConstants.longitude,
                     dataIndex: "lng",
                     key: "lng",
                     width: 100,
@@ -112,15 +120,18 @@ class CompetitionVenueAndTimesAdd extends Component {
                             <Form.Item name={`lng${index}`} rules={[{ required: true, message: ValidationConstants.courtField[2] }]}>
                                 <Input
                                     className="input-inside-table-venue-court"
-                                    onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(e.target.value), index, 'lng', 'courtData')}
                                     value={lng}
                                     placeholder="Longitude"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`lng${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         </div>
                     ),
                 }, {
-                    title: "Latitude",
+                    title: AppConstants.latitude,
                     dataIndex: "lat",
                     key: "lat",
                     width: 100,
@@ -134,24 +145,27 @@ class CompetitionVenueAndTimesAdd extends Component {
                         </div>
                     ),
                     render: (lat, record, index) => (
-                        // <div className="d-flex flex-row align-items-center" style={{ height: index > 0 ? 0 : 150 }}>
                         <div className="d-flex flex-row align-items-center">
                             <Form.Item
                                 name={`lat${index}`}
-                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
+                                rules={[{ required: true, message: ValidationConstants.courtField[3] }]}
                             >
                                 <Input
                                     className="input-inside-table-venue-court"
-                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                    onChange={(e) => this.props
+                                        .updateVenuAndTimeDataAction(removeFirstSpace(e.target.value), index, 'lat', 'courtData')}
                                     value={lat}
                                     placeholder="Latitude"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`lat${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         </div>
                     ),
                 },
                 {
-                    // title: "Override Venue Timeslots?",
+                    // title: AppConstants.overrideVenueTimeslots,
                     title: <span >Override Venue Timeslots?</span>,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
@@ -431,7 +445,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     contentView = () => {
-        const { venuData } = this.props.venueTimeState
+        const { venuData } = this.props.venueTimeState;
         const { stateList } = this.props.commonReducerState
         const { affiliateList, impersonationList = [] } = this.props.userState
         const affiliateCorrectList = affiliateList.length ? affiliateList : impersonationList;
@@ -451,10 +465,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                         required="required-field"
                         heading={AppConstants.name}
                         placeholder={AppConstants.name}
-                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(e.target.value), 'Venue', 'name')}
+                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(e.target.value)), 'Venue', 'name')}
                         value={venuData.name}
                         onBlur={(e) => this.formRef.current.setFieldsValue({
-                            'name': captializedString(e.target.value)
+                            'name': captializedString(removeFirstSpace(e.target.value))
                         })}
                     />
                 </Form.Item>
@@ -470,22 +484,31 @@ class CompetitionVenueAndTimesAdd extends Component {
                         disabled={this.state.isUsed}
                         placeholder={AppConstants.short_Name}
                         maxLength={4}
-                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(e.target.value), 'Venue', 'shortName')}
+                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(e.target.value)), 'Venue', 'shortName')}
                         value={venuData.shortName}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'shortName': captializedString(i.target.value)
+                            'shortName': captializedString(removeFirstSpace(i.target.value))
                         })}
                     />
                 </Form.Item>
 
                 {
                     !this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="venueAddress">
+                    <Form.Item
+                        className="formLineHeight"
+                        name="venueAddress"
+                        rules={[{ required: true, message: ValidationConstants.addressField[0] }]}
+                    >
                         <PlacesAutocomplete
                             heading={AppConstants.venueSearch}
                             required
                             error={this.state.venueAddressError}
                             onSetData={this.handlePlacesAutocomplete}
+                            otherProps={{
+                                onBlur: (i) => this.formRef.current.setFieldsValue({
+                                    "venueAddress": removeFirstSpace(i.target.value),
+                                }),
+                            }}
                         />
                     </Form.Item>
                 }
@@ -499,14 +522,17 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="addressOne">
+                    <Form.Item className="formLineHeight" name="addressOne" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
                         <InputWithHead
                             auto_complete="new-addressOne"
                             required="required-field"
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             value={venuData.street1}
-                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street1.target.value), 'Venue', 'street1')}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'addressOne': removeFirstSpace(e.target.value)
+                            })}
                         // readOnly
                         />
                     </Form.Item>
@@ -519,22 +545,32 @@ class CompetitionVenueAndTimesAdd extends Component {
                             auto_complete="new-addressTwo"
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
-                            onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
+                            onChange={(street2) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street2.target.value), 'Venue', 'street2')}
                             value={venuData.street2}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'addressTwo': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="suburb">
+                    <Form.Item
+                        className="formLineHeight"
+                        name="suburb"
+                        rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}
+                    >
                         <InputWithHead
                             auto_complete="new-suburb"
                             required="required-field"
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             value={venuData.suburb}
-                            onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, 'Venue', 'suburb')}
+                            onChange={(e) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(e.target.value), 'Venue', 'suburb')}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'suburb': removeFirstSpace(e.target.value)
+                            })}
                         // readOnly
                         />
                     </Form.Item>
@@ -542,14 +578,14 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="stateRefId">
+                    <Form.Item className="formLineHeight" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <InputWithHead required="required-field" heading={AppConstants.stateHeading} />
                         <Select
                             style={{ width: '100%' }}
                             placeholder={AppConstants.select}
                             value={venuData.stateRefId}
+                            name="stateRefId"
                             onChange={(value) => this.props.updateVenuAndTimeDataAction(value, 'Venue', 'stateRefId')}
-                        // disabled
                         >
                             {stateList.map((item) => (
                                 <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
@@ -560,7 +596,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="postcode">
+                    <Form.Item className="formLineHeight" name="postcode" rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
                         <InputWithHead
                             auto_complete="new-postcode"
                             required="required-field"
@@ -568,7 +604,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                             placeholder={AppConstants.postcode}
                             value={venuData.postalCode}
                             maxLength={4}
-                            onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, 'Venue', 'postalCode')}
+                            onChange={(e) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(e.target.value), 'Venue', 'postalCode')}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'postcode': removeFirstSpace(e.target.value)
+                            })}
                         // readOnly
                         />
                     </Form.Item>
@@ -579,8 +618,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                         auto_complete="new-contact"
                         heading={AppConstants.contactNumber}
                         placeholder={AppConstants.contactNumber}
-                        onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
+                        onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(
+                            removeFirstSpace(contactNumber.target.value), 'Venue', 'contactNumber')}
                         value={venuData.contactNumber}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'contact': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 

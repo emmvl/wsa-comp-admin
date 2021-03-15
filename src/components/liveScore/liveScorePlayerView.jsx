@@ -16,43 +16,43 @@ const { TabPane } = Tabs;
 ////activity columns data
 const activity_Columns = [
     {
-        title: 'Match id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => a.matchId.length - b.matchId.length,
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'home',
         key: 'home',
         sorter: (a, b) => a.home.length - b.home.length,
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'away',
         key: 'away',
         sorter: (a, b) => a.away.length - b.away.length,
     },
     {
-        title: 'Period',
+        title: AppConstants.period,
         dataIndex: 'period',
         key: 'period',
         sorter: (a, b) => a.period.length - b.period.length,
     },
     {
-        title: 'Timestamp',
+        title: AppConstants.timestamp,
         dataIndex: 'timestamp',
         key: 'timestamp',
         sorter: (a, b) => a.timestamp.length - b.timestamp.length,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => a.status.length - b.status.length,
     },
     {
-        title: 'Position',
+        title: AppConstants.position,
         dataIndex: 'positionName',
         key: 'positionName',
         sorter: (a, b) => a.positionName.length - b.positionName.length,
@@ -62,49 +62,49 @@ const activity_Columns = [
 ////activity columns data
 const shhoting_Columns = [
     {
-        title: 'Match id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => a.matchId.length - b.matchId.length,
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'home',
         key: 'home',
         sorter: (a, b) => a.home.length - b.home.length,
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'away',
         key: 'away',
         sorter: (a, b) => a.away.length - b.away.length,
     },
     {
-        title: 'Position',
+        title: AppConstants.position,
         dataIndex: 'position',
         key: 'position',
         sorter: (a, b) => a.position.length - b.position.length,
     },
     {
-        title: 'Attempts',
+        title: AppConstants.attempts,
         dataIndex: 'attempts',
         key: 'attempts',
         sorter: (a, b) => a.attempts.length - b.attempts.length,
     },
     {
-        title: 'Goals',
+        title: AppConstants.goals,
         dataIndex: 'goals',
         key: 'goals',
         sorter: (a, b) => a.goals.length - b.goals.length,
     },
     {
-        title: 'Goals %',
+        title: AppConstants.goalPercent,
         dataIndex: 'goalsPercent',
         key: 'goalsPercent',
         sorter: (a, b) => a.goalsPercent.length - b.goalsPercent.length,
     },
     {
-        title: 'Penalty Misses',
+        title: AppConstants.missedPenalties,
         dataIndex: 'penalty',
         key: 'penalty',
         sorter: (a, b) => a.penalty.length - b.penalty.length,

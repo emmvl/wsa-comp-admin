@@ -33,6 +33,7 @@ import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 import { getOrganisationData } from "../../util/sessionStorage";
+import { captializedString, removeFirstSpace } from "../../util/helpers";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -70,10 +71,13 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueAddressError: '',
             isCreator: null,
             fieldConfigurationRefIdIndex: null,
+            fieldConfigurationRefIdIndexSeparateTime: null,
             venueConfigurationModalIsOpened: false,
+            isModalTableIndex: null,
+            elementIndex: null,
             courtColumns: [
                 {
-                    title: "Court Number",
+                    title: AppConstants.courtNumbers,
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber, record, index) => {
@@ -85,22 +89,25 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Court Name",
+                    title: AppConstants.courtName,
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
                         return (
                             <Form.Item
                                 name={`venueCourtName${index}`}
-                                rules={[{ required: true, message: ValidationConstants.courtField[3] }]}
+                                rules={[{ required: true, message: ValidationConstants.courtField[1] }]}
                             >
                                 <Input
                                     // disabled={record.isDisabled}
                                     required="required-field pt-0 pb-0"
                                     className="input-inside-table-fees"
-                                    onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, index, 'venueCourtName', 'courtData')}
                                     value={courtName}
                                     placeholder="Court Name"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`venueCourtName${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
@@ -108,7 +115,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 },
 
                 {
-                    title: "Longitude",
+                    title: AppConstants.longitude,
                     dataIndex: "lng",
                     key: "lng",
                     render: (lng, record, index) => {
@@ -120,16 +127,19 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Input
                                     className="input-inside-table-venue-court"
                                     // disabled={record.isDisabled}
-                                    onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, index, 'lng', 'courtData')}
                                     value={lng}
                                     placeholder="Longitude"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`lng${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
                     }
                 },
                 {
-                    title: "Latitude",
+                    title: AppConstants.latitude,
                     dataIndex: "lat",
                     key: "lat",
                     render: (lat, record, index) => {
@@ -141,16 +151,19 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Input
                                     className="input-inside-table-venue-court"
                                     // disabled={record.isDisabled}
-                                    onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                    onChange={(e) => this.props.updateVenuAndTimeDataAction(e.target.value, index, 'lat', 'courtData')}
                                     value={lat}
                                     placeholder="Latitude"
+                                    onBlur={(e) => this.formRef.current.setFieldsValue({
+                                        [`lat${index}`]: removeFirstSpace(e.target.value),
+                                    })}
                                 />
                             </Form.Item>
                         )
                     }
                 },
                 {
-                    title: "Override Venue Timeslots?",
+                    title: AppConstants.overrideVenueTimeslots,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
                     width: 200,
@@ -169,32 +182,30 @@ class CompetitionVenueAndTimesEdit extends Component {
                     title: "",
                     dataIndex: "fieldConfigurationRefId",
                     key: "fieldConfigurationRefId",
-                    width: process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED ? 200 : 0,
+                    width: 200,
                     render: (fieldConfigurationRefId, record, index) => (
-                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED ?
-                            <div>
-                                <img
-                                    className="venue-configuration-image"
-                                    src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
-                                    alt=""
-                                    height={80}
-                                />
-                                <img
-                                    className="venue-configuration-control"
-                                    src={AppImages.chevronRight}
-                                    alt=""
-                                    height={25}
-                                    onClick={() => {
-                                        this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
-                                    }}
-                                />
+                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED &&
+                        <div>
+                            <img
+                                className="venue-configuration-image"
+                                src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
+                                alt=""
+                                height={80}
+                            />
+                            <img
+                                className="venue-configuration-control"
+                                src={AppImages.chevronRight}
+                                alt=""
+                                height={25}
+                                onClick={() => {
+                                    this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
+                                }}
+                            />
 
-                                <Form.Item name={`fieldConfigurationRefId${index}`}>
-                                    <Input type="hidden" value={fieldConfigurationRefId} />
-                                </Form.Item>
-                            </div>
-                            :
-                            <></>
+                            <Form.Item name={`fieldConfigurationRefId${index}`}>
+                                <Input type="hidden" value={fieldConfigurationRefId} />
+                            </Form.Item>
+                        </div>
                     )
                 },
                 {
@@ -322,13 +333,13 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     }
 
-    getImageForVenueConfig = (index, fieldConfigurationRefId) => {
+    getImageForVenueConfig = (index, fieldConfigurationRefId, tableIndex = null) => {
         let image = '';
         let i = 1;
         while (!image) {
             image = !!fieldConfigurationRefId
                 ? this.state.venueConfigurationImages[fieldConfigurationRefId - i]
-                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[index - i].fieldConfigurationRefId - 1]
+                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[!!tableIndex ? tableIndex : index - i].fieldConfigurationRefId - 1]
             i++;
         }
 
@@ -516,6 +527,30 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     };
 
+    getAddress = (addressObject) => {
+        try {
+            const { stateList, countryList } = this.props.commonReducerState;
+            const state = stateList.length > 0 && addressObject.stateRefId > 0
+                ? stateList.find((state) => state.id === addressObject.stateRefId).name
+                : null;
+            const country = countryList.length > 0 && addressObject.countryRefId > 0
+                ? countryList.find((country) => country.id === addressObject.countryRefId).description
+                : null;
+
+            let defaultAddress = '';
+            if (state) {
+                defaultAddress = (addressObject.street1 ? addressObject.street1 + ', ' : '') +
+                    (addressObject.suburb ? addressObject.suburb + ', ' : '') +
+                    (addressObject.postalCode ? addressObject.postalCode + ', ' : '') +
+                    (state ? state + ', ' : '') +
+                    (country ? country + '.' : '');
+                return defaultAddress;
+            }
+        } catch (ex) {
+            console.log("Error in getPartcipantParentAddress" + ex);
+        }
+    }
+
     enabledContentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
@@ -545,8 +580,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
+                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(e.target.value)), 'Venue', 'name')}
                         value={venuData.name}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'name': captializedString(removeFirstSpace(e.target.value))
+                        })}
                     />
                 </Form.Item>
 
@@ -561,20 +599,37 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.short_Name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.short_Name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                        onChange={(e) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(e.target.value)), 'Venue', 'shortName')}
                         value={venuData.shortName}
+                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                            'shortName': captializedString(removeFirstSpace(i.target.value))
+                        })}
                     />
                 </Form.Item>
 
                 {
                     !this.state.manualAddress &&
-                    <Form.Item name="venueAddress">
+                    <Form.Item
+                        name="venueAddress"
+                        help={this.state.venueAddressError && ValidationConstants.addressField[0]}
+                        validateStatus={this.state.venueAddressError ? "error" : 'validating'}
+                    >
                         <PlacesAutocomplete
-                            defaultValue={defaultVenueAddress}
+                            defaultValue={this.getAddress(venuData)}
                             heading={AppConstants.venueSearch}
                             required
                             error={this.state.venueAddressError}
                             onSetData={this.handlePlacesAutocomplete}
+                            otherProps={{
+                                onBlur: (i) => this.formRef.current.setFieldsValue({
+                                    "venueAddress": removeFirstSpace(i.target.value),
+                                }),
+                            }}
+                            onBlur={() => {
+                                this.setState({
+                                    venueAddressError: ''
+                                })
+                            }}
                         />
                     </Form.Item>
 
@@ -590,40 +645,51 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="addressOne">
+                    <Form.Item name="addressOne" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
                         <InputWithHead
                             auto_complete="new-addressOne"
                             required="required-field"
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
-                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street1.target.value), 'Venue', 'street1')}
                             value={venuData.street1}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'addressOne': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
 
                 {
                     this.state.manualAddress &&
-                    <InputWithHead
-                        auto_complete="new-addressTwo"
-                        heading={AppConstants.addressTwo}
-                        placeholder={AppConstants.addressTwo}
-                        onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
-                        value={venuData.street2}
-                    />
+                    <Form.Item name="addressTwo">
+                        <InputWithHead
+                            auto_complete="new-addressTwo"
+                            heading={AppConstants.addressTwo}
+                            placeholder={AppConstants.addressTwo}
+                            onChange={(street2) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street2.target.value), 'Venue', 'street2')}
+                            value={venuData.street2}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'addressTwo': removeFirstSpace(e.target.value)
+                            })}
+                        />
+                    </Form.Item>
                 }
 
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="suburb">
+                    <Form.Item name="suburb" rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
                         <InputWithHead
                             auto_complete="new-suburb"
                             required="required-field"
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
-                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
+                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(suburb.target.value), 'Venue', 'suburb')}
                             value={venuData.suburb}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'suburb': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
@@ -638,12 +704,13 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="stateRefId">
+                    <Form.Item rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <Select
                             className="w-100"
                             placeholder={AppConstants.select}
                             onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             value={venuData.stateRefId}
+                            name="stateRefId"
                         >
                             {stateList.map((item) => (
                                 <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
@@ -655,26 +722,35 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="postcode">
+                    <Form.Item name="postcode" rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
                         <InputWithHead
                             auto_complete="new-postcode"
                             required="required-field"
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
-                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
+                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(postalCode.target.value), 'Venue', 'postalCode')}
                             value={venuData.postalCode}
                             maxLength={4}
+                            onBlur={(e) => this.formRef.current.setFieldsValue({
+                                'postcode': removeFirstSpace(e.target.value)
+                            })}
                         />
                     </Form.Item>
                 }
 
-                <InputWithHead
-                    auto_complete="new-contactNumber"
-                    heading={AppConstants.contactNumber}
-                    placeholder={AppConstants.contactNumber}
-                    onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
-                    value={venuData.contactNumber}
-                />
+                <Form.Item className="formLineHeight" name="contact">
+                    <InputWithHead
+                        auto_complete="new-contactNumber"
+                        heading={AppConstants.contactNumber}
+                        placeholder={AppConstants.contactNumber}
+                        onChange={(contactNumber) => this.props
+                            .updateVenuAndTimeDataAction(removeFirstSpace(contactNumber.target.value), 'Venue', 'contactNumber')}
+                        value={venuData.contactNumber}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'contact': removeFirstSpace(e.target.value)
+                        })}
+                    />
+                </Form.Item>
 
                 <div className="fluid-width" style={{ marginTop: 25 }}>
                     <div className="row">
@@ -724,7 +800,6 @@ class CompetitionVenueAndTimesEdit extends Component {
         const state = stateList.length > 0 && venuData.stateRefId
             ? stateList.find((state) => state.id === venuData.stateRefId).name
             : null;
-
         let defaultVenueAddress = `${venuData.street1 ? `${venuData.street1},` : ''
             } ${venuData.suburb ? `${venuData.suburb},` : ''
             } ${state ? `${state},` : ''
@@ -745,8 +820,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
+                        onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(name.target.value)), 'Venue', 'name')}
                         value={venuData.name}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'name': captializedString(removeFirstSpace(e.target.value))
+                        })}
                     />
                 </Form.Item>
 
@@ -761,8 +839,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.short_Name}
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.short_Name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                        onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(removeFirstSpace(name.target.value)), 'Venue', 'shortName')}
                         value={venuData.shortName}
+                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                            'shortName': captializedString(removeFirstSpace(i.target.value))
+                        })}
                     />
                 </Form.Item>
 
@@ -776,36 +857,47 @@ class CompetitionVenueAndTimesEdit extends Component {
                 />
 
 
-                <Form.Item name="addressOne">
+                <Form.Item name="addressOne" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
                     <InputWithHead
                         auto_complete="new-addressOne"
                         required="required-field"
                         heading={AppConstants.addressOne}
                         placeholder={AppConstants.addressOne}
-                        onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
+                        onChange={(street1) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street1.target.value), 'Venue', 'street1')}
                         value={venuData.street1}
                         disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'addressOne': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 
-                <InputWithHead
-                    auto_complete="new-addressTwo"
-                    heading={AppConstants.addressTwo}
-                    placeholder={AppConstants.addressTwo}
-                    onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
-                    value={venuData.street2}
-                    disabled={this.state.isUsed || !this.state.isCreator}
-                />
+                <Form.Item name="addressTwo">
+                    <InputWithHead
+                        auto_complete="new-addressTwo"
+                        heading={AppConstants.addressTwo}
+                        placeholder={AppConstants.addressTwo}
+                        onChange={(street2) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(street2.target.value), 'Venue', 'street2')}
+                        value={venuData.street2}
+                        disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'addressTwo': removeFirstSpace(e.target.value)
+                        })}
+                    />
+                </Form.Item>
 
-                <Form.Item name="suburb">
+                <Form.Item name="suburb" rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
                     <InputWithHead
                         auto_complete="new-suburb"
                         required="required-field"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
-                        onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
+                        onChange={(suburb) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(suburb.target.value), 'Venue', 'suburb')}
                         value={venuData.suburb}
                         disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'suburb': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 
@@ -814,7 +906,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     heading={AppConstants.stateHeading}
                 />
 
-                <Form.Item name="stateRefId">
+                <Form.Item name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                     <Select
                         className="w-100"
                         placeholder={AppConstants.select}
@@ -828,27 +920,36 @@ class CompetitionVenueAndTimesEdit extends Component {
                     </Select>
                 </Form.Item>
 
-                <Form.Item name="postcode">
+                <Form.Item name="postcode" rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
                     <InputWithHead
                         auto_complete="new-postcode"
                         required="required-field"
                         heading={AppConstants.postcode}
                         placeholder={AppConstants.postcode}
-                        onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
+                        onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(removeFirstSpace(postalCode.target.value), 'Venue', 'postalCode')}
                         value={venuData.postalCode}
                         maxLength={4}
                         disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'postcode': removeFirstSpace(e.target.value)
+                        })}
                     />
                 </Form.Item>
 
-                <InputWithHead
-                    auto_complete="new-contactNumber"
-                    heading={AppConstants.contactNumber}
-                    placeholder={AppConstants.contactNumber}
-                    onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
-                    value={venuData.contactNumber}
-                    disabled={this.state.isUsed || !this.state.isCreator}
-                />
+                <Form.Item name="contact">
+                    <InputWithHead
+                        auto_complete="new-contactNumber"
+                        heading={AppConstants.contactNumber}
+                        placeholder={AppConstants.contactNumber}
+                        onChange={(contactNumber) => this.props
+                            .updateVenuAndTimeDataAction(removeFirstSpace(contactNumber.target.value), 'Venue', 'contactNumber')}
+                        value={venuData.contactNumber}
+                        disabled={this.state.isUsed || !this.state.isCreator}
+                        onBlur={(e) => this.formRef.current.setFieldsValue({
+                            'contact': removeFirstSpace(e.target.value)
+                        })}
+                    />
+                </Form.Item>
 
                 <div className="fluid-width" style={{ marginTop: 25 }}>
                     <div className="row">
@@ -1037,8 +1138,32 @@ class CompetitionVenueAndTimesEdit extends Component {
                         use12Hours={false}
                     />
                 </div>
+                {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED && (
+                    <div className="col-sm-1">
+                        <img
+                            className="venue-configuration-image"
+                            src={this.getImageForVenueConfig(index, item.fieldConfigurationRefId, tableIndex)}
+                            alt=""
+                            height={80}
+                        />
+                        <img
+                            className="venue-configuration-control"
+                            src={AppImages.chevronRight}
+                            alt=""
+                            height={25}
+                            onClick={() => {
+                                this.setState({isModalTableIndex: tableIndex, elementIndex: index, venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndexSeparateTime: index})
+                            }}
+                        />
+
+                        <Form.Item style={{height: 0}} name={`fieldConfigurationRefIdIndexSeparateTime${index}`}>
+                            <Input type="hidden" value={item.fieldConfigurationRefIdIndexSeparateTime} />
+                        </Form.Item>
+                    </div>
+                )}
+
                 {!item.isDisabled && (
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
+                    <div className="col-sm-1 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
                         <span className="user-remove-btn">
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
@@ -1256,13 +1381,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                         alt=""
                         height={150}
                         onClick={() => {
-                            this.setState({fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
                             this.props.updateVenuAndTimeDataAction(
                                 key+1,
-                                this.state.fieldConfigurationRefIdIndex,
+                                !!this.state.isModalTableIndex ? this.state.elementIndex : this.state.fieldConfigurationRefIdIndex,
                                 'fieldConfigurationRefId',
-                                'courtData',
+                                !!this.state.isModalTableIndex ? 'addTimeSlotField' : 'courtData',
+                                this.state.isModalTableIndex,
                             )
+                            this.setState({isModalTableIndex: null, elementIndex: null, fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
                         }}
                     />
                 ))

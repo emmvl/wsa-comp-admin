@@ -557,9 +557,6 @@ class UmpirePaymentSetting extends Component {
             ? paymentSettingsData.filter(item => !item.hasSettings)
             : [];
 
-        console.log('###-sectionData', sectionData)
-
-
         return (
             <>
                 {sectionTitle &&

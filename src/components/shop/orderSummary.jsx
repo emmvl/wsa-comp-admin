@@ -64,7 +64,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'date',
         key: 'date',
         sorter: true,
@@ -76,7 +76,7 @@ const columns = [
         },
     },
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -92,21 +92,21 @@ const columns = [
         ),
     },
     {
-        title: 'Affiliate',
+        title: AppConstants.affiliate,
         dataIndex: 'affiliate',
         key: 'affiliate',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("organisationId"),
     },
     {
-        title: 'Postcode',
+        title: AppConstants.postcode,
         dataIndex: 'postcode',
         key: 'postcode',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Order ID',
+        title: AppConstants.orderId,
         dataIndex: 'id',
         key: 'id',
         sorter: true,
@@ -120,7 +120,7 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'Paid',
+        title: AppConstants.paid,
         dataIndex: 'paid',
         key: 'paid',
         sorter: true,
@@ -130,7 +130,7 @@ const columns = [
         )
     },
     {
-        title: 'Net Profit',
+        title: AppConstants.netProfit,
         dataIndex: 'netProfit',
         key: 'netProfit',
         sorter: true,
@@ -140,7 +140,7 @@ const columns = [
         )
     },
     {
-        title: 'Payment Method',
+        title: AppConstants.paymentMethod,
         dataIndex: 'paymentMethod',
         key: 'paymentMethod',
         sorter: true,

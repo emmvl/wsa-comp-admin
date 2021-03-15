@@ -40,7 +40,7 @@ const communicationAxiosApi = {
             console.error(e);
         }
     },
-    communicationList({ userId, organisationId }) {
+    communicationList({ userId, organisationId, offset, limit, sortBy, sortOrder }) {
         try {
             let url = `${communicationBaseUrl}/admin`;
             if (userId) {
@@ -52,7 +52,15 @@ const communicationAxiosApi = {
             if (userId && organisationId) {
                 url = `${communicationBaseUrl}/admin?userId=${userId}&organisationId=${organisationId}`;
             }
-            return Method.dataGet(url, token);
+            const body = {
+                sortBy,
+                sortOrder,
+                paging: {
+                    offset,
+                    limit,
+                },
+            };
+            return Method.dataPost(url, token, body);
         } catch (e) {
             console.error(e);
         }

@@ -669,7 +669,7 @@ class LiveScoreAddIncident extends Component {
                 <Layout>
                     {this.headerView()}
 
-                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick} className="login-form" noValidate="noValidate">
+                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick} noValidate="noValidate">
                         <Content>
                             <div className="formView">
                                 {this.contentView()}

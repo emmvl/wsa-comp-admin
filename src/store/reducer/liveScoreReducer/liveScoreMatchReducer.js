@@ -530,9 +530,14 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.start_date = action.data;
                 state.start_post_date = action.data;
                 if (action.data != null) {
-                    let d_date = moment(action.data).format('YYYY-MM-DD').split('-');
-                    let d_oldTime = moment(state.start_time).format('HH:mm').split(':')
-                    let d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2], d_oldTime[0], d_oldTime[1]]).utc().format();
+                    const d_date = moment(action.data).format('YYYY-MM-DD').split('-');
+                    let d_newTime;
+                    if (!!state.start_time) {
+                        const d_oldTime = moment(state.start_time).format('HH:mm').split(':')
+                        d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2], d_oldTime[0], d_oldTime[1]]).utc().format();
+                    } else {
+                        d_newTime = moment([d_date[0], d_date[1] - 1, d_date[2]]).utc().format();
+                    }
                     state.matchData.startTime = d_newTime;
                     if (d_newTime !== 'Invalid date') {
                         state.updateUmpireFetchCall = true;
@@ -542,9 +547,9 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.start_time = action.data;
                 state.displayTime = action.data;
                 if (action.data != null) {
-                    let t_date = moment(state.matchData.startTime).format('YYYY-MM-DD').split('-');
-                    let t_time = moment(action.data).format('HH:mm').split(':');
-                    let t_newTime = moment([t_date[0], t_date[1] - 1, t_date[2], t_time[0], t_time[1]]).utc().format();
+                    const t_date = !!state.matchData.startTime ? moment(state.matchData.startTime).format('YYYY-MM-DD').split('-') : moment().format('YYYY-MM-DD').split('-');
+                    const t_time = moment(action.data).format('HH:mm').split(':');
+                    const t_newTime = moment([t_date[0], t_date[1] - 1, t_date[2], t_time[0], t_time[1]]).utc().format();
                     state.matchData.startTime = t_newTime;
                     if (t_newTime !== 'Invalid date') {
                         state.updateUmpireFetchCall = true;

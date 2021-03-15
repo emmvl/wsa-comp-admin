@@ -651,7 +651,14 @@ const CompetitionAxiosApi = {
         const url = `/api/competitionmanagement/dashboard?userId=${userId}`
         return Method.dataPost(url, token, body);
     },
-
+    async emptySideEffect(data){
+        return new Promise((resolve, reject) => {
+            return resolve({
+                status: 1,
+                result:data,
+            });
+        });
+    },
     // update Draws
     async updateDraws(data) {
         const body = data
@@ -854,7 +861,8 @@ const CompetitionAxiosApi = {
 
     drawsMatchesListApi(competitionId) {
         const url = `/api/draws/matches/export?competitionUniqueKey=${competitionId}`
-        return Method.dataGetDownload(url, token, "MatchesList");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataGetDownload(url, token, `matchesList-${_now}`);
     },
 
     importDraws(payload) {
@@ -872,28 +880,32 @@ const CompetitionAxiosApi = {
         const organisationId = await getOrganisationData().organisationUniqueKey;
         const { competitionId, yearRefId } = payload;
         const url = `/api/export/teams/final?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
-        return Method.dataGetDownload(url, token, "Teams");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataGetDownload(url, token, `finalTeams-${_now}`);
     },
 
     async proposedTeamsExportApi(payload) {
         const organisationId = await getOrganisationData().organisationUniqueKey;
         const { competitionId, yearRefId } = payload;
         const url = `/api/export/teams/proposed?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
-        return Method.dataGetDownload(url, token, "Teams");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataGetDownload(url, token, `competitionPartProposedTeamGrading-${_now}`);
     },
 
     async finalPlayersExportApi(payload) {
         const organisationId = await getOrganisationData().organisationUniqueKey;
         const { competitionId, yearRefId } = payload;
         const url = `/api/export/player/final?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
-        return Method.dataGetDownload(url, token, "Players");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataGetDownload(url, token, `finalPlayers-${_now}`);
     },
 
     async proposedPlayersExportApi(payload) {
         const organisationId = await getOrganisationData().organisationUniqueKey;
         const { competitionId, yearRefId } = payload;
         const url = `/api/export/player/proposed?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
-        return Method.dataGetDownload(url, token, "Players");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataGetDownload(url, token, `proposedPlayers-${_now}`);
     },
 
     async getFixtureData(yearId, competitionId, competitionDivisionGradeId) {
@@ -1082,8 +1094,14 @@ const CompetitionAxiosApi = {
         const userId = await getUserId()
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         const url = `/api/proposedplayerlist/export?userId=${userId}&competitionMembershipProductDivisionId=${division}&competitionUniqueKey=${competition}&organisationId=${organisationUniqueKey}`
-        let _now = moment().utc().format('Y-M-D');
+
+        let _now = moment().utc().format('Y-MM-DD');
         return Method.dataGetDownload(url, token, `competitionPlayerGrades-${_now}`);
+    },
+
+    saveCompetitionDivisions(competitionId, organisationId, payload) {
+        const url = `api/competition/${competitionId}/competitionDivisions?organisationId=${organisationId}`
+        return Method.dataPatch(url, token, payload)
     },
 };
 

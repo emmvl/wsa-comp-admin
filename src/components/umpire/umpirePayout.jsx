@@ -34,31 +34,31 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.transactionId,
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
         sorter: (a, b) => tableSort(a, b, "balance_transaction"),
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: (a, b) => tableSort(a, b, "description"),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: (a, b) => tableSort(a, b, "created"),
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         sorter: (a, b) => tableSort(a, b, "amount"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => tableSort(a, b, "status"),
@@ -87,7 +87,7 @@ class UmpirePayout extends Component {
                             {AppConstants.payouts}
                         </span>
                     </div>
-                    <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
+                    {/* <div className="col-sm-8 d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">
                             <div className="col-sm pt-1">
                                 <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
@@ -106,7 +106,7 @@ class UmpirePayout extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

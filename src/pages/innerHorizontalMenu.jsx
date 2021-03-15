@@ -639,7 +639,7 @@ class InnerHorizontalMenu extends React.Component {
                                     style={{ width: "fit-content", minWidth: 190, maxWidth: 220 }}
                                     className="year-select reg-filter-select1 innerSelect-value"
                                     onChange={this.setCompetitionID}
-                                    value={this.state.selectedComp}
+                                    value={!!compList.length ? this.state.selectedComp : ''}
                                 >
                                     {compList.map((item) => (
                                         <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
@@ -870,16 +870,11 @@ class InnerHorizontalMenu extends React.Component {
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu
-                            key="sub1"
-                            title={<span>{AppConstants.products}</span>}
-                        >
-                            <Menu.Item key="2">
-                                <NavLink to="/listProducts">
-                                    <span>{AppConstants.products}</span>
-                                </NavLink>
-                            </Menu.Item>
-                        </SubMenu>
+                        <Menu.Item key="2">
+                            <NavLink to="/listProducts">
+                                <span>{AppConstants.products}</span>
+                            </NavLink>
+                        </Menu.Item>
                         <Menu.Item key="4">
                             <NavLink to="/shopSettings">
                                 <span>{AppConstants.settings}</span>
@@ -920,7 +915,17 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item> */}
                         <Menu.Item key="5">
                             <NavLink to="/paymentSummary">
-                                <span>Payment Summary</span>
+                                <span>{AppConstants.paymentSummary}</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="6">
+                            <NavLink to="/SummaryByParticipant">
+                                <span>{AppConstants.summaryByParticipant}</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="7">
+                            <NavLink to="/salesSummary">
+                                <span>{AppConstants.salesSummary}</span>
                             </NavLink>
                         </Menu.Item>
                     </Menu>

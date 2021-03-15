@@ -26,12 +26,10 @@ function getUmpireList(data) {
     return action;
 }
 
-function addUmpireAction(data, affiliateId, exsitingUmpireId, extraData, isUmpire, isUmpireCoach) {
+function addUmpireAction(data, extraData, isUmpire, isUmpireCoach) {
     const action = {
         type: ApiConstants.API_ADD_UMPIRE_LOAD,
         data,
-        affiliateId,
-        exsitingUmpireId,
         extraData,
         isUmpire,
         isUmpireCoach
@@ -127,4 +125,4 @@ export {
     setUmpireListPageNumberAction,
     getRankedUmpiresCount,
     updateUmpireRank,
-} 
+}

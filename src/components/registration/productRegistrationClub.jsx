@@ -10,7 +10,7 @@ const { Footer, Content } = Layout;
 const { Option } = Select;
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
@@ -18,37 +18,37 @@ const columns = [
         // ellipsis: true,
     },
     {
-        title: 'Registration Type',
+        title: AppConstants.registrationType,
         dataIndex: 'regType',
         key: 'regType',
         sorter: (a, b) => a.regType.length - b.regType.length,
     },
     {
-        title: 'Club Fee',
+        title: AppConstants.clubFees,
         dataIndex: 'clubFee',
         key: 'clubFee',
         sorter: (a, b) => a.clubFee.length - b.clubFee.length,
     },
     {
-        title: 'Association Fee',
+        title: AppConstants.associationFees,
         dataIndex: 'associatFee',
         key: 'associatFee',
         sorter: (a, b) => a.associatFee.length - b.associatFee.length,
     },
     {
-        title: 'State Fee',
+        title: AppConstants.stateFees,
         dataIndex: 'stateFee',
         key: 'stateFee',
         sorter: (a, b) => a.stateFee.length - b.stateFee.length,
     },
     {
-        title: 'Total Fee',
+        title: AppConstants.totalFee,
         dataIndex: 'totalFee',
         key: 'totalFee',
         sorter: (a, b) => a.totalFee.length - b.totalFee.length,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         render: status => <span className='d-flex justify-content-center w-50'>
@@ -56,7 +56,7 @@ const columns = [
         </span>,
     },
     {
-        title: 'Product Type',
+        title: AppConstants.productType,
         dataIndex: 'productType',
         key: 'productType',
         sorter: (a, b) => a.productType.length - b.productType.length,

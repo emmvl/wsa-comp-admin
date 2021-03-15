@@ -23,52 +23,52 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "Round",
+        title: AppConstants.round,
         dataIndex: "Round",
         key: "Round",
     },
     {
-        title: "Division",
+        title: AppConstants.division,
         dataIndex: "Division",
         key: "Division",
     },
     {
-        title: "Grade",
+        title: AppConstants.grade,
         dataIndex: "Grade",
         key: "Grade",
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: "Date",
         key: "Date",
     },
     {
-        title: "Start Time",
+        title: AppConstants.startTime,
         dataIndex: "Start Time",
         key: "Start Time",
     },
     {
-        title: "End Time",
+        title: AppConstants.endTime,
         dataIndex: "End Time",
         key: "End Time",
     },
     {
-        title: "Team 1",
+        title: AppConstants.team1,
         dataIndex: "Team 1",
         key: "Team 1",
     },
     {
-        title: "Team 2",
+        title: AppConstants.team2,
         dataIndex: "Team 2",
         key: "Team 2",
     },
     {
-        title: "Venue Name",
+        title: AppConstants.venueName,
         dataIndex: "Venue Name",
         key: "Venue Name",
     },
     {
-        title: "Court Name",
+        title: AppConstants.courtName,
         dataIndex: "Court Name",
         key: "Court Name",
     },
