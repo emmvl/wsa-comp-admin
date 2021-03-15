@@ -81,12 +81,12 @@ const payments = [
 
 const columns = [
     {
-        title: AppConstants.name,
-        dataIndex: "name",
-        key: "name",
+        title: AppConstants.firstName,
+        dataIndex: "firstName",
+        key: "firstName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (name, record) => (
+        render: (firstName, record) => (
             <NavLink
                 to={{
                     pathname: "/userPersonal",
@@ -96,9 +96,31 @@ const columns = [
                         screen: "/registration",
                     },
                 }}
-            > 
-                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{name}</span>
-                  
+            >
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{firstName}</span>
+
+            </NavLink>
+        ),
+    },
+    {
+        title: AppConstants.lastName,
+        dataIndex: "lastName",
+        key: "lastName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (lastName, record) => (
+            <NavLink
+                to={{
+                    pathname: "/userPersonal",
+                    state: {
+                        userId: record.userId,
+                        screenKey: "registration",
+                        screen: "/registration",
+                    },
+                }}
+            >
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{lastName}</span>
+
             </NavLink>
         ),
     },
@@ -294,13 +316,13 @@ const columns = [
                             {
                                 record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
                                 record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
-                                    <Menu.Item key="7" 
-                                    onClick={() =>  
-                                        history.push("/deregistration", { 
-                                            regData: record, 
+                                    <Menu.Item key="7"
+                                    onClick={() =>
+                                        history.push("/deregistration", {
+                                            regData: record,
                                             personal: record,
                                             sourceFrom: AppConstants.ownRegistration,
-                                            subSourceFrom: "RegistrationListPage" 
+                                            subSourceFrom: "RegistrationListPage"
                                         })}
                                     >
                                         <span>{AppConstants.registrationChange}</span>
@@ -672,7 +694,7 @@ class Registration extends Component {
         }
         this.setState({otherModalVisible: false});
     }
-    
+
     receiveCashPayment = (key) => {
         if (key == "cancel") {
             this.setState({ visible: false });
@@ -1235,7 +1257,7 @@ class Registration extends Component {
                     {' '}
                     {selectedRow ? currencyFormat(selectedRow.governmentVoucherAmount) : "$0.00"}
                     </div>
-                    
+
                 </div>
             </Modal>
         )
