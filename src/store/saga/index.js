@@ -489,7 +489,7 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_NEW_UMPIRE_LIST_LOAD, umpireSaga.newUmpireListSaga);
     yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga);
     yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireSaga.getAffiliateSaga);
-    // yield takeEvery(ApiConstants.GET_UMPIRE_LOAD, umpireSaga.getUmpireInfoSaga); 
+    yield takeEvery(ApiConstants.GET_UMPIRE_TEAMS_LOAD, umpireSaga.getUmpireTeamsSaga); 
     yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireSaga.umpireSearchSaga);
     yield takeEvery(ApiConstants.API_ADD_UMPIRE_LOAD, umpireSaga.addEditUmpireSaga);
     yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga);
