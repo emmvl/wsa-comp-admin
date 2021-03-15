@@ -197,6 +197,13 @@ class MultifieldDrawsNewTimeline extends Component {
                 venueCourtNumber: 0,
                 venueShortName: ""
             },
+            emptySlotVenueFieldUpdate:{
+                colorCode: "#999999",                
+                venueCourtId: 0,
+                venueCourtName: "",
+                venueCourtNumber: 0,
+                venueShortName: ""
+            },
             switchDrawNameFields:{
                 awayTeamName:"",
                 awayTeamOrganisationId:"",
@@ -1218,6 +1225,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     if(drawindex>-1){             
                         let draw=sourceVenueCourt.slotsArray[drawindex];               
                         moveddraw=JSON.parse(JSON.stringify(draw));
+                        moveddraw.matchDate=postData.matchDate;
+                        moveddraw.startTime=postData.startTime;
+                        moveddraw.endTime=postData.endTime;
                         //set original to empty
                         let emptyDraw={...this.state.emptySlot};
                         Object.keys(this.state.emptySlotFieldUpdate).forEach(key => emptyDraw[key] = draw[key]);                            
@@ -1233,7 +1243,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         }
                     }                        
                     if(drawindex>-1){
-                        Object.keys(this.state.emptySlotFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
+                        Object.keys(this.state.emptySlotVenueFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
                         destinationVenueCourt.slotsArray[drawindex]=moveddraw;
                     }                    
                 }                
