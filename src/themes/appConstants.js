@@ -1553,6 +1553,7 @@ const AppConstants = {
     replicateSetting: "Replicate Settings",
     venuePreferences: "Venue Preferences",
     competitionName: "Competition Name",
+    competition_name: "Competition Name",
     pools: "Pools",
     gradesOrPools: "Grades / Pools",
     playOff3rdPosition: "Playoff for 3rd position",
