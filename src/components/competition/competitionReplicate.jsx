@@ -275,7 +275,7 @@ class CompetitionReplicate extends Component {
                     <div className="col-sm">
                         <div className="row">
                             <div className="col-sm-4">
-                                <InputWithHead heading={AppConstants.competition_name} />
+                                <InputWithHead heading={AppConstants.competitionName} />
                             </div>
                             <div className="col-sm">
                                 <Form.Item
@@ -287,7 +287,7 @@ class CompetitionReplicate extends Component {
                                 >
                                     <InputWithHead
                                         auto_complete="off"
-                                        placeholder={AppConstants.competition_name}
+                                        placeholder={AppConstants.competitionName}
                                         value={replicateSave.details.competitionName}
                                         onChange={(e) => this.onChangeReplicateValue(e.target.value, "details", "competitionName")}
                                     />
