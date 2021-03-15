@@ -665,8 +665,8 @@ class CompetitionFormat extends Component {
                 <InputWithHead
                     id={AppUniqueId.compnameTextbox}
                     disabled={disabledStatus}
-                    heading={AppConstants.competition_name}
-                    placeholder={AppConstants.competition_name}
+                    heading={AppConstants.competitionName}
+                    placeholder={AppConstants.competitionName}
                     value={data.competitionName}
                     onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}
                 />

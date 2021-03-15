@@ -75,7 +75,7 @@ class CompetitionModal extends React.Component {
                                 <Form.Item name="compName" rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}>
                                     <InputWithHead
                                         required="required-field pt-0"
-                                        heading={AppConstants.competition_name}
+                                        heading={AppConstants.competitionName}
                                         placeholder="Enter competition Name"
                                         onChange={(e) => competitionChange(e)}
                                         onBlur={(i) => this.formRef.current.setFieldsValue({
