@@ -202,7 +202,6 @@ const affiliate = {
   stateRefId: 0,
   whatIsTheLowestOrgThatCanAddChild: 0,
   contacts: [],
-  email: '',
   charityRoundUp: [],
   charity: [],
 };
