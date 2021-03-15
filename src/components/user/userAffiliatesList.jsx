@@ -63,7 +63,7 @@ const listeners = (key) => ({
 });
 const columns = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: true,
@@ -71,42 +71,42 @@ const columns = [
 
     },
     {
-        title: 'Affiliated To',
+        title: AppConstants.affiliatedTo,
         dataIndex: 'affiliatedToName',
         key: 'affiliatedToName',
         sorter: true,
         onHeaderCell: () => listeners('affiliatedTo'),
     },
     {
-        title: 'Organisation Type',
+        title: AppConstants.organisationType,
         dataIndex: 'organisationTypeRefName',
         key: 'organisationTypeRefName',
         sorter: true,
         onHeaderCell: () => listeners('organisationType'),
     },
     {
-        title: 'Contact 1',
+        title: AppConstants.contact1,
         dataIndex: 'contact1Name',
         key: 'contact1Name',
         sorter: false,
         // onHeaderCell: () => listeners('contact1'),
     },
     {
-        title: 'Contact 2',
+        title: AppConstants.contact2,
         dataIndex: 'contact2Name',
         key: 'contact2Name',
         sorter: false,
         // onHeaderCell: () => listeners('contact2'),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'statusRefName',
         key: 'statusRefName',
         sorter: true,
         onHeaderCell: () => listeners('status'),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isUsed',
         key: 'isUsed',
         render: (isUsed, e) => (
@@ -268,11 +268,11 @@ class UserAffiliatesList extends Component {
     showDeleteConfirm = (affiliateId) => {
         const this_ = this
         confirm({
-            title: 'Are you sure you want to delete this affiliate?',
+            title: AppConstants.affiliateDeleteConfirm,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteAffiliate(affiliateId)
             },

@@ -13,31 +13,31 @@ const { Content } = Layout;
 ////columns data
 const columns = [
     {
-        title: 'Start',
+        title: AppConstants.start,
         dataIndex: 'start',
         key: 'start',
         sorter: (a, b) => a.start.length - b.start.length,
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'home',
         key: 'home',
         sorter: (a, b) => a.home.length - b.home.length,
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'away',
         key: 'away',
         sorter: (a, b) => a.away.length - b.away.length,
     },
     {
-        title: 'Venue',
+        title: AppConstants.venue,
         dataIndex: 'venue',
         key: 'venue',
         sorter: (a, b) => a.venue.length - b.venue.length,
     },
     {
-        title: 'Results',
+        title: AppConstants.results,
         dataIndex: 'results',
         key: 'results',
         sorter: (a, b) => a.results.length - b.results.length,

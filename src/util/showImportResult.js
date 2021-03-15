@@ -44,8 +44,8 @@ export const receiptImportResult = (result) => {
         type: Object.keys(resErr).length === 0
             ? 'success'
             : (resData.length === 0 ? 'error' : 'warning'),
-        okText: 'Ok',
-        okType: 'primary',
+        okText: AppConstants.ok,
+        okType: AppConstants.primary,
         okButtonProps: { className: 'ant-btn primary-add-comp-form ant-btn-primary' },
         cancelButtonProps: { className: 'hide' },
         onOk() {
@@ -56,13 +56,13 @@ export const receiptImportResult = (result) => {
 export const showInvalidData = (cols, importResult) => {
     const columns = [
         {
-            title: 'Line #',
+            title: AppConstants.line,
             dataIndex: 'index',
             key: 'index',
         },
         ...cols,
         {
-            title: 'Error Message',
+            title: AppConstants.errorMessage,
             dataIndex: 'message',
             key: 'message',
             className: 'error-message-column',

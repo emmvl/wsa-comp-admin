@@ -71,7 +71,7 @@ function totalSeasonalFees(seasonalFees1, record) {
     return (
         affiliateFeeStatus ? (
             <span>
-                {record.feeOrgId == null ? 'N/A' : (record.seasonalFees == null && record.seasonalGST == null) ? 'N/A' : 'Affiliate fee not set!'}
+                {record.feeOrgId == null ? 'N/A' : (record.seasonalFees == null && record.seasonalGST == null) ? 'N/A' : AppConstants.affiliateFeeNotSet}
             </span>
         ) : (
             <span>
@@ -102,7 +102,7 @@ function totalCasualFees(casualFees1, record) {
     return (
         affiliateFeeStatus ? (
             <span>
-                {record.feeOrgId == null ? 'N/A' : (record.casualFees == null && record.casualGST == null) ? 'N/A' : 'Affiliate fee not set!'}
+                {record.feeOrgId == null ? 'N/A' : (record.casualFees == null && record.casualGST == null) ? 'N/A' : AppConstants.affiliateFeeNotSet}
             </span>
         ) : (
             <span>
@@ -118,14 +118,14 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Competition Name',
+        title: AppConstants.competitionName,
         dataIndex: 'competitionName',
         key: 'competitionName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Organiser',
+        title: AppConstants.organiser,
         dataIndex: 'organiser',
         key: 'organiser',
         sorter: true,
@@ -135,7 +135,7 @@ const columns = [
         ),
     },
     {
-        title: 'Affiliate',
+        title: AppConstants.affiliate,
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: true,
@@ -145,21 +145,21 @@ const columns = [
         ),
     },
     {
-        title: 'Membership Product',
+        title: AppConstants.membershipProduct,
         dataIndex: 'membershipProductName',
         key: 'membershipProductName',
         sorter: true,
         onHeaderCell: () => listeners('membershipProduct'),
     },
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         sorter: true,
         onHeaderCell: () => listeners('membershipType'),
     },
     {
-        title: 'Registration Divisions',
+        title: AppConstants.registrationDivisions,
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: true,
@@ -169,7 +169,7 @@ const columns = [
         ),
     },
     {
-        title: 'Total Fee - Seasonal (inc GST)',
+        title: AppConstants.totalFeeSeasonalIncGst,
         dataIndex: 'seasonalFees',
         key: 'seasonalFees',
         render: (seasonalFees, record) => totalSeasonalFees(seasonalFees, record),
@@ -177,7 +177,7 @@ const columns = [
         onHeaderCell: () => listeners('totalSeasonalFee'),
     },
     {
-        title: 'Total Fee - Single Game (inc GST)',
+        titie: AppConstants.totalFeeSingleGameIncGst,
         dataIndex: 'casualFees',
         key: 'casualFees',
         render: (casualFees, record) => totalCasualFees(casualFees, record),
@@ -193,7 +193,7 @@ const columns = [
         onHeaderCell: () => listeners('totalCasualFee'),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isUsed',
         key: 'isUsed',
         render: (isUsed, record) => (
@@ -319,11 +319,11 @@ class RegistrationCompetitionList extends Component {
     showDeleteConfirm = (competitionId) => {
         const this_ = this;
         confirm({
-            title: 'Are you sure delete this product?',
+            titie: AppConstants.productDeleteConfirmMsg,
             // content: "Some descriptions",
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteProduct(competitionId);
             },

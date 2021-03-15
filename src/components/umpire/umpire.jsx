@@ -15,7 +15,7 @@ import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { 
+import {
     umpireMainListAction,
     setUmpireListPageSizeAction,
     setUmpireListPageNumberAction,
@@ -113,9 +113,9 @@ class Umpire extends Component {
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                     render: (rank, record) => {
                         const { rankedUmpiresCount } = this.props.umpireState;
-                        const currentOrganisationId =JSON.parse(localStorage.getItem("setOrganisationData")).organisationId;
-                        const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData")).organisationId;
-                        
+                        const currentOrganisationId = JSON.parse(localStorage.getItem("setOrganisationData"))?.organisationId;
+                        const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData"))?.organisationId;
+
                         return (
                             <Form>
                                 {
@@ -127,8 +127,8 @@ class Umpire extends Component {
                                             {
                                                 Array.apply(null, { length: rankedUmpiresCount + 1 }).map((rank, i, arr) => {
                                                     return (
-                                                        <Option 
-                                                            style={ i === arr.length - 1 ? {backgroundColor: 'lightgreen'} : {}} 
+                                                        <Option
+                                                            style={ i === arr.length - 1 ? {backgroundColor: 'lightgreen'} : {}}
                                                             key={i}>
                                                                 {i+1}
                                                         </Option>
@@ -143,7 +143,7 @@ class Umpire extends Component {
                     },
                 },
                 {
-                    title: "First Name",
+                    title: AppConstants.firstName,
                     dataIndex: "firstName",
                     key: "firstsName",
                     sorter: true,
@@ -164,7 +164,7 @@ class Umpire extends Component {
                     ),
                 },
                 {
-                    title: "Last Name",
+                    title: AppConstants.lastName,
                     dataIndex: "lastName",
                     key: "lastName",
                     sorter: true,
@@ -185,21 +185,21 @@ class Umpire extends Component {
                     ),
                 },
                 {
-                    title: "Email",
+                    title: AppConstants.email,
                     dataIndex: "email",
                     key: "email",
                     sorter: true,
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 },
                 {
-                    title: "Contact No",
+                    title: AppConstants.contact_No,
                     dataIndex: "mobileNumber",
                     key: "mobileNumber",
                     sorter: true,
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 },
                 {
-                    title: 'Accreditation',
+                    title: AppConstants.accreditation,
                     dataIndex: 'accreditationLevelUmpireRefId',
                     key: 'accreditationLevelUmpireRefId',
                     sorter: false,
@@ -208,7 +208,7 @@ class Umpire extends Component {
                     )
                 },
                 {
-                    title: "Organisation",
+                    title: AppConstants.organisation,
                     dataIndex: "organisationName",
                     key: "organisationName",
                     sorter: false,
@@ -218,7 +218,7 @@ class Umpire extends Component {
                     )
                 },
                 {
-                    title: "Umpire",
+                    title: AppConstants.umpire,
                     dataIndex: "umpire",
                     key: "umpire",
                     sorter: false,
@@ -234,7 +234,7 @@ class Umpire extends Component {
                     render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
                 },
                 {
-                    title: "Action",
+                    title: AppConstants.action,
                     dataIndex: "action",
                     key: "action",
                     render: (data, record) => (
@@ -288,7 +288,7 @@ class Umpire extends Component {
     }
 
     handleSelectChange = (i, option, id) => {
-        const { rankedUmpiresCount } = this.props.umpireState; 
+        const { rankedUmpiresCount } = this.props.umpireState;
         const { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         if(option.children === rankedUmpiresCount + 1) {
             this.props.updateUmpireRank({
@@ -340,14 +340,14 @@ class Umpire extends Component {
                 <div className="umpire-modal">
                     <span className="umpire-modal-text">Would you like to</span>
                     <div className="umpire-modal-button-group">
-                        <Button 
+                        <Button
                             className="primary-add-comp-form umpire-modal-button"
                             type="primary"
                             onClick={() => this.switchShiftHandler('replace')}
                         >
                             Switch ratings
                         </Button>
-                        <Button 
+                        <Button
                             className="primary-add-comp-form umpire-modal-button"
                             type="primary"
                             onClick={() => this.switchShiftHandler('shift')}

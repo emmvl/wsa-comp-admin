@@ -25,12 +25,12 @@ const {
 
 const columns = [
     {
-        title: 'Rank',
+        title: AppConstants.rank,
         dataIndex: 'rank',
         key: 'rank'
     },
     {
-        title: 'Team Name',
+        title: AppConstants.teamName,
         dataIndex: 'name',
         key: 'name'
     },
@@ -40,12 +40,12 @@ const columns = [
         key: 'division'
     },
     {
-        title: 'Grade',
+        title: AppConstants.grade,
         dataIndex: 'grade',
         key: 'grade'
     },
     {
-        title: 'Message',
+        title: AppConstants.message,
         dataIndex: 'message',
         key: 'message'
     }

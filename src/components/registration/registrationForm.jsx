@@ -72,17 +72,17 @@ const columns = [
         )
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipProductTypeName",
         key: "membershipProductTypeName",
     },
     {
-        title: "Registration Type",
+        title: AppConstants.registrationType,
         dataIndex: "registrationType",
         key: "registrationType",
     },
     {
-        title: "Registration Divisions",
+        title: AppConstants.registrationDivisions,
         dataIndex: "divisionName",
         key: "divisionName",
         width: "25%",
@@ -116,7 +116,7 @@ const columns = [
     },
 
     {
-        title: "Registration Cap",
+        title: AppConstants.registrationCap,
         dataIndex: "registrationType",
         key: "registrationCap",
         render: (registrationCap, record, index) => {
@@ -703,7 +703,7 @@ class RegistrationForm extends Component {
                 {defaultChecked.trainingVisible && (
                     <div className="comp-open-reg-check-inpt-view">
                         <div className="fluid-width" style={{ marginTop: 15 }}>
-                            <div className="row" style={{ height: 56 }}>
+                            <div className="row">
                                 <div className="col-sm d-flex">
                                     <Checkbox
                                         className="comp-open-single-checkbox"
@@ -715,12 +715,14 @@ class RegistrationForm extends Component {
                                 </div>
                                 {defaultChecked.daysVisible === true && (
                                     <div className="col-sm">
-                                        <InputWithHead
+                                        <TextArea
+                                            name="trainingDaysAndTimes"
                                             auto_complete="new-trainingDay"
                                             placeholder={AppConstants.trainingDaysAndTimes}
-                                            value={formDataValue ? formDataValue.trainingDaysAndTimes : ""}
+                                            allowClear
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "trainingDaysAndTimes")}
-                                            name="trainingDaysAndTimes"
+                                            value={formDataValue ? formDataValue.trainingDaysAndTimes : ""}
+                                            defaultValue={AppConstants.usuallyThursdays}
                                         />
                                     </div>
                                 )}

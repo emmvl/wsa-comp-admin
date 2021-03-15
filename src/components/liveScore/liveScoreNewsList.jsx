@@ -77,7 +77,7 @@ function checkDate(expiryDate, publishedDate) {
 
 const columns = [
     {
-        title: 'Title',
+        title: AppConstants.title,
         dataIndex: 'title',
         key: 'title',
         sorter: (a, b) => a.title.length - b.title.length,
@@ -89,26 +89,26 @@ const columns = [
         </NavLink>
     },
     {
-        title: 'Author',
+        title: AppConstants.author,
         dataIndex: 'author',
         key: 'author',
         sorter: (a, b) => checkSorting(a, b, 'author'),
     },
     {
-        title: 'Expiry',
+        title: AppConstants.expiry,
         dataIndex: 'news_expire_date',
         key: 'news_expire_date',
         sorter: (a, b) => checkSorting(a, b, 'news_expire_date'),
         render: (news_expire_date) => <span>{news_expire_date ? liveScore_MatchFormate(news_expire_date) : ""}</span>
     },
     {
-        title: 'Recipients',
+        title: AppConstants.recipients,
         dataIndex: 'recipients',
         key: 'recipients',
         sorter: (a, b) => checkSorting(a, b, 'recipients'),
     },
     // {
-    //     title: 'Published',
+    //     title: AppConstants.published,
     //     dataIndex: 'published_at',
     //     key: 'published_at',
     //     sorter: (a, b) => checkSorting(a, b, 'published_at'),
@@ -118,28 +118,28 @@ const columns = [
     //         </span>,
     // },
     {
-        title: "Published",
+        title: AppConstants.published,
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
         render: isActive => <span>{isActive === 1 ? "Yes" : "NO"}</span>
     },
     {
-        title: "Published Date",
+        title: AppConstants.publishedDate,
         dataIndex: 'published_at',
         key: 'published_at',
         render: (published_at) => <span>{published_at && liveScore_formateDate(published_at)}</span>
         // sorter: (a, b) => tableSort(a, b, 'Published_date'),
     },
     {
-        title: 'Notification',
+        title: AppConstants.notification,
         dataIndex: 'isNotification',
         key: 'isNotification',
         sorter: (a, b) => checkSorting(a, b, 'isNotification'),
         render: isNotification => <span>{isNotification === 1 ? "Yes" : "NO"}</span>
     },
     {
-        title: 'Active',
+        title: AppConstants.active,
         dataIndex: 'news_expire_date',
         key: 'news_expire_date_Active',
         // sorter: (a, b) => a.news_expire_date.length - b.news_expire_date.length,

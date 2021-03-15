@@ -25,21 +25,21 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (match) => <span>{match ? liveScore_formateDate(match.startTime) : ""}</span>
     },
     {
-        title: 'Time',
+        title: AppConstants.time,
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (match) => <span>{match ? getTime(match.startTime) : ""}</span>
     },
     {
-        title: 'Match',
+        title: AppConstants.matches,
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
@@ -52,7 +52,7 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'First Umpire Name',
+        title: AppConstants.firstUmpireName,
         dataIndex: 'umpire1FullName',
         key: 'umpire1FullName',
         sorter: (a, b) => tableSort(a, b, "umpire1FullName"),
@@ -64,14 +64,14 @@ const columns = [
         </NavLink>
     },
     {
-        title: 'First Umpire Club',
+        title: AppConstants.firstUmpireClub,
         dataIndex: 'umpire1Club',
         key: 'umpire1Club',
         sorter: (a, b) => tableSort(a, b, "umpire1Club"),
         render: (umpire1Club) => <span>{umpire1Club ? umpire1Club.name : ""}</span>
     },
     {
-        title: 'Second Umpire Name',
+        title: AppConstants.secondUmpireName,
         dataIndex: 'umpire2FullName',
         key: 'umpire2FullName',
         sorter: (a, b) => tableSort(a, b, "umpire2FullName"),
@@ -83,7 +83,7 @@ const columns = [
         </NavLink>
     },
     {
-        title: 'Second Umpire Club',
+        title: AppConstants.secondUmpireClub,
         dataIndex: 'umpire2Club',
         key: 'umpire2Club',
         sorter: (a, b) => tableSort(a, b, "umpire2Club"),

@@ -71,10 +71,13 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueAddressError: '',
             isCreator: null,
             fieldConfigurationRefIdIndex: null,
+            fieldConfigurationRefIdIndexSeparateTime: null,
             venueConfigurationModalIsOpened: false,
+            isModalTableIndex: null,
+            elementIndex: null,
             courtColumns: [
                 {
-                    title: "Court Number",
+                    title: AppConstants.courtNumbers,
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber, record, index) => {
@@ -86,7 +89,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Court Name",
+                    title: AppConstants.courtName,
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
@@ -112,7 +115,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 },
 
                 {
-                    title: "Longitude",
+                    title: AppConstants.longitude,
                     dataIndex: "lng",
                     key: "lng",
                     render: (lng, record, index) => {
@@ -136,7 +139,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Latitude",
+                    title: AppConstants.latitude,
                     dataIndex: "lat",
                     key: "lat",
                     render: (lat, record, index) => {
@@ -160,7 +163,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
                 },
                 {
-                    title: "Override Venue Timeslots?",
+                    title: AppConstants.overrideVenueTimeslots,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
                     width: 200,
@@ -179,32 +182,30 @@ class CompetitionVenueAndTimesEdit extends Component {
                     title: "",
                     dataIndex: "fieldConfigurationRefId",
                     key: "fieldConfigurationRefId",
-                    width: process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED  === true ? 200 : 0,
+                    width: 200,
                     render: (fieldConfigurationRefId, record, index) => (
-                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true ?
-                            <div>
-                                <img
-                                    className="venue-configuration-image"
-                                    src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
-                                    alt=""
-                                    height={80}
-                                />
-                                <img
-                                    className="venue-configuration-control"
-                                    src={AppImages.chevronRight}
-                                    alt=""
-                                    height={25}
-                                    onClick={() => {
-                                        this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
-                                    }}
-                                />
+                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED &&
+                        <div>
+                            <img
+                                className="venue-configuration-image"
+                                src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
+                                alt=""
+                                height={80}
+                            />
+                            <img
+                                className="venue-configuration-control"
+                                src={AppImages.chevronRight}
+                                alt=""
+                                height={25}
+                                onClick={() => {
+                                    this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
+                                }}
+                            />
 
-                                <Form.Item name={`fieldConfigurationRefId${index}`}>
-                                    <Input type="hidden" value={fieldConfigurationRefId} />
-                                </Form.Item>
-                            </div>
-                            :
-                            <></>
+                            <Form.Item name={`fieldConfigurationRefId${index}`}>
+                                <Input type="hidden" value={fieldConfigurationRefId} />
+                            </Form.Item>
+                        </div>
                     )
                 },
                 {
@@ -332,13 +333,13 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     }
 
-    getImageForVenueConfig = (index, fieldConfigurationRefId) => {
+    getImageForVenueConfig = (index, fieldConfigurationRefId, tableIndex = null) => {
         let image = '';
         let i = 1;
         while (!image) {
             image = !!fieldConfigurationRefId
                 ? this.state.venueConfigurationImages[fieldConfigurationRefId - i]
-                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[index - i].fieldConfigurationRefId - 1]
+                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[!!tableIndex ? tableIndex : index - i].fieldConfigurationRefId - 1]
             i++;
         }
 
@@ -526,6 +527,30 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
     };
 
+    getAddress = (addressObject) => {
+        try {
+            const { stateList, countryList } = this.props.commonReducerState;
+            const state = stateList.length > 0 && addressObject.stateRefId > 0
+                ? stateList.find((state) => state.id === addressObject.stateRefId).name
+                : null;
+            const country = countryList.length > 0 && addressObject.countryRefId > 0
+                ? countryList.find((country) => country.id === addressObject.countryRefId).description
+                : null;
+
+            let defaultAddress = '';
+            if (state) {
+                defaultAddress = (addressObject.street1 ? addressObject.street1 + ', ' : '') +
+                    (addressObject.suburb ? addressObject.suburb + ', ' : '') +
+                    (addressObject.postalCode ? addressObject.postalCode + ', ' : '') +
+                    (state ? state + ', ' : '') +
+                    (country ? country + '.' : '');
+                return defaultAddress;
+            }
+        } catch (ex) {
+            console.log("Error in getPartcipantParentAddress" + ex);
+        }
+    }
+
     enabledContentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
@@ -584,9 +609,13 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     !this.state.manualAddress &&
-                    <Form.Item name="venueAddress" rules={[{ required: true, message: ValidationConstants.addressField[0] }]}>
+                    <Form.Item
+                        name="venueAddress"
+                        help={this.state.venueAddressError && ValidationConstants.addressField[0]}
+                        validateStatus={this.state.venueAddressError ? "error" : 'validating'}
+                    >
                         <PlacesAutocomplete
-                            defaultValue={defaultVenueAddress}
+                            defaultValue={this.getAddress(venuData)}
                             heading={AppConstants.venueSearch}
                             required
                             error={this.state.venueAddressError}
@@ -595,6 +624,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 onBlur: (i) => this.formRef.current.setFieldsValue({
                                     "venueAddress": removeFirstSpace(i.target.value),
                                 }),
+                            }}
+                            onBlur={() => {
+                                this.setState({
+                                    venueAddressError: ''
+                                })
                             }}
                         />
                     </Form.Item>
@@ -670,12 +704,13 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
+                    <Form.Item rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <Select
                             className="w-100"
                             placeholder={AppConstants.select}
                             onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             value={venuData.stateRefId}
+                            name="stateRefId"
                         >
                             {stateList.map((item) => (
                                 <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
@@ -765,7 +800,6 @@ class CompetitionVenueAndTimesEdit extends Component {
         const state = stateList.length > 0 && venuData.stateRefId
             ? stateList.find((state) => state.id === venuData.stateRefId).name
             : null;
-
         let defaultVenueAddress = `${venuData.street1 ? `${venuData.street1},` : ''
             } ${venuData.suburb ? `${venuData.suburb},` : ''
             } ${state ? `${state},` : ''
@@ -1104,8 +1138,32 @@ class CompetitionVenueAndTimesEdit extends Component {
                         use12Hours={false}
                     />
                 </div>
+                {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED && (
+                    <div className="col-sm-1">
+                        <img
+                            className="venue-configuration-image"
+                            src={this.getImageForVenueConfig(index, item.fieldConfigurationRefId, tableIndex)}
+                            alt=""
+                            height={80}
+                        />
+                        <img
+                            className="venue-configuration-control"
+                            src={AppImages.chevronRight}
+                            alt=""
+                            height={25}
+                            onClick={() => {
+                                this.setState({isModalTableIndex: tableIndex, elementIndex: index, venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndexSeparateTime: index})
+                            }}
+                        />
+
+                        <Form.Item style={{height: 0}} name={`fieldConfigurationRefIdIndexSeparateTime${index}`}>
+                            <Input type="hidden" value={item.fieldConfigurationRefIdIndexSeparateTime} />
+                        </Form.Item>
+                    </div>
+                )}
+
                 {!item.isDisabled && (
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
+                    <div className="col-sm-1 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
                         <span className="user-remove-btn">
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
@@ -1323,13 +1381,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                         alt=""
                         height={150}
                         onClick={() => {
-                            this.setState({fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
                             this.props.updateVenuAndTimeDataAction(
                                 key+1,
-                                this.state.fieldConfigurationRefIdIndex,
+                                !!this.state.isModalTableIndex ? this.state.elementIndex : this.state.fieldConfigurationRefIdIndex,
                                 'fieldConfigurationRefId',
-                                'courtData',
+                                !!this.state.isModalTableIndex ? 'addTimeSlotField' : 'courtData',
+                                this.state.isModalTableIndex,
                             )
+                            this.setState({isModalTableIndex: null, elementIndex: null, fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
                         }}
                     />
                 ))

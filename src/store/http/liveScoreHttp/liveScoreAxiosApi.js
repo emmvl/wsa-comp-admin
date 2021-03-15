@@ -1214,7 +1214,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    addEditUmpire(data, teamId, existingManagerId, isUmpire, isUmpireCoach) {
+    addEditUmpire(data, isUmpire, isUmpireCoach) {
         const body = data;
         const id = JSON.parse(localStorage.getItem('umpireCompetitionId'));
         const compData = JSON.parse(getUmpireCompetitonData());
@@ -1813,16 +1813,20 @@ const Method = {
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        let _now = moment().utc().format('Y-M-D');
+                        let _now = moment().utc().format('Y-MM-DD');
                         let fileName = "filecsv";
                         if (newurl.includes('payments')) {
-                            fileName = `umpirePayments-${_now}`;
+                            fileName = `umpirePayment-${_now}`;
                         } else if (newurl.includes('matches')) {
                             fileName = `matchDayMatches-${_now}`;
                         } else if (newurl.includes('teams')) {
                             fileName = `matchDayTeam-${_now}`;
                         } else if (newurl.includes('exportScore')) {
                             fileName = `matchDayScorerList-${_now}`;
+                        } else if (newurl.includes('matchUmpire')) {
+                            fileName = `umpireDashboard-${_now}`;
+                        } else if (newurl.includes('roster')) {
+                            fileName = `umpireRoster-${_now}`;
                         }
                         link.setAttribute('download', `${fileName}.csv`); // or any other extension
                         document.body.appendChild(link);

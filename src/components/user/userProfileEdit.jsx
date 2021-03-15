@@ -1511,8 +1511,8 @@ class UserProfileEdit extends Component {
                 confirm({
                     content: electionMsg,
                     okText: 'Continue',
-                    okType: 'primary',
-                    cancelText: 'Cancel',
+                    okType: AppConstants.primary,
+                    cancelText: AppConstants.cancel,
                     onOk: () => {
                         saveAction();
                         this.confirmOpend = false;

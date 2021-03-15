@@ -20,6 +20,12 @@ let token = getAuthToken();
 // let userId = getUserId();
 
 let UmpireAxiosApi = {
+    getUmpireEditInfo(data) {
+        const { competitionId, umpireId, organisationId} = data;
+        const url = `/competitions/${competitionId}/umpires/${umpireId}?organisationId=${organisationId}`
+        return Method.dataGet(url, token);
+    },
+
     umpireListGet(data) {
         let url = null;
         const { competitionId, organisationId, offset, skipAssignedToPools = false, sortBy, sortOrder } = data;

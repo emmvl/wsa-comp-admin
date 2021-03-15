@@ -68,7 +68,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'First Name',
         sorter: true,
@@ -91,7 +91,7 @@ const columns = [
         ),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'Last Name',
         sorter: true,
@@ -114,7 +114,7 @@ const columns = [
         ),
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -131,14 +131,14 @@ const columns = [
         ),
     },
     {
-        title: 'Verified By',
+        title: AppConstants.verifiedBy,
         dataIndex: 'verifiedBy',
         key: 'verifiedBy',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'makePayment',
         key: 'paymentStatus',
         sorter: true,
@@ -152,7 +152,7 @@ const columns = [
         }
     },
     {
-        title: 'Time/Date Paid',
+        title: AppConstants.timeDatePaid,
         dataIndex: 'approved_at',
         key: "approved_at",
         sorter: true,
@@ -178,7 +178,7 @@ const columns = [
         }
     },
     {
-        title: 'Pay',
+        title: AppConstants.pay,
         dataIndex: 'selectedValue',
         key: 'selectedValue',
         render: (selectedValue, record, index) => {
@@ -462,10 +462,10 @@ class UmpirePayments extends Component {
 
     showConfirm = () => {
         confirm({
-            title: 'Are you sure you want to make payments?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.makePaymentsConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             mask: true,
             maskClosable: true,
             onOk() {

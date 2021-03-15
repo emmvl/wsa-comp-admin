@@ -116,7 +116,7 @@ class RegistrationCompetitionForm extends Component {
             onYearLoad: false,
             divisionTable: [
                 {
-                    title: "Division Name",
+                    title: AppConstants.divisionName,
                     dataIndex: "divisionName",
                     key: "divisionName",
                     render: (divisionName, record, index) => {
@@ -137,7 +137,7 @@ class RegistrationCompetitionForm extends Component {
                     },
                 },
                 {
-                    title: "Gender Restriction",
+                    title: AppConstants.genderRestriction,
                     dataIndex: "genderRestriction",
                     key: AppUniqueId.div_gender_chkbox,
                     render: (genderRestriction, record, index) => (
@@ -179,7 +179,7 @@ class RegistrationCompetitionForm extends Component {
                     }
                 },
                 {
-                    title: "Age Restriction",
+                    title: AppConstants.ageRestrictions,
                     dataIndex: "ageRestriction",
                     key: AppUniqueId.div_ageres_chkbox,
                     render: (ageRestriction, record, index) => (
@@ -194,7 +194,7 @@ class RegistrationCompetitionForm extends Component {
                     )
                 },
                 {
-                    title: "DOB From",
+                    title: AppConstants.dobFrom,
                     dataIndex: "fromDate",
                     key: AppUniqueId.div_ageres_fromdate,
                     width: "25%",
@@ -221,7 +221,7 @@ class RegistrationCompetitionForm extends Component {
                     }
                 },
                 {
-                    title: "DOB To",
+                    title: AppConstants.dobTo,
                     dataIndex: "toDate",
                     width: "25%",
                     key: AppUniqueId.div_ageres_todate,
@@ -1313,11 +1313,11 @@ class RegistrationCompetitionForm extends Component {
         let competitionId = this.props.competitionFeesState.competitionId
         let this_ = this
         confirm({
-            title: 'Are you sure delete this product?',
+            title: AppConstants.productDeleteConfirmMsg,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 if (competitionId.length > 0) {
                     this_.deleteProduct(competitionId)
