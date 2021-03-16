@@ -136,7 +136,7 @@ class CompetitionReGradingStep2 extends Component {
                         </div>
                         <div className="col-sm-8">
                             <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
-                                <span className="year-select-heading">{AppConstants.competition_name}:</span>
+                                <span className="year-select-heading">{AppConstants.competitionName}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 140 }}
