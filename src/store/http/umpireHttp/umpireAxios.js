@@ -20,9 +20,10 @@ let token = getAuthToken();
 // let userId = getUserId();
 
 let UmpireAxiosApi = {
-    getUmpireEditInfo(data) {
-        const { competitionId, umpireId, organisationId} = data;
-        const url = `/competitions/${competitionId}/umpires/${umpireId}?organisationId=${organisationId}`
+    umpireTeamsGet(data) {
+        const { competitionId, umpireId, organisationId } = data;
+        let url = `/competitions/${competitionId}/umpires/details?organisationId=${organisationId}`;
+        if (umpireId) url += `&umpireId=${umpireId}`;
         return Method.dataGet(url, token);
     },
 

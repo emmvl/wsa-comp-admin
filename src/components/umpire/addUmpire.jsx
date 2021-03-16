@@ -573,7 +573,7 @@ class AddUmpire extends Component {
                     mobileNumber: regexNumberExpression(umpireData.mobileNumber),
                     email: umpireData.email,
                     affiliates: umpireData.affiliates,
-                    teams: teamsIds,
+                    teams: teamsIds
                 }
                 if (this.state.isEdit === true) body.id = umpireData.id;
 
@@ -601,6 +601,7 @@ class AddUmpire extends Component {
             } else {
                 const getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
                 const getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
+                const teamsIds = umpireData.teams.map(team => ({ id: team.id }));
                 if (getUmpireObject !== null) {
                     const body = {
                         id: getUmpireObject.id,
@@ -609,8 +610,7 @@ class AddUmpire extends Component {
                         mobileNumber: getUmpireObject.mobileNumber ? getUmpireObject.mobileNumber : "",
                         email: getUmpireObject.email ? getUmpireObject.email : "",
                         affiliates: umpireData.affiliates,
-                        teams: umpireData.teams,
-                        teamIds: umpireData.teamId
+                        teams: teamsIds
                     }
 
                     this.setState({ isUserNotFound: false })
