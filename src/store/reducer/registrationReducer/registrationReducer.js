@@ -1388,6 +1388,16 @@ function registration(state = initialState, action) {
       return {
         ...state,
       }
+    
+    case ApiConstants.ADD_HARDSHIP_CODE_LOAD:
+      return{...state,addHardshipCodeLoad: true}  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS:
+      return{
+        ...state,
+        status: action.status,
+        addHardshipCodeLoad: false
+      }
 
     default:
       return state;

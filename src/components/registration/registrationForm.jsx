@@ -30,7 +30,7 @@ import {
     updateRegistrationForm, clearReducerDataAction,
     changeMembershipProduct, getMembershipproduct,
     updateProductSelection, updateRegistrationLock, updateDisclamerText, isCheckedVisible,
-    isReplyCheckVisible
+    isReplyCheckVisible, addHardshipCodeAction
 } from "../../store/actions/registrationAction/registration";
 import {
     getYearAndCompetitionAction, getCompetitionTypeListAction,
@@ -530,7 +530,13 @@ class RegistrationForm extends Component {
             orgRegistrationId: orgRegistrationId,
             isActive: 1,
         }
+        let payload = {
+            hardshipCode: code,
+            orgRegistrationId: orgRegistrationId,
+            isActive: 1
+        }
         this.props.updateRegistrationForm(obj, "addHardshipCode")
+        this.props.addHardshipCodeAction(payload)
     }
 
     onChangeSetValue = (value, index) => {
@@ -1689,6 +1695,7 @@ function mapDispatchToProps(dispatch) {
             isCheckedVisible,
             isReplyCheckVisible,
             inviteTypeAction,
+            addHardshipCodeAction
         },
         dispatch,
     );

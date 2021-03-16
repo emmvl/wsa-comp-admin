@@ -51,7 +51,8 @@ import {
     getTeamRegistrationsSaga,
     exportTeamRegistrationsSaga,
     getMembershipFeeCapListSaga,
-    updateMembershipFeeCapSaga
+    updateMembershipFeeCapSaga,
+    addHardshipCodeSaga
 } from './registrationSaga/registrationSaga';
 
 /// /**************************Live Score***************************Start
@@ -623,6 +624,8 @@ export default function* rootSaga() {
     yield takeEvery(ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD, registrationRetryPaymentSaga);
 
     //Get DeRegister
-  yield takeEvery(ApiConstants.API_GET_DE_REGISTRATION_LOAD, regChangeSaga.getDeRegisterSaga)
+  yield takeEvery(ApiConstants.API_GET_DE_REGISTRATION_LOAD, regChangeSaga.getDeRegisterSaga);
+
+  yield takeEvery(ApiConstants.ADD_HARDSHIP_CODE_LOAD, addHardshipCodeSaga)
 
 }
