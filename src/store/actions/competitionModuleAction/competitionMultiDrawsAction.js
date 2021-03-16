@@ -113,9 +113,9 @@ function updateCourtTimingsDrawsDragSuccessAction(data, source, target, actionTy
         dateRangeCheck: dateRangeCheck,
     }
 }
-function updateCourtTimingsDrawsSwapSuccessAction(data, source, target, actionType, drawData, dateRangeCheck) {
+function updateCompetitionDrawsSwapLoadAction(data, source, target, actionType, drawData, dateRangeCheck) {
     return {
-        type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_SUCCESS,
+        type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD,
         result: data,
         status: 1,
         sourceArray: source,
@@ -248,7 +248,7 @@ export {
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
     updateCourtTimingsDrawsDragSuccessAction,
-    updateCourtTimingsDrawsSwapSuccessAction,
+    updateCompetitionDrawsSwapLoadAction,
     dateSelectionRounds,
     clearMultiDraws,
     getDivisionGradeNameLisAction,

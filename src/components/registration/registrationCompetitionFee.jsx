@@ -5466,8 +5466,8 @@ class RegistrationCompetitionFee extends Component {
                     <InputWithHead
                         auto_complete="off"
                         required="required-field"
-                        heading={AppConstants.competition_name}
-                        placeholder={AppConstants.competition_name}
+                        heading={AppConstants.competitionName}
+                        placeholder={AppConstants.competitionName}
                         // value={detailsData.competitionDetailData.competitionName}
                         onChange={(e) =>
                             this.props.add_editcompetitionFeeDeatils(

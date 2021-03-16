@@ -742,8 +742,8 @@ class LiveScoreSettingsView extends Component {
                             name="competitionName"
                             auto_complete="off"
                             required="required-field "
-                            heading={AppConstants.competition_name}
-                            placeholder={AppConstants.competition_name}
+                            heading={AppConstants.competitionName}
+                            placeholder={AppConstants.competitionName}
                             onChange={this.handleInputChange}
                             onBlur={(e) => {
                                 this.formRef.current.setFieldsValue({

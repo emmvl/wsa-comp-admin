@@ -903,8 +903,8 @@ class RegistrationCompetitionForm extends Component {
                     <InputWithHead
                         auto_complete="new-compName"
                         required="required-field"
-                        heading={AppConstants.competition_name}
-                        placeholder={AppConstants.competition_name}
+                        heading={AppConstants.competitionName}
+                        placeholder={AppConstants.competitionName}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
                         disabled={compDetailDisable}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
