@@ -166,6 +166,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 apiData:null
             },
             emptySlot:{
+                colorCode: "#999999",   
                 awayTeamId: null,
                 awayTeamName: null,                
                 competitionDivisionGradeId: null,
@@ -188,7 +189,6 @@ class MultifieldDrawsNewTimeline extends Component {
                 ],
             },
             emptySlotFieldUpdate:{
-                colorCode: "#999999",
                 endTime: "",
                 matchDate: "",
                 startTime: "",
@@ -197,8 +197,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 venueCourtNumber: 0,
                 venueShortName: ""
             },
-            emptySlotVenueFieldUpdate:{
-                colorCode: "#999999",                
+            emptySlotVenueFieldUpdate:{                             
                 venueCourtId: 0,
                 venueCourtName: "",
                 venueCourtNumber: 0,
