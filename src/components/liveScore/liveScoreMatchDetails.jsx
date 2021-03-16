@@ -606,6 +606,7 @@ class LiveScoreMatchDetails extends Component {
                                 liveScoreCompIsParent &&
                                 <div className="col-sm pt-2">
                                     <div className="w-100 d-flex flex-row align-items-center justify-content-end">
+                                        { false &&
                                         <NavLink to={{
                                             pathname: '/matchDayAddIncident',
                                             state: {
@@ -615,7 +616,7 @@ class LiveScoreMatchDetails extends Component {
                                                 screenName: this.state.screenName
                                             }
                                         }}>
-                                            <Button
+                                        <Button
                                                 disabled={userRole}
                                                 className="primary-add-comp-form"
                                                 type="primary"
@@ -623,9 +624,10 @@ class LiveScoreMatchDetails extends Component {
                                                 + {AppConstants.addIncident}
                                             </Button>
                                         </NavLink>
+                                        }
+                                            
                                     </div>
                                 </div>
-
                             }
 
                             {

@@ -133,11 +133,15 @@ class LiveScoreIncidentList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
+                    
+                    { false &&
                     <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidents}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+
+                    }
 
                     <div className="col-sm d-flex justify-content-end w-100 flex-row align-items-center">
                         <div className="row">

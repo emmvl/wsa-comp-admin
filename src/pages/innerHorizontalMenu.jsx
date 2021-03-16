@@ -569,11 +569,13 @@ class InnerHorizontalMenu extends React.Component {
                                             </NavLink>
                                         </Menu.Item>
                                     </SubMenu>
-                                    <Menu.Item key="17">
+                                    {false &&
+                                     <Menu.Item key="17">
                                         <NavLink to="/matchDayIncidentList">
                                             <span>Incidents</span>
                                         </NavLink>
                                     </Menu.Item>
+                                    }
                                 </SubMenu>
                                 {liveScoreCompIsParent && (
                                     <SubMenu
