@@ -128,8 +128,8 @@ class AddUmpire extends Component {
     setInitialFieldValue = () => {
         const { umpireData } = this.props.umpireState
         const compData = JSON.parse(getUmpireCompetitonData())
-        const competitionOrgId = compData.competitionOrganisation ? compData.competitionOrganisation.id : null
-        const affiliates = umpireData.affiliates.map(affiliate => affiliate.id)
+        const competitionOrgId = (compData && compData.competitionOrganisation) ? compData.competitionOrganisation.id : null
+        const affiliates = (umpireData && umpireData.affiliates) ? umpireData.affiliates.map(affiliate => affiliate.id) : []
         const umpireNewAffiliateName = !this.state.isCompParent ? competitionOrgId : affiliates
 
         if (this.state.isEdit) {

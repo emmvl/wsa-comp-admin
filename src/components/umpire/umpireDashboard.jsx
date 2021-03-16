@@ -667,37 +667,37 @@ class UmpireDashboard extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
                     ? this.props.umpireCompetitionState.umpireComptitionList
                     : [];
-                let firstComp = compList.length > 0 && compList[0].id;
-                let compData = compList.length > 0 && compList[0];
+                let firstComp = (compList && compList.length > 0) ? compList[0].id : 0;
+                let compData = (compList && compList.length > 0) ? compList[0] : null;
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
                         this.setState({
-                            org_Id: compData.organisationId
+                            org_Id: compData ? compData.organisationId : 0
                         })
                         firstComp = JSON.parse(getLiveScoreUmpireCompition());
                         compData = JSON.parse(getLiveScoreUmpireCompitionData());
                         setUmpireCompition(firstComp);
-                        setUmpireCompitionData(JSON.stringify(compData));
+                        if (compData) setUmpireCompitionData(JSON.stringify(compData));
                     } else {
                         firstComp = JSON.parse(getUmpireCompetiton());
                         compData = JSON.parse(getUmpireCompetitonData());
                         this.setState({
-                            org_Id: compData.organisationId
+                            org_Id: compData ? compData.organisationId : 0
                         })
                     }
                 } else {
                     setUmpireCompition(firstComp);
-                    setUmpireCompitionData(JSON.stringify(compData));
+                    if (compData) setUmpireCompitionData(JSON.stringify(compData));
                     this.setState({
-                        org_Id: compData.organisationId
+                        org_Id: compData ? compData.organisationId : 0
                     })
                 }
 
-                if (firstComp !== false) {
+                if (!!firstComp) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
                         let compId = JSON.parse(getLiveScoreUmpireCompition());
-                        this.props.getUmpireDashboardVenueList(compId);
+                        if (compId) this.props.getUmpireDashboardVenueList(compId);
 
                         const { uniqueKey, organisationId } = JSON.parse(getLiveScoreUmpireCompitionData());
                         let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
@@ -713,7 +713,7 @@ class UmpireDashboard extends Component {
                         });
                     } else {
                         this.props.getUmpireDashboardVenueList(firstComp);
-                        let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+                        let compKey = (compList && compList.length > 0) ? compList[0].competitionUniqueKey : 0;
                         this.setState({
                             selectedComp: firstComp,
                             loading: false,
