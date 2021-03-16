@@ -407,8 +407,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
-            let matches = action.result.matches ? action.result.matches : [];
-            const result = getMatchListSettings(matches);
+            const result = getMatchListSettings(action.result.matches);
             return {
                 ...state,
                 onLoadMatch: false,

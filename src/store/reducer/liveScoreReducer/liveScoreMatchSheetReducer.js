@@ -53,18 +53,13 @@ function liveScoreMatchSheetState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             let teamsArray = JSON.parse(JSON.stringify(action.result))
             state.allTeamData = JSON.parse(JSON.stringify(action.result))
-            try{
-                let teamObject = {
-                    name: "All Teams",
-                    id: null
-                }
-                state.allTeamData.unshift(teamObject)
-                state.isLoaderActive = false
+            let teamObject = {
+                name: "All Teams",
+                id: null
             }
-            catch(error){
-                console.log("**********",error);
-            }
-            
+
+            state.allTeamData.unshift(teamObject)
+            state.isLoaderActive = false
             return {
                 ...state,
                 onTeamLoad: false,

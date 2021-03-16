@@ -507,7 +507,6 @@ class LiveScoreMatchSheet extends Component {
     );
 
     render() {
-       
         return (
             <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.matchDay} menuName={AppConstants.liveScores} />

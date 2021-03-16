@@ -1629,17 +1629,17 @@ class CompetitionVenueTimesPrioritisation extends Component {
             const { competitionId } = this.state;
             const { organisationId } = getOrganisationData();
 
-            // const divisionsFieldsConfigurationsPayload = this.getDivisionsFieldsConfigurationsPayload(
-            //     venueConstrainstData.competitionDivisionsFieldsConfigurations,
-            // )
+            const divisionsFieldsConfigurationsPayload = this.getDivisionsFieldsConfigurationsPayload(
+                venueConstrainstData.competitionDivisionsFieldsConfigurations,
+            )
 
-            // this.props.saveCompetitionDivisionsAction(
-            //     competitionId,
-            //     organisationId,
-            //     {
-            //         competitionDivisionsFieldsConfigurations: divisionsFieldsConfigurationsPayload,
-            //     },
-            // );
+            this.props.saveCompetitionDivisionsAction(
+                competitionId,
+                organisationId,
+                {
+                    competitionDivisionsFieldsConfigurations: divisionsFieldsConfigurationsPayload,
+                },
+            );
         }
     }
 
