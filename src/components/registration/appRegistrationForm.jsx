@@ -782,7 +782,7 @@ class AppRegistrationForm extends Component {
                     />
                 )}
 
-                <InputWithHead heading={AppConstants.competition_name} />
+                <InputWithHead heading={AppConstants.competitionName} />
                 <div className="applicable-to-text d-flex">
                     <div>{membershipProdecutInfo.competitionName}</div>
                     {index == 0 && (
@@ -1684,7 +1684,7 @@ class AppRegistrationForm extends Component {
             <div className="formView content-view pt-5">
                 <span className="form-heading">{AppConstants.competitionMembershipProductDivision}</span>
 
-                <InputWithHead heading={AppConstants.competition_name} />
+                <InputWithHead heading={AppConstants.competitionName} />
                 <div className="applicable-to-text d-flex">
                     <div>{this.state.competitionName}</div>
                 </div>

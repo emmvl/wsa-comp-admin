@@ -222,12 +222,12 @@ export function* updateUmpireRank(action) {
     }
 }
 
-export function* getUmpireInfoSaga(action) {
+export function* getUmpireTeamsSaga(action) {
     try {
-        const result = yield call(UmpireAxiosApi.getUmpireEditInfo, action.data);
+        const result = yield call(UmpireAxiosApi.umpireTeamsGet, action.data);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.GET_UMPIRE_SUCCESS,
+                type: ApiConstants.GET_UMPIRE_TEAMS_SUCCESS,
                 data: result.result.data
             });
         } else {

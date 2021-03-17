@@ -26,6 +26,7 @@ import {
     saveUmpireAllocationSettings,
 } from "../../store/actions/umpireAction/umpireSettingAction";
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
+import history from 'util/history';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -667,7 +668,7 @@ class UmpireSetting extends Component {
             <div className="form-footer-button-wrapper">
                 {isOrganiserView && !!allocationSettingsData && 
                     <Button
-                        className="publish-button save-draft-text mr-0"
+                        className="publish-button save-draft-text mr-15"
                         type="primary"
                         htmlType="submit"
                         onClick={this.handleSave}
@@ -675,6 +676,17 @@ class UmpireSetting extends Component {
                         {AppConstants.save}
                     </Button>
                 }
+                <Button
+                    className="publish-button save-draft-text mr-0"
+                    type="primary"
+                    htmlType="submit"
+                    onClick={() => {
+                        if (isOrganiserView && !!allocationSettingsData) this.handleSave();
+                        history.push('/umpirePoolAllocation');
+                    }}
+                >
+                    {AppConstants.next}
+                </Button>
             </div>
         );
     };

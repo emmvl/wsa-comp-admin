@@ -606,7 +606,7 @@ class CompetitionQuickCompetition extends Component {
                                 <InputWithHead
                                     auto_complete="off"
                                     required="required-field pb-0 pt-0"
-                                    placeholder={AppConstants.competition_name}
+                                    placeholder={AppConstants.competitionName}
                                     onChange={(e) => this.props.updateQuickCompetitionData(captializedString(e.target.value), "competitionName")}
                                     onBlur={(i) => this.formRef.current.setFieldsValue({
                                         'competition_name': captializedString(i.target.value)

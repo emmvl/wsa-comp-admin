@@ -182,6 +182,7 @@ function* updateCompetitionDraws(action) {
 // Update Competition Draws Timeline
 function* updateCompetitionDrawsTimeline(action) {
     try {
+        //contains both swap and normal drag update data
         const result = yield call(
             CompetitionAxiosApi.updateDraws,
             action.data,
@@ -191,8 +192,7 @@ function* updateCompetitionDrawsTimeline(action) {
             action.drawData,
         );
 
-        yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data.draws[0]);
-        yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data.draws[1]);
+        //updateCourtTimingsDraws is merged into updateDraws api
 
         const getDataResult = yield call(
             CompetitionAxiosApi.getCompetitionDraws,
@@ -204,27 +204,21 @@ function* updateCompetitionDrawsTimeline(action) {
             action.startDate,
             action.endDate,
         );
-
+ 
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_SUCCESS,
+                type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_BULK_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                sourceArray: action.sourceArray,
-                targetArray: action.targetArray,
-                actionType: action.actionType,
-                drawData: action.drawData,
-                dateRangeCheck: action.dateRangeCheck,
             });
-
             yield put({
-                type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,
-                result: getDataResult.result.data,
-                status: getDataResult.status,
-                competitionId: action.competitionId,
-                dateRangeCheck: action.dateRangeCheck,
+                    type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,
+                    result: getDataResult.result.data,
+                    status: getDataResult.status,
+                    competitionId: action.competitionId,
+                    dateRangeCheck: action.dateRangeCheck,
             });
-
+         
             message.success(result.result.data.message)
         } else {
             yield call(failSaga, result)
@@ -233,7 +227,22 @@ function* updateCompetitionDrawsTimeline(action) {
         yield call(errorSaga, error)
     }
 }
-
+// Update Competition Draws Timeline on drag
+function* updateCompetitionDrawsOnDrag(action) {
+    try {
+        const result = yield call(
+            CompetitionAxiosApi.emptySideEffect,
+            action.data,           
+        );      
+        yield put({
+            type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_SUCCESS,
+            result: action.data,
+            status: result.status,
+        });
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
 // Save Draws saga
 function* saveDrawsSaga(action) {
     try {
@@ -480,6 +489,7 @@ export default function* rootCompetitionMultiDrawSaga() {
     yield takeEvery(ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_LOAD, getDrawsRoundsSaga);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_LOAD, updateCompetitionDraws);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_LOAD, updateCompetitionDrawsTimeline);
+    yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD, updateCompetitionDrawsOnDrag);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_SAVE_MULTI_DRAWS_LOAD, saveDrawsSaga);
     yield takeEvery(ApiConstants.API_GET_COMPETITION_VENUES_MULTI_LOAD, getCompetitionVenues);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_LOAD, updateCourtTimingsDrawsAction);

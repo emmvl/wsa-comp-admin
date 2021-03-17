@@ -628,32 +628,25 @@ class LiveScoreAddMatch extends Component {
             recordUmpireType,
             scorer1,
             scorer2,
-            // umpire1Name,
-            // umpire2Name,
             umpire1TextField,
             umpire2TextField,
             umpire1Orag,
             umpire2Orag,
             umpireReserve,
             umpireCoach,
-            // umpire1NameOrgId, 
-            // umpireReserveId,
         } = this.props.liveScoreMatchState;
         const {
-            venueData, 
-            clubListData, 
-            coachList, 
-            // umpireList, 
-            newUmpireList, 
-            umpire1NameMainId, 
+            venueData,
+            clubListData,
+            coachList,
+            newUmpireList,
+            umpire1NameMainId,
             umpire2NameMainId,
         } = this.props.liveScoreMatchState;
         const { scorerListResult } = this.props.liveScoreState;
-        // const { umpireList, coachList, } = this.props.umpireState
-        // const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
-        // const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
+
         return (
             <div className="content-view pt-4">
                 <div className="row">

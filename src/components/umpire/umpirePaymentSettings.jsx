@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { NavLink } from 'react-router-dom';
 import {
     Layout,
     Breadcrumb,
@@ -133,8 +134,7 @@ class UmpirePaymentSetting extends Component {
                 organisationId,
                 competitionId: this.state.selectedComp,
             };
-
-            this.props.getUmpirePaymentSettings(reqData);
+            if (reqData.competitionId && reqData.organisationId) this.props.getUmpirePaymentSettings(reqData);
         }
 
         if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
@@ -778,7 +778,12 @@ class UmpirePaymentSetting extends Component {
         ));
 
         return (
-            <div className="form-footer-button-wrapper">
+            <div className="form-footer-button-wrapper justify-content-between">
+                <div className="reg-add-save-button">
+                    <NavLink to="/umpireDivisions">
+                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                    </NavLink>
+                </div>
                 <Button
                     onClick={this.handleSave}
                     className="publish-button save-draft-text mr-0"

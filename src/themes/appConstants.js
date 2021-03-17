@@ -231,6 +231,7 @@ const AppConstants = {
     betweenGames: "Between Games",
     assignManually: "Assign Manually",
     regenerateDraw: "Regenerate",
+    saveDraw: "Save Draws",
 
     /// *****Competition Finals */
     extraTimeIfDraw1: "Extra time if a Draw - 1st Time",
@@ -1712,6 +1713,7 @@ const AppConstants = {
     membershipType: "Membership type",
     totalFeeIncGst: "Total Fee (inc GST)",
     governmentVoucher: "Govt. Voucher",
+    governmentVoucherStatus: "Govt. Voucher Status",
     portion: "Portion",
     redeemVoucher: "Redeem Voucher",
     cashPaymentReceived: "Cash Payment received",
@@ -1861,7 +1863,8 @@ const AppConstants = {
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
     cancelTransferReg: "Cancel Transfer registration",
-    feePaid: "Fee Paid",
+    fee: "Fee",
+    feeStatus: "Fee Status",
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
     failed: "Failed",
@@ -2021,6 +2024,7 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
+    competition_name: "Competition name"
 };
 
 export default AppConstants;

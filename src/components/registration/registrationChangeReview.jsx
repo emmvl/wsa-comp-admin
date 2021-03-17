@@ -387,8 +387,8 @@ class RegistrationChangeReview extends Component {
                     <div className='col-sm'>
                         <InputWithHead
                             disabled
-                            heading={AppConstants.competition_name}
-                            placeholder={AppConstants.competition_name}
+                            heading={AppConstants.competitionName}
+                            placeholder={AppConstants.competitionName}
                             value={regChangeReviewData ? regChangeReviewData.competitionName : null}
                         />
                     </div>
@@ -491,8 +491,8 @@ class RegistrationChangeReview extends Component {
                             />
 
                             <InputWithHead
-                                heading={AppConstants.competition_name}
-                                placeholder={AppConstants.competition_name}
+                                heading={AppConstants.competitionName}
+                                placeholder={AppConstants.competitionName}
                                 value={regChangeReviewData.transferCompName}
                                 disabled
                             />
