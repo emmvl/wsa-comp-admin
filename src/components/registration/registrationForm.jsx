@@ -532,7 +532,7 @@ class RegistrationForm extends Component {
         }
         let payload = {
             hardshipCode: code,
-            orgRegistrationId: orgRegistrationId,
+            orgRegistrationId: orgRegistrationId == 0 || orgRegistrationId == null ? this.state.orgRegId : orgRegistrationId,
             isActive: 1
         }
         this.props.updateRegistrationForm(obj, "addHardshipCode")
