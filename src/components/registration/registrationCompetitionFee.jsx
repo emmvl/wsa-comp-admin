@@ -3866,7 +3866,7 @@ class RegistrationCompetitionFee extends Component {
 
         // selectedSeasonalFeeKey
 
-        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2 || x.paymentMethodRefId == 3)) {
             message.error(ValidationConstants.pleaseSelectPaymentMethods);
             if(fromValidation == "FromValidation"){
                 return true;
@@ -3964,7 +3964,7 @@ class RegistrationCompetitionFee extends Component {
         let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
         selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
 
-        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2 || x.paymentMethodRefId == 3)) {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.paymentMandatory);
             return;
