@@ -214,12 +214,8 @@ class AssignUmpire extends Component {
         let umpireName = this_obj.props.location.state ? this_obj.props.location.state.record.firstName + " " + this_obj.props.location.state.record.lastName : null
         let userId = localStorage.getItem("userId");
         const competition = JSON.parse(getUmpireCompetitonData());
-        let rosterLocked = (competition && competition.recordUmpireType === "USERS") ? true : false
-        let orgId = (this.props.location.state && 
-            this.props.location.state.record &&
-            this.props.location.state.record.linkedEntity &&
-            Array.isArray(this.props.location.state.record.linkedEntity))
-            ? this.props.location.state.record.linkedEntity[0].entityId : null
+        let rosterLocked = competition.recordUmpireType === "USERS" ? true : false
+        let orgId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.userRoleEntities[0]?.entityId : null : null
 
         let assignBody = [{
             createdBy: parseInt(userId),
