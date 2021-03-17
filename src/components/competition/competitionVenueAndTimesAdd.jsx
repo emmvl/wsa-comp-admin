@@ -65,7 +65,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             venueAddressError: '',
             courtColumns: [
                 {
-                    title: "Court Numbers",
+                    title: AppConstants.courtNumbers,
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber) => (
@@ -75,7 +75,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     )
                 },
                 {
-                    title: "Court Name",
+                    title: AppConstants.courtName,
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
@@ -103,7 +103,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 },
 
                 {
-                    title: "Longitude",
+                    title: AppConstants.longitude,
                     dataIndex: "lng",
                     key: "lng",
                     width: 100,
@@ -131,7 +131,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         </div>
                     ),
                 }, {
-                    title: "Latitude",
+                    title: AppConstants.latitude,
                     dataIndex: "lat",
                     key: "lat",
                     width: 100,
@@ -165,7 +165,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     ),
                 },
                 {
-                    // title: "Override Venue Timeslots?",
+                    // title: AppConstants.overrideVenueTimeslots,
                     title: <span >Override Venue Timeslots?</span>,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
@@ -578,14 +578,14 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 {
                     this.state.manualAddress &&
-                    <Form.Item className="formLineHeight" name="stateRefId" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
+                    <Form.Item className="formLineHeight" rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                         <InputWithHead required="required-field" heading={AppConstants.stateHeading} />
                         <Select
                             style={{ width: '100%' }}
                             placeholder={AppConstants.select}
                             value={venuData.stateRefId}
+                            name="stateRefId"
                             onChange={(value) => this.props.updateVenuAndTimeDataAction(value, 'Venue', 'stateRefId')}
-                        // disabled
                         >
                             {stateList.map((item) => (
                                 <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>

@@ -22,27 +22,27 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "First Name",
         key: "First Name",
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "Last Name",
         key: "Last Name",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "Email",
         key: "Email",
     },
     {
-        title: "Contact No",
+        title: AppConstants.contact_No,
         dataIndex: "Contact No",
         key: "Contact No",
     },
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: "Organisation",
         key: "Organisation",
     },

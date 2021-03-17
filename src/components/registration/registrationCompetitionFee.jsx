@@ -104,7 +104,7 @@ export const getNotNegativeVal = e => e.target.value.startsWith('-') ? -e.target
 
 const playerSeasonalTable = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
         width: 84,
@@ -134,7 +134,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
@@ -148,7 +148,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -162,7 +162,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -190,7 +190,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -219,7 +219,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -244,7 +244,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -269,7 +269,7 @@ const playerSeasonalTable = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -287,7 +287,7 @@ const playerSeasonalTable = [
 
 const playerCasualTable = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         width: 84,
@@ -317,7 +317,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
         width: 84,
@@ -331,7 +331,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -345,7 +345,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -373,7 +373,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -401,7 +401,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -425,7 +425,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -449,7 +449,7 @@ const playerCasualTable = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -467,7 +467,7 @@ const playerCasualTable = [
 
 const playerSeasonalTableAssociation = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
         width: 84,
@@ -497,7 +497,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
@@ -511,7 +511,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -525,7 +525,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -553,7 +553,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -581,7 +581,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Nomination Fees (excl. GST)',
+        title: AppConstants.affiliateNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -609,7 +609,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -637,7 +637,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -661,7 +661,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -685,7 +685,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Competition Fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -710,7 +710,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -734,7 +734,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -752,7 +752,7 @@ const playerSeasonalTableAssociation = [
 
 const playerCasualTableAssociation = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         width: 84,
@@ -782,7 +782,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
         width: 84,
@@ -796,7 +796,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -810,7 +810,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -839,7 +839,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -867,7 +867,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Association Nomination Fees (excl. GST)',
+        title: AppConstants.associationNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -895,7 +895,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -923,7 +923,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -947,7 +947,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -971,7 +971,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate Competition Fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -995,7 +995,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -1019,7 +1019,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -1037,7 +1037,7 @@ const playerCasualTableAssociation = [
 
 const playerSeasonalTableClub = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
         width: 84,
@@ -1067,7 +1067,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
@@ -1081,7 +1081,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -1095,7 +1095,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -1123,7 +1123,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -1151,7 +1151,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Affiliate Nomination Fees (excl. GST)',
+        title: AppConstants.affiliateNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -1179,7 +1179,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -1207,7 +1207,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -1231,7 +1231,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -1255,7 +1255,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Affiliate Competition Fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1280,7 +1280,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -1304,7 +1304,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -1322,7 +1322,7 @@ const playerSeasonalTableClub = [
 
 const playerCasualTableClub = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         width: 84,
@@ -1352,7 +1352,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
         width: 84,
@@ -1366,7 +1366,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -1380,7 +1380,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -1408,7 +1408,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -1436,7 +1436,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Club Nomination Fees (excl. GST)',
+        title: AppConstants.clubNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -1464,7 +1464,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -1492,7 +1492,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Competition fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -1516,7 +1516,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -1540,7 +1540,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Affiliate Competition fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1564,7 +1564,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -1588,7 +1588,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -1606,7 +1606,7 @@ const playerCasualTableClub = [
 
 const playerSeasonalTableTeamAssociation = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
         width: 84,
@@ -1636,7 +1636,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
@@ -1650,7 +1650,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -1664,7 +1664,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -1692,7 +1692,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -1720,7 +1720,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Affiliate Nomination Fees (excl. GST)',
+        title: AppConstants.affiliateNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -1748,7 +1748,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -1776,7 +1776,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -1803,7 +1803,7 @@ const playerSeasonalTableTeamAssociation = [
                 ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -1834,7 +1834,7 @@ const playerSeasonalTableTeamAssociation = [
                 ),
     },
     {
-        title: 'Affiliate Competition Fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -1865,7 +1865,7 @@ const playerSeasonalTableTeamAssociation = [
                 ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -1896,7 +1896,7 @@ const playerSeasonalTableTeamAssociation = [
                 ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -1914,7 +1914,7 @@ const playerSeasonalTableTeamAssociation = [
 
 const playerSeasonalTableTeamClub = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
         width: 84,
@@ -1944,7 +1944,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
@@ -1958,7 +1958,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -1972,7 +1972,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -2000,7 +2000,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -2028,7 +2028,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Affiliate Nomination Fees (excl. GST)',
+        title: AppConstants.affiliateNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -2056,7 +2056,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -2084,7 +2084,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -2111,7 +2111,7 @@ const playerSeasonalTableTeamClub = [
                 ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -2142,7 +2142,7 @@ const playerSeasonalTableTeamClub = [
                 ),
     },
     {
-        title: 'Affiliate Competition Fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2173,7 +2173,7 @@ const playerSeasonalTableTeamClub = [
                 ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -2204,7 +2204,7 @@ const playerSeasonalTableTeamClub = [
                 ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -2222,7 +2222,7 @@ const playerSeasonalTableTeamClub = [
 
 const playerSeasonalTeamTable = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipType',
         width: 84,
@@ -2252,7 +2252,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipSeasonal',
         key: 'membershipSeasonal',
         width: 84,
@@ -2266,7 +2266,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         width: 84,
@@ -2280,7 +2280,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -2311,7 +2311,7 @@ const playerSeasonalTeamTable = [
         },
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -2339,7 +2339,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -2370,7 +2370,7 @@ const playerSeasonalTeamTable = [
                 ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -2401,7 +2401,7 @@ const playerSeasonalTeamTable = [
                 ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -2419,7 +2419,7 @@ const playerSeasonalTeamTable = [
 
 const playerCasualTableTeamAssociation = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         width: 84,
@@ -2449,7 +2449,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
         width: 84,
@@ -2463,7 +2463,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipCasualGst',
         key: 'membershipCasualGst',
         width: 84,
@@ -2477,7 +2477,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -2506,7 +2506,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -2535,7 +2535,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Association Nomination Fees (excl. GST)',
+        title: AppConstants.associationNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -2564,7 +2564,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -2593,7 +2593,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -2621,7 +2621,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -2650,7 +2650,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Affiliate Competition Fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2679,7 +2679,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -2708,7 +2708,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -2724,7 +2724,7 @@ const playerCasualTableTeamAssociation = [
 
 const playerCasualTableTeamClub = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         width: 84,
@@ -2754,7 +2754,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
         width: 84,
@@ -2768,7 +2768,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipCasualGst',
         key: 'membershipCasualGst',
         width: 84,
@@ -2782,7 +2782,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -2811,7 +2811,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -2840,7 +2840,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Club Nomination Fees (excl. GST)',
+        title: AppConstants.clubNominationFeesExclGst,
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         width: 84,
@@ -2869,7 +2869,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         width: 84,
@@ -2898,7 +2898,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Competition fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -2927,7 +2927,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -2956,7 +2956,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Affiliate Competition fees (excl. GST)',
+        title: AppConstants.affiliateCompetitionFeesExclGst,
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         width: 84,
@@ -2985,7 +2985,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         width: 84,
@@ -3014,7 +3014,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -3030,7 +3030,7 @@ const playerCasualTableTeamClub = [
 
 const playerCasualTeamTable = [
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         width: 84,
@@ -3060,7 +3060,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Membership Fees (excl. GST)',
+        title: AppConstants.membershipFeesGST,
         dataIndex: 'membershipCasual',
         key: 'membershipCasual',
         width: 84,
@@ -3074,7 +3074,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'membershipCasualGst',
         key: 'membershipCasualGst',
         width: 84,
@@ -3088,7 +3088,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Nomination Fees (excl. GST)',
+        title: AppConstants.nominationFeesExclGst,
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         width: 84,
@@ -3117,7 +3117,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         width: 84,
@@ -3146,7 +3146,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Competition Fees (excl. GST)',
+        title: AppConstants.competitionFeesExclGst,
         dataIndex: 'fee',
         key: 'fee',
         width: 84,
@@ -3175,7 +3175,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'GST',
+        title: AppConstants.gst,
         dataIndex: 'gst',
         key: 'gst',
         width: 84,
@@ -3204,7 +3204,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
         width: 96,
@@ -3293,7 +3293,7 @@ class RegistrationCompetitionFee extends Component {
             permissionState: permissionObject,
             divisionTable: [
                 {
-                    title: 'Division Name',
+                    title: AppConstants.divisionName,
                     dataIndex: 'divisionName',
                     key: 'divisionName',
                     render: (divisionName, record, index) => {
@@ -3324,7 +3324,7 @@ class RegistrationCompetitionFee extends Component {
                     },
                 },
                 {
-                    title: 'Gender Restriction',
+                    title: AppConstants.genderRestriction,
                     dataIndex: 'genderRestriction',
                     key: 'genderRestriction',
                     filterDropdown: true,
@@ -3395,7 +3395,7 @@ class RegistrationCompetitionFee extends Component {
                     },
                 },
                 {
-                    title: 'Age Restriction',
+                    title: AppConstants.ageRestrictions,
                     dataIndex: 'ageRestriction',
                     key: 'ageRestriction',
                     filterDropdown: true,
@@ -3425,7 +3425,7 @@ class RegistrationCompetitionFee extends Component {
                     ),
                 },
                 {
-                    title: 'DOB From',
+                    title: AppConstants.dobFrom,
                     dataIndex: 'fromDate',
                     key: 'fromDate',
                     width: '25%',
@@ -3463,7 +3463,7 @@ class RegistrationCompetitionFee extends Component {
                     },
                 },
                 {
-                    title: 'DOB To',
+                    title: AppConstants.dobTo,
                     dataIndex: 'toDate',
                     width: '25%',
                     key: 'toDate',
@@ -3866,7 +3866,7 @@ class RegistrationCompetitionFee extends Component {
 
         // selectedSeasonalFeeKey
 
-        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2 || x.paymentMethodRefId == 3)) {
             message.error(ValidationConstants.pleaseSelectPaymentMethods);
             if(fromValidation == "FromValidation"){
                 return true;
@@ -3964,7 +3964,7 @@ class RegistrationCompetitionFee extends Component {
         let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
         selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
 
-        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2 || x.paymentMethodRefId == 3)) {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.paymentMandatory);
             return;
@@ -5466,8 +5466,8 @@ class RegistrationCompetitionFee extends Component {
                     <InputWithHead
                         auto_complete="off"
                         required="required-field"
-                        heading={AppConstants.competition_name}
-                        placeholder={AppConstants.competition_name}
+                        heading={AppConstants.competitionName}
+                        placeholder={AppConstants.competitionName}
                         // value={detailsData.competitionDetailData.competitionName}
                         onChange={(e) =>
                             this.props.add_editcompetitionFeeDeatils(
@@ -7502,15 +7502,17 @@ class RegistrationCompetitionFee extends Component {
                         </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
-                                    suffix={JSON.stringify(item.discountTypeRefId) == '2' ? '%' : null}
-                                    type="number"
                                 />
                             </div>
                             <div className="col-sm">
@@ -7587,15 +7589,17 @@ class RegistrationCompetitionFee extends Component {
                         />
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
-                                    suffix={JSON.stringify(item.discountTypeRefId) == '2' ? '%' : null}
-                                    type="number"
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                 />
                             </div>
                             <div className="col-sm">
@@ -7749,12 +7753,16 @@ class RegistrationCompetitionFee extends Component {
                         </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-percentageOff"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
                                 />
                             </div>
@@ -8122,11 +8130,11 @@ class RegistrationCompetitionFee extends Component {
         let competitionId = this.props.competitionFeesState.competitionId;
         let this_ = this;
         confirm({
-            title: 'Are you sure delete this product?',
+            title: AppConstants.productDeleteConfirmMsg,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 if (competitionId.length > 0) {
                     this_.deleteProduct(competitionId);

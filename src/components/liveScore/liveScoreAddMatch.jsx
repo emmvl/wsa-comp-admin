@@ -92,10 +92,10 @@ class LiveScoreAddMatch extends Component {
     openModel = (matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, umpireKey, umpireData, scorerData, recordUmpireType, screenName) => {
         const this_ = this;
         confirm({
-            title: 'By making this change you may cause the draw to duplicate or create a conflict. We strongly recommend you make all match changes in the Competition Management Draws screen. Do you want to Proceed anyway?',
-            okText: 'OK',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            title: AppConstants.liveScoreAddConfirm,
+            okText: AppConstants.ok,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 this_.props.liveScoreCreateMatchAction(matchData, compId, key, isEdit, team1resultId, team2resultId, matchStatus, null, umpireKey, umpireData, scorerData, recordUmpireType, screenName);
             },
@@ -628,32 +628,25 @@ class LiveScoreAddMatch extends Component {
             recordUmpireType,
             scorer1,
             scorer2,
-            // umpire1Name,
-            // umpire2Name,
             umpire1TextField,
             umpire2TextField,
             umpire1Orag,
             umpire2Orag,
             umpireReserve,
             umpireCoach,
-            // umpire1NameOrgId, 
-            // umpireReserveId,
         } = this.props.liveScoreMatchState;
         const {
-            venueData, 
-            clubListData, 
-            coachList, 
-            // umpireList, 
-            newUmpireList, 
-            umpire1NameMainId, 
+            venueData,
+            clubListData,
+            coachList,
+            newUmpireList,
+            umpire1NameMainId,
             umpire2NameMainId,
         } = this.props.liveScoreMatchState;
         const { scorerListResult } = this.props.liveScoreState;
-        // const { umpireList, coachList, } = this.props.umpireState
-        // const umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
-        // const newUmpireListResult = isArrayNotEmpty(newUmpireList) ? newUmpireList : [];
         const coachListResult = isArrayNotEmpty(coachList) ? coachList : [];
         const { allDisabled } = this.state;
+
         return (
             <div className="content-view pt-4">
                 <div className="row">

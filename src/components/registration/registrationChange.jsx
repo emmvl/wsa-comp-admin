@@ -38,11 +38,22 @@ import DashboardLayout from "../../pages/dashboardLayout";
 const { Content } = Layout;
 const { Option } = Select;
 
+let this_Obj = null;
+
 // function to sort table column
-function tableSort(a, b, key) {
-    const stringA = JSON.stringify(a[key])
-    const stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+const tableSort = async (key) => {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
+    }
+
+    await this_Obj.props.getRegistrationChangeDashboard(this_Obj.state.filter, sortBy, sortOrder);
+    this_Obj.setState({ sortBy, sortOrder });
 }
 
 function getColor(record, key) {
@@ -65,42 +76,47 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: "Current",
+        title: AppConstants.current,
         children: [
             {
-                title: 'Participant',
+                title: AppConstants.participant,
                 dataIndex: 'userName',
                 key: 'userName',
-                sorter: (a, b) => tableSort(a, b, "userName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Comp Organiser',
+                title: AppConstants.competitionOrganiser,
                 dataIndex: 'compOrganiserName',
                 key: 'compOrganiserName',
-                sorter: (a, b) => tableSort(a, b, "compOrganiserName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Affiliate',
+                title: AppConstants.affiliate,
                 dataIndex: 'affiliateName',
                 key: 'affiliateName',
-                sorter: (a, b) => tableSort(a, b, "affiliateName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Competition',
+                title: AppConstants.competition,
                 dataIndex: 'competitionName',
                 key: 'competitionName',
-                sorter: (a, b) => tableSort(a, b, "competitionName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
         ],
     },
     {
-        title: "Transfer",
+        title: AppConstants.transfer,
         children: [
             {
-                title: 'Comp Organiser',
+                title: AppConstants.competitionOrganiser,
                 dataIndex: 'transferCompOrgName',
                 key: 'transferCompOrgName',
-                sorter: (a, b) => tableSort(a, b, "transferCompOrgName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (transferCompOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
@@ -125,10 +141,11 @@ const columns = [
                 ),
             },
             {
-                title: 'Affiliate',
+                title: AppConstants.affiliate,
                 dataIndex: 'transferAffOrgName',
                 key: 'transferAffOrgName',
-                sorter: (a, b) => tableSort(a, b, "transferAffOrgName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (transferAffOrgName, record) => (
                     <div>
                         <div className="d-flex justify-content-between">
@@ -153,42 +170,46 @@ const columns = [
                 ),
             },
             {
-                title: 'Competition',
+                title: AppConstants.competition,
                 dataIndex: 'transferCompName',
                 key: 'transferCompName',
-                sorter: (a, b) => tableSort(a, b, "transferCompName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
         ],
     },
     {
-        title: "Approvals",
+        title: AppConstants.approvals,
         children: [
             {
-                title: 'Membership Type',
+                title: AppConstants.membershipType,
                 dataIndex: 'membershipTypeName',
                 key: 'membershipTypeName',
-                sorter: (a, b) => tableSort(a, b, "membershipTypeName"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Paid',
+                title: AppConstants.paid,
                 dataIndex: 'paid',
                 key: 'paid',
-                sorter: (a, b) => tableSort(a, b, "paid"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (paid, record) => (
                     <div>{paid !== 'N/A' && paid !== 'P' ? currencyFormat(paid) : paid}</div>
                 )
             },
             {
-                title: 'Type',
+                title: AppConstants.type,
                 dataIndex: 'regChangeType',
                 key: 'regChangeType',
-                sorter: (a, b) => tableSort(a, b, "regChangeType"),
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Comp Organiser',
+                title: AppConstants.competitionOrganiser,
                 dataIndex: 'compOrganiserApproved',
                 key: 'compOrganiserApproved',
-                sorter: (a, b) => tableSort(a, b, "compOrganiserApproved"),
+                sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (compOrganiserApproved, record) => (
                     <div>
@@ -212,10 +233,10 @@ const columns = [
                 ),
             },
             {
-                title: 'Affiliate',
+                title: AppConstants.affiliate,
                 dataIndex: 'affiliateApproved',
                 key: 'affiliateApproved',
-                sorter: (a, b) => tableSort(a, b, "affiliateApproved"),
+                sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (affiliateApproved, record) => (
                     <div>
@@ -237,10 +258,10 @@ const columns = [
                 ),
             },
             {
-                title: 'State',
+                title: AppConstants.stateTitle,
                 dataIndex: 'stateApproved',
                 key: 'stateApproved',
-                sorter: (a, b) => tableSort(a, b, "stateApproved"),
+                sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 render: (stateApproved, record) => (
                     <div>
@@ -262,13 +283,13 @@ const columns = [
                 ),
             },
             // {
-            //     title: 'Status',
+            //     title: AppConstants.status,
             //     dataIndex: 'approvedStatus',
             //     key: 'approvedStatus',
             //     sorter: (a, b) => tableSort(a, b, "approvedStatus")
             // },
             {
-                title: "Action",
+                title: AppConstants.action,
                 dataIndex: 'action',
                 key: 'action',
                 render: (data, record) => (
@@ -308,13 +329,16 @@ class RegistrationChange extends Component {
             deleteLoading: false,
             userRole: "",
             searchText: '',
-            competition: 'All',
-            type: 'All',
+            competition: AppConstants.all,
+            type: AppConstants.all,
             yearRefId: null,
             competitionId: "-1",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             regChangeTypeRefId: -1,
+            sortBy: null,
+            sortOrder: null,
         };
+        this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
@@ -338,6 +362,8 @@ class RegistrationChange extends Component {
             competitionId,
             organisationId,
             regChangeTypeRefId,
+            sortBy,
+            sortOrder
         } = this.state;
         const yearRefId = getGlobalYear() && this.state.yearRefId != -1 ? JSON.parse(getGlobalYear()) : -1;
         let { regChangeDashboardListPageSize } = this.props.regChangeState;
@@ -354,7 +380,7 @@ class RegistrationChange extends Component {
             },
         };
 
-        this.props.getRegistrationChangeDashboard(filter);
+        this.props.getRegistrationChangeDashboard(filter, sortBy, sortOrder);
 
         this.setState({ filter });
     }

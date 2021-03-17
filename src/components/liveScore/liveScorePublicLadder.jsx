@@ -27,13 +27,13 @@ function tableSort(a, b, key) {
 ////Table columns
 const columns = [
     {
-        title: 'Rank',
+        title: AppConstants.rank,
         dataIndex: 'rank',
         key: 'rank',
         sorter: (a, b) => tableSort(a, b, "rank"),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),

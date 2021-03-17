@@ -488,10 +488,10 @@ class CompetitionDraws extends Component {
     openModel = (props, e) => {
         let this_ = this;
         confirm({
-            title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.proceedConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             maskClosable: true,
             mask: true,
             onOk() {

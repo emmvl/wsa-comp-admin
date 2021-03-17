@@ -10,20 +10,20 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: 'Summary',
+        title: AppConstants.summary,
         dataIndex: 'summary',
         key: 'summary',
         sorter: (a, b) => a.summary.length - b.summary.length,
     },
     {
-        title: 'Team Numbers',
+        title: AppConstants.teamNumbers,
         dataIndex: 'teamNumbers',
         key: 'teamNumbers',
         render: teamNumbers => <Input className="input-inside-player-grades-table-for-grade" value={teamNumbers} />,
         sorter: (a, b) => a.teamNumbers.length - b.teamNumbers.length,
     },
     {
-        title: 'Min. Teams/Grade or Division',
+        title: AppConstants.minTeamsGradeOrDivision,
         dataIndex: 'minTeamsPerGarde',
         key: 'minTeamsPerGarde',
         render: minTeamsPerGarde => <Input className="input-inside-player-grades-table-for-grade" value={minTeamsPerGarde} />,
@@ -136,7 +136,7 @@ class CompetitionReGradingStep2 extends Component {
                         </div>
                         <div className="col-sm-8">
                             <div className="w-100 d-flex flex-row align-items-center" style={{ marginRight: 50 }}>
-                                <span className="year-select-heading">{AppConstants.competition_name}:</span>
+                                <span className="year-select-heading">{AppConstants.competitionName}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 140 }}

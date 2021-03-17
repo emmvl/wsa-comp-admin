@@ -30,7 +30,7 @@ import {
     updateRegistrationForm, clearReducerDataAction,
     changeMembershipProduct, getMembershipproduct,
     updateProductSelection, updateRegistrationLock, updateDisclamerText, isCheckedVisible,
-    isReplyCheckVisible
+    isReplyCheckVisible, addHardshipCodeAction
 } from "../../store/actions/registrationAction/registration";
 import {
     getYearAndCompetitionAction, getCompetitionTypeListAction,
@@ -72,17 +72,17 @@ const columns = [
         )
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipProductTypeName",
         key: "membershipProductTypeName",
     },
     {
-        title: "Registration Type",
+        title: AppConstants.registrationType,
         dataIndex: "registrationType",
         key: "registrationType",
     },
     {
-        title: "Registration Divisions",
+        title: AppConstants.registrationDivisions,
         dataIndex: "divisionName",
         key: "divisionName",
         width: "25%",
@@ -116,7 +116,7 @@ const columns = [
     },
 
     {
-        title: "Registration Cap",
+        title: AppConstants.registrationCap,
         dataIndex: "registrationType",
         key: "registrationCap",
         render: (registrationCap, record, index) => {
@@ -384,7 +384,6 @@ class RegistrationForm extends Component {
             }
             SelectedProduct['registrationSettings'] = registration_settings
             SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
-
             this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
             this.setState({ onRegistrationSaveLoad: true });
         } else {
@@ -399,7 +398,6 @@ class RegistrationForm extends Component {
         if (matchIndexValue > -1) {
             this.props.updateProductSelection(matchIndexValue, key, record.isSelected, record.registrationLock, record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap")
         }
-
     }
 
     getRegistrationLock(value, record, key) {
@@ -530,7 +528,13 @@ class RegistrationForm extends Component {
             orgRegistrationId: orgRegistrationId,
             isActive: 1,
         }
+        let payload = {
+            hardshipCode: code,
+            orgRegistrationId: orgRegistrationId == 0 || orgRegistrationId == null ? this.state.orgRegId : orgRegistrationId,
+            isActive: 1
+        }
         this.props.updateRegistrationForm(obj, "addHardshipCode")
+        this.props.addHardshipCodeAction(payload)
     }
 
     onChangeSetValue = (value, index) => {
@@ -1689,6 +1693,7 @@ function mapDispatchToProps(dispatch) {
             isCheckedVisible,
             isReplyCheckVisible,
             inviteTypeAction,
+            addHardshipCodeAction
         },
         dispatch,
     );

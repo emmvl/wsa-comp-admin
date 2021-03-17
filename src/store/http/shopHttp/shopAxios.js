@@ -111,7 +111,7 @@ let AxiosApi = {
             sorterBy
         } = params
         var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
-        let _now = moment().utc().format('Y-M-D');
+        let _now = moment().utc().format('Y-MM-DD');
         return Method.dataGetDownload(url, token, `orderSummary-${_now}`);
     },
 
@@ -131,7 +131,8 @@ let AxiosApi = {
             sorterBy,
         } = params;
         const url = `/order/export/status?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&order=${order}&sorterBy=${sorterBy}`;
-        return Method.dataGetDownload(url, token, "orderStatus");
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataGetDownload(url, token, `orderStatus-${_now}`);
     },
 
     /////// //order status status listing get API

@@ -334,6 +334,15 @@ function setTeamRegistrationTableListPageNumberAction(pageNum) {
     return action;
 }
 
+function addHardshipCodeAction(payload) {
+    const action = {
+        type: ApiConstants.ADD_HARDSHIP_CODE_LOAD,
+        payload,
+    };
+
+    return action;
+}
+
 export {
     regMembershipListAction,
     regMembershipListDeleteAction,
@@ -372,4 +381,5 @@ export {
     setRegistrationMembershipListPageNumberAction,
     setTeamRegistrationTableListPageSizeAction,
     setTeamRegistrationTableListPageNumberAction,
+    addHardshipCodeAction
 };

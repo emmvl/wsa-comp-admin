@@ -428,9 +428,9 @@ class AddProduct extends Component {
         confirm({
             title: AppConstants.deleteVariantOption,
             content: AppConstants.deleteVariantOptionDescription,
-            okText: 'Confirm',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            okText: AppConstants.confirm,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 if (optionId) {
                     if (optionId > 0) {

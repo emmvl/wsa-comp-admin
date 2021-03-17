@@ -245,7 +245,8 @@ let userHttpApi = {
 
   exportUserFriendList(payload) {
     const url = `users/export/friends`;
-    return Method.dataPostDownload(url, token, payload, "UserFriends");
+    let _now = moment().utc().format('Y-MM-DD');
+    return Method.dataPostDownload(url, token, payload, `playWithFriend-${_now}`);
   },
 
   getUserReferFriendList(payload, sortBy, sortOrder) {
@@ -261,7 +262,8 @@ let userHttpApi = {
 
   exportUserReferFriendList(payload) {
     const url = `users/export/referFriends`;
-    return Method.dataPostDownload(url, token, payload, "ReferFriends");
+    let _now = moment().utc().format('Y-MM-DD');
+    return Method.dataPostDownload(url, token, payload, `referFriend-${_now}`);
   },
 
   async getOrgPhotosList(payload) {
@@ -313,7 +315,7 @@ let userHttpApi = {
 
   exportOrgRegQuestions(payload) {
     const url = `api/export/registration/questions`;
-    let _now = moment().utc().format('Y-M-D');
+    let _now = moment().utc().format('Y-MM-DD');
     return Method.dataPostDownload(url, token, payload, `userTextualDashboard-${_now}`);
   },
 
@@ -346,7 +348,8 @@ let userHttpApi = {
 
   exportAffiliateDirectory(payload) {
     const url = `api/export/affiliatedirectory`;
-    return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
+    let _now = moment().utc().format('Y-MM-DD');
+    return Method.dataPostDownload(url, token, payload, `affiliateDirectory-${_now}`);
   },
 
   umpireList(data) {
@@ -909,7 +912,7 @@ let Method = {
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;
-            let _now = moment().utc().format('Y-M-D');
+            let _now = moment().utc().format('Y-MM-DD');
             let fileName = "filecsv";
             if (userType === 'manager') {
               fileName = `matchDayManagerList-${_now}`;

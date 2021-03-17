@@ -17,13 +17,13 @@ const columns = [
         render: courtNumbers => <Input className="input-inside-table-fees" value={courtNumbers} />,
     },
     {
-        title: 'Longitude',
+        title: AppConstants.longitude,
         dataIndex: 'longitude',
         key: 'longitude',
         render: longitude => <Input className="input-inside-table-venue-court" value={longitude} />,
     },
     {
-        title: 'Latitude',
+        title: AppConstants.latitude,
         dataIndex: 'latitude',
         key: 'latitude',
         render: latitude => <Input className="input-inside-table-venue-court" value={latitude} />,

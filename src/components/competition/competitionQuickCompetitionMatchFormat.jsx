@@ -496,8 +496,8 @@ class QuickCompetitionMatchFormat extends Component {
             <div className="content-view pt-4">
                 <InputWithHead
                     auto_complete="new-compName"
-                    heading={AppConstants.competition_name}
-                    placeholder={AppConstants.competition_name}
+                    heading={AppConstants.competitionName}
+                    placeholder={AppConstants.competitionName}
                     value={data.competitionName}
                     onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}
                 />

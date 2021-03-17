@@ -358,3 +358,21 @@ export function* updateMembershipFeeCapSaga(action) {
     yield call(errorSaga, error)
   }
 }
+
+export function* addHardshipCodeSaga(action) {
+  try {
+    const result = yield call(AxiosApi.addHardshipCode,action.payload);
+    if (result.status === 1) {
+      message.success(AppConstants.successfullyUpdated)
+      yield put({
+        type: ApiConstants.ADD_HARDSHIP_CODE_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}

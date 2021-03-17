@@ -48,14 +48,14 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Logo',
+        title: AppConstants.logo,
         dataIndex: 'logoUrl',
         key: 'logoUrl',
         sorter: false,
         render: (logoUrl) => logoUrl ? <img style={{ height: 60, width: 80 }} src={logoUrl} alt="" /> : <span>{AppConstants.noImage}</span>,
     },
     {
-        title: 'Team Name',
+        title: AppConstants.teamName,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -70,7 +70,7 @@ const columns = [
             <span>{name}</span>
     },
     {
-        title: 'Team Alias Name',
+        title: AppConstants.teamAliasName,
         dataIndex: 'alias',
         key: 'alias',
         sorter: true,
@@ -78,7 +78,7 @@ const columns = [
         render: (alias) => <span>{alias}</span>
     },
     {
-        title: 'Affiliate',
+        title: AppConstants.affiliate,
         dataIndex: 'linkedCompetitionOrganisation',
         key: 'organisation',
         sorter: true,
@@ -95,7 +95,7 @@ const columns = [
         render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
-        title: '#Players',
+        title: AppConstants.players,
         dataIndex: 'playersCount',
         key: 'playersCount',
         sorter: true,
@@ -103,7 +103,7 @@ const columns = [
         render: (playersCount) => <span>{playersCount}</span>
     },
     {
-        title: 'Manager',
+        title: AppConstants.manager,
         dataIndex: 'managers',
         key: 'managers_1',
         sorter: true,
@@ -115,7 +115,7 @@ const columns = [
         </div>
     },
     {
-        title: 'Contact',
+        title: AppConstants.contact,
         dataIndex: 'managers',
         key: 'managers_2',
         sorter: true,
@@ -127,7 +127,7 @@ const columns = [
         </div>
     },
     {
-        title: 'Email',
+        title: AppConstants.email,
         dataIndex: 'managers',
         key: 'managers_3',
         sorter: true,

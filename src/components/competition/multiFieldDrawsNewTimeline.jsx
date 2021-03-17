@@ -57,6 +57,8 @@ import {
     saveDraws,
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
+    updateCourtTimingsDrawsDragSuccessAction,
+    updateCompetitionDrawsSwapLoadAction,
     clearMultiDraws,
     publishDraws,
     matchesListDrawsAction,
@@ -64,6 +66,7 @@ import {
     getActiveRoundsAction,
     changeDrawsDateRangeAction,
     checkBoxOnChange,
+    setTimelineModeAction,
 } from "store/actions/competitionModuleAction/competitionMultiDrawsAction";
 import DrawsPublishModel from "customComponents/drawsPublishModel";
 import Loader from "customComponents/loader";
@@ -141,7 +144,7 @@ class MultifieldDrawsNewTimeline extends Component {
             allOrgChecked: true,
             singleCompDivisionCheked: true,
             filterDates: false,
-            isFilterSchedule: false,
+            isFilterSchedule: true,
             isDivisionNameShow: false,
             isAxisInverted: false,
             regenerateDrawExceptionModalVisible: false,
@@ -157,7 +160,63 @@ class MultifieldDrawsNewTimeline extends Component {
             hoverTooltipFunc: null,
             isDragging: false,
             screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null,
-            publishPastMatches: 0
+            publishPastMatches: 0,
+            editedDraw:{
+                draws:[],
+                apiData:null
+            },
+            emptySlot:{
+                colorCode: "#999999",   
+                awayTeamId: null,
+                awayTeamName: null,                
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                drawsId: null,             
+                gradeName: null,
+                homeTeamId: null,
+                homeTeamName: null,
+                isLocked: 0,  
+                venueId: undefined,
+                teamArray:[
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            },
+            emptySlotFieldUpdate:{
+                endTime: "",
+                matchDate: "",
+                startTime: "",
+                venueCourtId: 0,
+                venueCourtName: "",
+                venueCourtNumber: 0,
+                venueShortName: ""
+            },
+            emptySlotVenueFieldUpdate:{                             
+                venueCourtId: 0,
+                venueCourtName: "",
+                venueCourtNumber: 0,
+                venueShortName: ""
+            },
+            switchDrawNameFields:{
+                awayTeamName:"",
+                awayTeamOrganisationId:"",
+                homeTeamName:"",
+                divisionName:"",
+                gradeName:"",
+                colorCode:"",
+                duplicate:false,
+                homeTeamOrganisationId:"",
+                isPastMatchAvailable:0,
+                outOfCompetitionDate:0,
+                outOfRoundDate:0,
+                teamArray:[]
+            }
         };
         this.props.clearMultiDraws();
         this.dragTimeRef = React.createRef();
@@ -337,6 +396,9 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     componentDidMount() {
+        if (this.props.drawsState.isTimelineMode === false) {
+            history.push('/competitionDrawsOld');
+        }
         loadjs('assets/js/custom.js');
         this.apiCalls();
     }
@@ -580,6 +642,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     getColumnData = (indexArray, drawData) => {
+        let xIndex=indexArray[0];
         let yIndex = indexArray[1];
         let object = null;
 
@@ -590,8 +653,27 @@ class MultifieldDrawsNewTimeline extends Component {
                 break;
             }
         }
+        if(!object){            
+            //empty slot has incorrect start time
+            object=drawData[xIndex].slotsArray[yIndex];
+            this.correctWrongDate(object,yIndex);
+
+        }
         return object;
     };
+    correctWrongDate=(slot,slotIndex)=>{
+        const slotDate = moment(slot.matchDate);
+        const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
+        const isCorrectStart = slotEnd.isAfter(slotDate);
+        if(!isCorrectStart){
+            if(this.props.drawsState.getRoundsDrawsdata.length>0){
+                const dateAxis=this.props.drawsState.getRoundsDrawsdata[0].dateNewArray[slotIndex];
+                slot.matchDate=dateAxis.date;
+                slot.startTime=moment(slot.matchDate).format('HH:mm');
+                slot.endTime=dateAxis.endTime;
+            }           
+        }
+    }
 
     ///////update the competition draws on  swapping and hitting update Apis if both has value
     updateCompetitionDraws = (
@@ -604,7 +686,7 @@ class MultifieldDrawsNewTimeline extends Component {
         newEndTimeSource,
         newEndTimeTarget
     ) => {
-        const key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
+        const key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add";
         const customSourceObject = {
             drawsId: targetObject.drawsId,
             homeTeamId: sourceObejct.homeTeamId,
@@ -627,32 +709,36 @@ class MultifieldDrawsNewTimeline extends Component {
             competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
             isLocked: 1,
         };
-        const postObject = {
-            draws: [customSourceObject, customTargetObject],
-        };
 
-        const yearId = getGlobalYear();
-        const storedCompetitionId = getOwn_competition();
-        const venueId = getDraws_venue();
-        const roundId = getDraws_round();
 
-        this.props.updateCompetitionDrawsTimeline(
-            postObject,
-            sourceIndexArray,
-            targetIndexArray,
-            key,
-            round_Id,
-            yearId,
-            storedCompetitionId,
-            venueId,
-            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
-            null,
-            null,
-            null,
-            this.state.filterDates
-        );
-        this.setState({ updateLoad: true, isOnSwapUpdate: true });
+        this.updateEditDrawArray(customSourceObject);
+        this.updateEditDrawArray(customTargetObject);
+
+        const sourceXIndex = sourceIndexArray[0];
+        const sourceYIndex = sourceIndexArray[1];
+        const targetXIndex = targetIndexArray[0];
+        const targetYIndex = targetIndexArray[1];
+             
+        let newSourceObj={...sourceObejct, ...customTargetObject};
+        Object.keys(this.state.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
+        
+        let newTargetObj={...targetObject, ...customSourceObject};
+        Object.keys(this.state.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
+
+        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
+        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
+        this.props.updateCourtTimingsDrawsDragSuccessAction();
+       
     };
+    updateEditDrawArray(draw){
+        const editdraw= this.state.editedDraw;        
+        const drawExistsIndex=editdraw.draws.findIndex(d=>d.drawsId==draw.drawsId);
+        if(drawExistsIndex>-1){
+            editdraw.draws[drawExistsIndex]=draw;
+        }else{
+            editdraw.draws.push(draw);
+        }
+    }
 
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
@@ -1050,9 +1136,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     const slotStart = moment(slot.matchDate);
                     const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
 
-                    const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
-                    const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
-                    const isSlotEventInside = startTimeNew.isBefore(slotStart) && endTimeNew.isAfter(slotEnd);
+                    const isStartTimeCondition = startTimeNew.isSameOrBefore(slotEnd) && startTimeNew.isSameOrAfter(slotStart);
+                    const isEndTimeCondition = endTimeNew.isSameOrAfter(slotStart) && endTimeNew.isSameOrBefore(slotEnd);
+                    const isSlotEventInside = startTimeNew.isSameOrBefore(slotStart) && endTimeNew.isSameOrAfter(slotEnd);
 
                     const isEventOverItself = slot.drawsId === draggableEventObject.drawsId
                         && (
@@ -1068,8 +1154,8 @@ class MultifieldDrawsNewTimeline extends Component {
                         const prevEventEnd = prevEvent && moment(this.getDate(slot.matchDate) + prevEvent?.endTime);
                         const nextEventStart = nextEvent && moment(nextEvent?.matchDate);
 
-                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isAfter(startTimeNew);
-                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isBefore(endTimeNew);
+                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isSameOrAfter(startTimeNew);
+                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isSameOrBefore(endTimeNew);
 
                         if (isPrevEventEndBeforeSlotStart || isPrevEventStartAfterSlotEnd) {
                             return true;
@@ -1105,21 +1191,74 @@ class MultifieldDrawsNewTimeline extends Component {
 
             const postData = {
                 drawsId: draggableEventObject.drawsId,
-                venueCourtId: stateVenueId,
+                venueCourtId: parseInt(stateVenueId),
                 matchDate: newTimeWithDateFormatted,
                 startTime: newTimeFormatted,
                 endTime: endTimeFormatted,
             };
-
-            this.props.updateCourtTimingsDrawsAction(
-                postData,
-                null,
-                null,
-                null,
-                this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
-                apiData,
-                this.state.filterDates
-            );
+            const editdraw= this.state.editedDraw;
+            editdraw.apiData=apiData;
+            
+            //change to action if necessary
+            this.dargSuccess(targetCourtId,postData);
+            this.updateEditDrawArray(postData);
+            this.setState({updateLoad: false});
+        }
+    }
+    dargSuccess(targetCourtId,postData){
+        for(let drawsData of this.props.drawsState.getRoundsDrawsdata){
+            if(targetCourtId==postData.venueCourtId){
+                //move in the same court
+                let venueCourt=drawsData.draws.find(d=>d.venueCourtId==postData.venueCourtId);
+                if(venueCourt){
+                    let draw=venueCourt.slotsArray.find(d=>d.drawsId==postData.drawsId);
+                    if(draw){                               
+                       draw.matchDate=postData.matchDate;
+                       draw.startTime=postData.startTime;
+                       draw.endTime=postData.endTime;
+                    }
+                }                    
+            }else{
+                //move to different court
+                let sourceVenueCourt=drawsData.draws.find(d=>d.venueCourtId==targetCourtId);
+                let moveddraw;
+                if(sourceVenueCourt){
+                    //remove from source court
+                    let drawindex=sourceVenueCourt.slotsArray.findIndex(d=>d.drawsId==postData.drawsId);
+                    if(drawindex>-1){             
+                        let draw=sourceVenueCourt.slotsArray[drawindex];               
+                        moveddraw=JSON.parse(JSON.stringify(draw));
+                        moveddraw.matchDate=postData.matchDate;
+                        moveddraw.startTime=postData.startTime;
+                        moveddraw.endTime=postData.endTime;
+                        //set original to empty
+                        let emptyDraw={...this.state.emptySlot};
+                        Object.keys(this.state.emptySlotFieldUpdate).forEach(key => emptyDraw[key] = draw[key]);                            
+                        sourceVenueCourt.slotsArray[drawindex]=emptyDraw;
+                    }
+                }
+                let destinationVenueCourt=drawsData.draws.find(d=>d.venueCourtId==postData.venueCourtId);
+                if(moveddraw && destinationVenueCourt){
+                    let drawindex=-1;
+                    for(let i=0; i<drawsData.dateNewArray.length;i++){
+                        if(new Date(moveddraw.matchDate)>= new Date(drawsData.dateNewArray[i].date)){
+                            drawindex=i;
+                        }
+                    }                        
+                    if(drawindex>-1){
+                        Object.keys(this.state.emptySlotVenueFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
+                        let targetDraw=destinationVenueCourt.slotsArray[drawindex];
+                        if(targetDraw.drawsId && targetDraw.drawsId != moveddraw.drawsId){
+                            //something wrong, 
+                            console.log("no enough slot");
+                            destinationVenueCourt.slotsArray.push(moveddraw);
+                            message.warning('Please save draws');
+                        }else{
+                            destinationVenueCourt.slotsArray[drawindex] =moveddraw;
+                        }                       
+                    }                    
+                }                
+            }                
         }
     }
 
@@ -1294,6 +1433,15 @@ class MultifieldDrawsNewTimeline extends Component {
                 : null;
 
         return dayTimeRestrictions;
+    }
+
+    handleToggleTimeline = () => {
+        const { isTimelineMode } = this.props.drawsState;
+        if (isTimelineMode) {
+            history.push('/competitionDraws');
+        } else {
+            history.push('/competitionDrawsOld');
+        }
     }
 
     headerView = () => {
@@ -1757,6 +1905,16 @@ class MultifieldDrawsNewTimeline extends Component {
                     <div className="col-sm-7 mt-3 pr-0" style={{ minWidth: 310 }}>
                         <span className="form-heading">{AppConstants.matchCalender}</span>
                         <Checkbox
+                            className="single-checkbox"
+                            checked={this.props.drawsState.isTimelineMode}
+                            onChange={async (e) => {
+                                await this.props.setTimelineModeAction(e.target.checked);
+                                this.handleToggleTimeline();
+                            }}
+                        >
+                            {AppConstants.timeline}
+                        </Checkbox>
+                        <Checkbox
                             className="single-checkbox-radio-style my-2"
                             checked={this.state.isFilterSchedule}
                             onChange={e => this.onCalendarCheckboxChange('isFilterSchedule', e.target.checked)}
@@ -1832,7 +1990,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             style={{ height: 100 }}
                         />
                     )}
-                    {this.props.drawsState.updateLoad ? (
+                    {(this.props.drawsState.updateLoad || this.props.drawsState.swapLoad) ? (
                         <div className="draggable-wrap draw-data-table">
                             <Loader visible={this.props.drawsState.updateLoad} />
 
@@ -1863,8 +2021,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     {dateItem.roundName}
                                                 </span>
                                         </div>
-                                    )}
-                                    {this.draggableView(dateItem)}
+                                    )}                                   
+                                    {this.draggableView(dateItem)}                                    
                                 </div>
                             ))}
                         </div>
@@ -2674,7 +2832,36 @@ class MultifieldDrawsNewTimeline extends Component {
     reGenerateDraw = () => {
         this.setState({ regenerateDrawExceptionModalVisible: true });
     };
-
+    saveEditDraws = () => {
+        const key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
+        const yearId = getGlobalYear();
+        const storedCompetitionId = getOwn_competition();
+        const venueId = getDraws_venue();
+        const roundId = getDraws_round();      
+        var sourceIndexArray=[];
+        var targetIndexArray=[];
+        //const apiData=this.state.editedDraw.apiData;
+        const postObject = {
+            draws: this.state.editedDraw.draws,
+        };
+        this.props.updateCompetitionDrawsTimeline(
+            postObject,
+            sourceIndexArray,
+            targetIndexArray,
+            key,
+            parseInt(roundId),
+            yearId,
+            storedCompetitionId,
+            venueId,
+            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : roundId,
+            null,
+            null,
+            null,
+            this.state.filterDates
+        );
+        //this.setState({ updateLoad: true, });
+        //isOnSwapUpdate: true 
+    }
     check = () => {
         if (
             this.state.firstTimeCompId == null ||
@@ -2694,10 +2881,10 @@ class MultifieldDrawsNewTimeline extends Component {
     openModel = (props, e) => {
         let this_ = this;
         confirm({
-            title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.proceedConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             maskClosable: true,
             mask: true,
             onOk() {
@@ -2782,6 +2969,14 @@ class MultifieldDrawsNewTimeline extends Component {
                     <div className="col-sm">
                         <div className="comp-buttons-view">
                             {/* <NavLink to="/competitionFormat"> */}
+                            <Button
+                                className="open-reg-button mr-15"
+                                type="primary"
+                                disabled={isPublish}
+                                onClick={() => this.saveEditDraws()}
+                            >
+                                {AppConstants.saveDraw}
+                            </Button>
                             <Button
                                 className="open-reg-button"
                                 type="primary"
@@ -2999,6 +3194,8 @@ function mapDispatchToProps(dispatch) {
             saveDraws,
             getCompetitionVenue,
             updateCourtTimingsDrawsAction,
+            updateCourtTimingsDrawsDragSuccessAction,
+            updateCompetitionDrawsSwapLoadAction,
             clearMultiDraws,
             publishDraws,
             matchesListDrawsAction,
@@ -3006,7 +3203,8 @@ function mapDispatchToProps(dispatch) {
             unlockDrawsAction,
             getActiveRoundsAction,
             changeDrawsDateRangeAction,
-            checkBoxOnChange
+            checkBoxOnChange,
+            setTimelineModeAction,
         },
         dispatch
     );
