@@ -37,7 +37,7 @@ function matchResultImag(result) {
 
 const columns2 = [
     {
-        title: 'Date/Time',
+        title: AppConstants.dateTime,
         dataIndex: 'startTime',
         // key: 'startTime',
         sorter: (a, b) => tableSort(a, b, "startTime"),
@@ -61,7 +61,7 @@ const columns2 = [
         },
     },
     {
-        title: 'Home Team',
+        title: AppConstants.homeTeam,
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, "team1"),
@@ -94,7 +94,7 @@ const columns2 = [
         }
     },
     {
-        title: 'Away Team',
+        title: AppConstants.awayTeam,
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, "team2"),
@@ -127,7 +127,7 @@ const columns2 = [
         }
     },
     {
-        title: 'Venue',
+        title: AppConstants.venue,
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b) => tableSort(a, b, "venueCourt"),
@@ -150,7 +150,7 @@ const columns2 = [
         }
     },
     {
-        title: 'Match Result',
+        title: AppConstants.matchResult,
         dataIndex: 'resultStatus',
         key: 'resultStatus',
         sorter: (a, b) => tableSort(a, b, "resultStatus"),
@@ -175,7 +175,7 @@ const columns2 = [
         }
     },
     {
-        title: 'Match Status',
+        title: AppConstants.matchStatus,
         dataIndex: 'matchStatus',
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),

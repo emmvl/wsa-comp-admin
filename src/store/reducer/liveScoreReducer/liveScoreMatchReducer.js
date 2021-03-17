@@ -316,6 +316,7 @@ function createCoachArray(result) {
                     let obj = {
                         name: (result[i].firstName + " " + result[i].lastName) + " - " + linkedEntity[k].name,
                         id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
+                        userId: parseInt(result[i].id),
                         umpireId: result[i].id,
                         entityId: linkedEntity[k].entityId
                     }
@@ -353,6 +354,7 @@ function createUmpireArray(result, accreditationArr) {
                         name: (result[i].firstName + " " + result[i].lastName) + " - " + accreditationBadge + " - " + linkedEntity[k].name,
                         reserveName: (result[i].firstName + " " + result[i].lastName) + " - " + linkedEntity[k].name,
                         id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
+                        userId: parseInt(result[i].id),
                         umpireId: result[i].id,
                         entityId: linkedEntity[k].entityId
                     }
@@ -497,6 +499,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_UMPIRE_LIST_SUCCESS:
             let user_Data = action.result.userData ? action.result.userData : action.result
             if (action.key === "data") {
+
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
                 state.coachList = coachData
             }
@@ -805,13 +808,13 @@ function liveScoreMatchReducer(state = initialState, action) {
             let team2Player = liveScoreMatchModal.getMatchViewData(action.payload.team2players);
             let match = isArrayNotEmpty(action.payload.match) ? action.payload.match[0] : null;
             let umpireReserveData = isArrayNotEmpty(action.payload.rosters) ? checkUmpireRole(action.payload.rosters, 19) : null
-            // let umpireCoachData = isArrayNotEmpty(action.payload.rosters) ? checkUmpireRole(action.payload.rosters, 20) : null
+            let umpireCoachData = isArrayNotEmpty(action.payload.rosters) ? checkUmpireRole(action.payload.rosters, 20) : null
             let umpires_1 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 1) : null;
             let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 2) : null;
             // state.umpireReserve = umpireReserveData ? umpireReserveData : null
             state.umpireReserve = getUmpureReserveId(state.umpireList, umpireReserveData)
             // state.umpireCoach = umpireCoachData ? umpireCoachData : null
-            state.umpireCoach = getUmpureReserveId(state.umpireList, umpireReserveData)
+            state.umpireCoach = getUmpureReserveId(state.umpireList, umpireCoachData)
             if (umpires_1) {
 
                 let umpir1UserId = getUmpureUserId(state.umpireList, umpires_1)

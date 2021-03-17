@@ -34,7 +34,7 @@ let this_Obj = null;
 
 const refundFullAmountColumns = [
     {
-        title: 'Paid Amount',
+        title: AppConstants.paidAmount,
         dataIndex: 'amount',
         key: 'amount',
         render: (amount, record, index) => {
@@ -44,7 +44,7 @@ const refundFullAmountColumns = [
         }
     },
     {
-        title: 'Fee Type',
+        title: AppConstants.feeType,
         dataIndex: 'feeType',
         key: 'feeType',
         render: (feeType) => (
@@ -52,12 +52,12 @@ const refundFullAmountColumns = [
         ),
     },
     {
-        title: 'Payment Type',
+        title: AppConstants.paymentType,
         dataIndex: 'paymentType',
         key: 'paymentType'
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'invoiceDate',
         key: 'invoiceDate',
         render: (invoiceDate) => (
@@ -65,7 +65,7 @@ const refundFullAmountColumns = [
         ),
     },
     {
-        title: 'Refund Amount',
+        title: AppConstants.refundAmount,
         dataIndex: 'amount',
         key: 'Refund Amount'
     }
@@ -73,7 +73,7 @@ const refundFullAmountColumns = [
 
 const refundPartialAmountColumns = [
     {
-        title: 'Paid Amount',
+        title: AppConstants.paidAmount,
         dataIndex: 'amount',
         key: 'amount',
         render: (amount) => (
@@ -81,17 +81,17 @@ const refundPartialAmountColumns = [
         ),
     },
     {
-        title: 'Fee Type',
+        title: AppConstants.feeType,
         dataIndex: 'feeType',
         key: 'feeType'
     },
     {
-        title: 'Payment Type',
+        title: AppConstants.paymentType,
         dataIndex: 'paymentType',
         key: 'paymentType'
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'invoiceDate',
         key: 'invoiceDate',
         render: (invoiceDate) => (
@@ -99,7 +99,7 @@ const refundPartialAmountColumns = [
         ),
     },
     {
-        title: 'Refund Amount',
+        title: AppConstants.refundAmount,
         dataIndex: 'amount',
         key: 'Refund Amount',
         render: (amount, record, index) => {
@@ -387,8 +387,8 @@ class RegistrationChangeReview extends Component {
                     <div className='col-sm'>
                         <InputWithHead
                             disabled
-                            heading={AppConstants.competition_name}
-                            placeholder={AppConstants.competition_name}
+                            heading={AppConstants.competitionName}
+                            placeholder={AppConstants.competitionName}
                             value={regChangeReviewData ? regChangeReviewData.competitionName : null}
                         />
                     </div>
@@ -491,8 +491,8 @@ class RegistrationChangeReview extends Component {
                             />
 
                             <InputWithHead
-                                heading={AppConstants.competition_name}
-                                placeholder={AppConstants.competition_name}
+                                heading={AppConstants.competitionName}
+                                placeholder={AppConstants.competitionName}
                                 value={regChangeReviewData.transferCompName}
                                 disabled
                             />

@@ -34,31 +34,31 @@ function tableSort(a, b, key) {
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.transactionId,
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
         sorter: (a, b) => tableSort(a, b, "balance_transaction"),
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'description',
         key: 'description',
         sorter: (a, b) => tableSort(a, b, "description"),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: (a, b) => tableSort(a, b, "created"),
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         sorter: (a, b) => tableSort(a, b, "amount"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => tableSort(a, b, "status"),

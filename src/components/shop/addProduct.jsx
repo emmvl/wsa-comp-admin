@@ -428,9 +428,9 @@ class AddProduct extends Component {
         confirm({
             title: AppConstants.deleteVariantOption,
             content: AppConstants.deleteVariantOptionDescription,
-            okText: 'Confirm',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            okText: AppConstants.confirm,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 if (optionId) {
                     if (optionId > 0) {
@@ -538,10 +538,18 @@ class AddProduct extends Component {
                 <Form.Item
                     name="productName"
                     rules={[
+                        { required: true, message: ValidationConstants.enterTitleOfTheProduct },
                         {
-                            required: true,
-                            message: ValidationConstants.enterTitleOfTheProduct,
-                        },
+                            validator: (_, value) => {
+                                const noSpaceValue = value.replace(/\s+/g, '');
+                                if (value === '') {
+                                    return Promise.reject();
+                                } else if (noSpaceValue === '') {
+                                    return Promise.reject(new Error(AppConstants.incorrectProductDetails));
+                                }
+                                return Promise.resolve();
+                            }
+                        }
                     ]}
                 >
                     <InputWithHead
@@ -845,11 +853,15 @@ class AddProduct extends Component {
                             <Form.Item
                                 name="quantity"
                                 rules={[
+                                    { required: true, message: ValidationConstants.pleaseEnterQuantity },
                                     {
-                                        required: true,
-                                        message:
-                                            ValidationConstants.pleaseEnterQuantity,
-                                    },
+                                        validator: (_, value) => {
+                                            if (value === 0) {
+                                                return Promise.reject(new Error(AppConstants.incorrectProductDetails));
+                                            }
+                                            return Promise.resolve();
+                                        }
+                                    }
                                 ]}
                             >
                                 <InputNumber

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Table } from 'antd';
-// import AppConstants from "../../themes/appConstants";
+import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 // import InputWithHead from "../../customComponents/InputWithHead"
 import './liveScore.css';
@@ -26,12 +26,12 @@ const columns = [
         key: '#',
     },
     {
-        title: 'Player Name',
+        title: AppConstants.playerName,
         dataIndex: 'name',
         key: 'name',
     },
     {
-        title: 'Signature',
+        title: AppConstants.signature,
         dataIndex: 'signature',
         key: 'signature',
     },

@@ -165,7 +165,7 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, 'invitees'),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'statusRefId',
         key: 'statusRefId',
         render: (statusRefId, record) => (
@@ -418,11 +418,11 @@ class CompetitionDashboard extends Component {
         // let competitionId = this.props.competitionFeesState.competitionId;
         let this_ = this;
         confirm({
-            title: 'Do you want to add registration?',
+            title: AppConstants.registrationAddConfirm,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 // [
                 // <NavLink

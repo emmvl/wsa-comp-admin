@@ -9,7 +9,7 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const columns = [
     {
-        title: 'Category',
+        title: AppConstants.category,
         dataIndex: 'category',
         key: 'category',
         render: category => <Input className="input-inside-table-fees" value={category} />,
@@ -21,31 +21,31 @@ const columns = [
         render: division => <Input className="input-inside-table-fees" value={division} />,
     },
     {
-        title: 'Club',
+        title: AppConstants.club,
         dataIndex: 'club',
         key: 'club',
         render: club => <Input className="input-inside-table-fees" value={club} />,
     },
     {
-        title: 'Association',
+        title: AppConstants.association,
         dataIndex: 'association',
         key: 'association',
         render: association => <Input className="input-inside-table-fees" value={association} />,
     },
     {
-        title: 'State',
+        title: AppConstants.stateTitle,
         dataIndex: 'state',
         key: 'state',
         render: state => <Input className="input-inside-table-fees" value={state} />,
     },
     {
-        title: 'National',
+        title: AppConstants.nationalTitle,
         dataIndex: 'national',
         key: 'national',
         render: national => <Input className="input-inside-table-fees" value={national} />,
     },
     {
-        title: 'Total',
+        title: AppConstants.total,
         dataIndex: 'total',
         key: 'total',
     },
@@ -120,21 +120,21 @@ class ProductAdd extends Component {
         const registrationVia = ['Application', 'Website', 'Other'];
         const registrationDetail1 = [
             {
-                title: 'Registration Details Required',
+                title: AppConstants.registrationDetailsRequired,
                 children: [
                     {
-                        title: 'Parent Details',
+                        title: AppConstants.parentDetails,
                         children: [
-                            { title: 'First Name', children: [] },
-                            { title: 'Last Name', children: [] },
-                            { title: 'Email', children: [] },
-                            { title: 'Phone', children: [] }
+                            { title: AppConstants.firstName, children: [] },
+                            { title: AppConstants.lastName, children: [] },
+                            { title: AppConstants.email, children: [] },
+                            { title: AppConstants.phone, children: [] }
                         ]
                     },
-                    { title: 'Medical History', children: [] },
-                    { title: 'Medicare Number', children: [] },
-                    { title: 'Private Insurance Provider & Number', children: [] },
-                    { title: 'Other', children: [] },
+                    { title: AppConstants.medicalHistory, children: [] },
+                    { title: AppConstants.medicareNumber, children: [] },
+                    { title: AppConstants.privateInsurance, children: [] },
+                    { title: AppConstants.other, children: [] },
                 ]
             }
         ]
@@ -454,11 +454,11 @@ class ProductAdd extends Component {
 
         const governemntRebateSetting1 = [
             {
-                title: 'Government Rebate',
+                title: AppConstants.governmentRebate,
                 children: [
-                    { title: 'NSW Active Kids', children: [] },
-                    { title: 'QLD Fair Play Voucher', children: [] },
-                    { title: 'Other', children: [] }
+                    { title: AppConstants.nswActiveKids, children: [] },
+                    { title: AppConstants.fairPlayVoucher, children: [] },
+                    { title: AppConstants.other, children: [] }
                 ]
             }
         ];

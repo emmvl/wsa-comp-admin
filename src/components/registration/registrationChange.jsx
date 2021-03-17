@@ -78,31 +78,31 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: "Current",
+        title: AppConstants.current,
         children: [
             {
-                title: 'Participant',
+                title: AppConstants.participant,
                 dataIndex: 'userName',
                 key: 'userName',
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Comp Organiser',
+                title: AppConstants.competitionOrganiser,
                 dataIndex: 'compOrganiserName',
                 key: 'compOrganiserName',
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Affiliate',
+                title: AppConstants.affiliate,
                 dataIndex: 'affiliateName',
                 key: 'affiliateName',
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Competition',
+                title: AppConstants.competition,
                 dataIndex: 'competitionName',
                 key: 'competitionName',
                 sorter: true,
@@ -111,10 +111,10 @@ const columns = [
         ],
     },
     {
-        title: "Transfer",
+        title: AppConstants.transfer,
         children: [
             {
-                title: 'Comp Organiser',
+                title: AppConstants.competitionOrganiser,
                 dataIndex: 'transferCompOrgName',
                 key: 'transferCompOrgName',
                 sorter: true,
@@ -143,7 +143,7 @@ const columns = [
                 ),
             },
             {
-                title: 'Affiliate',
+                title: AppConstants.affiliate,
                 dataIndex: 'transferAffOrgName',
                 key: 'transferAffOrgName',
                 sorter: true,
@@ -172,7 +172,7 @@ const columns = [
                 ),
             },
             {
-                title: 'Competition',
+                title: AppConstants.competition,
                 dataIndex: 'transferCompName',
                 key: 'transferCompName',
                 sorter: true,
@@ -181,17 +181,17 @@ const columns = [
         ],
     },
     {
-        title: "Approvals",
+        title: AppConstants.approvals,
         children: [
             {
-                title: 'Membership Type',
+                title: AppConstants.membershipType,
                 dataIndex: 'membershipTypeName',
                 key: 'membershipTypeName',
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Paid',
+                title: AppConstants.paid,
                 dataIndex: 'paid',
                 key: 'paid',
                 sorter: true,
@@ -201,14 +201,14 @@ const columns = [
                 )
             },
             {
-                title: 'Type',
+                title: AppConstants.type,
                 dataIndex: 'regChangeType',
                 key: 'regChangeType',
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             },
             {
-                title: 'Comp Organiser',
+                title: AppConstants.competitionOrganiser,
                 dataIndex: 'compOrganiserApproved',
                 key: 'compOrganiserApproved',
                 sorter: true,
@@ -235,7 +235,7 @@ const columns = [
                 ),
             },
             {
-                title: 'Affiliate',
+                title: AppConstants.affiliate,
                 dataIndex: 'affiliateApproved',
                 key: 'affiliateApproved',
                 sorter: true,
@@ -260,7 +260,7 @@ const columns = [
                 ),
             },
             {
-                title: 'State',
+                title: AppConstants.stateTitle,
                 dataIndex: 'stateApproved',
                 key: 'stateApproved',
                 sorter: true,
@@ -285,13 +285,13 @@ const columns = [
                 ),
             },
             // {
-            //     title: 'Status',
+            //     title: AppConstants.status,
             //     dataIndex: 'approvedStatus',
             //     key: 'approvedStatus',
             //     sorter: (a, b) => tableSort(a, b, "approvedStatus")
             // },
             {
-                title: "Action",
+                title: AppConstants.action,
                 dataIndex: 'action',
                 key: 'action',
                 render: (data, record) => (
@@ -331,8 +331,8 @@ class RegistrationChange extends Component {
             deleteLoading: false,
             userRole: "",
             searchText: '',
-            competition: 'All',
-            type: 'All',
+            competition: AppConstants.all,
+            type: AppConstants.all,
             yearRefId: null,
             competitionId: "-1",
             organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,

@@ -1511,8 +1511,8 @@ class UserProfileEdit extends Component {
                 confirm({
                     content: electionMsg,
                     okText: 'Continue',
-                    okType: 'primary',
-                    cancelText: 'Cancel',
+                    okType: AppConstants.primary,
+                    cancelText: AppConstants.cancel,
                     onOk: () => {
                         saveAction();
                         this.confirmOpend = false;
@@ -1560,7 +1560,7 @@ class UserProfileEdit extends Component {
             }
         }
 
-        data["email"] = data["email"].toLowerCase();
+        data["email"] = data["email"]?.toLowerCase();
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
 

@@ -279,6 +279,86 @@ function exportPaymentSummaryApi(
     }
 }
 
+function getParticipantSummaryAction(
+    offset,
+    limit,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType,
+    paymentStatus,
+) {
+    return {
+        type: ApiConstants.API_PARTICIPANT_SUMMARY_LIST_LOAD,
+        offset,
+        limit,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType,
+        paymentStatus,
+    }
+}
+
+function exportParticipantSummaryApiAction(
+    offset,
+    sortBy,
+    sortOrder,
+    userId,
+    registrationId,
+    yearId,
+    competitionKey,
+    paymentFor,
+    dateFrom,
+    dateTo,
+    searchValue,
+    feeType,
+    paymentType,
+    paymentMethod,
+    membershipType,
+    paymentStatus,
+) {
+    return {
+        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
+        offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentType,
+        paymentMethod,
+        membershipType,
+        paymentStatus,
+    }
+}
+
 function setDashboardPageSizeAction(pageSize) {
     const action = {
         type: ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_SIZE,
@@ -344,4 +424,6 @@ export {
     setSummaryPageSizeAction,
     setSummaryPageNumberAction,
     partialRefundAmountAction,
+    getParticipantSummaryAction,
+    exportParticipantSummaryApiAction,
 };

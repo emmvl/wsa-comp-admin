@@ -46,14 +46,14 @@ function tableSort(key) {
 
 const columns1 = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: true,
@@ -61,14 +61,14 @@ const columns1 = [
         // render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
@@ -82,7 +82,7 @@ const columns1 = [
             </NavLink>
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -96,35 +96,35 @@ const columns1 = [
             </NavLink>
     },
     {
-        title: 'Position',
+        title: AppConstants.position,
         dataIndex: 'gamePositionName',
         key: 'gamePositionName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('position'),
     },
     {
-        title: 'Misses',
+        title: AppConstants.misses,
         dataIndex: 'miss',
         key: 'miss',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('misses'),
     },
     {
-        title: 'Goals',
+        title: AppConstants.goals,
         dataIndex: 'goal',
         key: 'goal',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('goals'),
     },
     {
-        title: 'Attempts',
+        title: AppConstants.attempts,
         dataIndex: 'attempts',
         key: 'attempts',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Goals%',
+        title: AppConstants.goalPercent,
         dataIndex: 'goal_percent',
         key: 'goal_percent',
         sorter: true,
@@ -134,14 +134,14 @@ const columns1 = [
 
 const columns2 = [
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName1',
         sorter: true,
@@ -158,7 +158,7 @@ const columns2 = [
         }
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName1',
         sorter: true,
@@ -172,35 +172,35 @@ const columns2 = [
             </NavLink>
     },
     {
-        title: 'Position',
+        title: AppConstants.position,
         dataIndex: 'gamePositionName',
         key: 'gamePositionName1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('position'),
     },
     {
-        title: 'Misses',
+        title: AppConstants.misses,
         dataIndex: 'miss',
         key: 'miss1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('misses'),
     },
     {
-        title: 'Goals',
+        title: AppConstants.goals,
         dataIndex: 'goal',
         key: 'goal1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('goals'),
     },
     {
-        title: 'Attempts',
+        title: AppConstants.attempts,
         dataIndex: 'attempts',
         key: 'attempts1',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('attempts'),
     },
     {
-        title: 'Goals%',
+        title: AppConstants.goalPercent,
         dataIndex: 'goal_percent',
         key: 'goal_percent1',
         sorter: true,

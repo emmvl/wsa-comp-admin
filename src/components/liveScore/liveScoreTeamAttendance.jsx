@@ -54,7 +54,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -68,7 +68,7 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: true,
@@ -77,7 +77,7 @@ const columns = [
             <span>{liveScore_formateDateTime(teamName)}</span>
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'playerTeamName',
         key: 'playerTeamName',
         sorter: true,
@@ -85,14 +85,14 @@ const columns = [
         render: (playerTeamName) => <span>{playerTeamName}</span>
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'playerId',
         key: 'playerId',
         sorter: true,
         onHeaderCell: () => listeners("playerId"),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
@@ -109,7 +109,7 @@ const columns = [
         ),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -131,14 +131,14 @@ const columns = [
         onHeaderCell: () => listeners("division"),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: true,
         onHeaderCell: () => listeners("status"),
     },
     {
-        title: 'Position',
+        title: AppConstants.position,
         dataIndex: 'positionName',
         key: 'positionName',
         sorter: true,
@@ -148,7 +148,7 @@ const columns = [
 
 const borrowedColumns = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -165,7 +165,7 @@ const borrowedColumns = [
         ),
     },
     {
-        title: 'Start Time',
+        title: AppConstants.startTime,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: true,
@@ -173,7 +173,7 @@ const borrowedColumns = [
         render: (teamName) => <span>{liveScore_formateDateTime(teamName)}</span>
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'playerTeamName',
         key: 'playerTeamName',
         sorter: true,
@@ -181,7 +181,7 @@ const borrowedColumns = [
         render: (playerTeamName) => <span>{playerTeamName}</span>
     },
     {
-        title: 'Borrowing Team',
+        title: AppConstants.borrowingTeam,
         dataIndex: 'name',
         key: 'name',
         sorter: true,
@@ -189,14 +189,14 @@ const borrowedColumns = [
         render: (name) => <span>{name}</span>
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'playerId',
         key: 'playerId',
         sorter: true,
         onHeaderCell: () => listeners("playerId"),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
@@ -210,7 +210,7 @@ const borrowedColumns = [
             </span>
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -228,14 +228,14 @@ const borrowedColumns = [
         onHeaderCell: () => listeners("division"),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: true,
         onHeaderCell: () => listeners("status"),
     },
     {
-        title: 'Position',
+        title: AppConstants.position,
         dataIndex: 'positionName',
         key: 'positionName',
         sorter: true,
@@ -527,7 +527,7 @@ class LiveScoreTeamAttendance extends Component {
 
     onChangeDivision = (division) => {
         this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division , this.state.liveScoreCompIsParent , this.state.compOrgId)
-        this.setState({ selectedDivision: division, selectedRound: 'All', roundLoad: true })
+        this.setState({ selectedDivision: division, selectedRound: AppConstants.all, roundLoad: true })
     }
 
     onChangeRound = (roundName) => {

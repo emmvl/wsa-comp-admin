@@ -25,67 +25,67 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: "Date",
         key: "Date",
     },
     {
-        title: "Time",
+        title: AppConstants.time,
         dataIndex: "Time",
         key: "Time",
     },
     {
-        title: "Division Grade",
+        title: AppConstants.divisionGrade,
         dataIndex: "Division Grade",
         key: "Division Grade",
     },
     {
-        title: "Home Team",
+        title: AppConstants.homeTeam,
         dataIndex: "Home Team",
         key: "Home Team",
     },
     {
-        title: "Away Team",
+        title: AppConstants.awayTeam,
         dataIndex: "Away Team",
         key: "Away Team",
     },
     {
-        title: "Venue",
+        title: AppConstants.venue,
         dataIndex: "Venue",
         key: "Venue",
     },
     {
-        title: "Type",
+        title: AppConstants.type,
         dataIndex: "Type",
         key: "Type",
     },
     {
-        title: "Match Duration",
+        title: AppConstants.matchDuration,
         dataIndex: "Match Duration",
         key: "Match Duration",
     },
     {
-        title: "Break Duration",
+        title: AppConstants.breakDuration,
         dataIndex: "Break Duration",
         key: "Break Duration",
     },
     {
-        title: "Main Break Duration",
+        title: AppConstants.mainBreakDuration,
         dataIndex: "Main Break Duration",
         key: "Main Break Duration",
     },
     {
-        title: "Timezone GMT",
+        title: AppConstants.gmtTimezone,
         dataIndex: "Timezone GMT",
         key: "Timezone GMT",
     },
     {
-        title: "Round",
+        title: AppConstants.round,
         dataIndex: "Round",
         key: "Round",
     },
     {
-        title: "mnbMatchId",
+        title: AppConstants.matchID,
         dataIndex: "mnbMatchId",
         key: "mnbMatchId",
     },

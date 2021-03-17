@@ -143,7 +143,7 @@ class Umpire extends Component {
                     },
                 },
                 {
-                    title: "First Name",
+                    title: AppConstants.firstName,
                     dataIndex: "firstName",
                     key: "firstsName",
                     sorter: true,
@@ -164,7 +164,7 @@ class Umpire extends Component {
                     ),
                 },
                 {
-                    title: "Last Name",
+                    title: AppConstants.lastName,
                     dataIndex: "lastName",
                     key: "lastName",
                     sorter: true,
@@ -185,21 +185,21 @@ class Umpire extends Component {
                     ),
                 },
                 {
-                    title: "Email",
+                    title: AppConstants.email,
                     dataIndex: "email",
                     key: "email",
                     sorter: true,
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 },
                 {
-                    title: "Contact No",
+                    title: AppConstants.contact_No,
                     dataIndex: "mobileNumber",
                     key: "mobileNumber",
                     sorter: true,
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                 },
                 {
-                    title: 'Accreditation',
+                    title: AppConstants.accreditation,
                     dataIndex: 'accreditationLevelUmpireRefId',
                     key: 'accreditationLevelUmpireRefId',
                     sorter: false,
@@ -208,7 +208,7 @@ class Umpire extends Component {
                     )
                 },
                 {
-                    title: "Organisation",
+                    title: AppConstants.organisation,
                     dataIndex: "organisationName",
                     key: "organisationName",
                     sorter: false,
@@ -218,7 +218,7 @@ class Umpire extends Component {
                     )
                 },
                 {
-                    title: "Umpire",
+                    title: AppConstants.umpire,
                     dataIndex: "umpire",
                     key: "umpire",
                     sorter: false,
@@ -234,7 +234,7 @@ class Umpire extends Component {
                     render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
                 },
                 {
-                    title: "Action",
+                    title: AppConstants.action,
                     dataIndex: "action",
                     key: "action",
                     render: (data, record) => (

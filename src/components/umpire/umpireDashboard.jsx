@@ -131,7 +131,7 @@ function checkUmpireReserve(reserveArray, key) {
 
 const columnsInvite = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "id",
         key: "id",
         sorter: true,
@@ -148,7 +148,7 @@ const columnsInvite = [
         ),
     },
     {
-        title: "Start Time",
+        title: AppConstants.startTime,
         dataIndex: "startTime",
         key: "startTime",
         sorter: true,
@@ -172,7 +172,7 @@ const columnsInvite = [
         render: (team2) => <span>{team2.name}</span>,
     },
     {
-        title: "Round",
+        title: AppConstants.round,
         dataIndex: "round",
         key: "round",
         sorter: true,
@@ -276,7 +276,7 @@ const columnsInvite = [
         ),
     },
     {
-        title: 'Umpire Reserve',
+        title: AppConstants.umpireReservePref,
         dataIndex: 'umpireReserves',
         key: 'umpireReserves',
         sorter: false,
@@ -294,7 +294,7 @@ const columnsInvite = [
         }
     },
     {
-        title: 'Umpire Coach',
+        title: AppConstants.umpireCoach,
         dataIndex: 'umpireCoaches',
         key: 'umpireCoaches',
         sorter: false,
@@ -312,7 +312,7 @@ const columnsInvite = [
         }
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "action",
         key: "action",
         render: (umpires, record) => (
@@ -377,7 +377,7 @@ const columnsInvite = [
 
 const columns = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "id",
         key: "_id",
         sorter: true,
@@ -394,7 +394,7 @@ const columns = [
         ),
     },
     {
-        title: "Start Time",
+        title: AppConstants.startTime,
         dataIndex: "startTime",
         key: "_startTime",
         sorter: true,
@@ -418,7 +418,7 @@ const columns = [
         render: (team2) => <span>{team2.name}</span>,
     },
     {
-        title: "Round",
+        title: AppConstants.round,
         dataIndex: "round",
         key: "_round",
         sorter: true,
@@ -520,7 +520,7 @@ const columns = [
         ),
     },
     {
-        title: 'Umpire Reserve',
+        title: AppConstants.umpireReservePref,
         dataIndex: 'umpireReserves',
         key: 'umpireReserves',
         sorter: false,
@@ -538,7 +538,7 @@ const columns = [
         }
     },
     {
-        title: 'Umpire Coach',
+        title: AppConstants.umpireCoach,
         dataIndex: 'umpireCoaches',
         key: 'umpireCoaches',
         sorter: false,
@@ -556,7 +556,7 @@ const columns = [
         }
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "action",
         key: "_action",
         render: (umpires, record) => (
@@ -667,37 +667,37 @@ class UmpireDashboard extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
                     ? this.props.umpireCompetitionState.umpireComptitionList
                     : [];
-                let firstComp = compList.length > 0 && compList[0].id;
-                let compData = compList.length > 0 && compList[0];
+                let firstComp = (compList && compList.length > 0) ? compList[0].id : 0;
+                let compData = (compList && compList.length > 0) ? compList[0] : null;
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
                         this.setState({
-                            org_Id: compData.organisationId
+                            org_Id: compData ? compData.organisationId : 0
                         })
                         firstComp = JSON.parse(getLiveScoreUmpireCompition());
                         compData = JSON.parse(getLiveScoreUmpireCompitionData());
                         setUmpireCompition(firstComp);
-                        setUmpireCompitionData(JSON.stringify(compData));
+                        if (compData) setUmpireCompitionData(JSON.stringify(compData));
                     } else {
                         firstComp = JSON.parse(getUmpireCompetiton());
                         compData = JSON.parse(getUmpireCompetitonData());
                         this.setState({
-                            org_Id: compData.organisationId
+                            org_Id: compData ? compData.organisationId : 0
                         })
                     }
                 } else {
                     setUmpireCompition(firstComp);
-                    setUmpireCompitionData(JSON.stringify(compData));
+                    if (compData) setUmpireCompitionData(JSON.stringify(compData));
                     this.setState({
-                        org_Id: compData.organisationId
+                        org_Id: compData ? compData.organisationId : 0
                     })
                 }
 
-                if (firstComp !== false) {
+                if (!!firstComp) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
                         let compId = JSON.parse(getLiveScoreUmpireCompition());
-                        this.props.getUmpireDashboardVenueList(compId);
+                        if (compId) this.props.getUmpireDashboardVenueList(compId);
 
                         const { uniqueKey, organisationId } = JSON.parse(getLiveScoreUmpireCompitionData());
                         let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
@@ -713,7 +713,7 @@ class UmpireDashboard extends Component {
                         });
                     } else {
                         this.props.getUmpireDashboardVenueList(firstComp);
-                        let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+                        let compKey = (compList && compList.length > 0) ? compList[0].competitionUniqueKey : 0;
                         this.setState({
                             selectedComp: firstComp,
                             loading: false,

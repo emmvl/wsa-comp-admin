@@ -68,28 +68,28 @@ function tableSort(key) {
 
 const columns_1 = [
     {
-        title: 'Match Id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('matchId'),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('firstName'),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -152,7 +152,7 @@ const columns_1 = [
         render: (gk, records) => <span nowrap className="column-width-style">{gk}</span>
     },
     {
-        title: "Played",
+        title: AppConstants.played,
         dataIndex: 'played',
         key: 'played',
         sorter: true,
@@ -167,7 +167,7 @@ const columns_1 = [
         }
     },
     {
-        title: "Bench",
+        title: AppConstants.bench,
         dataIndex: 'bench',
         key: 'bench',
         sorter: true,
@@ -182,7 +182,7 @@ const columns_1 = [
         }
     },
     {
-        title: "No Play",
+        title: AppConstants.noPlay,
         dataIndex: 'noPlay',
         key: 'noPlay',
         sorter: true,
@@ -200,21 +200,21 @@ const columns_1 = [
 
 const columns_2 = [
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('firstName'),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -277,7 +277,7 @@ const columns_2 = [
         render: (gk, records) => <span nowrap className="column-width-style">{gk}</span>
     },
     {
-        title: "Played",
+        title: AppConstants.played,
         dataIndex: 'played',
         key: 'played',
         sorter: true,
@@ -292,7 +292,7 @@ const columns_2 = [
         }
     },
     {
-        title: "Bench",
+        title: AppConstants.bench,
         dataIndex: 'bench',
         key: 'bench',
         sorter: true,
@@ -310,28 +310,28 @@ const columns_2 = [
 
 const percentColumn = [
     {
-        title: 'Match Id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('matchId'),
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('firstName'),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -387,7 +387,7 @@ const percentColumn = [
         render: (gk, records) => <span nowrap className="column-width-style">{gk}</span>
     },
     {
-        title: "Played",
+        title: AppConstants.played,
         dataIndex: 'played',
         key: 'played',
         sorter: (a, b) => sorting(a, b, "played"),
@@ -401,7 +401,7 @@ const percentColumn = [
         }
     },
     {
-        title: "Bench",
+        title: AppConstants.bench,
         dataIndex: 'bench',
         key: 'bench',
         sorter: (a, b) => sorting(a, b, "bench"),
@@ -415,7 +415,7 @@ const percentColumn = [
         }
     },
     {
-        title: "No Play",
+        title: AppConstants.noPlay,
         dataIndex: 'noPlay',
         key: 'noPlay',
         sorter: (a, b) => sorting(a, b, "noPlay"),
@@ -432,21 +432,21 @@ const percentColumn = [
 
 const percentColumn_1 = [
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('firstName'),
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
@@ -502,7 +502,7 @@ const percentColumn_1 = [
         render: (gk, records) => <span nowrap className="column-width-style">{gk}</span>
     },
     {
-        title: "Played",
+        title: AppConstants.played,
         dataIndex: 'played',
         key: 'played',
         sorter: (a, b) => sorting(a, b, "played"),
@@ -516,7 +516,7 @@ const percentColumn_1 = [
         }
     },
     {
-        title: "Bench",
+        title: AppConstants.bench,
         dataIndex: 'bench',
         key: 'bench',
         sorter: (a, b) => sorting(a, b, "bench"),
@@ -530,7 +530,7 @@ const percentColumn_1 = [
         }
     },
     {
-        title: "No Play",
+        title: AppConstants.noPlay,
         dataIndex: 'noPlay',
         key: 'noPlay',
         sorter: (a, b) => sorting(a, b, "noPlay"),
@@ -551,8 +551,8 @@ class LiveScorePositionTrackReport extends Component {
         this.state = {
             competitionId: null,
             searchText: "",
-            reporting: 'PERIOD',
-            aggregate: 'MATCH',
+            reporting: AppConstants.period,
+            aggregate: AppConstants.matches,
             offset: 0,
             liveScoreCompIsParent: false,
             compOrgId: 0

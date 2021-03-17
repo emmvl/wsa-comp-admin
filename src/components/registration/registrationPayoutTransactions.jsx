@@ -24,13 +24,13 @@ const { Content } = Layout;
 
 const columns = [
     {
-        title: "Transaction Id",
+        title: AppConstants.transactionId,
         dataIndex: 'id',
         key: 'id',
         sorter: false,
     },
     {
-        title: "Description",
+        title: AppConstants.description,
         dataIndex: 'source_transfer',
         key: 'source_transfer',
         sorter: false,
@@ -39,7 +39,7 @@ const columns = [
         ),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: 'created',
         key: 'created',
         sorter: false,
@@ -52,7 +52,7 @@ const columns = [
         },
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         render: (amount) => (
@@ -61,7 +61,7 @@ const columns = [
         sorter: false,
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: false,

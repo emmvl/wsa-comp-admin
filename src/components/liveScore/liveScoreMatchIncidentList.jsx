@@ -41,7 +41,7 @@ const { Content } = Layout;
 ////columens data
 const columns = [
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'createdAt',
         key: 'createdAt',
         sorter: (a, b) => checkSorting(a, b, 'matchId'),
@@ -54,13 +54,13 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => checkSorting(a, b, 'matchId')
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'incidentPlayers',
         key: 'incidentPlayers',
         //  sorter: (a, b) => sort(a, b, "playerId"),
@@ -73,7 +73,7 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'incidentPlayers',
         key: 'incidentPlayers',
         sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
@@ -86,7 +86,7 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'incidentPlayers',
         key: 'incidentPlayers',
         // sorter: (a, b) => a.lastName.length - b.lastName.length,
@@ -99,7 +99,7 @@ const columns = [
             </NavLink>
     },
     {
-        title: 'Type',
+        title: AppConstants.type,
         dataIndex: 'incidentType',
         key: 'incidentType',
         render: (incidentType, record) =>

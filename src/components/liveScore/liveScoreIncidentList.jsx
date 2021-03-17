@@ -78,7 +78,7 @@ function tableSort(key) {
 
 const columns = [
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'incidentTime',
         key: 'incidentTime',
         sorter: true,
@@ -94,7 +94,7 @@ const columns = [
         ),
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -110,7 +110,7 @@ const columns = [
         ),
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         key: 'player id',
         render: (row) => {
             const { incidentPlayers, foulUserId, foulUser } = row;
@@ -145,7 +145,7 @@ const columns = [
         },
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         key: 'Incident Players First Name',
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
@@ -182,7 +182,7 @@ const columns = [
         },
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         key: 'Incident Players Last Name',
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
@@ -219,7 +219,7 @@ const columns = [
         },
     },
     {
-        title: 'Type',
+        title: AppConstants.type,
         dataIndex: 'incidentType',
         key: 'incidentType',
         render: (incidentType) => <span>{incidentType.name}</span>,
@@ -227,7 +227,7 @@ const columns = [
         onHeaderCell: () => listeners("type"),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'suspension',
         key: 'suspension',
         render: (suspension) => (
@@ -237,7 +237,7 @@ const columns = [
         ),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         render: (row) => (
             <Menu
                 className="action-triple-dot-submenu"

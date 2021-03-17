@@ -150,7 +150,7 @@ const columns = [
         ),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e, index) => (

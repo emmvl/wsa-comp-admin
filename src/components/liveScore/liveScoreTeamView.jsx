@@ -30,7 +30,7 @@ var _this;
 
 const columns = [
     {
-        title: 'Profile Picture',
+        title: AppConstants.profilePic,
         dataIndex: 'photoUrl',
         key: 'photoUrl',
         sorter: (a, b) => a.photoUrl.length - b.photoUrl.length,
@@ -41,7 +41,7 @@ const columns = [
                 <span>No Image</span>
     },
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
@@ -59,21 +59,21 @@ const columns = [
         }
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dob',
         key: 'dob',
         sorter: (a, b) => a.dob.length - b.dob.length,
         render: (dob, record) => <span>{record.dateOfBirth ? moment(record.dateOfBirth).format('DD/MM/YYYY') : '    '}</span>
     },
     {
-        title: 'Contact No.',
+        title: AppConstants.contact_No,
         dataIndex: 'number',
         key: 'number',
         sorter: (a, b) => a.number.length - b.number.length,
         render: (dob, record) => <span>{record.phoneNumber ? record.phoneNumber : ''}</span>
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         render: (data, record, playerId) => (
             <Menu
                 className="action-triple-dot-submenu"
@@ -103,7 +103,7 @@ const columns = [
 
 const columns_2 = [
     {
-        title: 'Profile Picture',
+        title: AppConstants.profilePic,
         dataIndex: 'photoUrl',
         key: 'photoUrl',
         sorter: (a, b) => a.photoUrl.length - b.photoUrl.length,
@@ -114,7 +114,7 @@ const columns_2 = [
                 <span>{'No Image'}</span>
     },
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
@@ -132,14 +132,14 @@ const columns_2 = [
         }
     },
     {
-        title: 'DOB',
+        title: AppConstants.dOB,
         dataIndex: 'dob',
         key: 'dob',
         sorter: (a, b) => a.dob.length - b.dob.length,
         render: (dob, record) => <span>{record.dateOfBirth ? moment(record.dateOfBirth).format('DD/MM/YYYY') : '    '}</span>
     },
     {
-        title: 'Contact No.',
+        title: AppConstants.contact_No,
         dataIndex: 'number',
         key: 'number',
         sorter: (a, b) => a.number.length - b.number.length,
@@ -209,10 +209,10 @@ class LiveScoreTeamView extends Component {
     showDeleteConfirmPlayer = (playerId, competitionId) => {
         let this_ = this
         confirm({
-            title: 'Are you sure you want to delete this player?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.playerDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deletePlayer(playerId, competitionId)
 
@@ -374,10 +374,10 @@ class LiveScoreTeamView extends Component {
     showDeleteConfirm = (teamId) => {
         let this_ = this
         confirm({
-            title: 'Are you sure you want to delete this team?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.teamDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteTeam(teamId)
             },
