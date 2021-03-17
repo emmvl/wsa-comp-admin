@@ -755,7 +755,7 @@ class LiveScoreAddMatch extends Component {
                                     {
                                         validator: (_, value) => {
                                             if (value === addEditMatch.team2id) {
-                                              return Promise.reject("Teams must be different");
+                                              return Promise.reject(ValidationConstants.teamsMustBeDifferent);
                                             } else {
                                                 return Promise.resolve();
                                             }
@@ -787,7 +787,7 @@ class LiveScoreAddMatch extends Component {
                                     {
                                         validator: (_, value) => {
                                             if (value === addEditMatch.team1id) {
-                                              return Promise.reject("Teams must be different");
+                                              return Promise.reject(ValidationConstants.teamsMustBeDifferent);
                                             } else {
                                                 return Promise.resolve();
                                             }
