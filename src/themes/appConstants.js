@@ -2024,6 +2024,7 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
+    incorrectProductDetails: "You have entered incorrect product details.",
     competition_name: "Competition name"
 };
 
