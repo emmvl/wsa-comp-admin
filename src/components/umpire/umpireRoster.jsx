@@ -517,13 +517,14 @@ class UmpireRoster extends Component {
 
     // on Export
     onExport() {
-        let url = '';
-        if (this.state.compIsParent) {
-            url = AppConstants.rosterExport + `entityId=${this.state.selectedComp}&entityTypeId=1&roleId=${15}`
-        }
-        else {
-            url = AppConstants.rosterExport + `entityId=${this.state.compOrgId}&entityTypeId=6&roleId=${15}`
-        }
+        const {
+            umpireRole, compIsParent,
+            selectedComp, compOrgId,
+        } = this.state
+        const roleId = umpireRole || 15
+        const entityId = compIsParent ? selectedComp : compOrgId
+        const entityTypeId = compIsParent ? 1 : 6
+        const url = AppConstants.rosterExport + `entityId=${entityId}&entityTypeId=${entityTypeId}&roleId=${roleId}`
 
         this.props.exportFilesAction(url)
     }
