@@ -12,6 +12,7 @@ import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
 import history from "util/history";
+import { isArrayNotEmpty } from "../../util/helpers";
 import {
     getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear, getLiveScoreCompetiton
 } from "util/sessionStorage";
@@ -435,8 +436,8 @@ class Registration extends Component {
                 this.handleRegTableList(1);
             }
         }
-        if(nextProps.liveScoreDashboardState != this.props.liveScoreDashboardState){
-            if(this.state.loading == true && this.props.liveScoreDashboardState.onRetryPaymentLoad == false){
+        if((nextProps.liveScoreDashboardState != this.props.liveScoreDashboardState) || (nextProps.registrationDashboardState!= this.props.registrationDashboardState)){
+            if(this.state.loading == true && (this.props.liveScoreDashboardState.onRetryPaymentLoad == false || this.props.registrationDashboardState.onRegRetryPaymentLoad == false)){
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
                 }
@@ -639,6 +640,7 @@ class Registration extends Component {
 
     handleOtherModal = (key) =>{
         const {selectedRow, actionView} = this.state;
+        let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers) ? selectedRow.paidByUsers[0].paidByUserId : null
         if(actionView == 4){
             if(key == "ok"){
                 let payload = {
@@ -655,7 +657,8 @@ class Registration extends Component {
                     registrationUniqueKey: selectedRow.registrationUniqueKey,
                     userId: selectedRow.userId,
                     divisionId: selectedRow.divisionId,
-                    competitionId: selectedRow.competitionUniqueKey
+                    competitionId: selectedRow.competitionUniqueKey,
+                    paidByUserId: paidByUserId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ loading: true });
@@ -1270,7 +1273,7 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.userRegistrationState.onLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.registrationDashboardState.onRegRetryPaymentLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}

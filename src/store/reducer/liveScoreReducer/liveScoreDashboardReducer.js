@@ -62,14 +62,16 @@ function liveScoreDashboardsReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onRetryPaymentLoad: false
             };
         case ApiConstants.API_LIVE_SCORE_DASHBOARD_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                onRetryPaymentLoad: false
             };
 
         case ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_LIST_LOAD:
