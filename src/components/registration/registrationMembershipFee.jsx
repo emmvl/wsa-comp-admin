@@ -573,10 +573,12 @@ class RegistrationMembershipFee extends Component {
                                             className="col-sm transfer-image-view pt-4"
                                             onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}
                                         >
-                                            <span className="user-remove-btn">
-                                                <i className="fa fa-trash-o" aria-hidden="true" />
-                                            </span>
-                                            <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+                                            <div className="removeAction">
+                                                <span className="user-remove-btn">
+                                                    <i className="fa fa-trash-o" aria-hidden="true" />
+                                                </span>
+                                                <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
