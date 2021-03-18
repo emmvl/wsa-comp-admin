@@ -1,7 +1,7 @@
 import ApiConstants from "themes/apiConstants";
 import AppConstants from "themes/appConstants";
 import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from "util/helpers";
-import {setImpersonation, setRoleId} from 'util/sessionStorage';
+import { setImpersonation } from 'util/sessionStorage';
 
 const teamMemberObj = {
   genderRefId: null,
