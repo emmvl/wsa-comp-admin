@@ -38,7 +38,7 @@ TagManager.initialize(tagManagerArgs);
 function App() {
     useEffect(() => {
         if (localStorage.token) {
-            if (getSignDate() && getRoleId() === 1 && ((Date.now() - localStorage.signDate) > 60 * 60 * 24)) {
+            if (getSignDate() && ((Date.now() - localStorage.signDate) > 60 * 60 * 24)) {
                 removeSignDate();
             }
 

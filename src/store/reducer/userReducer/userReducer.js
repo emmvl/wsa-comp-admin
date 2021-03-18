@@ -202,7 +202,6 @@ const affiliate = {
   stateRefId: 0,
   whatIsTheLowestOrgThatCanAddChild: 0,
   contacts: [],
-  email: '',
   charityRoundUp: [],
   charity: [],
 };
@@ -466,7 +465,6 @@ function userReducer(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_URE_SUCCESS:
-      setRoleId(action.result[0].roleId);
       return {
         ...state,
         onLoad: false,
