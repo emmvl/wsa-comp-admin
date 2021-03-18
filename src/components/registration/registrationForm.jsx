@@ -384,7 +384,6 @@ class RegistrationForm extends Component {
             }
             SelectedProduct['registrationSettings'] = registration_settings
             SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
-
             this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
             this.setState({ onRegistrationSaveLoad: true });
         } else {
@@ -399,7 +398,6 @@ class RegistrationForm extends Component {
         if (matchIndexValue > -1) {
             this.props.updateProductSelection(matchIndexValue, key, record.isSelected, record.registrationLock, record.isIndividualRegistration == 1 ? "registrationCap" : "teamRegistrationCap")
         }
-
     }
 
     getRegistrationLock(value, record, key) {

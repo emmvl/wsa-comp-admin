@@ -64,7 +64,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        titie: AppConstants.registrationOpen,
+        title: AppConstants.registrationOpen,
         dataIndex: 'registrationOpenDate',
         key: 'registrationOpenDate',
         render: (registrationOpenDate, record) => {
@@ -77,7 +77,7 @@ const columns = [
 
     },
     {
-        titie: AppConstants.registrationClose,
+        title: AppConstants.registrationClose,
         dataIndex: 'registrationCloseDate',
         key: 'registrationCloseDate',
         render: (registrationCloseDate, record) => {

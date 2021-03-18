@@ -1724,7 +1724,7 @@ class UserModulePersonalDetail extends Component {
             this.setState({ cancelDeRegistrationLoad: false })
         }
 
-        if ((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
+        if ((this.props.registrationDashboardState.onRegRetryPaymentLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
             this.setState({ retryPaymentOnLoad: false });
             this.handleRegistrationTableList(
                 1,
@@ -2158,6 +2158,7 @@ class UserModulePersonalDetail extends Component {
 
     retryPayment = (record) => {
         try {
+            let paidByUserId = isArrayNotEmpty(record.paidByUsers) ? record.paidByUsers[0].paidByUserId : null
             if (record.invoiceFailedStatus) {
                 const payload = {
                     registrationId: record.registrationId,
@@ -2171,6 +2172,7 @@ class UserModulePersonalDetail extends Component {
                     userId: this.state.userId,
                     divisionId: record.divisionId,
                     competitionId: record.competitionId,
+                    paidByUserId: paidByUserId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
@@ -2182,6 +2184,7 @@ class UserModulePersonalDetail extends Component {
 
     myRegistrationRetryPayment = (record) => {
         try {
+            let paidByUserId = isArrayNotEmpty(record.paidByUsers) ? record.paidByUsers[0].paidByUserId : null
             if (record.paymentStatusFlag == 2) {
                 const payload = {
                     registrationId: record.registrationId,
@@ -2195,6 +2198,7 @@ class UserModulePersonalDetail extends Component {
                     userId: this.state.userId,
                     divisionId: record.competitionMembershipProductDivisionId,
                     competitionId: record.competitionId,
+                    paidByUserId: paidByUserId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
@@ -3743,6 +3747,7 @@ class UserModulePersonalDetail extends Component {
             isPersonalUserLoading,
             isCompUserLoading,
         } = this.props.userState;
+        const {retryPaymentOnLoad} = this.state
         const isUserLoading = isPersonalUserLoading || isCompUserLoading;
         const personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
@@ -3823,7 +3828,7 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Loader visible={isUserLoading || onMedicalLoad} />
+                        <Loader visible={isUserLoading || onMedicalLoad || retryPaymentOnLoad} />
                         {this.unlinkChildConfirmPopup()}
                         {this.unlinkParentConfirmPopup()}
                         {this.cannotUninkPopup()}

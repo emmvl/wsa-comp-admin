@@ -1431,6 +1431,7 @@ const AppConstants = {
     statusPublishHover:
         "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
+    teamRankingError: "Team ranking has not been completed",
     venueAddressDetailsError: "Please input venue address in details",
     venueAddressError: "Please select a venue from the venue search",
     venueAddressSelect: "Please select a venue from the venue search",
@@ -2024,6 +2025,7 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
+    incorrectProductDetails: "You have entered incorrect product details.",
     competition_name: "Competition name"
 };
 
