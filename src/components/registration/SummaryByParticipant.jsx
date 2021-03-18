@@ -447,23 +447,43 @@ const columns = [
             },
             {
                 title: AppConstants.partialRefund,
+                dataIndex: "competitionOrganiserRefundAmount",
+                key: "competitionOrganiserRefundAmount",
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (competitionOrganiserRefundAmount) => currencyFormat(competitionOrganiserRefundAmount)
             }
         ]
     },
     {
-        title: AppConstants.state,
+        title: AppConstants.membership,
         children: [
             {
                 title: AppConstants.portion,
                 children: [
                     {
                         title: AppConstants.total,
+                        dataIndex: "membershipAmount",
+                        key: "membershipAmount",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmount) => currencyFormat(membershipAmount)
                     },
                     {
                         title: AppConstants.paid,
+                        dataIndex: "membershipAmountPaid",
+                        key: "membershipAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmountPaid) => currencyFormat(membershipAmountPaid)
                     },
                     {
                         title: AppConstants.pending,
+                        dataIndex: "membershipAmountPending",
+                        key: "membershipAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmountPending) => currencyFormat(membershipAmountPending)
                     },
                     {
                         title: AppConstants.failed,
@@ -475,9 +495,19 @@ const columns = [
                 children: [
                     {
                         title: AppConstants.paid,
+                        dataIndex: "membershipInstalmentAmountPaid",
+                        key: "membershipInstalmentAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipInstalmentAmountPaid) => currencyFormat(membershipInstalmentAmountPaid)
                     },
                     {
                         title: AppConstants.pending,
+                        dataIndex: "membershipInstalmentAmountPending",
+                        key: "membershipInstalmentAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipInstalmentAmountPending) => currencyFormat(membershipInstalmentAmountPending)
                     }
                 ]
             },
@@ -486,17 +516,37 @@ const columns = [
                 children: [
                     {
                         title: AppConstants.redeemed,
+                        dataIndex: "membershipGovernmentVoucherAmountRedeemed",
+                        key: "membershipGovernmentVoucherAmountRedeemed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipGovernmentVoucherAmountRedeemed) => currencyFormat(membershipGovernmentVoucherAmountRedeemed)
                     },
                     {
                         title: AppConstants.pending,
+                        dataIndex: "membershipGovernmentVoucherAmountPending",
+                        key: "membershipGovernmentVoucherAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipGovernmentVoucherAmountPending) => currencyFormat(membershipGovernmentVoucherAmountPending)
                     }
                 ]
             },
             {
                 title: AppConstants.discount,
+                dataIndex: "membershipDiscountAmount",
+                key: "membershipDiscountAmount",
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (membershipDiscountAmount) => currencyFormat(membershipDiscountAmount)
             },
             {
                 title: AppConstants.partialRefund,
+                dataIndex: "membershipRefundAmount",
+                key: "membershipRefundAmount",
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (membershipRefundAmount) => currencyFormat(membershipRefundAmount)
             }
         ]
     },
