@@ -12,6 +12,7 @@ import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
 import history from "util/history";
+import { isArrayNotEmpty } from "../../util/helpers";
 import {
     getOrganisationData, getPrevUrl, getGlobalYear, setGlobalYear, getLiveScoreCompetiton
 } from "util/sessionStorage";
@@ -81,12 +82,12 @@ const payments = [
 
 const columns = [
     {
-        title: AppConstants.name,
-        dataIndex: "name",
-        key: "name",
+        title: AppConstants.firstName,
+        dataIndex: "firstName",
+        key: "firstName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (name, record) => (
+        render: (firstName, record) => (
             <NavLink
                 to={{
                     pathname: "/userPersonal",
@@ -96,9 +97,31 @@ const columns = [
                         screen: "/registration",
                     },
                 }}
-            > 
-                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{name}</span>
-                  
+            >
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{firstName}</span>
+
+            </NavLink>
+        ),
+    },
+    {
+        title: AppConstants.lastName,
+        dataIndex: "lastName",
+        key: "lastName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (lastName, record) => (
+            <NavLink
+                to={{
+                    pathname: "/userPersonal",
+                    state: {
+                        userId: record.userId,
+                        screenKey: "registration",
+                        screen: "/registration",
+                    },
+                }}
+            >
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{lastName}</span>
+
             </NavLink>
         ),
     },
@@ -294,13 +317,13 @@ const columns = [
                             {
                                 record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
                                 record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
-                                    <Menu.Item key="7" 
-                                    onClick={() =>  
-                                        history.push("/deregistration", { 
-                                            regData: record, 
+                                    <Menu.Item key="7"
+                                    onClick={() =>
+                                        history.push("/deregistration", {
+                                            regData: record,
                                             personal: record,
                                             sourceFrom: AppConstants.ownRegistration,
-                                            subSourceFrom: "RegistrationListPage" 
+                                            subSourceFrom: "RegistrationListPage"
                                         })}
                                     >
                                         <span>{AppConstants.registrationChange}</span>
@@ -435,8 +458,8 @@ class Registration extends Component {
                 this.handleRegTableList(1);
             }
         }
-        if(nextProps.liveScoreDashboardState != this.props.liveScoreDashboardState){
-            if(this.state.loading == true && this.props.liveScoreDashboardState.onRetryPaymentLoad == false){
+        if((nextProps.liveScoreDashboardState != this.props.liveScoreDashboardState) || (nextProps.registrationDashboardState!= this.props.registrationDashboardState)){
+            if(this.state.loading == true && (this.props.liveScoreDashboardState.onRetryPaymentLoad == false || this.props.registrationDashboardState.onRegRetryPaymentLoad == false)){
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
                 }
@@ -639,6 +662,7 @@ class Registration extends Component {
 
     handleOtherModal = (key) =>{
         const {selectedRow, actionView} = this.state;
+        let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers) ? selectedRow.paidByUsers[0].paidByUserId : null
         if(actionView == 4){
             if(key == "ok"){
                 let payload = {
@@ -655,7 +679,8 @@ class Registration extends Component {
                     registrationUniqueKey: selectedRow.registrationUniqueKey,
                     userId: selectedRow.userId,
                     divisionId: selectedRow.divisionId,
-                    competitionId: selectedRow.competitionUniqueKey
+                    competitionId: selectedRow.competitionUniqueKey,
+                    paidByUserId: paidByUserId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ loading: true });
@@ -672,7 +697,7 @@ class Registration extends Component {
         }
         this.setState({otherModalVisible: false});
     }
-    
+
     receiveCashPayment = (key) => {
         if (key == "cancel") {
             this.setState({ visible: false });
@@ -1235,7 +1260,7 @@ class Registration extends Component {
                     {' '}
                     {selectedRow ? currencyFormat(selectedRow.governmentVoucherAmount) : "$0.00"}
                     </div>
-                    
+
                 </div>
             </Modal>
         )
@@ -1270,7 +1295,7 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.userRegistrationState.onLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.registrationDashboardState.onRegRetryPaymentLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}

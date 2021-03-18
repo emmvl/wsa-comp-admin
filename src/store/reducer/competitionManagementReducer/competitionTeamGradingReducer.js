@@ -67,6 +67,7 @@ function ownTeamGradingSummaryFunction(ownTeamGradingSummaryData, sortOrderArray
                     teamCount: checkGradesArray.result.teamCount,
                     sortOrder: checkGradesArray.result.sortOrder,
                     gradeRefId: checkGradesArray.result.gradeRefId,
+                    teamRanked: checkGradesArray.result.teamRanked,
                 }
             } else {
                 defaultObj = {

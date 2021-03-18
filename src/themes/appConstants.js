@@ -1431,6 +1431,7 @@ const AppConstants = {
     statusPublishHover:
         "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
+    teamRankingError: "Team ranking has not been completed",
     venueAddressDetailsError: "Please input venue address in details",
     venueAddressError: "Please select a venue from the venue search",
     venueAddressSelect: "Please select a venue from the venue search",
@@ -2028,6 +2029,7 @@ const AppConstants = {
     redeemed: "Redeemed",
     partialRefund: "Partial Refund",
     governmentVoucherNumber: "Government Voucher Number",
+    incorrectProductDetails: "You have entered incorrect product details."
 };
 
 export default AppConstants;
