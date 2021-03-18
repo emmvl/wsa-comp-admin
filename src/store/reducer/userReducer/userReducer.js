@@ -1,7 +1,7 @@
 import ApiConstants from "themes/apiConstants";
 import AppConstants from "themes/appConstants";
 import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from "util/helpers";
-import { setImpersonation } from 'util/sessionStorage';
+import {setImpersonation, setRoleId} from 'util/sessionStorage';
 
 const teamMemberObj = {
   genderRefId: null,
@@ -466,6 +466,7 @@ function userReducer(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_URE_SUCCESS:
+      setRoleId(action.result[0].roleId);
       return {
         ...state,
         onLoad: false,
