@@ -538,12 +538,12 @@ class AddProduct extends Component {
                 <Form.Item
                     name="productName"
                     rules={[
-                        { required: true, message: ValidationConstants.enterTitleOfTheProduct },
+                        // { required: true, message: ValidationConstants.enterTitleOfTheProduct },
                         {
                             validator: (_, value) => {
                                 const noSpaceValue = value.replace(/\s+/g, '');
                                 if (value === '') {
-                                    return Promise.reject();
+                                    return Promise.reject(new Error(ValidationConstants.enterTitleOfTheProduct));
                                 } else if (noSpaceValue === '') {
                                     return Promise.reject(new Error(AppConstants.incorrectProductDetails));
                                 }
