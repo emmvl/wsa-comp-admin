@@ -184,7 +184,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     key: "fieldConfigurationRefId",
                     width: 200,
                     render: (fieldConfigurationRefId, record, index) => (
-                        process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED &&
+                        (process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true) &&
                         <div>
                             <img
                                 className="venue-configuration-image"
@@ -1138,7 +1138,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         use12Hours={false}
                     />
                 </div>
-                {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED && (
+                { (process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true) && (
                     <div className="col-sm-1">
                         <img
                             className="venue-configuration-image"
