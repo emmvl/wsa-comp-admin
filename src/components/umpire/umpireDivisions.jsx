@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import { NavLink } from 'react-router-dom';
 import { Layout, Button, Select, Breadcrumb, Form, Modal, } from 'antd';
 
 import { getRefBadgeData } from '../../store/actions/appAction';
@@ -15,6 +15,7 @@ import { liveScoreGetDivision, liveScoreGetRounds } from "../../store/actions/Li
 
 import { getUmpireCompId, setUmpireCompId, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
+import history from 'util/history';
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -89,7 +90,9 @@ class UmpireDivisions extends Component {
         if (umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
             const selectedDivisions = [];
             umpirePoolData.forEach(poolItem => {
-                selectedDivisions.push(...poolItem.divisions.map(division => division.id));
+                if (poolItem && poolItem.divisions && Array.isArray(poolItem.divisions)) {
+                    selectedDivisions.push(...poolItem.divisions.map(division => division.id));
+                } 
             });
 
             this.setState({ umpirePoolData, selectedDivisions });
@@ -251,8 +254,8 @@ class UmpireDivisions extends Component {
                         placeholder="Select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={divisions => this.handleChangeDivisions(divisions, index)}
-                        value={!!poolItem.divisions.length && !!divisionList.length ?
-                            poolItem.divisions.map(division => division.id) : []
+                        value={!!poolItem?.divisions?.length && !!divisionList?.length ?
+                            poolItem?.divisions?.map(division => division?.id) : []
                         }
                         disabled={!isOrganiserView}
                     >
@@ -352,40 +355,51 @@ class UmpireDivisions extends Component {
 
     footerView = () => {
         const { isOrganiserView, umpirePoolData } = this.state;
-
+        const isDisabled = this.props.appState.onLoad ||this.props.umpirePoolAllocationState.onLoad ||
+                        this.props.liveScoreTeamState.onLoad || !umpirePoolData?.length
         return (
-            <div className="form-footer-button-wrapper">
-                {isOrganiserView && 
+            <div className="form-footer-button-wrapper justify-content-between">
+                <div className="reg-add-save-button">
+                    <NavLink to="/umpirePoolAllocation">
+                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                    </NavLink>
+                </div>
+                <div>
+                    {isOrganiserView && 
                     <>
                         <Button 
                             className="publish-button save-draft-text mr-4"
                             style={{ minWidth: 'fit-content' }}
                             type="primary"
                             onClick={this.handleOpenAlgorithm}
-                            disabled={this.props.appState.onLoad ||
-                                this.props.umpirePoolAllocationState.onLoad ||
-                                this.props.liveScoreTeamState.onLoad
-                                || !umpirePoolData?.length
-                            }
+                            disabled={isDisabled}
                         >
                             {AppConstants.allocateUmpires}
                         </Button>
 
                         <Button 
-                            className="publish-button save-draft-text m-0" 
+                            className="publish-button save-draft-text m-0 mr-4" 
                             type="primary" 
                             htmlType="submit"
                             onClick={this.handleSave}
-                            disabled={this.props.appState.onLoad ||
-                                this.props.umpirePoolAllocationState.onLoad ||
-                                this.props.liveScoreTeamState.onLoad
-                                || !umpirePoolData?.length
-                            }
+                            disabled={isDisabled}
                         >
                             {AppConstants.save}
                         </Button>
                     </>
-                }
+                    }
+                    <Button
+                        className="publish-button save-draft-text mr-0"
+                        type="primary"
+                        htmlType="submit"
+                        onClick={() => {
+                            if (isOrganiserView && !isDisabled) this.handleSave();
+                            history.push('/umpirePaymentSetting');
+                        }}
+                    >
+                        {AppConstants.next}
+                    </Button>
+                </div>  
             </div>
         );
     }

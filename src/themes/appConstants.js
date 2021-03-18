@@ -1431,6 +1431,7 @@ const AppConstants = {
     statusPublishHover:
         "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
+    teamRankingError: "Team ranking has not been completed",
     venueAddressDetailsError: "Please input venue address in details",
     venueAddressError: "Please select a venue from the venue search",
     venueAddressSelect: "Please select a venue from the venue search",
@@ -1713,6 +1714,7 @@ const AppConstants = {
     membershipType: "Membership type",
     totalFeeIncGst: "Total Fee (inc GST)",
     governmentVoucher: "Govt. Voucher",
+    governmentVoucherStatus: "Govt. Voucher Status",
     portion: "Portion",
     redeemVoucher: "Redeem Voucher",
     cashPaymentReceived: "Cash Payment received",
@@ -1862,7 +1864,8 @@ const AppConstants = {
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
     cancelTransferReg: "Cancel Transfer registration",
-    feePaid: "Fee Paid",
+    fee: "Fee",
+    feeStatus: "Fee Status",
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
     failed: "Failed",
@@ -2022,6 +2025,7 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
+    incorrectProductDetails: "You have entered incorrect product details.",
     competition_name: "Competition name"
 };
 

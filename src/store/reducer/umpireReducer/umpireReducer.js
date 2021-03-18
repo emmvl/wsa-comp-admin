@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
+import { uniqBy } from "lodash";
 
 const umpireObj = {
     id: null,
@@ -120,10 +121,10 @@ function getAffiliateData(selectedAffiliateId, affiliateArray) {
 }
 
 export function getAffiliatesDataFromRoleEntities(linkedEntities = []) {
-    return linkedEntities.map((linkedEntity) => ({
+    return uniqBy(linkedEntities.map((linkedEntity) => ({
         id: linkedEntity.entityId,
         name: linkedEntity.name,
-    }))
+    })), 'id')
 }
 
 export function getAffiliatesByIds(selectedAffiliateIds, affiliateArr) {
@@ -143,8 +144,10 @@ export function getAffiliatesByIds(selectedAffiliateIds, affiliateArr) {
 function getTeamsData(selectedTeamId, teamsArray) {
     return selectedTeamId.map((teamId) => {
         const team = teamsArray.find((curTeam) => curTeam.id === teamId)
+        if (!team) return null;
+
         return ({ id: team.id || teamId, name: team.name })
-    })
+    }).filter(t => !!t)
 }
 
 /// / get umpire selected Affiliate
@@ -229,7 +232,7 @@ function umpireState(state = initialState, action) {
                 onSaveLoad: false,
                 status: action.status,
             };
-            /// / Get Affiliate List
+        /// / Get Affiliate List
         case ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD:
             return { ...state, onAffiliateLoad: true };
         case ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_SUCCESS:
@@ -239,38 +242,39 @@ function umpireState(state = initialState, action) {
                 onAffiliateLoad: false,
                 status: action.status,
             };
-        case ApiConstants.GET_UMPIRE_LOAD:
+        case ApiConstants.GET_UMPIRE_TEAMS_LOAD:
             return {
-                ...state, onLoad: true,
+                ...state, onLoad: true
             }
-        case ApiConstants.GET_UMPIRE_SUCCESS:
+        case ApiConstants.GET_UMPIRE_TEAMS_SUCCESS:
             const umpire = action.data
-            const affiliates = !umpire.selectedOrganisations.length ? [] : umpire.selectedOrganisations.map(
-                ({ id, name }) => ({ id, name }),
-            )
-            const selectedTeams = !umpire.teams.length ? [] : umpire.teams.map(({ id, name }) => ({ id, name }))
-            const ids = selectedTeams.map(({ id }) => id)
+            const affiliates = umpire.selectedOrganisations.map(
+                ({ id, name }) => {
+                    const org = state.affilateList?.find(affiliate => affiliate.organisationId === id)
+                    const newId = org ? org.id : id;
+                    return { name, id: newId }
+                },
+            );
+            const selectedTeams = umpire.selectedTeams.map(({ id, name }) => ({ id, name }))
+            const affiliateIds = affiliates.map(affiliate => affiliate.id);
+            const teamIds = selectedTeams.map(({ id }) => id)
+
             return {
                 ...state,
                 onLoad: false,
-                umpireRadioBtn: "existing",
-                umpireData: {
-                    ...state.umpireData,
-                    id: umpire.id,
-                    firstName: umpire.firstName || '',
-                    lastName: umpire.lastName || '',
-                    mobileNumber: umpire.mobileNumber,
-                    email: umpire.email,
-                    affiliates,
-                    teams: selectedTeams,
-                    teamId: ids,
-                },
                 umpireOwnTeam: umpire.umpireOwnTeam,
-                teamList: umpire.teams,
+                teamsList: umpire.teams,
                 umpireCheckbox: umpire.isUmpire,
                 umpireCoachCheckBox: umpire.isUmpireCoach,
+                affiliateId: affiliateIds,
+                umpireData: {
+                    ...state.umpireData,
+                    teams: selectedTeams,
+                    teamId: teamIds,
+                    affiliates,
+                },
             }
-            /// / Update Add Umpire Data
+        //// Update Add Umpire Data
         case ApiConstants.UPDATE_ADD_UMPIRE_DATA:
             const { key } = action
             const { data } = action
