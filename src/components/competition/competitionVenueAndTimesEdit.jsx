@@ -184,28 +184,29 @@ class CompetitionVenueAndTimesEdit extends Component {
                     key: "fieldConfigurationRefId",
                     width: 200,
                     render: (fieldConfigurationRefId, record, index) => (
-                        (process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true) &&
-                        <div>
-                            <img
-                                className="venue-configuration-image"
-                                src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
-                                alt=""
-                                height={80}
-                            />
-                            <img
-                                className="venue-configuration-control"
-                                src={AppImages.chevronRight}
-                                alt=""
-                                height={25}
-                                onClick={() => {
-                                    this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
-                                }}
-                            />
+                        (process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === 'true') && (
+                            <div>
+                                <img
+                                    className="venue-configuration-image"
+                                    src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
+                                    alt=""
+                                    height={80}
+                                />
+                                <img
+                                    className="venue-configuration-control"
+                                    src={AppImages.chevronRight}
+                                    alt=""
+                                    height={25}
+                                    onClick={() => {
+                                        this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
+                                    }}
+                                />
 
-                            <Form.Item name={`fieldConfigurationRefId${index}`}>
-                                <Input type="hidden" value={fieldConfigurationRefId} />
-                            </Form.Item>
-                        </div>
+                                <Form.Item name={`fieldConfigurationRefId${index}`}>
+                                    <Input type="hidden" value={fieldConfigurationRefId} />
+                                </Form.Item>
+                            </div>
+                        )
                     )
                 },
                 {
@@ -334,16 +335,28 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     getImageForVenueConfig = (index, fieldConfigurationRefId, tableIndex = null) => {
-        let image = '';
-        let i = 1;
-        while (!image) {
-            image = !!fieldConfigurationRefId
-                ? this.state.venueConfigurationImages[fieldConfigurationRefId - i]
-                : this.state.venueConfigurationImages[this.props.venueTimeState.venuData.venueCourts[!!tableIndex ? tableIndex : index - i].fieldConfigurationRefId - 1]
-            i++;
+        if (!!fieldConfigurationRefId) {
+            return this.state.venueConfigurationImages[fieldConfigurationRefId - 1]
         }
 
-        return image;
+        if (!!tableIndex) {
+            const configIndex = this.props.venueTimeState.venuData.venueCourts[tableIndex]?.fieldConfigurationRefId
+            return this.state.venueConfigurationImages[!!configIndex ? configIndex - 1 : 0]
+        }
+
+        if (!!index) {
+            let i = 1;
+            while (index - i >= 0) {
+                const configIndex = this.props.venueTimeState.venuData.venueCourts[index - i].fieldConfigurationRefId
+                const image = this.state.venueConfigurationImages[!!configIndex ? configIndex - 1 : 0]
+                if (image) {
+                    return image
+                }
+                i++;
+            }
+        }
+
+        return this.state.venueConfigurationImages[0];
     }
 
     setFormFieldValue = () => {
@@ -1138,7 +1151,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         use12Hours={false}
                     />
                 </div>
-                { (process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true) && (
+                {(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === 'true') && (
                     <div className="col-sm-1">
                         <img
                             className="venue-configuration-image"
