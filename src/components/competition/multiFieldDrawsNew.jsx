@@ -161,9 +161,12 @@ class MultifieldDrawsNew extends Component {
                 homeTeamName:"",
                 divisionName:"",
                 gradeName:"",
+                colorCode:"",
+                duplicate:false,
                 homeTeamOrganisationId:"",
                 isPastMatchAvailable:0,
                 outOfCompetitionDate:0,
+                outOfRoundDate:0,
                 teamArray:[]
             },
             switchDrawTimeFields:{

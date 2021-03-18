@@ -748,7 +748,20 @@ class LiveScoreAddMatch extends Component {
                     <div className="row">
                         <div className="col-sm-6">
                             <InputWithHead required="required-field" heading={AppConstants.homeTeam} />
-                            <Form.Item name="home" rules={[{ required: true, message: ValidationConstants.homeField }]}>
+                            <Form.Item
+                                name="home"
+                                rules={[
+                                    { required: true, message: ValidationConstants.homeField },
+                                    {
+                                        validator: (_, value) => {
+                                            if (value === addEditMatch.team2id) {
+                                              return Promise.reject(ValidationConstants.teamsMustBeDifferent);
+                                            } else {
+                                                return Promise.resolve();
+                                            }
+                                        }
+                                    }
+                                ]}>
                                 <Select
                                     showSearch
                                     className="reg-form-multiple-select w-100"
@@ -767,7 +780,21 @@ class LiveScoreAddMatch extends Component {
                         </div>
                         <div className="col-sm-6">
                             <InputWithHead required="required-field" heading={AppConstants.awayTeam} />
-                            <Form.Item name="away" rules={[{ required: true, message: ValidationConstants.awayField }]}>
+                            <Form.Item
+                                name="away"
+                                rules={[
+                                    { required: true, message: ValidationConstants.awayField },
+                                    {
+                                        validator: (_, value) => {
+                                            if (value === addEditMatch.team1id) {
+                                              return Promise.reject(ValidationConstants.teamsMustBeDifferent);
+                                            } else {
+                                                return Promise.resolve();
+                                            }
+                                        }
+                                    }
+                                ]}
+                            >
                                 <Select
                                     showSearch
                                     onSearch={(e) => this.onSearchTeams(e, "awayTeam")}

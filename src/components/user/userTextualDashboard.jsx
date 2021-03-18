@@ -696,6 +696,7 @@ class UserTextualDashboard extends Component {
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
+                        style={{ whiteSpace: 'pre'}} 
                         columns={columns}
                         dataSource={userDashboardTextualList}
                         pagination={false}

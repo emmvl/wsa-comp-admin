@@ -166,6 +166,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 apiData:null
             },
             emptySlot:{
+                colorCode: "#999999",   
                 awayTeamId: null,
                 awayTeamName: null,                
                 competitionDivisionGradeId: null,
@@ -188,7 +189,6 @@ class MultifieldDrawsNewTimeline extends Component {
                 ],
             },
             emptySlotFieldUpdate:{
-                colorCode: "#999999",
                 endTime: "",
                 matchDate: "",
                 startTime: "",
@@ -197,8 +197,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 venueCourtNumber: 0,
                 venueShortName: ""
             },
-            emptySlotVenueFieldUpdate:{
-                colorCode: "#999999",                
+            emptySlotVenueFieldUpdate:{                             
                 venueCourtId: 0,
                 venueCourtName: "",
                 venueCourtNumber: 0,
@@ -210,9 +209,12 @@ class MultifieldDrawsNewTimeline extends Component {
                 homeTeamName:"",
                 divisionName:"",
                 gradeName:"",
+                colorCode:"",
+                duplicate:false,
                 homeTeamOrganisationId:"",
                 isPastMatchAvailable:0,
                 outOfCompetitionDate:0,
+                outOfRoundDate:0,
                 teamArray:[]
             }
         };
@@ -1134,9 +1136,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     const slotStart = moment(slot.matchDate);
                     const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
 
-                    const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
-                    const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
-                    const isSlotEventInside = startTimeNew.isBefore(slotStart) && endTimeNew.isAfter(slotEnd);
+                    const isStartTimeCondition = startTimeNew.isSameOrBefore(slotEnd) && startTimeNew.isSameOrAfter(slotStart);
+                    const isEndTimeCondition = endTimeNew.isSameOrAfter(slotStart) && endTimeNew.isSameOrBefore(slotEnd);
+                    const isSlotEventInside = startTimeNew.isSameOrBefore(slotStart) && endTimeNew.isSameOrAfter(slotEnd);
 
                     const isEventOverItself = slot.drawsId === draggableEventObject.drawsId
                         && (
@@ -1152,8 +1154,8 @@ class MultifieldDrawsNewTimeline extends Component {
                         const prevEventEnd = prevEvent && moment(this.getDate(slot.matchDate) + prevEvent?.endTime);
                         const nextEventStart = nextEvent && moment(nextEvent?.matchDate);
 
-                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isAfter(startTimeNew);
-                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isBefore(endTimeNew);
+                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isSameOrAfter(startTimeNew);
+                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isSameOrBefore(endTimeNew);
 
                         if (isPrevEventEndBeforeSlotStart || isPrevEventStartAfterSlotEnd) {
                             return true;
@@ -1196,9 +1198,10 @@ class MultifieldDrawsNewTimeline extends Component {
             };
             const editdraw= this.state.editedDraw;
             editdraw.apiData=apiData;
-            this.updateEditDrawArray(postData);
+            
             //change to action if necessary
             this.dargSuccess(targetCourtId,postData);
+            this.updateEditDrawArray(postData);
             this.setState({updateLoad: false});
         }
     }
@@ -1244,7 +1247,15 @@ class MultifieldDrawsNewTimeline extends Component {
                     }                        
                     if(drawindex>-1){
                         Object.keys(this.state.emptySlotVenueFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
-                        destinationVenueCourt.slotsArray[drawindex]=moveddraw;
+                        let targetDraw=destinationVenueCourt.slotsArray[drawindex];
+                        if(targetDraw.drawsId && targetDraw.drawsId != moveddraw.drawsId){
+                            //something wrong, 
+                            console.log("no enough slot");
+                            destinationVenueCourt.slotsArray.push(moveddraw);
+                            message.warning('Please save draws');
+                        }else{
+                            destinationVenueCourt.slotsArray[drawindex] =moveddraw;
+                        }                       
                     }                    
                 }                
             }                
