@@ -48,6 +48,7 @@ import AppRegistrationForm from 'components/registration/appRegistrationForm';
 import deRegistration from 'components/registration/deRegistration';
 import PaymentDashboard from 'components/registration/paymentDashboard';
 import PaymentSummary from 'components/registration/PaymentSummary';
+import SummaryByParticipant from 'components/registration/SummaryByParticipant';
 import ProductAdd from 'components/registration/productAdd';
 import ProductAddRegistration from 'components/registration/productAddRegistration';
 import ProductRegistrationClub from 'components/registration/productRegistrationClub';
@@ -879,6 +880,11 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/paymentSummary"
                     component={this.haveAccess(userRoleId, '/paymentSummary') ? lazyLoad(PaymentSummary) : lazyLoad(NotFound)}
+                />
+
+                <PrivateRoute
+                    path="/summaryByParticipant"
+                    component={this.haveAccess(userRoleId, '/summaryByParticipant') ? lazyLoad(SummaryByParticipant) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

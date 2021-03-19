@@ -126,7 +126,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("postcode"),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e) => (

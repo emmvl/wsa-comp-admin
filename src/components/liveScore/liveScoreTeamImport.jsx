@@ -24,17 +24,17 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "Team Name",
+        title: AppConstants.teamName,
         dataIndex: "Team Name",
         key: "Team Name",
     },
     {
-        title: "Division Grade",
+        title: AppConstants.divisionGrade,
         dataIndex: "Division Grade",
         key: "Division Grade",
     },
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: "Organisation",
         key: "Organisation",
     },

@@ -665,8 +665,8 @@ class CompetitionFormat extends Component {
                 <InputWithHead
                     id={AppUniqueId.compnameTextbox}
                     disabled={disabledStatus}
-                    heading={AppConstants.competition_name}
-                    placeholder={AppConstants.competition_name}
+                    heading={AppConstants.competitionName}
+                    placeholder={AppConstants.competitionName}
                     value={data.competitionName}
                     onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}
                 />
@@ -746,7 +746,7 @@ class CompetitionFormat extends Component {
                             onKeyDown={(e) => e.key === '.' && e.preventDefault()}
                             onChange={(e) => this.onChangeSetValue(e, 'noOfRounds')}
                             min={1}
-                            max={5}
+                            max={50}
                             value={data.noOfRounds}
                             disabled={disabledStatus}
                         />

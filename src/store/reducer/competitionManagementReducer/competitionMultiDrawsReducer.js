@@ -41,7 +41,8 @@ const initialState = {
     drawDivisions: [],
     drawsCompetitionArray: [],
     onImportLoad: false,
-    isPastMatchAvailable :null
+    isPastMatchAvailable :null,
+    isTimelineMode: false,
 };
 
 const gradeColorArray = [];
@@ -936,7 +937,7 @@ function CompetitionMultiDraws(state = initialState, action) {
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_LOAD:
             return {
                 ...state,
-                updateLoad: true,
+                updateLoad: true,                
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_SUCCESS:
@@ -984,7 +985,7 @@ function CompetitionMultiDraws(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: null,
-                updateLoad: false,
+                updateLoad: false,                
             };
 
         /// Update draws timeline reducer cases
@@ -1076,6 +1077,18 @@ function CompetitionMultiDraws(state = initialState, action) {
             return {
                 ...state,
                 updateLoad: true,
+            };
+        case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD:
+            return {
+                ...state,
+                updateLoad: false,
+                swapLoad:true
+            };
+        case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_SUCCESS:
+            return {
+                ...state,
+                updateLoad: false,
+                swapLoad:false
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:
@@ -1305,6 +1318,13 @@ function CompetitionMultiDraws(state = initialState, action) {
                 onLoad: false,
                 error: null,
             };
+
+        case ApiConstants.SET_TIMELINE_MODE:
+            console.log(action.value);
+            return {
+                ...state,
+                isTimelineMode: action.value,
+            }
 
         default:
             return state;

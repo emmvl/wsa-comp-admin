@@ -202,7 +202,6 @@ const affiliate = {
   stateRefId: 0,
   whatIsTheLowestOrgThatCanAddChild: 0,
   contacts: [],
-  email: '',
   charityRoundUp: [],
   charity: [],
 };
@@ -379,7 +378,6 @@ const initialState = {
   netSetGoTotalCount: 1,
   isPersonalUserLoading: false,
   isDocumentLoading: false,
-  isDocumentRemoving: false,
   isCompUserLoading: false,
 };
 

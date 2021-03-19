@@ -83,7 +83,8 @@ function registrationDashboard(state = initialState, action) {
                 onLoad: false,
                 error: action.error,
                 status: action.status,
-                onRegStatusUpdateLoad: false
+                onRegStatusUpdateLoad: false,
+                onRegRetryPaymentLoad: false,
             };
         case ApiConstants.API_REG_DASHBOARD_LIST_ERROR:
             return {
@@ -91,7 +92,8 @@ function registrationDashboard(state = initialState, action) {
                 onLoad: false,
                 error: action.error,
                 status: action.status,
-                onRegStatusUpdateLoad: false
+                onRegStatusUpdateLoad: false,
+                onRegRetryPaymentLoad: false
             };
 
         /////get the Competition type list 
@@ -178,12 +180,12 @@ function registrationDashboard(state = initialState, action) {
         };
 
         case ApiConstants.API_REGISTRATION_RETRY_PAYMENT_LOAD:
-            return{...state,onLoad: true}
+            return{...state,onRegRetryPaymentLoad: true}
         
         case ApiConstants.API_REGISTRATION_RETRY_PAYMENT_SUCCESS:
             return{
                 ...state,
-                onLoad: false,
+                onRegRetryPaymentLoad: false,
                 status: action.status
             }
 

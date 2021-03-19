@@ -57,14 +57,14 @@ const listeners = (key) => ({
 const columns = [
 
     {
-        title: 'Competition Name',
+        title: AppConstants.competitionName,
         dataIndex: 'competitionName',
         key: 'competitionName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Registration Open',
+        title: AppConstants.registrationOpen,
         dataIndex: 'registrationOpenDate',
         key: 'registrationOpenDate',
         render: (registrationOpenDate, record) => {
@@ -77,7 +77,7 @@ const columns = [
 
     },
     {
-        title: 'Registration Close',
+        title: AppConstants.registrationClose,
         dataIndex: 'registrationCloseDate',
         key: 'registrationCloseDate',
         render: (registrationCloseDate, record) => {
@@ -91,7 +91,7 @@ const columns = [
     },
 
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: true,
@@ -99,7 +99,7 @@ const columns = [
 
     },
     {
-        title: 'Form',
+        titie: AppConstants.form,
         dataIndex: 'userRegistrationUrl',
         key: 'userRegistrationUrl',
         render: (userRegistrationUrl, record) => {
@@ -116,7 +116,7 @@ const columns = [
         ,
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record) => (

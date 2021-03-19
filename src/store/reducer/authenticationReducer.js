@@ -1,5 +1,6 @@
 import ApiConstants from 'themes/apiConstants';
 import { setAuthToken, setUserId } from 'util/sessionStorage';
+import {setSignDate} from "../../util/sessionStorage";
 
 const initialState = {
     onLoad: false,
@@ -50,6 +51,7 @@ function login(state = initialState, action) {
         case ApiConstants.API_QR_CODE_SUCCESS:
             setUserId(action.result.user.id);
             setAuthToken(action.result.authToken);
+            setSignDate(action.result.signDate);
             window.location.reload();
 
             return {

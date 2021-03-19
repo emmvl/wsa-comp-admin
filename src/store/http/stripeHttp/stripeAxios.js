@@ -403,9 +403,101 @@ let AxiosApi = {
     partialRefundAmountApi(payload) {
         let url = "/api/partial/refund"
         return Method.dataPost(url, token, payload)
-    }
+    },
 
+    async getParticipantSummary(
+        offset,
+        limit,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentOption,
+        paymentMethod,
+        membershipType,
+        paymentStatus,
+    ) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationId: organisationUniqueKey,
+            userId: parseInt(userId, 10),
+            registrationId,
+            paging: {
+                offset,
+                limit,
+            },
+            yearId: parseInt(yearId, 10),
+            competitionKey,
+            paymentFor,
+            dateFrom,
+            dateTo,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType,
+            paymentStatus,
+        }
+        var url = `api/participant/summary?search=${searchValue}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
 
+        return Method.dataPost(url, token, body);
+    },
+
+    async exportParticipantSummaryApi(offset,
+        sortBy,
+        sortOrder,
+        userId,
+        registrationId,
+        yearId,
+        competitionKey,
+        paymentFor,
+        dateFrom,
+        dateTo,
+        searchValue,
+        feeType,
+        paymentOption,
+        paymentMethod,
+        membershipType,
+        paymentStatus,
+    ) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationId: organisationUniqueKey,
+            userId: parseInt(userId, 10),
+            registrationId,
+            paging: {
+                offset: 0,
+                limit: -1,
+            },
+            yearId: parseInt(yearId, 10),
+            competitionKey,
+            paymentFor,
+            dateFrom,
+            dateTo,
+            feeType,
+            paymentOption,
+            paymentMethod,
+            membershipType,
+            paymentStatus,
+        }
+        var url = `/api/participant/summary/export?search=${searchValue}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+        let _now = moment().utc().format('Y-MM-DD');
+        return Method.dataPostDownload(url, token, `pariticipantSummary-${_now}`, body);
+    },
 };
 
 const Method = {

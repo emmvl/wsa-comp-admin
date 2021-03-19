@@ -502,8 +502,13 @@ const AxiosApi = {
         const url = `/api/deregister`;
         return Method.dataPost(url, token, payload);
     },
-    getRegistrationChangeDashboard(payload) {
-        const url = `/api/registrationchange/dashboard`;
+    getRegistrationChangeDashboard(payload, sortBy, sortOrder) {
+        let url;
+        if (sortBy && sortOrder) {
+            url = `/api/registrationchange/dashboard?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        } else {
+            url = `/api/registrationchange/dashboard`;
+        }
         return Method.dataPost(url, token, payload);
     },
     exportRegistrationChangeDashboard(payload) {
@@ -615,6 +620,10 @@ const AxiosApi = {
     },
     getDeRegisterData(payload) {
         var url = `/api/deRegister/details `;
+        return Method.dataPost(url, token, payload);
+    },
+    addHardshipCode(payload) {
+        const url = `api/orgregistration/singleusecode/add`;
         return Method.dataPost(url, token, payload);
     },
 };

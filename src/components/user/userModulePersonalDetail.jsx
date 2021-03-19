@@ -124,7 +124,7 @@ const isUserSuperAdmin = (userRolesFromState = []) => {
 
 const columns = [
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
     },
@@ -161,12 +161,12 @@ const columns = [
         key: "membershipProduct",
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipType",
         key: "membershipType",
     },
     {
-        title: "Division",
+        title: AppConstants.division,
         dataIndex: "divisionName",
         key: "divisionName",
         render: (divisionName) => (
@@ -174,7 +174,7 @@ const columns = [
         ),
     },
     {
-        title: "Paid By",
+        title: AppConstants.paidBy,
         dataIndex: "paidByUsers",
         key: "paidByUsers",
         render: (paidByUsers, record) => (
@@ -202,7 +202,7 @@ const columns = [
         ),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
         render: (paymentStatus) => (
@@ -210,7 +210,7 @@ const columns = [
         ),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "regForm",
         key: "regForm",
         render: (regForm, e) => (
@@ -287,7 +287,7 @@ const columns = [
 
 const teamRegistrationColumns = [
     {
-        title: "Team Name",
+        title: AppConstants.teamName,
         dataIndex: "teamName",
         key: "teamName",
         render: (teamName, record) => (
@@ -301,25 +301,25 @@ const teamRegistrationColumns = [
     },
 
     {
-        title: "Organisation",
+        title: AppConstants.organisation,
         dataIndex: "organisationName",
         key: "organisationName",
     },
 
     {
-        title: "Division",
+        title: AppConstants.division,
         key: "divisionName",
         dataIndex: "divisionName",
     },
 
     {
-        title: "Product",
+        title: AppConstants.product,
         key: "productName",
         dataIndex: "productName",
     },
 
     {
-        title: "Registered By",
+        title: AppConstants.registeredBy,
         dataIndex: "registeredBy",
         key: "registeredBy",
         render: (registeredBy, record) => (
@@ -330,7 +330,7 @@ const teamRegistrationColumns = [
     },
 
     {
-        title: "Registration Date",
+        title: AppConstants.registrationDate,
         key: "registrationDate",
         dataIndex: "registrationDate",
         render: (registrationDate) => (
@@ -339,12 +339,12 @@ const teamRegistrationColumns = [
     },
 
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'status',
         key: 'status',
         width: 80,
@@ -385,13 +385,13 @@ const teamRegistrationColumns = [
 
 const childOtherRegistrationColumns = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "name",
         key: "name",
     },
 
     {
-        title: "DOB",
+        title: AppConstants.dOB,
         dataIndex: "dateOfBirth",
         key: "dateOfBirth",
         render: (dateOfBirth) => (
@@ -400,7 +400,7 @@ const childOtherRegistrationColumns = [
     },
 
     {
-        title: "Email",
+        title: AppConstants.email,
         key: "email",
         dataIndex: "email",
     },
@@ -416,7 +416,7 @@ const childOtherRegistrationColumns = [
         dataIndex: "feePaid",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         key: "action",
         render: (data, record) => (
             <div>
@@ -452,17 +452,17 @@ const childOtherRegistrationColumns = [
 
 const teamMembersColumns = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "name",
         key: "name",
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
     },
     {
-        title: "Membership Type",
+        title: AppConstants.membershipType,
         dataIndex: "membershipTypeName",
         key: "membershipTypeName",
     },
@@ -483,7 +483,7 @@ const teamMembersColumns = [
         render: (r) => new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 2 }).format(r),
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         key: "action",
         dataIndex: "isActive",
         render: (data, record) => {
@@ -549,13 +549,13 @@ const teamMembersColumns = [
 
 const columnsPlayer = [
     {
-        title: "Match Id",
+        title: AppConstants.tableMatchID,
         dataIndex: "matchId",
         key: "matchId",
         sorter: (a, b) => tableSort(a, b, "matchId"),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: "stateDate",
         key: "stateDate",
         sorter: (a, b) => tableSort(a, b, "stateDate"),
@@ -601,7 +601,7 @@ const columnsPlayer = [
         sorter: (a, b) => tableSort(a, b, "gameTime"),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => tableSort(a, b, "status"),
@@ -613,7 +613,7 @@ const columnsPlayer = [
         sorter: (a, b) => tableSort(a, b, "competitionName"),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => tableSort(a, b, "affiliate"),
@@ -622,19 +622,19 @@ const columnsPlayer = [
 
 const columnsParent = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "firstName",
         key: "firstName",
         sorter: (a, b) => a.firstName.localeCompare(b.firstName),
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "lastName",
         key: "lastName",
         sorter: (a, b) => a.lastName.localeCompare(b.lastName),
     },
     {
-        title: "DOB",
+        title: AppConstants.dOB,
         dataIndex: "dateOfBirth",
         key: "dateOfBirth",
         sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
@@ -645,19 +645,19 @@ const columnsParent = [
         ),
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: "team",
         key: "team",
         sorter: (a, b) => a.team.localeCompare(b.team),
     },
     {
-        title: "Div",
+        title: AppConstants.div,
         dataIndex: "divisionName",
         key: "divisionName",
         sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
@@ -677,19 +677,19 @@ const columnsScorer = [
         ),
     },
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "matchId",
         key: "matchId",
         sorter: (a, b) => a.matchId.localeCompare(b.matchId),
     },
     {
-        title: "Team",
+        title: AppConstants.team,
         dataIndex: "teamName",
         key: "teamName",
         sorter: (a, b) => a.teamName.localeCompare(b.teamName),
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
@@ -701,7 +701,7 @@ const columnsScorer = [
         sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
@@ -710,13 +710,13 @@ const columnsScorer = [
 
 const columnsManager = [
     {
-        title: "Match ID",
+        title: AppConstants.tableMatchID,
         dataIndex: "matchId",
         key: "matchId",
         sorter: (a, b) => a.matchId.localeCompare(b.matchId),
     },
     {
-        title: "Date",
+        title: AppConstants.date,
         dataIndex: "startTime",
         key: "startTime",
         sorter: (a, b) => a.startTime.localeCompare(b.startTime),
@@ -751,7 +751,7 @@ const columnsManager = [
         sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
     },
     {
-        title: "Affiliate",
+        title: AppConstants.affiliate,
         dataIndex: "affiliate",
         key: "affiliate",
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
@@ -770,7 +770,7 @@ const columnsPersonalAddress = [
         key: "suburb",
     },
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
     },
@@ -780,12 +780,12 @@ const columnsPersonalAddress = [
         key: "postalCode",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUsed",
         key: "isUsed",
         width: 80,
@@ -826,7 +826,7 @@ const columnsPersonalAddress = [
 
 const columnsPersonalPrimaryContacts = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "parentName",
         key: "parentName",
         render: (parentName, record) => (
@@ -856,7 +856,7 @@ const columnsPersonalPrimaryContacts = [
         key: "suburb",
     },
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
     },
@@ -871,17 +871,17 @@ const columnsPersonalPrimaryContacts = [
         key: "mobileNumber",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUser",
         key: "isUser",
         width: 80,
@@ -926,7 +926,7 @@ const columnsPersonalPrimaryContacts = [
 
 const columnsPersonalChildContacts = [
     {
-        title: "Name",
+        title: AppConstants.name,
         dataIndex: "childName",
         key: "childName",
         render: (childName, record) => (
@@ -956,7 +956,7 @@ const columnsPersonalChildContacts = [
         key: "suburb",
     },
     {
-        title: "State",
+        title: AppConstants.stateTitle,
         dataIndex: "state",
         key: "state",
     },
@@ -971,17 +971,17 @@ const columnsPersonalChildContacts = [
         key: "mobileNumber",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
     {
-        title: "Status",
+        title: AppConstants.status,
         dataIndex: "status",
         key: "status",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUser",
         key: "isUser",
         width: 80,
@@ -1088,12 +1088,12 @@ const columnsDocuments = [
 
 const columnsPersonalEmergency = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "emergencyFirstName",
         key: "emergencyFirstName",
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "emergencyLastName",
         key: "emergencyLastName",
     },
@@ -1103,7 +1103,7 @@ const columnsPersonalEmergency = [
         key: "emergencyContactNumber",
     },
     {
-        title: "Action",
+        title: AppConstants.action,
         dataIndex: "isUser",
         key: "isUser",
         width: 80,
@@ -1144,17 +1144,17 @@ const columnsPersonalEmergency = [
 
 const columnsFriends = [
     {
-        title: "First Name",
+        title: AppConstants.firstName,
         dataIndex: "firstName",
         key: "firstName",
     },
     {
-        title: "Last Name",
+        title: AppConstants.lastName,
         dataIndex: "lastName",
         key: "lastName",
     },
     {
-        title: "Email",
+        title: AppConstants.email,
         dataIndex: "email",
         key: "email",
     },
@@ -1229,17 +1229,17 @@ const columnsMedical = [
 
 const columnsHistory = [
     // {
-    //     title: 'Competition Name',
+    //     title: AppConstants.competitionName,
     //     dataIndex: 'competitionName',
     //     key: 'competitionName'
     // },
     // {
-    //     title: 'Team Name',
+    //     title: AppConstants.teamName,
     //     dataIndex: 'teamName',
     //     key: 'teamName'
     // },
     {
-        title: "Division Grade",
+        title: AppConstants.divisionGrade,
         dataIndex: "divisionGrade",
         key: "divisionGrade",
     },
@@ -1252,41 +1252,41 @@ const columnsHistory = [
 
 const columnsIncident = [
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'incidentTime',
         key: 'incidentTime',
         sorter: (a, b) => tableSort(a, b, "incidentTime"),
         render: (incidentTime) => <span>{liveScore_MatchFormate(incidentTime)}</span>,
     },
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, "matchId"),
     },
     {
-        title: 'Player ID',
+        title: AppConstants.playerId,
         dataIndex: 'playerId',
         key: 'incident Players',
         sorter: (a, b) => tableSort(a, b, "playerId"),
 
     },
     {
-        title: 'First Name',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'Incident Players First Name',
         sorter: (a, b) => tableSort(a, b, "firstName"),
 
     },
     {
-        title: 'Last Name',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'Incident Players Last Name',
         sorter: (a, b) => tableSort(a, b, "lastName"),
 
     },
     {
-        title: 'Team',
+        title: AppConstants.team,
         dataIndex: 'teamName',
         key: 'teamName',
         sorter: (a, b) => tableSort(a, b, "teamName"),
@@ -1309,7 +1309,7 @@ const columnsIncident = [
         ),
     },
     {
-        title: 'Type',
+        title: AppConstants.type,
         dataIndex: 'incidentTypeName',
         key: 'incidentTypeName',
         sorter: (a, b) => a.incidentTypeName.localeCompare(b.incidentTypeName),
@@ -1323,14 +1323,14 @@ const listeners = (key) => ({
 
 const umpireActivityColumn = [
     {
-        title: 'Match Id',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'date',
         key: 'date',
         sorter: true,
@@ -1338,14 +1338,14 @@ const umpireActivityColumn = [
         render: (date, record) => <span>{record?.match?.startTime ? liveScore_formateDate(record.match.startTime) : ""}</span>,
     },
     {
-        title: 'Time',
+        title: AppConstants.time,
         dataIndex: 'time',
         key: 'time',
         // sorter: true,
         render: (time, record) => <span>{record?.match?.startTime ? getTime(record.match.startTime) : ""}</span>,
     },
     {
-        title: 'Competition',
+        title: AppConstants.competition,
         dataIndex: 'competition',
         key: 'competition',
         sorter: true,
@@ -1353,7 +1353,7 @@ const umpireActivityColumn = [
         render: (date, record) => <span>{record?.match?.competition ? record.match.competition.longName : ""}</span>,
     },
     {
-        title: 'Affiliate',
+        title: AppConstants.affiliate,
         dataIndex: 'affiliate',
         key: 'affiliate',
         sorter: true,
@@ -1372,7 +1372,7 @@ const umpireActivityColumn = [
         },
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'home',
         key: 'home',
         sorter: true,
@@ -1380,7 +1380,7 @@ const umpireActivityColumn = [
         render: (home, record) => <span>{record?.match?.team1 ? record.match.team1.name : ""}</span>,
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'away',
         key: 'away',
         sorter: true,
@@ -1388,7 +1388,7 @@ const umpireActivityColumn = [
         render: (away, record) => <span>{record?.match?.team2 ? record.match.team2.name : ""}</span>,
     },
     {
-        title: 'Amount',
+        title: AppConstants.amount,
         dataIndex: 'amount',
         key: 'amount',
         // sorter: true,
@@ -1396,7 +1396,7 @@ const umpireActivityColumn = [
         render: (amount, record) => <span>N/A</span>,
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         // sorter: true,
@@ -1407,14 +1407,14 @@ const umpireActivityColumn = [
 
 const coachColumn = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'coach matchId',
         sorter: true,
 
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'startTime',
         key: 'coach date',
         sorter: (a, b) => a.startTime.localeCompare(b.startTime),
@@ -1425,21 +1425,21 @@ const coachColumn = [
         ),
     },
     {
-        title: 'Home Team',
+        title: AppConstants.homeTeam,
         dataIndex: 'homeTeam',
         key: 'coach homeTeam',
         sorter: (a, b) => a.homeTeam.localeCompare(b.homeTeam),
 
     },
     {
-        title: 'Away Team',
+        title: AppConstants.awayTeam,
         dataIndex: 'awayTeam',
         key: 'coach awayTeam',
         sorter: (a, b) => a.awayTeam.localeCompare(b.awayTeam),
 
     },
     {
-        title: 'Result',
+        title: AppConstants.results,
         dataIndex: 'resultStatus',
         key: 'coach result',
         sorter: (a, b) => a.resultStatus.localeCompare(b.resultStatus),
@@ -1449,14 +1449,14 @@ const coachColumn = [
 
 const umpireColumn = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'matchId',
         key: 'Umpire matchId',
         sorter: true,
 
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'startTime',
         key: 'Umpire date',
         sorter: (a, b) => a.startTime.localeCompare(b.startTime),
@@ -1467,21 +1467,21 @@ const umpireColumn = [
         ),
     },
     {
-        title: 'Home Team',
+        title: AppConstants.homeTeam,
         dataIndex: 'homeTeam',
         key: 'Umpire homeTeam',
         sorter: (a, b) => a.homeTeam.localeCompare(b.homeTeam),
 
     },
     {
-        title: 'Away Team',
+        title: AppConstants.awayTeam,
         dataIndex: 'awayTeam',
         key: 'Umpire awayTeam',
         sorter: (a, b) => a.awayTeam.localeCompare(b.awayTeam),
 
     },
     {
-        title: 'Result',
+        title: AppConstants.results,
         dataIndex: 'resultStatus',
         key: 'Umpire result',
         sorter: (a, b) => a.resultStatus.localeCompare(b.resultStatus),
@@ -1516,7 +1516,7 @@ const purchaseListeners = (key) => ({
 
 const purchaseActivityColumn = [
     {
-        title: 'Order ID',
+        title: AppConstants.orderId,
         dataIndex: 'orderId',
         key: 'orderId',
         sorter: true,
@@ -1532,7 +1532,7 @@ const purchaseActivityColumn = [
         ),
     },
     {
-        title: 'Date',
+        title: AppConstants.date,
         dataIndex: 'date',
         key: 'date',
         sorter: true,
@@ -1540,7 +1540,7 @@ const purchaseActivityColumn = [
         render: (date) => <span>{date ? liveScore_formateDate(date) : ""}</span>,
     },
     // {
-    //   title: 'Transaction ID',
+    //   title: AppConstants.transactionId,
     //   dataIndex: 'transactionId',
     //   key: 'transactionId',
     //   sorter: true,
@@ -1549,7 +1549,7 @@ const purchaseActivityColumn = [
     //       <span className="input-heading-add-another pt-0">{transactionId}</span>
     // },
     {
-        title: 'Products',
+        titie: AppConstants.products,
         dataIndex: 'orderDetails',
         key: 'orderDetails',
         // sorter: true,
@@ -1563,14 +1563,14 @@ const purchaseActivityColumn = [
         ),
     },
     {
-        title: 'Organisation',
+        title: AppConstants.organisation,
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => purchaseListeners("organisationId"),
     },
     {
-        title: 'Payment Status',
+        title: AppConstants.paymentStatus,
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
         sorter: true,
@@ -1580,14 +1580,14 @@ const purchaseActivityColumn = [
         ),
     },
     {
-        title: 'Payment Method',
+        title: AppConstants.paymentMethod,
         dataIndex: 'paymentMethod',
         key: 'paymentMethod',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
     },
     {
-        title: 'Fulfillment Status',
+        title: AppConstants.fulfilmentStatus,
         dataIndex: 'fulfilmentStatus',
         key: 'fulfilmentStatus',
         sorter: true,
@@ -1788,7 +1788,7 @@ class UserModulePersonalDetail extends Component {
             this.setState({ cancelDeRegistrationLoad: false })
         }
 
-        if ((this.props.registrationDashboardState.onLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
+        if ((this.props.registrationDashboardState.onRegRetryPaymentLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
             this.setState({ retryPaymentOnLoad: false });
             this.handleRegistrationTableList(
                 1,
@@ -2223,6 +2223,7 @@ class UserModulePersonalDetail extends Component {
 
     retryPayment = (record) => {
         try {
+            let paidByUserId = isArrayNotEmpty(record.paidByUsers) ? record.paidByUsers[0].paidByUserId : null
             if (record.invoiceFailedStatus) {
                 const payload = {
                     registrationId: record.registrationId,
@@ -2236,6 +2237,7 @@ class UserModulePersonalDetail extends Component {
                     userId: this.state.userId,
                     divisionId: record.divisionId,
                     competitionId: record.competitionId,
+                    paidByUserId: paidByUserId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
@@ -2247,6 +2249,7 @@ class UserModulePersonalDetail extends Component {
 
     myRegistrationRetryPayment = (record) => {
         try {
+            let paidByUserId = isArrayNotEmpty(record.paidByUsers) ? record.paidByUsers[0].paidByUserId : null
             if (record.paymentStatusFlag == 2) {
                 const payload = {
                     registrationId: record.registrationId,
@@ -2260,6 +2263,7 @@ class UserModulePersonalDetail extends Component {
                     userId: this.state.userId,
                     divisionId: record.competitionMembershipProductDivisionId,
                     competitionId: record.competitionId,
+                    paidByUserId: paidByUserId
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ retryPaymentOnLoad: true });
@@ -3849,9 +3853,9 @@ class UserModulePersonalDetail extends Component {
             scorerActivityRoster,
             isPersonalUserLoading,
             isCompUserLoading,
-            isDocumentRemoving
         } = this.props.userState;
-        const isUserLoading = isPersonalUserLoading || isCompUserLoading || isDocumentRemoving;
+        const {retryPaymentOnLoad} = this.state
+        const isUserLoading = isPersonalUserLoading || isCompUserLoading;
         const personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
         if (personalDetails != null && personalDetails.length > 0) {
@@ -3931,7 +3935,7 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Loader visible={isUserLoading || onMedicalLoad} />
+                        <Loader visible={isUserLoading || onMedicalLoad || retryPaymentOnLoad} />
                         {this.unlinkChildConfirmPopup()}
                         {this.unlinkParentConfirmPopup()}
                         {this.cannotUninkPopup()}

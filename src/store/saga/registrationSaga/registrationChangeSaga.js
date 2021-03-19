@@ -48,7 +48,7 @@ export function* saveDeRegisterSaga(action) {
 // Get Registration Change Dashboard
 export function* getRegistrationChangeDashboardSaga(action) {
     try {
-        const result = yield call(AxiosApi.getRegistrationChangeDashboard, action.payload);
+        const result = yield call(AxiosApi.getRegistrationChangeDashboard, action.payload, action.sortBy, action.sortOrder);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_SUCCESS,

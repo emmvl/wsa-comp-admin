@@ -89,7 +89,7 @@ const permissionObject = {
 
 const divisionTableColumns = [
     {
-        title: "Division Name",
+        title: AppConstants.divisionName,
         dataIndex: "divisionName",
         key: "divisionName",
         render: (divisionName, record, index) => (
@@ -108,7 +108,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "Gender Restriction",
+        title: AppConstants.genderRestriction,
         dataIndex: "genderRestriction",
         key: AppUniqueId.div_gender_chkbox,
         filterDropdown: true,
@@ -156,7 +156,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "Age Restriction",
+        title: AppConstants.ageRestrictions,
         dataIndex: "ageRestriction",
         key: AppUniqueId.div_ageres_chkbox,
         filterDropdown: true,
@@ -177,7 +177,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "DOB From",
+        title: AppConstants.dobFrom,
         dataIndex: "fromDate",
         key: AppUniqueId.div_ageres_fromdate,
         width: "25%",
@@ -202,7 +202,7 @@ const divisionTableColumns = [
         )
     },
     {
-        title: "DOB To",
+        title: AppConstants.dobTo,
         dataIndex: "toDate",
         width: "25%",
         key: AppUniqueId.div_ageres_todate,
@@ -996,8 +996,8 @@ class CompetitionOpenRegForm extends Component {
                     <InputWithHead
                         auto_complete="off"
                         required="required-field"
-                        heading={AppConstants.competition_name}
-                        placeholder={AppConstants.competition_name}
+                        heading={AppConstants.competitionName}
+                        placeholder={AppConstants.competitionName}
                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
                         disabled={disabledStatus || compDetailDisable}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
@@ -1403,11 +1403,11 @@ class CompetitionOpenRegForm extends Component {
         let competitionId = this.props.competitionFeesState.competitionId
         let this_ = this
         confirm({
-            title: 'Are you sure delete this product?',
+            title: AppConstants.productDeleteConfirmMsg,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 if (competitionId.length > 0) {
                     this_.deleteProduct(competitionId)

@@ -25,22 +25,22 @@ const {
 
 const columns = [
     {
-        title: 'FirstName',
+        title: AppConstants.firstName,
         dataIndex: 'firstName',
         key: 'firstName'
     },
     {
-        title: 'LastName',
+        title: AppConstants.lastName,
         dataIndex: 'lastName',
         key: 'lastName'
     },
     {
-        title: 'Email',
+        title: AppConstants.email,
         dataIndex: 'email',
         key: 'email'
     },
     {
-        title: 'Phone No',
+        title: AppConstants.phoneNumber,
         dataIndex: 'mobileNumber',
         key: 'mobileNumber'
     }

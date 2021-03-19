@@ -63,7 +63,7 @@ function checkUmpireRosterStatus(data) {
 
 const column = [
     {
-        title: 'Match ID',
+        title: AppConstants.tableMatchID,
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
@@ -75,7 +75,7 @@ const column = [
         </NavLink>
     },
     {
-        title: 'Start Date',
+        title: AppConstants.startDate,
         dataIndex: 'startTime',
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, 'startTime'),
@@ -83,7 +83,7 @@ const column = [
             <span>{startTime ? liveScore_MatchFormate(startTime) : ''}</span>
     },
     {
-        title: 'Home',
+        title: AppConstants.home,
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
@@ -94,7 +94,7 @@ const column = [
         }
     },
     {
-        title: 'Away',
+        title: AppConstants.away,
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
@@ -105,7 +105,7 @@ const column = [
         }
     },
     {
-        title: 'Umpire 1',
+        title: AppConstants.umpire1,
         dataIndex: 'user1',
         key: 'user1',
         width: '25%',
@@ -132,7 +132,7 @@ const column = [
         }
     },
     {
-        title: 'Umpire 2',
+        title: AppConstants.umpire2,
         dataIndex: 'user2',
         key: 'user2',
         width: "25%",
@@ -215,7 +215,7 @@ class AssignUmpire extends Component {
         let userId = localStorage.getItem("userId");
         const competition = JSON.parse(getUmpireCompetitonData());
         let rosterLocked = competition.recordUmpireType === "USERS" ? true : false
-        let orgId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.linkedEntity[0].entityId : null : null
+        let orgId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.userRoleEntities[0]?.entityId : null : null
 
         let assignBody = [{
             createdBy: parseInt(userId),
@@ -243,10 +243,10 @@ class AssignUmpire extends Component {
     openModel = (assignBody, index, umpireKey, rosterLocked) => {
         let this_ = this;
         confirm({
-            title: 'Assigning this umpire will unassign them from their current match assignment. Proceed?',
-            okText: 'OK',
-            okType: 'primary',
-            cancelText: 'Cancel',
+            title: AppConstants.umpireProceedConfirm,
+            okText: AppConstants.ok,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.cancel,
             onOk() {
                 this_.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked, 'sameUmpire');
             },

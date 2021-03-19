@@ -16,7 +16,7 @@ import Login from './components/login';
 import ForgotPassword from './components/ForgotPassword';
 import lazyLoad from './components/lazyLoad';
 import ErrorBoundary from './components/emptyComponent/errorBoundary';
-import { getOrganisationData } from 'util/sessionStorage'
+import {getOrganisationData, getRoleId, getSignDate, removeSignDate} from 'util/sessionStorage'
 
 import './customStyles/customStyles.css';
 import './customStyles/antdStyles.css';
@@ -38,6 +38,10 @@ TagManager.initialize(tagManagerArgs);
 function App() {
     useEffect(() => {
         if (localStorage.token) {
+            if (getSignDate() && ((Date.now() - localStorage.signDate) > 60 * 60 * 24)) {
+                removeSignDate();
+            }
+
             window.Tawk_API = window.Tawk_API || {};
             window.Tawk_LoadStart = new Date();
             (function () {

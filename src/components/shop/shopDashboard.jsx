@@ -24,7 +24,7 @@ class ShopDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: 'All'
+            year: AppConstants.all
         }
         this.chartRefCompititions = React.createRef();
 

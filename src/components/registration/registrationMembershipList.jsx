@@ -51,21 +51,21 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Membership Product',
+        title: AppConstants.membershipProduct,
         dataIndex: 'membershipProductName',
         key: 'membershipProductName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("membershipProduct"),
     },
     {
-        title: 'Membership Type',
+        title: AppConstants.membershipType,
         dataIndex: 'membershipProductTypeName',
         key: 'membershipProductTypeName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("membershipType"),
     },
     {
-        title: 'Discounts',
+        titie: AppConstants.discounts,
         dataIndex: 'isDiscountApplicable',
         key: 'isDiscountApplicable',
         render: isDiscountApplicable => (
@@ -76,7 +76,7 @@ const columns = [
 
     },
     {
-        title: 'Individual User Seasonal Fee (inc GST)',
+        title: AppConstants.seasonalFeeIncGst,
         dataIndex: 'seasonalFee',
         key: 'seasonalFee',
         render: (seasonalFee, record) => {
@@ -89,7 +89,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Single Game Fee (inc GST)',
+        title: AppConstants.casualFee,
         dataIndex: 'casualFee',
         key: 'casualFee',
         render: (casualFee, record) => {
@@ -102,7 +102,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         dataIndex: 'isUsed',
         key: 'isUsed',
         render: (isUsed, record) => {
@@ -244,11 +244,11 @@ class RegistrationMembershipList extends Component {
     showDeleteConfirm = (membershipProductId) => {
         let this_ = this
         confirm({
-            title: 'Are you sure delete this product?',
+            title: AppConstants.productDeleteConfirmMsg,
             // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteProduct(membershipProductId)
             },

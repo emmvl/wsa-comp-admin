@@ -75,7 +75,7 @@ function tableSort(key, tableName) {
 
 const columnsOwned = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'longName',
         key: 'longName',
         sorter: true,
@@ -135,7 +135,7 @@ const columnsOwned = [
         },
     },
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teamCount',
         key: 'teamCount',
         sorter: true,
@@ -154,7 +154,7 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'playerCount',
         key: 'playerCount',
         sorter: true,
@@ -173,7 +173,7 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: true,
@@ -192,7 +192,7 @@ const columnsOwned = [
         ),
     },
     {
-        title: 'Action',
+        title: AppConstants.action,
         render: (data, record) => (
             <Menu
                 className="action-triple-dot-submenu"
@@ -232,7 +232,7 @@ const columnsOwned = [
 
 const columnsParticipate = [
     {
-        title: 'Name',
+        title: AppConstants.name,
         dataIndex: 'longName',
         key: 'longName',
         sorter: true,
@@ -292,7 +292,7 @@ const columnsParticipate = [
         },
     },
     {
-        title: 'Teams',
+        title: AppConstants.teams,
         dataIndex: 'teamCount',
         key: 'teamCount',
         sorter: true,
@@ -311,7 +311,7 @@ const columnsParticipate = [
         ),
     },
     {
-        title: 'Players',
+        title: AppConstants.players,
         dataIndex: 'playerCount',
         key: 'playerCount',
         sorter: true,
@@ -330,7 +330,7 @@ const columnsParticipate = [
         ),
     },
     {
-        title: 'Status',
+        title: AppConstants.status,
         dataIndex: 'status',
         key: 'status',
         sorter: true,
@@ -466,10 +466,10 @@ class LiveScoreCompetitions extends Component {
     showDeleteConfirm = (record, key) => {
         const this_ = this;
         confirm({
-            title: 'Are you sure you want to delete this competition?',
-            okText: 'Yes',
-            okType: 'primary',
-            cancelText: 'No',
+            title: AppConstants.competitionDeleteConfirm,
+            okText: AppConstants.yes,
+            okType: AppConstants.primary,
+            cancelText: AppConstants.no,
             onOk() {
                 this_.deleteCompetition(record, key);
             },
@@ -537,26 +537,6 @@ class LiveScoreCompetitions extends Component {
                 </div>
 
                 <div className="row fluid-width">
-                    {this.state.orgLevel === 'state' && (
-                        <div className="col-sm">
-                            <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
-                                <Button
-                                    type="primary"
-                                    className="primary-add-comp-form"
-                                    onClick={() => {
-                                        setKeyForStateWideMessage('stateWideMessage');
-                                        this.props.history.push({
-                                            pathname: '/matchDayNewsList',
-                                            state: { screenKey: 'stateWideMsg' },
-                                        });
-                                    }}
-                                >
-                                    {AppConstants.comunityWideMsg}
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-
                     <div className="col-sm">
                         <div className="comp-dashboard-botton-view-mobile w-100 d-flex flex-row align-items-center justify-content-end">
                             <Button

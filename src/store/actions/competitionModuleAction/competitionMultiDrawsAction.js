@@ -99,6 +99,33 @@ function updateCourtTimingsDrawsAction(data, source, target, actionType, drawDat
     };
 }
 
+function updateCourtTimingsDrawsDragSuccessAction(data, source, target, actionType, drawData, competitionId, dateRangeCheck) {
+    return {
+        type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD,
+        result: data,
+        status: 1,
+        getResult: data,
+        competitionId: competitionId,
+        sourceArray: source,
+        targetArray: target,
+        actionType: actionType,
+        drawData: drawData,
+        dateRangeCheck: dateRangeCheck,
+    }
+}
+function updateCompetitionDrawsSwapLoadAction(data, source, target, actionType, drawData, dateRangeCheck) {
+    return {
+        type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD,
+        result: data,
+        status: 1,
+        sourceArray: source,
+        targetArray: target,
+        actionType: actionType,
+        drawData: drawData,
+        dateRangeCheck: dateRangeCheck,
+    }
+}
+
 function dateSelectionRounds(data) {
     return {
         type: ApiConstants.UPDATE_ROUNDS_TIME,
@@ -205,6 +232,13 @@ function checkBoxOnChange(value, key, index, subIndex) {
     };
 }
 
+function setTimelineModeAction(value) {
+    return {
+        type:  ApiConstants.SET_TIMELINE_MODE,
+        value,
+    }
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -213,6 +247,8 @@ export {
     saveDraws,
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
+    updateCourtTimingsDrawsDragSuccessAction,
+    updateCompetitionDrawsSwapLoadAction,
     dateSelectionRounds,
     clearMultiDraws,
     getDivisionGradeNameLisAction,
@@ -225,4 +261,5 @@ export {
     changeDrawsDateRangeAction,
     checkBoxOnChange,
     importDrawsAction,
+    setTimelineModeAction,
 }

@@ -14,9 +14,8 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    // getOwn_CompetitionFinalRefId,
     setOwn_CompetitionFinalRefId,
-    setGlobalYear, getGlobalYear
+    setGlobalYear, getGlobalYear,
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from 'store/actions/appAction';
 import {
@@ -32,6 +31,7 @@ import InputWithHead from 'customComponents/InputWithHead';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
 import './competition.css';
+import AppColor from 'themes/appColor'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -189,6 +189,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
         });
     }
 
+    isGradeHasTeamRankingError = (grade = {}) => {
+        return !grade.teamRanked && grade.gradeName && grade.gradeRefId !== -1
+    }
+
     //////add new column in the table for grades
     addNewGrade = (arr) => {
         let columns1 = [...this.state.columns];
@@ -199,9 +203,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 title: null,
                 dataIndex: `grades${i}`,
                 key: `grades${i}`,
-                render: (grades, record) => (
-                    <div className="w-ft h-100 d-flex flex-column justify-content-center">
-                        <a className="pb-3 mb-auto mt-auto">
+                render: (grades, record) => {
+                    return (
+                        <div className="w-ft h-100 d-flex flex-column justify-content-center">
+                            <a className="pb-3 mb-auto mt-auto">
                             <span
                                 className="year-select-heading"
                                 style={{ color: 'var(--app-color)' }}
@@ -209,32 +214,36 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             >
                                 {grades.gradeName}
                             </span>
-                        </a>
-                        {!disabledStatus ? (
-                            <NavLink
-                                to={{
-                                    pathname: '/competitionProposedTeamGrading',
-                                    state: {
-                                        id: record.competitionMembershipProductDivisionId,
-                                        gradeRefId: grades.gradeRefId
-                                    },
-                                }}
-                            >
-                                {grades.teamCount !== null && (
-                                    <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
-                                        {grades.teamCount}
-                                    </Tag>
-                                )}
-                            </NavLink>
-                        ) : (
+                            {this.isGradeHasTeamRankingError(grades) && (
+                                <span style={{ color: AppColor.error }}> *</span>
+                            )}
+                            </a>
+                            {!disabledStatus ? (
+                                <NavLink
+                                    to={{
+                                        pathname: '/competitionProposedTeamGrading',
+                                        state: {
+                                            id: record.competitionMembershipProductDivisionId,
+                                            gradeRefId: grades.gradeRefId
+                                        },
+                                    }}
+                                >
+                                    {grades.teamCount !== null && (
+                                        <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
+                                            {grades.teamCount}
+                                        </Tag>
+                                    )}
+                                </NavLink>
+                            ) : (
                                 grades.teamCount !== null && (
                                     <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
                                         {grades.teamCount}
                                     </Tag>
                                 )
                             )}
-                    </div>
-                )
+                        </div>
+                    )
+                }
             };
             columns1.push(newColumn)
         }
@@ -440,17 +449,28 @@ class CompetitionPartTeamGradeCalculate extends Component {
     contentView = () => {
         const { columns, addGradeVisible, updateGradeName, getDataLoading } = this.state;
         const { ownTeamGradingSummaryGetData } = this.props.ownTeamGradingState;
+        const isTeamRankingHasError = ownTeamGradingSummaryGetData.find(team => {
+            return !!team.grades.find(g => this.isGradeHasTeamRankingError(g))
+        });
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        // dataSource={data}
                         dataSource={ownTeamGradingSummaryGetData}
                         pagination={false}
                         loading={getDataLoading && true}
                     />
+                </div>
+
+                <div className="warning-messages mt-4 mb-0">
+                    { isTeamRankingHasError && (
+                        <p>
+                            * { AppConstants.teamRankingError }
+                        </p>
+                    )}
                 </div>
 
                 <Modal
