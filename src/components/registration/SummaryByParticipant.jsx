@@ -1084,7 +1084,7 @@ class SummaryByParticipant extends Component {
         return (
             <div>
                 <div className="row pb-2">
-                    <div className="col-sm-3">
+                    {/* <div className="col-sm-3">
                         <InputWithHead
                             required="pt-0"
                             heading={AppConstants.year}
@@ -1114,7 +1114,7 @@ class SummaryByParticipant extends Component {
                                 </Option>
                             ))}
                         </Select>
-                    </div>
+                    </div> */}
                     <div className="col-sm-3">
                         <InputWithHead
                             required="pt-0"
@@ -1147,6 +1147,7 @@ class SummaryByParticipant extends Component {
                             ))}
                         </Select>
                     </div>
+                {/*
                     <div className="col-sm-3">
                         <InputWithHead
                             required="pt-0"
@@ -1210,10 +1211,11 @@ class SummaryByParticipant extends Component {
                             </Option>
                         </Select>
                     </div>
+                        */}
                 </div>
-
+                {/*
                 <div className="row pb-2">
-                    {/* <div className="col-sm-3">
+                    <div className="col-sm-3">
                         <InputWithHead required="pt-0" heading={AppConstants.feeType} />
                         <Select
                             showSearch
@@ -1230,7 +1232,7 @@ class SummaryByParticipant extends Component {
                                 </Option>
                             ))}
                         </Select>
-                    </div> */}
+                    </div>
                     <div className="col-sm-3">
                         <InputWithHead
                             required="pt-0"
@@ -1375,7 +1377,7 @@ class SummaryByParticipant extends Component {
                             }
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     };
