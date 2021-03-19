@@ -28,8 +28,8 @@ function liveScoreGameTimeStatisticsState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                gameTimeStatisticsPage: result.page.currentPage,
-                gameTimeStatisticstotalCount: result.page.totalCount
+                gameTimeStatisticsPage: result.page ? result.page.currentPage : 1,
+                gameTimeStatisticstotalCount: result.page ? result.page.totalCount : 0,
             }
         case ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_FAIL:
             return {

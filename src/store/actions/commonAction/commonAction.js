@@ -328,6 +328,14 @@ function setVenuesTableListPageNumberAction(pageNum) {
     return action;
 }
 
+// getDocumentType
+function getDocumentType() {
+    const action = {
+        type: ApiConstants.API_GET_DOCUMENT_TYPE_LOAD,
+    }
+    return action;
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -368,4 +376,5 @@ export {
     setVenuesTableListPageSizeAction,
     setVenuesTableListPageNumberAction,
     getDivisionFieldConfigAction,
+    getDocumentType
 }

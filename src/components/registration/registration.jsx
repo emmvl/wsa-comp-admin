@@ -29,7 +29,7 @@ import {
     setRegistrationListPageNumber
 } from "store/actions/registrationAction/endUserRegistrationAction";
 import { getAllCompetitionAction, registrationFailedStatusUpdate,registrationRetryPaymentAction } from "store/actions/registrationAction/registrationDashboardAction";
-import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
+import { getAffiliateToOrganisationAction, cancelDeRegistrationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { liveScorePlayersToCashReceivedAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 
@@ -82,12 +82,12 @@ const payments = [
 
 const columns = [
     {
-        title: AppConstants.name,
-        dataIndex: "name",
-        key: "name",
+        title: AppConstants.firstName,
+        dataIndex: "firstName",
+        key: "firstName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (name, record) => (
+        render: (firstName, record) => (
             <NavLink
                 to={{
                     pathname: "/userPersonal",
@@ -97,9 +97,31 @@ const columns = [
                         screen: "/registration",
                     },
                 }}
-            > 
-                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{name}</span>
-                  
+            >
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{firstName}</span>
+
+            </NavLink>
+        ),
+    },
+    {
+        title: AppConstants.lastName,
+        dataIndex: "lastName",
+        key: "lastName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (lastName, record) => (
+            <NavLink
+                to={{
+                    pathname: "/userPersonal",
+                    state: {
+                        userId: record.userId,
+                        screenKey: "registration",
+                        screen: "/registration",
+                    },
+                }}
+            >
+                <span className={record.deRegistered ? "input-heading-add-another-strike pt-0" : "input-heading-add-another pt-0"}>{lastName}</span>
+
             </NavLink>
         ),
     },
@@ -217,7 +239,8 @@ const columns = [
         render: (isUsed, record, index) => (
            (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
            (record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
-           record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee")))
+           record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee" ||
+           record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer")))
                 ? (
                     <Menu
                         className="action-triple-dot-submenu"
@@ -295,16 +318,25 @@ const columns = [
                             {
                                 record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
                                 record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
-                                    <Menu.Item key="7" 
-                                    onClick={() =>  
-                                        history.push("/deregistration", { 
-                                            regData: record, 
+                                    <Menu.Item key="7"
+                                    onClick={() =>
+                                        history.push("/deregistration", {
+                                            regData: record,
                                             personal: record,
                                             sourceFrom: AppConstants.ownRegistration,
-                                            subSourceFrom: "RegistrationListPage" 
+                                            subSourceFrom: "RegistrationListPage"
                                         })}
                                     >
                                         <span>{AppConstants.registrationChange}</span>
+                                    </Menu.Item>
+                                )
+                            }
+                            {
+                                record.actionView == 0 && (record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer") && (
+                                    <Menu.Item key="8"
+                                    onClick={() => this_Obj.cancelDeRegistrtaion(record.deRegisterId)}
+                                    >
+                                        <span>{AppConstants.cancelDeRegistrtaion}</span>
                                     </Menu.Item>
                                 )
                             }
@@ -350,7 +382,8 @@ class Registration extends Component {
             otherModalVisible: false,
             modalTitle: null,
             modalMessage: null,
-            actionView: 0
+            actionView: 0,
+            cancelDeRegistrationLoad: false
         };
 
         this_Obj = this;
@@ -451,6 +484,11 @@ class Registration extends Component {
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
             }
+        }
+
+        if(this.state.cancelDeRegistrationLoad == true && this.props.userState.cancelDeRegistrationLoad == false){
+            this.setState({ cancelDeRegistrationLoad: false });
+            this.handleRegTableList(1);
         }
     }
 
@@ -675,7 +713,7 @@ class Registration extends Component {
         }
         this.setState({otherModalVisible: false});
     }
-    
+
     receiveCashPayment = (key) => {
         if (key == "cancel") {
             this.setState({ visible: false });
@@ -717,6 +755,18 @@ class Registration extends Component {
         setTimeout(() => {
             this.handleRegTableList(1);
         }, 300);
+    }
+
+    cancelDeRegistrtaion = (deRegisterId) => {
+        try {
+            const payload = {
+                deRegisterId: Number(deRegisterId),
+            }
+            this.props.cancelDeRegistrationAction(payload);
+            this.setState({ cancelDeRegistrationLoad: true })
+        } catch (ex) {
+            console.log(`Error in cancelDeRegistrtaion::${ex}`)
+        }
     }
 
     headerView = () => (
@@ -1238,7 +1288,7 @@ class Registration extends Component {
                     {' '}
                     {selectedRow ? currencyFormat(selectedRow.governmentVoucherAmount) : "$0.00"}
                     </div>
-                    
+
                 </div>
             </Modal>
         )
@@ -1303,7 +1353,8 @@ function mapDispatchToProps(dispatch) {
         setRegistrationListPageNumber,
         registrationFailedStatusUpdate,
         liveScorePlayersToPayRetryPaymentAction,
-        registrationRetryPaymentAction
+        registrationRetryPaymentAction,
+        cancelDeRegistrationAction
     }, dispatch);
 }
 

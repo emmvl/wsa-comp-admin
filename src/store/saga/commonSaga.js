@@ -843,6 +843,22 @@ export function* netSetGoTshirtSizeSaga(){
   }
 }
 
+export function* getDocumentType(){
+  try {
+      const result = yield call(CommonAxiosApi.getDocumentType);
+      if (result.status === 1) {
+          yield put({
+              type: ApiConstants.API_GET_DOCUMENT_TYPE_SUCCESS,
+              result: result.result.data.DocumentType,
+              status: result.status,
+          });
+      } else {
+          yield call(failSaga, result)
+      }
+  } catch (error) {
+      yield call(errorSaga, error)
+  }
+}
 
 export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_TIME_SLOT_INIT_LOAD, getTimeSlotInitSaga);
@@ -864,6 +880,7 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga);
   yield takeEvery(ApiConstants.API_GET_PHOTO_TYPE_LOAD, getPhotoTypeSaga);
   yield takeEvery(ApiConstants.API_GET_APPY_TO_LOAD, getApplyToSaga);
+  yield takeEvery(ApiConstants.API_GET_DOCUMENT_TYPE_LOAD, getDocumentType);
   yield takeEvery(ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD, getExtraTimeDrawSaga);
   yield takeEvery(ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD, getFinalsFixtureTemplateSaga);
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga);

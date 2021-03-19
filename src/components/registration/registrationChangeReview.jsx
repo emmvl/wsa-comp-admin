@@ -549,45 +549,48 @@ class RegistrationChangeReview extends Component {
         );
     }
 
-    deRegisterApprove = (reviewSaveData, regChangeReviewData) => (
-        <div>
-            {isArrayNotEmpty(regChangeReviewData.invoices) ?
-                <Radio.Group
-                    className="reg-competition-radio"
-                    value={reviewSaveData.refundTypeRefId}
-                    onChange={(e) => this.updateRegistrationReview(e.target.value, "refundTypeRefId")}
-                >
-                    <Radio value={1}>Refund full amount</Radio>
-                    {reviewSaveData.refundTypeRefId == 1 && (
-                        <Table
-                            className="refund-table"
-                            columns={refundFullAmountColumns}
-                            dataSource={regChangeReviewData.invoices}
-                            pagination={false}
-                        />
-                    )}
-                    <Radio value={2}>Refund partial payment</Radio>
-                    {reviewSaveData.refundTypeRefId == 2 && (
-                        <Table
-                            className="refund-table"
-                            columns={refundPartialAmountColumns}
-                            dataSource={regChangeReviewData.invoices}
-                            pagination={false}
-                        />
-                    )}
-                    {/* {reviewSaveData.refundTypeRefId == 2 && (
-                        <InputWithHead
-                            placeholder={AppConstants.refundAmount}
-                            value={reviewSaveData.refundAmount}
-                            onChange={(e) => this.updateRegistrationReview(e.target.value, "refundAmount")}
-                        />
-                    )} */}
-                </Radio.Group>
-            :
-                <div className="dereg-modal-content">{AppConstants.wouldYouLikeToApprove}</div>
-            }
-        </div>
-    );
+    deRegisterApprove = (reviewSaveData, regChangeReviewData) => {
+        let invoicesTemp = (regChangeReviewData.invoices || []).filter(x => x.amount > 0)
+        return(
+            <div>
+                {isArrayNotEmpty(invoicesTemp) ?
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        value={reviewSaveData.refundTypeRefId}
+                        onChange={(e) => this.updateRegistrationReview(e.target.value, "refundTypeRefId")}
+                    >
+                        <Radio value={1}>Refund full amount</Radio>
+                        {reviewSaveData.refundTypeRefId == 1 && (
+                            <Table
+                                className="refund-table"
+                                columns={refundFullAmountColumns}
+                                dataSource={invoicesTemp}
+                                pagination={false}
+                            />
+                        )}
+                        <Radio value={2}>Refund partial payment</Radio>
+                        {reviewSaveData.refundTypeRefId == 2 && (
+                            <Table
+                                className="refund-table"
+                                columns={refundPartialAmountColumns}
+                                dataSource={invoicesTemp}
+                                pagination={false}
+                            />
+                        )}
+                        {/* {reviewSaveData.refundTypeRefId == 2 && (
+                            <InputWithHead
+                                placeholder={AppConstants.refundAmount}
+                                value={reviewSaveData.refundAmount}
+                                onChange={(e) => this.updateRegistrationReview(e.target.value, "refundAmount")}
+                            />
+                        )} */}
+                    </Radio.Group>
+                :
+                    <div className="dereg-modal-content">{AppConstants.wouldYouLikeToApprove}</div>
+                }
+            </div>
+        )
+    }
 
     transferApprove = () => (
         <div>

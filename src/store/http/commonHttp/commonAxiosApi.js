@@ -273,6 +273,13 @@ let AxiosApi = {
         const url = '/common/references';
         return Method.dataPost(url, token, body);
     },
+    getDocumentType() {
+        let body = {
+            DocumentType: 'DocumentType'
+        }
+        const url = '/common/references';
+        return Method.dataPost(url, token, body);
+    },
     getCombinedUmpireCoachAccreditationReference() {
         let body = {
             accreditationUmpire: "accreditationUmpire",
