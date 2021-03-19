@@ -20,7 +20,11 @@ import "./product.scss";
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
-import { getOrganisationData, getGlobalYear, setGlobalYear } from "util/sessionStorage";
+import {
+    getOrganisationData,
+    getGlobalYear,
+    setGlobalYear,
+} from "util/sessionStorage";
 import {
     getOnlyYearListAction,
     getFeeTypeAction,
@@ -28,7 +32,12 @@ import {
     getPaymentMethodsListAction,
 } from "store/actions/appAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { getParticipantSummaryAction, exportParticipantSummaryApiAction, setSummaryPageSizeAction, setSummaryPageNumberAction } from "store/actions/stripeAction/stripeAction";
+import {
+    getParticipantSummaryAction,
+    exportParticipantSummaryApiAction,
+    setSummaryPageSizeAction,
+    setSummaryPageNumberAction,
+} from "store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
@@ -43,16 +52,24 @@ function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
     if (thisObj.state.sortBy !== key) {
-        sortOrder = 'ASC';
-    } else if (thisObj.state.sortBy === key && thisObj.state.sortOrder === 'ASC') {
-        sortOrder = 'DESC';
-    } else if (thisObj.state.sortBy === key && thisObj.state.sortOrder === 'DESC') {
+        sortOrder = "ASC";
+    } else if (
+        thisObj.state.sortBy === key &&
+        thisObj.state.sortOrder === "ASC"
+    ) {
+        sortOrder = "DESC";
+    } else if (
+        thisObj.state.sortBy === key &&
+        thisObj.state.sortOrder === "DESC"
+    ) {
         sortBy = null;
         sortOrder = null;
     }
 
     let { participantSummaryListPageSize } = thisObj.props.paymentState;
-    participantSummaryListPageSize = participantSummaryListPageSize ? participantSummaryListPageSize : 10;
+    participantSummaryListPageSize = participantSummaryListPageSize
+        ? participantSummaryListPageSize
+        : 10;
 
     const {
         offset,
@@ -87,7 +104,7 @@ function tableSort(key) {
         paymentOption,
         paymentMethod,
         membershipType,
-        paymentStatus,
+        paymentStatus
     );
 
     thisObj.setState({ sortBy, sortOrder });
@@ -111,37 +128,12 @@ const columns = [
                     pathname: `/userPersonal`,
                     state: {
                         userId: record.userId,
-                        screenKey: "salesSummary",
-                        screen: "/salesSummary",
+                        screenKey: "participantSummary",
+                        screen: "/participantSummary",
                     },
                 }}
             >
-                <span className="input-heading-add-another pt-0">
-                    {userId}
-                </span>
-            </NavLink>
-        ),
-    },
-    {
-        title: AppConstants.participant_fullName,
-        dataIndex: "fullName",
-        key: "fullName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (userFullName, record) => (
-            <NavLink
-                to={{
-                    pathname: `/userPersonal`,
-                    state: {
-                        userId: record.userId,
-                        screenKey: "salesSummary",
-                        screen: "/salesSummary",
-                    },
-                }}
-            >
-                <span className="input-heading-add-another pt-0">
-                    {userFullName}
-                </span>
+                <span className="input-heading-add-another pt-0">{userId}</span>
             </NavLink>
         ),
     },
@@ -157,8 +149,8 @@ const columns = [
                     pathname: `/userPersonal`,
                     state: {
                         userId: record.userId,
-                        screenKey: "salesSummary",
-                        screen: "/salesSummary",
+                        screenKey: "participantSummary",
+                        screen: "/participantSummary",
                     },
                 }}
             >
@@ -180,8 +172,8 @@ const columns = [
                     pathname: `/userPersonal`,
                     state: {
                         userId: record.userId,
-                        screenKey: "salesSummary",
-                        screen: "/salesSummary",
+                        screenKey: "participantSummary",
+                        screen: "/participantSummary",
                     },
                 }}
             >
@@ -192,147 +184,423 @@ const columns = [
         ),
     },
     {
-        title: AppConstants.teamName,
-        dataIndex: "teamName",
-        key: "teamName",
+        title: AppConstants.membershipType,
+        dataIndex: "membershipTypeName",
+        key: "membershipTypeName",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: AppConstants.membershipFees,
+        title: AppConstants.registration + ' ' + AppConstants.status,
+        dataIndex: "registrationStatus",
+        key: "registrationStatus",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
+        title: AppConstants.total,
         children: [
             {
-                title: AppConstants.paid,
-                dataIndex: "paid",
-                key: "paid",
+                title: AppConstants.fees,
+                dataIndex: "fee",
+                key: "fee",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (paid, record) => currencyFormat(record.membership.paid),
+                render: (fee) => currencyFormat(fee)
             },
             {
-                title: AppConstants.declined,
-                dataIndex: "declined",
-                key: "declined",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (declined, record) => currencyFormat(record.membership.declined),
+                title: AppConstants.registration,
+                children: [
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "registrationPaid",
+                        key: "registrationPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (registrationPaid) => currencyFormat(registrationPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "registrationPending",
+                        key: "registrationPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (registrationPending) => currencyFormat(registrationPending)
+                    }
+                ]
             },
             {
-                title: AppConstants.owing,
-                dataIndex: "owing",
-                key: "owing",
+                title: AppConstants.charity,
+                children: [
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "charityPaid",
+                        key: "charityPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (charityPaid) => currencyFormat(charityPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "charityPending",
+                        key: "charityPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (charityPending) => currencyFormat(charityPending)
+                    }
+                ]
+            },
+            {
+                title: AppConstants.shop,
+                children: [
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "shopPaid",
+                        key: "shopPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (shopPaid) => currencyFormat(shopPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "shopPending",
+                        key: "shopPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (shopPending) => currencyFormat(shopPending)
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        title: AppConstants.competitionName,
+        dataIndex: "competitionName",
+        key: "competitionName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
+    },
+    {
+        title: AppConstants.affiliate,
+        dataIndex: "affiliate",
+        key: "affiliate",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
+    },
+    {
+        title: AppConstants.competitionOrganiser,
+        dataIndex: "competitionOrganiser",
+        key: "competitionOrganiser",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex)
+    },
+    {
+        title: AppConstants.affiliate,
+        children: [
+            {
+                title: AppConstants.portion,
+                children: [
+                    {
+                        title: AppConstants.total,
+                        dataIndex: "affiliateAmount",
+                        key: "affiliateAmount",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateAmount) => currencyFormat(affiliateAmount)
+                    },
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "affiliateAmountPaid",
+                        key: "affiliateAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateAmountPaid) => currencyFormat(affiliateAmountPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "affiliateAmountPending",
+                        key: "affiliateAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateAmountPending) => currencyFormat(affiliateAmountPending)
+                    },
+                    {
+                        title: AppConstants.failed,
+                        dataIndex: "affiliateAmountFailed",
+                        key: "affiliateAmountFailed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateAmountFailed) => currencyFormat(affiliateAmountFailed)
+                    }
+                ]
+            },
+            {
+                title: AppConstants.instalmentPortion,
+                children: [
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "affiliateInstalmentAmountPaid",
+                        key: "affiliateInstalmentAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateInstalmentAmountPaid) => currencyFormat(affiliateInstalmentAmountPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "affiliateInstalmentAmountPending",
+                        key: "affiliateInstalmentAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateInstalmentAmountPending) => currencyFormat(affiliateInstalmentAmountPending)
+                    }
+                ]
+            },
+            {
+                title: AppConstants.governmentVoucher,
+                children: [
+                    {
+                        title: AppConstants.redeemed,
+                        dataIndex: "affiliateGovernmentVoucherAmountRedeemed",
+                        key: "affiliateGovernmentVoucherAmountRedeemed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateGovernmentVoucherAmountRedeemed) => currencyFormat(affiliateGovernmentVoucherAmountRedeemed)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "affiliateGovernmentVoucherAmountPending",
+                        key: "affiliateGovernmentVoucherAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateGovernmentVoucherAmountPending) => currencyFormat(affiliateGovernmentVoucherAmountPending)
+                    }
+                ]
+            },
+            {
+                title: AppConstants.discount,
+                dataIndex: "affiliateDiscountAmount",
+                key: "affiliateDiscountAmount",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (owing, record) => currencyFormat(record.membership.owing),
+                render: (affiliateDiscountAmount) => currencyFormat(affiliateDiscountAmount)
             },
-        ],
+            {
+                title: AppConstants.partialRefund,
+                dataIndex: "affiliateRefundAmount",
+                key: "affiliateRefundAmount",
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (affiliateRefundAmount) => currencyFormat(affiliateRefundAmount)
+            }
+        ]
     },
     {
         title: AppConstants.competitionOrganiser,
         children: [
             {
-                title: AppConstants.nominationFeesPaid,
-                dataIndex: "nominationFeesPaid",
-                key: "nominationFeesPaid",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid, record) => currencyFormat(record.competitionNomination.paid),
+                title: AppConstants.portion,
+                children: [
+                    {
+                        title: AppConstants.total,
+                        dataIndex: "competitionOrganiserAmount",
+                        key: "competitionOrganiserAmount",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserAmount) => currencyFormat(competitionOrganiserAmount)
+                    },
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "competitionOrganiserAmountPaid",
+                        key: "competitionOrganiserAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserAmountPaid) => currencyFormat(competitionOrganiserAmountPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "competitionOrganiserAmountPending",
+                        key: "competitionOrganiserAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserAmountPending) => currencyFormat(competitionOrganiserAmountPending)
+                    },
+                    {
+                        title: AppConstants.failed,
+                        dataIndex: "competitionOrganiserAmountFailed",
+                        key: "competitionOrganiserAmountFailed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserAmountFailed) => currencyFormat(competitionOrganiserAmountFailed)
+                    }
+                ]
             },
             {
-                title: AppConstants.nominationFeesDeclined,
-                dataIndex: "nominationFeesDeclined",
-                key: "nominationFeesDeclined",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees, record) => currencyFormat(record.competitionNomination.declined),
+                title: AppConstants.instalmentPortion,
+                children: [
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "competitionOrganiserInstalmentAmountPaid",
+                        key: "competitionOrganiserInstalmentAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserInstalmentAmountPaid) => currencyFormat(competitionOrganiserInstalmentAmountPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "competitionOrganiserInstalmentAmountPending",
+                        key: "competitionOrganiserInstalmentAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserInstalmentAmountPending) => currencyFormat(competitionOrganiserInstalmentAmountPending)
+                    }
+                ]
             },
             {
-                title: AppConstants.nominationFeesOwing,
-                dataIndex: "nominationFeesOwing",
-                key: "nominationFeesOwing",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing, record) => currencyFormat(record.competitionNomination.owing),
+                title: AppConstants.governmentVoucher,
+                children: [
+                    {
+                        title: AppConstants.redeemed,
+                        dataIndex: "competitionOrganiserGovernmentVoucherAmountRedeemed",
+                        key: "competitionOrganiserGovernmentVoucherAmountRedeemed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserGovernmentVoucherAmountRedeemed) => currencyFormat(competitionOrganiserGovernmentVoucherAmountRedeemed)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "competitionOrganiserGovernmentVoucherAmountPending",
+                        key: "competitionOrganiserGovernmentVoucherAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserGovernmentVoucherAmountPending) => currencyFormat(competitionOrganiserGovernmentVoucherAmountPending)
+                    }
+                ]
             },
             {
-                title: AppConstants.competitionFeesPaid,
-                dataIndex: "competitionFeesPaid",
-                key: "competitionFeesPaid",
+                title: AppConstants.discount,
+                dataIndex: "competitionOrganiserDiscountAmount",
+                key: "competitionOrganiserDiscountAmount",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid, record) => currencyFormat(record.competition.paid),
+                render: (competitionOrganiserDiscountAmount) => currencyFormat(competitionOrganiserDiscountAmount)
             },
             {
-                title: AppConstants.competitionFeesDeclined,
-                dataIndex: "competitionFeesDeclined",
-                key: "competitionFeesDeclined",
+                title: AppConstants.partialRefund,
+                dataIndex: "competitionOrganiserRefundAmount",
+                key: "competitionOrganiserRefundAmount",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees, record) => currencyFormat(record.competition.declined),
-            },
-            {
-                title: AppConstants.competitionFeesOwing,
-                dataIndex: "competitionFeesOwing",
-                key: "competitionFeesOwing",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing, record) => currencyFormat(record.competition.owing),
-            },
-        ],
+                render: (competitionOrganiserRefundAmount) => currencyFormat(competitionOrganiserRefundAmount)
+            }
+        ]
     },
     {
-        title: AppConstants.affiliateIfApplicable,
+        title: AppConstants.membership,
         children: [
             {
-                title: AppConstants.nominationFeesPaid,
-                dataIndex: "affiliateNominationFeesPaid",
-                key: "affiliateNominationFeesPaid",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid, record) => currencyFormat(record.affiliateNomination.paid),
+                title: AppConstants.portion,
+                children: [
+                    {
+                        title: AppConstants.total,
+                        dataIndex: "membershipAmount",
+                        key: "membershipAmount",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmount) => currencyFormat(membershipAmount)
+                    },
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "membershipAmountPaid",
+                        key: "membershipAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmountPaid) => currencyFormat(membershipAmountPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "membershipAmountPending",
+                        key: "membershipAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmountPending) => currencyFormat(membershipAmountPending)
+                    },
+                    {
+                        title: AppConstants.failed,
+                        dataIndex: "membershipAmountFailed",
+                        key: "membershipAmountFailed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmountFailed) => currencyFormat(membershipAmountFailed)
+                    }
+                ]
             },
             {
-                title: AppConstants.nominationFeesDeclined,
-                dataIndex: "affiliateNominationFeesDeclined",
-                key: "affiliateNominationFeesDeclined",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees, record) => currencyFormat(record.affiliateNomination.declined),
+                title: AppConstants.instalmentPortion,
+                children: [
+                    {
+                        title: AppConstants.paid,
+                        dataIndex: "membershipInstalmentAmountPaid",
+                        key: "membershipInstalmentAmountPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipInstalmentAmountPaid) => currencyFormat(membershipInstalmentAmountPaid)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "membershipInstalmentAmountPending",
+                        key: "membershipInstalmentAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipInstalmentAmountPending) => currencyFormat(membershipInstalmentAmountPending)
+                    }
+                ]
             },
             {
-                title: AppConstants.nominationFeesOwing,
-                dataIndex: "affiliateNominationFeesOwing",
-                key: "affiliateNominationFeesOwing",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing, record) => currencyFormat(record.affiliateNomination.owing),
+                title: AppConstants.governmentVoucher,
+                children: [
+                    {
+                        title: AppConstants.redeemed,
+                        dataIndex: "membershipGovernmentVoucherAmountRedeemed",
+                        key: "membershipGovernmentVoucherAmountRedeemed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipGovernmentVoucherAmountRedeemed) => currencyFormat(membershipGovernmentVoucherAmountRedeemed)
+                    },
+                    {
+                        title: AppConstants.pending,
+                        dataIndex: "membershipGovernmentVoucherAmountPending",
+                        key: "membershipGovernmentVoucherAmountPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipGovernmentVoucherAmountPending) => currencyFormat(membershipGovernmentVoucherAmountPending)
+                    }
+                ]
             },
             {
-                title: AppConstants.competitionFeesPaid,
-                dataIndex: "affiliateFeesPaid",
-                key: "affiliateFeesPaid",
+                title: AppConstants.discount,
+                dataIndex: "membershipDiscountAmount",
+                key: "membershipDiscountAmount",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesPaid, record) => currencyFormat(record.affiliate.paid),
+                render: (membershipDiscountAmount) => currencyFormat(membershipDiscountAmount)
             },
             {
-                title: AppConstants.competitionFeesDeclined,
-                dataIndex: "affiliateFeesDeclined",
-                key: "affiliateFeesDeclined",
+                title: AppConstants.partialRefund,
+                dataIndex: "membershipRefundAmount",
+                key: "membershipRefundAmount",
                 sorter: true,
                 onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (fees, record) => currencyFormat(record.affiliate.declined),
-            },
-            {
-                title: AppConstants.competitionFeesOwing,
-                dataIndex: "affiliateFeesOwing",
-                key: "affiliateFeesOwing",
-                sorter: true,
-                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                render: (feesOwing, record) => currencyFormat(record.affiliate.owing),
-            },
-        ],
+                render: (membershipRefundAmount) => currencyFormat(membershipRefundAmount)
+            }
+        ]
     },
+    {
+        title: AppConstants.governmentVoucherNumber,
+        dataIndex: "governmentVoucherNumber",
+        key: "governmentVoucherNumber",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    }
 ];
 
 class SummaryByParticipant extends Component {
@@ -340,7 +608,9 @@ class SummaryByParticipant extends Component {
         super(props);
 
         this.state = {
-            organisationUniqueKey: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+            organisationUniqueKey: getOrganisationData()
+                ? getOrganisationData().organisationUniqueKey
+                : null,
             yearRefId: null,
             competitionUniqueKey: "-1",
             filterOrganisation: -1,
@@ -355,7 +625,7 @@ class SummaryByParticipant extends Component {
             feeType: -1,
             paymentOption: -1,
             paymentMethod: -1,
-            searchText: '',
+            searchText: "",
             membershipType: -1,
             paymentStatus: -1,
         };
@@ -373,10 +643,19 @@ class SummaryByParticipant extends Component {
             const { offset } = paymentDashboardListAction;
             sortBy = paymentDashboardListAction.sortBy;
             sortOrder = paymentDashboardListAction.sortOrder;
-            const registrationId = paymentDashboardListAction.registrationId == null ? '-1' : paymentDashboardListAction.registrationId;
-            const userId = paymentDashboardListAction.userId == null ? -1 : paymentDashboardListAction.userId;
-            const yearRefId = getGlobalYear() ? getGlobalYear() : paymentDashboardListAction.yearId;
-            const competitionUniqueKey = paymentDashboardListAction.competitionKey;
+            const registrationId =
+                paymentDashboardListAction.registrationId == null
+                    ? "-1"
+                    : paymentDashboardListAction.registrationId;
+            const userId =
+                paymentDashboardListAction.userId == null
+                    ? -1
+                    : paymentDashboardListAction.userId;
+            const yearRefId = getGlobalYear()
+                ? getGlobalYear()
+                : paymentDashboardListAction.yearId;
+            const competitionUniqueKey =
+                paymentDashboardListAction.competitionKey;
             const { dateFrom } = paymentDashboardListAction;
             const { dateTo } = paymentDashboardListAction;
             const filterOrganisation = paymentDashboardListAction.paymentFor;
@@ -394,19 +673,39 @@ class SummaryByParticipant extends Component {
                 filterOrganisation,
             });
             let { participantSummaryListPageSize } = this.props.paymentState;
-            participantSummaryListPageSize = participantSummaryListPageSize ? participantSummaryListPageSize : 10;
+            participantSummaryListPageSize = participantSummaryListPageSize
+                ? participantSummaryListPageSize
+                : 10;
             page = Math.floor(offset / participantSummaryListPageSize) + 1;
 
-            this.handlePaymentTableList(page, userId, registrationId, this.state.searchText);
+            this.handlePaymentTableList(
+                page,
+                userId,
+                registrationId,
+                this.state.searchText
+            );
         } else {
-            const yearRefId = getGlobalYear() ? getGlobalYear() : '-1';
-            const userInfo = this.props.location.state ? this.props.location.state.personal : null;
-            const registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
-            this.setState({ userInfo, registrationId, yearRefId: JSON.parse(yearRefId) });
+            const yearRefId = getGlobalYear() ? getGlobalYear() : "-1";
+            const userInfo = this.props.location.state
+                ? this.props.location.state.personal
+                : null;
+            const registrationId = this.props.location.state
+                ? this.props.location.state.registrationId
+                : null;
+            this.setState({
+                userInfo,
+                registrationId,
+                yearRefId: JSON.parse(yearRefId),
+            });
             const userId = userInfo != null ? userInfo.userId : -1;
-            const regId = registrationId != null ? registrationId : '-1';
+            const regId = registrationId != null ? registrationId : "-1";
 
-            this.handlePaymentTableList(1, userId, regId, this.state.searchText);
+            this.handlePaymentTableList(
+                1,
+                userId,
+                regId,
+                this.state.searchText
+            );
         }
     }
 
@@ -416,28 +715,32 @@ class SummaryByParticipant extends Component {
         this.props.getFeeTypeAction();
         this.props.getPaymentOptionsListAction();
         this.props.getPaymentMethodsListAction();
-        this.props.endUserRegDashboardListAction({
-            organisationUniqueKey: this.state.organisationUniqueKey,
-            yearRefId: 1,
-            competitionUniqueKey: '-1',
-            dobFrom: '-1',
-            dobTo: '-1',
-            membershipProductTypeId: -1,
-            genderRefId: -1,
-            postalCode: '-1',
-            affiliate: -1,
-            membershipProductId: -1,
-            paymentId: -1,
-            paymentStatusRefId: -1,
-            searchText: '',
-            teamId: -1,
-            regFrom: '-1',
-            regTo: '-1',
-            paging: {
-                limit: 10,
-                offset: 0,
+        this.props.endUserRegDashboardListAction(
+            {
+                organisationUniqueKey: this.state.organisationUniqueKey,
+                yearRefId: 1,
+                competitionUniqueKey: "-1",
+                dobFrom: "-1",
+                dobTo: "-1",
+                membershipProductTypeId: -1,
+                genderRefId: -1,
+                postalCode: "-1",
+                affiliate: -1,
+                membershipProductId: -1,
+                paymentId: -1,
+                paymentStatusRefId: -1,
+                searchText: "",
+                teamId: -1,
+                regFrom: "-1",
+                regTo: "-1",
+                paging: {
+                    limit: 10,
+                    offset: 0,
+                },
             },
-        }, null, null);
+            null,
+            null
+        );
     };
 
     onExport = () => {
@@ -459,7 +762,7 @@ class SummaryByParticipant extends Component {
             userId,
         } = this.state;
 
-        const year = getGlobalYear() ? getGlobalYear() : '-1';
+        const year = getGlobalYear() ? getGlobalYear() : "-1";
 
         this.props.exportParticipantSummaryApiAction(
             offset,
@@ -477,13 +780,18 @@ class SummaryByParticipant extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus,
+            paymentStatus
         );
     };
 
     clearFilterByUserId = () => {
         this.setState({ userInfo: null });
-        this.handlePaymentTableList(this.state.offset, -1, "-1", this.state.searchText);
+        this.handlePaymentTableList(
+            this.state.offset,
+            -1,
+            "-1",
+            this.state.searchText
+        );
     };
 
     // on change search text
@@ -493,27 +801,32 @@ class SummaryByParticipant extends Component {
             this.handlePaymentTableList(
                 1,
                 this.state.userId !== null ? this.state.userId : -1,
-                this.state.registrationId !== null ? this.state.registrationId : "-1",
+                this.state.registrationId !== null
+                    ? this.state.registrationId
+                    : "-1",
                 e.target.value,
                 this.state.feeType,
                 this.state.paymentOption,
                 this.state.paymentMethod,
-                this.state.membershipType,
+                this.state.membershipType
             );
         }
     };
 
     onKeyEnterSearchText = (e) => {
         const code = e.keyCode || e.which;
-        if (code === 13) { // 13 is the enter keycode
+        if (code === 13) {
+            // 13 is the enter keycode
             this.handlePaymentTableList(
                 1,
                 this.state.userId !== null ? this.state.userId : -1,
-                this.state.registrationId !== null ? this.state.registrationId : "-1",
+                this.state.registrationId !== null
+                    ? this.state.registrationId
+                    : "-1",
                 this.state.searchText,
                 this.state.feeType,
                 this.state.paymentType,
-                this.state.paymentMethod,
+                this.state.paymentMethod
             );
         }
     };
@@ -523,17 +836,22 @@ class SummaryByParticipant extends Component {
             this.handlePaymentTableList(
                 1,
                 this.state.userId !== null ? this.state.userId : -1,
-                this.state.registrationId !== null ? this.state.registrationId : "-1",
+                this.state.registrationId !== null
+                    ? this.state.registrationId
+                    : "-1",
                 this.state.searchText,
                 this.state.feeType,
                 this.state.paymentType,
-                this.state.paymentMethod,
+                this.state.paymentMethod
             );
         }
     };
 
     headerView = () => {
-        const tagName = this.state.userInfo != null ? `${this.state.userInfo.firstName} ${this.state.userInfo.lastName}` : null;
+        const tagName =
+            this.state.userInfo != null
+                ? `${this.state.userInfo.firstName} ${this.state.userInfo.lastName}`
+                : null;
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -551,7 +869,10 @@ class SummaryByParticipant extends Component {
                                         <Tag
                                             closable
                                             color="volcano"
-                                            style={{ paddingTop: 3, height: 30 }}
+                                            style={{
+                                                paddingTop: 3,
+                                                height: 30,
+                                            }}
                                             onClose={() => {
                                                 this.clearFilterByUserId();
                                             }}
@@ -567,14 +888,23 @@ class SummaryByParticipant extends Component {
                                             className="product-reg-search-input"
                                             onChange={this.onChangeSearchText}
                                             placeholder="Search..."
-                                            onKeyPress={this.onKeyEnterSearchText}
+                                            onKeyPress={
+                                                this.onKeyEnterSearchText
+                                            }
                                             value={this.state.searchText}
-                                            prefix={(
+                                            prefix={
                                                 <SearchOutlined
-                                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                    onClick={this.onClickSearchIcon}
+                                                    style={{
+                                                        color:
+                                                            "rgba(0,0,0,.25)",
+                                                        height: 16,
+                                                        width: 16,
+                                                    }}
+                                                    onClick={
+                                                        this.onClickSearchIcon
+                                                    }
                                                 />
-                                            )}
+                                            }
                                             allowClear
                                         />
                                     </div>
@@ -612,7 +942,7 @@ class SummaryByParticipant extends Component {
         await this.props.setSummaryPageSizeAction(pageSize);
         const { userId, registrationId, searchText } = this.state;
         this.handlePaymentTableList(page, userId, registrationId, searchText);
-    }
+    };
 
     handlePaymentTableList = async (page, userId, regId, searchValue) => {
         await this.props.setSummaryPageNumberAction(page);
@@ -632,10 +962,12 @@ class SummaryByParticipant extends Component {
         } = this.state;
 
         let { participantSummaryListPageSize } = this.props.paymentState;
-        participantSummaryListPageSize = participantSummaryListPageSize ? participantSummaryListPageSize : 10;
+        participantSummaryListPageSize = participantSummaryListPageSize
+            ? participantSummaryListPageSize
+            : 10;
 
         const offset = page ? participantSummaryListPageSize * (page - 1) : 0;
-        const year = getGlobalYear() ? getGlobalYear() : '-1';
+        const year = getGlobalYear() ? getGlobalYear() : "-1";
 
         this.setState({
             offset,
@@ -660,7 +992,7 @@ class SummaryByParticipant extends Component {
             paymentOption,
             paymentMethod,
             membershipType,
-            paymentStatus,
+            paymentStatus
         );
     };
 
@@ -670,84 +1002,42 @@ class SummaryByParticipant extends Component {
             if (value != -1) {
                 setGlobalYear(value);
             }
-            this.handlePaymentTableList(
-                1,
-                -1,
-                null,
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, null, this.state.searchText);
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                null,
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, null, this.state.searchText);
         } else if (key === "filterOrganisation") {
             await this.setState({ filterOrganisation: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "dateFrom") {
-            await this.setState({ dateFrom: value ? moment(value).startOf('day').format('YYYY-MM-DD HH:mm:ss') : value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            await this.setState({
+                dateFrom: value
+                    ? moment(value).startOf("day").format("YYYY-MM-DD HH:mm:ss")
+                    : value,
+            });
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "dateTo") {
-            await this.setState({ dateTo: value ? moment(value).endOf('day').format('YYYY-MM-DD HH:mm:ss') : value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            await this.setState({
+                dateTo: value
+                    ? moment(value).endOf("day").format("YYYY-MM-DD HH:mm:ss")
+                    : value,
+            });
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "feeType") {
             await this.setState({ feeType: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "paymentOption") {
             await this.setState({ paymentOption: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "paymentMethod") {
             await this.setState({ paymentMethod: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "membershipType") {
             await this.setState({ membershipType: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         } else if (key === "paymentStatus") {
             await this.setState({ paymentStatus: value });
-            this.handlePaymentTableList(
-                1,
-                -1,
-                "-1",
-                this.state.searchText,
-            );
+            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
         }
     };
 
@@ -762,11 +1052,20 @@ class SummaryByParticipant extends Component {
 
         if (affiliateToData.affiliatedTo !== undefined) {
             const obj = {
-                organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
+                organisationId: getOrganisationData()
+                    ? getOrganisationData().organisationUniqueKey
+                    : null,
                 name: getOrganisationData() ? getOrganisationData().name : null,
             };
             uniqueValues.push(obj);
-            const arr = [...new Map(affiliateToData.affiliatedTo.map((obj) => [obj.organisationId, obj])).values()];
+            const arr = [
+                ...new Map(
+                    affiliateToData.affiliatedTo.map((obj) => [
+                        obj.organisationId,
+                        obj,
+                    ])
+                ).values(),
+            ];
             if (isEmptyArray) {
                 uniqueValues = [...uniqueValues, ...arr];
             }
@@ -777,7 +1076,10 @@ class SummaryByParticipant extends Component {
             <div>
                 <div className="row pb-2">
                     <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.year} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.year}
+                        />
                         <Select
                             className="reg-payment-select w-100"
                             style={{
@@ -786,10 +1088,17 @@ class SummaryByParticipant extends Component {
                                 maxHeight: 60,
                                 minHeight: 44,
                             }}
-                            onChange={(yearRefId) => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                            onChange={(yearRefId) =>
+                                this.onChangeDropDownValue(
+                                    yearRefId,
+                                    "yearRefId"
+                                )
+                            }
                             value={this.state.yearRefId}
                         >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            <Option key={-1} value={-1}>
+                                {AppConstants.all}
+                            </Option>
                             {this.props.appState.yearList.map((item) => (
                                 <Option key={`year_${item.id}`} value={item.id}>
                                     {item.description}
@@ -798,16 +1107,26 @@ class SummaryByParticipant extends Component {
                         </Select>
                     </div>
                     <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.competition} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.competition}
+                        />
                         <Select
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(competitionId) => this.onChangeDropDownValue(competitionId, "competitionId")}
+                            onChange={(competitionId) =>
+                                this.onChangeDropDownValue(
+                                    competitionId,
+                                    "competitionId"
+                                )
+                            }
                             value={this.state.competitionUniqueKey}
                         >
-                            <Option key={-1} value="-1">{AppConstants.all}</Option>
+                            <Option key={-1} value="-1">
+                                {AppConstants.all}
+                            </Option>
                             {(paymentCompetitionList || []).map((item) => (
                                 <Option
                                     // key={'competition_' + item.competitionUniquekey}
@@ -820,37 +1139,66 @@ class SummaryByParticipant extends Component {
                         </Select>
                     </div>
                     <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.paymentFor}
+                        />
                         <Select
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
+                            onChange={(e) =>
+                                this.onChangeDropDownValue(
+                                    e,
+                                    "filterOrganisation"
+                                )
+                            }
                             value={this.state.filterOrganisation}
                         >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            <Option key={-1} value={-1}>
+                                {AppConstants.all}
+                            </Option>
                             {(uniqueValues || []).map((org) => (
-                                <Option key={`organisation_${org.organisationId}`} value={org.organisationId}>
+                                <Option
+                                    key={`organisation_${org.organisationId}`}
+                                    value={org.organisationId}
+                                >
                                     {org.name}
                                 </Option>
                             ))}
                         </Select>
                     </div>
                     <div className="col-sm-3 pt-2">
-                        <InputWithHead required="pt-0" heading={AppConstants.status} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.status}
+                        />
                         <Select
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(status) => this.onChangeDropDownValue(status, "paymentStatus")}
+                            onChange={(status) =>
+                                this.onChangeDropDownValue(
+                                    status,
+                                    "paymentStatus"
+                                )
+                            }
                             value={this.state.paymentStatus}
                         >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            <Option key="paid" value={2}>{AppConstants.paid}</Option>
-                            <Option key="pending" value={1}>{AppConstants.pending}</Option>
-                            <Option key="declined" value={6}>{AppConstants.declined}</Option>
+                            <Option key={-1} value={-1}>
+                                {AppConstants.all}
+                            </Option>
+                            <Option key="paid" value={2}>
+                                {AppConstants.paid}
+                            </Option>
+                            <Option key="pending" value={1}>
+                                {AppConstants.pending}
+                            </Option>
+                            <Option key="declined" value={6}>
+                                {AppConstants.declined}
+                            </Option>
                         </Select>
                     </div>
                 </div>
@@ -875,64 +1223,112 @@ class SummaryByParticipant extends Component {
                         </Select>
                     </div> */}
                     <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.paymentType} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.paymentType}
+                        />
                         <Select
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(paymentOption) => this.onChangeDropDownValue(paymentOption, "paymentOption")}
+                            onChange={(paymentOption) =>
+                                this.onChangeDropDownValue(
+                                    paymentOption,
+                                    "paymentOption"
+                                )
+                            }
                             value={this.state.paymentOption}
                         >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            {this.props.appState.paymentOptions.map((paymentOption) => (
-                                <Option key={`paymentOption_${paymentOption.id}`} value={paymentOption.id}>
-                                    {paymentOption.description}
-                                </Option>
-                            ))}
+                            <Option key={-1} value={-1}>
+                                {AppConstants.all}
+                            </Option>
+                            {this.props.appState.paymentOptions.map(
+                                (paymentOption) => (
+                                    <Option
+                                        key={`paymentOption_${paymentOption.id}`}
+                                        value={paymentOption.id}
+                                    >
+                                        {paymentOption.description}
+                                    </Option>
+                                )
+                            )}
                         </Select>
                     </div>
                     <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.paymentMethod} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.paymentMethod}
+                        />
                         <Select
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(paymentMethod) => this.onChangeDropDownValue(paymentMethod, "paymentMethod")}
+                            onChange={(paymentMethod) =>
+                                this.onChangeDropDownValue(
+                                    paymentMethod,
+                                    "paymentMethod"
+                                )
+                            }
                             value={this.state.paymentMethod}
                         >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            {this.props.appState.paymentMethods.map((paymentMethod) => (
-                                <Option key={`paymentMethod_${paymentMethod.id}`} value={paymentMethod.id}>
-                                    {paymentMethod.description}
-                                </Option>
-                            ))}
+                            <Option key={-1} value={-1}>
+                                {AppConstants.all}
+                            </Option>
+                            {this.props.appState.paymentMethods.map(
+                                (paymentMethod) => (
+                                    <Option
+                                        key={`paymentMethod_${paymentMethod.id}`}
+                                        value={paymentMethod.id}
+                                    >
+                                        {paymentMethod.description}
+                                    </Option>
+                                )
+                            )}
                         </Select>
                     </div>
                     <div className="col-sm-3">
-                        <InputWithHead required="pt-0" heading={AppConstants.membershipTYpe} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.membershipTYpe}
+                        />
                         <Select
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select w-100"
                             style={{ paddingRight: 1, minWidth: 160 }}
-                            onChange={(membershipType) => this.onChangeDropDownValue(membershipType, "membershipType")}
+                            onChange={(membershipType) =>
+                                this.onChangeDropDownValue(
+                                    membershipType,
+                                    "membershipType"
+                                )
+                            }
                             value={this.state.membershipType}
                         >
-                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                            {this.props.userRegistrationState.membershipProductTypes.map((mt) => (
-                                <Option key={`mt_${mt.id}`} value={mt.membershipProductTypeId}>
-                                    {mt.membershipProductTypeName}
-                                </Option>
-                            ))}
+                            <Option key={-1} value={-1}>
+                                {AppConstants.all}
+                            </Option>
+                            {this.props.userRegistrationState.membershipProductTypes.map(
+                                (mt) => (
+                                    <Option
+                                        key={`mt_${mt.id}`}
+                                        value={mt.membershipProductTypeId}
+                                    >
+                                        {mt.membershipProductTypeName}
+                                    </Option>
+                                )
+                            )}
                         </Select>
                     </div>
                 </div>
 
                 <div className="row pb-5">
                     <div className="col-sm-3 pt-2">
-                        <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.dateFrom}
+                        />
                         <DatePicker
                             className="reg-payment-datepicker w-100"
                             size="default"
@@ -940,12 +1336,20 @@ class SummaryByParticipant extends Component {
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
-                            onChange={(e) => this.onChangeDropDownValue(e, "dateFrom")}
-                            value={this.state.dateFrom !== null && moment(this.state.dateFrom, "YYYY-MM-DD")}
+                            onChange={(e) =>
+                                this.onChangeDropDownValue(e, "dateFrom")
+                            }
+                            value={
+                                this.state.dateFrom !== null &&
+                                moment(this.state.dateFrom, "YYYY-MM-DD")
+                            }
                         />
                     </div>
                     <div className="col-sm-3 pt-2">
-                        <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
+                        <InputWithHead
+                            required="pt-0"
+                            heading={AppConstants.dateTo}
+                        />
                         <DatePicker
                             className="reg-payment-datepicker w-100"
                             size="default"
@@ -953,8 +1357,13 @@ class SummaryByParticipant extends Component {
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
-                            onChange={(e) => this.onChangeDropDownValue(e, "dateTo")}
-                            value={this.state.dateTo !== null && moment(this.state.dateTo, "YYYY-MM-DD")}
+                            onChange={(e) =>
+                                this.onChangeDropDownValue(e, "dateTo")
+                            }
+                            value={
+                                this.state.dateTo !== null &&
+                                moment(this.state.dateTo, "YYYY-MM-DD")
+                            }
                         />
                     </div>
                 </div>
@@ -963,9 +1372,19 @@ class SummaryByParticipant extends Component {
     };
 
     contentView = () => {
-        const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
-        const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
-        const { participantSummaryListTotalCount, participantSummaryList, participantSummaryListPage, onLoad, participantSummaryListPageSize } = this.props.paymentState;
+        const userId =
+            this.state.userInfo != null ? this.state.userInfo.userId : -1;
+        const regId =
+            this.state.registrationId != null
+                ? this.state.registrationId
+                : "-1";
+        const {
+            participantSummaryListTotalCount,
+            participantSummaryList,
+            participantSummaryListPage,
+            onLoad,
+            participantSummaryListPageSize,
+        } = this.props.paymentState;
 
         return (
             <div className="comp-dash-table-view mt-2">
@@ -990,7 +1409,14 @@ class SummaryByParticipant extends Component {
                         defaultCurrent={participantSummaryListPage}
                         defaultPageSize={participantSummaryListPageSize}
                         total={participantSummaryListTotalCount}
-                        onChange={(page) => this.handlePaymentTableList(page, userId, regId, this.state.searchText)}
+                        onChange={(page) =>
+                            this.handlePaymentTableList(
+                                page,
+                                userId,
+                                regId,
+                                this.state.searchText
+                            )
+                        }
                         onShowSizeChange={this.handleShowSizeChange}
                     />
                 </div>
@@ -1012,9 +1438,7 @@ class SummaryByParticipant extends Component {
 
                 <Layout>
                     {this.headerView()}
-                    <Content>
-                        {this.contentView()}
-                    </Content>
+                    <Content>{this.contentView()}</Content>
                 </Layout>
             </div>
         );
@@ -1022,18 +1446,21 @@ class SummaryByParticipant extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        getOnlyYearListAction,
-        getFeeTypeAction,
-        getPaymentOptionsListAction,
-        getPaymentMethodsListAction,
-        getParticipantSummaryAction,
-        exportParticipantSummaryApiAction,
-        getAffiliateToOrganisationAction,
-        endUserRegDashboardListAction,
-        setSummaryPageSizeAction,
-        setSummaryPageNumberAction,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            getOnlyYearListAction,
+            getFeeTypeAction,
+            getPaymentOptionsListAction,
+            getPaymentMethodsListAction,
+            getParticipantSummaryAction,
+            exportParticipantSummaryApiAction,
+            getAffiliateToOrganisationAction,
+            endUserRegDashboardListAction,
+            setSummaryPageSizeAction,
+            setSummaryPageNumberAction,
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -1045,4 +1472,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SummaryByParticipant);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SummaryByParticipant);

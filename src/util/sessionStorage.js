@@ -22,6 +22,37 @@ const getAuthToken = () => {
   return localStorage.token
 }
 
+// Set Sign Date
+const setSignDate = signDate => {
+    localStorage.setItem("signDate", signDate);
+}
+
+// get Auth Token
+const getSignDate = () => {
+    return localStorage.signDate ?? false;
+}
+
+// Set Sign Date
+const removeSignDate = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("signDate");
+}
+
+// Set Sign Date
+const setRoleId = role_id => {
+    localStorage.setItem("role_id", role_id);
+}
+
+// get Auth Token
+const getRoleId = () => {
+    return localStorage.role_id ?? false;
+}
+
+// Set Sign Date
+const removeRoleId = () => {
+    localStorage.removeItem("role_id");
+}
+
 // Set User Id
 const setUserId = userId => {
   localStorage.setItem("userId", userId)
@@ -246,6 +277,12 @@ export {
   getCompetitonId,
   setAuthToken,
   getAuthToken,
+  setSignDate,
+  getSignDate,
+  removeSignDate,
+  setRoleId,
+  getRoleId,
+  removeRoleId,
   setUserId,
   getUserId,
   setOwnCompetitionYear,

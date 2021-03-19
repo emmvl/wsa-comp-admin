@@ -66,6 +66,7 @@ const initialState = {
     tShirtSizeList: [],
     stateListData: [],
     divisionFieldConfigList: [],
+    docTypes: [],
 };
 
 function commonReducerState(state = initialState, action) {
@@ -560,6 +561,21 @@ function commonReducerState(state = initialState, action) {
                 ...state,
                 venuesListPage: action.pageNum,
             }
+
+        case ApiConstants.API_GET_DOCUMENT_TYPE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+        
+        case ApiConstants.API_GET_DOCUMENT_TYPE_SUCCESS:
+            return {
+                ...state,
+                docTypes: action.result,
+                onLoad: false
+            }
+        
+            
 
         default:
             return state;

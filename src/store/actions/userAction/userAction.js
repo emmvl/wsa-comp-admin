@@ -147,6 +147,20 @@ function getUserModulePersonalDetailsAction(userId) {
     };
 }
 
+function getUserModuleDocumentsAction(userId) {
+    return {
+        type: ApiConstants.API_USER_MODULE_DOCUMENTS_LOAD,
+        payload: userId,
+    };
+}
+
+function removeUserModuleDocumentAction(id) {
+    return {
+        type: ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_LOAD,
+        payload: id
+    }
+}
+
 function getUserModulePersonalByCompetitionAction(payload) {
     return {
         type: ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD,
@@ -721,6 +735,8 @@ export {
     onOrganisationChangeAction,
     getUserDashboardTextualAction,
     getUserModulePersonalDetailsAction,
+    getUserModuleDocumentsAction,
+    removeUserModuleDocumentAction,
     getUserModuleMedicalInfoAction,
     getUserModuleRegistrationAction,
     getUserModuleTeamRegistrationAction,

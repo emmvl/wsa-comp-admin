@@ -78,6 +78,16 @@ const columns = [
         ),
     },
     {
+        title: AppConstants.date,
+        dataIndex: "createdOn",
+        key: "createdOn",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (createdOn) => (
+            <span>{moment(createdOn).format("DD/MM/YYYY HH:mm")}</span>
+        ),
+    },
+    {
         title: AppConstants.paidBy,
         dataIndex: "paidBy",
         key: "paidBy",
@@ -146,12 +156,12 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
     },
     {
-        title: AppConstants.feePaid,
+        title: AppConstants.fee,
         dataIndex: "paidFee",
         key: "paidFee",
         render: (paidFee, record) => currencyFormat(paidFee),
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("paidFee"),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: AppConstants.discount,
@@ -159,7 +169,7 @@ const columns = [
         key: "discount",
         render: (discount, record) => currencyFormat(discount),
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("discount"),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: AppConstants.governmentVoucher,
@@ -173,10 +183,20 @@ const columns = [
             )
         },
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("governmentVoucherAmount"),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: AppConstants.status,
+        title: AppConstants.governmentVoucherStatus,
+        dataIndex: "governmentVoucherStatus",
+        key: "governmentVoucherStatus",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (governmentVoucherStatus, record) => (
+            <span>{ governmentVoucherStatus }</span>
+        ),
+    },
+    {
+        title: AppConstants.feeStatus,
         dataIndex: "paymentStatus",
         key: "paymentStatus",
         sorter: true,
@@ -1117,6 +1137,7 @@ class PaymentDashboard extends Component {
         const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
         const { paymentListTotalCount, paymentListData, paymentListPage, onLoad, paymentListPageSize } = this.props.paymentState;
+
         return (
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}

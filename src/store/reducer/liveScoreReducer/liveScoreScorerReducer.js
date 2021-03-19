@@ -257,12 +257,12 @@ function liveScoreScorerState(state = initialState, action) {
                 ...state,
                 assignMatchListPageSize: action.pageSize,
             }
-        
+
         case ApiConstants.SET_LIVE_SCORE_ASSIGN_MATCH_LIST_PAGE_CURRENT_NUMBER:
             return {
                 ...state,
                 assignMatchListPage: action.pageNum,
-            }    
+            }
 
         default:
             return state;

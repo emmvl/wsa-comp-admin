@@ -58,7 +58,7 @@ import {
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
     updateCourtTimingsDrawsDragSuccessAction,
-    updateCourtTimingsDrawsSwapSuccessAction,
+    updateCompetitionDrawsSwapLoadAction,
     clearMultiDraws,
     publishDraws,
     matchesListDrawsAction,
@@ -166,6 +166,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 apiData:null
             },
             emptySlot:{
+                colorCode: "#999999",   
                 awayTeamId: null,
                 awayTeamName: null,                
                 competitionDivisionGradeId: null,
@@ -188,10 +189,15 @@ class MultifieldDrawsNewTimeline extends Component {
                 ],
             },
             emptySlotFieldUpdate:{
-                colorCode: "#999999",
                 endTime: "",
                 matchDate: "",
                 startTime: "",
+                venueCourtId: 0,
+                venueCourtName: "",
+                venueCourtNumber: 0,
+                venueShortName: ""
+            },
+            emptySlotVenueFieldUpdate:{                             
                 venueCourtId: 0,
                 venueCourtName: "",
                 venueCourtNumber: 0,
@@ -203,9 +209,12 @@ class MultifieldDrawsNewTimeline extends Component {
                 homeTeamName:"",
                 divisionName:"",
                 gradeName:"",
+                colorCode:"",
+                duplicate:false,
                 homeTeamOrganisationId:"",
                 isPastMatchAvailable:0,
                 outOfCompetitionDate:0,
+                outOfRoundDate:0,
                 teamArray:[]
             }
         };
@@ -633,6 +642,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     getColumnData = (indexArray, drawData) => {
+        let xIndex=indexArray[0];
         let yIndex = indexArray[1];
         let object = null;
 
@@ -643,8 +653,27 @@ class MultifieldDrawsNewTimeline extends Component {
                 break;
             }
         }
+        if(!object){            
+            //empty slot has incorrect start time
+            object=drawData[xIndex].slotsArray[yIndex];
+            this.correctWrongDate(object,yIndex);
+
+        }
         return object;
     };
+    correctWrongDate=(slot,slotIndex)=>{
+        const slotDate = moment(slot.matchDate);
+        const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
+        const isCorrectStart = slotEnd.isAfter(slotDate);
+        if(!isCorrectStart){
+            if(this.props.drawsState.getRoundsDrawsdata.length>0){
+                const dateAxis=this.props.drawsState.getRoundsDrawsdata[0].dateNewArray[slotIndex];
+                slot.matchDate=dateAxis.date;
+                slot.startTime=moment(slot.matchDate).format('HH:mm');
+                slot.endTime=dateAxis.endTime;
+            }           
+        }
+    }
 
     ///////update the competition draws on  swapping and hitting update Apis if both has value
     updateCompetitionDraws = (
@@ -1107,9 +1136,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     const slotStart = moment(slot.matchDate);
                     const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
 
-                    const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
-                    const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
-                    const isSlotEventInside = startTimeNew.isBefore(slotStart) && endTimeNew.isAfter(slotEnd);
+                    const isStartTimeCondition = startTimeNew.isSameOrBefore(slotEnd) && startTimeNew.isSameOrAfter(slotStart);
+                    const isEndTimeCondition = endTimeNew.isSameOrAfter(slotStart) && endTimeNew.isSameOrBefore(slotEnd);
+                    const isSlotEventInside = startTimeNew.isSameOrBefore(slotStart) && endTimeNew.isSameOrAfter(slotEnd);
 
                     const isEventOverItself = slot.drawsId === draggableEventObject.drawsId
                         && (
@@ -1125,8 +1154,8 @@ class MultifieldDrawsNewTimeline extends Component {
                         const prevEventEnd = prevEvent && moment(this.getDate(slot.matchDate) + prevEvent?.endTime);
                         const nextEventStart = nextEvent && moment(nextEvent?.matchDate);
 
-                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isAfter(startTimeNew);
-                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isBefore(endTimeNew);
+                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isSameOrAfter(startTimeNew);
+                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isSameOrBefore(endTimeNew);
 
                         if (isPrevEventEndBeforeSlotStart || isPrevEventStartAfterSlotEnd) {
                             return true;
@@ -1169,9 +1198,10 @@ class MultifieldDrawsNewTimeline extends Component {
             };
             const editdraw= this.state.editedDraw;
             editdraw.apiData=apiData;
-            this.updateEditDrawArray(postData);
+            
             //change to action if necessary
             this.dargSuccess(targetCourtId,postData);
+            this.updateEditDrawArray(postData);
             this.setState({updateLoad: false});
         }
     }
@@ -1198,6 +1228,9 @@ class MultifieldDrawsNewTimeline extends Component {
                     if(drawindex>-1){             
                         let draw=sourceVenueCourt.slotsArray[drawindex];               
                         moveddraw=JSON.parse(JSON.stringify(draw));
+                        moveddraw.matchDate=postData.matchDate;
+                        moveddraw.startTime=postData.startTime;
+                        moveddraw.endTime=postData.endTime;
                         //set original to empty
                         let emptyDraw={...this.state.emptySlot};
                         Object.keys(this.state.emptySlotFieldUpdate).forEach(key => emptyDraw[key] = draw[key]);                            
@@ -1213,8 +1246,16 @@ class MultifieldDrawsNewTimeline extends Component {
                         }
                     }                        
                     if(drawindex>-1){
-                        Object.keys(this.state.emptySlotFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
-                        destinationVenueCourt.slotsArray[drawindex]=moveddraw;
+                        Object.keys(this.state.emptySlotVenueFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
+                        let targetDraw=destinationVenueCourt.slotsArray[drawindex];
+                        if(targetDraw.drawsId && targetDraw.drawsId != moveddraw.drawsId){
+                            //something wrong, 
+                            console.log("no enough slot");
+                            destinationVenueCourt.slotsArray.push(moveddraw);
+                            message.warning('Please save draws');
+                        }else{
+                            destinationVenueCourt.slotsArray[drawindex] =moveddraw;
+                        }                       
                     }                    
                 }                
             }                
@@ -1949,7 +1990,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             style={{ height: 100 }}
                         />
                     )}
-                    {this.props.drawsState.updateLoad ? (
+                    {(this.props.drawsState.updateLoad || this.props.drawsState.swapLoad) ? (
                         <div className="draggable-wrap draw-data-table">
                             <Loader visible={this.props.drawsState.updateLoad} />
 
@@ -1980,8 +2021,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     {dateItem.roundName}
                                                 </span>
                                         </div>
-                                    )}
-                                    {this.draggableView(dateItem)}
+                                    )}                                   
+                                    {this.draggableView(dateItem)}                                    
                                 </div>
                             ))}
                         </div>
@@ -2818,7 +2859,7 @@ class MultifieldDrawsNewTimeline extends Component {
             null,
             this.state.filterDates
         );
-        this.setState({ updateLoad: true, });
+        //this.setState({ updateLoad: true, });
         //isOnSwapUpdate: true 
     }
     check = () => {
@@ -3154,7 +3195,7 @@ function mapDispatchToProps(dispatch) {
             getCompetitionVenue,
             updateCourtTimingsDrawsAction,
             updateCourtTimingsDrawsDragSuccessAction,
-            updateCourtTimingsDrawsSwapSuccessAction,
+            updateCompetitionDrawsSwapLoadAction,
             clearMultiDraws,
             publishDraws,
             matchesListDrawsAction,

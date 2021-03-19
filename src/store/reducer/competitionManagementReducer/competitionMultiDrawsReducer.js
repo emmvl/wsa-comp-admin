@@ -937,7 +937,7 @@ function CompetitionMultiDraws(state = initialState, action) {
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_LOAD:
             return {
                 ...state,
-                updateLoad: true,
+                updateLoad: true,                
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_SUCCESS:
@@ -985,7 +985,7 @@ function CompetitionMultiDraws(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: null,
-                updateLoad: false,
+                updateLoad: false,                
             };
 
         /// Update draws timeline reducer cases
@@ -1081,12 +1081,14 @@ function CompetitionMultiDraws(state = initialState, action) {
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_LOAD:
             return {
                 ...state,
-                updateLoad: true, //todo remove loading once UI can update without loading
+                updateLoad: false,
+                swapLoad:true
             };
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_DRAG_SUCCESS:
             return {
                 ...state,
                 updateLoad: false,
+                swapLoad:false
             };
 
         case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS:

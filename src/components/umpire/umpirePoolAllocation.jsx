@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { NavLink } from 'react-router-dom';
 
 import { 
     Layout, 
@@ -37,6 +38,7 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 
 import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
+import history from 'util/history';
 
 const { 
     // Header, 
@@ -989,15 +991,34 @@ class UmpirePoolAllocation extends Component {
         return (
             <div className="fluid-width pool-space">
                 <div className="col-sm mt-3 px-0">
-                    <div className="d-flex justify-content-end">
-                        <Button
-                            className="publish-button save-draft-text mr-0" 
-                            type="primary"
-                            htmlType="submit"
-                            onClick={this.handleSave}
-                        >
-                            {AppConstants.save}
-                        </Button>
+                    <div className="d-flex justify-content-between">
+                        <div className="reg-add-save-button">
+                            <NavLink to="/umpireSetting">
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
+                        <div>
+                            <Button
+                                className="publish-button save-draft-text mr-15" 
+                                type="primary"
+                                htmlType="submit"
+                                onClick={this.handleSave}
+                            >
+                                {AppConstants.save}
+                            </Button>
+                            <Button
+                                className="publish-button save-draft-text mr-0"
+                                type="primary"
+                                htmlType="submit"
+                                onClick={() => {
+                                    this.handleSave();
+                                    history.push('/umpireDivisions');
+                                }}
+                            >
+                                {AppConstants.next}
+                            </Button>
+                        </div>
+                       
                     </div>
                 </div>
             </div>

@@ -23,6 +23,8 @@ import {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
     updateCompetitionDraws,
+    updateCompetitionDrawsSwapLoadAction,
+    updateCompetitionDrawsTimeline,
     saveDraws,
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
@@ -148,7 +150,34 @@ class MultifieldDrawsNew extends Component {
             filterDates: false,
             regenerateDrawExceptionModalVisible: false,
             regenerateExceptionRefId: 1,
-            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null
+            screenKey: this.props.location.state ? this.props.location.state.screenKey ? this.props.location.state.screenKey : null : null,
+            editedDraw:{
+                draws:[],
+                apiData:null
+            },
+            switchDrawNameFields:{
+                awayTeamName:"",
+                awayTeamOrganisationId:"",
+                homeTeamName:"",
+                divisionName:"",
+                gradeName:"",
+                colorCode:"",
+                duplicate:false,
+                homeTeamOrganisationId:"",
+                isPastMatchAvailable:0,
+                outOfCompetitionDate:0,
+                outOfRoundDate:0,
+                teamArray:[]
+            },
+            switchDrawTimeFields:{
+                venueCourtId:0,
+                matchDate:"",
+                startTime:"",
+                endTime:"",     
+                venueCourtName:"",
+                venueCourtNumber:0,
+                venueShortName:""          
+            }
         };
         this.props.clearMultiDraws();
     }
@@ -533,6 +562,7 @@ class MultifieldDrawsNew extends Component {
     }
 
     getColumnData = (indexArray, drawData) => {
+        let xIndex=indexArray[0];
         let yIndex = indexArray[1];
         let object = null;
 
@@ -543,19 +573,40 @@ class MultifieldDrawsNew extends Component {
                 break;
             }
         }
+        if(!object){            
+            //empty slot has incorrect start time
+            object=drawData[xIndex].slotsArray[yIndex];
+            this.correctWrongDate(object,yIndex);
+
+        }
         return object;
     };
-
+    correctWrongDate=(slot,slotIndex)=>{
+        const slotDate = moment(slot.matchDate);
+        const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
+        const isCorrectStart = slotEnd.isAfter(slotDate);
+        if(!isCorrectStart){
+            if(this.props.drawsState.getRoundsDrawsdata.length>0){
+                const dateAxis=this.props.drawsState.getRoundsDrawsdata[0].dateNewArray[slotIndex];
+                slot.matchDate=dateAxis.date;
+                slot.startTime=moment(slot.matchDate).format('HH:mm');
+                slot.endTime=dateAxis.endTime;
+            }           
+        }
+    }
+    getDate = date => {
+        return date.slice(0, -5);
+    }
     ///////update the competition draws on  swapping and hitting update Apis if both has value
     updateCompetitionDraws = (
         sourceObejct,
         targetObject,
         sourceIndexArray,
         targetIndexArray,
-        drawsData,
+        drawData,
         round_Id, sourceDuplicate, targetDuplicate
     ) => {
-        let key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
+        
         let customSourceObject = {
             // drawsId: sourceObejct.drawsId,
             drawsId: targetObject.drawsId,
@@ -574,31 +625,35 @@ class MultifieldDrawsNew extends Component {
             competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
             isLocked: 1,
         };
-        let postObject = {
-            draws: [customSourceObject, customTargetObject],
-        };
-        let apiData = {
-            yearRefId: this.state.yearRefId,
-            competitionId: this.state.firstTimeCompId,
-            venueId: 0,
-            roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : this.state.roundId,
-            orgId: null,
-            startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
-            endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
-        }
+       
+        this.updateEditDrawArray(customSourceObject);
+        this.updateEditDrawArray(customTargetObject);
 
-        this.props.updateCompetitionDraws(
-            postObject,
-            sourceIndexArray,
-            targetIndexArray,
-            key,
-            round_Id,
-            sourceDuplicate, targetDuplicate, apiData, this.state.filterDates
-        );
+        const sourceXIndex = sourceIndexArray[0];
+        const sourceYIndex = sourceIndexArray[1];
+        const targetXIndex = targetIndexArray[0];
+        const targetYIndex = targetIndexArray[1];
+             
+        let newSourceObj={...sourceObejct, ...customTargetObject};
+        Object.keys(this.state.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
+        
+        let newTargetObj={...targetObject, ...customSourceObject};
+        Object.keys(this.state.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
 
-        this.setState({ updateLoad: true });
+        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
+        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
+        this.props.updateCompetitionDrawsSwapLoadAction();       
+        
     };
-
+    updateEditDrawArray(draw){
+        const editdraw= this.state.editedDraw;        
+        const drawExistsIndex=editdraw.draws.findIndex(d=>d.drawsId==draw.drawsId);
+        if(drawExistsIndex>-1){
+            editdraw.draws[drawExistsIndex]={...editdraw.draws[drawExistsIndex], ...draw};
+        }else{
+            editdraw.draws.push(draw);
+        }
+    }
     ///////update the competition draws on  swapping and hitting update Apis if one has N/A(null)
     updateCompetitionNullDraws = (
         sourceObejct,
@@ -629,29 +684,66 @@ class MultifieldDrawsNew extends Component {
                 endTime: columnObject.endTime,
             };
         }
+
+        this.updateEditDrawArray(postData);
+
+        const sourceXIndex = sourceIndexArray[0];
+        const sourceYIndex = sourceIndexArray[1];
+        const targetXIndex = targetIndexArray[0];
+        const targetYIndex = targetIndexArray[1];
+        const newSourceObj = JSON.parse(JSON.stringify(targetObject));
+        const newTargetObj = JSON.parse(JSON.stringify(sourceObejct));
+        
+        Object.keys(this.state.switchDrawTimeFields).forEach(key => newSourceObj[key] = sourceObejct[key]);
+        Object.keys(this.state.switchDrawTimeFields).forEach(key => newTargetObj[key] = targetObject[key]); 
+
+        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
+        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
+        this.props.updateCompetitionDrawsSwapLoadAction();  
+    };
+
+    saveEditDraws = () => {
+        let key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
         let apiData = {
             yearRefId: this.state.yearRefId,
             competitionId: this.state.firstTimeCompId,
-            venueId: this.state.venueId,
+            venueId: 0, //this.state.venueId,
             roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : this.state.roundId,
             orgId: null,
             startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
             endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
         }
-
-        this.props.updateCourtTimingsDrawsAction(
-            postData,
+        const sourceIndexArray=[];
+        const targetIndexArray=[];
+        const postObject = {
+            draws: this.state.editedDraw.draws,
+        };
+        //re-use the timeline action, can be moved to updateCompetitionDraws action if necessary
+        this.props.updateCompetitionDrawsTimeline(
+            postObject,
             sourceIndexArray,
             targetIndexArray,
-            updatedKey,
-            round_Id,
-            apiData,
+            key,
+            parseInt(apiData.roundId),
+            apiData.yearRefId,
+            apiData.competitionId,
+            apiData.venueId,
+            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : apiData.roundId,
+            null,
+            null,
+            null,
             this.state.filterDates
         );
+        // this.props.updateCompetitionDraws(
+        //     postObject,
+        //     sourceIndexArray,
+        //     targetIndexArray,
+        //     key,
+        //     round_Id,
+        //     sourceDuplicate, targetDuplicate, apiData, this.state.filterDates
+        // );
 
-        this.setState({ updateLoad: true });
-    };
-
+    }
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
@@ -1330,7 +1422,7 @@ class MultifieldDrawsNew extends Component {
                     {this.props.drawsState.getRoundsDrawsdata.length <= 0 && (
                         <div className="d-flex justify-content-center align-items-center" style={{ height: 100 }} />
                     )}
-                    {this.props.drawsState.updateLoad ? (
+                    {(this.props.drawsState.updateLoad ||this.props.drawsState.swapLoad) ? (
                         <div className="draggable-wrap draw-data-table">
                             <Loader visible={this.props.drawsState.updateLoad} />
 
@@ -1818,7 +1910,15 @@ class MultifieldDrawsNew extends Component {
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            {/* <NavLink to="/competitionFormat"> */}
+                            {/* <NavLink to="/competitionFormat"> */}      
+                            <Button
+                                className="open-reg-button mr-15"
+                                type="primary"
+                                disabled={isPublish}
+                                onClick={() => this.saveEditDraws()}
+                            >
+                                {AppConstants.saveDraw}
+                            </Button>                      
                             <Button
                                 className="open-reg-button"
                                 type="primary"
@@ -2021,6 +2121,8 @@ function mapDispatchToProps(dispatch) {
             getVenuesTypeAction,
             getDrawsRoundsAction,
             updateCompetitionDraws,
+            updateCompetitionDrawsSwapLoadAction,
+            updateCompetitionDrawsTimeline,
             saveDraws,
             getCompetitionVenue,
             updateCourtTimingsDrawsAction,

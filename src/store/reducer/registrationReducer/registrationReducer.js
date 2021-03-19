@@ -987,7 +987,6 @@ function registration(state = initialState, action) {
       }
       if (action.dataName === "getRegistrationFormDetails") {
         state.selectedMemberShipType = [];
-        state.selectedMemberShipType = [];
         state.membershipProductTypes = [];
         state.selectedProductName = [];
         state.registrationFormData = JSON.parse(JSON.stringify([newObjvalue]));
@@ -1170,7 +1169,7 @@ function registration(state = initialState, action) {
       };
 
     case ApiConstants.REG_FORM_UPDATE_MEMBERSHIP_PRODUCT_TYPES:
-      let productsData = state.selectedMemberShipType;
+      let productsData = [ ...state.selectedMemberShipType ];
       let getFormValue = state.registrationFormData;
       let tableValue = action.tableKey;
       let matchIndexKey = action.matchkey;
@@ -1181,22 +1180,27 @@ function registration(state = initialState, action) {
         productsData[matchIndexKey].membershipProductTypes[tableValue][subKey] = null;        
       }
       let selectedArray = makeFinalProductArr(productsData, state.defaultMembershipProduct);
-      getFormValue[0].membershipProductTypes = selectedArray;
-      state.selectedMemberShipType = productsData;
-      return { ...state, error: null };
+      getFormValue[0].membershipProductTypes = [ ...selectedArray ];
+      return {
+        ...state,
+        selectedMemberShipType: [ ...productsData ],
+        error: null
+      };
 
     case ApiConstants.REG_FORM_UPDATE_MEMBERSHIP_REGISTRATIONLOCK:
       let Form_Value = state.registrationFormData;
-      let product_Data = state.selectedMemberShipType;
+      let product_Data = [ ...state.selectedMemberShipType ];
       let table_Value = action.table_key;
       let match_Key = action.matchValue;
       product_Data[match_Key].membershipProductTypes[table_Value].isSelected = action.isSelected;
       product_Data[match_Key].membershipProductTypes[table_Value].registrationLock = action.registrationLock;
       let selected_Array = makeFinalProductArr(product_Data, state.defaultMembershipProduct);
       Form_Value[0].membershipProductTypes = selected_Array;
-      state.selectedMemberShipType = product_Data;
-      return { ...state, error: null };
-
+      return {
+        ...state,
+        selectedMemberShipType: [ ...product_Data ],
+        error: null
+      };
 
     case ApiConstants.API_YEAR_LIST_SUCCESS:
       if (isArrayNotEmpty(action.competetionListResult)) {
@@ -1387,6 +1391,16 @@ function registration(state = initialState, action) {
       state.teamRegistrationTableData.page.currentPage = action.pageNum;
       return {
         ...state,
+      }
+    
+    case ApiConstants.ADD_HARDSHIP_CODE_LOAD:
+      return{...state,addHardshipCodeLoad: true}  
+    
+    case ApiConstants.API_UPDATE_MEMBERSHIP_FEE_CAP_SUCCESS:
+      return{
+        ...state,
+        status: action.status,
+        addHardshipCodeLoad: false
       }
 
     default:

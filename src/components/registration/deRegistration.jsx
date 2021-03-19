@@ -389,7 +389,7 @@ class DeRegistration extends Component {
 
                 <InputWithHead
                     disabled
-                    heading={AppConstants.competition_name}
+                    heading={AppConstants.competitionName}
                     required="pb-1"
                     style={{ paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type w-100"

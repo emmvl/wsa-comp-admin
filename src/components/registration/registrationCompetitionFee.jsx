@@ -3866,7 +3866,7 @@ class RegistrationCompetitionFee extends Component {
 
         // selectedSeasonalFeeKey
 
-        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2 || x.paymentMethodRefId == 3)) {
             message.error(ValidationConstants.pleaseSelectPaymentMethods);
             if(fromValidation == "FromValidation"){
                 return true;
@@ -3964,7 +3964,7 @@ class RegistrationCompetitionFee extends Component {
         let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
         selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
 
-        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
+        if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2 || x.paymentMethodRefId == 3)) {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.paymentMandatory);
             return;
@@ -5466,8 +5466,8 @@ class RegistrationCompetitionFee extends Component {
                     <InputWithHead
                         auto_complete="off"
                         required="required-field"
-                        heading={AppConstants.competition_name}
-                        placeholder={AppConstants.competition_name}
+                        heading={AppConstants.competitionName}
+                        placeholder={AppConstants.competitionName}
                         // value={detailsData.competitionDetailData.competitionName}
                         onChange={(e) =>
                             this.props.add_editcompetitionFeeDeatils(
@@ -7502,15 +7502,17 @@ class RegistrationCompetitionFee extends Component {
                         </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
-                                    suffix={JSON.stringify(item.discountTypeRefId) == '2' ? '%' : null}
-                                    type="number"
                                 />
                             </div>
                             <div className="col-sm">
@@ -7587,15 +7589,17 @@ class RegistrationCompetitionFee extends Component {
                         />
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-number"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
-                                    suffix={JSON.stringify(item.discountTypeRefId) == '2' ? '%' : null}
-                                    type="number"
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                 />
                             </div>
                             <div className="col-sm">
@@ -7749,12 +7753,16 @@ class RegistrationCompetitionFee extends Component {
                         </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead
+                                <InputWithHead heading={AppConstants.percentageOff_FixedAmount} />
+                                <InputNumber
                                     auto_complete="new-percentageOff"
-                                    heading={AppConstants.percentageOff_FixedAmount}
-                                    placeholder={AppConstants.percentageOff_FixedAmount}
-                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                     value={item.amount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    min={0}
+                                    max={100}
+                                    formatter={value => `% ${value}`}
+                                    parser={value => value.replace('% ', '')}
+                                    onChange={(value) => this.onChangePercentageOff(value, index)}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
                                 />
                             </div>

@@ -69,6 +69,9 @@ const AppConstants = {
     parents_guardians: "Parent/ Guardian Details",
     firstName: "First Name",
     lastName: "Last Name",
+    documentType: "Document Type",
+    documentUploadDate: "Date Uploaded",
+    documentUrl: "Document Urls",
     sameAddress: "Use same Address as Participant",
     additionalInfoReqd: "Additional Information required",
     additionalPersonalInfoReqd: "Additional Personal Information required",
@@ -208,6 +211,7 @@ const AppConstants = {
     code: "Code",
     earlyDiscount: "Early Discount",
     addChild: "Add Child",
+    addDocument: "Add Document",
     child1: "Child 1 %",
     child2: "Child 2 %",
     delete: "Delete",
@@ -1306,6 +1310,8 @@ const AppConstants = {
     injuryFirstAdd: "Injury - First Aid",
     emailExp: "/^-?(0|[1-9][0-9]*)(.[0-9]*)?$/",
     childDetails: "Child Details",
+    documents: "Documents",
+    registrationDivision: "Registration Divisions",
     addRegDivision: "Add Registration Divisions",
     downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
     assignUmpireToMatch: "Assign Umpires To Matches",
@@ -1431,6 +1437,7 @@ const AppConstants = {
     statusPublishHover:
         "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
+    teamRankingError: "Team ranking has not been completed",
     venueAddressDetailsError: "Please input venue address in details",
     venueAddressError: "Please select a venue from the venue search",
     venueAddressSelect: "Please select a venue from the venue search",
@@ -1710,9 +1717,9 @@ const AppConstants = {
     paidBy: "Paid by",
     feeType: "Fee Type",
     paymentType: "Payment Type",
-    membershipType: "Membership type",
     totalFeeIncGst: "Total Fee (inc GST)",
     governmentVoucher: "Govt. Voucher",
+    governmentVoucherStatus: "Govt. Voucher Status",
     portion: "Portion",
     redeemVoucher: "Redeem Voucher",
     cashPaymentReceived: "Cash Payment received",
@@ -1862,7 +1869,8 @@ const AppConstants = {
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
     cancelTransferReg: "Cancel Transfer registration",
-    feePaid: "Fee Paid",
+    fee: "Fee",
+    feeStatus: "Fee Status",
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
     failed: "Failed",
@@ -2022,7 +2030,12 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
-    competition_name: "Competition name"
+    competition_name: "Competition name",
+    instalmentPortion: "Instalment Portion",
+    redeemed: "Redeemed",
+    partialRefund: "Partial Refund",
+    governmentVoucherNumber: "Government Voucher Number",
+    incorrectProductDetails: "You have entered incorrect product details."
 };
 
 export default AppConstants;

@@ -70,7 +70,7 @@ class AddCommunication extends Component {
             videoUrl: null,
             image: null,
             imageSelection: AppImages.circleImage,
-            videoSelection: '',
+            videoSelection: AppImages.circleImage,
             isEdit: props.location.state ? props.location.state.isEdit : false,
             visible: false,
             imageTimeout: null,
@@ -418,7 +418,7 @@ class AddCommunication extends Component {
 
     deleteVideo() {
         this.setState({
-            video: null, videoSelection: '', crossVideoIcon: false, videoUrl: null,
+            video: null, videoSelection: AppImages.circleImage, crossVideoIcon: false, videoUrl: null,
         });
     }
 
@@ -526,8 +526,8 @@ class AddCommunication extends Component {
                             <ImageLoader
                                 timeout={this.state.videoTimeout}
                                 video
+                                poster={(videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? '' : AppImages.circleImage}
                                 src={videoUrl || this.state.videoSelection}
-                                poster={(videoUrl || this.state.videoSelection !== '') ? '' : AppImages.circleImage}
                             />
                         </div>
                         <input

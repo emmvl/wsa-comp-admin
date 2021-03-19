@@ -622,6 +622,10 @@ const AxiosApi = {
         var url = `/api/deRegister/details `;
         return Method.dataPost(url, token, payload);
     },
+    addHardshipCode(payload) {
+        const url = `api/orgregistration/singleusecode/add`;
+        return Method.dataPost(url, token, payload);
+    },
 };
 
 const Method = {

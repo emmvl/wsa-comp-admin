@@ -16,7 +16,9 @@ import {
     Table,
     Typography,
     Checkbox,
+    Upload
 } from "antd";
+import { InboxOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -32,11 +34,11 @@ import ValidationConstants from "../../themes/validationConstant";
 import {
     getCommonRefData, countryReferenceAction, nationalityReferenceAction,
     getGenderAction, disabilityReferenceAction, checkVenueDuplication,
-    combinedAccreditationUmpieCoachRefrence,
+    combinedAccreditationUmpieCoachRefrence, getDocumentType
 } from '../../store/actions/commonAction/commonAction';
 import history from '../../util/history';
 import Loader from '../../customComponents/loader';
-import { getOrganisationData, getUserId } from "../../util/sessionStorage";
+import { getAuthToken, getOrganisationData, getUserId } from "../../util/sessionStorage";
 import { regexNumberExpression } from '../../util/helpers';
 import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 import UserAxiosApi from "../../store/http/userHttp/userAxiosApi";
@@ -47,6 +49,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { confirm } = Modal;
 const { Text } = Typography;
+const { Dragger } = Upload;
 
 const columns = [
     {
@@ -149,10 +152,14 @@ class UserProfileEdit extends Component {
             isPossibleMatchShow: false,
             isLoading: false,
             parentMatchingId: 0,
+            docType: '',
+            docList: [],
+            documentId: -1
         };
         this.confirmOpend = false;
         // this.props.getCommonRefData();
         this.props.countryReferenceAction();
+        this.props.getDocumentType();
         this.props.nationalityReferenceAction();
         this.props.getGenderAction();
         this.props.disabilityReferenceAction();
@@ -165,7 +172,7 @@ class UserProfileEdit extends Component {
             let titleLabel = "";
             let section = "";
             const data = this.props.history.location.state.userData;
-            const { moduleFrom } = this.props.history.location.state;
+            const { moduleFrom, userData: {docType, docUrl} } = this.props.history.location.state;
             if (moduleFrom === "1") {
                 titleLabel = `${AppConstants.edit} ${AppConstants.address}`;
                 section = "address";
@@ -245,7 +252,13 @@ class UserProfileEdit extends Component {
                 ...additionalSettings,
                 isSameEmail: data.isInActive
             }
-
+            let docList = docUrl ? [{
+                uid: '1',
+                name: 'document',
+                status: 'done',
+                url: docUrl,
+                thumbUrl: '',
+            }] : [];
             setTimeout(() => {
                 this.setState({
                     displaySection: moduleFrom,
@@ -253,6 +266,8 @@ class UserProfileEdit extends Component {
                     showSameEmailOption,
                     titleLabel,
                     section,
+                    docType: docType ? docType : '',
+                    docList: docList,
                     loadValue: true,
                     userRole: getOrganisationData().userRole,
                     ...additionalSettings,
@@ -470,6 +485,8 @@ class UserProfileEdit extends Component {
                 key = "email";
                 value = updatedEmail;
             }
+        } else if (key === 'docType') {
+            this.setState({docType: value});
         }
 
         if (key === 'accreditationLevelUmpireRefId') {
@@ -1253,6 +1270,91 @@ class UserProfileEdit extends Component {
         );
     };
 
+    documentUpload = () => {
+        const { userData, docList } = this.state;
+        const { docTypes } = this.props.commonReducerState;
+
+        const beforeUpload = (file) => {
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                message.error('Image must smaller than 2MB!');
+            } else {
+                this.setState(state => ({
+                    docList: [file],
+                    isLoading: true
+                }));
+            }
+            return isLt2M;
+        }
+        const onCustomUpload = async (data) => {
+            console.log(data);
+            let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
+            if (ret.result.data.status === 'done') {
+                docList[0].url = ret.result.data.url;
+                return data.onSuccess();
+            } else {
+                data.onError();
+            }
+            this.setState({docList: []});
+        }
+        const onChange = (info) => {        
+            if (info.file.status !== 'uploading') {
+                
+            }
+            if (info.file.status === 'done') {
+                message.success(`File was uploaded successfully`);
+                this.setState({isLoading: false});
+            } else if (info.file.status === 'error') {
+                message.error(`Uploading was failed.`);
+                this.setState({isLoading: false});
+            }
+        }
+        const props = {
+            customRequest: onCustomUpload,
+            name: 'file',
+            maxCount: 1,
+            accept: '.jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.xls,.xlsx,.csv',
+            onRemove: file => {
+                this.setState({
+                    docList: [],
+                });
+            },
+            beforeUpload: beforeUpload,
+            onChange: onChange,
+            fileList: docList
+        };
+
+        return ( <div> 
+            <Loader visible={this.state.isLoading} />
+            <div className="row">
+                <div className="col-sm-12 col-md-6">
+                    <InputWithHead heading={AppConstants.documentType} />
+                    <Select defaultValue={this.state.docType} onSelect={(e) => this.onChangeSetValue(e, 'docType')} style={{width: '100%'}}>
+                        {docTypes.map(doctype => (
+                            <Option key={doctype.name}>{doctype.description}</Option>
+                        ))}
+                    </Select>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm-12">
+                    <InputWithHead heading={AppConstants.documentUrl} />
+                    <div>
+                        <Dragger {...props}>
+                            <p className="ant-upload-drag-icon">
+                            <InboxOutlined />
+                            </p>
+                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                            <p className="ant-upload-hint">
+                                Selected file must be less then 2 MB and jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx formats are supported.
+                            </p>
+                        </Dragger>
+                    </div>
+                </div>
+            </div>
+        </div>);
+    }
+
     medicalEdit = () => {
         const { userData } = this.state;
         const { disabilityList } = this.props.commonReducerState;
@@ -1390,6 +1492,7 @@ class UserProfileEdit extends Component {
                 {displaySection === "3" && <div>{this.emergencyContactEdit()}</div>}
                 {displaySection === "4" && <div>{this.otherInfoEdit()}</div>}
                 {displaySection === "5" && <div>{this.medicalEdit()}</div>}
+                {displaySection === "9" && <div>{this.documentUpload()}</div>}
                 {/* {(displaySection === "7" || displaySection === "8") && <div>{this.addParentOrChild()}</div>} */}
             </div>
         );
@@ -1523,9 +1626,11 @@ class UserProfileEdit extends Component {
                 });
             } else {
                 saveAction();
+                this.confirmOpend = false;
             }
         } else {
             saveAction();
+            this.confirmOpend = false;
         }
     };
 
@@ -1547,6 +1652,35 @@ class UserProfileEdit extends Component {
             data.childUserId = 0;
         } if (this.state.hasErrorAddressNumber == true || this.state.hasErrorEmergency == true) {
             return false;
+        } else if (this.state.displaySection == 9) {
+            let {docType, docList} = this.state;
+            let { docTypes } = this.props.commonReducerState;
+            let documentId =  this.props.history.location.state.userData.documentId || this.state.documentId || -1;
+
+            if (!docType || docList.length === 0) return;
+            
+            this.setState({isLoading: true});
+            let payload = {
+                userId: data.userId,
+                organisationUniqueKey: data.organisationId,
+                dateUploaded: new Date(),
+                docType: docType,
+                docTypeDescription: docTypes.filter(dt => dt.name === docType)[0].description,
+                docUrl: docList[0].url,
+                documentId: documentId !== -1 ? documentId : undefined
+            }
+            let ret = await UserAxiosApi.addUserModuleDocuments(payload);
+            if (!!ret.result.data.documentId) {
+                this.setState({documentId: ret.result.data.documentId});
+                message.success(`Document was saved successfully`);
+                setTimeout(() => {
+                    history.goBack();
+                }, 1000);
+            } else {
+                message.success(`Document uploading was failed`);;
+            }
+            this.setState({isLoading: false});
+            return;
         }
 
         if (this.state.isSameEmail) {
@@ -1560,7 +1694,7 @@ class UserProfileEdit extends Component {
             }
         }
 
-        data["email"] = data["email"].toLowerCase();
+        data["email"] = data["email"]?.toLowerCase();
 
         // judging whether the flow is on addChild / addParent based on `titleLabel` (possible refactor)
 
@@ -1663,6 +1797,7 @@ function mapDispatchToProps(dispatch) {
         addParentAction,
         userProfileUpdateAction,
         getCommonRefData,
+        getDocumentType,
         countryReferenceAction,
         nationalityReferenceAction,
         getGenderAction,
