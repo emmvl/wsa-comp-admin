@@ -379,6 +379,7 @@ const initialState = {
   isPersonalUserLoading: false,
   isDocumentLoading: false,
   isCompUserLoading: false,
+  cancelDeRegistrationLoad: false
 };
 
 function getUpdatedTeamMemberObj(competition) {

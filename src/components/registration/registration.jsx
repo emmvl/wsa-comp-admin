@@ -29,7 +29,7 @@ import {
     setRegistrationListPageNumber
 } from "store/actions/registrationAction/endUserRegistrationAction";
 import { getAllCompetitionAction, registrationFailedStatusUpdate,registrationRetryPaymentAction } from "store/actions/registrationAction/registrationDashboardAction";
-import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
+import { getAffiliateToOrganisationAction, cancelDeRegistrationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { liveScorePlayersToCashReceivedAction, liveScorePlayersToPayRetryPaymentAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 
@@ -239,7 +239,8 @@ const columns = [
         render: (isUsed, record, index) => (
            (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
            (record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
-           record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee")))
+           record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee" ||
+           record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer")))
                 ? (
                     <Menu
                         className="action-triple-dot-submenu"
@@ -330,6 +331,15 @@ const columns = [
                                     </Menu.Item>
                                 )
                             }
+                            {
+                                record.actionView == 0 && (record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer") && (
+                                    <Menu.Item key="8"
+                                    onClick={() => this_Obj.cancelDeRegistrtaion(record.deRegisterId)}
+                                    >
+                                        <span>{AppConstants.cancelDeRegistrtaion}</span>
+                                    </Menu.Item>
+                                )
+                            }
 
                         </SubMenu>
 
@@ -372,7 +382,8 @@ class Registration extends Component {
             otherModalVisible: false,
             modalTitle: null,
             modalMessage: null,
-            actionView: 0
+            actionView: 0,
+            cancelDeRegistrationLoad: false
         };
 
         this_Obj = this;
@@ -473,6 +484,11 @@ class Registration extends Component {
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
             }
+        }
+
+        if(this.state.cancelDeRegistrationLoad == true && this.props.userState.cancelDeRegistrationLoad == false){
+            this.setState({ cancelDeRegistrationLoad: false });
+            this.handleRegTableList(1);
         }
     }
 
@@ -739,6 +755,18 @@ class Registration extends Component {
         setTimeout(() => {
             this.handleRegTableList(1);
         }, 300);
+    }
+
+    cancelDeRegistrtaion = (deRegisterId) => {
+        try {
+            const payload = {
+                deRegisterId: Number(deRegisterId),
+            }
+            this.props.cancelDeRegistrationAction(payload);
+            this.setState({ cancelDeRegistrationLoad: true })
+        } catch (ex) {
+            console.log(`Error in cancelDeRegistrtaion::${ex}`)
+        }
     }
 
     headerView = () => (
@@ -1325,7 +1353,8 @@ function mapDispatchToProps(dispatch) {
         setRegistrationListPageNumber,
         registrationFailedStatusUpdate,
         liveScorePlayersToPayRetryPaymentAction,
-        registrationRetryPaymentAction
+        registrationRetryPaymentAction,
+        cancelDeRegistrationAction
     }, dispatch);
 }
 
