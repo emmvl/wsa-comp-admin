@@ -689,7 +689,7 @@ class HomeDashboard extends Component {
                 &&
                 !document.cookie.split(';').filter((item) => item.trim().startsWith('termsAndConditions=')).length
                 &&
-                (!!this.props.userState.affiliateOurOrg.termsAndConditionsFile || !!this.props.userState.affiliateOurOrg.termsAndConditionsLink)
+                (!!this.props.userState.affiliateOurOrg.stateTermsAndConditionsFile || !!this.props.userState.affiliateOurOrg.stateTermsAndConditionsLink)
             )
         ) {
             return (
