@@ -256,6 +256,7 @@ const initialState = {
   personalData: {},
   personalEmergency: [],
   medicalData: [],
+  documents: [],
   personalByCompData: [],
   userRegistrationList: null,
   userRegistrationPage: 1,
@@ -377,6 +378,8 @@ const initialState = {
   netSetGoPageSize: 10,
   netSetGoTotalCount: 1,
   isPersonalUserLoading: false,
+  isDocumentLoading: false,
+  isDocumentRemoving: false,
   isCompUserLoading: false,
 };
 
@@ -749,6 +752,32 @@ function userReducer(state = initialState, action) {
         status: action.status,
         isPersonalUserLoading: false,
       };
+
+    case ApiConstants.API_USER_MODULE_DOCUMENTS_LOAD:
+      return { ...state, onLoad: true, isDocumentLoading: true };
+
+    case ApiConstants.API_USER_MODULE_DOCUMENTS_ERROR:
+      return { ...state, onLoad: false, isDocumentLoading: false };
+
+    case ApiConstants.API_USER_MODULE_DOCUMENTS_SUCCESS:
+      let documents = action.result;
+      return {
+        ...state,
+        onLoad: false,
+        documents: documents,
+        status: action.status,
+        isDocumentLoading: false,
+      };
+    
+    case ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_LOAD:
+      return { ...state, isDocumentLoading: true };
+
+    case ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_ERROR:
+      return { ...state, isDocumentLoading: false };
+
+    case ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_SUCCESS:
+      return { ...state, isDocumentLoading: false};
+      
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD:
       return { ...state, onPersonLoad: true, isCompUserLoading: true };

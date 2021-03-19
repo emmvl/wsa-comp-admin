@@ -345,6 +345,54 @@ function* getUserModulePersonalDataSaga(action) {
   }
 }
 
+// Get the User Module Documents
+function* getUserModuleDocumentsSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleDocuments, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_DOCUMENTS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+      yield put({
+          type: ApiConstants.API_USER_MODULE_DOCUMENTS_ERROR,
+      });
+  }
+}
+
+// Remove Document from USER
+function* removeUserModuleDocumentSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.removeUserModuleDocument, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_SUCCESS,
+      });
+      const payload = {
+        userId: action.payload.userId,
+        organisationId: action.payload.organisationId,
+      };
+      yield put({
+        type: ApiConstants.API_USER_MODULE_DOCUMENTS_LOAD,
+        payload: payload
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+      yield put({
+          type: ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_ERROR,
+      });
+  }
+}
+
 // Get the User Module Personal by Competition Data
 function* getUserModulePersonalByCompDataSaga(action) {
   try {
@@ -1419,6 +1467,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD, getUserDashboardTextualListingSaga);
   yield takeEvery(ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_LOAD, getUserDashboardTextualSpectatorCountSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD, getUserModulePersonalDataSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_DOCUMENTS_LOAD, getUserModuleDocumentsSaga);
+  yield takeEvery(ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_LOAD, removeUserModuleDocumentSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD, getUserModulePersonalByCompDataSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, getUserModuleMedicalInfoSaga);
   yield takeEvery(ApiConstants.API_USER_MODULE_REGISTRATION_LOAD, getUserModuleRegistrationDataSaga);

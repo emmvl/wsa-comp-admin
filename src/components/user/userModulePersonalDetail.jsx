@@ -25,6 +25,8 @@ import AppImages from "../../themes/appImages";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import {
     getUserModulePersonalDetailsAction,
+    getUserModuleDocumentsAction,
+    removeUserModuleDocumentAction,
     getUserModulePersonalByCompetitionAction,
     getUserModuleRegistrationAction,
     getUserModuleTeamMembersAction,
@@ -1022,6 +1024,68 @@ const columnsPersonalChildContacts = [
     },
 ];
 
+
+const columnsDocuments = [
+    {
+        title: "Date Uploaded",
+        dataIndex: "dateUploaded",
+        key: "dateUploaded",
+        render: (data, record) => moment(data).format("DD/MM/YYYY")
+    },
+    {
+        title: "Document Type",
+        dataIndex: "docTypeDescription",
+        key: "docTypeDescription",
+    },
+    {
+        title: "Document",
+        dataIndex: "docUrl",
+        key: "docUrl",
+    },
+    {
+        title: "Action",
+        dataIndex: "isUser",
+        key: "isUser",
+        width: 80,
+        render: (data, record) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: "25px" }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={(
+                        <img
+                            className="dot-image"
+                            src={AppImages.moreTripleDot}
+                            alt=""
+                            width="16"
+                            height="16"
+                        />
+                    )}
+                >
+                    <Menu.Item key="1">
+                        <NavLink
+                            to={{
+                                pathname: `/userProfileEdit`,
+                                state: { userData: { userId: record.userId, organisationId: record.organisationUniqueKey, documentId: record.id, docType: record.docType, docUrl: record.docUrl }, moduleFrom: "9" },
+                            }}
+                        >
+                            <span>Edit</span>
+                        </NavLink>
+                    </Menu.Item>
+
+                    <Menu.Item key="2">
+                        <span onClick={() => this_Obj.removeDocument(record)}>Remove</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+        ),
+    },
+];
+
 const columnsPersonalEmergency = [
     {
         title: "First Name",
@@ -1749,6 +1813,7 @@ class UserModulePersonalDetail extends Component {
         this.props.getUserRole(userId);
         this.props.getUserModulePersonalDetailsAction(payload);
         this.props.getUserModulePersonalByCompetitionAction(payload);
+        this.props.getUserModuleDocumentsAction(payload);
     };
 
     getOrganisationArray(data, roleId) {
@@ -2587,6 +2652,7 @@ class UserModulePersonalDetail extends Component {
             ? personalByCompData[0].primaryContacts
             : [];
         const childContacts = personalByCompData.length > 0 ? personalByCompData[0].childContacts : [];
+        const documents = userState.documents.length > 0 ? userState.documents : [];
         let countryName = "";
         // let nationalityName = "";
         // let languages = "";
@@ -2790,6 +2856,36 @@ class UserModulePersonalDetail extends Component {
                             <div className="year-select-heading other-info-label" style={{ paddingBottom: 20 }}>{AppConstants.disability}</div>
                             <div className="desc-text-style side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
                         </div> */}
+                    </div>
+                    
+                </div>
+                
+                {/* Upload Documents */}
+                <div>
+                    <div
+                        className="user-module-row-heading"
+                        style={{ marginTop: 30 }}
+                    >
+                        {AppConstants.documents}
+                    </div>
+                    <NavLink
+                        to={{
+                            pathname: `/userProfileEdit`,
+                            state: { moduleFrom: "9", userData: personal },
+                        }}
+                    >
+                        <span className="input-heading-add-another" style={{ paddingTop: "unset", marginBottom: "15px" }}>
+                            {`+ ${AppConstants.addDocument}`}
+                        </span>
+                    </NavLink>
+                    <div className="table-responsive home-dash-table-view">
+                        <Table
+                            className="home-dashboard-table"
+                            columns={columnsDocuments}
+                            dataSource={documents}
+                            pagination={false}
+                            loading={userState.isDocumentLoading && true}
+                        />
                     </div>
                 </div>
             </div>
@@ -3541,6 +3637,17 @@ class UserModulePersonalDetail extends Component {
         }
     }
 
+    removeDocument = async (record) => {
+        if (record.id) {
+            const payload = {
+                id: record.id,
+                userId: record.userId,
+                organisationId: record.organisationUniqueKey,
+            };
+            this.props.removeUserModuleDocumentAction(payload);
+        }
+    }
+
     removeTeamMember = (record) => {
         if (record.isActive) {
             this.setState({ removeTeamMemberRecord: record, showRemoveTeamMemberConfirmPopup: true });
@@ -3742,8 +3849,9 @@ class UserModulePersonalDetail extends Component {
             scorerActivityRoster,
             isPersonalUserLoading,
             isCompUserLoading,
+            isDocumentRemoving
         } = this.props.userState;
-        const isUserLoading = isPersonalUserLoading || isCompUserLoading;
+        const isUserLoading = isPersonalUserLoading || isCompUserLoading || isDocumentRemoving;
         const personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
         if (personalDetails != null && personalDetails.length > 0) {
@@ -3840,6 +3948,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             getUserModulePersonalDetailsAction,
+            getUserModuleDocumentsAction,
+            removeUserModuleDocumentAction,
             getUserModuleMedicalInfoAction,
             getUserModuleRegistrationAction,
             getUserModuleTeamMembersAction,

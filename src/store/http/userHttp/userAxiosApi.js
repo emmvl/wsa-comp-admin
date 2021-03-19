@@ -163,6 +163,28 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
+  getUserModuleDocuments(payload) {
+    const url = `api/user/documents?userId=${payload.userId}&organisationId=${payload.organisationId}`;
+    return Method.dataGet(url, token);
+  },
+
+  addUserModuleDocuments(payload) {
+    const url = `api/user/document`;
+    return Method.dataPost(url, token, payload);
+  },
+  
+  removeUserModuleDocument(payload) {
+    const url = `api/user/document?id=${payload.id}`;
+    return Method.dataDelete(url, token);
+  },
+  
+  getUserModuleUploadDocument(payload) {
+    const url = `api/user/uploadDocument`;
+    let formData = new FormData();
+    formData.append('file', payload.file);
+    return Method.dataPostFormData(url, token, formData);
+  },
+
   getUserModulePersonalByCompData(payload) {
     const url = `api/user/personaldetails/competition`;
     return Method.dataPost(url, token, payload);
@@ -558,6 +580,69 @@ let Method = {
         .post(url, body, {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Authorization: "BWSA " + authorization,
+            "SourceSystem": "WebAdmin"
+          }
+        })
+        .then(result => {
+          if (result.status === 200) {
+            return resolve({
+              status: 1,
+              result: result
+            });
+          } else if (result.status === 212) {
+            return resolve({
+              status: 4,
+              result: result
+            });
+          } else {
+            if (result) {
+              return reject({
+                status: 3,
+                error: result.data.message,
+              });
+            } else {
+              return reject({
+                status: 4,
+                error: "Something went wrong."
+              });
+            }
+          }
+        })
+        .catch(err => {
+          if (err.response) {
+            if (err.response.status !== null && err.response.status !== undefined) {
+              if (err.response.status === 401) {
+                let unauthorizedStatus = err.response.status;
+                if (unauthorizedStatus === 401) {
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
+                }
+              } else {
+                return reject({
+                  status: 5,
+                  error: err
+                })
+              }
+            }
+          } else {
+            return reject({
+              status: 5,
+              error: err
+            });
+          }
+        });
+    });
+  },
+
+  async dataPostFormData(newUrl, authorization, body) {
+    const url = newUrl;
+    return await new Promise((resolve, reject) => {
+      userHttp
+        .post(url, body, {
+          headers: {
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
             Authorization: "BWSA " + authorization,
             "SourceSystem": "WebAdmin"
