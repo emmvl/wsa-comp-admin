@@ -43,6 +43,7 @@ import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import registration from "./registration";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -116,6 +117,14 @@ const listeners = (key) => ({
 });
 
 const columns = [
+    {
+        title: AppConstants.registrationDate,
+        dataIndex: "registrationDate",
+        key: "registrationDate",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (registrationDate) => moment(registration).format('DD/MM/YYYY')
+    },
     {
         title: AppConstants.participant_id,
         dataIndex: "userId",
@@ -192,8 +201,8 @@ const columns = [
     },
     {
         title: AppConstants.registration + ' ' + AppConstants.status,
-        dataIndex: "registrationStatus",
-        key: "registrationStatus",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
@@ -595,7 +604,7 @@ const columns = [
         ]
     },
     {
-        title: AppConstants.governmentVoucherNumber,
+        title: AppConstants.voucherOrDiscountCode,
         dataIndex: "governmentVoucherNumber",
         key: "governmentVoucherNumber",
         sorter: true,
