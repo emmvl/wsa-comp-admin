@@ -43,6 +43,7 @@ import Loader from "customComponents/loader";
 import InputWithHead from "customComponents/InputWithHead";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import registration from "./registration";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -116,6 +117,14 @@ const listeners = (key) => ({
 });
 
 const columns = [
+    {
+        title: AppConstants.registrationDate,
+        dataIndex: "registrationDate",
+        key: "registrationDate",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (registrationDate) => moment(registration).format('DD/MM/YYYY')
+    },
     {
         title: AppConstants.participant_id,
         dataIndex: "userId",
@@ -192,8 +201,8 @@ const columns = [
     },
     {
         title: AppConstants.registration + ' ' + AppConstants.status,
-        dataIndex: "registrationStatus",
-        key: "registrationStatus",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
@@ -595,7 +604,7 @@ const columns = [
         ]
     },
     {
-        title: AppConstants.governmentVoucherNumber,
+        title: AppConstants.voucherOrDiscountCode,
         dataIndex: "governmentVoucherNumber",
         key: "governmentVoucherNumber",
         sorter: true,
@@ -678,7 +687,7 @@ class SummaryByParticipant extends Component {
                 : 10;
             page = Math.floor(offset / participantSummaryListPageSize) + 1;
 
-            this.handlePaymentTableList(
+            this.handleSummaryList(
                 page,
                 userId,
                 registrationId,
@@ -700,7 +709,7 @@ class SummaryByParticipant extends Component {
             const userId = userInfo != null ? userInfo.userId : -1;
             const regId = registrationId != null ? registrationId : "-1";
 
-            this.handlePaymentTableList(
+            this.handleSummaryList(
                 1,
                 userId,
                 regId,
@@ -786,7 +795,7 @@ class SummaryByParticipant extends Component {
 
     clearFilterByUserId = () => {
         this.setState({ userInfo: null });
-        this.handlePaymentTableList(
+        this.handleSummaryList(
             this.state.offset,
             -1,
             "-1",
@@ -798,7 +807,7 @@ class SummaryByParticipant extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value, offset: 0 });
         if (e.target.value === null || e.target.value === "") {
-            this.handlePaymentTableList(
+            this.handleSummaryList(
                 1,
                 this.state.userId !== null ? this.state.userId : -1,
                 this.state.registrationId !== null
@@ -817,7 +826,7 @@ class SummaryByParticipant extends Component {
         const code = e.keyCode || e.which;
         if (code === 13) {
             // 13 is the enter keycode
-            this.handlePaymentTableList(
+            this.handleSummaryList(
                 1,
                 this.state.userId !== null ? this.state.userId : -1,
                 this.state.registrationId !== null
@@ -833,7 +842,7 @@ class SummaryByParticipant extends Component {
 
     onClickSearchIcon = () => {
         if (this.state.searchText) {
-            this.handlePaymentTableList(
+            this.handleSummaryList(
                 1,
                 this.state.userId !== null ? this.state.userId : -1,
                 this.state.registrationId !== null
@@ -941,10 +950,10 @@ class SummaryByParticipant extends Component {
     handleShowSizeChange = async (page, pageSize) => {
         await this.props.setSummaryPageSizeAction(pageSize);
         const { userId, registrationId, searchText } = this.state;
-        this.handlePaymentTableList(page, userId, registrationId, searchText);
+        this.handleSummaryList(page, userId, registrationId, searchText);
     };
 
-    handlePaymentTableList = async (page, userId, regId, searchValue) => {
+    handleSummaryList = async (page, userId, regId, searchValue) => {
         await this.props.setSummaryPageNumberAction(page);
         const {
             sortBy,
@@ -1002,42 +1011,42 @@ class SummaryByParticipant extends Component {
             if (value != -1) {
                 setGlobalYear(value);
             }
-            this.handlePaymentTableList(1, -1, null, this.state.searchText);
+            this.handleSummaryList(1, -1, null, this.state.searchText);
         } else if (key === "competitionId") {
             await this.setState({ competitionUniqueKey: value });
-            this.handlePaymentTableList(1, -1, null, this.state.searchText);
+            this.handleSummaryList(1, -1, null, this.state.searchText);
         } else if (key === "filterOrganisation") {
             await this.setState({ filterOrganisation: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "dateFrom") {
             await this.setState({
                 dateFrom: value
                     ? moment(value).startOf("day").format("YYYY-MM-DD HH:mm:ss")
                     : value,
             });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "dateTo") {
             await this.setState({
                 dateTo: value
                     ? moment(value).endOf("day").format("YYYY-MM-DD HH:mm:ss")
                     : value,
             });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "feeType") {
             await this.setState({ feeType: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "paymentOption") {
             await this.setState({ paymentOption: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "paymentMethod") {
             await this.setState({ paymentMethod: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "membershipType") {
             await this.setState({ membershipType: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         } else if (key === "paymentStatus") {
             await this.setState({ paymentStatus: value });
-            this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+            this.handleSummaryList(1, -1, "-1", this.state.searchText);
         }
     };
 
@@ -1410,7 +1419,7 @@ class SummaryByParticipant extends Component {
                         defaultPageSize={participantSummaryListPageSize}
                         total={participantSummaryListTotalCount}
                         onChange={(page) =>
-                            this.handlePaymentTableList(
+                            this.handleSummaryList(
                                 page,
                                 userId,
                                 regId,

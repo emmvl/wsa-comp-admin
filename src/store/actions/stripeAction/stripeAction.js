@@ -339,7 +339,7 @@ function exportParticipantSummaryApiAction(
     paymentStatus,
 ) {
     return {
-        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
+        type: ApiConstants.API_EXPORT_PARTICIPANT_SUMMARY_LOAD,
         offset,
         sortBy,
         sortOrder,
