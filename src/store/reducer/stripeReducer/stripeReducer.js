@@ -472,6 +472,7 @@ function stripe(state = initialState, action) {
             return {
                 ...state, onLoad: false,
                 participantSummaryList: participantSummary.participantSummary,
+                participantCompetitionList: participantSummary.competitionList,
                 participantSummaryListTotalCount: participantSummary.page.totalCount,
                 participantSummaryListPage: participantSummary.page ? participantSummary.page.currentPage : 1,
             }

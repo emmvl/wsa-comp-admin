@@ -1080,7 +1080,7 @@ class SummaryByParticipant extends Component {
             }
         }
 
-        const { paymentCompetitionList } = this.props.paymentState;
+        const { participantCompetitionList } = this.props.paymentState;
         return (
             <div>
                 <div className="row pb-2">
@@ -1136,7 +1136,7 @@ class SummaryByParticipant extends Component {
                             <Option key={-1} value="-1">
                                 {AppConstants.all}
                             </Option>
-                            {(paymentCompetitionList || []).map((item) => (
+                            {(participantCompetitionList || []).map((item) => (
                                 <Option
                                     // key={'competition_' + item.competitionUniquekey}
                                     key={item.competitionUniquekey}
