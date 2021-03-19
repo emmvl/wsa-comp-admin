@@ -892,11 +892,21 @@ class InnerHorizontalMenu extends React.Component {
                         selectedKeys={[this.props.finSelectedKey]}
                         onClick={this.handleMenuClick}
                     >
-                        <Menu.Item key="1">
-                            <NavLink to="/paymentDashboard">
-                                <span>Dashboard</span>
-                            </NavLink>
-                        </Menu.Item>
+                        <SubMenu
+                            key="sub2"
+                            title={<span>Dashboard</span>}
+                        >
+                            <Menu.Item key="1">
+                                <NavLink to="/paymentDashboard">
+                                    <span>Dashboard</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="6">
+                                <NavLink to="/SummaryByParticipant">
+                                    <span>{AppConstants.summaryByParticipant}</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
                         <Menu.Item key="2" disabled={this.state.isImpersonation}>
                             <NavLink to="/registrationPayments">
                                 <span>Payment Gateway</span>
@@ -916,16 +926,6 @@ class InnerHorizontalMenu extends React.Component {
                         <Menu.Item key="5">
                             <NavLink to="/paymentSummary">
                                 <span>{AppConstants.paymentSummary}</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="6">
-                            <NavLink to="/SummaryByParticipant">
-                                <span>{AppConstants.summaryByParticipant}</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="7">
-                            <NavLink to="/salesSummary">
-                                <span>{AppConstants.salesSummary}</span>
                             </NavLink>
                         </Menu.Item>
                     </Menu>

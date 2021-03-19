@@ -1711,7 +1711,6 @@ const AppConstants = {
     paidBy: "Paid by",
     feeType: "Fee Type",
     paymentType: "Payment Type",
-    membershipType: "Membership type",
     totalFeeIncGst: "Total Fee (inc GST)",
     governmentVoucher: "Govt. Voucher",
     governmentVoucherStatus: "Govt. Voucher Status",
@@ -2025,8 +2024,12 @@ const AppConstants = {
     registeredBy: "Registered By",
     toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
-    incorrectProductDetails: "You have entered incorrect product details.",
-    competition_name: "Competition name"
+    competition_name: "Competition name",
+    instalmentPortion: "Instalment Portion",
+    redeemed: "Redeemed",
+    partialRefund: "Partial Refund",
+    governmentVoucherNumber: "Government Voucher Number",
+    incorrectProductDetails: "You have entered incorrect product details."
 };
 
 export default AppConstants;
