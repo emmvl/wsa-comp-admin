@@ -382,7 +382,8 @@ class Registration extends Component {
             otherModalVisible: false,
             modalTitle: null,
             modalMessage: null,
-            actionView: 0
+            actionView: 0,
+            cancelDeRegistrationLoad: false
         };
 
         this_Obj = this;
@@ -483,6 +484,11 @@ class Registration extends Component {
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
             }
+        }
+
+        if(this.state.cancelDeRegistrationLoad == true && this.props.userState.cancelDeRegistrationLoad == false){
+            this.setState({ cancelDeRegistrationLoad: false });
+            this.handleRegTableList(1);
         }
     }
 
@@ -754,7 +760,7 @@ class Registration extends Component {
     cancelDeRegistrtaion = (deRegisterId) => {
         try {
             const payload = {
-                deRegisterId,
+                deRegisterId: Number(deRegisterId),
             }
             this.props.cancelDeRegistrationAction(payload);
             this.setState({ cancelDeRegistrationLoad: true })
