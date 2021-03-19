@@ -191,7 +191,11 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: AppConstants.registration + ' ' + AppConstants.status
+        title: AppConstants.registration + ' ' + AppConstants.status,
+        dataIndex: "registrationStatus",
+        key: "registrationStatus",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: AppConstants.total,
@@ -209,14 +213,19 @@ const columns = [
                 children: [
                     {
                         title: AppConstants.paid,
-                        dataIndex: "registrationAmount",
-                        key: "registrationAmount",
+                        dataIndex: "registrationPaid",
+                        key: "registrationPaid",
                         sorter: true,
                         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                        render: (registrationAmount) => currencyFormat(registrationAmount)
+                        render: (registrationPaid) => currencyFormat(registrationPaid)
                     },
                     {
-                        title: AppConstants.pending
+                        title: AppConstants.pending,
+                        dataIndex: "registrationPending",
+                        key: "registrationPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (registrationPending) => currencyFormat(registrationPending)
                     }
                 ]
             },
@@ -225,14 +234,19 @@ const columns = [
                 children: [
                     {
                         title: AppConstants.paid,
-                        dataIndex: "charityAmount",
-                        key: "charityAmount",
+                        dataIndex: "charityPaid",
+                        key: "charityPaid",
                         sorter: true,
                         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-                        render: (charityAmount) => currencyFormat(charityAmount)
+                        render: (charityPaid) => currencyFormat(charityPaid)
                     },
                     {
-                        title: AppConstants.pending
+                        title: AppConstants.pending,
+                        dataIndex: "charityPending",
+                        key: "charityPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (charityPending) => currencyFormat(charityPending)
                     }
                 ]
             },
@@ -241,9 +255,19 @@ const columns = [
                 children: [
                     {
                         title: AppConstants.paid,
+                        dataIndex: "shopPaid",
+                        key: "shopPaid",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (shopPaid) => currencyFormat(shopPaid)
                     },
                     {
-                        title: AppConstants.pending
+                        title: AppConstants.pending,
+                        dataIndex: "shopPending",
+                        key: "shopPending",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (shopPending) => currencyFormat(shopPending)
                     }
                 ]
             }
@@ -302,6 +326,11 @@ const columns = [
                     },
                     {
                         title: AppConstants.failed,
+                        dataIndex: "affiliateAmountFailed",
+                        key: "affiliateAmountFailed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (affiliateAmountFailed) => currencyFormat(affiliateAmountFailed)
                     }
                 ]
             },
@@ -357,6 +386,11 @@ const columns = [
             },
             {
                 title: AppConstants.partialRefund,
+                dataIndex: "affiliateRefundAmount",
+                key: "affiliateRefundAmount",
+                sorter: true,
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (affiliateRefundAmount) => currencyFormat(affiliateRefundAmount)
             }
         ]
     },
@@ -392,6 +426,11 @@ const columns = [
                     },
                     {
                         title: AppConstants.failed,
+                        dataIndex: "competitionOrganiserAmountFailed",
+                        key: "competitionOrganiserAmountFailed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (competitionOrganiserAmountFailed) => currencyFormat(competitionOrganiserAmountFailed)
                     }
                 ]
             },
@@ -487,6 +526,11 @@ const columns = [
                     },
                     {
                         title: AppConstants.failed,
+                        dataIndex: "membershipAmountFailed",
+                        key: "membershipAmountFailed",
+                        sorter: true,
+                        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                        render: (membershipAmountFailed) => currencyFormat(membershipAmountFailed)
                     }
                 ]
             },
@@ -552,6 +596,10 @@ const columns = [
     },
     {
         title: AppConstants.governmentVoucherNumber,
+        dataIndex: "governmentVoucherNumber",
+        key: "governmentVoucherNumber",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     }
 ];
 
