@@ -2035,7 +2035,8 @@ const AppConstants = {
     redeemed: "Redeemed",
     partialRefund: "Partial Refund",
     governmentVoucherNumber: "Government Voucher Number",
-    incorrectProductDetails: "You have entered incorrect product details."
+    incorrectProductDetails: "You have entered incorrect product details.",
+    voucherOrDiscountCode: "Voucher/Discount Code",
 };
 
 export default AppConstants;

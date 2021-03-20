@@ -496,7 +496,7 @@ let AxiosApi = {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
         let _now = moment().utc().format('Y-MM-DD');
-        return Method.dataPostDownload(url, token, `pariticipantSummary-${_now}`, body);
+        return Method.dataPostDownload(url, token, `summary-by-Participant-${_now}`, body);
     },
 };
 
