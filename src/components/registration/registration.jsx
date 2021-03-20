@@ -238,7 +238,7 @@ const columns = [
         key: "isUsed",
         render: (isUsed, record, index) => (
            (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
-           (record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+           (record.deRegistered != 1 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
            record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee" ||
            record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer")))
                 ? (
@@ -316,7 +316,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+                                record.deRegistered != 1 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
                                 record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
                                     <Menu.Item key="7"
                                     onClick={() =>
@@ -332,7 +332,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 0 && (record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer") && (
+                                record.deRegistered != 1 && (record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer") && (
                                     <Menu.Item key="8"
                                     onClick={() => this_Obj.cancelDeRegistrtaion(record.deRegisterId)}
                                     >
