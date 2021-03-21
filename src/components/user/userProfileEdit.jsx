@@ -1288,11 +1288,15 @@ class UserProfileEdit extends Component {
         }
         const onCustomUpload = async (data) => {
             console.log(data);
-            let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
-            if (ret.result.data.status === 'done') {
-                docList[0].url = ret.result.data.url;
-                return data.onSuccess();
-            } else {
+            try {
+                let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
+                if (ret.result.data.status === 'done') {
+                    docList[0].url = ret.result.data.url;
+                    return data.onSuccess();
+                } else {
+                    data.onError();
+                }
+            } catch (e) {
                 data.onError();
             }
             this.setState({docList: []});
