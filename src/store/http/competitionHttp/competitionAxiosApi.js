@@ -204,6 +204,76 @@ const Method = {
         });
     },
 
+    async dataDelete(newurl, authorization) {
+        const url = newurl;
+        return await new Promise((resolve, reject) => {
+            competitionHttp
+                .delete(url, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        Authorization: "BWSA " + authorization,
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
+                    }
+                })
+
+                .then(result => {
+                    if (result.status === 200) {
+                        return resolve({
+                            status: 1,
+                            result: result
+                        });
+                    }
+                    else if (result.status === 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status === 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus === 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
+                                }
+                            }
+                            else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
+
+                            }
+                        }
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
+                        });
+                    }
+                });
+        });
+    },
+
     async dataDeconste(newurl, authorization) {
         const url = newurl;
         return new Promise((resolve, reject) => {
@@ -1073,9 +1143,9 @@ const CompetitionAxiosApi = {
         return Method.dataPost(url, token, payload)
     },
 
-    async competitionDashboardDeconste(competitionId, targetValue) {
-        const url = `/api/competition/deconste?competitionId=${competitionId}&deconsteOptionId=${targetValue}`;
-        return Method.dataDeconste(url, token);
+    async competitionDashboardDelete(competitionId, targetValue) {
+        const url = `/api/competition/delete?competitionId=${competitionId}&deconsteOptionId=${targetValue}`;
+        return Method.dataDelete(url, token);
     },
 
     async replicateSave(replicateData) {

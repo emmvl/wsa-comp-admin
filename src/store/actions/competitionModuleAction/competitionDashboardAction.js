@@ -35,11 +35,11 @@ function saveCompetitionDivisionsAction(competitionId, organisationId, payload) 
     return action;
 }
 
-function deleteCompetitionAction(competitionId,targetValue) {
+function deleteCompetitionAction(competitionId, targetValue) {
     const action = {
         type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD,
         competitionId,
-        targetValue:targetValue
+        targetValue,
     };
     return action;
 }
