@@ -48,15 +48,17 @@ function checlfixedDurationForBulkMatch(data) {
 
 function checkVenueCourtId(data) {
     const courtId = isArrayNotEmpty(data.courtId) ? data.courtId : [];
-    let url;
+    let url = null;
     if (data.venueId) {
         if (data.venueId && courtId.length > 0) {
             url = `&venueId=${data.venueId}&courtId=${data.courtId}`;
         } else {
             url = `&venueId=${data.venueId}`;
         }
-    } else {
-        url = null;
+    }
+
+    if (data.roundId) {
+        url += `&roundId=${data.roundId}`
     }
 
     return url;
@@ -962,10 +964,11 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAbandonMatch(data, startTime, endTime) {
+    async liveScoreAbandonMatch(data, startTime, endTime) {
         const extendParam = checkVenueCourtId(data);
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        let url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}`;
+        const organisationId = await getOrganisationData().organisationUniqueKey;
+        let url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}&organisationUniqueKey=${organisationId}`;
         if (extendParam) {
             url = `${url}${extendParam}`;
         }
