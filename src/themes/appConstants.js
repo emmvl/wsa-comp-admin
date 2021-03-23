@@ -2038,6 +2038,7 @@ const AppConstants = {
     governmentVoucherNumber: "Government Voucher Number",
     incorrectProductDetails: "You have entered incorrect product details.",
     voucherOrDiscountCode: "Voucher/Discount Code",
+    cash: "Cash",
     nominationFeesRefunded: "Nomination Fees Refunded",
     competitionFeesRefunded: "Competition Fees Refunded",
     refunded: "Refunded",
