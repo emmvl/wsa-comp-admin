@@ -1345,9 +1345,25 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAddEditIncident(data) {
+    async liveScoreAddEditIncident(data) {
         const { body } = data;
         const players = JSON.stringify(data.playerIds);
+
+        if (data.key === 'media') {
+            const media = data.mediaArry
+            const body = new FormData()
+
+            for (let i in media) {
+                body.append("media", media[i])
+            }
+            if (data.isEdit) {
+                const url = `/incident/media/edit?incidentId=${data.incidentId}`;
+                await Method.dataPatch(url, token, body)
+            } else {
+                const url = `/incident/media?incidentId=${data.incidentId}`;
+                await Method.dataPost(url, token, body)
+            }
+        }
 
         if (data.isEdit) {
             const url = `/incident/edit?playerIds=${players}`;
@@ -1355,33 +1371,6 @@ const LiveScoreAxiosApi = {
         }
         const url = `/incident?playerIds=${players}`;
         return Method.dataPost(url, token, body);
-
-        // if (data.key === 'media') {
-        //     let media = data.mediaArry
-        //     let body = new FormData()
-        //
-        //     for (let i in media) {
-        //         body.append("media", media[i])
-        //     }
-        //     if (data.isEdit) {
-        //         const url = `/incident/media/edit?incidentId=${data.incidentId}`;
-        //         return Method.dataPatch(url, token, body)
-        //     } else {
-        //         const url = `/incident/media?incidentId=${data.incidentId}`;
-        //         return Method.dataPost(url, token, body)
-        //     }
-        // } else {
-        //     // let body = { "incident": data.body }
-        //     let body = data.body
-        //     let players = JSON.stringify(data.playerIds)
-        //     if (data.isEdit) {
-        //         const url = `/incident/edit?playerIds=${players}`;
-        //         return Method.dataPatch(url, token, body)
-        //     } else {
-        //         const url = `/incident?playerIds=${players}`;
-        //         return Method.dataPost(url, token, body)
-        //     }
-        // }
     },
 
     liveScoreIncidentType() {

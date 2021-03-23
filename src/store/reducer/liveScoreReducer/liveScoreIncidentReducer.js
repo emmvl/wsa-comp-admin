@@ -163,7 +163,6 @@ function liveScoreIncidentState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_INCIDENT_DATA:
-
             if (action.key === "teamId") {
                 state.incidentData['teamId'] = action.data
 
@@ -195,8 +194,6 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.team1Id = data.match.team1.id
                 state.team2_Name = data.match.team2.name
                 state.team2Id = data.match.team2.id
-
-
             } else if (action.key === "clearImage") {
                 if (state.mediaData) {
                     state.incidentData['addImages'] = null
@@ -241,9 +238,7 @@ function liveScoreIncidentState(state = initialState, action) {
             } else {
                 state.incidentData[action.key] = action.data
             }
-            return state;
-
-            break;
+            return { ...state };
         case ApiConstants.API_LIVE_SCORE_INCIDENT_ITEM_LOAD:
         case ApiConstants.API_CREATE_PLAYER_SUSPENSION:
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
@@ -318,7 +313,7 @@ function liveScoreIncidentState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.incidentListActionObject = null
             return { ...state, onLoad: false };
-        
+
         case ApiConstants.SET_LIVE_SCORE_INCIDENT_LIST_PAGE_SIZE:
             return {
                 ...state,
