@@ -2037,6 +2037,7 @@ const AppConstants = {
     governmentVoucherNumber: "Government Voucher Number",
     incorrectProductDetails: "You have entered incorrect product details.",
     voucherOrDiscountCode: "Voucher/Discount Code",
+    cash: "Cash",
 };
 
 export default AppConstants;

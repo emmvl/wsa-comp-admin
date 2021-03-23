@@ -122,6 +122,7 @@ const columns = [
     dataIndex: "firstName",
     key: "firstName",
     fixed: 'left',
+    width: 200,
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (userFirstName, record) => (
@@ -144,6 +145,7 @@ const columns = [
     dataIndex: "lastName",
     key: "lastName",
     fixed: 'left',
+    width: 200,
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (userLastName, record) => (
@@ -633,6 +635,23 @@ const columns = [
           currencyFormat(membershipRefundAmount),
       },
     ],
+  },
+  {
+    title: AppConstants.paymentMethod,
+    dataIndex: "paymentMethod",
+    key: "paymentMethod",
+    sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (paymentMethod) => {
+      switch(paymentMethod) {
+        case 'direct_debit':
+          return AppConstants.directDebit;
+        case 'card':
+          return AppConstants.creditCard;
+        case 'cash':
+          return AppConstants.cash;
+      }
+    }
   },
   {
     title: AppConstants.voucherOrDiscountCode,
@@ -1362,7 +1381,7 @@ class SummaryByParticipant extends Component {
             pagination={false}
             loading={onLoad && true}
             size="middle"
-            scroll={{ x: 'calc(300%)',  y: 240 }}
+            scroll={{ x: 'calc(300%)',  y: 500 }}
           />
         </div>
 
