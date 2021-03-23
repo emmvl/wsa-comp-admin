@@ -177,6 +177,14 @@ const columns = [
         render: (paid, record) => currencyFormat(record.membership.paid),
       },
       {
+        title: AppConstants.refunded,
+        dataIndex: "refunded",
+        key: "refunded",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (refunded, record) => currencyFormat(record.membership.refunded),
+      },
+      {
         title: AppConstants.declined,
         dataIndex: "declined",
         key: "declined",
@@ -208,6 +216,15 @@ const columns = [
           currencyFormat(record.competitionNomination.paid),
       },
       {
+        title: AppConstants.nominationFeesRefunded,
+        dataIndex: "nominationFeesRefunded",
+        key: "nominationFeesRefunded",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (feesPaid, record) =>
+          currencyFormat(record.competitionNomination.refunded),
+      },
+      {
         title: AppConstants.nominationFeesDeclined,
         dataIndex: "nominationFeesDeclined",
         key: "nominationFeesDeclined",
@@ -232,6 +249,14 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (feesPaid, record) => currencyFormat(record.competition.paid),
+      },
+      {
+        title: AppConstants.competitionFeesRefunded,
+        dataIndex: "competitionFeesRefunded",
+        key: "competitionFeesRefunded",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (feesPaid, record) => currencyFormat(record.competition.refunded),
       },
       {
         title: AppConstants.competitionFeesDeclined,
@@ -264,6 +289,15 @@ const columns = [
           currencyFormat(record.affiliateNomination.paid),
       },
       {
+        title: AppConstants.nominationFeesRefunded,
+        dataIndex: "affiliateNominationFeesRefunded",
+        key: "affiliateNominationFeesRefunded",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (feesPaid, record) =>
+          currencyFormat(record.affiliateNomination.refunded),
+      },
+      {
         title: AppConstants.nominationFeesDeclined,
         dataIndex: "affiliateNominationFeesDeclined",
         key: "affiliateNominationFeesDeclined",
@@ -288,6 +322,14 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (feesPaid, record) => currencyFormat(record.affiliate.paid),
+      },
+      {
+        title: AppConstants.competitionFeesRefunded,
+        dataIndex: "affiliateFeesRefunded",
+        key: "affiliateFeesRefunded",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (feesPaid, record) => currencyFormat(record.affiliate.refunded),
       },
       {
         title: AppConstants.competitionFeesDeclined,

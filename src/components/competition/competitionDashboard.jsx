@@ -186,7 +186,7 @@ const columnsOwned = [
                             <Menu.Item key="1" onClick={() => this_Obj.updateCompetitionStatus(record)}>
                                 <span>{AppConstants.editRegrade}</span>
                             </Menu.Item>
-                            <Menu.Item key="2" onClick={() => this_Obj.deleteCompetition('show', record)}>
+                            <Menu.Item key="2" onClick={this_Obj.deleteCompetition('show', record)}>
                                 <span>{AppConstants.delete}</span>
                             </Menu.Item>
                         </SubMenu>
@@ -206,7 +206,7 @@ const columnsOwned = [
                                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                                 }
                             >
-                                <Menu.Item key="1" onClick={() => this_Obj.deleteCompetition('show', record)}>
+                                <Menu.Item key="1" onClick={this_Obj.deleteCompetition('show', record)}>
                                     <span>{AppConstants.delete}</span>
                                 </Menu.Item>
                             </SubMenu>
@@ -291,22 +291,22 @@ class CompetitionDashboard extends Component {
         this.props.updateCompetitionStatus(payload, selectedYearId);
     };
 
-    deleteCompetition = (key, record) => {
+    deleteCompetition = (key, record) => async () => {
         if (key === 'show') {
-            this.setState({
+            await this.setState({
                 modalVisible: true,
                 competitionId: record.competitionId,
                 competitionName: record.competitionName,
                 statusRefId: record.statusRefId,
             });
         } else if (key === 'ok') {
-            this.props.deleteCompetitionAction(this.state.competitionId, this.state.onDeleteTargetValue);
-            this.setState({
+            await this.props.deleteCompetitionAction(this.state.competitionId, this.state.onDeleteTargetValue);
+            await this.setState({
                 modalVisible: false,
                 deleteCompLoad: true,
             });
         } else if (key === 'cancel') {
-            this.setState({
+            await this.setState({
                 modalVisible: false,
                 onDeleteTargetValue: 2,
             });
@@ -527,8 +527,8 @@ class CompetitionDashboard extends Component {
                 className="add-membership-type-modal"
                 title={AppConstants.deleteCompetition}
                 visible={this.state.modalVisible}
-                onOk={() => this.deleteCompetition("ok", this.state.competitionId)}
-                onCancel={() => this.deleteCompetition("cancel", this.state.competitionId)}
+                onOk={this.deleteCompetition("ok")}
+                onCancel={this.deleteCompetition("cancel")}
                 okText={AppConstants.yes}
                 cancelText={AppConstants.no}
             >
