@@ -1831,8 +1831,6 @@ const AppConstants = {
 
     yourOrder: "Your Order",
 
-    paymentSummary: "Payment Summary",
-    salesSummary: "Sales Summary",
     summaryByParticipant: "Summary by participant",
     nominationFeesPaid: "Nomination Fees Paid",
     nominationFeesDeclined: "Nomination Fees Declined",
