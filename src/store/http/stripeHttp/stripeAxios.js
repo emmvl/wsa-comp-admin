@@ -204,54 +204,6 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    async getPaymentSummary(
-        offset,
-        limit,
-        sortBy,
-        sortOrder,
-        userId,
-        registrationId,
-        yearId,
-        competitionKey,
-        paymentFor,
-        dateFrom,
-        dateTo,
-        searchValue,
-        feeType,
-        paymentOption,
-        paymentMethod,
-        membershipType,
-        paymentStatus,
-    ) {
-        let orgItem = await getOrganisationData()
-        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        let body = {
-            organisationId: organisationUniqueKey,
-            userId: parseInt(userId, 10),
-            registrationId,
-            paging: {
-                offset,
-                limit,
-            },
-            yearId: parseInt(yearId, 10),
-            competitionKey,
-            paymentFor,
-            dateFrom,
-            dateTo,
-            feeType,
-            paymentOption,
-            paymentMethod,
-            membershipType,
-            paymentStatus,
-        }
-        var url = `api/payment/summary?search=${searchValue}`;
-        if (sortBy && sortOrder) {
-            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
-        }
-
-        return Method.dataPost(url, token, body);
-    },
-
     async exportPayoutTransaction(payoutId) {
         const orgItem = await getOrganisationData();
         const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -268,8 +220,6 @@ let AxiosApi = {
         let url;
         if (key === "paymentDashboard") {
             url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}`;
-        } else if (key === "paymentSummary") {
-            url = `/api/payments/summary/export?organisationUniqueKey=${organisationUniqueKey}`;
         } else if (key === "payout") {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=payout`;
         } else if (key === "transfer") {
@@ -325,52 +275,6 @@ let AxiosApi = {
         }
         let _now = moment().utc().format('Y-MM-DD');
         return Method.dataPostDownload(url, token, `paymentDashboard-${_now}`, body);
-    },
-
-    async exportPaymentSummaryApi(offset,
-        sortBy,
-        sortOrder,
-        userId,
-        registrationId,
-        yearId,
-        competitionKey,
-        paymentFor,
-        dateFrom,
-        dateTo,
-        searchValue,
-        feeType,
-        paymentOption,
-        paymentMethod,
-        membershipType,
-        paymentStatus,
-    ) {
-        let orgItem = await getOrganisationData()
-        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        let body = {
-            organisationId: organisationUniqueKey,
-            userId: parseInt(userId, 10),
-            registrationId,
-            paging: {
-                offset: 0,
-                limit: -1,
-            },
-            yearId: parseInt(yearId, 10),
-            competitionKey,
-            paymentFor,
-            dateFrom,
-            dateTo,
-            feeType,
-            paymentOption,
-            paymentMethod,
-            membershipType,
-            paymentStatus,
-        }
-        var url = `/api/payment/summary/export?search=${searchValue}`;
-        if (sortBy && sortOrder) {
-            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
-        }
-        let _now = moment().utc().format('Y-MM-DD');
-        return Method.dataPostDownload(url, token, `paymentSummary-${_now}`, body);
     },
 
     async getStripeRefundList(page, startingAfter, endingBefore) {
