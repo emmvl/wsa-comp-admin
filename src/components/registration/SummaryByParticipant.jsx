@@ -118,19 +118,58 @@ const listeners = (key) => ({
 
 const columns = [
   {
+    title: AppConstants.participant_firstName,
+    dataIndex: "firstName",
+    key: "firstName",
+    fixed: 'left',
+    width: 200,
+    sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (userFirstName, record) => (
+      <NavLink
+        to={{
+          pathname: `/userPersonal`,
+          state: {
+            userId: record.userId,
+            screenKey: "summaryByParticipant",
+            screen: "/summaryByParticipant",
+          },
+        }}
+      >
+        <span className="input-heading-add-another pt-0">{userFirstName}</span>
+      </NavLink>
+    ),
+  },
+  {
+    title: AppConstants.participant_lastName,
+    dataIndex: "lastName",
+    key: "lastName",
+    fixed: 'left',
+    width: 200,
+    sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (userLastName, record) => (
+      <NavLink
+        to={{
+          pathname: `/userPersonal`,
+          state: {
+            userId: record.userId,
+            screenKey: "summaryByParticipant",
+            screen: "/summaryByParticipant",
+          },
+        }}
+      >
+        <span className="input-heading-add-another pt-0">{userLastName}</span>
+      </NavLink>
+    ),
+  },
+  {
     title: AppConstants.registrationDate,
     dataIndex: "registrationDate",
     key: "registrationDate",
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (registrationDate) => moment(registrationDate).format("DD/MM/YYYY"),
-  },
-  {
-    title: AppConstants.registrationDate,
-    dataIndex: "statusRefId",
-    key: "statusRefId",
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.participant_id,
@@ -144,54 +183,12 @@ const columns = [
           pathname: `/userPersonal`,
           state: {
             userId: record.userId,
-            screenKey: "participantSummary",
-            screen: "/participantSummary",
+            screenKey: "summaryByParticipant",
+            screen: "/summaryByParticipant",
           },
         }}
       >
         <span className="input-heading-add-another pt-0">{userId}</span>
-      </NavLink>
-    ),
-  },
-  {
-    title: AppConstants.participant_firstName,
-    dataIndex: "firstName",
-    key: "firstName",
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    render: (userFirstName, record) => (
-      <NavLink
-        to={{
-          pathname: `/userPersonal`,
-          state: {
-            userId: record.userId,
-            screenKey: "participantSummary",
-            screen: "/participantSummary",
-          },
-        }}
-      >
-        <span className="input-heading-add-another pt-0">{userFirstName}</span>
-      </NavLink>
-    ),
-  },
-  {
-    title: AppConstants.participant_lastName,
-    dataIndex: "lastName",
-    key: "lastName",
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    render: (userLastName, record) => (
-      <NavLink
-        to={{
-          pathname: `/userPersonal`,
-          state: {
-            userId: record.userId,
-            screenKey: "participantSummary",
-            screen: "/participantSummary",
-          },
-        }}
-      >
-        <span className="input-heading-add-another pt-0">{userLastName}</span>
       </NavLink>
     ),
   },
@@ -638,6 +635,23 @@ const columns = [
           currencyFormat(membershipRefundAmount),
       },
     ],
+  },
+  {
+    title: AppConstants.paymentMethod,
+    dataIndex: "paymentMethod",
+    key: "paymentMethod",
+    sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (paymentMethod) => {
+      switch(paymentMethod) {
+        case 'direct_debit':
+          return AppConstants.directDebit;
+        case 'card':
+          return AppConstants.creditCard;
+        case 'cash':
+          return AppConstants.cash;
+      }
+    }
   },
   {
     title: AppConstants.voucherOrDiscountCode,
@@ -1366,6 +1380,8 @@ class SummaryByParticipant extends Component {
             dataSource={participantSummaryList}
             pagination={false}
             loading={onLoad && true}
+            size="middle"
+            scroll={{ x: 'calc(300%)',  y: 500 }}
           />
         </div>
 

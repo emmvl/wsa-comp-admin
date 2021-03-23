@@ -322,3 +322,30 @@
   z-index: 100;  
   top: 0;
 }
+
+.confirmation-modal {
+    text-align: center;
+}
+
+.confirmation-modal a {
+    display: block;
+    color: #000;
+    margin: 15px;
+    text-decoration: underline;
+}
+
+.confirmation-modal .ant-checkbox-wrapper {
+    color: #4f534f;
+}
+
+.confirmation-modal .ant-modal-title {
+    font-weight: bold;
+}
+
+.terms-and-conditions-checkbox {
+    margin-top: 15px;
+}
+
+.terms-and-conditions-checkbox span {
+    font-weight: normal;
+}

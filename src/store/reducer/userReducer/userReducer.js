@@ -767,7 +767,7 @@ function userReducer(state = initialState, action) {
         status: action.status,
         isDocumentLoading: false,
       };
-    
+
     case ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_LOAD:
       return { ...state, isDocumentLoading: true };
 
@@ -776,7 +776,7 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_SUCCESS:
       return { ...state, isDocumentLoading: false};
-      
+
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD:
       return { ...state, onPersonLoad: true, isCompUserLoading: true };
@@ -1206,6 +1206,14 @@ function userReducer(state = initialState, action) {
       } else {
         ourOrgTCData["termsAndConditionsLink"] = action.result.organisation.termsAndConditions;
         ourOrgTCData["termsAndConditionsFile"] = null;
+      }
+      ourOrgTCData["stateTermsAndConditions"] = action.result.organisation.stateTermsAndConditions;
+      if (action.result.organisation.stateTermsAndConditionsRefId == "2") {
+        ourOrgTCData["stateTermsAndConditionsFile"] = action.result.organisation.stateTermsAndConditions;
+        ourOrgTCData["stateTermsAndConditionsLink"] = null;
+      } else {
+        ourOrgTCData["stateTermsAndConditionsLink"] = action.result.organisation.stateTermsAndConditions;
+        ourOrgTCData["stateTermsAndConditionsFile"] = null;
       }
 
       return {

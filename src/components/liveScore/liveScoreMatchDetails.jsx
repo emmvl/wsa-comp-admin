@@ -2748,9 +2748,14 @@ class LiveScoreMatchDetails extends Component {
 
     handleAddPlayer = (playerId) => {
         if (playerId) {
+            const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
             const borrowedPlayer = (this.props.liveScorePlayerState.searchResult || [])
                 .find((player) => player.playerId === playerId);
+            const { addPlayerModal } = this.state;
+            const teamId = addPlayerModal === 'team1' ? match.team1.id : match.team2.id
+            borrowedPlayer.teamId = teamId
             const borrowedPlayerAttendance = this.getPlayerAttendance(borrowedPlayer, true);
+
             const borrowedPlayerData = {
                 attendance: null,
                 attended: false,
@@ -2759,25 +2764,23 @@ class LiveScoreMatchDetails extends Component {
                 photoUrl: borrowedPlayer?.profilePicture,
                 playerId: borrowedPlayer?.playerId,
                 team: borrowedPlayer?.team?.name,
-                teamId: borrowedPlayer?.team?.id,
+                teamId,
             };
 
             if (this.state.addPlayerModal === 'team1') {
-                const borrowedTeam1Players = this.state.borrowedTeam1Players;
-                const team1Attendance = this.state.team1Attendance;
-                borrowedTeam1Players.push(borrowedPlayerData);
-                team1Attendance.push(borrowedPlayerAttendance);
+                const { borrowedTeam1Players, team1Attendance } = this.state;
 
+                borrowedTeam1Players.push(borrowedPlayerData);
+                team1Attendance.push(...borrowedPlayerAttendance);
                 this.setState({
                     borrowedTeam1Players,
                     team1Attendance,
                 });
             } else {
-                const borrowedTeam2Players = this.state.borrowedTeam2Players;
-                borrowedTeam2Players.push(borrowedPlayerData);
-                const team2Attendance = this.state.team2Attendance;
-                team2Attendance.push(borrowedPlayerAttendance);
+                const { borrowedTeam2Players, team2Attendance } = this.state;
 
+                borrowedTeam2Players.push(borrowedPlayerData);
+                team2Attendance.push(...borrowedPlayerAttendance);
                 this.setState({
                     borrowedTeam2Players,
                     team2Attendance,

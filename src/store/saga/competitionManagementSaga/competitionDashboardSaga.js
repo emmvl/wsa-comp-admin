@@ -78,7 +78,7 @@ export function* updateCompetitionStatusSaga(action) {
 
 export function* competitionDashboardDeleteSaga(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.competitionDashboardDelete,action.competitionId,action.targetValue);
+        const result = yield call(CompetitionAxiosApi.competitionDashboardDelete, action.competitionId, action.targetValue);
         if (result.status === 1) {
 
             yield put({

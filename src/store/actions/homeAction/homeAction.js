@@ -57,6 +57,14 @@ function updateActionBoxAction(payload){
     return action;
 }
 
+/* Get Affiliate Our Organisation */
+function getAffiliateOurOrganisationIdAction(organisationId) {
+    return {
+        type: ApiConstants.API_AFFILIATE_OUR_ORGANISATION_LOAD,
+        payload: organisationId,
+    };
+}
+
 
 
 
@@ -68,4 +76,5 @@ export {
     updateActionBoxAction,
     setPageSize,
     setPageNum,
+    getAffiliateOurOrganisationIdAction
 }
