@@ -113,6 +113,7 @@ const AppConstants = {
 
     agreeTerm: "I have read and agree to the  ",
     termsAndConditions: "Terms and Conditions",
+    stateTermsAndConditions: "Admin Terms and Conditions",
     reviewOrder: "Review Order",
     checkOptions: "Checkout Options",
     voucherLink: "Voucher link",
