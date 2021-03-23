@@ -315,3 +315,10 @@
 .home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
   background: var(--app-f1c2a2) !important;
 }
+
+.offlineAlert { 
+  width: 100%;
+  position: sticky;
+  z-index: 100;  
+  top: 0;
+}
