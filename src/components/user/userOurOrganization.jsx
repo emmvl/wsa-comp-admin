@@ -73,7 +73,8 @@ class UserOurOrganization extends Component {
             orgPhotoModalVisible: false,
             isEditable: true,
             sourcePage: "AFF",
-            termsAndCondititionFile: null,
+            termsAndCondititionFile: this.props.userState.termsAndCondititionFile ?? null,
+            stateTermsAndCondititionFile: this.props.userState.stateTermsAndCondititionFile ?? null,
             organisationTypeRefId: 0,
             affiliateAddressError: '',
         }
@@ -128,6 +129,8 @@ class UserOurOrganization extends Component {
                     orgPhotosImgSend: null,
                     buttonPressed: "",
                     photoLoading: false,
+                    termsAndCondititionFile: this.props.userState.termsAndCondititionFile ?? null,
+                    stateTermsAndCondititionFile: this.props.userState.stateTermsAndCondititionFile ?? null,
                 });
 
                 this.props.getOrganisationPhotoAction(obj);
@@ -461,6 +464,10 @@ class UserOurOrganization extends Component {
         this.setState({ termsAndCondititionFile: data.target.files[0] })
     };
 
+    handleForceState = (data) => {
+        this.setState({ stateTermsAndCondititionFile: data.target.files[0] })
+    };
+
     onChangesetCharity = (value, index, key) => {
         this.props.updateCharityValue(value, index, key);
     }
@@ -541,21 +548,36 @@ class UserOurOrganization extends Component {
     updateTermsAndCondition = () => {
         const affiliate = this.props.userState.affiliateOurOrg;
         const formData = new FormData();
+        let filesArray = [];
+        filesArray['termsAndCondition'] = this.state.termsAndCondititionFile;
+        filesArray['stateTermsAndCondition'] = this.state.stateTermsAndCondititionFile;
         let termsAndConditionsValue = null;
+        let stateTermsAndConditionsValue = null;
         if (affiliate.termsAndConditionsRefId == 1) {
             termsAndConditionsValue = affiliate.termsAndConditionsLink;
         }
         if (this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2) {
             termsAndConditionsValue = affiliate.termsAndConditionsFile;
         }
+        if (affiliate.stateTermsAndConditionsRefId == 1) {
+            stateTermsAndConditionsValue = affiliate.stateTermsAndConditionsLink;
+        }
+        if (this.state.termsAndCondititionFile == null && affiliate.stateTermsAndConditionsRefId == 2) {
+            stateTermsAndConditionsValue = affiliate.stateTermsAndConditionsFile;
+        }
+
         formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
         formData.append("termsAndConditions", termsAndConditionsValue || "");
-        formData.append("termsAndCondition", this.state.termsAndCondititionFile ? this.state.termsAndCondititionFile : "");
+        formData.append("stateTermsAndConditionsRefId", affiliate.stateTermsAndConditionsRefId);
+        formData.append("stateTermsAndConditions", stateTermsAndConditionsValue || "");
+        formData.append("termsAndCondition[]", filesArray['termsAndCondition']);
+        formData.append("termsAndCondition[]", filesArray['stateTermsAndCondition']);
+
 
         this.setState({ loading: true });
         this.props.updateTermsAndConditionAction(formData);
-        this.setState({ termsAndCondititionFile: null });
+        this.setState({ termsAndCondititionFile: null, stateTermsAndCondititionFile: null });
     }
 
     updateCharity = () => {
@@ -945,56 +967,109 @@ class UserOurOrganization extends Component {
     termsAndConditionsView = () => {
         const affiliate = this.props.userState.affiliateOurOrg;
         return (
-            <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.termsAndConditions}</span>
-                <Radio.Group
-                    className="reg-competition-radio"
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
-                    value={affiliate.termsAndConditionsRefId}
-                >
-                    <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
-                    {affiliate.termsAndConditionsRefId === 2 && (
-                        <div className="pl-5 pb-5 pt-4">
-                            <label className="pt-2">
-                                <input
-                                    className="pt-2 pb-2 pointer"
-                                    type="file"
-                                    id="teamImport"
-                                    ref={(input) => { this.filesInput = input }}
-                                    name="file"
-                                    // icon="file text outline"
-                                    // iconPosition="left"
-                                    // label="Upload PDF"
-                                    // labelPosition="right"
-                                    placeholder="UploadPDF..."
-                                    onChange={this.handleForce}
-                                    accept=".pdf"
-                                />
-                            </label>
-                            <div className="pt-4">
-                                <div className="row">
-                                    <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
-                                        <a className="user-reg-link" href={affiliate.termsAndConditions} target="_blank" rel="noopener noreferrer">
-                                            {affiliate.termsAndConditionsFile}
-                                        </a>
+            <>
+                <div className="discount-view pt-5">
+                    <span className="form-heading">{AppConstants.termsAndConditions}</span>
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
+                        value={affiliate.termsAndConditionsRefId}
+                    >
+                        <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
+                        {affiliate.termsAndConditionsRefId === 2 && (
+                            <div className="pl-5 pb-5 pt-4">
+                                <label className="pt-2">
+                                    <input
+                                        className="pt-2 pb-2 pointer"
+                                        type="file"
+                                        id="teamImport"
+                                        ref={(input) => { this.filesInput = input }}
+                                        name="file"
+                                        // icon="file text outline"
+                                        // iconPosition="left"
+                                        // label="Upload PDF"
+                                        // labelPosition="right"
+                                        placeholder="UploadPDF..."
+                                        onChange={this.handleForce}
+                                        accept=".pdf"
+                                    />
+                                    <div className="pt-4">
+                                        <div className="row">
+                                            <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
+                                                <a className="user-reg-link" href={affiliate.termsAndConditions} target="_blank" rel="noopener noreferrer">
+                                                    {affiliate.termsAndConditionsFile}
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </label>
                             </div>
-                        </div>
-                    )}
-                    <Radio value={1}>{AppConstants.link}</Radio>
-                    {affiliate.termsAndConditionsRefId === 1 && (
-                        <div className=" pl-5 pb-5">
-                            <InputWithHead
-                                auto_complete="new-termsAndConditions"
-                                placeholder={AppConstants.termsAndConditions}
-                                value={affiliate.termsAndConditionsLink}
-                                onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
-                            />
-                        </div>
-                    )}
-                </Radio.Group>
-            </div>
+                        )}
+                        <Radio value={1}>{AppConstants.link}</Radio>
+                        {affiliate.termsAndConditionsRefId === 1 && (
+                            <div className=" pl-5 pb-5">
+                                <InputWithHead
+                                    auto_complete="new-termsAndConditions"
+                                    placeholder={AppConstants.termsAndConditions}
+                                    value={affiliate.termsAndConditionsLink}
+                                    onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
+                                />
+                            </div>
+                        )}
+                    </Radio.Group>
+                </div>
+                <div className="discount-view pt-5">
+                    <span className="form-heading">{AppConstants.stateTermsAndConditions}</span>
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "stateTermsAndConditionsRefId")}
+                        value={affiliate.stateTermsAndConditionsRefId}
+                    >
+                        <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
+                        {affiliate.stateTermsAndConditionsRefId === 2 && (
+                            <div className="pl-5 pb-5 pt-4">
+                                {affiliate.stateTermsAndConditionsFile}
+                                <label className="pt-2">
+                                    <input
+                                        className="pt-2 pb-2 pointer"
+                                        type="file"
+                                        id="teamImport"
+                                        ref={(input) => { this.filesInput = input }}
+                                        name="file"
+                                        // icon="file text outline"
+                                        // iconPosition="left"
+                                        // label="Upload PDF"
+                                        // labelPosition="right"
+                                        placeholder="UploadPDF..."
+                                        onChange={this.handleForceState}
+                                        accept=".pdf"
+                                    />
+                                    <div className="pt-4">
+                                        <div className="row">
+                                            <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
+                                                <a className="user-reg-link" href={affiliate.stateTermsAndConditions} target="_blank" rel="noopener noreferrer">
+                                                    {affiliate.stateTermsAndConditionsFile}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        )}
+                        <Radio value={1}>{AppConstants.link}</Radio>
+                        {affiliate.stateTermsAndConditionsRefId === 1 && (
+                            <div className=" pl-5 pb-5">
+                                <InputWithHead
+                                    auto_complete="new-termsAndConditions"
+                                    placeholder={AppConstants.stateTermsAndConditions}
+                                    value={affiliate.stateTermsAndConditionsLink}
+                                    onChange={(e) => this.onChangeSetValue(e.target.value, "stateTermsAndConditionsLink")}
+                                />
+                            </div>
+                        )}
+                    </Radio.Group>
+                </div>
+            </>
         )
     }
 

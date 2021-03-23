@@ -8130,16 +8130,15 @@ class RegistrationCompetitionFee extends Component {
                 <InputWithHead
                   heading={AppConstants.percentageOff_FixedAmount}
                 />
-                <InputNumber
+                <Input
+                  type="number"
                   auto_complete="new-number"
                   value={item.amount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
-                  min={0}
-                  max={100}
-                  formatter={(value) => `% ${value}`}
-                  parser={(value) => value.replace("% ", "")}
-                  onChange={(value) => this.onChangePercentageOff(value, index)}
                   disabled={this.checkDiscountDisable(item.organisationId)}
+                  suffix={item.discountTypeRefId === 1 ? '' : '%'}
+                  prefix={item.discountTypeRefId === 1 ? '$' : ''}
+                  onChange={(e) => this.onChangePercentageOffOrFixedAmount(e, item.discountTypeRefId, index)}
                 />
               </div>
               <div className="col-sm">
@@ -8231,16 +8230,15 @@ class RegistrationCompetitionFee extends Component {
                 <InputWithHead
                   heading={AppConstants.percentageOff_FixedAmount}
                 />
-                <InputNumber
+                <Input
+                  type="number"
                   auto_complete="new-number"
                   value={item.amount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   disabled={this.checkDiscountDisable(item.organisationId)}
-                  min={0}
-                  max={100}
-                  formatter={(value) => `% ${value}`}
-                  parser={(value) => value.replace("% ", "")}
-                  onChange={(value) => this.onChangePercentageOff(value, index)}
+                  suffix={item.discountTypeRefId === 1 ? '' : '%'}
+                  prefix={item.discountTypeRefId === 1 ? '$' : ''}
+                  onChange={(e) => this.onChangePercentageOffOrFixedAmount(e, item.discountTypeRefId, index)}
                 />
               </div>
               <div className="col-sm">
@@ -8422,16 +8420,15 @@ class RegistrationCompetitionFee extends Component {
                 <InputWithHead
                   heading={AppConstants.percentageOff_FixedAmount}
                 />
-                <InputNumber
-                  auto_complete="new-percentageOff"
+                <Input
+                  type="number"
+                  auto_complete="new-number"
                   value={item.amount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
-                  min={0}
-                  max={100}
-                  formatter={(value) => `% ${value}`}
-                  parser={(value) => value.replace("% ", "")}
-                  onChange={(value) => this.onChangePercentageOff(value, index)}
                   disabled={this.checkDiscountDisable(item.organisationId)}
+                  suffix={item.discountTypeRefId === 1 ? '' : '%'}
+                  prefix={item.discountTypeRefId === 1 ? '$' : ''}
+                  onChange={(e) => this.onChangePercentageOffOrFixedAmount(e, item.discountTypeRefId, index)}
                 />
               </div>
               <div className="col-sm">
@@ -8589,6 +8586,14 @@ class RegistrationCompetitionFee extends Component {
     let discountData = this.props.competitionFeesState.competionDiscountValue
       .competitionDiscounts[0].discounts;
     discountData[index].discountTypeRefId = discountType;
+    if (discountType === 2) {
+        if (discountData[index].amount > 100) {
+            discountData[index].amount = 100;
+        }
+        if (discountData[index].amount <  0) {
+            discountData[index].amount = 0;
+        }
+    }
     this.props.updatedDiscountDataAction(discountData);
   };
 
@@ -8601,7 +8606,14 @@ class RegistrationCompetitionFee extends Component {
   };
 
   ///onchange on text field percentage off
-  onChangePercentageOff = (amount, index) => {
+  onChangePercentageOffOrFixedAmount = (e, discountTypeRefId, index) => {
+    let amount = isNaN(parseFloat(e.target.value)) ? 0.0 : parseFloat(e.target.value);
+    if (discountTypeRefId === 2) {
+      if (amount > 100 || amount < 0) {
+          e.preventDefault();
+          return;
+      }
+    }
     let discountData = this.props.competitionFeesState.competionDiscountValue
       .competitionDiscounts[0].discounts;
     discountData[index].amount = amount;

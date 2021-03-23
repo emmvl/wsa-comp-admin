@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
+import {isArrayNotEmpty} from "../../../util/helpers";
 // import history from "../../../util/history";
 // import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
@@ -17,6 +18,10 @@ const initialState = {
     actionBoxPage: 1,
     actionBoxTotalCount: 1,
     pageSize: 10,
+    affiliate: null,
+    affiliateEdit: null,
+    affiliateOurOrg: null,
+    affiliateOnLoad: true
 };
 
 
@@ -76,7 +81,7 @@ function homeReducer(state = initialState, action) {
                 ...state,
                 yearRefId: action.year
             }
-        
+
         case ApiConstants.SET_PAGE_SIZE:
             return {
                 ...state,
@@ -113,9 +118,66 @@ function homeReducer(state = initialState, action) {
                 error: null
             };
 
+        case ApiConstants.API_AFFILIATE_OUR_ORGANISATION_LOAD:
+            return { ...state, onLoad: true, affiliateOurOrgOnLoad: true };
+
+        case ApiConstants.API_AFFILIATE_OUR_ORGANISATION_SUCCESS:
+            const affiliateOurOrgData = action.result;
+            const charityData = getCharityResult(action.charityResult);
+            const selectedCharity = checkSelectedCharity(affiliateOurOrgData.charityRoundUp, charityData);
+            affiliateOurOrgData.charityRoundUp = selectedCharity;
+
+            return {
+                ...state,
+                onLoad: false,
+                affiliateOurOrgOnLoad: false,
+                affiliateOurOrg: affiliateOurOrgData,
+                defaultCharityRoundUp: charityData,
+                status: action.status,
+            };
+
         default:
             return state;
     }
+}
+
+// get charity result
+function getCharityResult(data) {
+    let newCharityResult = [];
+    if (isArrayNotEmpty(data)) {
+        for (let i in data) {
+            data[i]["isSelected"] = false;
+        }
+        newCharityResult = data;
+    }
+    return newCharityResult;
+}
+
+// for check selected Charity
+function checkSelectedCharity(selected, data) {
+    const arr = [];
+    for (let i in data) {
+        const obj = {
+            id: 0,
+            description: data[i].description,
+            charityRoundUpRefId: data[i].id,
+            isSelected: false,
+        };
+        if (selected) {
+            let filteredRes = selected.find(x => x.charityRoundUpRefId === data[i].id);
+            if (filteredRes !== null && filteredRes !== undefined) {
+                obj.id = filteredRes.id;
+                obj.charityRoundUpRefId = filteredRes.charityRoundUpRefId;
+                obj.isSelected = true;
+                arr.push(obj);
+            } else {
+                arr.push(obj);
+            }
+        } else {
+            arr.push(obj);
+        }
+    }
+    return arr;
 }
 
 export default homeReducer;

@@ -113,6 +113,7 @@ const AppConstants = {
 
     agreeTerm: "I have read and agree to the  ",
     termsAndConditions: "Terms and Conditions",
+    stateTermsAndConditions: "Admin Terms and Conditions",
     reviewOrder: "Review Order",
     checkOptions: "Checkout Options",
     voucherLink: "Voucher link",
@@ -2035,6 +2036,10 @@ const AppConstants = {
     governmentVoucherNumber: "Government Voucher Number",
     incorrectProductDetails: "You have entered incorrect product details.",
     voucherOrDiscountCode: "Voucher/Discount Code",
+    cash: "Cash",
+    nominationFeesRefunded: "Nomination Fees Refunded",
+    competitionFeesRefunded: "Competition Fees Refunded",
+    refunded: "Refunded",
 };
 
 export default AppConstants;
