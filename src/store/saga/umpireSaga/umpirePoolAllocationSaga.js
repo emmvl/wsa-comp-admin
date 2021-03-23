@@ -10,6 +10,7 @@ import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
 
 import UmpireAxiosApi from "store/http/umpireHttp/umpireAxios";
+import { umpireSearchSaga } from "./umpireSaga";
 
 function* failSaga(result) {
     yield put({
@@ -51,9 +52,15 @@ function* getUmpirePoolAllocationSaga(action) {
         const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
 
         if (result.status === 1) {
+            const pools = result.result.data;
+            pools.forEach(pool => {
+                if (!!pool.umpires.length){
+                    pool.umpires.sort((a, b) => a.poolRank - b.poolRank);
+                }
+            })
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_POOL_DATA_SUCCESS,
-                result: result.result.data,
+                result: pools,
                 status: result.status,
             });
         } else {
@@ -107,9 +114,15 @@ function* updateUmpirePoolAllocationManySaga(action) {
         const result = yield call(UmpireAxiosApi.updateUmpirePoolAllocationMany, action.payload);
 
         if (result.status === 1) {
+            const pools = result.result.data;
+            pools.forEach(pool => {
+                if (!!pool.umpires.length){
+                    pool.umpires.sort((a, b) => a.poolRank - b.poolRank);
+                }
+            })
             yield put({
                 type: ApiConstants.API_UPDATE_UMPIRE_POOL_MANY_DATA_SUCCESS,
-                result: result.result.data,
+                result: pools,
                 status: result.status,
             });
             message.success(AppConstants.settingsUpdatedMessage);

@@ -315,3 +315,30 @@
 .home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
   background: var(--app-f1c2a2) !important;
 }
+
+.confirmation-modal {
+    text-align: center;
+}
+
+.confirmation-modal a {
+    display: block;
+    color: #000;
+    margin: 15px;
+    text-decoration: underline;
+}
+
+.confirmation-modal .ant-checkbox-wrapper {
+    color: #4f534f;
+}
+
+.confirmation-modal .ant-modal-title {
+    font-weight: bold;
+}
+
+.terms-and-conditions-checkbox {
+    margin-top: 15px;
+}
+
+.terms-and-conditions-checkbox span {
+    font-weight: normal;
+}

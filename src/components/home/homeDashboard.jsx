@@ -11,7 +11,7 @@ import {
     Spin,
     Pagination,
     Menu,
-    Modal,
+    Modal, Checkbox,
 } from 'antd';
 import moment from 'moment';
 
@@ -29,6 +29,7 @@ import {
     setPageNum,
     getActionBoxAction,
     updateActionBoxAction,
+    getAffiliateOurOrganisationIdAction
 } from 'store/actions/homeAction/homeAction';
 import { getUreAction, getRoleAction } from 'store/actions/userAction/userAction';
 import DashboardLayout from 'pages/dashboardLayout';
@@ -248,11 +249,14 @@ class HomeDashboard extends Component {
         this.state = {
             loading: true,
             userCountLoading: false,
-            organisationId: null,
+            organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
             updateActionBoxLoad: false,
             actions: null,
             orgChange: props.location.state ? props.location.state.orgChange : null,
             userRoleId: getUserRoleId(),
+            isModalVisible: true,
+            isTermsConditionsAccepted: false,
+            firstLoaded: false,
         };
 
         thisObj = this;
@@ -279,6 +283,10 @@ class HomeDashboard extends Component {
 
     async componentDidUpdate(nextProps) {
         try {
+            if(!!localStorage.setOrganisationData && !this.props.userState.affiliateOurOrg.logoUrl && !this.state.firstLoaded) {
+                this.setState({firstLoaded: true});
+                this.props.getAffiliateOurOrganisationIdAction(JSON.parse(localStorage.setOrganisationData).organisationUniqueKey);
+            }
             const { yearList } = this.props.appState;
             const userOrganisation = this.props.userState.getUserOrganisation;
             if (this.state.userCountLoading && !this.props.appState.onLoad) {
@@ -669,32 +677,77 @@ class HomeDashboard extends Component {
         </div>
     );
 
+    handleModalOk = () => {
+        document.cookie = "termsAndConditions=true";
+        this.setState({isModalVisible: false});
+    }
+
     render() {
-        return (
-            <div className="fluid-width default-bg">
-                <DashboardLayout
-                    menuId={AppConstants.home_page_heading}
-                    menuHeading={AppConstants.home}
-                    menuName={AppConstants.home}
-                />
+        if(
+            (
+                (this.state.userRoleId === 1 || this.state.userRoleId === 2)
+                &&
+                !document.cookie.split(';').filter((item) => item.trim().startsWith('termsAndConditions=')).length
+                &&
+                (!!this.props.userState.affiliateOurOrg.stateTermsAndConditionsFile || !!this.props.userState.affiliateOurOrg.stateTermsAndConditionsLink)
+            )
+        ) {
+            return (
+                <Modal
+                    className="confirmation-modal"
+                    title="Terms and Conditions"
+                    visible={true}
+                    onCancel={() => {
+                    }}
+                    footer={[
+                        <Button key="back" disabled={!this.state.isTermsConditionsAccepted} onClick={
+                            () => {
+                                this.state.isTermsConditionsAccepted && this.handleModalOk()
+                            }
+                        }>
+                            Continue
+                        </Button>,
+                    ]}>
+                    <div className="terms-and-conditions-checkbox">
+                        <p>Please review the folowing terms and conditions.</p>
+                        <a target="_blank" href={this.props.userState.affiliateOurOrg.termsAndConditions}>Terms and
+                            conditions for NSW Netball</a>
+                        <a target="_blank" href={this.props.userState.affiliateOurOrg.termsAndConditions}>Terms and
+                            conditions for World Sport Action</a>
+                        <Checkbox name="terms-and-conditions" onClick={() => {
+                            this.setState({isTermsConditionsAccepted: !this.state.isTermsConditionsAccepted})
+                        }}>
+                            To continue please agree to the updated terms and conditions
+                        </Checkbox>
+                    </div>
+                </Modal>
+            );
+        }
+            return (
+                <div className="fluid-width default-bg">
+                    <DashboardLayout
+                        menuId={AppConstants.home_page_heading}
+                        menuHeading={AppConstants.home}
+                        menuName={AppConstants.home}
+                    />
 
-                <InnerHorizontalMenu menu="home" userSelectedKey="1" />
+                    <InnerHorizontalMenu menu="home" userSelectedKey="1"/>
 
-                <Layout>
-                    {/* <Content className="container"> */}
-                    <Content className="comp-dash-table-view">
-                        {this.actionboxView()}
-                        {this.compOverview()}
-                        {/* {this.ownedView()}
-                        {this.participatedView()} */}
-                    </Content>
+                    <Layout>
+                        {/* <Content className="container"> */}
+                        <Content className="comp-dash-table-view">
+                            {this.actionboxView()}
+                            {this.compOverview()}
+                            {/* {this.ownedView()}
+                            {this.participatedView()} */}
+                        </Content>
 
-                    <Loader visible={this.props.appState.onLoad} />
+                        <Loader visible={this.props.appState.onLoad}/>
 
-                    <Footer className="mb-5" />
-                </Layout>
-            </div>
-        );
+                        <Footer className="mb-5"/>
+                    </Layout>
+                </div>
+            );
     }
 }
 
@@ -725,6 +778,7 @@ function mapDispatchToProps(dispatch) {
         setPageNum,
         getActionBoxAction,
         updateActionBoxAction,
+        getAffiliateOurOrganisationIdAction
     }, dispatch);
 }
 
