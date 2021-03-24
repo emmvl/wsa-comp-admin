@@ -1858,8 +1858,8 @@ const AppConstants = {
 
     // Communication
     communicationDetails: 'Communication Details',
-    communicationtitle: 'Communication Title',
-    enterCommunicationtitle: 'Enter Communication Title',
+    communicationTitle: 'Communication Title',
+    enterCommunicationTitle: 'Enter Communication Title',
     communicationBody: 'Communication Body',
     communicationImage: 'Communication Image',
     communicationVideo: 'Communication Video',
