@@ -1999,6 +1999,7 @@ const AppConstants = {
     historicalGrade: "Historical Grade",
     historicalResult: "Historical Result",
     errorMessage: "Error Message",
+    onlyEvenNumbersError: "Only even numbers are allowed",
     line: "Line #",
     playingUp: "Playing Up %",
     primary: "primary",
