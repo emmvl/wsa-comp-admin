@@ -1,13 +1,11 @@
 import ApiConstants from "themes/apiConstants";
 // Division action
-function liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId, isParent) {
+function liveScoreAddEditManager(data, compOrgId, isParent) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD,
         data,
-        teamId,
-        existingManagerId,
         compOrgId,
-        isParent
+        isParent,
     };
 }
 
