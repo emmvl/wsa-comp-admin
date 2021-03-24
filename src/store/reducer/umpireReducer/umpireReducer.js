@@ -248,32 +248,42 @@ function umpireState(state = initialState, action) {
             }
         case ApiConstants.GET_UMPIRE_TEAMS_SUCCESS:
             const umpire = action.data
-            const affiliates = umpire.selectedOrganisations.map(
-                ({ id, name }) => {
-                    const org = state.affilateList?.find(affiliate => affiliate.organisationId === id)
-                    const newId = org ? org.id : id;
-                    return { name, id: newId }
-                },
-            );
-            const selectedTeams = umpire.selectedTeams.map(({ id, name }) => ({ id, name }))
-            const affiliateIds = affiliates.map(affiliate => affiliate.id);
-            const teamIds = selectedTeams.map(({ id }) => id)
-
-            return {
-                ...state,
-                onLoad: false,
-                umpireOwnTeam: umpire.umpireOwnTeam,
-                teamsList: umpire.teams,
-                umpireCheckbox: umpire.isUmpire,
-                umpireCoachCheckBox: umpire.isUmpireCoach,
-                affiliateId: affiliateIds,
-                umpireData: {
-                    ...state.umpireData,
-                    teams: selectedTeams,
-                    teamId: teamIds,
-                    affiliates,
-                },
+            if (umpire.email) {
+                const affiliates = umpire.selectedOrganisations.map(
+                    ({ id, name }) => {
+                        const org = state.affilateList?.find(affiliate => affiliate.organisationId === id)
+                        const newId = org ? org.id : id;
+                        return { name, id: newId }
+                    },
+                );
+                const selectedTeams = umpire.selectedTeams.map(({ id, name }) => ({ id, name }))
+                const affiliateIds = affiliates.map(affiliate => affiliate.id);
+                const teamIds = selectedTeams.map(({ id }) => id)
+    
+                return {
+                    ...state,
+                    onLoad: false,
+                    umpireOwnTeam: umpire.umpireOwnTeam,
+                    teamsList: umpire.teams,
+                    umpireCheckbox: umpire.isUmpire,
+                    umpireCoachCheckBox: umpire.isUmpireCoach,
+                    affiliateId: affiliateIds,
+                    umpireData: {
+                        ...state.umpireData,
+                        teams: selectedTeams,
+                        teamId: teamIds,
+                        affiliates,
+                    },
+                }
+            } else {
+                return {
+                    ...state,
+                    onLoad: false,
+                    umpireOwnTeam: umpire.umpireOwnTeam,
+                    teamsList: umpire.teams,
+                }
             }
+            
         //// Update Add Umpire Data
         case ApiConstants.UPDATE_ADD_UMPIRE_DATA:
             const { key } = action
