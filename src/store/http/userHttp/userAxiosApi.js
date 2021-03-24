@@ -172,12 +172,12 @@ let userHttpApi = {
     const url = `api/user/document`;
     return Method.dataPost(url, token, payload);
   },
-  
+
   removeUserModuleDocument(payload) {
     const url = `api/user/document?id=${payload.id}`;
     return Method.dataDelete(url, token);
   },
-  
+
   getUserModuleUploadDocument(payload) {
     const url = `api/user/uploadDocument`;
     let formData = new FormData();
@@ -314,7 +314,7 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, limit, sortBy, sortOrder, isParent, competitionId) {
+  liveScoreCoachesList(roleId, entityId, search, offset, limit, sortBy, sortOrder, isParent, competitionId) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url;
     if (offset != null) {
