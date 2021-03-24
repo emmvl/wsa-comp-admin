@@ -293,9 +293,13 @@ class LiveScoreManagerList extends Component {
 
     // on Export
     onExport = () => {
-        // let url = AppConstants.managerExport + this.state.competitionId
-        let url = AppConstants.managerExport + this.state.compOrgId
-        this.props.userExportFilesAction(url, 'manager')
+        const { compOrgId } = this.state
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+
+        checkLivScoreCompIsParent().then((isParent) => {
+            const url = AppConstants.managerExport + `?roleId=3&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? id : compOrgId}`
+            this.props.userExportFilesAction(url, 'manager')
+        })
     }
 
     headerView = () => {

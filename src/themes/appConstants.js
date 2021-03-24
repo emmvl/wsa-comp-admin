@@ -970,7 +970,7 @@ const AppConstants = {
     payouts: "Payouts",
 
     coachExport: "/users/byRole/export",
-    managerExport: "/users/byRole/export?roleId=3&entityTypeId=6&entityId=",
+    managerExport: "/users/byRole/export",
     scorerExport: "/roster/exportScorer?entityTypeId=",
     positionExport: "/stats/positionTracking/export?",
     teamExport: "/teams/export?competitionId=",
