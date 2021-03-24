@@ -169,7 +169,7 @@ class AddCommunication extends Component {
 
     setInitialFilledValue(data, author) {
         this.formRef.current.setFieldsValue({
-            communication_Title: data.title,
+            communicationTitle: data.title,
             author: data.author ? data.author : author,
         });
 
@@ -430,7 +430,7 @@ class AddCommunication extends Component {
 
         return (
             <div className="content-view pt-4">
-                <Form.Item name="communication_Title" rules={[{ required: true, message: ValidationConstants.communicationValidation[0] }]}>
+                <Form.Item name="communicationTitle" rules={[{ required: true, message: ValidationConstants.communicationValidation[0] }]}>
                     <InputWithHead
                         required="required-field pt-0"
                         heading={AppConstants.communicationTitle}
@@ -439,7 +439,7 @@ class AddCommunication extends Component {
                         onChange={(event) => this.setState({ title: captializedString(event.target.value) })}
                         value={editData.title}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            communication_Title: captializedString(i.target.value),
+                            communicationTitle: captializedString(i.target.value),
                         })}
                     />
                 </Form.Item>
@@ -523,12 +523,20 @@ class AddCommunication extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.communicationVideo} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
-                            <ImageLoader
-                                timeout={this.state.videoTimeout}
-                                video
-                                poster={(videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? '' : AppImages.circleImage}
-                                src={videoUrl || this.state.videoSelection}
-                            />
+                            { (videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? (
+                                <ImageLoader
+                                  timeout={this.state.videoTimeout}
+                                  video
+                                  poster={(videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? '' : AppImages.circleImage}
+                                  src={videoUrl || this.state.videoSelection}
+                                />
+                              ) : (
+                                <ImageLoader
+                                  timeout={this.state.imageTimeout}
+                                  src={AppImages.circleImage}
+                                />
+                              )
+                            }
                         </div>
                         <input
                             type="file"
