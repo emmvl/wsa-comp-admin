@@ -689,7 +689,7 @@ class AddCommunication extends Component {
             { label: 'Coaches', value: "coach" },
             { label: 'Managers', value: "manager" },
             { label: 'Players', value: "player" },
-            { label: 'Player Registration', value: "player registration" },
+            { label: 'Players Registered', value: "player_candidate" },
             { label: 'Umpires', value: "umpire" },
         ];
 
@@ -798,13 +798,13 @@ class AddCommunication extends Component {
                             value={
                                 this.props.userState.roles
                                     .filter((role) => this.state.toUserRoleIds.includes(role.id))
-                                    .map((role) => role.description.toLowerCase())
+                                    .map((role) => role.name.toLowerCase())
                             }
                             onChange={(value) => {
                                 const selected = value.length > 0
                                     ? value.map((item) => {
                                         const role = this.props.userState.roles
-                                            .find((rol) => rol.description.toLowerCase() === item.toLowerCase());
+                                            .find((rol) => rol.name.toLowerCase() === item.toLowerCase());
                                         return role?.id;
                                     }).filter((item) => item)
                                     : [];
