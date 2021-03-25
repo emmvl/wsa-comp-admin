@@ -297,6 +297,7 @@ const AppConstants = {
     previews: "Previews",
     print: "Print",
     printAll: "Print All",
+    printProcessing: 'Processing Downloads, Please click refresh after a short while',
 
     /** ** competition Open Reg form */
     competitionDetails: "Competition Details",
