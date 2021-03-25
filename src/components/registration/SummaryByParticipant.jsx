@@ -35,8 +35,8 @@ import { getAffiliateToOrganisationAction } from "store/actions/userAction/userA
 import {
   getParticipantSummaryAction,
   exportParticipantSummaryApiAction,
-  setSummaryPageSizeAction,
-  setSummaryPageNumberAction,
+  setParticipantSummaryPageSizeAction,
+  setParticipantSummaryPageNumberAction,
 } from "store/actions/stripeAction/stripeAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import Loader from "customComponents/loader";
@@ -976,13 +976,13 @@ class SummaryByParticipant extends Component {
   };
 
   handleShowSizeChange = async (page, pageSize) => {
-    await this.props.setSummaryPageSizeAction(pageSize);
+    await this.props.setParticipantSummaryPageSizeAction(pageSize);
     const { userId, registrationId, searchText } = this.state;
     this.handleSummaryList(page, userId, registrationId, searchText);
   };
 
   handleSummaryList = async (page, userId, regId, searchValue) => {
-    await this.props.setSummaryPageNumberAction(page);
+    await this.props.setParticipantSummaryPageNumberAction(page);
     const {
       sortBy,
       sortOrder,
@@ -1435,8 +1435,8 @@ function mapDispatchToProps(dispatch) {
       exportParticipantSummaryApiAction,
       getAffiliateToOrganisationAction,
       endUserRegDashboardListAction,
-      setSummaryPageSizeAction,
-      setSummaryPageNumberAction,
+      setParticipantSummaryPageSizeAction,
+      setParticipantSummaryPageNumberAction,
     },
     dispatch
   );
