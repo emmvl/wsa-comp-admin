@@ -76,7 +76,7 @@ function* liveScoreManagerListSaga(action) {
 // Add/Edit Manager Saga
 function* liveScoreAddEditManagerSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddEditManager, action.data, action.teamId, action.existingManagerId, action.compOrgId, action.isParent);
+    const result = yield call(LiveScoreAxiosApi.liveScoreAddEditManager, action.data, action.compOrgId, action.isParent);
 
     if (result.status === 1) {
       yield put({

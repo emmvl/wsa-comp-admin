@@ -174,11 +174,14 @@ const MatchesDetailView = () => {
             };
             return openNotificationWithIcon('error')
         }
+        const secondUser = matches.find(match => match.id === userToBeMerged[0].id)
+
         dispatch(addUsersToBeCompared([
             selectedUser,
-            matches.find(match => match.id === userToBeMerged[0].id)
+            secondUser
         ]))
-        history.push("/mergeUserDetail")
+
+        history.push(`/mergeUserDetail?masterId=${selectedUser.userId}&secondId=${secondUser.id}`)
     }
 
     return (

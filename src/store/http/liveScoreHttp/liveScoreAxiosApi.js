@@ -828,7 +828,7 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    async liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId, isParent) {
+    async liveScoreAddEditManager(data, compOrgId, isParent) {
         const body = data;
         let url = null
         let userId = await getUserId();
@@ -839,16 +839,6 @@ const LiveScoreAxiosApi = {
             url = `/users/manager?userId=${userId}&entityId=${id}&entityTypeId=${1}`
         }
         return Method.dataPost(url, token, body);
-
-        // if (existingManagerId) {
-        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
-        //     const url = `/users/manager?userId=${existingManagerId}&competitionId=${id}`;
-        //     return Method.dataPost(url, token)
-        // } else {
-        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
-        //     const url = `/users/manager?userId=${userId}&competitionId=${id}`;
-        //     return Method.dataPost(url, token, body)
-        // }
     },
 
     // delete match

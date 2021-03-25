@@ -74,41 +74,45 @@ class LiveScoreAddManager extends Component {
         }
     }
 
-    componentDidUpdate(nextProps) {
-        if (this.props.liveScoreManagerState.managerListResult !== nextProps.liveScoreManagerState.managerListResult) {
+    componentDidUpdate(prevProps) {
+        const { managerData, managerListResult } = this.props.liveScoreManagerState
+
+
+        if (managerListResult !== prevProps.liveScoreManagerState.managerListResult) {
             if (this.state.load === true && this.props.liveScoreManagerState.onLoad === false) {
                 this.filterManagerList()
                 if (this.state.isEdit === true) {
-                    this.setInitalFiledValue()
+                    this.setInitialFiledValues()
                 }
                 this.setState({ load: false, loader: false })
             }
         }
 
-        if (this.props.liveScoreManagerState.teamId !== nextProps.liveScoreManagerState.teamId) {
+        if (managerData.teams !== prevProps.liveScoreManagerState.managerData.teams) {
             if (this.state.teamLoad === true) {
-                const { teamId } = this.props.liveScoreManagerState
-                this.setSelectedTeamValue(teamId)
+                this.updateManagerTeamName(managerData.teams);
 
                 this.setState({ teamLoad: false })
             }
         }
     }
 
-    setSelectedTeamValue(teamId) {
+    updateManagerTeamName(teamIds) {
         this.formRef.current.setFieldsValue({
-            'managerTeamName': teamId
+            'managerTeamName': teamIds,
         })
     }
 
-    setInitalFiledValue() {
-        const { managerData, teamId } = this.props.liveScoreManagerState
+    setInitialFiledValues() {
+        const { managerData } = this.props.liveScoreManagerState
+        const selectedTeamIds = managerData.teams?.map(team => team.id)
+
         this.formRef.current.setFieldsValue({
-            'First Name': managerData.firstName,
-            'Last Name': managerData.lastName,
-            'Email Address': managerData.email,
-            'Contact no': managerData.mobileNumber,
-            'Select Team': teamId
+            [AppConstants.firstName]: managerData.firstName,
+            [AppConstants.lastName]: managerData.lastName,
+            [AppConstants.emailAdd]: managerData.email,
+            [AppConstants.contactNO]: managerData.mobileNumber,
+            [AppConstants.selectTeam]: selectedTeamIds,
         })
     }
 
@@ -134,7 +138,7 @@ class LiveScoreAddManager extends Component {
             })
         }
         setTimeout(() => {
-            this.setInitalFiledValue()
+            this.setInitialFiledValues()
         }, 300);
     }
 
@@ -215,8 +219,7 @@ class LiveScoreAddManager extends Component {
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
                                 className="w-100"
-                                onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
-                                // value={teamId}
+                                onChange={(teamIds) => this.props.liveScoreUpdateManagerDataAction(teamIds, 'teams')}
                                 optionFilterProp="children"
                             >
                                 {teamData.map((item) => (
@@ -335,8 +338,7 @@ class LiveScoreAddManager extends Component {
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
                                 className="w-100"
-                                onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
-                                // value={teamId}
+                                onChange={(teamIds) => this.props.liveScoreUpdateManagerDataAction(teamIds, 'teams')}
                                 showSearch
                                 optionFilterProp="children"
                             >
@@ -442,73 +444,38 @@ class LiveScoreAddManager extends Component {
         );
     };
 
-    onSaveClick = values => {
-        const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreManagerState
+    onSaveClick = () => {
+        const {
+            managerData, managerRadioBtn, exsitingManagerId,
+        } = this.props.liveScoreManagerState
         const { compOrgId } = this.state
+
         if (managerRadioBtn === 'new') {
             if (managerData.mobileNumber.length !== 10) {
                 this.setState({
-                    hasError: true
+                    hasError: true,
                 })
             } else {
-                let body = ''
-                if (managerRadioBtn === 'new') {
-                    if (this.state.isEdit === true) {
-                        body = {
-                            id: managerData.id,
-                            firstName: managerData.firstName,
-                            lastName: managerData.lastName,
-                            mobileNumber: regexNumberExpression(managerData.mobileNumber),
-                            email: managerData.email,
-                            teams: managerData.teams
-                        }
-                    } else {
-                        body = {
-                            firstName: managerData.firstName,
-                            lastName: managerData.lastName,
-                            mobileNumber: regexNumberExpression(managerData.mobileNumber),
-                            email: managerData.email,
-                            teams: managerData.teams
-                        }
-                    }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
-                } else if (managerRadioBtn === 'existing') {
-                    body = {
-                        id: exsitingManagerId,
-                        teams: managerData.teams
-                    }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
+                const body = {
+                    firstName: managerData.firstName,
+                    lastName: managerData.lastName,
+                    mobileNumber: regexNumberExpression(managerData.mobileNumber),
+                    email: managerData.email,
+                    teams: managerData.teams,
                 }
-            }
-        } else {
-            let body = ''
-            if (managerRadioBtn === 'new') {
+
                 if (this.state.isEdit === true) {
-                    body = {
-                        id: managerData.id,
-                        firstName: managerData.firstName,
-                        lastName: managerData.lastName,
-                        mobileNumber: regexNumberExpression(managerData.mobileNumber),
-                        email: managerData.email,
-                        teams: managerData.teams
-                    }
-                } else {
-                    body = {
-                        firstName: managerData.firstName,
-                        lastName: managerData.lastName,
-                        mobileNumber: regexNumberExpression(managerData.mobileNumber),
-                        email: managerData.email,
-                        teams: managerData.teams
-                    }
+                    body.id = managerData.id
                 }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
-            } else if (managerRadioBtn === 'existing') {
-                body = {
-                    id: exsitingManagerId,
-                    teams: managerData.teams
-                }
-                this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId, compOrgId, this.state.liveScoreCompIsParent)
+
+                this.props.liveScoreAddEditManager(body, compOrgId, this.state.liveScoreCompIsParent)
             }
+        } else if (managerRadioBtn === 'existing') {
+            const body = {
+                id: exsitingManagerId,
+                teams: managerData.teams,
+            }
+            this.props.liveScoreAddEditManager(body, compOrgId, this.state.liveScoreCompIsParent)
         }
     };
 

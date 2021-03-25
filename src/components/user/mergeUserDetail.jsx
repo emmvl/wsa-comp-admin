@@ -12,7 +12,7 @@ import {
     Typography,
     notification,
 } from "antd";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { useHistory } from "react-router-dom";
 import { connect, useSelector } from 'react-redux'
 import { getOrganisationData } from 'util/sessionStorage'
@@ -46,11 +46,16 @@ const userTypes = {
     master: "master",
     second: "second",
 }
-const MatchesDetailView = () => {
+const MatchesDetailView = (props) => {
     const { usersToBeMerged } = useSelector((state) => state.UserState);
     const master = usersToBeMerged[0];
     const second = usersToBeMerged[1];
     const history = useHistory();
+    const searchParams = new URLSearchParams(props.location.search);
+    const paramMasterId = searchParams.get('masterId')
+    const paramSecondId = searchParams.get('secondId')
+    const masterId = master ? master.userId : paramMasterId
+    const secondId = second ? second.id : paramSecondId
 
     const [masterUserData, setMasterUserData] = useState(null);
     const [secondUserData, setSecondUserData] = useState(null);
@@ -62,6 +67,15 @@ const MatchesDetailView = () => {
     const isMasterSelected = (radioKey) => values[radioKey] === userTypes.master;
     const isSecondSelected = (radioKey) => values[radioKey] === userTypes.second;
 
+    const getUserValueByKeys = (valueKey, userTypeKey) => {
+        if (!masterUserData || !secondUserData) return ''
+
+        const isMasterValue = userTypeKey === userTypes.master;
+        const payloadValue = isMasterValue ? masterUserData[valueKey] : secondUserData[valueKey];
+
+        return payloadValue || '';
+    }
+
     const fields = [
         { key: "firstName", title: AppConstants.firstName },
         { key: "lastName", title: AppConstants.lastName },
@@ -72,25 +86,30 @@ const MatchesDetailView = () => {
         },
         { key: "email", title: AppConstants.emailAdd },
         { key: "mobileNumber", title: AppConstants.contactNumber },
-        { key: "address", title: AppConstants.address },
         { key: "gender", title: AppConstants.gender },
         {
             key: "accreditationUmpireExpiryDate",
             title: AppConstants.nationalAccreditationLevelUmpire,
-            value: `${getMasterValue(
-                "umpireAccreditationLevel",
-            )} ${getDateTypeValue(
-                getMasterValue("accreditationUmpireExpiryDate"),
-            )}`,
+            getValue: (radioValue) => {
+                const value = getUserValueByKeys('umpireAccreditationLevel', radioValue)
+                const dateValue = getDateTypeValue(
+                    getUserValueByKeys("accreditationUmpireExpiryDate", radioValue),
+                )
+
+                return value + ' ' + dateValue;
+            },
         },
         {
             key: "accreditationCoachExpiryDate",
             title: AppConstants.nationalAccreditationLevelCoach,
-            value: `${getMasterValue(
-                "coachAccreditationLevel",
-            )} ${getDateTypeValue(
-                getMasterValue("accreditationCoachExpiryDate"),
-            )}`,
+            getValue: (radioValue) => {
+                const value = getUserValueByKeys("coachAccreditationLevel", radioValue)
+                const dateValue = getDateTypeValue(
+                    getUserValueByKeys("accreditationCoachExpiryDate", radioValue),
+                )
+
+                return value + ' ' + dateValue;
+            },
         },
         { key: "childrenCheckNumber", title: AppConstants.childrenNumber },
         {
@@ -132,13 +151,6 @@ const MatchesDetailView = () => {
         handleRadioSelected(radioKey, userTypes.second)
     }
 
-    const getUserValueByKeys = (valueKey, userTypeKey) => {
-        const isMasterValue = userTypeKey === userTypes.master;
-        const payloadValue = isMasterValue ? masterUserData[valueKey] : secondUserData[valueKey];
-
-        return payloadValue;
-    }
-
     const getCorrectedUserData = (valueKey, value, userTypeKey) => {
         switch (valueKey) {
             case "gender": {
@@ -166,14 +178,18 @@ const MatchesDetailView = () => {
             const fromValues = isMasterSelected ? masterUserData : secondUserData;
 
             fields.forEach(field => {
-                payload[field.key] = fromValues[field.key];
+                const payloadValue = fromValues[field.key];
+                const { correctedKey, correctedValue } = getCorrectedUserData(field.key, payloadValue, values.selectAll);
+
+                payload[correctedKey] = correctedValue;
             })
         } else {
+            delete values.selectAll
             Object.keys(values).forEach((valueKey) => {
                 const radioValue = values[valueKey];
                 const payloadValue = getUserValueByKeys(valueKey, radioValue);
+                const { correctedKey, correctedValue } = getCorrectedUserData(valueKey, payloadValue, values.selectAll);
 
-                const { correctedKey, correctedValue } = getCorrectedUserData(valueKey, payloadValue, radioValue);
                 payload[correctedKey] = correctedValue;
             })
         }
@@ -188,8 +204,8 @@ const MatchesDetailView = () => {
         try {
             await userHttp.post(
                 `${process.env.REACT_APP_USER_API_URL}/userMerge/merge`, {
-                    masterUserId: master.userId,
-                    otherUserId: second.id,
+                    masterUserId: masterId,
+                    otherUserId: secondId,
                     payload,
                 }
             )
@@ -221,16 +237,20 @@ const MatchesDetailView = () => {
     }
 
     useEffect(() => {
-        (async function anyNameFunction() {
-            const masterData = await fetchUserData(master.userId)
-            const secondData = await fetchUserData(second.id)
+        async function anyNameFunction() {
+            if (!masterId || !secondId) return;
+
+            const masterData = await fetchUserData(masterId)
+            const secondData = await fetchUserData(secondId)
 
             setMasterUserData(masterData);
             setSecondUserData(secondData);
-        }());
-    }, [])
+        }
 
-    if (!usersToBeMerged.length) {
+        anyNameFunction()
+    }, [masterId, secondId])
+
+    if (!masterId || !secondId) {
         return history.replace("/userPersonal");
     }
 
@@ -267,14 +287,27 @@ const MatchesDetailView = () => {
                             </Row>
                             <Divider style={{ margin: '8px' }} />
 
-                            { fields.map((field) => {
-                                const defaultMasterValue = getMasterValue(field.key);
-                                const defaultSecondValue = getSecondValue(field.key);
-                                const masterValue = field.value || defaultMasterValue;
-                                const secondValue = field.value || defaultSecondValue;
 
-                                const formattedMasterValue = field.onValueFormat ? field.onValueFormat(masterValue) : masterValue;
-                                const formattedSecondValue = field.onValueFormat ? field.onValueFormat(secondValue) : secondValue;
+                            { fields.map((field) => {
+                                const { getValue, onValueFormat, key } = field;
+                                let masterValue = getMasterValue(key);
+                                let secondValue = getSecondValue(key);
+
+                                if (typeof getValue === 'function') {
+                                    masterValue = getValue(userTypes.master)
+                                    secondValue = getValue(userTypes.second)
+                                }
+
+                                if (typeof onValueFormat === 'function') {
+                                    masterValue = onValueFormat(masterValue)
+                                    secondValue = onValueFormat(secondValue)
+                                }
+
+                                if (
+                                    isEmpty(masterValue.replace(/\s/g, '')) &&
+                                    isEmpty(secondValue.replace(/\s/g, ''))) {
+                                    return null
+                                }
 
                                 return (
                                     <Row key={field.key}>
@@ -284,7 +317,7 @@ const MatchesDetailView = () => {
                                                 checked={isMasterSelected(field.key)}
                                                 onChange={() => handleMasterRadioSelected(field.key)}
                                             >
-                                                {formattedMasterValue || ''}
+                                                {masterValue}
                                             </Radio>
                                         </Col>
                                         <Col span={8}>
@@ -292,7 +325,7 @@ const MatchesDetailView = () => {
                                                 checked={isSecondSelected(field.key)}
                                                 onChange={() => handleSecondRadioSelected(field.key)}
                                             >
-                                                {formattedSecondValue || ''}
+                                                {secondValue}
                                             </Radio>
                                         </Col>
                                     </Row>
@@ -311,7 +344,8 @@ const MatchesDetailView = () => {
     );
 };
 
-function MergeUserDetail() {
+function MergeUserDetail(props) {
+
     return (
         <div className="fluid-width default-bg">
 
@@ -323,7 +357,7 @@ function MergeUserDetail() {
             <Layout>
                 <HeaderView />
                 <Content>
-                    <MatchesDetailView />
+                    <MatchesDetailView {...props} />
                 </Content>
             </Layout>
         </div>

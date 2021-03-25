@@ -46,7 +46,6 @@ function* liveScoreCoachSaga(action) {
     const result = yield call(
       UserAxiosApi.liveScoreCoachesList,
       action.roleId,
-      action.entityTypeId,
       action.entityId,
       action.search,
       action.offset,

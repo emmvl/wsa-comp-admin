@@ -297,6 +297,7 @@ const AppConstants = {
     previews: "Previews",
     print: "Print",
     printAll: "Print All",
+    printProcessing: 'Processing Downloads, Please click refresh after a short while',
 
     /** ** competition Open Reg form */
     competitionDetails: "Competition Details",
@@ -969,8 +970,8 @@ const AppConstants = {
     turnOff_30Second: "30 second warning",
     payouts: "Payouts",
 
-    coachExport: "/users/byRole/export?roleId=17&entityTypeId=6&entityId=",
-    managerExport: "/users/byRole/export?roleId=3&entityTypeId=6&entityId=",
+    coachExport: "/users/byRole/export",
+    managerExport: "/users/byRole/export",
     scorerExport: "/roster/exportScorer?entityTypeId=",
     positionExport: "/stats/positionTracking/export?",
     teamExport: "/teams/export?competitionId=",
@@ -1860,8 +1861,8 @@ const AppConstants = {
 
     // Communication
     communicationDetails: 'Communication Details',
-    communicationtitle: 'Communication Title',
-    enterCommunicationtitle: 'Enter Communication Title',
+    communicationTitle: 'Communication Title',
+    enterCommunicationTitle: 'Enter Communication Title',
     communicationBody: 'Communication Body',
     communicationImage: 'Communication Image',
     communicationVideo: 'Communication Video',
@@ -2001,6 +2002,7 @@ const AppConstants = {
     historicalGrade: "Historical Grade",
     historicalResult: "Historical Result",
     errorMessage: "Error Message",
+    onlyEvenNumbersError: "Only even numbers are allowed",
     line: "Line #",
     playingUp: "Playing Up %",
     primary: "primary",
