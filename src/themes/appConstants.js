@@ -1795,6 +1795,8 @@ const AppConstants = {
     byBadge: "By Badge",
     byPool: "By Pool",
     noPoolMsg: "There are no pools in this competition",
+    noUmpirePayments: "No umpire payment through the platform",
+    yesUmpirePayments: "Umpire payments through the platform",
 
     thankYouRegistering: "Thank you for registering!",
     emailConfirmNewUserMessage:
