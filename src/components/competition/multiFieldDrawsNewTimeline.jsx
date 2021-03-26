@@ -1949,7 +1949,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             <span className="input-heading-add-another pt-0 pr-5 pl-3">{AppConstants.matchesList}</span>
                         </div>
 
-                        <NavLink
+                        {/* <NavLink
                             to={{
                                 pathname: "/competitionDrawsImport",
                                 state: { competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId },
@@ -1968,7 +1968,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     </div>
                                 </div>
                             </Button>
-                        </NavLink>
+                        </NavLink> */}
 
                         <Button className="multi-field-draw-edit-button" type="primary" onClick={() => this.navigateToDrawEdit()}>
                             {AppConstants.edit}
