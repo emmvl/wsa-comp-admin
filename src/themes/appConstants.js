@@ -1266,6 +1266,7 @@ const AppConstants = {
     deleteProduct: "Delete Product",
     deleteProductDescription: "Please confirm you want to delete this product?",
     umpireDashboardExport: "/matchUmpire/dashboard/export?",
+    umpirePayoutsExport: "/matchUmpire/payouts/export?",
     updateAction: "Update Action",
     actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
     backToUmpire: "Back to all Umpires",
