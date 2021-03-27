@@ -297,6 +297,7 @@ const AppConstants = {
     previews: "Previews",
     print: "Print",
     printAll: "Print All",
+    printProcessing: 'Processing Downloads, Please click refresh after a short while',
 
     /** ** competition Open Reg form */
     competitionDetails: "Competition Details",
@@ -1265,6 +1266,7 @@ const AppConstants = {
     deleteProduct: "Delete Product",
     deleteProductDescription: "Please confirm you want to delete this product?",
     umpireDashboardExport: "/matchUmpire/dashboard/export?",
+    umpirePayoutsExport: "/matchUmpire/payouts/export?",
     updateAction: "Update Action",
     actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
     backToUmpire: "Back to all Umpires",
@@ -1795,6 +1797,8 @@ const AppConstants = {
     byBadge: "By Badge",
     byPool: "By Pool",
     noPoolMsg: "There are no pools in this competition",
+    noUmpirePayments: "No umpire payment through the platform",
+    yesUmpirePayments: "Umpire payments through the platform",
 
     thankYouRegistering: "Thank you for registering!",
     emailConfirmNewUserMessage:

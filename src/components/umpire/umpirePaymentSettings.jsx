@@ -68,6 +68,7 @@ class UmpirePaymentSetting extends Component {
             tempSelectedDivisions: null,
             isOrganiserView: false,
             allowedDivisionList: null,
+            allowPayment: true,
         };
     }
 
@@ -78,9 +79,8 @@ class UmpirePaymentSetting extends Component {
         this.props.getRefBadgeData();
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps, prevState) {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             // if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
             if (!this.props.umpireCompetitionState.onLoad) {
@@ -134,7 +134,11 @@ class UmpirePaymentSetting extends Component {
                 organisationId,
                 competitionId: this.state.selectedComp,
             };
-            if (reqData.competitionId && reqData.organisationId) this.props.getUmpirePaymentSettings(reqData);
+            if (reqData.competitionId && reqData.organisationId) {
+                await this.props.getUmpirePaymentSettings(reqData);
+               
+            }
+            this.setState({ allowPayment: this.props.umpirePaymentSettingState?.allowUmpiresPayments });
         }
 
         if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
@@ -147,11 +151,12 @@ class UmpirePaymentSetting extends Component {
     modifyGetSettingsData = () => {
         const { divisionList } = this.props.liveScoreTeamState;
         const { umpirePaymentSettings, allowedDivisionsSetting } = this.props.umpirePaymentSettingState.paymentSettingsData;
-        const { isOrganiserView } = this.state;
+        const { allowUmpiresPayments } = this.props.umpirePaymentSettingState;
+        const { isOrganiserView, allowPayment } = this.state;
 
         const selectedDivisions = [];
 
-        const umpirePaymentSettingsArray = !!umpirePaymentSettings.length ?
+        const umpirePaymentSettingsArray = (!!umpirePaymentSettings && !!umpirePaymentSettings.length) ?
             umpirePaymentSettings.map(settingsItem => ({
                 allDivisions: settingsItem.allDivisions,
                 divisions: settingsItem.divisions,
@@ -193,7 +198,7 @@ class UmpirePaymentSetting extends Component {
             item.allDivisions ? selectedDivisions.push(...allowedDivisionList) : selectedDivisions.push(...item.divisions);
         });
 
-        this.setState({ paymentSettingsData: newPaymentSettingsData, selectedDivisions, allowedDivisionList });
+        this.setState({ paymentSettingsData: newPaymentSettingsData, selectedDivisions, allowedDivisionList, allowPayment: allowUmpiresPayments });
     }
 
     handleChangeWhoPaysUmpires = (e, isBoxHasSettings) => {
@@ -442,7 +447,7 @@ class UmpirePaymentSetting extends Component {
 
     handleSave = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        const { selectedComp, paymentSettingsData, isOrganiserView } = this.state;
+        const { selectedComp, paymentSettingsData, isOrganiserView, allowPayment } = this.state;
 
         const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData));
 
@@ -455,16 +460,17 @@ class UmpirePaymentSetting extends Component {
         this.modifyPostArray(affiliateSettingArray);
         this.modifyPostArray(umpirePaymentSettingsArray);
 
-        const allowedDivisionsSetting = !!affiliateSettingArray[0]?.divisions.length || !!affiliateSettingArray[0]?.allDivisions
+        const allowedDivisionsSetting = ((!!affiliateSettingArray[0]?.divisions.length || !!affiliateSettingArray[0]?.allDivisions) && allowPayment)
             ? affiliateSettingArray[0]
             :  null;
 
-        const umpirePaymentSettings = !!umpirePaymentSettingsArray.length ? umpirePaymentSettingsArray : [];
+        const umpirePaymentSettings = (!!umpirePaymentSettingsArray.length && allowPayment) ? umpirePaymentSettingsArray : [];
 
-        const bodyData = isOrganiserView ? {
-            umpirePaymentSettings,
-            allowedDivisionsSetting,
-        } : umpirePaymentSettings;
+        const bodyData = {
+            noPaymentThroughPlatform: !allowPayment,
+            umpirePaymentSettings
+        }
+        if (isOrganiserView) bodyData.allowedDivisionsSetting = allowedDivisionsSetting;
 
         const saveData = {
             organisationId,
@@ -523,27 +529,60 @@ class UmpirePaymentSetting extends Component {
         );
     };
 
+    allowPaymentsSwitcher = () => {
+        const { allowPayment, isOrganiserView } = this.state;
+        return(
+            <div className="d-flex flex-column pb-3">
+                <Radio
+                    onChange={() => { 
+                        if (allowPayment) this.setState({ allowPayment: false })
+                    }}
+                    checked={!allowPayment}
+                    disabled={isOrganiserView ? false : true}
+                    className="p-0"
+                >
+                    {AppConstants.noUmpirePayments}
+                </Radio>
+                <Radio
+                    onChange={() => { 
+                        if (!allowPayment) this.setState({ allowPayment: true })
+                    }}
+                    checked={allowPayment} 
+                    disabled={isOrganiserView ? false : true}
+                    className="p-0"
+                >
+                    {AppConstants.yesUmpirePayments}
+                </Radio>
+            </div>
+        )
+    }
+
     contentView = () => {
-        const { isOrganiserView } = this.state;
+        const { isOrganiserView, allowPayment } = this.state;
 
         return (
-            <div className="content-view pt-4 mt-5">
-                {isOrganiserView ?
+            <div className="content-view mt-5">
+                { !this.props.umpirePaymentSettingState.onLoad && this.allowPaymentsSwitcher() }
+                { (allowPayment && !this.props.umpirePaymentSettingState.onLoad) &&
                     <>
-                        <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
-                        <div className="d-flex flex-column">
-                            {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, true)}
-                            {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, false)}
-                        </div>
-                    </>
-                :
-                    <div className="d-flex flex-column">
-                        {this.umpireSettingsSectionView(null, true)}
-                    </div>
-                }
+                        {isOrganiserView ?
+                            <>
+                                <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
+                                <div className="d-flex flex-column">
+                                    {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, true)}
+                                    {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, false)}
+                                </div>
+                            </>
+                        :
+                            <div className="d-flex flex-column">
+                                {this.umpireSettingsSectionView(null, true)}
+                            </div>
+                        }
 
-                {this.deleteConfirmModalView()}
-                {this.allDivisionModalView()}
+                        {this.deleteConfirmModalView()}
+                        {this.allDivisionModalView()}
+                    </>
+                }
             </div>
         );
     };
