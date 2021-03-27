@@ -137,6 +137,10 @@
     background-color: var(--app-white);
 }
 
+.participant-summary-table-overflow {
+    overflow-x: scroll;
+}
+
 .home-dash-name-table-title {
     font-weight: 500;
     font-family: inter-medium, sans-serif;

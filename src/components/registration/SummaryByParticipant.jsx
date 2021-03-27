@@ -121,9 +121,9 @@ const columns = [
     title: AppConstants.participant_firstName,
     dataIndex: "firstName",
     key: "firstName",
-    fixed: 'left',
-    width: 200,
+    fixed: "left",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (userFirstName, record) => (
       <NavLink
@@ -144,9 +144,9 @@ const columns = [
     title: AppConstants.participant_lastName,
     dataIndex: "lastName",
     key: "lastName",
-    fixed: 'left',
-    width: 200,
+    fixed: "left",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (userLastName, record) => (
       <NavLink
@@ -168,6 +168,7 @@ const columns = [
     dataIndex: "registrationDate",
     key: "registrationDate",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (registrationDate) => moment(registrationDate).format("DD/MM/YYYY"),
   },
@@ -176,6 +177,7 @@ const columns = [
     dataIndex: "userId",
     key: "userId",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (userId, record) => (
       <NavLink
@@ -197,6 +199,7 @@ const columns = [
     dataIndex: "membershipTypeName",
     key: "membershipTypeName",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
@@ -204,6 +207,7 @@ const columns = [
     dataIndex: "paymentStatus",
     key: "paymentStatus",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
@@ -214,6 +218,7 @@ const columns = [
         dataIndex: "fee",
         key: "fee",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (fee) => currencyFormat(fee),
       },
@@ -225,6 +230,7 @@ const columns = [
             dataIndex: "registrationPaid",
             key: "registrationPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (registrationPaid) => currencyFormat(registrationPaid),
           },
@@ -233,6 +239,7 @@ const columns = [
             dataIndex: "registrationPending",
             key: "registrationPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (registrationPending) =>
               currencyFormat(registrationPending),
@@ -247,6 +254,7 @@ const columns = [
             dataIndex: "charityPaid",
             key: "charityPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (charityPaid) => currencyFormat(charityPaid),
           },
@@ -255,6 +263,7 @@ const columns = [
             dataIndex: "charityPending",
             key: "charityPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (charityPending) => currencyFormat(charityPending),
           },
@@ -268,6 +277,7 @@ const columns = [
             dataIndex: "shopPaid",
             key: "shopPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (shopPaid) => currencyFormat(shopPaid),
           },
@@ -276,6 +286,7 @@ const columns = [
             dataIndex: "shopPending",
             key: "shopPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (shopPending) => currencyFormat(shopPending),
           },
@@ -288,6 +299,7 @@ const columns = [
     dataIndex: "competitionName",
     key: "competitionName",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
@@ -295,6 +307,7 @@ const columns = [
     dataIndex: "affiliate",
     key: "affiliate",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
@@ -302,6 +315,7 @@ const columns = [
     dataIndex: "competitionOrganiser",
     key: "competitionOrganiser",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
@@ -315,6 +329,7 @@ const columns = [
             dataIndex: "affiliateAmount",
             key: "affiliateAmount",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateAmount) => currencyFormat(affiliateAmount),
           },
@@ -323,6 +338,7 @@ const columns = [
             dataIndex: "affiliateAmountPaid",
             key: "affiliateAmountPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateAmountPaid) =>
               currencyFormat(affiliateAmountPaid),
@@ -332,6 +348,7 @@ const columns = [
             dataIndex: "affiliateAmountPending",
             key: "affiliateAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateAmountPending) =>
               currencyFormat(affiliateAmountPending),
@@ -341,6 +358,7 @@ const columns = [
             dataIndex: "affiliateAmountFailed",
             key: "affiliateAmountFailed",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateAmountFailed) =>
               currencyFormat(affiliateAmountFailed),
@@ -355,6 +373,7 @@ const columns = [
             dataIndex: "affiliateInstalmentAmountPaid",
             key: "affiliateInstalmentAmountPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateInstalmentAmountPaid) =>
               currencyFormat(affiliateInstalmentAmountPaid),
@@ -364,6 +383,7 @@ const columns = [
             dataIndex: "affiliateInstalmentAmountPending",
             key: "affiliateInstalmentAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateInstalmentAmountPending) =>
               currencyFormat(affiliateInstalmentAmountPending),
@@ -378,6 +398,7 @@ const columns = [
             dataIndex: "affiliateGovernmentVoucherAmountRedeemed",
             key: "affiliateGovernmentVoucherAmountRedeemed",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateGovernmentVoucherAmountRedeemed) =>
               currencyFormat(affiliateGovernmentVoucherAmountRedeemed),
@@ -387,6 +408,7 @@ const columns = [
             dataIndex: "affiliateGovernmentVoucherAmountPending",
             key: "affiliateGovernmentVoucherAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (affiliateGovernmentVoucherAmountPending) =>
               currencyFormat(affiliateGovernmentVoucherAmountPending),
@@ -398,6 +420,7 @@ const columns = [
         dataIndex: "affiliateDiscountAmount",
         key: "affiliateDiscountAmount",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (affiliateDiscountAmount) =>
           currencyFormat(affiliateDiscountAmount),
@@ -407,6 +430,7 @@ const columns = [
         dataIndex: "affiliateRefundAmount",
         key: "affiliateRefundAmount",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (affiliateRefundAmount) =>
           currencyFormat(affiliateRefundAmount),
@@ -424,6 +448,7 @@ const columns = [
             dataIndex: "competitionOrganiserAmount",
             key: "competitionOrganiserAmount",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserAmount) =>
               currencyFormat(competitionOrganiserAmount),
@@ -433,6 +458,7 @@ const columns = [
             dataIndex: "competitionOrganiserAmountPaid",
             key: "competitionOrganiserAmountPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserAmountPaid) =>
               currencyFormat(competitionOrganiserAmountPaid),
@@ -442,6 +468,7 @@ const columns = [
             dataIndex: "competitionOrganiserAmountPending",
             key: "competitionOrganiserAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserAmountPending) =>
               currencyFormat(competitionOrganiserAmountPending),
@@ -451,6 +478,7 @@ const columns = [
             dataIndex: "competitionOrganiserAmountFailed",
             key: "competitionOrganiserAmountFailed",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserAmountFailed) =>
               currencyFormat(competitionOrganiserAmountFailed),
@@ -465,6 +493,7 @@ const columns = [
             dataIndex: "competitionOrganiserInstalmentAmountPaid",
             key: "competitionOrganiserInstalmentAmountPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserInstalmentAmountPaid) =>
               currencyFormat(competitionOrganiserInstalmentAmountPaid),
@@ -474,6 +503,7 @@ const columns = [
             dataIndex: "competitionOrganiserInstalmentAmountPending",
             key: "competitionOrganiserInstalmentAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserInstalmentAmountPending) =>
               currencyFormat(competitionOrganiserInstalmentAmountPending),
@@ -488,6 +518,7 @@ const columns = [
             dataIndex: "competitionOrganiserGovernmentVoucherAmountRedeemed",
             key: "competitionOrganiserGovernmentVoucherAmountRedeemed",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserGovernmentVoucherAmountRedeemed) =>
               currencyFormat(
@@ -499,6 +530,7 @@ const columns = [
             dataIndex: "competitionOrganiserGovernmentVoucherAmountPending",
             key: "competitionOrganiserGovernmentVoucherAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (competitionOrganiserGovernmentVoucherAmountPending) =>
               currencyFormat(
@@ -512,6 +544,7 @@ const columns = [
         dataIndex: "competitionOrganiserDiscountAmount",
         key: "competitionOrganiserDiscountAmount",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (competitionOrganiserDiscountAmount) =>
           currencyFormat(competitionOrganiserDiscountAmount),
@@ -521,6 +554,7 @@ const columns = [
         dataIndex: "competitionOrganiserRefundAmount",
         key: "competitionOrganiserRefundAmount",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (competitionOrganiserRefundAmount) =>
           currencyFormat(competitionOrganiserRefundAmount),
@@ -538,6 +572,7 @@ const columns = [
             dataIndex: "membershipAmount",
             key: "membershipAmount",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipAmount) => currencyFormat(membershipAmount),
           },
@@ -546,6 +581,7 @@ const columns = [
             dataIndex: "membershipAmountPaid",
             key: "membershipAmountPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipAmountPaid) =>
               currencyFormat(membershipAmountPaid),
@@ -555,6 +591,7 @@ const columns = [
             dataIndex: "membershipAmountPending",
             key: "membershipAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipAmountPending) =>
               currencyFormat(membershipAmountPending),
@@ -564,6 +601,7 @@ const columns = [
             dataIndex: "membershipAmountFailed",
             key: "membershipAmountFailed",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipAmountFailed) =>
               currencyFormat(membershipAmountFailed),
@@ -578,6 +616,7 @@ const columns = [
             dataIndex: "membershipInstalmentAmountPaid",
             key: "membershipInstalmentAmountPaid",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipInstalmentAmountPaid) =>
               currencyFormat(membershipInstalmentAmountPaid),
@@ -587,6 +626,7 @@ const columns = [
             dataIndex: "membershipInstalmentAmountPending",
             key: "membershipInstalmentAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipInstalmentAmountPending) =>
               currencyFormat(membershipInstalmentAmountPending),
@@ -601,6 +641,7 @@ const columns = [
             dataIndex: "membershipGovernmentVoucherAmountRedeemed",
             key: "membershipGovernmentVoucherAmountRedeemed",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipGovernmentVoucherAmountRedeemed) =>
               currencyFormat(membershipGovernmentVoucherAmountRedeemed),
@@ -610,6 +651,7 @@ const columns = [
             dataIndex: "membershipGovernmentVoucherAmountPending",
             key: "membershipGovernmentVoucherAmountPending",
             sorter: true,
+            width: 200,
             onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
             render: (membershipGovernmentVoucherAmountPending) =>
               currencyFormat(membershipGovernmentVoucherAmountPending),
@@ -621,6 +663,7 @@ const columns = [
         dataIndex: "membershipDiscountAmount",
         key: "membershipDiscountAmount",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (membershipDiscountAmount) =>
           currencyFormat(membershipDiscountAmount),
@@ -630,6 +673,7 @@ const columns = [
         dataIndex: "membershipRefundAmount",
         key: "membershipRefundAmount",
         sorter: true,
+        width: 200,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (membershipRefundAmount) =>
           currencyFormat(membershipRefundAmount),
@@ -641,26 +685,29 @@ const columns = [
     dataIndex: "paymentMethod",
     key: "paymentMethod",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (paymentMethod) => {
-      switch(paymentMethod) {
-        case 'direct_debit':
+      switch (paymentMethod) {
+        case "direct_debit":
           return AppConstants.directDebit;
-        case 'card':
+        case "card":
           return AppConstants.creditCard;
-        case 'cash':
+        case "cash":
           return AppConstants.cash;
       }
-    }
+    },
   },
   {
     title: AppConstants.voucherOrDiscountCode,
     dataIndex: "governmentVoucherNumber",
     key: "governmentVoucherNumber",
     sorter: true,
+    width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
 ];
+
 
 class SummaryByParticipant extends Component {
   constructor(props) {
@@ -1372,7 +1419,7 @@ class SummaryByParticipant extends Component {
       <div className="comp-dash-table-view mt-2">
         {this.dropdownView()}
 
-        <div className="table-responsive home-dash-table-view">
+        <div className="table-responsive home-dash-table-view participant-summary-table-overflow">
           <Table
             className="home-dashboard-table"
             bordered
