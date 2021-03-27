@@ -437,6 +437,18 @@ function stripe(state = initialState, action) {
                 participantSummaryListPage: participantSummary.page ? participantSummary.page.currentPage : 1,
             }
 
+        case ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                participantSummaryListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                participantSummaryListPage: action.pageNum,
+            }
+
         default:
             return state;
     }
