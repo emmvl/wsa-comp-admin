@@ -1041,6 +1041,11 @@ const columnsDocuments = [
         title: "Document",
         dataIndex: "docUrl",
         key: "docUrl",
+        render: (data, record) => {
+            let bucket = data.match(/(?<=https:\/\/).*?(?=.s3)/)[0];
+            let filename = unescape(data.match(/(?<=.com\/).*?$/)[0]);
+            return <a href={`${process.env.REACT_APP_COMMON_API_URL}/file/download?bucket=${bucket}&filename=${filename}`}><span>{filename}</span></a>
+        }
     },
     {
         title: "Action",

@@ -1291,7 +1291,9 @@ class UserProfileEdit extends Component {
             try {
                 let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
                 if (ret.result.data.status === 'done') {
-                    docList[0].url = ret.result.data.url;
+                    let bucket = ret.result.data.url.match(/(?<=https:\/\/).*?(?=.s3)/)[0];
+                    let filename = unescape(ret.result.data.url.match(/(?<=.com\/).*?$/)[0]);
+                    docList[0].url = `${process.env.REACT_APP_COMMON_API_URL}/file/download?bucket=${bucket}&filename=${filename}`;
                     return data.onSuccess();
                 } else {
                     data.onError();
