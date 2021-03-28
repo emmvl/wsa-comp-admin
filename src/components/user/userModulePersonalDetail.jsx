@@ -1923,7 +1923,12 @@ class UserModulePersonalDetail extends Component {
                         teamId: i.teamId,
                         teamName: i.teamName,
                     };
-                    if (i.teamId != null) teams.push(obj);
+                    if (i.teamId != null){
+                        let alreadyExist = (teams || []).find(x => x.teamId == i.teamId)
+                        if(!alreadyExist) {
+                            teams.push(obj);
+                        }
+                    }
                 });
             }
 
@@ -1934,7 +1939,10 @@ class UserModulePersonalDetail extends Component {
                         divisionName: j.divisionName,
                     };
                     if (j.divisionId != null) {
-                        divisions.push(div);
+                        let divAlreadyExist = (divisions || []).find(x => x.divisionId == j.divisionId)
+                        if(!divAlreadyExist){
+                            divisions.push(div);
+                        }
                     }
                 });
             }
@@ -1990,7 +1998,12 @@ class UserModulePersonalDetail extends Component {
                         teamId: i.teamId,
                         teamName: i.teamName,
                     };
-                    if (i.teamId != null) teams.push(obj);
+                    if (i.teamId != null){
+                        let alreadyExist = (teams || []).find(x => x.teamId == i.teamId)
+                        if(!alreadyExist) {
+                            teams.push(obj);
+                        }
+                    }
                 });
             }
 
@@ -2001,7 +2014,10 @@ class UserModulePersonalDetail extends Component {
                         divisionName: j.divisionName,
                     };
                     if (j.divisionId != null) {
-                        divisions.push(div);
+                        let divAlreadyExist = (divisions || []).find(x => x.divisionId == j.divisionId)
+                        if(!divAlreadyExist){
+                            divisions.push(div);
+                        }
                     }
                 });
             }

@@ -153,11 +153,15 @@ class RegistrationPayments extends Component {
 
     //on export button click
     onExport() {
+        const stripeConnected = this.stripeConnected()
+        const isBecsSetupDone = this.isBecsSetupDone();
         const { dateFrom, dateTo, year } = this.state;
         const start = dateFrom ? moment(dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
         const end = dateTo ? moment(dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
+        let type  = stripeConnected ? "transfer" : "";
+        type = isBecsSetupDone ? "payout" : "";
         this.props.exportPaymentApi(
-            "transfer",
+            type,
             year,
             start,
             end,
@@ -203,7 +207,7 @@ class RegistrationPayments extends Component {
                                                 </Button>
                                             ) : ('')}
                                             {isBecsSetupDone ? (
-                                                <Button type="primary">
+                                                <Button type="primary" onClick={() => this.onExport()}>
                                                     <img
                                                         src={AppImages.export}
                                                         alt=""

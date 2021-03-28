@@ -579,8 +579,6 @@ class AddUmpire extends Component {
 
                 this.props.addUmpireAction(
                     body,
-                    affiliateId,
-                    exsitingUmpireId,
                     {
                         screenName: this.state.screenName,
                         isEdit: this.state.isEdit
@@ -616,8 +614,6 @@ class AddUmpire extends Component {
                     this.setState({ isUserNotFound: false })
                     this.props.addUmpireAction(
                         body,
-                        affiliateId,
-                        exsitingUmpireId,
                         { screenName: this.state.screenName },
                         this.state.existingUmpireCheckBox,
                         this.state.existingUmpireCoach_CheckBox

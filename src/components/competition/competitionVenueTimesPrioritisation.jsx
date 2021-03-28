@@ -875,7 +875,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         return (
             <div>
                 <span className="applicable-to-heading required-field">
-                    {AppConstants.anyGradePreference2}
+                    {AppConstants.anyGradePreference}
                 </span>
 
                 <Radio.Group
@@ -1682,8 +1682,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         noValidate="noValidate"
                     >
                         <Content>
-                            {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
-
+                            {/* {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()} */}
+                            { this.contentView() }
                             {/* {venueConstrainstData.competitionTypeRefId == 1 && (
                                 <div>
                                     <div className="formView" style={{ marginTop: 20 }}>

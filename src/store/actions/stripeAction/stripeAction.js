@@ -199,86 +199,6 @@ function exportPayoutTransaction(payoutId) {
     };
 }
 
-function getPaymentSummary(
-    offset,
-    limit,
-    sortBy,
-    sortOrder,
-    userId,
-    registrationId,
-    yearId,
-    competitionKey,
-    paymentFor,
-    dateFrom,
-    dateTo,
-    searchValue,
-    feeType,
-    paymentType,
-    paymentMethod,
-    membershipType,
-    paymentStatus,
-) {
-    return {
-        type: ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD,
-        offset,
-        limit,
-        sortBy,
-        sortOrder,
-        userId,
-        registrationId,
-        yearId,
-        competitionKey,
-        paymentFor,
-        dateFrom,
-        dateTo,
-        searchValue,
-        feeType,
-        paymentType,
-        paymentMethod,
-        membershipType,
-        paymentStatus,
-    }
-}
-
-function exportPaymentSummaryApi(
-    offset,
-    sortBy,
-    sortOrder,
-    userId,
-    registrationId,
-    yearId,
-    competitionKey,
-    paymentFor,
-    dateFrom,
-    dateTo,
-    searchValue,
-    feeType,
-    paymentType,
-    paymentMethod,
-    membershipType,
-    paymentStatus,
-) {
-    return {
-        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
-        offset,
-        sortBy,
-        sortOrder,
-        userId,
-        registrationId,
-        yearId,
-        competitionKey,
-        paymentFor,
-        dateFrom,
-        dateTo,
-        searchValue,
-        feeType,
-        paymentType,
-        paymentMethod,
-        membershipType,
-        paymentStatus,
-    }
-}
-
 function getParticipantSummaryAction(
     offset,
     limit,
@@ -377,18 +297,18 @@ function setDashboardPageNumberAction(pageNum) {
     return action;
 }
 
-function setSummaryPageSizeAction(pageSize) {
+function setParticipantSummaryPageSizeAction(pageSize) {
     const action = {
-        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE,
+        type: ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_SIZE,
         pageSize
     }
 
     return action;
 }
 
-function setSummaryPageNumberAction(pageNum) {
+function setParticipantSummaryPageNumberAction(pageNum) {
     const action = {
-        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
+        type: ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
         pageNum
     }
 
@@ -417,12 +337,10 @@ export {
     getInvoiceStatusAction,
     exportPaymentDashboardApi,
     exportPayoutTransaction,
-    getPaymentSummary,
-    exportPaymentSummaryApi,
     setDashboardPageSizeAction,
     setDashboardPageNumberAction,
-    setSummaryPageSizeAction,
-    setSummaryPageNumberAction,
+    setParticipantSummaryPageSizeAction,
+    setParticipantSummaryPageNumberAction,
     partialRefundAmountAction,
     getParticipantSummaryAction,
     exportParticipantSummaryApiAction,

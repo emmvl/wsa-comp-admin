@@ -169,7 +169,7 @@ class AddCommunication extends Component {
 
     setInitialFilledValue(data, author) {
         this.formRef.current.setFieldsValue({
-            communication_Title: data.title,
+            communicationTitle: data.title,
             author: data.author ? data.author : author,
         });
 
@@ -430,7 +430,7 @@ class AddCommunication extends Component {
 
         return (
             <div className="content-view pt-4">
-                <Form.Item name="communication_Title" rules={[{ required: true, message: ValidationConstants.communicationValidation[0] }]}>
+                <Form.Item name="communicationTitle" rules={[{ required: true, message: ValidationConstants.communicationValidation[0] }]}>
                     <InputWithHead
                         required="required-field pt-0"
                         heading={AppConstants.communicationTitle}
@@ -439,7 +439,7 @@ class AddCommunication extends Component {
                         onChange={(event) => this.setState({ title: captializedString(event.target.value) })}
                         value={editData.title}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            communication_Title: captializedString(i.target.value),
+                            communicationTitle: captializedString(i.target.value),
                         })}
                     />
                 </Form.Item>
@@ -523,12 +523,20 @@ class AddCommunication extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.communicationVideo} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
-                            <ImageLoader
-                                timeout={this.state.videoTimeout}
-                                video
-                                poster={(videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? '' : AppImages.circleImage}
-                                src={videoUrl || this.state.videoSelection}
-                            />
+                            { (videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? (
+                                <ImageLoader
+                                  timeout={this.state.videoTimeout}
+                                  video
+                                  poster={(videoUrl || (!!this.state.videoSelection && this.state.videoSelection !== AppImages.circleImage)) ? '' : AppImages.circleImage}
+                                  src={videoUrl || this.state.videoSelection}
+                                />
+                              ) : (
+                                <ImageLoader
+                                  timeout={this.state.imageTimeout}
+                                  src={AppImages.circleImage}
+                                />
+                              )
+                            }
                         </div>
                         <input
                             type="file"
@@ -681,7 +689,7 @@ class AddCommunication extends Component {
             { label: 'Coaches', value: "coach" },
             { label: 'Managers', value: "manager" },
             { label: 'Players', value: "player" },
-            { label: 'Player Registration', value: "player registration" },
+            { label: 'Players Registered', value: "player_candidate" },
             { label: 'Umpires', value: "umpire" },
         ];
 
@@ -790,13 +798,13 @@ class AddCommunication extends Component {
                             value={
                                 this.props.userState.roles
                                     .filter((role) => this.state.toUserRoleIds.includes(role.id))
-                                    .map((role) => role.description.toLowerCase())
+                                    .map((role) => role.name.toLowerCase())
                             }
                             onChange={(value) => {
                                 const selected = value.length > 0
                                     ? value.map((item) => {
                                         const role = this.props.userState.roles
-                                            .find((rol) => rol.description.toLowerCase() === item.toLowerCase());
+                                            .find((rol) => rol.name.toLowerCase() === item.toLowerCase());
                                         return role?.id;
                                     }).filter((item) => item)
                                     : [];

@@ -588,7 +588,7 @@ class UmpirePoolAllocation extends Component {
 
         const body = assignedData.map(dataItem => ({
             id: dataItem.id,
-            umpires: dataItem.umpires.map(umpire => umpire.id)
+            umpires: dataItem.umpires.map((umpire, poolRank) => ({ id: umpire.id, rank: poolRank+1 }))
         }))
 
         this.props.updateUmpirePoolManyData({

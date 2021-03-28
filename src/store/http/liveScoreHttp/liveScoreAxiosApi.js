@@ -48,15 +48,17 @@ function checlfixedDurationForBulkMatch(data) {
 
 function checkVenueCourtId(data) {
     const courtId = isArrayNotEmpty(data.courtId) ? data.courtId : [];
-    let url;
+    let url = null;
     if (data.venueId) {
         if (data.venueId && courtId.length > 0) {
             url = `&venueId=${data.venueId}&courtId=${data.courtId}`;
         } else {
             url = `&venueId=${data.venueId}`;
         }
-    } else {
-        url = null;
+    }
+
+    if (data.roundId) {
+        url += `&roundId=${data.roundId}`
     }
 
     return url;
@@ -826,7 +828,7 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    async liveScoreAddEditManager(data, teamId, existingManagerId, compOrgId, isParent) {
+    async liveScoreAddEditManager(data, compOrgId, isParent) {
         const body = data;
         let url = null
         let userId = await getUserId();
@@ -837,16 +839,6 @@ const LiveScoreAxiosApi = {
             url = `/users/manager?userId=${userId}&entityId=${id}&entityTypeId=${1}`
         }
         return Method.dataPost(url, token, body);
-
-        // if (existingManagerId) {
-        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
-        //     const url = `/users/manager?userId=${existingManagerId}&competitionId=${id}`;
-        //     return Method.dataPost(url, token)
-        // } else {
-        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
-        //     const url = `/users/manager?userId=${userId}&competitionId=${id}`;
-        //     return Method.dataPost(url, token, body)
-        // }
     },
 
     // delete match
@@ -962,10 +954,11 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAbandonMatch(data, startTime, endTime) {
+    async liveScoreAbandonMatch(data, startTime, endTime) {
         const extendParam = checkVenueCourtId(data);
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        let url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}`;
+        const organisationId = await getOrganisationData().organisationUniqueKey;
+        let url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}&organisationUniqueKey=${organisationId}`;
         if (extendParam) {
             url = `${url}${extendParam}`;
         }
@@ -1342,9 +1335,25 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAddEditIncident(data) {
+    async liveScoreAddEditIncident(data) {
         const { body } = data;
         const players = JSON.stringify(data.playerIds);
+
+        if (data.key === 'media') {
+            const media = data.mediaArry
+            const body = new FormData()
+
+            for (let i in media) {
+                body.append("media", media[i])
+            }
+            if (data.isEdit) {
+                const url = `/incident/media/edit?incidentId=${data.incidentId}`;
+                await Method.dataPatch(url, token, body)
+            } else {
+                const url = `/incident/media?incidentId=${data.incidentId}`;
+                await Method.dataPost(url, token, body)
+            }
+        }
 
         if (data.isEdit) {
             const url = `/incident/edit?playerIds=${players}`;
@@ -1352,33 +1361,6 @@ const LiveScoreAxiosApi = {
         }
         const url = `/incident?playerIds=${players}`;
         return Method.dataPost(url, token, body);
-
-        // if (data.key === 'media') {
-        //     let media = data.mediaArry
-        //     let body = new FormData()
-        //
-        //     for (let i in media) {
-        //         body.append("media", media[i])
-        //     }
-        //     if (data.isEdit) {
-        //         const url = `/incident/media/edit?incidentId=${data.incidentId}`;
-        //         return Method.dataPatch(url, token, body)
-        //     } else {
-        //         const url = `/incident/media?incidentId=${data.incidentId}`;
-        //         return Method.dataPost(url, token, body)
-        //     }
-        // } else {
-        //     // let body = { "incident": data.body }
-        //     let body = data.body
-        //     let players = JSON.stringify(data.playerIds)
-        //     if (data.isEdit) {
-        //         const url = `/incident/edit?playerIds=${players}`;
-        //         return Method.dataPatch(url, token, body)
-        //     } else {
-        //         const url = `/incident?playerIds=${players}`;
-        //         return Method.dataPost(url, token, body)
-        //     }
-        // }
     },
 
     liveScoreIncidentType() {
