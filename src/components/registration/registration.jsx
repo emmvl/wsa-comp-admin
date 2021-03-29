@@ -294,9 +294,14 @@ const columns = [
                             {
                                 record.actionView == 4
                                 && (
-                                    <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
-                                        <span>{AppConstants.markAsFailedReg}</span>
-                                    </Menu.Item>
+                                    <Menu>
+                                        <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
+                                            <span>{AppConstants.markAsFailedReg}</span>
+                                        </Menu.Item>
+                                        <Menu.Item key="9" onClick={() => this_Obj.setSchoolInvoicePaid(record)}>
+                                            <span>{AppConstants.markAsPaidReg}</span>
+                                        </Menu.Item>
+                                    </Menu>
                                 )
                             }
                             {
@@ -383,7 +388,8 @@ class Registration extends Component {
             modalTitle: null,
             modalMessage: null,
             actionView: 0,
-            cancelDeRegistrationLoad: false
+            cancelDeRegistrationLoad: false,
+            isInvoiceFailed: 0
         };
 
         this_Obj = this;
@@ -656,7 +662,15 @@ class Registration extends Component {
         this.setState({
             selectedRow: record, otherModalVisible: true,
             actionView: 4, modalMessage : AppConstants.regFailedModalMsg,
-            modalTitle: AppConstants.invoiceFail
+            modalTitle: AppConstants.invoiceFail, isInvoiceFailed: 1
+        });
+    }
+
+    setSchoolInvoicePaid = (record) =>{
+        this.setState({
+            selectedRow: record, otherModalVisible: true,
+            actionView: 4, modalMessage : AppConstants.regPaidModalMsg,
+            modalTitle: AppConstants.invoicePaid, isInvoiceFailed: 0
         });
     }
 
@@ -677,15 +691,29 @@ class Registration extends Component {
 
 
     handleOtherModal = (key) =>{
-        const {selectedRow, actionView} = this.state;
+        const {selectedRow, actionView, isInvoiceFailed} = this.state;
         let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers) ? selectedRow.paidByUsers[0].paidByUserId : null
         if(actionView == 4){
             if(key == "ok"){
-                let payload = {
-                    registrationId: selectedRow.registrationUniqueKey
+                if(isInvoiceFailed == 1){
+                    let payload = {
+                        registrationId: selectedRow.registrationUniqueKey
+                    }
+                    this.props.registrationFailedStatusUpdate(payload);
+                    this.setState({loading: true})
                 }
-                this.props.registrationFailedStatusUpdate(payload);
-                this.setState({loading: true})
+                else {
+                    let payload = {
+                        processTypeName: selectedRow.processType,
+                        registrationUniqueKey: selectedRow.registrationUniqueKey,
+                        userId: selectedRow.userId,
+                        divisionId: selectedRow.divisionId,
+                        competitionId: selectedRow.competitionUniqueKey
+                    }
+                    this.props.liveScorePlayersToCashReceivedAction(payload);
+                    this.setState({ loading: true });
+                }
+
             }
         }
         else if(actionView == 5){
@@ -1323,7 +1351,11 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.registrationDashboardState.onRegRetryPaymentLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || 
+                            this.props.registrationDashboardState.onRegRetryPaymentLoad || 
+                            this.props.liveScoreDashboardState.onRetryPaymentLoad || 
+                            this.props.registrationDashboardState.onRegStatusUpdateLoad
+                            } />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}
