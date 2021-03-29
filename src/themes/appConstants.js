@@ -2045,6 +2045,9 @@ const AppConstants = {
     nominationFeesRefunded: "Nomination Fees Refunded",
     competitionFeesRefunded: "Competition Fees Refunded",
     refunded: "Refunded",
+    markAsPaidReg: "Mark as Paid Registration",
+    invoicePaid: "Invoice Paid",
+    regPaidModalMsg: "Do you want to mark the invoice as paid?",
 };
 
 export default AppConstants;
