@@ -6,7 +6,10 @@ import {
 } from 'util/helpers';
 import ApiConstants from 'themes/apiConstants';
 import { isDateSame, sortArrayByDate } from 'themes/dateformate';
-
+import { randomKeyGen } from '../../../util/helpers';
+import moment from 'moment';
+import DrawConstant from 'themes/drawConstant';
+import { getDiffBetweenStartAndEnd } from "../../../util/drawUtil";
 const initialState = {
     changeStatus: false,
     onLoad: false,
@@ -274,9 +277,10 @@ function getGradeColor(gradeId) {
     return color;
 }
 
-function getSlotFromDate(drawsArray, matchDate, gradeArray, key, mainCourtNumber) {
-    let startTime;
-    let endTime;
+function getSlotFromDate(drawsArray, dateObj, gradeArray, key, mainCourtNumber) {
+    let matchDate=dateObj.date;
+    let startTime=moment(matchDate).format('HH:mm');
+    let endTime=dateObj.endTime;
     const {
         venueCourtId,
         venueCourtNumber,
@@ -284,47 +288,107 @@ function getSlotFromDate(drawsArray, matchDate, gradeArray, key, mainCourtNumber
         venueShortName,
         venueId,
     } = mainCourtNumber;
-    for (const i in drawsArray) {
-        startTime = drawsArray[i].startTime;
-        endTime = drawsArray[i].endTime;
-        if (drawsArray[i].venueCourtId === venueCourtId && isDateSame(drawsArray[i].matchDate, matchDate)) {
-            // let gradeIndex = gradeArray.indexOf(
-            //     drawsArray[i].competitionDivisionGradeId
-            // );
+    let sameTimeSlotArray=[];
+    
+    for (const i in drawsArray) {       
+        if(isDateSame(drawsArray[i].matchDate, matchDate)){
+            startTime = drawsArray[i].startTime;
+            endTime = drawsArray[i].endTime;        
+            if (drawsArray[i].venueCourtId === venueCourtId) {
+                // let gradeIndex = gradeArray.indexOf(
+                //     drawsArray[i].competitionDivisionGradeId
+                // );
 
-            const gradeColour = key === "all"
-                ? getCompGradeColor(drawsArray[i].competitionDivisionGradeId, drawsArray[i].competitionUniqueKey)
-                : getGradeColor(drawsArray[i].competitionDivisionGradeId);
+                const gradeColour = key === "all"
+                    ? getCompGradeColor(drawsArray[i].competitionDivisionGradeId, drawsArray[i].competitionUniqueKey)
+                    : getGradeColor(drawsArray[i].competitionDivisionGradeId);
 
-            // if (gradeIndex === -1) {
-            drawsArray[i].colorCode = gradeColour;
-            // } else {
-            //     if (gradeIndex < 39) {
-            //         drawsArray[i].colorCode = colorsArray[gradeIndex];
-            //     } else {
-            //         drawsArray[i].colorCode = '#999999';
-            //     }
-            // }
-            drawsArray[i].teamArray = [
-                {
-                    teamName: drawsArray[i].homeTeamName,
-                    teamId: drawsArray[i].homeTeamId,
-                },
-                {
-                    teamName: drawsArray[i].awayTeamName,
-                    teamId: drawsArray[i].awayTeamId,
-                },
-            ];
-            const checkDuplicate = getDrawsDuplicate(drawsArray, drawsArray[i])
-            if (checkDuplicate) {
-                drawsArray[i].duplicate = true
-            } else {
-                drawsArray[i].duplicate = false
+                // if (gradeIndex === -1) {
+                drawsArray[i].colorCode = gradeColour;
+                // } else {
+                //     if (gradeIndex < 39) {
+                //         drawsArray[i].colorCode = colorsArray[gradeIndex];
+                //     } else {
+                //         drawsArray[i].colorCode = '#999999';
+                //     }
+                // }
+                drawsArray[i].teamArray = [
+                    {
+                        teamName: drawsArray[i].homeTeamName,
+                        teamId: drawsArray[i].homeTeamId,
+                    },
+                    {
+                        teamName: drawsArray[i].awayTeamName,
+                        teamId: drawsArray[i].awayTeamId,
+                    },
+                ];
+                // const checkDuplicate = getDrawsDuplicate(drawsArray, drawsArray[i])
+                // if (checkDuplicate) {
+                //     drawsArray[i].duplicate = false;
+                // } else {
+                //     drawsArray[i].duplicate = false
+                // }
+                drawsArray[i].slotId= randomKeyGen(5);
+                drawsArray[i].minuteDuration=getDiffBetweenStartAndEnd(drawsArray[i]);
+                sameTimeSlotArray.push(drawsArray[i]);    
+                if(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED!="true"){
+                    break;
+                }        
             }
-
-            return drawsArray[i];
         }
     }
+
+    if(sameTimeSlotArray.length==0){  
+        let emptySlot=createEmptySlot(venueCourtNumber,venueCourtName,venueCourtId,venueShortName,matchDate,startTime,endTime,venueId);
+        sameTimeSlotArray.push(emptySlot);
+    }else if(sameTimeSlotArray.length>0){
+        if(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED==="true"){
+            //fill empty slot
+            let remainingSlotUnit=8;
+            let existingSubCourts=[];
+            for(let slot of sameTimeSlotArray){
+                if(!slot.subCourt){
+                    remainingSlotUnit=0;
+                    break;
+                }
+                remainingSlotUnit-=DrawConstant.subCourtHeightUnit[slot.subCourt];
+                existingSubCourts.push(slot.subCourt);
+            }
+            if(remainingSlotUnit>0){
+                let minUnit=1;
+                let unitArray= sameTimeSlotArray.map(s=>DrawConstant.subCourtHeightUnit[s.subCourt]).filter(s=> s<=remainingSlotUnit);
+                if(unitArray.length>0){
+                    minUnit=Math.min(...unitArray);
+                }
+                let fieldIds= Object.keys(DrawConstant.subCourtHeightUnit).filter(f=> DrawConstant.subCourtHeightUnit[f]==minUnit && !existingSubCourts.includes(f));
+                for(let fid of fieldIds){
+                    if(remainingSlotUnit>0){
+                        let emptySlot=createEmptySlot(venueCourtNumber,venueCourtName,venueCourtId,venueShortName,matchDate,startTime,endTime,venueId);
+                        emptySlot.subCourt=fid;
+                        sameTimeSlotArray.push(emptySlot);
+                        remainingSlotUnit-=DrawConstant.subCourtHeightUnit[fid];
+                    }
+                }          
+            }
+        }
+        if(sameTimeSlotArray.length>1){
+            sameTimeSlotArray.sort((a,b)=>{             
+                if(a.subCourt && b.subCourt){
+                    if (a.subCourt < b.subCourt) {
+                        return -1;
+                    }
+                    if (a.subCourt > b.subCourt) {
+                        return 1;
+                    }
+                }
+                return 0;
+            });
+        }
+    }
+    return sameTimeSlotArray;
+}
+function createEmptySlot(venueCourtNumber,venueCourtName,venueCourtId,venueShortName,matchDate,startTime,endTime,venueId){
+    let slotId= randomKeyGen(5); 
     const teamArray = [
         {
             teamName: null,
@@ -335,7 +399,7 @@ function getSlotFromDate(drawsArray, matchDate, gradeArray, key, mainCourtNumber
             teamId: null,
         },
     ];
-    return {
+    const emptySlot= {
         drawsId: null,
         venueCourtNumber,
         venueCourtName,
@@ -355,7 +419,10 @@ function getSlotFromDate(drawsArray, matchDate, gradeArray, key, mainCourtNumber
         colorCode: '#999999',
         teamArray,
         venueId,
+        slotId
     };
+    emptySlot.minuteDuration=getDiffBetweenStartAndEnd(emptySlot);
+    return emptySlot;
 }
 
 function mapSlotObjectsWithTimeSlots(
@@ -366,20 +433,183 @@ function mapSlotObjectsWithTimeSlots(
     key,
 ) {
     for (const i in mainCourtNumberArray) {
+        mockUpSubCourt(drawsArray,mainCourtNumberArray,i);
         const tempSlotsArray = [];
         for (const j in sortedDateArray) {
-            tempSlotsArray.push(
-                getSlotFromDate(
-                    drawsArray,
-                    sortedDateArray[j].date,
-                    gradeArray, key,
-                    mainCourtNumberArray[i],
-                ),
+            const sameTimeSlotArray=getSlotFromDate(
+                drawsArray,
+                sortedDateArray[j],
+                gradeArray, key,
+                mainCourtNumberArray[i],
             );
+            tempSlotsArray.push(...sameTimeSlotArray);
         }
         mainCourtNumberArray[i].slotsArray = tempSlotsArray;
     }
     return mainCourtNumberArray;
+}
+function mockUpSubCourt(drawsArray,mainCourtNumberArray,i){
+     //start mockup
+     
+     let courtslots=drawsArray.filter(d=>d.venueCourtId==mainCourtNumberArray[i].venueCourtId).sort((a,b)=> moment(a.matchDate)-moment(b.matchDate));
+    //  if(i==2){
+    //     drawsArray.filter(d=>d.venueCourtId==mainCourtNumberArray[7].venueCourtId).forEach(d=>{
+    //         d.matchDate=courtslots[0].matchDate;
+    //         d.startTime=courtslots[0].startTime;
+    //         d.endTime=courtslots[0].endTime;
+    //         d.venueCourtId=courtslots[0].venueCourtId;
+    //         d.venueId=courtslots[0].venueId;
+    //         d.venueCourtNumber=courtslots[0].venueCourtNumber;
+    //         d.venueCourtName=courtslots[0].venueCourtName;
+    //         d.venueShortName=courtslots[0].venueShortName;
+    //     });
+    //     courtslots=drawsArray.filter(d=>d.venueCourtId==mainCourtNumberArray[i].venueCourtId).sort((a,b)=> moment(a.matchDate)-moment(b.matchDate));
+    //  }
+     if(i==3){
+        drawsArray.filter(d=>d.venueCourtId==mainCourtNumberArray[4].venueCourtId).forEach(d=>{
+            d.matchDate=courtslots[0].matchDate;
+            d.startTime=courtslots[0].startTime;
+            d.endTime=courtslots[0].endTime;
+            d.venueCourtId=courtslots[0].venueCourtId;
+            d.venueId=courtslots[0].venueId;
+            d.venueCourtNumber=courtslots[0].venueCourtNumber;
+            d.venueCourtName=courtslots[0].venueCourtName;
+            d.venueShortName=courtslots[0].venueShortName;
+        });
+        courtslots=drawsArray.filter(d=>d.venueCourtId==mainCourtNumberArray[i].venueCourtId).sort((a,b)=> moment(a.matchDate)-moment(b.matchDate));
+     }
+     if(i==0){         
+         for(let s=0; s<courtslots.length;s++){
+             if(s==0){
+                 courtslots[s].subCourt="A";
+             }
+             if(s>0){
+                 courtslots[s].matchDate=courtslots[0].matchDate;
+                 courtslots[s].startTime=courtslots[0].startTime;
+                 courtslots[s].endTime=courtslots[0].endTime;
+                 if(s==1){
+                     courtslots[s].subCourt="E";
+                 }
+                 if(s==2){
+                     courtslots[s].subCourt="F";
+                 }
+             }
+         }
+
+     }
+     else if(i==1){         
+        for(let s=0; s<courtslots.length;s++){
+            if(s==0){
+                courtslots[s].subCourt="C";
+            }
+            if(s>0){
+                courtslots[s].matchDate=courtslots[0].matchDate;
+                courtslots[s].startTime=courtslots[0].startTime;
+                courtslots[s].endTime=courtslots[0].endTime;
+                if(s==1){
+                    courtslots[s].subCourt="D";
+                }
+                if(s==2){
+                    courtslots[s].subCourt="E";
+                }
+                if(s==3){
+                    courtslots[s].subCourt="F";
+                }
+            }
+        }
+    }
+    else if(i==2){         
+        for(let s=0; s<courtslots.length;s++){
+            if(s==0){
+                courtslots[s].subCourt="G";
+            }
+            if(s>0){
+                courtslots[s].matchDate=courtslots[0].matchDate;
+                courtslots[s].startTime=courtslots[0].startTime;
+                courtslots[s].endTime=courtslots[0].endTime;
+                if(s==1){
+                    courtslots[s].subCourt="H";
+                }
+                if(s==2){
+                    courtslots[s].subCourt="I";
+                }
+                if(s==3){
+                    courtslots[s].subCourt="J";
+                }
+                if(s==4){
+                    courtslots[s].subCourt="E";
+                }
+                if(s==5){
+                    courtslots[s].subCourt="F";
+                }
+            }
+        }
+    }
+     else if(i==3){
+        for(let s=0; s<courtslots.length;s++){
+            if(s==0){
+                courtslots[s].subCourt="G";
+            }
+            if(s>0){
+                courtslots[s].matchDate=courtslots[0].matchDate;
+                courtslots[s].startTime=courtslots[0].startTime;
+                courtslots[s].endTime=courtslots[0].endTime;
+                if(s==1){
+                    courtslots[s].subCourt="H";
+                }
+                else if(s==2){
+                    courtslots[s].subCourt="I";
+                }
+                else if(s==3){
+                    courtslots[s].subCourt="J";
+                }
+                else if(s==4){
+                    courtslots[s].subCourt="K";
+                }
+                else if(s==5){
+                    courtslots[s].subCourt="L";
+                }
+                else if(s==6){
+                    courtslots[s].subCourt="M";
+                }
+                else if(s==7){
+                    courtslots[s].subCourt="N";
+                }
+            }
+        }
+        //  for(let s=0; s<courtslots.length;s++){
+        //      if(s==0){
+        //          //courtslots[s].subCourt="A";
+        //      }
+        //      if(s>0){                 
+        //          if(s==1){
+        //              courtslots[s].subCourt="B";
+        //          }
+        //          if(s==2){
+        //             courtslots[s].matchDate=courtslots[1].matchDate;
+        //             courtslots[s].startTime=courtslots[1].startTime;
+        //             courtslots[s].endTime=courtslots[1].endTime;
+        //             courtslots[s].subCourt="A";
+        //          }
+        //      }
+        //  }        
+     }
+     else if(i==6){
+        for(let s=0; s<courtslots.length;s++){
+            if(s==0){
+                courtslots[s].subCourt="A";
+            }
+            if(s>0){                 
+                if(s==1){
+                    courtslots[s].matchDate=courtslots[0].matchDate;
+                    courtslots[s].startTime=courtslots[0].startTime;
+                    courtslots[s].endTime=courtslots[0].endTime;                   
+                    courtslots[s].subCourt="B";
+                }              
+            }
+        }        
+    }
+     //end mockup
 }
 
 function structureDrawsData(data, key, venuesData) {
@@ -428,6 +658,7 @@ function structureDrawsData(data, key, venuesData) {
                         venueNameCourtName: (JSON.stringify(object.venueShortName) + JSON.stringify(object.venueCourtNumber)),
                         venueCourtId: object.venueCourtId,
                         roundId: object.roundId ? object.roundId : 0,
+                        venueId:object.venueId,
                         slotsArray: [],
                     });
                 }

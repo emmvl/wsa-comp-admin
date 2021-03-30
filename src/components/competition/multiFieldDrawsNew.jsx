@@ -63,9 +63,11 @@ import {
     setLiveScoreUmpireCompitionData
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
+import DrawConstant from '../../themes/drawConstant';
 import './draws.scss';
 import getColor from "../../util/coloredCheckbox";
-
+import {getDate,checkDate} from "../../util/drawUtil";
+import MultiFieldDrawsSubCourt from "./multiFieldDraw/multiFieldDrawsSubCourt";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Footer, Content } = Layout;
@@ -155,29 +157,8 @@ class MultifieldDrawsNew extends Component {
                 draws:[],
                 apiData:null
             },
-            switchDrawNameFields:{
-                awayTeamName:"",
-                awayTeamOrganisationId:"",
-                homeTeamName:"",
-                divisionName:"",
-                gradeName:"",
-                colorCode:"",
-                duplicate:false,
-                homeTeamOrganisationId:"",
-                isPastMatchAvailable:0,
-                outOfCompetitionDate:0,
-                outOfRoundDate:0,
-                teamArray:[]
-            },
-            switchDrawTimeFields:{
-                venueCourtId:0,
-                matchDate:"",
-                startTime:"",
-                endTime:"",     
-                venueCourtName:"",
-                venueCourtNumber:0,
-                venueShortName:""          
-            }
+            switchDrawNameFields:DrawConstant.switchDrawNameFields,
+            switchDrawTimeFields:DrawConstant.switchDrawTimeFields,
         };
         this.props.clearMultiDraws();
     }
@@ -524,7 +505,23 @@ class MultifieldDrawsNew extends Component {
             this.setState({ singleCompDivisionCheked: value })
         }
     }
-
+    checkCurrentSwapObjects=(source, target, drawData)=> {
+        let sourceIndexArray = source.split(':');
+        let targetIndexArray = target.split(':');
+        let sourceXIndex = sourceIndexArray[0];
+        let sourceYIndex = sourceIndexArray[1];
+        let targetXIndex = targetIndexArray[0];
+        let targetYIndex = targetIndexArray[1];
+        if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
+            return false;
+        }
+        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
+        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+        if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
+            return false;
+        }
+        return true;
+    }
     onSwap(source, target, drawData, round_Id) {
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
@@ -583,7 +580,7 @@ class MultifieldDrawsNew extends Component {
     };
     correctWrongDate=(slot,slotIndex)=>{
         const slotDate = moment(slot.matchDate);
-        const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
+        const slotEnd = moment(getDate(slot.matchDate) + slot.endTime);
         const isCorrectStart = slotEnd.isAfter(slotDate);
         if(!isCorrectStart){
             if(this.props.drawsState.getRoundsDrawsdata.length>0){
@@ -594,9 +591,7 @@ class MultifieldDrawsNew extends Component {
             }           
         }
     }
-    getDate = date => {
-        return date.slice(0, -5);
-    }
+
     ///////update the competition draws on  swapping and hitting update Apis if both has value
     updateCompetitionDraws = (
         sourceObejct,
@@ -719,29 +714,23 @@ class MultifieldDrawsNew extends Component {
             draws: this.state.editedDraw.draws,
         };
         //re-use the timeline action, can be moved to updateCompetitionDraws action if necessary
-        this.props.updateCompetitionDrawsTimeline(
-            postObject,
-            sourceIndexArray,
-            targetIndexArray,
-            key,
-            parseInt(apiData.roundId),
-            apiData.yearRefId,
-            apiData.competitionId,
-            apiData.venueId,
-            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : apiData.roundId,
-            null,
-            null,
-            null,
-            this.state.filterDates
-        );
-        // this.props.updateCompetitionDraws(
+        console.log(this.state.editedDraw.draws);
+        // this.props.updateCompetitionDrawsTimeline(
         //     postObject,
         //     sourceIndexArray,
         //     targetIndexArray,
         //     key,
-        //     round_Id,
-        //     sourceDuplicate, targetDuplicate, apiData, this.state.filterDates
+        //     parseInt(apiData.roundId),
+        //     apiData.yearRefId,
+        //     apiData.competitionId,
+        //     apiData.venueId,
+        //     this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : apiData.roundId,
+        //     null,
+        //     null,
+        //     null,
+        //     this.state.filterDates
         // );
+        
 
     }
     // on Competition change
@@ -912,15 +901,38 @@ class MultifieldDrawsNew extends Component {
         this.setState({ filterDates: val, startDate: startDate, endDate: endDate, venueLoad: true, });
     }
 
-    handleToggleTimeline = () => {
-        const { isTimelineMode } = this.props.drawsState;
-        if (isTimelineMode) {
+    handleToggleTimeline = (checked) => {
+        //const { isTimelineMode } = this.props.drawsState;
+        if (checked) {
             history.push('/competitionDraws');
         } else {
             history.push('/competitionDrawsOld');
         }
     }
-
+    openConfirmToggleTimeline = async(checked) => {     
+        if(this.state.editedDraw.draws.length>0){   
+            confirm({
+                title: AppConstants.timelineToggleConfirm,
+                okText: AppConstants.yes,
+                okType: AppConstants.primary,
+                cancelText: AppConstants.no,
+                maskClosable: true,
+                mask: true,
+                onOk:async()=> {
+                    await this.confirmToggleTimeline(checked);
+                },
+                onCancel() {
+                    console.log('toggle timeline cancel');
+                },
+            });
+        }else{
+            await this.confirmToggleTimeline(checked);
+        }
+    };
+    confirmToggleTimeline= async(checked)=>{
+        await this.props.setTimelineModeAction(checked);
+        this.handleToggleTimeline(checked);
+    }
     headerView = () => {
         return (
             <>
@@ -1307,7 +1319,7 @@ class MultifieldDrawsNew extends Component {
                     <div className={showAllOrg ? "multi-draw-left-list-view" : ""}>
                         {isArrayNotEmpty(drawOrganisations) && drawOrganisations.map((item, index) => {
                             return (
-                                index < this.checkDisplayCountList(drawOrganisations, showAllOrg) && <div className="column pl-5">
+                                index < this.checkDisplayCountList(drawOrganisations, showAllOrg) && <div key={"org"+index} className="column pl-5">
                                     <Checkbox
                                         className="single-checkbox-radio-style"
                                         style={{ paddingTop: 8 }}
@@ -1370,7 +1382,7 @@ class MultifieldDrawsNew extends Component {
         )
     }
 
-    containerView() {
+    containerView() {        
         return (
             <div className="multiDrawContentView">
                 <div className="multi-draw-list-top-head row align-content-center">
@@ -1379,9 +1391,8 @@ class MultifieldDrawsNew extends Component {
                         <Checkbox
                             className="single-checkbox"
                             checked={this.props.drawsState.isTimelineMode}
-                            onChange={async (e) => {
-                                await this.props.setTimelineModeAction(e.target.checked);
-                                this.handleToggleTimeline();
+                            onChange={ (e) => {                                
+                                this.openConfirmToggleTimeline(e.target.checked);
                             }}
                         >
                             {AppConstants.timeline}
@@ -1436,7 +1447,7 @@ class MultifieldDrawsNew extends Component {
                                         </div>
                                     )}
                                     <div key={"drawData" + dateIndex}>
-                                        {this.draggableView(dateItem)}
+                                        {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED=="true" ? this.draggableSubCourtView(dateItem) : this.draggableView(dateItem)}
                                     </div>
                                 </div>
                             ))}
@@ -1454,7 +1465,7 @@ class MultifieldDrawsNew extends Component {
                                                 </span>
                                             </div>
                                         )}
-                                        {this.draggableView(dateItem)}
+                                         {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED=="true" ? this.draggableSubCourtView(dateItem) : this.draggableView(dateItem)}
                                     </div>
 
                                     /* {dateItem.legendsArray.length > 0 ?
@@ -1476,17 +1487,7 @@ class MultifieldDrawsNew extends Component {
         );
     }
 
-    checkDate(date, index, dateArray) {
-        if (index == 0) {
-            return moment(date).format('DD MMM, ddd')
-        } else {
-            if (moment(dateArray[index].date).format('DD-MM-YYYY') == moment(dateArray[(index - 1)].date).format('DD-MM-YYYY')) {
-                return moment(date).format('ddd')
-            } else {
-                return moment(date).format('DD MMM, ddd')
-            }
-        }
-    }
+
 
     draggableView = (dateItem) => {
         let disabledStatus = this.state.competitionStatus == 1
@@ -1510,7 +1511,7 @@ class MultifieldDrawsNew extends Component {
                                 }
                                 return (
                                     <span key={"day" + index} style={{ left: dateMargin }}>
-                                        {item.notInDraw == false ? this.checkDate(item.date, index, dateItem.dateNewArray) : ''}
+                                        {item.notInDraw == false ? checkDate(item.date, index, dateItem.dateNewArray) : ''}
                                     </span>
                                 );
                             })}
@@ -1603,6 +1604,13 @@ class MultifieldDrawsNew extends Component {
                                                                 "1"
                                                             )
                                                         }
+                                                        isCurrentSwappable={(source, target) =>                                 
+                                                            this.checkCurrentSwapObjects(
+                                                            source,
+                                                            target,
+                                                            dateItem.draws,
+                                                            )
+                                                        }
                                                     >
                                                         {slotObject.drawsId != null ? (
                                                             <span>
@@ -1633,6 +1641,13 @@ class MultifieldDrawsNew extends Component {
                                                                     target,
                                                                     dateItem.draws,
                                                                     dateItem.roundId
+                                                                )
+                                                            }
+                                                            isCurrentSwappable={(source, target) =>                                 
+                                                                this.checkCurrentSwapObjects(
+                                                                source,
+                                                                target,
+                                                                dateItem.draws,
                                                                 )
                                                             }
                                                         >
@@ -1757,6 +1772,11 @@ class MultifieldDrawsNew extends Component {
         );
     };
 
+    draggableSubCourtView = (dateItem) => {
+        let allprops = {...this.props, ...this.state,dateItem:dateItem};
+        return <MultiFieldDrawsSubCourt {...allprops} ></MultiFieldDrawsSubCourt>;
+
+    }
     contentView = () => {
         return (
             <div className="row">

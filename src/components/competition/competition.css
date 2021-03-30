@@ -514,7 +514,7 @@ a.collapsed i {
     position: absolute;
     /* white-space: nowrap; */
     padding-right: 10px;
-    width: 75px;
+    width: 80px;
     color: var(--app-9b9bad);
 }
 
@@ -1050,4 +1050,8 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
 
 .preference-form-line .ant-form-item-explain > div {
     display: inline;
+}
+
+.app-color{
+    color: var(--app-color);
 }

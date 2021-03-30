@@ -1907,6 +1907,7 @@ const AppConstants = {
     proceedConfirm: "You have teams ‘Not in Draw’. Would you still like to proceed?",
     makePaymentsConfirm: "Are you sure you want to make payments?",
     affiliateDeleteConfirm: "Are you sure you want to delete this affiliate?",
+    timelineToggleConfirm:"There are unsaved changes. Would you still like to proceed?",
 
     affiliateName: "Affiliate Name",
     rank: "Rank",
