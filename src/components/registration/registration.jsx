@@ -706,7 +706,7 @@ class Registration extends Component {
                     let payload = {
                         processTypeName: selectedRow.processType,
                         registrationUniqueKey: selectedRow.registrationUniqueKey,
-                        userId: selectedRow.userId,
+                        userId: selectedRow.paidByUsers[0].paidByUserId,
                         divisionId: selectedRow.divisionId,
                         competitionId: selectedRow.competitionUniqueKey
                     }
